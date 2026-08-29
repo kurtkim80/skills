@@ -1,0 +1,50 @@
+[
+  {
+    "name": "farmage/opencode-skills",
+    "repo": "https://github.com/farmage/opencode-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "commands_subpath": "commands",
+    "description": "66+ specialized OpenCode skills and workflow commands"
+  },
+  {
+    "name": "different-ai/openwork-hub",
+    "repo": "https://github.com/different-ai/openwork-hub.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "commands_subpath": "commands",
+    "agents_subpath": "agents",
+    "description": "Official OpenWork community hub for agents, commands, and skills"
+  },
+  {
+    "name": "m4stanuj/openwork",
+    "repo": "https://github.com/m4stanuj/openwork.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "commands_subpath": "commands",
+    "agents_subpath": "agents",
+    "description": "Universal MCP workspace with portable agents, skills and commands"
+  },
+  {
+    "name": "anthropics/skills",
+    "repo": "https://github.com/anthropics/skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "agents_subpath": "agents",
+    "description": "Official Anthropic public skill library — 20 SKILL.md + 26 agent definitions (⭐ 172k)"
+  },
+  {
+    "name": "wshobson/agents",
+    "repo": "https://github.com/wshobson/agents.git",
+    "branch": "main",
+    "skills_subpath": "plugins",
+    "description": "Multi-harness agent plugin marketplace — 181 skills, 238 agents for Claude Code, OpenCode, Cursor, Copilot (⭐ 39k)"
+  },
+  {
+    "name": "MK-ORGANIZATION-1/AGENTS-COLLECTION",
+    "repo": "https://github.com/MK-ORGANIZATION-1/AGENTS-COLLECTION.git",
+    "branch": "main",
+    "skills_subpath": "AGENTS",
+    "description": "Massive collection — 1195 SKILL.md + 664 agent definitions across 11 platforms (⭐ 80)"
+  }
+]
