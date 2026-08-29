@@ -2,7 +2,7 @@
 """
 OpenCode & OpenWork Asset Dashboard Generator
 CDN 없이 순수 inline CSS + JS로 동작하는 완전 오프라인 HTML 대시보드를 생성합니다.
-12개 이상의 상세 세부 카테고리로 에셋을 체계적으로 분류합니다.
+12개 이상의 상세 세부 카테고리와 다크/라이트 테마 전환 기능을 지원합니다.
 """
 
 import json
@@ -176,13 +176,15 @@ def generate_dashboard():
             tabs_html += f'<button class="tab-btn" data-cat="{cid}" onclick="setTab(\'{cid}\')">{clabel} ({count})</button>\n'
 
     html = f"""<!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OpenCode &amp; OpenWork Hub Dashboard</title>
 <style>
 *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+
+/* ── Dark Theme (Default) ────────────────────────────────── */
 :root {{
   --bg: #0d1117;
   --bg2: #161b22;
@@ -192,6 +194,9 @@ def generate_dashboard():
   --text: #e6edf3;
   --text2: #7d8590;
   --text3: #9198a1;
+  --header-bg: rgba(13,17,23,0.92);
+  --hero-grad: rgba(110,118,241,0.06);
+  --card-shadow: rgba(110,118,241,0.18);
   --indigo: #6e76f1;
   --indigo-dim: rgba(110,118,241,0.15);
   --indigo-border: rgba(110,118,241,0.35);
@@ -208,6 +213,35 @@ def generate_dashboard():
   --radius: 10px;
   --radius-lg: 14px;
 }}
+
+/* ── Light Theme ─────────────────────────────────────────── */
+[data-theme="light"] {{
+  --bg: #f6f8fa;
+  --bg2: #ffffff;
+  --bg3: #eaedf0;
+  --border: #d0d7de;
+  --border2: #afb8c1;
+  --text: #1f2328;
+  --text2: #656d76;
+  --text3: #484f58;
+  --header-bg: rgba(246,248,250,0.92);
+  --hero-grad: rgba(80,88,216,0.05);
+  --card-shadow: rgba(80,88,216,0.12);
+  --indigo: #5058d8;
+  --indigo-dim: rgba(80,88,216,0.1);
+  --indigo-border: rgba(80,88,216,0.25);
+  --purple: #8250df;
+  --purple-dim: rgba(130,80,223,0.1);
+  --green: #1a7f37;
+  --green-dim: rgba(26,127,55,0.1);
+  --amber: #9a6700;
+  --amber-dim: rgba(154,103,0,0.1);
+  --red: #cf222e;
+  --red-dim: rgba(207,34,46,0.1);
+  --teal: #0969da;
+  --teal-dim: rgba(9,105,218,0.1);
+}}
+
 html {{ scroll-behavior: smooth; }}
 body {{
   background: var(--bg);
@@ -216,6 +250,7 @@ body {{
   font-size: 14px;
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color .2s, color .2s;
 }}
 
 /* ── Scrollbar ─────────────────────────────────────────── */
@@ -227,7 +262,7 @@ body {{
 /* ── Header ─────────────────────────────────────────────── */
 .header {{
   position: sticky; top: 0; z-index: 50;
-  background: rgba(13,17,23,0.92);
+  background: var(--header-bg);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
   padding: 0 24px;
@@ -263,6 +298,25 @@ body {{
   position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
   color: var(--text2); font-size: 14px; pointer-events: none;
 }}
+
+/* ── Header Actions ──────────────────────────────────────── */
+.header-actions {{ display: flex; gap: 10px; align-items: center; }}
+.btn-theme {{
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all .15s;
+  user-select: none;
+}}
+.btn-theme:hover {{ border-color: var(--indigo); }}
 .header-stat {{ text-align: right; flex-shrink: 0; }}
 .header-stat small {{ display: block; font-size: 11px; color: var(--text2); }}
 .header-stat strong {{ font-size: 18px; font-weight: 800; color: var(--indigo); }}
@@ -270,7 +324,7 @@ body {{
 /* ── Hero / Filter ───────────────────────────────────────── */
 .hero {{
   padding: 28px 24px 0;
-  background: linear-gradient(180deg, rgba(110,118,241,0.06) 0%, transparent 100%);
+  background: linear-gradient(180deg, var(--hero-grad) 0%, transparent 100%);
   border-bottom: 1px solid var(--border);
 }}
 .hero h1 {{ font-size: 24px; font-weight: 800; margin-bottom: 6px; }}
@@ -283,7 +337,7 @@ body {{
   font-size: 12px; font-weight: 600; cursor: pointer;
   border: 1px solid transparent; transition: all .15s;
 }}
-.pill-indigo  {{ background: var(--indigo-dim); color: #a5b4fc; border-color: var(--indigo-border); }}
+.pill-indigo  {{ background: var(--indigo-dim); color: var(--indigo); border-color: var(--indigo-border); }}
 .pill-purple  {{ background: var(--purple-dim); color: var(--purple); border-color: rgba(167,139,250,.35); }}
 .pill-green   {{ background: var(--green-dim); color: var(--green); border-color: rgba(63,185,80,.35); }}
 .pill-amber   {{ background: var(--amber-dim); color: var(--amber); border-color: rgba(210,153,34,.35); }}
@@ -334,7 +388,7 @@ body {{
 .card:hover {{
   border-color: var(--indigo);
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(110,118,241,0.18);
+  box-shadow: 0 8px 24px var(--card-shadow);
 }}
 .card.rag-highlight {{ border-color: var(--indigo-border); }}
 
@@ -343,7 +397,7 @@ body {{
   display: inline-block; padding: 2px 8px; border-radius: 6px;
   font-size: 11px; font-weight: 700; border: 1px solid;
 }}
-.badge-skill   {{ background: var(--indigo-dim); color: #a5b4fc; border-color: var(--indigo-border); }}
+.badge-skill   {{ background: var(--indigo-dim); color: var(--indigo); border-color: var(--indigo-border); }}
 .badge-command {{ background: var(--purple-dim); color: var(--purple); border-color: rgba(167,139,250,.35); }}
 .badge-agent   {{ background: var(--green-dim); color: var(--green); border-color: rgba(63,185,80,.35); }}
 .badge-src     {{ background: transparent; color: var(--text2); border-color: transparent; font-size: 10px; font-weight: 400; margin-left: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }}
@@ -420,7 +474,7 @@ body {{
 }}
 .modal-install code {{
   font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-  font-size: 12px; color: #a5b4fc; flex: 1;
+  font-size: 12px; color: var(--indigo); font-weight: 600; flex: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }}
 .btn-copy {{
@@ -458,7 +512,7 @@ body {{
 /* ── Toast ───────────────────────────────────────────────── */
 .toast {{
   position: fixed; bottom: 24px; right: 24px; z-index: 200;
-  background: #1a7f37; color: #fff;
+  background: var(--green); color: #fff;
   border-radius: var(--radius); padding: 10px 16px;
   font-size: 13px; font-weight: 600;
   display: none; align-items: center; gap: 8px;
@@ -498,8 +552,9 @@ body {{
            placeholder="키워드 검색 (예: rag, review, docker, security) — 단축키 /" />
   </div>
 
-  <div style="display: flex; gap: 12px; align-items: center;">
-    <button id="syncBtn" onclick="triggerSync()" class="btn-secondary" style="background: var(--indigo); color: white; border: none; padding: 0 12px; border-radius: 6px;">🔄 수집(Sync)</button>
+  <div class="header-actions">
+    <button id="themeToggleBtn" onclick="toggleTheme()" class="btn-theme" title="다크/라이트 테마 전환">🌙 다크</button>
+    <button id="syncBtn" onclick="triggerSync()" class="btn-secondary" style="background: var(--indigo); color: white; border: none; padding: 6px 12px; border-radius: 6px;">🔄 수집(Sync)</button>
     <div class="header-stat">
       <small>수집된 에셋</small>
       <strong>{total}</strong>
@@ -580,6 +635,27 @@ let curCat = 'all';
 let curSearch = '';
 let curCard = null;
 
+/* ── Theme Switcher ────────────────────────────────────── */
+function initTheme() {{
+  const saved = localStorage.getItem('opencode_theme') || 'dark';
+  setTheme(saved);
+}}
+
+function toggleTheme() {{
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+}}
+
+function setTheme(theme) {{
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('opencode_theme', theme);
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) {{
+    btn.innerHTML = theme === 'light' ? '☀️ 라이트' : '🌙 다크';
+  }}
+}}
+
 /* ── Render ────────────────────────────────────────────── */
 function render() {{
   const q = curSearch.toLowerCase();
@@ -654,7 +730,7 @@ document.addEventListener('keydown', e => {{
   if (e.key === 'Escape') closeModal();
 }});
 
-/* ── Responsive mobile search ──────────────────────────── */
+/* ── Responsive mobile search ──────────────────── */
 if (window.innerWidth < 640) {{
   document.getElementById('searchMobile').style.display = 'block';
 }}
@@ -763,6 +839,7 @@ function escAttr(s) {{
 }}
 
 /* ── Init ─────────────────────────────────────────────── */
+initTheme();
 render();
 </script>
 </body>
