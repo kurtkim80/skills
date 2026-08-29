@@ -141,6 +141,10 @@ def generate_dashboard():
             cat_id, cat_label = classify_category(name, desc, item_type)
             cat_counts[cat_id] = cat_counts.get(cat_id, 0) + 1
 
+            repo_url = item.get("source_repo", "")
+            if repo_url.endswith(".git"):
+                repo_url = repo_url[:-4]
+
             raw_cards.append({
                 "id": key,
                 "name": name,
@@ -149,6 +153,7 @@ def generate_dashboard():
                 "cat_label": cat_label,
                 "desc": desc,
                 "source": src,
+                "repo_url": repo_url,
                 "content": content,
                 "install": f"python3 skill_collector.py install {key} --target global",
             })
@@ -559,7 +564,6 @@ body {{
 }}
 .badge-skill   {{ background: var(--apple-blue-dim); color: var(--apple-blue); }}
 .badge-command {{ background: var(--purple-dim); color: var(--purple); }}
-.badge-agent   {{ background: var(--green-dim); color: var(--green); }}
 .badge-src {{
   color: var(--text-muted);
   font-size: 11px;
@@ -569,6 +573,30 @@ body {{
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 140px;
+}}
+.badge-src-link {{
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 980px;
+  background: var(--segment-bg);
+  transition: all .2s ease;
+}}
+.badge-src-link:hover {{
+  color: var(--apple-blue);
+  background: var(--apple-blue-dim);
+  border-color: var(--apple-blue-border);
+  transform: translateY(-1px);
 }}
 
 .card-cat {{
@@ -991,10 +1019,16 @@ function render() {{
     const bLabel = typeLabel[c.type] || 'SKILL';
     const descText = c.desc || '상세 지침 및 사양을 보려면 카드를 클릭하세요.';
     const srcShort = c.source.length > 22 ? c.source.slice(0,22)+'…' : c.source;
+    const repoBtn = c.repo_url ?
+      `<a href="${{escAttr(c.repo_url)}}" target="_blank" rel="noopener noreferrer" class="badge-src-link" onclick="event.stopPropagation()" title="원본 GitHub 저장소 바로가기: ${{escAttr(c.source)}}">
+        🐙 ${{escHtml(srcShort)}} ↗
+      </a>` :
+      `<span class="badge-src" title="${{escAttr(c.source)}}">${{escHtml(srcShort)}}</span>`;
+
     return `<div class="card${{isRAG ? ' rag-highlight' : ''}}" onclick="openModal('${{escAttr(c.id)}}')">
       <div class="card-badges">
         <span class="badge ${{bClass}}">${{bLabel}}</span>
-        <span class="badge-src" title="${{escAttr(c.source)}}">${{escAttr(srcShort)}}</span>
+        ${{repoBtn}}
       </div>
       <div class="card-cat">${{escHtml(c.cat_label)}}</div>
       <div class="card-name">${{escHtml(c.name)}}</div>
@@ -1043,11 +1077,16 @@ function openModal(id) {{
 
   const bClass = typeBadgeClass[c.type] || 'badge-skill';
   const bLabel = typeLabel[c.type] || 'SKILL';
+  const modalRepoBtn = c.repo_url ?
+    `<a href="${{escAttr(c.repo_url)}}" target="_blank" rel="noopener noreferrer" class="btn-apple" style="padding: 3px 10px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-left: 4px;" title="원본 GitHub 저장소 새 탭으로 열기">
+      🐙 원본 GitHub: ${{escHtml(c.source)}} ↗
+    </a>` :
+    `<span style="font-size:11px;color:var(--text-muted);margin-left:4px">출처: ${{escHtml(c.source)}}</span>`;
 
   document.getElementById('modalBadges').innerHTML =
     `<span class="badge ${{bClass}}">${{bLabel}}</span>` +
     `<span class="badge" style="background:var(--segment-bg);color:var(--text-secondary)">${{escHtml(c.cat_label)}}</span>` +
-    `<span style="font-size:11px;color:var(--text-muted);margin-left:4px">출처: ${{escHtml(c.source)}}</span>`;
+    modalRepoBtn;
 
   document.getElementById('modalName').textContent = c.name;
   document.getElementById('modalDesc').textContent = c.desc || '';
