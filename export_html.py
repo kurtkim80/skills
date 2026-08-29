@@ -2,6 +2,7 @@
 """
 OpenCode & OpenWork Asset Dashboard Generator
 CDN 없이 순수 inline CSS + JS로 동작하는 완전 오프라인 HTML 대시보드를 생성합니다.
+12개 이상의 상세 세부 카테고리로 에셋을 체계적으로 분류합니다.
 """
 
 import json
@@ -12,6 +13,24 @@ INDEX_FILE = BASE_DIR / "assets_index.json"
 COLLECTED_DIR = BASE_DIR / "collected_assets"
 HTML_OUTPUT = BASE_DIR / "index.html"
 
+# 세부 카테고리 정의 (ID, 라벨, UI pill 색상)
+CATEGORY_DEFS = [
+    ("all", "🔥 전체", "pill-indigo"),
+    ("rag_search", "🔍 RAG & 시맨틱 검색", "pill-indigo"),
+    ("llm_ai", "🧠 LLM & AI 개발", "pill-purple"),
+    ("frontend", "🎨 프론트엔드 & UI/UX", "pill-teal"),
+    ("backend", "⚙️ 백엔드 & API", "pill-green"),
+    ("database", "🗄️ 데이터베이스 & 데이터", "pill-amber"),
+    ("devops", "☁️ DevOps & 클라우드", "pill-indigo"),
+    ("security", "🛡️ 보안 & 취약점 분석", "pill-red"),
+    ("testing", "🧪 테스트 & QA", "pill-green"),
+    ("architecture", "🏗️ 아키텍처 & 코드 리뷰", "pill-purple"),
+    ("mobile_sys", "📱 모바일 & 시스템 프로그래밍", "pill-teal"),
+    ("general_dev", "💻 일반 언어 & 유틸리티", "pill-indigo"),
+    ("workflow", "⚡ 워크플로우 커맨드", "pill-purple"),
+    ("agent", "🤖 자율 에이전트", "pill-green"),
+]
+
 
 def classify_category(name: str, desc: str, asset_type: str) -> tuple:
     text = (name + " " + desc).lower()
@@ -20,25 +39,50 @@ def classify_category(name: str, desc: str, asset_type: str) -> tuple:
         return "workflow", "⚡ 워크플로우 커맨드"
 
     if asset_type == "agent":
-        return "agent", "🤖 에이전트"
+        return "agent", "🤖 자율 에이전트"
 
-    if any(k in text for k in ["rag", "embedding", "vector", "retrieval", "semantic search",
-                                 "fine-tuning", "fine_tuning", "finetune", "prompt-engineer",
-                                 "prompt engineer", "ml-pipeline", "agent-creator", "skill-creator",
-                                 "mcp-", "mcp developer", "llm", "nlp"]):
-        return "ai_rag", "🤖 AI, RAG & LLM"
+    # 1. RAG & 시맨틱 검색
+    if any(k in text for k in ["rag", "embedding", "vector", "retrieval", "semantic search", "hybrid search", "similarity search", "index-tuning", "chunking", "re-ranking", "rerank", "contextual retrieval"]):
+        return "rag_search", "🔍 RAG & 시맨틱 검색"
 
-    if any(k in text for k in ["docker", "kubernetes", "k8s", "terraform", "devops", "sre",
-                                 "cloud", "chaos", "monitoring", "embedded", "legacy", "ci-cd",
-                                 "cicd", "pipeline", "infra", "deployment"]):
-        return "devops", "☁️ DevOps & 인프라"
+    # 2. LLM & AI 엔지니어링 / 프롬프트
+    if any(k in text for k in ["fine-tuning", "fine_tuning", "finetune", "prompt-engineer", "prompt", "llm", "nlp", "mcp-", "mcp developer", "agent-creator", "skill-creator", "model-selection", "langchain", "llamaindex", "ai-engineer", "token-optim", "few-shot"]):
+        return "llm_ai", "🧠 LLM & AI 개발"
 
-    if any(k in text for k in ["review", "reviewer", "architect", "security", "guardian",
-                                 "test", "debug", "api-design", "graphql", "postgres", "sql",
-                                 "database", "spec", "document", "common-ground", "microservices"]):
-        return "arch_quality", "🏗️ 아키텍처, 리뷰 & 보안"
+    # 3. 보안 & 취약점 분석
+    if any(k in text for k in ["security", "auth", "vulnerability", "xss", "injection", "privilege", "exploit", "metasploit", "penetration", "secret", "crypto", "compliance", "guardian", "cors", "csrf", "oauth", "jwt", "sanitization"]):
+        return "security", "🛡️ 보안 & 취약점 분석"
 
-    return "dev_frameworks", "💻 언어 & 프레임워크"
+    # 4. 테스팅, 검증 & QA
+    if any(k in text for k in ["test", "testing", "tdd", "pytest", "jest", "mock", "benchmark", "qa", "verification", "fuzzing", "coverage", "e2e", "cypress", "playwright"]):
+        return "testing", "🧪 테스트 & QA"
+
+    # 5. 프론트엔드 & UI/UX
+    if any(k in text for k in ["react", "next.js", "nextjs", "vue", "nuxt", "svelte", "tailwind", "css", "html", "ui", "ux", "frontend", "front-end", "web-design", "astro", "solidjs", "accessibility", "wcag", "canvas", "svg", "animation"]):
+        return "frontend", "🎨 프론트엔드 & UI/UX"
+
+    # 6. 백엔드 & API 개발
+    if any(k in text for k in ["fastapi", "django", "flask", "express", "nestjs", "spring", "spring boot", "springboot", "api-design", "graphql", "rest", "backend", "grpc", "websocket", "http", "routing", "controller", "middleware"]):
+        return "backend", "⚙️ 백엔드 & API"
+
+    # 7. 데이터베이스 & 데이터 엔지니어링
+    if any(k in text for k in ["sql", "postgres", "postgresql", "mysql", "mongodb", "redis", "sqlite", "database", "orm", "prisma", "query", "recsys", "data-tables", "storage-blob", "etl", "analytics", "data warehouse", "schema", "migration"]):
+        return "database", "🗄️ 데이터베이스 & 데이터"
+
+    # 8. DevOps, 클라우드 & 인프라
+    if any(k in text for k in ["docker", "kubernetes", "k8s", "terraform", "aws", "azure", "gcp", "cloudflare", "ci-cd", "cicd", "devops", "sre", "infra", "chaos", "prometheus", "monitoring", "deployment", "serverless", "helm", "ansible"]):
+        return "devops", "☁️ DevOps & 클라우드"
+
+    # 9. 모바일 & 시스템 프로그래밍
+    if any(k in text for k in ["ios", "swift", "swiftui", "android", "kotlin", "flutter", "react-native", "embedded", "c++", "cpp", "rust", "linux", "windows", "wasm", "webassembly", "kernel", "driver"]):
+        return "mobile_sys", "📱 모바일 & 시스템 프로그래밍"
+
+    # 10. 아키텍처 & 코드 리뷰
+    if any(k in text for k in ["review", "reviewer", "architect", "refactor", "pattern", "clean code", "spec", "document", "documentation", "audit", "optimization", "analysis", "solid", "dry", "kiss", "design pattern"]):
+        return "architecture", "🏗️ 아키텍처 & 코드 리뷰"
+
+    # 11. 일반 언어 & 유틸리티 (기타)
+    return "general_dev", "💻 일반 언어 & 유틸리티"
 
 
 def esc(s: str) -> str:
@@ -70,50 +114,12 @@ def generate_dashboard():
             "path": "rag-search-optimizer"
         }
 
-    cards = []
-    for asset_type_key, items in [("skill", data.get("skills", {})),
-                                    ("command", data.get("commands", {})),
-                                    ("agent", data.get("agents", {}))]:
-        for key, item in items.items():
-            name = item.get("name", key)
-            desc = item.get("description", "")
-            src_name = item.get("source_name", "local")
-            rel_path = item.get("path", "")
-
-            content = ""
-            file_path = BASE_DIR / rel_path
-            if file_path.is_dir():
-                skill_md = file_path / "SKILL.md"
-                if skill_md.exists():
-                    content = skill_md.read_text(encoding="utf-8", errors="ignore")
-            elif file_path.is_file():
-                content = file_path.read_text(encoding="utf-8", errors="ignore")
-
-            cat_id, cat_label = classify_category(name, desc, asset_type_key)
-
-            cards.append({
-                "id": esc(key),
-                "name": esc(name),
-                "type": asset_type_key,
-                "cat_id": cat_id,
-                "cat_label": esc(cat_label),
-                "desc": esc(desc[:200]),
-                "source": esc(src_name),
-                "content": esc(content[:8000]),
-                "install": esc(f"python3 skill_collector.py install {key} --target global"),
-            })
-
-    # 카테고리 카운트
-    cat_counts = {}
-    for c in cards:
-        cat_counts[c["cat_id"]] = cat_counts.get(c["cat_id"], 0) + 1
-
-    # JSON으로 카드 데이터를 JS에 주입 (이미 esc 처리됨 → JS 문자열용으로 역변환하여 다시 넣기)
-    # JS embed용으로 raw 데이터를 다시 만들기 (JS JSON.parse용이므로 esc 하지 않고 json.dumps 사용)
     raw_cards = []
+    cat_counts = {}
+
     for item_type, items in [("skill", data.get("skills", {})),
-                               ("command", data.get("commands", {})),
-                               ("agent", data.get("agents", {}))]:
+                             ("command", data.get("commands", {})),
+                             ("agent", data.get("agents", {}))]:
         for key, item in items.items():
             name = item.get("name", key)
             desc = item.get("description", "")
@@ -130,6 +136,7 @@ def generate_dashboard():
                 content = fp.read_text(encoding="utf-8", errors="ignore")[:8000]
 
             cat_id, cat_label = classify_category(name, desc, item_type)
+            cat_counts[cat_id] = cat_counts.get(cat_id, 0) + 1
 
             raw_cards.append({
                 "id": key,
@@ -148,14 +155,25 @@ def generate_dashboard():
     js_data = json.dumps(raw_cards, ensure_ascii=False)
     js_data = js_data.replace("</", "<\\/")
 
-
     total = len(raw_cards)
-    ai_rag_n = cat_counts.get("ai_rag", 0)
-    dev_n = cat_counts.get("dev_frameworks", 0)
-    arch_n = cat_counts.get("arch_quality", 0)
-    devops_n = cat_counts.get("devops", 0)
-    wf_n = cat_counts.get("workflow", 0)
-    ag_n = cat_counts.get("agent", 0)
+
+    # 퀵 필터 알약(Pills) 동적 생성 (전체 제외, 카운트 있는 것 위주)
+    pills_html = ""
+    for cid, clabel, ccolor in CATEGORY_DEFS:
+        if cid == "all":
+            continue
+        count = cat_counts.get(cid, 0)
+        if count > 0:
+            pills_html += f'<span class="pill {ccolor}" onclick="setTab(\'{cid}\')">{clabel} ({count})</span>\n'
+
+    # 상단 탭(Tabs) 동적 생성
+    tabs_html = f'<button class="tab-btn active" data-cat="all" onclick="setTab(\'all\')">🔥 전체 ({total})</button>\n'
+    for cid, clabel, _ in CATEGORY_DEFS:
+        if cid == "all":
+            continue
+        count = cat_counts.get(cid, 0)
+        if count > 0:
+            tabs_html += f'<button class="tab-btn" data-cat="{cid}" onclick="setTab(\'{cid}\')">{clabel} ({count})</button>\n'
 
     html = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -184,6 +202,7 @@ def generate_dashboard():
   --amber: #d29922;
   --amber-dim: rgba(210,153,34,0.15);
   --red: #f85149;
+  --red-dim: rgba(248,81,73,0.15);
   --teal: #39d2c0;
   --teal-dim: rgba(57,210,192,0.12);
   --radius: 10px;
@@ -269,6 +288,7 @@ body {{
 .pill-green   {{ background: var(--green-dim); color: var(--green); border-color: rgba(63,185,80,.35); }}
 .pill-amber   {{ background: var(--amber-dim); color: var(--amber); border-color: rgba(210,153,34,.35); }}
 .pill-teal    {{ background: var(--teal-dim); color: var(--teal); border-color: rgba(57,210,192,.35); }}
+.pill-red     {{ background: var(--red-dim); color: var(--red); border-color: rgba(248,81,73,.35); }}
 
 /* ── Category Tabs ───────────────────────────────────────── */
 .tabs {{ display: flex; gap: 6px; overflow-x: auto; padding: 16px 0 12px; }}
@@ -475,7 +495,7 @@ body {{
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input class="search-input" id="searchInput" type="text"
-           placeholder="키워드 검색 (예: rag, review, docker) — 단축키 /" />
+           placeholder="키워드 검색 (예: rag, review, docker, security) — 단축키 /" />
   </div>
 
   <div style="display: flex; gap: 12px; align-items: center;">
@@ -487,7 +507,6 @@ body {{
   </div>
 </header>
 
-
 <!-- Hero -->
 <div class="hero">
   <div style="max-width:1400px;margin:0 auto">
@@ -495,11 +514,7 @@ body {{
     <p>인터넷 &amp; GitHub에서 수집된 OpenCode / OpenWork 표준 규격의 스킬, 커맨드, 에이전트를 탐색하고 1-클릭으로 설치하세요.</p>
 
     <div class="stat-pills">
-      <span class="pill pill-indigo" onclick="setTab('ai_rag')">🤖 AI, RAG &amp; LLM ({ai_rag_n})</span>
-      <span class="pill pill-teal" onclick="setTab('dev_frameworks')">💻 언어 &amp; 프레임워크 ({dev_n})</span>
-      <span class="pill pill-green" onclick="setTab('arch_quality')">🏗️ 아키텍처 &amp; 보안 ({arch_n})</span>
-      <span class="pill pill-amber" onclick="setTab('devops')">☁️ DevOps &amp; 인프라 ({devops_n})</span>
-      <span class="pill pill-purple" onclick="setTab('workflow')">⚡ 커맨드 ({wf_n})</span>
+      {pills_html}
     </div>
 
     <!-- Mobile search -->
@@ -508,13 +523,7 @@ body {{
            style="display:none;width:100%;margin:14px 0 0;" />
 
     <div class="tabs" id="tabs">
-      <button class="tab-btn active" data-cat="all" onclick="setTab('all')">🔥 전체 ({total})</button>
-      <button class="tab-btn" data-cat="ai_rag" onclick="setTab('ai_rag')">🤖 AI, RAG &amp; LLM ({ai_rag_n})</button>
-      <button class="tab-btn" data-cat="dev_frameworks" onclick="setTab('dev_frameworks')">💻 언어 &amp; 프레임워크 ({dev_n})</button>
-      <button class="tab-btn" data-cat="arch_quality" onclick="setTab('arch_quality')">🏗️ 아키텍처, 리뷰 &amp; 보안 ({arch_n})</button>
-      <button class="tab-btn" data-cat="devops" onclick="setTab('devops')">☁️ DevOps &amp; 인프라 ({devops_n})</button>
-      <button class="tab-btn" data-cat="workflow" onclick="setTab('workflow')">⚡ 워크플로우 커맨드 ({wf_n})</button>
-      <button class="tab-btn" data-cat="agent" onclick="setTab('agent')">🤖 에이전트 ({ag_n})</button>
+      {tabs_html}
     </div>
   </div>
 </div>
@@ -594,7 +603,7 @@ function render() {{
   empty.style.display = 'none';
 
   grid.innerHTML = filtered.map(c => {{
-    const isRAG = c.cat_id === 'ai_rag';
+    const isRAG = c.cat_id === 'rag_search';
     const bClass = typeBadgeClass[c.type] || 'badge-skill';
     const bLabel = typeLabel[c.type] || 'SKILL';
     const descText = c.desc || '상세 내용을 보려면 카드를 클릭하세요.';
@@ -764,7 +773,7 @@ render();
         f.write(html)
 
     print(f"✅ 대시보드 생성 완료: {HTML_OUTPUT}")
-    print(f"   총 {len(raw_cards)}개 에셋 포함")
+    print(f"   총 {len(raw_cards)}개 에셋 포함 ({len(cat_counts)}개 세부 카테고리)")
 
 
 if __name__ == "__main__":
