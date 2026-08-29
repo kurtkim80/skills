@@ -3,6 +3,7 @@
 인터넷(GitHub)의 OpenCode / OpenWork 커뮤니티 저장소들로부터 **스킬(Skills)**, **커맨드(Commands)**, **에이전트(Agents)**를 자동으로 탐색, 수집, 검색, 설치하는 올인원 CLI 도구입니다.
 
 ---
+[https://kurtkim80.github.io/skills/]https://kurtkim80.github.io/skills/
 
 ## 🌟 지원하는 에셋 종류
 
