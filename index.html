@@ -227,18 +227,20 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  max-width: 1100px;
+  gap: 10px;
+  max-width: 1440px;
   margin: 0 auto 28px;
 }
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 8px 18px;
   border-radius: 980px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
+  word-break: keep-all;
   cursor: pointer;
   border: 1px solid transparent;
   background: var(--card-bg);
@@ -265,23 +267,22 @@ body {
 
 /* ── Segmented Tabs Bar (Apple macOS / iOS Style) ───────── */
 .tabs-container {
-  max-width: 1400px;
+  max-width: 1520px;
   margin: 0 auto;
   padding: 0 28px;
 }
 .tabs {
   display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
   background: var(--segment-bg);
-  border-radius: 980px;
-  scrollbar-width: none;
+  border-radius: 18px;
 }
-.tabs::-webkit-scrollbar { display: none; }
 .tab-btn {
   flex-shrink: 0;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 980px;
   border: none;
   background: transparent;
@@ -293,6 +294,7 @@ body {
   letter-spacing: -0.01em;
   transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
+  word-break: keep-all;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -312,7 +314,7 @@ body {
 
 /* ── Main Layout ─────────────────────────────────────────── */
 .main {
-  max-width: 1400px;
+  max-width: 1520px;
   margin: 0 auto;
   padding: 32px 28px 80px;
 }
