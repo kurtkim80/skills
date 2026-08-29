@@ -751,6 +751,42 @@ body {{
 }}
 .modal-foot small {{ font-size: 11px; color: var(--text-muted); }}
 
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {{
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  padding: 32px 28px 48px;
+  margin-top: 40px;
+  text-align: center;
+}}
+.footer-inner {{
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}}
+.footer-inner p {{
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: -0.01em;
+}}
+.footer-link {{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apple-blue);
+  text-decoration: none;
+  transition: opacity .2s;
+}}
+.footer-link:hover {{
+  text-decoration: underline;
+  opacity: 0.85;
+}}
+
 /* ── Toast ───────────────────────────────────────────────── */
 .toast {{
   position: fixed; bottom: 28px; right: 28px; z-index: 300;
@@ -778,6 +814,7 @@ body {{
   .search-wrap {{ display: none; }}
   .logo-subtitle {{ display: none; }}
   .tabs-container {{ padding: 0 16px; }}
+  .btn-github span {{ display: none; }}
 }}
 </style>
 </head>
@@ -799,6 +836,12 @@ body {{
   </div>
 
   <div class="header-actions">
+    <a href="https://github.com/kurtkim80/skills" target="_blank" rel="noopener noreferrer" class="btn-apple btn-github" title="GitHub 저장소 바로가기" style="text-decoration: none;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+      </svg>
+      <span>GitHub</span>
+    </a>
     <button id="themeToggleBtn" onclick="toggleTheme()" class="btn-apple" title="다크/라이트 테마 전환">🌙 다크</button>
     <button id="syncBtn" onclick="triggerSync()" class="btn-primary">🔄 Sync</button>
     <div class="header-stat">
@@ -838,6 +881,19 @@ body {{
     <p>다른 검색어나 카테고리를 선택해 보세요.</p>
   </div>
 </main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p>OpenCode &amp; OpenWork Skills Dashboard · Apple HIG Design System</p>
+    <a href="https://github.com/kurtkim80/skills" target="_blank" rel="noopener noreferrer" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+      </svg>
+      <span>github.com/kurtkim80/skills 바로가기 ↗</span>
+    </a>
+  </div>
+</footer>
 
 <!-- Modal (iOS/macOS Sheet) -->
 <div class="modal-overlay" id="modal" onclick="onOverlayClick(event)">
