@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
 OpenCode & OpenWork Asset Dashboard Generator
-CDN 없이 순수 inline CSS + JS로 동작하는 완전 오프라인 HTML 대시보드를 생성합니다.
-12개 이상의 상세 세부 카테고리와 다크/라이트 테마 전환 기능을 지원합니다.
+애플(Apple.com) 스타일의 프리미엄 미니멀리즘 디자인 대시보드를 생성합니다.
+- SF Pro / Apple Human Interface Guidelines 스타일 타이포그래피 & 라운딩
+- 글래스모피즘(Glassmorphism) 블러 내비게이션 바 & 세그먼트 컨트롤 탭
+- 13개 세부 카테고리 & 다크/라이트 테마 원클릭 전환
+- macOS 스타일 코드 프리뷰어 (트래픽 라이트 인디케이터 포함)
 """
 
 import json
@@ -15,18 +18,18 @@ HTML_OUTPUT = BASE_DIR / "index.html"
 
 # 세부 카테고리 정의 (ID, 라벨, UI pill 색상)
 CATEGORY_DEFS = [
-    ("all", "🔥 전체", "pill-indigo"),
-    ("rag_search", "🔍 RAG & 시맨틱 검색", "pill-indigo"),
+    ("all", "전체", "pill-blue"),
+    ("rag_search", "🔍 RAG & 시맨틱 검색", "pill-blue"),
     ("llm_ai", "🧠 LLM & AI 개발", "pill-purple"),
     ("frontend", "🎨 프론트엔드 & UI/UX", "pill-teal"),
     ("backend", "⚙️ 백엔드 & API", "pill-green"),
-    ("database", "🗄️ 데이터베이스 & 데이터", "pill-amber"),
-    ("devops", "☁️ DevOps & 클라우드", "pill-indigo"),
-    ("security", "🛡️ 보안 & 취약점 분석", "pill-red"),
+    ("database", "🗄️ DB & 데이터", "pill-amber"),
+    ("devops", "☁️ DevOps & 클라우드", "pill-blue"),
+    ("security", "🛡️ 보안 & 취약점", "pill-red"),
     ("testing", "🧪 테스트 & QA", "pill-green"),
-    ("architecture", "🏗️ 아키텍처 & 코드 리뷰", "pill-purple"),
-    ("mobile_sys", "📱 모바일 & 시스템 프로그래밍", "pill-teal"),
-    ("general_dev", "💻 일반 언어 & 유틸리티", "pill-indigo"),
+    ("architecture", "🏗️ 아키텍처 & 리뷰", "pill-purple"),
+    ("mobile_sys", "📱 모바일 & 시스템", "pill-teal"),
+    ("general_dev", "💻 일반 언어 & 도구", "pill-blue"),
     ("workflow", "⚡ 워크플로우 커맨드", "pill-purple"),
     ("agent", "🤖 자율 에이전트", "pill-green"),
 ]
@@ -51,7 +54,7 @@ def classify_category(name: str, desc: str, asset_type: str) -> tuple:
 
     # 3. 보안 & 취약점 분석
     if any(k in text for k in ["security", "auth", "vulnerability", "xss", "injection", "privilege", "exploit", "metasploit", "penetration", "secret", "crypto", "compliance", "guardian", "cors", "csrf", "oauth", "jwt", "sanitization"]):
-        return "security", "🛡️ 보안 & 취약점 분석"
+        return "security", "🛡️ 보안 & 취약점"
 
     # 4. 테스팅, 검증 & QA
     if any(k in text for k in ["test", "testing", "tdd", "pytest", "jest", "mock", "benchmark", "qa", "verification", "fuzzing", "coverage", "e2e", "cypress", "playwright"]):
@@ -67,7 +70,7 @@ def classify_category(name: str, desc: str, asset_type: str) -> tuple:
 
     # 7. 데이터베이스 & 데이터 엔지니어링
     if any(k in text for k in ["sql", "postgres", "postgresql", "mysql", "mongodb", "redis", "sqlite", "database", "orm", "prisma", "query", "recsys", "data-tables", "storage-blob", "etl", "analytics", "data warehouse", "schema", "migration"]):
-        return "database", "🗄️ 데이터베이스 & 데이터"
+        return "database", "🗄️ DB & 데이터"
 
     # 8. DevOps, 클라우드 & 인프라
     if any(k in text for k in ["docker", "kubernetes", "k8s", "terraform", "aws", "azure", "gcp", "cloudflare", "ci-cd", "cicd", "devops", "sre", "infra", "chaos", "prometheus", "monitoring", "deployment", "serverless", "helm", "ansible"]):
@@ -75,14 +78,14 @@ def classify_category(name: str, desc: str, asset_type: str) -> tuple:
 
     # 9. 모바일 & 시스템 프로그래밍
     if any(k in text for k in ["ios", "swift", "swiftui", "android", "kotlin", "flutter", "react-native", "embedded", "c++", "cpp", "rust", "linux", "windows", "wasm", "webassembly", "kernel", "driver"]):
-        return "mobile_sys", "📱 모바일 & 시스템 프로그래밍"
+        return "mobile_sys", "📱 모바일 & 시스템"
 
     # 10. 아키텍처 & 코드 리뷰
     if any(k in text for k in ["review", "reviewer", "architect", "refactor", "pattern", "clean code", "spec", "document", "documentation", "audit", "optimization", "analysis", "solid", "dry", "kiss", "design pattern"]):
-        return "architecture", "🏗️ 아키텍처 & 코드 리뷰"
+        return "architecture", "🏗️ 아키텍처 & 리뷰"
 
     # 11. 일반 언어 & 유틸리티 (기타)
-    return "general_dev", "💻 일반 언어 & 유틸리티"
+    return "general_dev", "💻 일반 언어 & 도구"
 
 
 def esc(s: str) -> str:
@@ -157,433 +160,671 @@ def generate_dashboard():
 
     total = len(raw_cards)
 
-    # 퀵 필터 알약(Pills) 동적 생성 (전체 제외, 카운트 있는 것 위주)
+    # 퀵 필터 알약(Pills) 동적 생성 (전체 제외)
     pills_html = ""
     for cid, clabel, ccolor in CATEGORY_DEFS:
         if cid == "all":
             continue
         count = cat_counts.get(cid, 0)
         if count > 0:
-            pills_html += f'<span class="pill {ccolor}" onclick="setTab(\'{cid}\')">{clabel} ({count})</span>\n'
+            pills_html += f'<button class="pill {ccolor}" onclick="setTab(\'{cid}\')">{clabel} <span class="pill-count">{count}</span></button>\n'
 
     # 상단 탭(Tabs) 동적 생성
-    tabs_html = f'<button class="tab-btn active" data-cat="all" onclick="setTab(\'all\')">🔥 전체 ({total})</button>\n'
+    tabs_html = f'<button class="tab-btn active" data-cat="all" onclick="setTab(\'all\')">전체 <span class="tab-count">{total}</span></button>\n'
     for cid, clabel, _ in CATEGORY_DEFS:
         if cid == "all":
             continue
         count = cat_counts.get(cid, 0)
         if count > 0:
-            tabs_html += f'<button class="tab-btn" data-cat="{cid}" onclick="setTab(\'{cid}\')">{clabel} ({count})</button>\n'
+            tabs_html += f'<button class="tab-btn" data-cat="{cid}" onclick="setTab(\'{cid}\')">{clabel} <span class="tab-count">{count}</span></button>\n'
 
     html = f"""<!DOCTYPE html>
 <html lang="ko" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OpenCode &amp; OpenWork Hub Dashboard</title>
+<title>OpenCode &amp; OpenWork Hub</title>
 <style>
 *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
 
-/* ── Dark Theme (Default) ────────────────────────────────── */
+/* ── Apple Dark Theme (Default) ─────────────────────────── */
 :root {{
-  --bg: #0d1117;
-  --bg2: #161b22;
-  --bg3: #21262d;
-  --border: #30363d;
-  --border2: #3d444d;
-  --text: #e6edf3;
-  --text2: #7d8590;
-  --text3: #9198a1;
-  --header-bg: rgba(13,17,23,0.92);
-  --hero-grad: rgba(110,118,241,0.06);
-  --card-shadow: rgba(110,118,241,0.18);
-  --indigo: #6e76f1;
-  --indigo-dim: rgba(110,118,241,0.15);
-  --indigo-border: rgba(110,118,241,0.35);
-  --purple: #a78bfa;
-  --purple-dim: rgba(167,139,250,0.15);
-  --green: #3fb950;
-  --green-dim: rgba(63,185,80,0.15);
-  --amber: #d29922;
-  --amber-dim: rgba(210,153,34,0.15);
-  --red: #f85149;
-  --red-dim: rgba(248,81,73,0.15);
-  --teal: #39d2c0;
-  --teal-dim: rgba(57,210,192,0.12);
-  --radius: 10px;
-  --radius-lg: 14px;
+  --bg: #000000;
+  --bg-secondary: #121212;
+  --card-bg: #1c1c1e;
+  --card-hover: #2c2c2e;
+  --nav-bg: rgba(0, 0, 0, 0.8);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text: #f5f5f7;
+  --text-muted: #86868b;
+  --text-secondary: #a1a1a6;
+  --apple-blue: #2997ff;
+  --apple-blue-hover: #0077ed;
+  --apple-blue-dim: rgba(41, 151, 255, 0.12);
+  --apple-blue-border: rgba(41, 151, 255, 0.3);
+  --purple: #bf5af2;
+  --purple-dim: rgba(191, 90, 242, 0.12);
+  --green: #30d158;
+  --green-dim: rgba(48, 209, 88, 0.12);
+  --amber: #ffd60a;
+  --amber-dim: rgba(255, 214, 10, 0.12);
+  --red: #ff453a;
+  --red-dim: rgba(255, 69, 58, 0.12);
+  --teal: #64d2ff;
+  --teal-dim: rgba(100, 210, 255, 0.12);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.6);
+  --segment-bg: rgba(120, 120, 128, 0.24);
+  --segment-active: #2c2c2e;
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --code-bg: #141416;
 }}
 
-/* ── Light Theme ─────────────────────────────────────────── */
+/* ── Apple Light Theme ──────────────────────────────────── */
 [data-theme="light"] {{
-  --bg: #f6f8fa;
-  --bg2: #ffffff;
-  --bg3: #eaedf0;
-  --border: #d0d7de;
-  --border2: #afb8c1;
-  --text: #1f2328;
-  --text2: #656d76;
-  --text3: #484f58;
-  --header-bg: rgba(246,248,250,0.92);
-  --hero-grad: rgba(80,88,216,0.05);
-  --card-shadow: rgba(80,88,216,0.12);
-  --indigo: #5058d8;
-  --indigo-dim: rgba(80,88,216,0.1);
-  --indigo-border: rgba(80,88,216,0.25);
-  --purple: #8250df;
-  --purple-dim: rgba(130,80,223,0.1);
-  --green: #1a7f37;
-  --green-dim: rgba(26,127,55,0.1);
-  --amber: #9a6700;
-  --amber-dim: rgba(154,103,0,0.1);
-  --red: #cf222e;
-  --red-dim: rgba(207,34,46,0.1);
-  --teal: #0969da;
-  --teal-dim: rgba(9,105,218,0.1);
+  --bg: #f5f5f7;
+  --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
+  --card-hover: #ffffff;
+  --nav-bg: rgba(245, 245, 247, 0.8);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --text: #1d1d1f;
+  --text-muted: #86868b;
+  --text-secondary: #515154;
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-blue-dim: rgba(0, 113, 227, 0.08);
+  --apple-blue-border: rgba(0, 113, 227, 0.2);
+  --purple: #9b51e0;
+  --purple-dim: rgba(155, 81, 224, 0.08);
+  --green: #28cd41;
+  --green-dim: rgba(40, 205, 65, 0.08);
+  --amber: #f5a623;
+  --amber-dim: rgba(245, 166, 35, 0.08);
+  --red: #ff3b30;
+  --red-dim: rgba(255, 59, 48, 0.08);
+  --teal: #00a0dc;
+  --teal-dim: rgba(0, 160, 220, 0.08);
+  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.08);
+  --segment-bg: rgba(118, 118, 128, 0.12);
+  --segment-active: #ffffff;
+  --modal-overlay: rgba(0, 0, 0, 0.4);
+  --code-bg: #1d1d1f;
 }}
 
 html {{ scroll-behavior: smooth; }}
 body {{
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   min-height: 100vh;
-  transition: background-color .2s, color .2s;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s ease, color .3s ease;
 }}
 
 /* ── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
-::-webkit-scrollbar-track {{ background: var(--bg); }}
-::-webkit-scrollbar-thumb {{ background: var(--border2); border-radius: 3px; }}
-::-webkit-scrollbar-thumb:hover {{ background: var(--text2); }}
+::-webkit-scrollbar-track {{ background: transparent; }}
+::-webkit-scrollbar-thumb {{ background: var(--border); border-radius: 980px; }}
 
-/* ── Header ─────────────────────────────────────────────── */
+/* ── Apple Global Navigation ────────────────────────────── */
 .header {{
-  position: sticky; top: 0; z-index: 50;
-  background: var(--header-bg);
-  backdrop-filter: blur(14px);
+  position: sticky; top: 0; z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 64px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 0 28px;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  transition: all .3s ease;
 }}
-.header-logo {{ display: flex; align-items: center; gap: 10px; flex-shrink: 0; }}
-.logo-icon {{
-  width: 38px; height: 38px; border-radius: 10px;
-  background: linear-gradient(135deg, #6e76f1, #a78bfa);
+.header-logo {{
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--text);
+  font-weight: 600; font-size: 15px; letter-spacing: -0.02em;
+}}
+.logo-badge {{
+  width: 28px; height: 28px; border-radius: 7px;
+  background: linear-gradient(135deg, #0071e3, #64d2ff);
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+  font-size: 14px; color: white;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.4);
 }}
-.logo-title {{ font-size: 16px; font-weight: 700; color: var(--text); }}
-.logo-sub {{ font-size: 11px; color: var(--text2); }}
+.logo-title {{ font-weight: 600; }}
+.logo-subtitle {{ font-size: 11px; color: var(--text-muted); font-weight: 400; }}
 
-/* ── Search ──────────────────────────────────────────────── */
-.search-wrap {{ flex: 1; max-width: 440px; position: relative; }}
+/* ── Search Bar (Apple Pill Style) ─────────────────────── */
+.search-wrap {{ flex: 1; max-width: 420px; position: relative; }}
 .search-input {{
   width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--border);
+  background: var(--segment-bg);
+  border: 1px solid transparent;
   color: var(--text);
-  border-radius: var(--radius);
-  padding: 8px 12px 8px 36px;
+  border-radius: 980px;
+  padding: 7px 14px 7px 34px;
   font-size: 13px;
   outline: none;
-  transition: border-color .2s, box-shadow .2s;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  transition: all .2s ease;
 }}
-.search-input::placeholder {{ color: var(--text2); }}
-.search-input:focus {{ border-color: var(--indigo); box-shadow: 0 0 0 3px var(--indigo-dim); }}
+.search-input::placeholder {{ color: var(--text-muted); }}
+.search-input:focus {{
+  background: var(--card-bg);
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 3px var(--apple-blue-dim);
+}}
 .search-icon {{
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--text2); font-size: 14px; pointer-events: none;
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); font-size: 13px; pointer-events: none;
 }}
 
-/* ── Header Actions ──────────────────────────────────────── */
+/* ── Header Actions (Apple Capsule Buttons) ─────────────── */
 .header-actions {{ display: flex; gap: 10px; align-items: center; }}
-.btn-theme {{
-  background: var(--bg2);
-  border: 1px solid var(--border);
+.btn-apple {{
+  background: var(--segment-bg);
+  border: 1px solid transparent;
   color: var(--text);
-  border-radius: var(--radius);
-  padding: 6px 12px;
+  border-radius: 980px;
+  padding: 6px 14px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: all .15s;
+  font-family: inherit;
+  transition: all .2s ease;
   user-select: none;
 }}
-.btn-theme:hover {{ border-color: var(--indigo); }}
+.btn-apple:hover {{
+  background: var(--card-hover);
+  border-color: var(--border);
+}}
+.btn-primary {{
+  background: var(--apple-blue);
+  color: #ffffff;
+  border-radius: 980px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  transition: background-color .2s ease, transform .1s ease;
+}}
+.btn-primary:hover {{
+  background: var(--apple-blue-hover);
+  transform: scale(1.02);
+}}
 .header-stat {{ text-align: right; flex-shrink: 0; }}
-.header-stat small {{ display: block; font-size: 11px; color: var(--text2); }}
-.header-stat strong {{ font-size: 18px; font-weight: 800; color: var(--indigo); }}
+.header-stat small {{ display: block; font-size: 10px; color: var(--text-muted); font-weight: 500; }}
+.header-stat strong {{ font-size: 15px; font-weight: 700; color: var(--apple-blue); }}
 
-/* ── Hero / Filter ───────────────────────────────────────── */
+/* ── Hero Section (Apple Keynote Style) ─────────────────── */
 .hero {{
-  padding: 28px 24px 0;
-  background: linear-gradient(180deg, var(--hero-grad) 0%, transparent 100%);
-  border-bottom: 1px solid var(--border);
+  padding: 56px 28px 24px;
+  text-align: center;
+  background: radial-gradient(circle at 50% 0%, var(--apple-blue-dim) 0%, transparent 60%);
 }}
-.hero h1 {{ font-size: 24px; font-weight: 800; margin-bottom: 6px; }}
-.hero p {{ font-size: 13px; color: var(--text2); max-width: 680px; line-height: 1.7; }}
+.hero-eyebrow {{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-blue);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}}
+.hero h1 {{
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  color: var(--text);
+}}
+.hero p {{
+  font-size: 17px;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto 28px;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+}}
 
-.stat-pills {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }}
+/* ── Quick Pills (Capsule Tags) ──────────────────────────── */
+.stat-pills {{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 1100px;
+  margin: 0 auto 28px;
+}}
 .pill {{
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 12px; border-radius: 20px;
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  border: 1px solid transparent; transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 980px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--card-bg);
+  color: var(--text);
+  box-shadow: var(--card-shadow);
+  transition: all .2s ease;
+  font-family: inherit;
 }}
-.pill-indigo  {{ background: var(--indigo-dim); color: var(--indigo); border-color: var(--indigo-border); }}
-.pill-purple  {{ background: var(--purple-dim); color: var(--purple); border-color: rgba(167,139,250,.35); }}
-.pill-green   {{ background: var(--green-dim); color: var(--green); border-color: rgba(63,185,80,.35); }}
-.pill-amber   {{ background: var(--amber-dim); color: var(--amber); border-color: rgba(210,153,34,.35); }}
-.pill-teal    {{ background: var(--teal-dim); color: var(--teal); border-color: rgba(57,210,192,.35); }}
-.pill-red     {{ background: var(--red-dim); color: var(--red); border-color: rgba(248,81,73,.35); }}
+.pill:hover {{
+  transform: translateY(-2px);
+  border-color: var(--apple-blue-border);
+}}
+.pill-count {{
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.7;
+}}
+.pill-blue   {{ background: var(--apple-blue-dim); color: var(--apple-blue); border-color: var(--apple-blue-border); }}
+.pill-purple {{ background: var(--purple-dim); color: var(--purple); border-color: rgba(191, 90, 242, 0.25); }}
+.pill-green  {{ background: var(--green-dim); color: var(--green); border-color: rgba(48, 209, 88, 0.25); }}
+.pill-amber  {{ background: var(--amber-dim); color: var(--amber); border-color: rgba(255, 214, 10, 0.25); }}
+.pill-teal   {{ background: var(--teal-dim); color: var(--teal); border-color: rgba(100, 210, 255, 0.25); }}
+.pill-red    {{ background: var(--red-dim); color: var(--red); border-color: rgba(255, 69, 58, 0.25); }}
 
-/* ── Category Tabs ───────────────────────────────────────── */
-.tabs {{ display: flex; gap: 6px; overflow-x: auto; padding: 16px 0 12px; }}
+/* ── Segmented Tabs Bar (Apple macOS / iOS Style) ───────── */
+.tabs-container {{
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 28px;
+}}
+.tabs {{
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px;
+  background: var(--segment-bg);
+  border-radius: 980px;
+  scrollbar-width: none;
+}}
 .tabs::-webkit-scrollbar {{ display: none; }}
 .tab-btn {{
-  flex-shrink: 0; padding: 7px 14px; border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--bg2); color: var(--text2);
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  transition: all .15s;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 980px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }}
-.tab-btn:hover {{ border-color: var(--border2); color: var(--text); }}
+.tab-btn:hover {{ color: var(--text); }}
 .tab-btn.active {{
-  background: var(--indigo); border-color: var(--indigo);
-  color: #fff; box-shadow: 0 0 12px rgba(110,118,241,0.4);
+  background: var(--segment-active);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}}
+.tab-count {{
+  font-size: 11px;
+  opacity: 0.65;
+  font-weight: 600;
 }}
 
 /* ── Main Layout ─────────────────────────────────────────── */
-.main {{ max-width: 1400px; margin: 0 auto; padding: 24px; }}
-.results-bar {{
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px;
+.main {{
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
 }}
-.results-bar p {{ font-size: 12px; color: var(--text2); }}
-.results-bar span {{ color: var(--indigo); font-weight: 700; }}
+.results-bar {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}}
+.results-bar p {{
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}}
+.results-bar span {{
+  color: var(--text);
+  font-weight: 700;
+}}
 
-/* ── Card Grid ───────────────────────────────────────────── */
+/* ── Card Grid (Apple Product Bento Style) ───────────────── */
 .grid {{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }}
 .card {{
-  background: var(--bg2);
+  background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 18px;
+  border-radius: 20px;
+  padding: 22px;
   cursor: pointer;
-  transition: border-color .2s, transform .2s, box-shadow .2s;
-  display: flex; flex-direction: column; gap: 10px;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .25s ease, border-color .25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
 }}
 .card:hover {{
-  border-color: var(--indigo);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px var(--card-shadow);
+  transform: translateY(-4px) scale(1.008);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--apple-blue-border);
 }}
-.card.rag-highlight {{ border-color: var(--indigo-border); }}
+.card.rag-highlight {{
+  border-color: var(--apple-blue-border);
+  background: linear-gradient(180deg, var(--card-bg) 0%, var(--apple-blue-dim) 100%);
+}}
 
-.card-badges {{ display: flex; align-items: center; gap: 6px; }}
+.card-badges {{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}}
 .badge {{
-  display: inline-block; padding: 2px 8px; border-radius: 6px;
-  font-size: 11px; font-weight: 700; border: 1px solid;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 980px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }}
-.badge-skill   {{ background: var(--indigo-dim); color: var(--indigo); border-color: var(--indigo-border); }}
-.badge-command {{ background: var(--purple-dim); color: var(--purple); border-color: rgba(167,139,250,.35); }}
-.badge-agent   {{ background: var(--green-dim); color: var(--green); border-color: rgba(63,185,80,.35); }}
-.badge-src     {{ background: transparent; color: var(--text2); border-color: transparent; font-size: 10px; font-weight: 400; margin-left: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }}
+.badge-skill   {{ background: var(--apple-blue-dim); color: var(--apple-blue); }}
+.badge-command {{ background: var(--purple-dim); color: var(--purple); }}
+.badge-agent   {{ background: var(--green-dim); color: var(--green); }}
+.badge-src {{
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}}
 
-.card-cat {{ font-size: 11px; color: var(--indigo); font-weight: 600; }}
-.card-name {{ font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; }}
+.card-cat {{
+  font-size: 11px;
+  color: var(--apple-blue);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}}
+.card-name {{
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}}
 .card-desc {{
-  font-size: 12px; color: var(--text2); line-height: 1.6;
-  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   flex: 1;
 }}
 
 .card-footer {{
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: 10px; border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
 }}
-.card-footer-label {{ font-size: 11px; color: var(--text2); }}
+.card-footer-label {{
+  font-size: 12px;
+  color: var(--apple-blue);
+  font-weight: 500;
+}}
 .btn-install {{
-  background: var(--bg3); border: 1px solid var(--border2);
-  color: var(--text); border-radius: 7px; padding: 4px 10px;
-  font-size: 11px; font-weight: 600; cursor: pointer;
-  display: flex; align-items: center; gap: 4px;
-  transition: all .15s;
+  background: var(--apple-blue-dim);
+  border: 1px solid transparent;
+  color: var(--apple-blue);
+  border-radius: 980px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  transition: all .2s ease;
 }}
-.btn-install:hover {{ background: var(--indigo); border-color: var(--indigo); color: #fff; }}
+.btn-install:hover {{
+  background: var(--apple-blue);
+  color: #ffffff;
+}}
 
 /* ── Empty State ─────────────────────────────────────────── */
-.empty {{ text-align: center; padding: 80px 20px; display: none; }}
-.empty-icon {{ font-size: 48px; margin-bottom: 14px; }}
-.empty h3 {{ font-size: 18px; font-weight: 700; margin-bottom: 6px; }}
-.empty p {{ font-size: 13px; color: var(--text2); }}
+.empty {{ text-align: center; padding: 100px 20px; display: none; }}
+.empty-icon {{ font-size: 54px; margin-bottom: 16px; }}
+.empty h3 {{ font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }}
+.empty p {{ font-size: 14px; color: var(--text-muted); }}
 
-/* ── Modal ───────────────────────────────────────────────── */
+/* ── Modal (Apple iOS/macOS Sheet Style) ─────────────────── */
 .modal-overlay {{
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(6px);
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   display: none; align-items: center; justify-content: center;
-  padding: 16px;
+  padding: 20px;
 }}
 .modal-overlay.open {{ display: flex; }}
 .modal {{
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  max-width: 860px; width: 100%; max-height: 90vh;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  max-width: 880px; width: 100%; max-height: 88vh;
   display: flex; flex-direction: column;
-  animation: modal-in .18s ease-out;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  animation: apple-modal-in .25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }}
-@keyframes modal-in {{ from {{ opacity:0; transform: scale(.96) translateY(8px); }} to {{ opacity:1; transform: scale(1) translateY(0); }} }}
+@keyframes apple-modal-in {{
+  from {{ opacity: 0; transform: scale(0.95) translateY(12px); }}
+  to   {{ opacity: 1; transform: scale(1) translateY(0); }}
+}}
 
 .modal-head {{
-  padding: 20px 22px 16px;
+  padding: 24px 28px 18px;
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
 }}
 .modal-head-info {{ flex: 1; min-width: 0; }}
-.modal-badges {{ display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }}
-.modal-name {{ font-size: 20px; font-weight: 800; line-height: 1.3; word-break: break-all; }}
-.modal-desc {{ font-size: 12px; color: var(--text2); line-height: 1.7; margin-top: 6px; }}
+.modal-badges {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }}
+.modal-name {{ font-size: 22px; font-weight: 700; line-height: 1.25; letter-spacing: -0.025em; }}
+.modal-desc {{ font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; }}
 .btn-close {{
-  background: var(--bg3); border: 1px solid var(--border);
-  color: var(--text2); border-radius: 8px;
+  background: var(--segment-bg);
+  border: none;
+  color: var(--text-muted);
+  border-radius: 50%;
   width: 32px; height: 32px; flex-shrink: 0;
-  font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
+  font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s ease;
 }}
-.btn-close:hover {{ background: var(--red); border-color: var(--red); color: #fff; }}
+.btn-close:hover {{ background: var(--red); color: #fff; }}
 
 .modal-install {{
-  padding: 10px 22px;
-  background: var(--bg);
+  padding: 12px 28px;
+  background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }}
 .modal-install code {{
-  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-  font-size: 12px; color: var(--indigo); font-weight: 600; flex: 1;
+  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 12px; color: var(--apple-blue); font-weight: 600; flex: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }}
 .btn-copy {{
-  background: var(--indigo); border: none;
-  color: #fff; border-radius: 7px; padding: 6px 12px;
-  font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
-  transition: opacity .15s;
+  background: var(--apple-blue);
+  border: none;
+  color: #fff;
+  border-radius: 980px;
+  padding: 6px 14px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; flex-shrink: 0;
+  transition: opacity .2s ease, transform .1s ease;
 }}
-.btn-copy:hover {{ opacity: .85; }}
+.btn-copy:hover {{ opacity: .9; transform: scale(1.02); }}
 .btn-copy.copied {{ background: var(--green); }}
 
-.modal-body {{ flex: 1; overflow-y: auto; padding: 20px 22px; }}
-.modal-body-label {{ font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text2); margin-bottom: 10px; }}
+.modal-body {{
+  flex: 1; overflow-y: auto; padding: 24px 28px;
+}}
+.modal-body-label {{
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-muted); margin-bottom: 12px;
+}}
+
+/* ── macOS Xcode / Terminal styled Code Previewer ────────── */
+.mac-terminal {{
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}}
+.mac-terminal-bar {{
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--border-subtle);
+}}
+.mac-dot {{
+  width: 11px; height: 11px; border-radius: 50%;
+}}
+.dot-red    {{ background: #ff5f56; }}
+.dot-yellow {{ background: #ffbd2e; }}
+.dot-green  {{ background: #27c93f; }}
+.mac-terminal-title {{
+  font-size: 11px; color: #86868b; margin-left: 8px; font-family: "SF Mono", monospace;
+}}
 .modal-content-pre {{
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px;
-  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-  font-size: 12px; color: var(--text); line-height: 1.7;
+  padding: 16px;
+  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 12px; color: #e6edf3; line-height: 1.7;
   white-space: pre-wrap; word-break: break-word; overflow-x: auto;
 }}
 
 .modal-foot {{
-  padding: 12px 22px;
+  padding: 14px 28px;
   border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-secondary);
 }}
-.modal-foot small {{ font-size: 11px; color: var(--text2); }}
-.btn-secondary {{
-  background: var(--bg3); border: 1px solid var(--border2);
-  color: var(--text); border-radius: 8px; padding: 7px 16px;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s;
-}}
-.btn-secondary:hover {{ border-color: var(--border2); background: var(--border); }}
+.modal-foot small {{ font-size: 11px; color: var(--text-muted); }}
 
 /* ── Toast ───────────────────────────────────────────────── */
 .toast {{
-  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  position: fixed; bottom: 28px; right: 28px; z-index: 300;
   background: var(--green); color: #fff;
-  border-radius: var(--radius); padding: 10px 16px;
+  border-radius: 980px; padding: 10px 18px;
   font-size: 13px; font-weight: 600;
   display: none; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  animation: toast-in .18s ease-out;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: apple-toast-in .25s ease-out;
 }}
 .toast.show {{ display: flex; }}
-@keyframes toast-in {{ from {{ opacity:0; transform: translateY(12px); }} to {{ opacity:1; transform: translateY(0); }} }}
+@keyframes apple-toast-in {{
+  from {{ opacity: 0; transform: translateY(16px) scale(0.95); }}
+  to   {{ opacity: 1; transform: translateY(0) scale(1); }}
+}}
 
 /* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 640px) {{
-  .header {{ padding: 0 14px; }}
-  .hero {{ padding: 18px 14px 0; }}
-  .hero h1 {{ font-size: 18px; }}
-  .main {{ padding: 16px 14px; }}
+@media (max-width: 680px) {{
+  .header {{ padding: 0 16px; }}
+  .hero {{ padding: 36px 16px 20px; }}
+  .hero h1 {{ font-size: 28px; }}
+  .hero p {{ font-size: 15px; }}
+  .main {{ padding: 20px 16px 60px; }}
   .grid {{ grid-template-columns: 1fr; }}
   .search-wrap {{ display: none; }}
-  .logo-sub {{ display: none; }}
+  .logo-subtitle {{ display: none; }}
+  .tabs-container {{ padding: 0 16px; }}
 }}
 </style>
 </head>
 <body>
 
-<!-- Header -->
+<!-- Apple Global Navigation -->
 <header class="header">
-  <div class="header-logo">
-    <div class="logo-icon">🧩</div>
+  <a href="#" class="header-logo">
+    <div class="logo-badge"></div>
     <div>
       <div class="logo-title">OpenCode &amp; OpenWork Hub</div>
-      <div class="logo-sub">Skills · Commands · Agents</div>
     </div>
-  </div>
+  </a>
 
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input class="search-input" id="searchInput" type="text"
-           placeholder="키워드 검색 (예: rag, review, docker, security) — 단축키 /" />
+           placeholder="스킬, 에이전트, 커맨드 검색 (단축키 /)" />
   </div>
 
   <div class="header-actions">
-    <button id="themeToggleBtn" onclick="toggleTheme()" class="btn-theme" title="다크/라이트 테마 전환">🌙 다크</button>
-    <button id="syncBtn" onclick="triggerSync()" class="btn-secondary" style="background: var(--indigo); color: white; border: none; padding: 6px 12px; border-radius: 6px;">🔄 수집(Sync)</button>
+    <button id="themeToggleBtn" onclick="toggleTheme()" class="btn-apple" title="다크/라이트 테마 전환">🌙 다크</button>
+    <button id="syncBtn" onclick="triggerSync()" class="btn-primary">🔄 Sync</button>
     <div class="header-stat">
-      <small>수집된 에셋</small>
+      <small>TOTAL</small>
       <strong>{total}</strong>
     </div>
   </div>
 </header>
 
-<!-- Hero -->
-<div class="hero">
-  <div style="max-width:1400px;margin:0 auto">
-    <h1>분야별 AI 에이전트 에셋 컬렉션</h1>
-    <p>인터넷 &amp; GitHub에서 수집된 OpenCode / OpenWork 표준 규격의 스킬, 커맨드, 에이전트를 탐색하고 1-클릭으로 설치하세요.</p>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-eyebrow">Next-Generation AI Agent Toolkit</div>
+  <h1>OpenCode &amp; OpenWork Hub</h1>
+  <p>인터넷과 GitHub의 최고 성능 AI 코딩 에이전트 스킬, 커맨드, 페르소나를 한 곳에서 탐색하고 원클릭으로 설치하세요.</p>
 
-    <div class="stat-pills">
-      {pills_html}
-    </div>
+  <div class="stat-pills">
+    {pills_html}
+  </div>
+</section>
 
-    <!-- Mobile search -->
-    <input class="search-input" id="searchMobile" type="text"
-           placeholder="검색..."
-           style="display:none;width:100%;margin:14px 0 0;" />
-
-    <div class="tabs" id="tabs">
-      {tabs_html}
-    </div>
+<!-- Segmented Tabs Navigation -->
+<div class="tabs-container">
+  <div class="tabs" id="tabs">
+    {tabs_html}
   </div>
 </div>
 
-<!-- Main -->
+<!-- Main Content Area -->
 <main class="main">
   <div class="results-bar">
     <p id="resultsLabel">전체 <span id="resultsCount">{total}</span>개 에셋</p>
@@ -591,12 +832,12 @@ body {{
   <div class="grid" id="grid"></div>
   <div class="empty" id="emptyState">
     <div class="empty-icon">🔍</div>
-    <h3>검색 결과 없음</h3>
-    <p>다른 키워드나 카테고리를 선택해보세요.</p>
+    <h3>검색 결과가 없습니다</h3>
+    <p>다른 검색어나 카테고리를 선택해 보세요.</p>
   </div>
 </main>
 
-<!-- Modal -->
+<!-- Modal (iOS/macOS Sheet) -->
 <div class="modal-overlay" id="modal" onclick="onOverlayClick(event)">
   <div class="modal" id="modalBox">
     <div class="modal-head">
@@ -612,12 +853,20 @@ body {{
       <button class="btn-copy" id="copyBtn" onclick="copyInstall()">📋 복사</button>
     </div>
     <div class="modal-body">
-      <div class="modal-body-label">📄 지침 &amp; 스펙 (SKILL.md / COMMAND.md 전체 내용)</div>
-      <pre class="modal-content-pre" id="modalContent"></pre>
+      <div class="modal-body-label">SPECIFICATION &amp; INSTRUCTIONS</div>
+      <div class="mac-terminal">
+        <div class="mac-terminal-bar">
+          <span class="mac-dot dot-red"></span>
+          <span class="mac-dot dot-yellow"></span>
+          <span class="mac-dot dot-green"></span>
+          <span class="mac-terminal-title">SKILL.md preview</span>
+        </div>
+        <pre class="modal-content-pre" id="modalContent"></pre>
+      </div>
     </div>
     <div class="modal-foot">
-      <small>ESC 또는 바깥 클릭으로 닫기</small>
-      <button class="btn-secondary" onclick="closeModal()">닫기</button>
+      <small>ESC 키 또는 바깥 영역을 클릭하여 닫기</small>
+      <button class="btn-apple" onclick="closeModal()">닫기</button>
     </div>
   </div>
 </div>
@@ -682,19 +931,19 @@ function render() {{
     const isRAG = c.cat_id === 'rag_search';
     const bClass = typeBadgeClass[c.type] || 'badge-skill';
     const bLabel = typeLabel[c.type] || 'SKILL';
-    const descText = c.desc || '상세 내용을 보려면 카드를 클릭하세요.';
+    const descText = c.desc || '상세 지침 및 사양을 보려면 카드를 클릭하세요.';
     const srcShort = c.source.length > 22 ? c.source.slice(0,22)+'…' : c.source;
     return `<div class="card${{isRAG ? ' rag-highlight' : ''}}" onclick="openModal('${{escAttr(c.id)}}')">
       <div class="card-badges">
         <span class="badge ${{bClass}}">${{bLabel}}</span>
-        <span class="badge badge-src" title="${{escAttr(c.source)}}">${{escAttr(srcShort)}}</span>
+        <span class="badge-src" title="${{escAttr(c.source)}}">${{escAttr(srcShort)}}</span>
       </div>
       <div class="card-cat">${{escHtml(c.cat_label)}}</div>
       <div class="card-name">${{escHtml(c.name)}}</div>
       <div class="card-desc">${{escHtml(descText)}}</div>
       <div class="card-footer">
-        <span class="card-footer-label">👁 상세 보기</span>
-        <button class="btn-install" title="설치 명령 복사" onclick="event.stopPropagation();copyCmd('${{escAttr(c.install)}}')">
+        <span class="card-footer-label">세부 사양 보기 →</span>
+        <button class="btn-install" title="설치 명령어 복사" onclick="event.stopPropagation();copyCmd('${{escAttr(c.install)}}')">
           📋 설치
         </button>
       </div>
@@ -715,11 +964,9 @@ function setTab(cat) {{
 function onSearch(val) {{
   curSearch = val;
   document.getElementById('searchInput').value = val;
-  document.getElementById('searchMobile').value = val;
   render();
 }}
 document.getElementById('searchInput').addEventListener('input', e => onSearch(e.target.value));
-document.getElementById('searchMobile').addEventListener('input', e => onSearch(e.target.value));
 
 /* ── Keyboard shortcuts ────────────────────────────────── */
 document.addEventListener('keydown', e => {{
@@ -729,11 +976,6 @@ document.addEventListener('keydown', e => {{
   }}
   if (e.key === 'Escape') closeModal();
 }});
-
-/* ── Responsive mobile search ──────────────────── */
-if (window.innerWidth < 640) {{
-  document.getElementById('searchMobile').style.display = 'block';
-}}
 
 /* ── Modal ─────────────────────────────────────────────── */
 function openModal(id) {{
@@ -746,8 +988,8 @@ function openModal(id) {{
 
   document.getElementById('modalBadges').innerHTML =
     `<span class="badge ${{bClass}}">${{bLabel}}</span>` +
-    `<span class="badge" style="background:var(--bg3);color:var(--text2);border:1px solid var(--border)">${{escHtml(c.cat_label)}}</span>` +
-    `<span style="font-size:11px;color:var(--text2);margin-left:4px">출처: ${{escHtml(c.source)}}</span>`;
+    `<span class="badge" style="background:var(--segment-bg);color:var(--text-secondary)">${{escHtml(c.cat_label)}}</span>` +
+    `<span style="font-size:11px;color:var(--text-muted);margin-left:4px">출처: ${{escHtml(c.source)}}</span>`;
 
   document.getElementById('modalName').textContent = c.name;
   document.getElementById('modalDesc').textContent = c.desc || '';
@@ -849,8 +1091,8 @@ render();
     with open(HTML_OUTPUT, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"✅ 대시보드 생성 완료: {HTML_OUTPUT}")
-    print(f"   총 {len(raw_cards)}개 에셋 포함 ({len(cat_counts)}개 세부 카테고리)")
+    print(f"✅ 애플 스타일 대시보드 생성 완료: {HTML_OUTPUT}")
+    print(f"   총 {len(raw_cards)}개 에셋 포함")
 
 
 if __name__ == "__main__":
