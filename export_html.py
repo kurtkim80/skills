@@ -145,13 +145,19 @@ def generate_dashboard():
             if repo_url.endswith(".git"):
                 repo_url = repo_url[:-4]
 
+            desc_en = item.get("description", "")
+            desc_ko = item.get("description_ko", desc_en)
+            desc_display = desc_ko if desc_ko else desc_en
+
             raw_cards.append({
                 "id": key,
                 "name": name,
                 "type": item_type,
                 "cat_id": cat_id,
                 "cat_label": cat_label,
-                "desc": desc,
+                "desc": desc_display,
+                "desc_ko": desc_ko,
+                "desc_en": desc_en,
                 "source": src,
                 "repo_url": repo_url,
                 "content": content,
@@ -998,7 +1004,8 @@ function render() {{
     const matchCat = curCat === 'all' || c.cat_id === curCat;
     const matchQ = !q ||
       c.name.toLowerCase().includes(q) ||
-      c.desc.toLowerCase().includes(q);
+      (c.desc && c.desc.toLowerCase().includes(q)) ||
+      (c.desc_en && c.desc_en.toLowerCase().includes(q));
     return matchCat && matchQ;
   }});
 
