@@ -149,6 +149,17 @@ def generate_dashboard():
             desc_ko = item.get("description_ko", desc_en)
             desc_display = desc_ko if desc_ko else desc_en
 
+            # 온라인 방문자도 py 파일 없이 즉시 설치할 수 있는 범용 curl 원라이너 명령어 생성
+            if item_type == "skill":
+                file_rel = f"{rel}/SKILL.md" if (BASE_DIR / rel).is_dir() else rel
+                install_cmd = f"mkdir -p ~/.config/opencode/skills/{key} && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/{file_rel} -o ~/.config/opencode/skills/{key}/SKILL.md"
+            elif item_type == "command":
+                install_cmd = f"mkdir -p ~/.config/opencode/commands && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/{rel} -o ~/.config/opencode/commands/{Path(rel).name}"
+            elif item_type == "agent":
+                install_cmd = f"mkdir -p ~/.config/opencode/agents && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/{rel} -o ~/.config/opencode/agents/{Path(rel).name}"
+            else:
+                install_cmd = f"mkdir -p ~/.config/opencode/skills/{key} && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/{rel} -o ~/.config/opencode/skills/{key}/SKILL.md"
+
             raw_cards.append({
                 "id": key,
                 "name": name,
@@ -161,7 +172,7 @@ def generate_dashboard():
                 "source": src,
                 "repo_url": repo_url,
                 "content": content,
-                "install": f"python3 skill_collector.py install {key} --target global",
+                "install": install_cmd,
             })
 
     # </script> 가 content 안에 있으면 브라우저가 스크립트 태그를 조기 종료함
