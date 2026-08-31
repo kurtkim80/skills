@@ -45,6 +45,27 @@
     "repo": "https://github.com/MK-ORGANIZATION-1/AGENTS-COLLECTION.git",
     "branch": "main",
     "skills_subpath": "AGENTS",
-    "description": "Massive collection — 1195 SKILL.md + 664 agent definitions across 11 platforms (⭐ 80)"
+    "description": "Massive collection — 1195 SKILL.md + 664 agent definitions across 11 platforms"
+  },
+  {
+    "name": "alirezarezvani/claude-skills",
+    "repo": "https://github.com/alirezarezvani/claude-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "380+ curated skills for engineering, context optimization, architecture, and productivity"
+  },
+  {
+    "name": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+    "repo": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Specialized agent skills for context window optimization, memory management, and attention engineering"
+  },
+  {
+    "name": "obviousworks/Claude-AI-skills-collection-2026",
+    "repo": "https://github.com/obviousworks/Claude-AI-skills-collection-2026.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Agentic engineering workflows for requirements clarification, planning, testing, and security review"
   }
 ]
