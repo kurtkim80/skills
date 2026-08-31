@@ -890,10 +890,6 @@ body {{
   <div class="hero-eyebrow">Next-Generation AI Agent Toolkit</div>
   <h1>OpenCode &amp; OpenWork Hub</h1>
   <p>인터넷과 GitHub의 최고 성능 AI 코딩 에이전트 스킬, 커맨드, 페르소나를 한 곳에서 탐색하고 원클릭으로 설치하세요.</p>
-
-  <div class="stat-pills">
-    {pills_html}
-  </div>
 </section>
 
 <!-- Segmented Tabs Navigation -->
