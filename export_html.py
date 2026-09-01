@@ -561,10 +561,6 @@ body {{
   box-shadow: var(--card-shadow-hover);
   border-color: var(--apple-blue-border);
 }}
-.card.rag-highlight {{
-  border-color: var(--apple-blue-border);
-  background: linear-gradient(180deg, var(--card-bg) 0%, var(--apple-blue-dim) 100%);
-}}
 
 .card-badges {{
   display: flex;
@@ -1028,7 +1024,6 @@ function render() {{
   empty.style.display = 'none';
 
   grid.innerHTML = filtered.map(c => {{
-    const isRAG = c.cat_id === 'rag_search';
     const bClass = typeBadgeClass[c.type] || 'badge-skill';
     const bLabel = typeLabel[c.type] || 'SKILL';
     const descText = c.desc || '상세 지침 및 사양을 보려면 카드를 클릭하세요.';
@@ -1039,7 +1034,7 @@ function render() {{
       </a>` :
       `<span class="badge-src" title="${{escAttr(c.source)}}">${{escHtml(srcShort)}}</span>`;
 
-    return `<div class="card${{isRAG ? ' rag-highlight' : ''}}" onclick="openModal('${{escAttr(c.id)}}')">
+    return `<div class="card" onclick="openModal('${{escAttr(c.id)}}')">
       <div class="card-badges">
         <span class="badge ${{bClass}}">${{bLabel}}</span>
         ${{repoBtn}}
