@@ -105,6 +105,16 @@ def generate_dashboard():
     with open(INDEX_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    # 번역 캐시 파일 로드 (누락 방지 안전장치)
+    trans_cache = {}
+    cache_file = BASE_DIR / "translations_cache.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file, "r", encoding="utf-8") as cf:
+                trans_cache = json.load(cf)
+        except Exception:
+            pass
+
     # 커스텀 RAG 스킬 포함
     custom_rag = BASE_DIR / "rag-search-optimizer" / "SKILL.md"
     if custom_rag.exists() and "rag-search-optimizer" not in data.get("skills", {}):
@@ -112,6 +122,7 @@ def generate_dashboard():
             "name": "rag-search-optimizer",
             "type": "skill",
             "description": "RAG(Retrieval-Augmented Generation) 시스템의 검색 정확도 향상, 하이브리드 검색, 리랭킹, 청킹 전략, Contextual Retrieval 등 검색 파이프라인 최적화",
+            "description_ko": "RAG(Retrieval-Augmented Generation) 시스템의 검색 정확도 향상, 하이브리드 검색, 리랭킹, 청킹 전략, Contextual Retrieval 등 검색 파이프라인 최적화",
             "source_repo": "local/custom",
             "source_name": "local-custom",
             "path": "rag-search-optimizer"
@@ -125,7 +136,7 @@ def generate_dashboard():
                              ("agent", data.get("agents", {}))]:
         for key, item in items.items():
             name = item.get("name", key)
-            desc = item.get("description", "")
+            desc_en = item.get("description", "")
             src = item.get("source_name", "local")
             rel = item.get("path", "")
 
@@ -138,15 +149,15 @@ def generate_dashboard():
             elif fp.is_file():
                 content = fp.read_text(encoding="utf-8", errors="ignore")[:8000]
 
-            cat_id, cat_label = classify_category(name, desc, item_type)
+            cat_id, cat_label = classify_category(name, desc_en, item_type)
             cat_counts[cat_id] = cat_counts.get(cat_id, 0) + 1
 
             repo_url = item.get("source_repo", "")
             if repo_url.endswith(".git"):
                 repo_url = repo_url[:-4]
 
-            desc_en = item.get("description", "")
-            desc_ko = item.get("description_ko", desc_en)
+            # 한국어 번역 우선 매핑
+            desc_ko = item.get("description_ko") or trans_cache.get(desc_en) or desc_en
             desc_display = desc_ko if desc_ko else desc_en
 
             # 온라인 방문자도 py 파일 없이 즉시 설치할 수 있는 범용 curl 원라이너 명령어 생성

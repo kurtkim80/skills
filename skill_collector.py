@@ -210,8 +210,19 @@ def sync_assets():
 
                 print(f"   ✅ [수집] Skills: {repo_skills}개 | Commands: {repo_commands}개 | Agents: {repo_agents}개")
 
-            except Exception as e:
-                print(f"   ❌ 처리 중 오류: {e}")
+    # 한국어 번역 캐시 자동 연동 및 보존
+    cache_file = BASE_DIR / "translations_cache.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file, "r", encoding="utf-8") as cf:
+                trans_cache = json.load(cf)
+            for sec in ["skills", "commands", "agents"]:
+                for k, item in index.get(sec, {}).items():
+                    desc = item.get("description", "")
+                    if desc in trans_cache:
+                        item["description_ko"] = trans_cache[desc]
+        except Exception:
+            pass
 
     save_index(index)
     total_skills = len(index["skills"])
