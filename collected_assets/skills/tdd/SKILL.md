@@ -1,76 +1,164 @@
 ---
 name: tdd
-description: "Run a red-green-refactor TDD workflow — generate failing tests first, implement to green, then check coverage gaps. Usage: /tdd <generate|coverage|validate> [target]"
-argument-hint: <generate|coverage|validate> [file-or-dir]
+description: >
+  Guided test-driven development workflow for .NET 10 using xUnit v3,
+  WebApplicationFactory, Testcontainers, and Verify snapshots. Follows the
+  strict red-green-refactor cycle. Use when: "TDD", "test-driven", "let's TDD
+  this", "red green refactor", "write the test first", or when building a
+  feature with clear acceptance criteria.
 ---
 
-# /tdd
+# /tdd -- Red-Green-Refactor for .NET
 
-Drive a test-first workflow for `$ARGUMENTS` using the TDD Guide skill. The first word of `$ARGUMENTS` selects the mode (`generate`, `coverage`, or `validate`); the rest is the target file or directory. If `$ARGUMENTS` is empty, ask which mode and target.
+## What
 
-> **Note on tooling:** the tdd-guide scripts are **Python library modules, not CLI tools** — import them; do not invoke them as commands. Runnable patterns below.
+Guides a strict test-driven development cycle for .NET features. Instead of
+writing implementation first and bolting on tests after, this command flips the
+order: write a failing test that defines the desired behavior, implement the
+minimum code to make it pass, then refactor with confidence.
 
-## Modes
+Every cycle uses the .NET testing stack:
+- **xUnit v3** -- Test framework with `[Fact]` and `[Theory]`
+- **WebApplicationFactory** -- Integration tests against the real HTTP pipeline
+- **Testcontainers** -- Real databases (PostgreSQL, SQL Server) in tests
+- **Verify** -- Snapshot testing for complex response structures
+- **FakeTimeProvider** -- Deterministic time in tests
 
-### `/tdd generate <file-or-dir>` — write failing tests FIRST
+## When
 
-1. Read `engineering-team/skills/tdd-guide/SKILL.md` and `engineering-team/skills/tdd-guide/references/tdd-best-practices.md` for the red-green-refactor discipline and test-case taxonomy (happy path, edge cases, error cases)
-2. Detect the project's test framework — use `engineering-team/skills/tdd-guide/references/framework-guide.md` for Jest/Vitest/pytest/JUnit conventions
-3. Write the tests **before** any implementation; run them and confirm they FAIL (red)
-4. Implement the minimum code to pass (green), then refactor with tests staying green
-5. Optionally use the library for stub scaffolding:
+- User says "TDD", "test-driven", "let's TDD this", "write the test first"
+- Building a new feature with clear acceptance criteria
+- Fixing a bug (write a test that reproduces the bug first, then fix)
+- Adding behavior to an existing feature (test the new behavior first)
+- Any time the user wants proof that code works before it ships
 
-```bash
-cd engineering-team/skills/tdd-guide/scripts && python3 -c "
-from test_generator import TestGenerator, TestFramework
-g = TestGenerator(framework=TestFramework.PYTEST, language='python')
-cases = g.generate_from_requirements({'acceptance_criteria': [
-    {'id': 'AC1', 'description': 'validates email format'},
-    {'id': 'AC2', 'description': 'rejects duplicate emails'}]})
-print(g.generate_test_file('registration', cases))
-"
+**Skip TDD for:** Trivial config changes, scaffolding without logic, documentation.
+
+## How
+
+### Cycle: Red -> Green -> Refactor
+
+Each feature goes through one or more TDD cycles. A cycle covers one discrete behavior.
+
+#### Step 1: Red -- Write the Failing Test
+
+Write a test that describes the desired behavior. The test MUST fail because the
+implementation does not exist yet.
+
+```csharp
+[Fact]
+public async Task CreateOrder_WithValidItems_Returns201WithOrderId()
+{
+    // Arrange
+    var client = _factory.CreateClient();
+    var request = new CreateOrderRequest([
+        new OrderItemRequest("SKU-001", 2, 29.99m)
+    ]);
+
+    // Act
+    var response = await client.PostAsJsonAsync("/api/orders", request);
+
+    // Assert — plain xUnit Assert (FluentAssertions v8+ requires a commercial license)
+    Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    var result = await response.Content.ReadFromJsonAsync<CreateOrderResponse>();
+    Assert.NotNull(result);
+    Assert.NotEqual(Guid.Empty, result.OrderId);
+}
 ```
 
-### `/tdd coverage <coverage-report>` — analyze gaps against a threshold
-
-1. Generate a real coverage report with the project's native runner first (`pytest --cov --cov-report=lcov`, `vitest run --coverage`, `jest --coverage`)
-2. Parse it and list prioritized gaps:
-
+Run the test and confirm it fails:
 ```bash
-cd engineering-team/skills/tdd-guide/scripts && python3 -c "
-from coverage_analyzer import CoverageAnalyzer
-a = CoverageAnalyzer()
-a.parse_coverage_report(open('<path-to-lcov-or-json>').read(), 'lcov')  # or 'json' / 'xml'
-print(a.calculate_summary())
-for gap in a.identify_gaps(threshold=80.0): print(gap)
-"
+dotnet test --filter "CreateOrder_WithValidItems_Returns201WithOrderId"
 ```
 
-(Smoke-test input available at `engineering-team/skills/tdd-guide/assets/sample_coverage_report.lcov`.)
+If the test passes without implementation, the test is not testing what you think.
+Rewrite it.
 
-3. For each gap, return to `/tdd generate` — coverage gaps are filled with tests, not excuses
+#### Step 2: Green -- Minimal Implementation
 
-### `/tdd validate <test-file>` — review test quality
+Write the minimum code to make the test pass. Do not add features, optimizations,
+or edge case handling. The goal is a green test, nothing more.
 
-Read the test file and check it against `engineering-team/skills/tdd-guide/references/tdd-best-practices.md`:
+- Create the endpoint, handler, request/response types, and EF config as needed
+- Use the simplest logic that satisfies the test assertion
+- Do not refactor yet -- ugly passing code is fine at this stage
 
-- [ ] Every test has at least one meaningful assertion (no assertion-free tests)
-- [ ] Edge cases and error paths covered, not just happy path
-- [ ] Tests are independent (no order coupling, no shared mutable state)
-- [ ] Test names describe behavior, not implementation
-- [ ] No testing of private internals — behavior only
+Run the test and confirm it passes:
+```bash
+dotnet test --filter "CreateOrder_WithValidItems_Returns201WithOrderId"
+```
 
-Report failures with concrete rewrite suggestions.
+#### Step 3: Refactor -- Clean Up with Confidence
 
-## CI Integration
+Now that the test is green, refactor freely:
+- Extract methods, rename variables, improve structure
+- Apply modern C# patterns (primary constructors, records, collection expressions)
+- Add validation, error handling, and edge cases (with new tests for each)
+- Run the full test suite after each refactor step to catch regressions
 
-For wiring coverage thresholds into CI, follow `engineering-team/skills/tdd-guide/references/ci-integration.md`.
+```bash
+dotnet test
+```
 
-## Repo Assets (verified paths)
+If any test goes red during refactoring, undo the last change and try a smaller step.
 
-- Skill: `engineering-team/skills/tdd-guide/SKILL.md` (+ `HOW_TO_USE.md`)
-- Best practices: `engineering-team/skills/tdd-guide/references/tdd-best-practices.md`
-- Framework conventions: `engineering-team/skills/tdd-guide/references/framework-guide.md`
-- CI integration: `engineering-team/skills/tdd-guide/references/ci-integration.md`
-- Library modules: `engineering-team/skills/tdd-guide/scripts/` (test_generator, coverage_analyzer, tdd_workflow, fixture_generator, metrics_calculator — import-only)
-- Sample inputs: `engineering-team/skills/tdd-guide/assets/`
+### Multi-Cycle Features
+
+Most features require multiple TDD cycles. Plan the cycles upfront:
+
+```
+Feature: Order Management
+
+Cycle 1: Create order with valid items -> 201
+Cycle 2: Create order with empty items -> 400 validation error
+Cycle 3: Create order with invalid SKU -> 400 with specific error
+Cycle 4: Get order by ID -> 200 with full order details
+Cycle 5: Get order that does not exist -> 404
+```
+
+Each cycle adds one behavior. Never combine multiple behaviors in a single cycle.
+
+### Test Infrastructure Setup
+
+If the project lacks test infrastructure, set it up before the first cycle:
+
+1. Create test project with xUnit v3 and required packages
+2. Configure `WebApplicationFactory` with Testcontainers for the real database
+3. Add a shared fixture to avoid spinning up containers per test class
+4. Verify the infrastructure with a simple health-check test
+
+## Example
+
+```
+User: /tdd Let's TDD a product search endpoint
+
+Claude: I'll plan the TDD cycles for product search:
+
+Cycle 1: Search with matching term returns matching products
+Cycle 2: Search with no matches returns empty list
+Cycle 3: Search with pagination returns correct page
+Cycle 4: Search with filters narrows results
+
+Starting Cycle 1: Red phase
+Writing a failing integration test for basic product search...
+
+[writes test, runs it, confirms failure]
+
+Cycle 1: Green phase
+Implementing the minimum to make the search test pass...
+
+[implements, runs test, confirms pass]
+
+Cycle 1: Refactor phase
+The implementation works but the query could use a projection
+instead of loading full entities. Refactoring...
+
+[refactors, runs full suite, all green]
+
+Cycle 1 complete. Moving to Cycle 2...
+```
+
+## Related
+
+- `/verify` -- Run full verification after completing all TDD cycles
+- `/scaffold` -- Generate initial feature structure that tests will drive

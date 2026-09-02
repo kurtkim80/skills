@@ -1,135 +1,182 @@
 ---
-name: "migrate"
-description: >-
-  Migrate from Cypress or Selenium to Playwright. Use when user mentions
-  "cypress", "selenium", "migrate tests", "convert tests", "switch to
-  playwright", "move from cypress", or "replace selenium".
+name: migrate
+description: >
+  Guided, safe migration workflow covering EF Core schema migrations, .NET
+  version upgrades, and NuGet dependency updates — each with rollback
+  strategies and verification steps. Invoke when: "add migration",
+  "update database", "create migration", "schema change", "new table",
+  "rename column", "upgrade nuget", "update packages", "dependency update",
+  "version upgrade", ".NET upgrade".
 ---
 
-# Migrate to Playwright
+# /migrate
 
-Interactive migration from Cypress or Selenium to Playwright with file-by-file conversion.
+## What
 
-## Input
+The single migration workflow for three change types, with EF Core schema
+migrations as the primary flow:
 
-`$ARGUMENTS` can be:
-- `"from cypress"` — migrate Cypress test suite
-- `"from selenium"` — migrate Selenium/WebDriver tests
-- A file path: convert a specific test file
-- Empty: auto-detect source framework
+1. **EF Core schema** — review pending model changes, generate a descriptively
+   named migration, review the SQL for data loss and locking risks, apply with
+   a documented rollback path.
+2. **.NET version upgrade** — phased TFM/SDK/package upgrade with verification
+   at each phase.
+3. **NuGet updates** — incremental, one-package-at-a-time updates so breakage
+   is always attributable.
 
-## Steps
+Shared principles: verify before applying, rollback plan always, test after
+every step, one logical change per migration.
 
-### 1. Detect Source Framework
+## When
 
-Use `Explore` subagent to scan:
-- `cypress/` directory or `cypress.config.ts` → Cypress
-- `selenium`, `webdriver` in `package.json` deps → Selenium
-- `.py` test files with `selenium` imports → Selenium (Python)
+- After modifying entity classes, DbContext configuration, or relationships
+- "add migration", "update database", "create migration", "new table", "rename column"
+- When generating SQL scripts for DBA review
+- "upgrade to .NET 10", "version upgrade", ".NET upgrade"
+- "upgrade nuget", "update packages", "dependency update", vulnerable package alerts
 
-### 2. Assess Migration Scope
+## How
 
-Count files and categorize:
+First, classify the request: schema change → Flow A; framework upgrade → Flow B;
+package update → Flow C. Then follow that flow end to end.
 
-```
-Migration Assessment:
-- Total test files: X
-- Cypress custom commands: Y
-- Cypress fixtures: Z
-- Estimated effort: [small|medium|large]
-```
+### Flow A: EF Core Schema Migration (primary)
 
-| Size | Files | Approach |
-|---|---|---|
-| Small (1-10) | Convert sequentially | Direct conversion |
-| Medium (11-30) | Batch in groups of 5 | Use sub-agents |
-| Large (31+) | Use `/batch` | Parallel conversion with `/batch` |
-
-### 3. Set Up Playwright (If Not Present)
-
-Run `/pw:pw-init` first if Playwright isn't configured.
-
-### 4. Convert Files
-
-For each file, apply the appropriate mapping:
-
-#### Cypress → Playwright
-
-Load `cypress-mapping.md` for complete reference.
-
-Key translations:
-```
-cy.visit(url)           → page.goto(url)
-cy.get(selector)        → page.locator(selector) or page.getByRole(...)
-cy.contains(text)       → page.getByText(text)
-cy.find(selector)       → locator.locator(selector)
-cy.click()              → locator.click()
-cy.type(text)           → locator.fill(text)
-cy.should('be.visible') → expect(locator).toBeVisible()
-cy.should('have.text')  → expect(locator).toHaveText(text)
-cy.intercept()          → page.route()
-cy.wait('@alias')       → page.waitForResponse()
-cy.fixture()            → JSON import or test data file
-```
-
-**Cypress custom commands** → Playwright fixtures or helper functions
-**Cypress plugins** → Playwright config or fixtures
-**`before`/`beforeEach`** → `test.beforeAll()` / `test.beforeEach()`
-
-#### Selenium → Playwright
-
-Load `selenium-mapping.md` for complete reference.
-
-Key translations:
-```
-driver.get(url)                    → page.goto(url)
-driver.findElement(By.id('x'))     → page.locator('#x') or page.getByTestId('x')
-driver.findElement(By.css('.x'))   → page.locator('.x') or page.getByRole(...)
-element.click()                    → locator.click()
-element.sendKeys(text)             → locator.fill(text)
-element.getText()                  → locator.textContent()
-WebDriverWait + ExpectedConditions → expect(locator).toBeVisible()
-driver.switchTo().frame()          → page.frameLocator()
-Actions                            → locator.hover(), locator.dragTo()
-```
-
-### 5. Upgrade Locators
-
-During conversion, upgrade selectors to Playwright best practices:
-- `#id` → `getByTestId()` or `getByRole()`
-- `.class` → `getByRole()` or `getByText()`
-- `[data-testid]` → `getByTestId()`
-- XPath → role-based locators
-
-### 6. Convert Custom Commands / Utilities
-
-- Cypress custom commands → Playwright custom fixtures via `test.extend()`
-- Selenium page objects → Playwright page objects (keep structure, update API)
-- Shared helpers → TypeScript utility functions
-
-### 7. Verify Each Converted File
-
-After converting each file:
+**Step 1: Assess current state**
 
 ```bash
-npx playwright test <converted-file> --reporter=list
+dotnet ef migrations list --project <InfraProject> --startup-project <ApiProject>
 ```
 
-Fix any compilation or runtime errors before moving to the next file.
+Check for pending migrations and uncaptured model changes.
 
-### 8. Clean Up
+**Step 2: Review model changes**
 
-After all files are converted:
-- Remove Cypress/Selenium dependencies from `package.json`
-- Remove old config files (`cypress.config.ts`, etc.)
-- Update CI workflow to use Playwright
-- Update README with new test commands
+Use MCP tools instead of reading whole files:
 
-Ask user before deleting anything.
+```
+find_symbol(name: entity or DbSet)        -- locate the changed entity
+get_type_hierarchy(typeName: entity)      -- check TPH/TPT/TPC inheritance changes
+find_references(symbolName: property)     -- assess downstream query impact
+```
 
-## Output
+Confirm the change is one logical unit. If not, split into multiple migrations —
+mixed migrations make rollback all-or-nothing.
 
-- Conversion summary: files converted, total tests migrated
-- Any tests that couldn't be auto-converted (manual intervention needed)
-- Updated CI config
-- Before/after comparison of test run results
+**Step 3: Generate migration**
+
+Name describes the change, not the entity: `Add|Remove|Rename|Modify` + `WhatChanged`.
+
+```bash
+# GOOD
+dotnet ef migrations add AddOrderShippingAddress --project <Infra> --startup-project <Api>
+# BAD — names the entity, not the change
+dotnet ef migrations add Order
+```
+
+**Step 4: Review generated SQL**
+
+`database update` has no dry-run flag — preview by generating an idempotent
+script and reading it:
+
+```bash
+dotnet ef migrations script --idempotent --project <Infra> --startup-project <Api>
+```
+
+Flag and report:
+- **DROP COLUMN / DROP TABLE** — confirm data loss is intentional
+- **ALTER COLUMN** type changes — check precision loss or truncation
+- **ALTER on large tables** — warn about lock duration
+- **New non-nullable columns** — need defaults for existing rows
+
+If data must survive a rename/retype, use a multi-step migration with raw SQL:
+
+```csharp
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.AddColumn<string>("ContactEmail", "Customers", nullable: true);
+    migrationBuilder.Sql("UPDATE \"Customers\" SET \"ContactEmail\" = \"Email\"");
+    migrationBuilder.AlterColumn<string>("ContactEmail", "Customers", nullable: false);
+    migrationBuilder.DropColumn("Email", "Customers");
+}
+```
+
+**Step 5: Apply and verify**
+
+```bash
+dotnet ef database update --project <Infra> --startup-project <Api>
+dotnet build && dotnet test   # integration tests catch schema mismatches
+```
+
+**Step 6: Document rollback**
+
+```bash
+dotnet ef database update <PreviousMigrationName> --project <Infra> --startup-project <Api>
+dotnet ef migrations remove --project <Infra> --startup-project <Api>   # if unapplying from code
+```
+
+Never modify a migration that is already applied — create a new one.
+
+### Flow B: .NET Version Upgrade
+
+1. **Assess** — `get_project_graph` to list all TFMs; flag mixed versions.
+2. **Pre-flight** — all tests green, no pending EF migrations, dependencies
+   checked for target-version compatibility, dedicated branch created
+   (branch IS the rollback plan).
+3. **Update `global.json`** — SDK version with `"rollForward": "latestMinor"`.
+4. **Update TFMs** — `<TargetFramework>net10.0</TargetFramework>` and
+   `<LangVersion>14</LangVersion>` in `.csproj` or `Directory.Build.props`.
+5. **Update packages** — `dotnet outdated --upgrade Major --include Microsoft.*`,
+   then build and fix.
+6. **Adopt new features** — per `knowledge/dotnet-whats-new.md`: `TimeProvider`,
+   `HybridCache`, primary constructors, collection expressions.
+7. **Verify** — `dotnet build`, `dotnet test`, `dotnet format --verify-no-changes`.
+
+### Flow C: NuGet Package Updates
+
+1. **Audit** — `dotnet list package --outdated` and `dotnet list package --vulnerable`.
+   Vulnerable packages are urgent: update, test, deploy.
+2. **Categorize** — patch (batch-safe), minor (one at a time), major (one at a
+   time, read release notes first).
+3. **Update incrementally** — one package, then `dotnet build && dotnet test`
+   before the next. Batched updates make failures unattributable.
+4. **Check fit** — consult `knowledge/package-recommendations.md` before adding
+   new packages; prefer built-in .NET alternatives. Moving off MediatR
+   (commercial license from v13)? Follow the step-by-step guide in
+   `knowledge/mediatr-to-mediator-migration.md`.
+5. **Rollback** — git revert the package bump; never downgrade other packages
+   to compensate.
+
+### MCP Tools Used
+
+- `find_symbol` / `find_references` — locate entities, assess schema-change impact
+- `get_type_hierarchy` — entity inheritance for TPH/TPT/TPC
+- `get_project_graph` — TFM audit before version upgrades
+- `get_diagnostics` — catch warnings after migration generation or upgrades
+
+## Example
+
+```
+User: /migrate
+
+Claude: Checking migration state...
+  Last applied: 20250710_AddOrderTable
+  Model changes detected: new ShippingAddress property on Order entity.
+
+  Creating migration: AddOrderShippingAddress
+  Reviewing SQL (dotnet ef migrations script --idempotent)...
+  - ALTER TABLE "Orders" ADD "ShippingStreet" text NULL
+  - ALTER TABLE "Orders" ADD "ShippingCity" text NULL
+  No data loss. No locking risk. Safe to apply.
+
+  Applying migration... Done. Build: green. Tests: 34/34 passed.
+
+  Rollback (if needed):
+  dotnet ef database update AddOrderTable --project src/Infrastructure --startup-project src/Api
+```
+
+## Related
+
+- `ef-core` — entity configuration, query patterns, migration internals
+- `/verify` — full verification pipeline after migration work
+- `/checkpoint` — commit a safe state before risky migrations

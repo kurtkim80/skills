@@ -1,164 +1,121 @@
 ---
 name: security-scan
-description: Scan your Claude Code configuration (.claude/ directory) for security vulnerabilities, misconfigurations, and injection risks using AgentShield. Checks CLAUDE.md, settings.json, MCP servers, hooks, and agent definitions.
+description: >
+  Deep security scanning for .NET applications across 6 layers: vulnerable packages,
+  secrets detection, OWASP code patterns, auth configuration, CORS policy, and
+  data protection. Produces severity-rated findings with specific remediation steps.
+  Load this skill when: "security scan", "security audit", "check for vulnerabilities",
+  "find secrets", "OWASP", "auth review", "CORS check", "security review",
+  "penetration test prep", "CVE check", "vulnerability scan", "hardcoded password",
+  "data protection", "security posture".
 ---
 
-# Security Scan Skill
+# /security-scan — 6-Layer Security Pipeline
 
-Audit your Claude Code configuration for security issues using [AgentShield](https://github.com/affaan-m/agentshield).
+## What
 
-## When to Activate
+Runs a defense-in-depth static scan across 6 layers. A project with zero CVEs
+can still have hardcoded secrets, SQL injection, and missing auth — each layer
+catches a different vulnerability class. Findings map to the **OWASP Top
+10:2025** taxonomy and are rated Critical/High/Medium/Low by exploitability,
+impact, and exposure — a Critical SQL injection on a public endpoint outranks a
+Low info-disclosure on an admin page.
 
-- Setting up a new Claude Code project
-- After modifying `.claude/settings.json`, `CLAUDE.md`, or MCP configs
-- Before committing configuration changes
-- When onboarding to a new repository with existing Claude Code configs
-- Periodic security hygiene checks
+Detection patterns, OWASP mappings, remediation code, and the report template
+live in `references/scan-layers.md` — read it before executing.
 
-## What It Scans
+**Honesty rule:** this is static analysis, not a penetration test. It catches
+known patterns but misses business-logic flaws, complex authorization bypasses,
+and runtime-only vulnerabilities. Every report states this.
 
-| File | Checks |
-|------|--------|
-| `CLAUDE.md` | Hardcoded secrets, auto-run instructions, prompt injection patterns |
-| `settings.json` | Overly permissive allow lists, missing deny lists, dangerous bypass flags |
-| `mcp.json` | Risky MCP servers, hardcoded env secrets, npx supply chain risks |
-| `hooks/` | Command injection via interpolation, data exfiltration, silent error suppression |
-| `agents/*.md` | Unrestricted tool access, prompt injection surface, missing model specs |
+## When
 
-## Prerequisites
+- Pre-release security gate — full scan, non-negotiable before production
+- "Security scan", "security audit", "find secrets", "CVE check", "OWASP"
+- After a dependency update (Layer 1), auth changes (Layer 4), config changes
+  (Layer 2), or logging changes (Layer 6)
+- Pre-pentest preparation — fix static issues before paying for a pentest
+- Incident response and quarterly reviews
 
-AgentShield must be installed. Check and install if needed:
+## How
 
-```bash
-# Check if installed
-npx ecc-agentshield --version
+### Step 1: Choose Layers
 
-# Install globally (recommended)
-npm install -g ecc-agentshield
+| Scenario | Layers |
+|----------|--------|
+| Pre-release gate / pentest prep / incident / quarterly | All 6 |
+| After dependency update | 1 |
+| New endpoint added | 3, 4, 5 |
+| Auth system changes | 4 |
+| Config file changes | 2 |
+| Logging changes | 6 |
+| Public API exposure | 3, 4, 5 |
+| Internal-only service | 1, 2, 3 |
 
-# Or run directly via npx (no install needed)
-npx ecc-agentshield scan .
+### Step 2: Execute the Layers
+
+Read `references/scan-layers.md` for the detection patterns per layer.
+Delegate deep auth and secrets review to the `security-auditor` agent, pairing
+the `authentication` and `configuration` skills.
+
+| # | Layer | OWASP 2025 | Method |
+|---|-------|-----------|--------|
+| 1 | Package vulnerabilities | A03 Supply Chain | `dotnet list package --vulnerable --include-transitive` |
+| 2 | Secrets detection | — | Pattern scan over .cs/.json/.yml/.xml/.config |
+| 3 | OWASP code patterns | A05 Injection, A08 Integrity, A04 Crypto, A01 Access Control | Source scan: raw SQL, `Html.Raw`, `BinaryFormatter`, MD5/SHA1, IDOR |
+| 4 | Auth configuration | A07 Authentication, A01 Access Control | `get_endpoint_map` — every route's auth posture in one call; flag `unmarked` endpoints; then JWT validation settings |
+| 5 | CORS policy | A02 Misconfiguration | Wildcard origins, credentials combos, method/header breadth |
+| 6 | Data protection | A04 Crypto, A09 Logging & Alerting | PII in logs, over-broad responses, plaintext sensitive storage |
+
+### Step 3: Rate with Context
+
+Severity must match actual risk — over-classification causes alert fatigue and
+buries the real Critical:
+
+- Test-fixture "secrets" and appsettings.Development.json values are expected —
+  skip or mark INFO, don't flag as HIGH
+- A missing XML comment is never a security finding
+- Reserve Critical for exploitable-now issues: injection on public endpoints,
+  exposed production secrets, auth bypass
+
+### Step 4: Report
+
+Every finding: `[SEVERITY] file:line — title`, OWASP category, what's wrong,
+impact if exploited, and remediation code (before/after). Produce the summary
+table + per-layer status table from the reference template, prefixed with the
+static-analysis disclaimer.
+
+## Example
+
+```
+User: /security-scan before we ship
+
+Claude: Running all 6 layers...
+
+| Layer | Status | Findings |
+|-------|--------|----------|
+| 1. Packages | PASS | 0 CVEs (142 packages incl. transitive) |
+| 2. Secrets | PASS | 0 real secrets (2 dev-only values skipped) |
+| 3. OWASP Patterns | FAIL | 1 SQL injection |
+| 4. Auth Config | WARN | 2 endpoints missing explicit auth attributes |
+| 5. CORS | PASS | Explicit origins from configuration |
+| 6. Data Protection | WARN | Customer email logged at Information level |
+
+[HIGH] SearchOrders.cs:34 — SQL Injection (A05:2025)
+  FromSqlRaw($"...LIKE '%{search}%'") → attacker controls the query.
+  Fix: db.Orders.Where(o => EF.Functions.Like(o.Name, $"%{search}%"))
+
+[MEDIUM] OrderEndpoints.cs:18,31 — no [Authorize]/[AllowAnonymous]; behavior
+  depends on ambient global policy. Make intent explicit per endpoint.
+
+[LOW] OrderPlacedHandler.cs:22 — PII in logs (A09:2025). Log CustomerId, not email.
+
+Note: static analysis only — this does not replace a penetration test.
 ```
 
-## Usage
+## Related
 
-### Basic Scan
-
-Run against the current project's `.claude/` directory:
-
-```bash
-# Scan current project
-npx ecc-agentshield scan
-
-# Scan a specific path
-npx ecc-agentshield scan --path /path/to/.claude
-
-# Scan with minimum severity filter
-npx ecc-agentshield scan --min-severity medium
-```
-
-### Output Formats
-
-```bash
-# Terminal output (default) — colored report with grade
-npx ecc-agentshield scan
-
-# JSON — for CI/CD integration
-npx ecc-agentshield scan --format json
-
-# Markdown — for documentation
-npx ecc-agentshield scan --format markdown
-
-# HTML — self-contained dark-theme report
-npx ecc-agentshield scan --format html > security-report.html
-```
-
-### Auto-Fix
-
-Apply safe fixes automatically (only fixes marked as auto-fixable):
-
-```bash
-npx ecc-agentshield scan --fix
-```
-
-This will:
-- Replace hardcoded secrets with environment variable references
-- Tighten wildcard permissions to scoped alternatives
-- Never modify manual-only suggestions
-
-### Opus 4.6 Deep Analysis
-
-Run the adversarial three-agent pipeline for deeper analysis:
-
-```bash
-# Requires ANTHROPIC_API_KEY
-export ANTHROPIC_API_KEY=your-key
-npx ecc-agentshield scan --opus --stream
-```
-
-This runs:
-1. **Attacker (Red Team)** — finds attack vectors
-2. **Defender (Blue Team)** — recommends hardening
-3. **Auditor (Final Verdict)** — synthesizes both perspectives
-
-### Initialize Secure Config
-
-Scaffold a new secure `.claude/` configuration from scratch:
-
-```bash
-npx ecc-agentshield init
-```
-
-Creates:
-- `settings.json` with scoped permissions and deny list
-- `CLAUDE.md` with security best practices
-- `mcp.json` placeholder
-
-### GitHub Action
-
-Add to your CI pipeline:
-
-```yaml
-- uses: affaan-m/agentshield@v1
-  with:
-    path: '.'
-    min-severity: 'medium'
-    fail-on-findings: true
-```
-
-## Severity Levels
-
-| Grade | Score | Meaning |
-|-------|-------|---------|
-| A | 90-100 | Secure configuration |
-| B | 75-89 | Minor issues |
-| C | 60-74 | Needs attention |
-| D | 40-59 | Significant risks |
-| F | 0-39 | Critical vulnerabilities |
-
-## Interpreting Results
-
-### Critical Findings (fix immediately)
-- Hardcoded API keys or tokens in config files
-- `Bash(*)` in the allow list (unrestricted shell access)
-- Command injection in hooks via `${file}` interpolation
-- Shell-running MCP servers
-
-### High Findings (fix before production)
-- Auto-run instructions in CLAUDE.md (prompt injection vector)
-- Missing deny lists in permissions
-- Agents with unnecessary Bash access
-
-### Medium Findings (recommended)
-- Silent error suppression in hooks (`2>/dev/null`, `|| true`)
-- Missing PreToolUse security hooks
-- `npx -y` auto-install in MCP server configs
-
-### Info Findings (awareness)
-- Missing descriptions on MCP servers
-- Prohibitive instructions correctly flagged as good practice
-
-## Links
-
-- **GitHub**: [github.com/affaan-m/agentshield](https://github.com/affaan-m/agentshield)
-- **npm**: [npmjs.com/package/ecc-agentshield](https://www.npmjs.com/package/ecc-agentshield)
+- `references/scan-layers.md` — detection patterns, OWASP 2025 mappings, report template
+- `/verify` — Phase 5 runs a lightweight version of this scan per change set
+- `/health-check` — Dimension 7 (Security Posture) is the spot-check version
+- `authentication` / `configuration` — remediation patterns for Layers 4 and 2

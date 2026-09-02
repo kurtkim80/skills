@@ -62,31 +62,34 @@
     "description": "Specialized agent skills for context window optimization, memory management, and attention engineering"
   },
   {
-    "name": "obviousworks/Claude-AI-skills-collection-2026",
-    "repo": "https://github.com/obviousworks/Claude-AI-skills-collection-2026.git",
+    "name": "Aaronontheweb/dotnet-skills",
+    "repo": "https://github.com/Aaronontheweb/dotnet-skills.git",
     "branch": "main",
     "skills_subpath": "skills",
-    "description": "Agentic engineering workflows for requirements clarification, planning, testing, and security review"
+    "agents_subpath": "agents",
+    "description": "Specialized C#, ASP.NET Core, EF Core, Akka.NET, and high-performance .NET architecture skills by Aaron Stannard"
   },
   {
-    "name": "VoltAgent/awesome-agent-skills",
-    "repo": "https://github.com/VoltAgent/awesome-agent-skills.git",
+    "name": "dotnet/skills",
+    "repo": "https://github.com/dotnet/skills.git",
     "branch": "main",
-    "skills_subpath": "skills",
-    "description": "1000+ curated agent skills for Claude Code, Gemini CLI, Cursor, and OpenCode"
+    "skills_subpath": "plugins",
+    "description": "Official Microsoft .NET Team skills repository for ASP.NET Core, MSBuild, MAUI, and modern C# engineering"
   },
   {
-    "name": "travisvn/awesome-claude-skills",
-    "repo": "https://github.com/travisvn/awesome-claude-skills.git",
+    "name": "novotnyllc/dotnet-artisan",
+    "repo": "https://github.com/novotnyllc/dotnet-artisan.git",
     "branch": "main",
-    "skills_subpath": "skills",
-    "description": "Highly starred repository of curated skills and workflow tools for AI coding agents"
+    "skills_subpath": "plugins",
+    "agents_subpath": "agents",
+    "description": "Professional C# & ASP.NET Core agent skills and coding standards by .NET Foundation Director"
   },
   {
-    "name": "agentskills/agentskills",
-    "repo": "https://github.com/agentskills/agentskills.git",
+    "name": "codewithmukesh/dotnet-claude-kit",
+    "repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
     "branch": "main",
     "skills_subpath": "skills",
-    "description": "Official Agent Skills specification repository with standard templates and reference skills"
+    "agents_subpath": "agents",
+    "description": "Clean Architecture, CQRS, ASP.NET Web API, MediatR, and Microservices expert rules for .NET"
   }
 ]

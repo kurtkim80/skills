@@ -1,63 +1,130 @@
 ---
 name: wrap-up
-description: Close out a launched Claude Managed Agent — recap every primitive the founder now owns, regenerate the single-file overview page, and suggest the next 1-2 upgrades. Use when the user says "wrap up", "close this out", "what do I own now", "give me the summary", "recap the agent", or when the orchestrator routes phase=wrap-up. primitives_inventory.py tables everything owned (agent, environment, session, memory, outcome, deployment); overview_page.py regenerates a self-contained ./my-agent/agent-overview.html; upgrade_suggester.py ranks the next moves from recorded deferrals plus standing hardening steps. Companion to run-without-you; the last stop before phase=done.
-version: 2.11.2
-author: Alireza Rezvani
-license: MIT
-tags: [cma, wrap-up, closeout, inventory, overview, upgrades, next-directions]
-compatible_tools: [claude-code, codex-cli, cursor, antigravity, opencode, gemini-cli]
+description: >
+  Owns the session handoff lifecycle: the end-of-session ritual that captures
+  completed work, pending tasks, and learnings into .claude/handoff.md, and the
+  session-start protocol that loads it back. Triggers on: /wrap-up, "wrap up",
+  "done for today", "that's all", "end session", "signing off", "handoff" —
+  and at session start: "start session", "session start", "load handoff",
+  "pick up where we left off", "what were we working on".
+disable-model-invocation: true
 ---
 
-# Wrap-up — close it out
+# /wrap-up
 
-The explicit close-out. Confirm what's live, regenerate the shareable overview,
-and name the next 1–2 upgrades so the founder leaves with a clear roadmap. The
-`./my-agent/` folder keeps working after the session ends.
+## What
 
-## Workflow
+The session continuity ritual. Sessions are ephemeral; knowledge is permanent.
+Wrap-up bridges sessions in both directions:
 
-1. **Inventory what they own.**
-   ```bash
-   python3 scripts/primitives_inventory.py \
-     --sheet ./my-agent/build-sheet.json --goal ./my-agent/goal.json
-   ```
-   Tables agent / environment / session / memory / outcome / deployment and the
-   phases completed.
-2. **Regenerate the overview page.**
-   ```bash
-   python3 scripts/overview_page.py \
-     --sheet ./my-agent/build-sheet.json --out-dir ./my-agent \
-     --status live --loop-shape cron-loop --last-verdict satisfied
-   ```
-   Self-contained `agent-overview.html` (inline CSS, theme-aware, no external
-   assets) — shareable as-is.
-3. **Suggest the next moves.**
-   ```bash
-   python3 scripts/upgrade_suggester.py --sheet ./my-agent/build-sheet.json --top 2
-   ```
-   Ranks recorded deferrals (v1 before v2, real-integration first) plus standing
-   hardening (tighten networking, pin the agent version, nest an outcome).
-4. **Finalize.** Ensure `NEXT-DIRECTIONS.md` is current (Phase-4 tool), then
-   `goal_state.py advance` → `phase=done`.
+- **Session END** — capture exactly three things: what was DONE, what is
+  PENDING, and what was LEARNED. Write them to `.claude/handoff.md` and flow
+  durable learnings into `MEMORY.md`.
+- **Session START** — load the handoff, memory, and instincts, then present a
+  resume summary so no session starts blind.
 
-## Hard rules
+## When
 
-- **Recap what's actually live** — read it from the sheet + goal state, never
-  assert primitives that weren't created.
-- **The overview is single-file** — no external assets, so it shares cleanly.
-- **Every next move names the exact mechanism.**
+- End of a working session — "done for today", "that's all", "signing off"
+- Before switching projects or after a major milestone
+- Implicit endings — "thanks" after completed tasks, "good enough for now":
+  offer the handoff, don't just say goodbye
+- Start of a session — "start session", "load handoff", "what were we working on"
+- For a mid-session save without ending, use `/checkpoint` instead
 
-## Forcing-question library (recommend + cite)
+## How
 
-1. "Confirm what's live vs still a plan?" *Recommend:* inventory from the sheet.
-   *Cite:* this SKILL. 
-2. "Which single upgrade has the highest payoff?" *Recommend:* the top-ranked v1
-   deferral. *Cite:* upgrade_suggester ranking.
-3. "Is the overview page current?" *Recommend:* regenerate after any change.
-   *Cite:* this SKILL.
+### Session End
 
-## Tools
+1. **Review the session** — From git status/diff and the conversation: files
+   touched, tasks completed vs unfinished, decisions made and why, user
+   corrections observed.
+2. **Check uncommitted changes** — If any exist, offer to commit before wrapping.
+3. **Write the handoff** — `.claude/handoff.md`, using the format below.
+   Single file, always overwritten — only the current state matters. If the
+   existing handoff has pending tasks from someone else, ask before
+   overwriting: merge, overwrite, or skip.
+4. **Extract learnings** — Corrections and discoveries worth keeping go to
+   `MEMORY.md` (via `instinct-system`); emerging patterns update
+   `.claude/instincts.md` (via `instinct-system`). The handoff's Learned
+   section is the trigger, not the destination — handoffs are ephemeral.
+5. **Confirm** — Summarize the handoff and learnings captured for the user.
 
-- `scripts/primitives_inventory.py` — recap every owned primitive.
-- `scripts/overview_page.py` — regenerate single-file agent-overview.html.
-- `scripts/upgrade_suggester.py` — next 1–2 upgrades with mechanisms.
+### Handoff File Format (`.claude/handoff.md`)
+
+Write it for a stranger with zero context — file paths, rationale, specific
+next steps. "Continue the refactor" is useless; "Refactor
+`src/Orders/CreateOrder.cs` to the Result pattern — see Catalog for the
+established pattern" is actionable.
+
+```markdown
+# Session Handoff
+
+> Generated: 2026-06-12 | Branch: feature/order-validation
+
+## Completed
+- [x] Added FluentValidation to CreateOrder (src/Orders/Features/CreateOrder.cs:15-35)
+- [x] Fixed N+1 in GetOrderDetails (src/Orders/Features/GetOrderDetails.cs:28)
+
+## Pending
+- [ ] Add validation to UpdateOrder (src/Orders/Features/UpdateOrder.cs)
+  - Reference: CreateOrder validator for the established pattern
+- [ ] Full test run — 2 pre-existing Catalog failures, not from today
+
+## Learned
+- FluentValidation validators must be registered in the module's DI setup
+- Test fixture seeds 1 item per order, which hides N+1 queries
+
+## Context
+- Branch: feature/order-validation | Last commit: "Add CreateOrder validation"
+- Uncommitted changes: no | Solution: src/MyApp.slnx
+```
+
+When multiple developers share the project, add a `## Decisions Made` table
+(Decision | Choice | Rationale) and `## Open Questions`.
+
+### Learning Extraction Checklist
+
+1. Did the user correct anything? → MEMORY.md via `instinct-system`
+2. Did we discover something non-obvious? → Learned section
+3. Did we decide something with rationale? → document the "why"
+4. Did a tool/approach fail? → note it so the next session doesn't retry it
+
+Good learning: "EF compiled queries don't work with Include()". Bad learning:
+"Worked on Orders module" (vague) or "Used TimeProvider" (already a rule).
+
+### Session Start
+
+1. **Load context** — Read `.claude/handoff.md` (pending work), `MEMORY.md`
+   (permanent rules), `.claude/instincts.md` (patterns at 0.7+ confidence).
+   Missing files are fine: note it and start clean — never block on them.
+2. **Detect the solution** — Find `.slnx`/`.sln` (current dir, then parents,
+   then children) so Roslyn MCP tools work from the first prompt.
+3. **Present a resume summary** — Last session's work, pending tasks, active
+   rules/instincts count, detected solution. Then ask what to work on —
+   never auto-start pending work.
+
+## Example
+
+```
+User: /wrap-up
+
+Claude: Wrapping up session...
+
+## Session Summary
+- Implemented OrderService with validation pipeline
+- Fixed N+1 query in GetOrdersByCustomer
+
+## Pending
+- [ ] Add retry logic to payment gateway calls (OrderService.cs:42)
+
+## Learnings Captured
+- User prefers explicit mapping over AutoMapper → MEMORY.md
+
+Written to .claude/handoff.md. See you next session.
+```
+
+## Related
+
+- `/checkpoint` — Mid-session save (commit + brief note) without ending the session
+- `instinct-system` — Routes session learnings: patterns become instincts, user corrections become permanent MEMORY.md rules
