@@ -1,159 +1,222 @@
 ---
-name: auditing-python-security
-description: Audits Python libraries for security vulnerabilities using Bandit, pip-audit, Semgrep, and detect-secrets. Identifies SQL injection, command injection, hardcoded credentials, secrets exposed through tracebacks, weak cryptography, and insecure deserialization. Use when reviewing library security, setting up security scanning in CI, or implementing secure coding patterns.
+name: security-audit
+description: "Comprehensive security auditing workflow covering web application testing, API security, penetration testing, vulnerability scanning, and security hardening."
+category: workflow-bundle
+risk: safe
+source: personal
+date_added: "2026-02-27"
 ---
 
-# Python Security Auditing
+# Security Auditing Workflow Bundle
 
-## Quick Start
+## Overview
 
-```bash
-# Run all four scanners (gates CI): exit 1 on a blocking finding, exit 2 when a
-# requested scanner could not run, exit 0 only when every scanner ran clean:
-uv run python scripts/security_scan.py .
+Comprehensive security auditing workflow for web applications, APIs, and infrastructure. This bundle orchestrates skills for penetration testing, vulnerability assessment, security scanning, and remediation.
 
-# Tolerate scanners that are missing or hung (restores exit 0 in that case):
-uv run python scripts/security_scan.py . --allow-scanner-failure
+## When to Use This Workflow
 
-# Or individually:
-uvx bandit -r src/ -ll                       # High-severity static analysis
-uvx pip-audit .                              # This project's dependencies
-uvx semgrep --config auto src/               # Pattern-based SAST
-uvx detect-secrets scan > .secrets.baseline  # Secrets detection
+Use this workflow when:
+- Performing security audits on web applications
+- Testing API security
+- Conducting penetration tests
+- Scanning for vulnerabilities
+- Hardening application security
+- Compliance security assessments
+
+## Workflow Phases
+
+### Phase 1: Reconnaissance
+
+#### Skills to Invoke
+- `scanning-tools` - Security scanning
+- `shodan-reconnaissance` - Shodan searches
+- `top-web-vulnerabilities` - OWASP Top 10
+
+#### Actions
+1. Identify target scope
+2. Gather intelligence
+3. Map attack surface
+4. Identify technologies
+5. Document findings
+
+#### Copy-Paste Prompts
+```
+Use @scanning-tools to perform initial reconnaissance
 ```
 
-## Tool Configuration
-
-**Bandit (.bandit):**
-```yaml
-exclude_dirs: [tests/, docs/, .venv/]
-skips: [B101]  # assert_used - OK in tests
+```
+Use @shodan-reconnaissance to find exposed services
 ```
 
-**pip-audit:**
-```bash
-uvx pip-audit -r requirements.txt     # Scan requirements
-uvx pip-audit --fix                   # Auto-fix vulnerabilities
+### Phase 2: Vulnerability Scanning
+
+#### Skills to Invoke
+- `vulnerability-scanner` - Vulnerability analysis
+- `security-scanning-security-sast` - Static analysis
+- `security-scanning-security-dependencies` - Dependency scanning
+
+#### Actions
+1. Run automated scanners
+2. Perform static analysis
+3. Scan dependencies
+4. Identify misconfigurations
+5. Document vulnerabilities
+
+#### Copy-Paste Prompts
+```
+Use @vulnerability-scanner to scan for OWASP Top 10 vulnerabilities
 ```
 
-## Common Vulnerabilities
-
-| Issue | Bandit ID | Fix |
-|-------|-----------|-----|
-| SQL injection | B608 | Use parameterized queries |
-| Command injection | B602 | subprocess without shell=True |
-| Hardcoded secrets | B105, B106 | Environment variables |
-| Weak crypto | B303 | Use SHA-256+, bcrypt for passwords |
-| Pickle untrusted data | B301 | Use JSON instead |
-| Path traversal | B108 | Validate with Path.resolve() |
-
-## Secure Patterns
-
-```python
-# SQL - Parameterized query
-conn.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-
-# Commands - No shell
-subprocess.run(["cat", filename], check=True)
-
-# Secrets - Environment
-API_KEY = os.environ.get("API_KEY")
-
-# Paths - Validate
-base = Path("/data").resolve()
-file_path = (base / filename).resolve()
-if not file_path.is_relative_to(base):
-    raise ValueError("Invalid path")
+```
+Use @security-scanning-security-dependencies to audit dependencies
 ```
 
-## Tracebacks Must Not Dump Frame Locals
+### Phase 3: Web Application Testing
 
-Rich exception renderers can print every local variable in every stack frame.
-That turns an ordinary unhandled exception into a credential leak: API tokens,
-authorization headers, request bodies, and decrypted configuration commonly live
-in locals when the traceback is rendered to a terminal or CI log.
+#### Skills to Invoke
+- `top-web-vulnerabilities` - OWASP vulnerabilities
+- `sql-injection-testing` - SQL injection
+- `xss-html-injection` - XSS testing
+- `broken-authentication` - Authentication testing
+- `idor-testing` - IDOR testing
+- `file-path-traversal` - Path traversal
+- `burp-suite-testing` - Burp Suite testing
 
-Keep local-variable rendering disabled anywhere logs can leave the developer's
-machine:
+#### Actions
+1. Test for injection flaws
+2. Test authentication mechanisms
+3. Test session management
+4. Test access controls
+5. Test input validation
+6. Test security headers
 
-```python
-from rich.traceback import install
-
-install(show_locals=False)
+#### Copy-Paste Prompts
+```
+Use @sql-injection-testing to test for SQL injection vulnerabilities
 ```
 
-Do not stop at asserting the configuration call. Exercise the installed exception
-hook with a sentinel secret and inspect the rendered output. This catches a later
-refactor that replaces the hook or re-enables locals elsewhere:
-
-```python
-import sys
-
-
-def test_unhandled_traceback_does_not_expose_locals(capsys):
-    sentinel = "sentinel-secret-that-must-not-appear"
-
-    try:
-        raise RuntimeError("boom")
-    except RuntimeError:
-        exc_type, exc, traceback = sys.exc_info()
-        sys.excepthook(exc_type, exc, traceback)
-
-    output = capsys.readouterr()
-    rendered = output.out + output.err
-    assert "RuntimeError: boom" in rendered  # proves the hook rendered
-    assert sentinel not in rendered
+```
+Use @xss-html-injection to test for cross-site scripting
 ```
 
-Use a unique sentinel, never a real credential. Assert both that the exception was
-rendered and that the sentinel was absent; an empty or bypassed output path must
-not make the security test pass vacuously.
-
-## CI Integration
-
-```yaml
-# .github/workflows/security.yml — full workflow in CI_SECURITY.md
-- uses: astral-sh/setup-uv@v5
-- run: uv run python scripts/security_scan.py . --output security-report.json
+```
+Use @broken-authentication to test authentication security
 ```
 
-For detailed patterns, see:
-- **scripts/security_scan.py** — runs all four scanners and exits non-zero on blocking findings (exit 1) or on a requested scanner that could not run (exit 2, opt out with `--allow-scanner-failure`) (`uv run python scripts/security_scan.py .`)
-- **[VULNERABILITIES.md](VULNERABILITIES.md)** - Vulnerability classes with vulnerable→fixed pairs
-- **[CI_SECURITY.md](CI_SECURITY.md)** - Complete CI workflow, pre-commit, Dependabot, triage
+### Phase 4: API Security Testing
 
-## Audit Checklist
+#### Skills to Invoke
+- `api-fuzzing-bug-bounty` - API fuzzing
+- `api-security-best-practices` - API security
 
+#### Actions
+1. Enumerate API endpoints
+2. Test authentication/authorization
+3. Test rate limiting
+4. Test input validation
+5. Test error handling
+6. Document API vulnerabilities
+
+#### Copy-Paste Prompts
 ```
-Code:
-- [ ] No SQL injection (parameterized queries)
-- [ ] No command injection (no shell=True)
-- [ ] No hardcoded secrets
-- [ ] Exception and logging configuration cannot render frame locals containing secrets
-- [ ] No weak crypto (MD5/SHA1)
-- [ ] Input validation on external data
-- [ ] Path traversal prevention
-- [ ] SSRF fetches connect to the validated IP on every redirect hop (DNS rebinding safe)
-- [ ] SSRF deny policy covers IPv4/IPv6 and CGNAT (`100.64.0.0/10`)
-
-Dependencies:
-- [ ] pip-audit clean
-- [ ] Minimal dependencies
-- [ ] From trusted sources
-
-CI:
-- [ ] Security scan on every PR
-- [ ] Weekly dependency scan
+Use @api-fuzzing-bug-bounty to fuzz API endpoints
 ```
 
-## Learn More
+### Phase 5: Penetration Testing
 
-This skill is based on the [Security](https://mcginniscommawill.com/guides/python-library-development/#security-a-matter-of-trust) section of the [Guide to Developing High-Quality Python Libraries](https://mcginniscommawill.com/guides/python-library-development/) by [Will McGinnis](https://mcginniscommawill.com/). See these posts for deeper coverage:
+#### Skills to Invoke
+- `pentest-commands` - Penetration testing commands
+- `pentest-checklist` - Pentest planning
+- `ethical-hacking-methodology` - Ethical hacking
+- `metasploit-framework` - Metasploit
 
-- [Avoiding Injection Flaws](https://mcginniscommawill.com/posts/2025-01-18-avoiding-injection-flaws/)
-- [Intro to Bandit](https://mcginniscommawill.com/posts/2025-01-25-intro-to-bandit/)
-- [Advanced Bandit Configuration](https://mcginniscommawill.com/posts/2025-08-22-advanced-bandit-configuration/)
-- [SQL Injection Detection](https://mcginniscommawill.com/posts/2025-08-25-sql-injection-detection-b608/)
-- [Dependency Security with pip-audit](https://mcginniscommawill.com/posts/2025-01-27-dependency-security-pip-audit/)
-- [Handling Sensitive Data](https://mcginniscommawill.com/posts/2025-01-29-handling-sensitive-data/)
-- [Secure Coding Practices](https://mcginniscommawill.com/posts/2025-02-02-secure-coding-practices/)
+#### Actions
+1. Plan penetration test
+2. Execute attack scenarios
+3. Exploit vulnerabilities
+4. Document proof of concept
+5. Assess impact
+
+#### Copy-Paste Prompts
+```
+Use @pentest-checklist to plan penetration test
+```
+
+```
+Use @pentest-commands to execute penetration testing
+```
+
+### Phase 6: Security Hardening
+
+#### Skills to Invoke
+- `security-scanning-security-hardening` - Security hardening
+- `auth-implementation-patterns` - Authentication
+- `api-security-best-practices` - API security
+
+#### Actions
+1. Implement security controls
+2. Configure security headers
+3. Set up authentication
+4. Implement authorization
+5. Configure logging
+6. Apply patches
+
+#### Copy-Paste Prompts
+```
+Use @security-scanning-security-hardening to harden application security
+```
+
+### Phase 7: Reporting
+
+#### Skills to Invoke
+- `reporting-standards` - Security reporting
+
+#### Actions
+1. Document findings
+2. Assess risk levels
+3. Provide remediation steps
+4. Create executive summary
+5. Generate technical report
+
+## Security Testing Checklist
+
+### OWASP Top 10
+- [ ] Injection (SQL, NoSQL, OS, LDAP)
+- [ ] Broken Authentication
+- [ ] Sensitive Data Exposure
+- [ ] XML External Entities (XXE)
+- [ ] Broken Access Control
+- [ ] Security Misconfiguration
+- [ ] Cross-Site Scripting (XSS)
+- [ ] Insecure Deserialization
+- [ ] Using Components with Known Vulnerabilities
+- [ ] Insufficient Logging & Monitoring
+
+### API Security
+- [ ] Authentication mechanisms
+- [ ] Authorization checks
+- [ ] Rate limiting
+- [ ] Input validation
+- [ ] Error handling
+- [ ] Security headers
+
+## Quality Gates
+
+- [ ] All planned tests executed
+- [ ] Vulnerabilities documented
+- [ ] Proof of concepts captured
+- [ ] Risk assessments completed
+- [ ] Remediation steps provided
+- [ ] Report generated
+
+## Related Workflow Bundles
+
+- `development` - Secure development practices
+- `wordpress` - WordPress security
+- `cloud-devops` - Cloud security
+- `testing-qa` - Security testing
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

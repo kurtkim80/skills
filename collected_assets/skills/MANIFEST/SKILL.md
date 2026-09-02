@@ -1,178 +1,132 @@
 ---
 name: manifest
-description: Set up and use Manifest — the open-source LLM router and observability plugin for OpenClaw. Use when the user asks to install Manifest, set up cost tracking, configure LLM routing, monitor agent costs/tokens, understand what Manifest does, check Manifest status, troubleshoot the plugin, or wants to reduce OpenClaw costs. Also triggers on "manifest setup", "install manifest", "how much am I spending", "track my costs", "route to cheaper models", "manifest dashboard", "manifest help".
-metadata: {"openclaw":{"requires":{"bins":["openclaw"],"credentials":["mnfst_* API key (cloud mode only)"]},"configPaths":["~/.openclaw/openclaw.json","~/.openclaw/manifest/"]}}
+description: "Install and configure the Manifest observability plugin for your agents. Use when setting up telemetry, configuring API keys, or troubleshooting the plugin."
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
-# Manifest — LLM Router & Observability for OpenClaw
+# Manifest Setup
 
-Manifest is an OpenClaw plugin that:
+Follow these steps **in order**. Do not skip ahead.
 
-- **Routes every request** to the most cost-effective model via a 23-dimension scoring algorithm (<2ms latency)
-- **Tracks costs and tokens** in a real-time dashboard
-- **Sets limits** with email alerts and hard spending caps
+## Use this skill when
 
-Source: [github.com/mnfst/manifest](https://github.com/mnfst/manifest) — MIT licensed. Homepage: [manifest.build](https://manifest.build)
+- User wants to set up observability or telemetry for their agent
+- User wants to connect their agent to Manifest for monitoring
+- User needs to configure a Manifest API key or custom endpoint
+- User is troubleshooting Manifest plugin connection issues
+- User wants to verify the Manifest plugin is running
 
-## Setup (Cloud — default)
+## Do not use this skill when
 
-Three commands, no coding:
+- User needs general observability design (use `observability-engineer` instead)
+- User wants to build custom dashboards or alerting rules
+- User is not using the Manifest platform
 
-```bash
-openclaw plugins install manifest
-openclaw config set plugins.entries.manifest.config.apiKey "mnfst_YOUR_KEY"
-openclaw gateway restart
-```
+## Instructions
 
-Get the API key at [app.manifest.build](https://app.manifest.build) → create an account → create an agent → copy the `mnfst_*` key.
+### Step 1 — Stop the gateway
 
-After restart, the plugin auto-configures:
-
-- Registers `manifest/auto` as the default model
-- Injects the `manifest` provider into `~/.openclaw/openclaw.json`
-- Starts exporting OTLP telemetry to `app.manifest.build`
-- Exposes three agent tools: `manifest_usage`, `manifest_costs`, `manifest_health`
-
-Dashboard at [app.manifest.build](https://app.manifest.build). Telemetry arrives within 10-30 seconds (batched OTLP export).
-
-### Verify connection
+Stop the gateway first to avoid hot-reload issues during configuration.
 
 ```bash
-openclaw manifest
+claude gateway stop
 ```
 
-Shows: mode, endpoint reachability, auth validity, agent name.
-
-## Setup (Local — offline alternative)
-
-Use local mode only when data must never leave the machine.
+### Step 2 — Install the plugin
 
 ```bash
-openclaw plugins install manifest
-openclaw config set plugins.entries.manifest.config.mode local
-openclaw gateway restart
+claude plugins install manifest
 ```
 
-Dashboard opens at **http://127.0.0.1:2099**. Data stored locally in `~/.openclaw/manifest/manifest.db`. No account or API key needed.
+If it fails, check that the CLI is installed and available in the PATH.
 
-To expose over Tailscale (requires Tailscale on both devices, only accessible within your Tailnet): `tailscale serve --bg 2099`
+### Step 3 — Get an API key
 
-## What Manifest Answers
+Ask the user:
 
-Manifest answers these questions about your OpenClaw agents — via the dashboard or directly in-conversation via agent tools:
+> To connect your agent, you need a Manifest API key. Here's how to get one:
+>
+> 1. Go to **https://app.manifest.build** and create an account (or sign in)
+> 2. Once logged in, click **"Connect Agent"** to create a new agent
+> 3. Copy the API key that starts with `mnfst_`
+> 4. Paste it here
 
-**Spending & budget**
+Wait for a key starting with `mnfst_`. If the key doesn't match, tell the user the format looks incorrect and ask them to try again.
 
-- How much have I spent today / this week / this month?
-- What's my cost breakdown by model?
-- Which model consumes the biggest share of my budget?
-- Am I approaching my spending limit?
-
-**Token consumption**
-
-- How many tokens has my agent used (input vs. output)?
-- What's my token trend compared to the previous period?
-- How much cache am I reading vs. writing?
-
-**Activity & performance**
-
-- How many LLM calls has my agent made?
-- How long do LLM calls take (latency)?
-- Are there errors or rate limits occurring? What are the error messages?
-- Which skills/tools are running and how often?
-
-**Routing intelligence**
-
-- What routing tier (simple/standard/complex/reasoning) was each request assigned?
-- Why was a specific tier chosen?
-- What model pricing is available across all providers?
-
-**Connectivity**
-
-- Is Manifest connected and healthy?
-- Is telemetry flowing correctly?
-
-## Agent Tools
-
-Three tools are available to the agent in-conversation:
-
-| Tool              | Trigger phrases                                 | What it returns                                                             |
-| ----------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
-| `manifest_usage`  | "how many tokens", "token usage", "consumption" | Total, input, output, cache-read tokens + action count for today/week/month |
-| `manifest_costs`  | "how much spent", "costs", "money burned"       | Cost breakdown by model in USD for today/week/month                         |
-| `manifest_health` | "is monitoring working", "connectivity test"    | Endpoint reachable, auth valid, agent name, status                          |
-
-Each accepts a `period` parameter: `"today"`, `"week"`, or `"month"`.
-
-All three tools are read-only — they query the agent's own usage data and never send message content.
-
-## LLM Routing
-
-When the model is set to `manifest/auto`, the router scores each conversation across 23 dimensions and assigns one of 4 tiers:
-
-| Tier          | Use case                                | Examples                                                |
-| ------------- | --------------------------------------- | ------------------------------------------------------- |
-| **Simple**    | Greetings, confirmations, short lookups | "hi", "yes", "what time is it"                          |
-| **Standard**  | General tasks, balanced quality/cost    | "summarize this", "write a test"                        |
-| **Complex**   | Multi-step reasoning, nuanced analysis  | "compare these architectures", "debug this stack trace" |
-| **Reasoning** | Formal logic, proofs, critical planning | "prove this theorem", "design a migration strategy"     |
-
-Each tier maps to a model. Default models are auto-assigned per provider, but overridable in the dashboard under **Routing**.
-
-Short-circuit rules:
-
-- Messages <50 chars with no tools → **Simple**
-- Formal logic keywords → **Reasoning**
-- Tools present → floor at **Standard**
-- Context >50k tokens → floor at **Complex**
-
-## Dashboard Pages
-
-| Page             | What it shows                                                                 |
-| ---------------- | ----------------------------------------------------------------------------- |
-| **Workspace**    | All connected agents as cards with sparkline activity charts                  |
-| **Overview**     | Per-agent cost, tokens, messages with trend badges and time-series charts     |
-| **Messages**     | Full paginated message log with filters (status, model, cost range)           |
-| **Routing**      | 4-tier model config, provider connections, enable/disable routing             |
-| **Limits**       | Email alerts and hard spending caps (tokens or cost, per hour/day/week/month) |
-| **Settings**     | Agent rename, delete, OTLP key management                                     |
-| **Model Prices** | Sortable table of 300+ model prices across all providers                      |
-
-## Supported Providers
-
-Anthropic, OpenAI, Google Gemini, DeepSeek, xAI, Mistral AI, Qwen, MiniMax, Kimi, Amazon Nova, Z.ai, OpenRouter, Ollama. 300+ models total.
-
-## Uninstall
+### Step 4 — Configure the plugin
 
 ```bash
-openclaw plugins uninstall manifest
-openclaw gateway restart
+claude config set plugins.entries.manifest.config.apiKey "USER_API_KEY"
 ```
 
-This removes the plugin, provider config, and auth profiles. Set a new default model after uninstalling.
+Replace `USER_API_KEY` with the actual key the user provided.
+
+Ask the user if they have a custom endpoint. If not, the default (`https://app.manifest.build/api/v1/otlp`) is used automatically. If they do:
+
+```bash
+claude config set plugins.entries.manifest.config.endpoint "USER_ENDPOINT"
+```
+
+### Step 5 — Start the gateway
+
+```bash
+claude gateway install
+```
+
+### Step 6 — Verify
+
+Wait 3 seconds for the gateway to fully start, then check the logs:
+
+```bash
+grep "manifest" ~/.claude/logs/gateway.log | tail -5
+```
+
+Look for:
+
+```
+[manifest] Observability pipeline active
+```
+
+If it appears, tell the user setup is complete. If not, check the error messages and troubleshoot.
+
+## Safety
+
+- Never log or echo the API key in plain text after configuration
+- Verify the key format (`mnfst_` prefix) before writing to config
 
 ## Troubleshooting
 
-**Telemetry not appearing**: The gateway batches OTLP data every 10-30 seconds. Wait, then check `openclaw manifest` for connection status.
+| Error | Fix |
+|-------|-----|
+| Missing apiKey | Re-run step 4 |
+| Invalid apiKey format | The key must start with `mnfst_` |
+| Connection refused | The endpoint is unreachable. Check the URL or ask if they self-host |
+| Duplicate OTel registration | Disable the conflicting built-in plugin: `claude plugins disable diagnostics-otel` |
 
-**Auth errors in cloud mode**: Verify the API key starts with `mnfst_` and matches the key in the dashboard under Settings → Agent setup.
+## Examples
 
-**Port conflict in local mode**: If port 2099 is busy, the plugin checks if the existing process is Manifest and reuses it. To change the port: `openclaw config set plugins.entries.manifest.config.port <PORT>`.
+### Example 1: Basic setup
 
-**Plugin conflicts**: Manifest conflicts with the built-in `diagnostics-otel` plugin. Disable it before enabling Manifest.
+```
+Use @manifest to set up observability for my agent.
+```
 
-**After backend restart**: Always restart the gateway too (`openclaw gateway restart`) — the OTLP pipeline doesn't auto-reconnect.
+### Example 2: Custom endpoint
 
-## Privacy
+```
+Use @manifest to connect my agent to my self-hosted Manifest instance at https://manifest.internal.company.com/api/v1/otlp
+```
 
-**OTLP telemetry (sent to endpoint):**
+## Best Practices
 
-Fields collected per LLM call: session key, agent name, model name, provider name, token counts (input, output, cache-read, cache-write), tool names, tool success/failure, tool duration, error messages (truncated to classification, no content), message channel, and service metadata. **Not collected**: user prompts, assistant responses, tool input/output, or any message content.
+- Always stop the gateway before making configuration changes
+- The default endpoint works for most users — only change it if self-hosting
+- API keys always start with `mnfst_` — any other format is invalid
+- Check gateway logs first when debugging any plugin issue
 
-**Routing caveat — `manifest/auto` sends message content:**
-
-When the model is set to `manifest/auto`, the last 10 non-system messages (including their content) are sent to `POST /api/v1/routing/resolve` for complexity scoring. This is a separate REST call used only for tier assignment — it is not part of OTLP telemetry. To avoid sending content, disable routing in the dashboard and use a fixed model instead.
-
-**Local mode**: All data stays on your machine. No external calls are made.
-
-**Product analytics**: Anonymous usage stats sent to PostHog (hashed machine ID only, no PII). Opt out: `MANIFEST_TELEMETRY_OPTOUT=1` or `"telemetryOptOut": true` in `~/.openclaw/manifest/config.json`.
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

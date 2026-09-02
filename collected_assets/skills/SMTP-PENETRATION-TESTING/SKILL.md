@@ -1,10 +1,27 @@
 ---
-name: SMTP Penetration Testing
-description: This skill should be used when the user asks to "perform SMTP penetration testing", "enumerate email users", "test for open mail relays", "grab SMTP banners", "brute force email credentials", or "assess mail server security". It provides comprehensive techniques for testing SMTP server security.
-metadata:
-  author: zebbern
-  version: "1.1"
+name: smtp-penetration-testing
+description: "Conduct comprehensive security assessments of SMTP (Simple Mail Transfer Protocol) servers to identify vulnerabilities including open relays, user enumeration, weak authentication, and misconfiguration."
+risk: offensive
+source: community
+author: zebbern
+date_added: "2026-02-27"
 ---
+
+> **⚠️ AUTHORIZED USE ONLY**
+> This skill is for educational purposes or authorized security assessments only.
+> You must have explicit, written permission from the system owner before using this tool.
+> Misuse of this tool is illegal and strictly prohibited.
+
+> **Mandatory confirmation gate**
+> Before running any command that probes, exploits, changes, persists on, extracts data from, or attempts credential access against a target:
+> 1. Ask the user to state the exact target URL, IP, account, or resource.
+> 2. Ask the user to confirm written authorization and the permitted scope.
+> 3. Show the exact command(s) and explain their expected effect.
+> 4. Wait for explicit confirmation in the current conversation.
+>
+> Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
+
+> AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
 # SMTP Penetration Testing
 
@@ -498,3 +515,6 @@ nmap -p 25 --script smtp-open-relay --script-args smtp-open-relay.from=test@atta
 8. **Log Monitoring** - Alert on suspicious activity
 9. **Patch Management** - Keep SMTP software updated
 10. **Access Controls** - Restrict SMTP to authorized IPs
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.

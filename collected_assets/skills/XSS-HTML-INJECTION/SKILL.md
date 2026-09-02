@@ -1,10 +1,27 @@
 ---
-name: Cross-Site Scripting and HTML Injection Testing
-description: This skill should be used when the user asks to "test for XSS vulnerabilities", "perform cross-site scripting attacks", "identify HTML injection flaws", "exploit client-side injection vulnerabilities", "steal cookies via XSS", or "bypass content security policies". It provides comprehensive techniques for detecting, exploiting, and understanding XSS and HTML injection attack vectors in web applications.
-metadata:
-  author: zebbern
-  version: "1.1"
+name: xss-html-injection
+description: "Execute comprehensive client-side injection vulnerability assessments on web applications to identify XSS and HTML injection flaws, demonstrate exploitation techniques for session hijacking and credential theft, and validate input sanitization and output encoding mechanisms."
+risk: offensive
+source: community
+author: zebbern
+date_added: "2026-02-27"
 ---
+
+> **⚠️ AUTHORIZED USE ONLY**
+> This skill is for educational purposes or authorized security assessments only.
+> You must have explicit, written permission from the system owner before using this tool.
+> Misuse of this tool is illegal and strictly prohibited.
+
+> **Mandatory confirmation gate**
+> Before running any command that probes, exploits, changes, persists on, extracts data from, or attempts credential access against a target:
+> 1. Ask the user to state the exact target URL, IP, account, or resource.
+> 2. Ask the user to confirm written authorization and the permitted scope.
+> 3. Show the exact command(s) and explain their expected effect.
+> 4. Wait for explicit confirmation in the current conversation.
+>
+> Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
+
+> AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
 # Cross-Site Scripting and HTML Injection Testing
 
@@ -190,7 +207,7 @@ document.writeln()
 element.innerHTML
 element.outerHTML
 element.insertAdjacentHTML()
-eval()
+eval() <!-- security-allowlist: XSS sink inventory -->
 setTimeout()
 setInterval()
 Function()
@@ -314,7 +331,7 @@ Fake login form or misleading content here
 
 ```javascript
 // String concatenation
-<script>eval('al'+'ert(1)')</script>
+<script>eval('al'+'ert(1)')</script> <!-- security-allowlist: controlled XSS obfuscation example -->
 
 // Template literals
 <script>alert`1`</script>
@@ -323,7 +340,7 @@ Fake login form or misleading content here
 <script>[].constructor.constructor('alert(1)')()</script>
 
 // Base64 encoding
-<script>eval(atob('YWxlcnQoMSk='))</script>
+<script>eval(atob('YWxlcnQoMSk='))</script> <!-- security-allowlist: controlled XSS obfuscation example -->
 
 // Without parentheses
 <script>alert`1`</script>
@@ -497,3 +514,6 @@ Content-Security-Policy: script-src 'self' https://cdn.trusted.com
 | Cookies not accessible | Check HttpOnly flag; try localStorage/sessionStorage; use no-cors mode |
 | CSP blocking payloads | Find JSONP on whitelisted domains; check for unsafe-inline; test base-uri bypass |
 | WAF blocking requests | Use encoding variations; fragment payload; null bytes; case variations |
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.

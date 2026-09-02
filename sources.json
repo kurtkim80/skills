@@ -175,5 +175,26 @@
     "branch": "main",
     "skills_subpath": "",
     "description": "Professional Database Administrator (DBA) rules and index optimization for SQL Server, PostgreSQL, MySQL"
+  },
+  {
+    "name": "Guidogl/socket.io-consistency",
+    "repo": "https://github.com/Guidogl/socket.io-consistency.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Canonical Socket.IO architecture, room broadcasting, reconnection lifecycle, and state consistency"
+  },
+  {
+    "name": "dwellir-public/hyperliquid-skills",
+    "repo": "https://github.com/dwellir-public/hyperliquid-skills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "High-throughput low-latency WebSocket streaming, socket subscriptions, and real-time network streams"
+  },
+  {
+    "name": "sickn33/agentic-awesome-skills",
+    "repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Comprehensive agent skills collection covering WebSockets, SignalR, TCP sockets, and network protocols"
   }
 ]

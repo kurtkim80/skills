@@ -1,129 +1,265 @@
 ---
-name: documenting-python-libraries
-description: Creates comprehensive Python library documentation including Google-style docstrings, Sphinx setup, API references, tutorials, and ReadTheDocs configuration. Use when writing docstrings, setting up Sphinx documentation, or creating user guides for Python libraries.
+name: documentation
+description: "Documentation generation workflow covering API docs, architecture docs, README files, code comments, and technical writing."
+category: workflow-bundle
+risk: safe
+source: personal
+date_added: "2026-02-27"
 ---
 
-# Python Library Documentation
+# Documentation Workflow Bundle
 
-## Docstring Style (Google)
+## Overview
 
-```python
-def encode(latitude: float, longitude: float, *, precision: int = 12) -> str:
-    """Encode geographic coordinates to a quadtree string.
+Comprehensive documentation workflow for generating API documentation, architecture documentation, README files, code comments, and technical content from codebases.
 
-    Args:
-        latitude: The latitude in degrees (-90 to 90).
-        longitude: The longitude in degrees (-180 to 180).
-        precision: Number of characters in output. Defaults to 12.
+## When to Use This Workflow
 
-    Returns:
-        A string representing the encoded location.
+Use this workflow when:
+- Creating project documentation
+- Generating API documentation
+- Writing architecture docs
+- Documenting code
+- Creating user guides
+- Maintaining wikis
 
-    Raises:
-        ValidationError: If coordinates are out of valid range.
+## Workflow Phases
 
-    Example:
-        >>> encode(37.7749, -122.4194)
-        '9q8yy9h7wr3z'
-    """
+### Phase 1: Documentation Planning
+
+#### Skills to Invoke
+- `docs-architect` - Documentation architecture
+- `documentation-templates` - Documentation templates
+
+#### Actions
+1. Identify documentation needs
+2. Choose documentation tools
+3. Plan documentation structure
+4. Define style guidelines
+5. Set up documentation site
+
+#### Copy-Paste Prompts
+```
+Use @docs-architect to plan documentation structure
 ```
 
-## Sphinx Quick Setup
-
-```bash
-# Install
-uv add --dev sphinx furo myst-parser sphinx-copybutton
-
-# Initialize
-sphinx-quickstart docs/
+```
+Use @documentation-templates to set up documentation
 ```
 
-**conf.py essentials:**
-```python
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',  # Google docstrings
-    'myst_parser',          # Markdown support
-]
-html_theme = 'furo'
+### Phase 2: API Documentation
+
+#### Skills to Invoke
+- `api-documenter` - API documentation
+- `api-documentation-generator` - Auto-generation
+- `openapi-spec-generation` - OpenAPI specs
+
+#### Actions
+1. Extract API endpoints
+2. Generate OpenAPI specs
+3. Create API reference
+4. Add usage examples
+5. Set up auto-generation
+
+#### Copy-Paste Prompts
+```
+Use @api-documenter to generate API documentation
 ```
 
-## pyproject.toml Dependencies
-
-```toml
-[project.optional-dependencies]
-docs = [
-    "sphinx>=7.0",
-    "furo>=2024.0",
-    "myst-parser>=2.0",
-]
+```
+Use @openapi-spec-generation to create OpenAPI specs
 ```
 
-## README Template
+### Phase 3: Architecture Documentation
 
-```markdown
-# Package Name
+#### Skills to Invoke
+- `c4-architecture-c4-architecture` - C4 architecture
+- `c4-context` - Context diagrams
+- `c4-container` - Container diagrams
+- `c4-component` - Component diagrams
+- `c4-code` - Code diagrams
+- `mermaid-expert` - Mermaid diagrams
 
-[![PyPI](https://badge.fury.io/py/package.svg)](https://pypi.org/project/package/)
+#### Actions
+1. Create C4 diagrams
+2. Document architecture
+3. Generate sequence diagrams
+4. Document data flows
+5. Create deployment docs
 
-Short description of what it does.
-
-## Installation
-
-uv add package
-
-## Quick Start
-
-from package import function
-result = function(args)
-
-## Documentation
-
-Full docs at [package.readthedocs.io](https://package.readthedocs.io/)
+#### Copy-Paste Prompts
+```
+Use @c4-architecture-c4-architecture to create C4 diagrams
 ```
 
-## ReadTheDocs (.readthedocs.yaml)
-
-```yaml
-version: 2
-build:
-  os: ubuntu-22.04
-  tools:
-    python: "3.11"
-sphinx:
-  configuration: docs/conf.py
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements: [docs]
+```
+Use @mermaid-expert to create architecture diagrams
 ```
 
-For detailed setup, see:
-- **[SPHINX_CONFIG.md](SPHINX_CONFIG.md)** - Full Sphinx configuration
-- **[TUTORIALS.md](TUTORIALS.md)** - Tutorial writing guide
+### Phase 4: Code Documentation
 
-## Checklist
+#### Skills to Invoke
+- `code-documentation-code-explain` - Code explanation
+- `code-documentation-doc-generate` - Doc generation
+- `documentation-generation-doc-generate` - Auto-generation
+
+#### Actions
+1. Extract code comments
+2. Generate JSDoc/TSDoc
+3. Create type documentation
+4. Document functions
+5. Add usage examples
+
+#### Copy-Paste Prompts
+```
+Use @code-documentation-code-explain to explain code
+```
 
 ```
-README:
-- [ ] Clear project description
-- [ ] Installation instructions
-- [ ] Quick start example
-- [ ] Link to full documentation
-
-API Docs:
-- [ ] All public functions documented
-- [ ] Args, Returns, Raises sections
-- [ ] Examples in docstrings
-- [ ] Type hints included
+Use @code-documentation-doc-generate to generate docs
 ```
 
-## Learn More
+### Phase 5: README and Getting Started
 
-This skill is based on the [Documentation](https://mcginniscommawill.com/guides/python-library-development/#documentation-your-librarys-ambassador) section of the [Guide to Developing High-Quality Python Libraries](https://mcginniscommawill.com/guides/python-library-development/) by [Will McGinnis](https://mcginniscommawill.com/). See these posts for deeper coverage:
+#### Skills to Invoke
+- `readme` - README generation
+- `environment-setup-guide` - Setup guides
+- `tutorial-engineer` - Tutorial creation
 
-- [Writing Effective Docstrings](https://mcginniscommawill.com/posts/2025-03-06-writing-effective-docstrings/)
-- [Getting Started with Sphinx](https://mcginniscommawill.com/posts/2025-03-15-getting-started-sphinx/)
-- [Automating Docs Deployment](https://mcginniscommawill.com/posts/2025-03-23-automating-docs-deployment/)
-- [Documenting Your Library's API](https://mcginniscommawill.com/posts/2025-03-30-documenting-library-api/)
+#### Actions
+1. Create README
+2. Write getting started guide
+3. Document installation
+4. Add usage examples
+5. Create troubleshooting guide
+
+#### Copy-Paste Prompts
+```
+Use @readme to create project README
+```
+
+```
+Use @tutorial-engineer to create tutorials
+```
+
+### Phase 6: Wiki and Knowledge Base
+
+#### Skills to Invoke
+- `wiki-architect` - Wiki architecture
+- `wiki-page-writer` - Wiki pages
+- `wiki-onboarding` - Onboarding docs
+- `wiki-qa` - Wiki Q&A
+- `wiki-researcher` - Wiki research
+- `wiki-vitepress` - VitePress wiki
+
+#### Actions
+1. Design wiki structure
+2. Create wiki pages
+3. Write onboarding guides
+4. Document processes
+5. Set up wiki site
+
+#### Copy-Paste Prompts
+```
+Use @wiki-architect to design wiki structure
+```
+
+```
+Use @wiki-page-writer to create wiki pages
+```
+
+```
+Use @wiki-onboarding to create onboarding docs
+```
+
+### Phase 7: Changelog and Release Notes
+
+#### Skills to Invoke
+- `changelog-automation` - Changelog generation
+- `wiki-changelog` - Changelog from git
+
+#### Actions
+1. Extract commit history
+2. Categorize changes
+3. Generate changelog
+4. Create release notes
+5. Publish updates
+
+#### Copy-Paste Prompts
+```
+Use @changelog-automation to generate changelog
+```
+
+```
+Use @wiki-changelog to create release notes
+```
+
+### Phase 8: Documentation Maintenance
+
+#### Skills to Invoke
+- `doc-coauthoring` - Collaborative writing
+- `reference-builder` - Reference docs
+
+#### Actions
+1. Review documentation
+2. Update outdated content
+3. Fix broken links
+4. Add new features
+5. Gather feedback
+
+#### Copy-Paste Prompts
+```
+Use @doc-coauthoring to collaborate on docs
+```
+
+## Documentation Types
+
+### Code-Level
+- JSDoc/TSDoc comments
+- Function documentation
+- Type definitions
+- Example code
+
+### API Documentation
+- Endpoint reference
+- Request/response schemas
+- Authentication guides
+- SDK documentation
+
+### Architecture Documentation
+- System overview
+- Component diagrams
+- Data flow diagrams
+- Deployment architecture
+
+### User Documentation
+- Getting started guides
+- User manuals
+- Tutorials
+- FAQs
+
+### Process Documentation
+- Runbooks
+- Onboarding guides
+- SOPs
+- Decision records
+
+## Quality Gates
+
+- [ ] All APIs documented
+- [ ] Architecture diagrams current
+- [ ] README up to date
+- [ ] Code comments helpful
+- [ ] Examples working
+- [ ] Links valid
+
+## Related Workflow Bundles
+
+- `development` - Development workflow
+- `testing-qa` - Documentation testing
+- `ai-ml` - AI documentation
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

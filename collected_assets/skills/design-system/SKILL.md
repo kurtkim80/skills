@@ -1,156 +1,140 @@
 ---
 name: design-system
-description: Captures the user's brand identity once via a 10-question onboarding wizard (primary/accent HEX + heading + body Google Fonts + design style editorial/technical/minimal/playful + default output directory + syntax theme + TOC behavior + optional logo/company), validates body-text and link contrast against WCAG 2.2 AA, derives 12 CSS custom properties in HSL space, and stores the result for every markdown-html converter to consume. Use before any markdown-html conversion. Triggers on first-run onboarding ("set up the brand", "configure markdown-html", "run onboarding"), on explicit reset ("reset the design system", "re-onboard"), and is checked by every converter via config_loader.py before rendering. Refuses to save if body-text contrast fails AA 4.5:1 or the output dir isn't writable. Precedence is project (./.markdown-html/) > global (~/.config/markdown-html/) > built-in defaults; MARKDOWN_HTML_NO_CONFIG=1 bypasses.
-version: 2.10.0
-author: Alireza Rezvani
+description: "Mechanical implementation invariants for frontend design: token architecture, typography hierarchy, loading order, FOUT prevention, chrome stability, motion timing, color semantics. Use with design when building components, pages, or design systems. (Aesthetic direction lives in..."
+risk: critical
+source: https://github.com/connerkward/ckw-design-skill/tree/main/design-system
+source_repo: connerkward/ckw-design-skill
+source_type: community
+date_added: 2026-07-01
 license: MIT
-tags: [design-system, brand-palette, wcag, onboarding, customization, markdown-html, css-variables, typography]
-compatible_tools: [claude-code, codex-cli, cursor, antigravity, opencode, gemini-cli]
+license_source: https://github.com/connerkward/ckw-design-skill/blob/main/LICENSE
+author: Conner K Ward
 ---
 
-# Design System — Onboarding + Shared Brand Tokens
+# Design system
+## When to Use
 
-The design-system skill is the **shared brand owner** for the markdown-html plugin. Run its onboarding once. Every converter (`md-document`, `md-review`, `md-slides`) reads the resulting config via `config_loader.py` and applies the same 12 CSS custom properties to its output. Without this, conversions render with placeholder defaults — technically functional but unbranded.
+Use this skill when you need mechanical implementation invariants for frontend design: token architecture, typography hierarchy, loading order, FOUT prevention, chrome stability, motion timing, color semantics. Use with design when building components, pages, or design systems. (Aesthetic direction lives in...
 
-This skill ships exactly three Python tools:
 
-1. **`onboard.py`** — interactive (or `--defaults` / `--set` / `--show` / `--reset`) wizard.
-2. **`config_loader.py`** — importable customization loader with project > global > defaults precedence and `MARKDOWN_HTML_NO_CONFIG=1` bypass.
-3. **`brand_palette_validator.py`** — WCAG-AA contrast checker + HSL palette deriver.
+Apply with **design** when implementing UI: components, pages, or design systems. Every color, type, and motion choice should trace back to these rules.
 
-All three are stdlib-only and contain no LLM calls (deterministic per Path-B discipline).
+## Token architecture
 
-## When to invoke
+All colors map to a small set of primitives. No random hex values.
 
-| Symptom | Action |
+- **Foreground**: Text hierarchy (primary, secondary, muted).
+- **Background**: Surface elevation (base, raised, overlay).
+- **Border**: Separation hierarchy (subtle, default, emphasis).
+- **Brand**: Identity and primary accent.
+- **Semantic**: Destructive, warning, success (and optional info).
+
+Use tokens in code (CSS variables, theme objects); never hardcode hex for UI.
+
+## Typography
+
+- **Hierarchy**: Headlines — heavier weight, tighter letter-spacing for presence. Body — comfortable weight for readability. Labels/UI — medium weight, works at smaller sizes. Data — monospace, `tabular-nums` for alignment.
+- Combine size, weight, and letter-spacing so hierarchy is clear at a glance. If you squint and can't tell headline from body, hierarchy is too weak.
+- **Fonts**: pair a display font with a body font; keep hierarchy legible at a glance. *Which* fonts is direction, not mechanics — pick from the domain and push off your first/default instinct (the mean); see design-spatial §2.
+- **Data (functional only)**: real aligned numbers, IDs, timestamps in monospace with `tabular-nums` — mono earns its place when values line up in a column. Do NOT sprinkle mono on decorative eyebrow/metadata microtext ("35MM · DEVELOP · SCAN", fake spec captions) for a "technical" look — that's the current trend-slop, not data. See design-spatial §2.
+
+## Loading order — first seen, first loaded
+
+The first viewport must paint complete and correct, fast. Order every resource by whether the user sees it first; the rest waits.
+
+- **Prioritize only the above-the-fold set** (hero text, hero image/video, brand mark). Preloading everything is the same as preloading nothing — the true criticals lose the bandwidth race. Pick the few things in the first screenful and prioritize *those*.
+- **Fonts: self-host WOFF2.** Convert OTF/TTF → WOFF2 (Brotli; ~half the bytes, identical glyphs) and `<link rel="preload" as="font" type="font/woff2" crossorigin>` the weights used in the first viewport. Never a render-blocking third-party font stylesheet — a Google Fonts `<link>` adds a CSS round-trip plus extra DNS/TLS before the font even starts downloading; self-host instead.
+- **LCP image/video:** `fetchpriority="high"` on the hero image (or the video poster); `<link rel="preload" as="image">` it when it's CSS-referenced (the parser can't see CSS `url()`s early). The hero box must never be empty — ship a poster/low-res placeholder so there's no blank frame.
+- **Below the fold:** `loading="lazy" decoding="async"` on images; `preload="none"` (or `"metadata"`) on video; `defer` non-critical JS. Always reserve space (`aspect-ratio`, or `width`+`height`) so deferred media can't shift layout (CLS).
+- Keep the render-blocking head minimal: inline critical CSS, defer the rest.
+
+## Never let fonts pop in (no FOUT) — ever
+
+`font-display: swap` **is** the pop — it paints a fallback face, then swaps to the webfont and reflows. Do not use it for any text the user watches load (titles, wordmarks, hero copy). The rule is absolute: title/display text must never flash a fallback or reflow.
+
+- **Gate visibility on the real font.** Synchronously in `<head>`, add a `fonts-pending` class to `<html>` that holds the display-font text at `opacity: 0`. On `document.fonts.ready` — kick it with `document.fonts.load('<weight> 1em "Family"')` for each critical face — swap to `fonts-ready` and fade the text in (~0.5s). Always include a safety timeout (~2.5s) that reveals regardless, so a font failure can never leave text permanently hidden.
+- Pair this with preload + WOFF2 (above) so the hidden window is a few hundred ms, not seconds — the fade reads as intentional, not as a stall.
+- For body text where a sub-perceptual swap is tolerable, at minimum kill the reflow: define a fallback `@font-face` (or `font-family` fallback) tuned with `size-adjust` / `ascent-override` / `descent-override` so the fallback occupies the same metrics as the webfont and the swap shifts nothing.
+
+Worked example — an AR product-research page: a head script toggles `fonts-pending → fonts-ready` (titles fade in on `fonts.ready`, 2.5s fallback), preloads the four above-the-fold WOFF2 weights, and self-hosts the brand face so there's no Google round-trip.
+
+## Slow-loading content — never show the ugly intermediate state
+
+Anything that *could* take a noticeable moment to be ready — fonts (above), large images, video, `<canvas>` scenes, Three.js / WebGL, lazy-loaded React islands, anything that fetches over the network or runs heavy main-thread setup — must either **arrive fast** or **load gracefully**. The default browser behavior (blank box → partial paint → reflow → final state) is the ugly intermediate state. Catch it.
+
+Two levers; use both:
+
+- **Arrive faster.** Compress (WOFF2 for fonts, Draco for glTF, WebP/AVIF for images, h264/h265 for video with `preload="metadata"`). Preload the *few* assets the first viewport actually needs (`<link rel="preload">`). Lazy-load below-the-fold so the LCP set isn't competing. Reserve the box (`aspect-ratio`, `width`+`height`) so deferred content can't trigger CLS.
+- **Load gracefully.** Hide the in-flight state behind a styled placeholder, then fade the real thing in. Skeleton boxes, low-res blurred posters, a single ASCII glyph, even just the container's bg color — anything coherent with the design beats the default partial-paint.
+
+What "ugly" looks like, concretely, and the fix:
+
+| Symptom | Fix |
 |---|---|
-| User says "convert this markdown to HTML" for the first time in this workspace | Run `python3 markdown-html/skills/design-system/scripts/onboard.py` |
-| `~/.config/markdown-html/design-system.json` doesn't exist OR `setup_completed_at` is null | Refuse conversion, surface onboarding |
-| User wants per-repo brand override | `python3 .../onboard.py --scope project` |
-| User wants to change a single field non-interactively | `python3 .../onboard.py --set brand.primary=#FF6B35` |
-| User wants to reset and re-onboard | `python3 .../onboard.py --reset` then re-run |
-| User wants zero-touch defaults (CI, ephemeral session) | `python3 .../onboard.py --defaults` |
-| Headless / containerized run that should ignore saved config | `MARKDOWN_HTML_NO_CONFIG=1 ...` |
+| Annotation labels stack at `translate(0,0)` (top-left of container) until JS positions them | Start labels at `opacity: 0` with a `transition: opacity ~0.35s`; first projection sets inline opacity → CSS fades them up. |
+| Canvas/WebGL paints empty/black for a frame on first render | Show a placeholder (CSS art, low-res poster image, or paper/skeleton fill) in the same box; remove it once the first real frame has rendered. |
+| Lazy image fetches and snaps in with a layout-jump | `aspect-ratio` + `<link rel="preload">` (above-the-fold) or `loading="lazy" decoding="async"` (below); fade from `opacity:0` on the `load` event for the first paint. |
+| Video poster pops to first frame on play | `poster` matches a still you control; once `playing` event fires, you've already had a clean handoff. |
+| 3D model "appears" mid-screen with no transition | Keep the canvas visible but at `opacity: 0`; toggle a `.viewer-ready` class (or set inline opacity) inside the GLTFLoader success callback, after the first `tick()`. |
+| Lazy React island flashes a fallback that looks worse than no UI | Replace `Suspense` fallback with a skeleton that traces the final layout, not a spinner. |
 
-## Onboarding question set (10 questions)
+Rule of thumb: if a user could screenshot the page mid-load and you'd be embarrassed, you owe it a graceful state. The placeholder doesn't have to be fancy — it has to be *intentional*, sized correctly, and in the design language of what's coming.
 
-| # | Key | Choices / Validator | Default |
-|---|---|---|---|
-| 1 | `default_output_dir` | path; `os.access(parent, os.W_OK)` | `./markdown-html-out/` |
-| 2 | `brand.primary` | HEX `^#?[0-9a-fA-F]{6}$` | `#0A1628` |
-| 3 | `brand.accent` | HEX or blank (auto-derive) | derive from primary |
-| 4 | `typography.heading_font` | Google Font name (12 safe defaults) | `Inter` |
-| 5 | `typography.body_font` | Google Font name | `Inter` |
-| 6 | `design_style` | `editorial / technical / minimal / playful` | `technical` |
-| 7 | `code_theme` | `light / dark / auto` | `auto` |
-| 8 | `toc.behavior` | `sticky-sidebar / collapsible-top / inline / none` | `sticky-sidebar` |
-| 9 | `company_name` | string (may be empty) | `""` |
-| 10 | `logo_url` | URL or empty (base64-embedded at render) | `""` |
+## Chrome stays still — status text never resizes layout
 
-## Hard rules
+Persistent chrome (headers, nav, toolbars, search bars, status regions) must hold a **constant height** no matter what text lands in it. Transient status / loading / explanatory copy — "loading model…", "N matching · M indexed", empty-state hints — must not wrap to a second line and shove adjacent controls down. A status region that grows and shrinks as its message changes is a layout-jank bug, not dynamic content.
 
-1. **WCAG AA body-text contrast must pass.** `brand_palette_validator.validate()` runs after every change. Body text on bg must reach 4.5:1; link on bg must reach 4.5:1. If either fails, `onboard.py` refuses to save (exit code 4) and tells the user to pick a darker primary, blank `brand.bg`/`brand.text` to let derivation pick a safe pair, or override `brand.text` directly. Canon: WCAG 2.2 §1.4.3.
-2. **Output directory must be writable.** `onboard.py` walks up the path to find an existing ancestor and checks `os.W_OK`. Empty or unwritable path → exit code 3. The orchestrator's `output_path_resolver.py` honors the same rule per-conversion.
-3. **Customization must change behavior, not sit as decoration.** Every consumer (md-document, md-review, md-slides) must read the config and render differently when the user changes `design_style`, `brand.primary`, `code_theme`, or `toc.behavior`. Decorative-only fields fail the design discipline.
-4. **Precedence is fixed.** Project > global > defaults. The deep-merge preserves nested keys (e.g. you can override `brand.primary` in a project config without losing `typography.heading_font` from global).
-5. **Bypass env exists for a reason.** `MARKDOWN_HTML_NO_CONFIG=1` is for headless CI, ephemeral test containers, and the autoresearch-style evaluator loops. Never set it silently for an interactive user.
+- **Constrain to one line:** `white-space: nowrap; overflow: hidden; text-overflow: ellipsis` so the longest message truncates instead of wrapping.
+- **Reserve the space up front:** give the container a fixed `height` (or `min-height`) sized for the message, so the shortest and longest states — and the empty state — occupy the same footprint.
 
-## Derived 12-token palette
+Only the content area should move while chrome stays fixed; layout shift from transient text reads as broken polish. (Concrete failure this prevents: in a search app, a model-loading message wrapping to two lines and pushing the search bar downward.)
 
-Once the user's brand is captured, `brand_palette_validator.derive_palette()` produces 12 CSS custom properties stored under `derived_palette` in the same config file. Every converter inlines these into its `<style>` block.
+## Motion
 
-| Token | Purpose | Derivation |
-|---|---|---|
-| `--md-bg` | Document background | Primary if dark, near-neutral if vibrant |
-| `--md-surface` | Card / callout / blockquote background | Bg ± 4-6% luminance |
-| `--md-border` | Hairline dividers, table borders | Bg ± 8-12% luminance |
-| `--md-text` | Body text | Off-white on dark bg, near-black on light bg |
-| `--md-text-muted` | Captions, metadata, footers | `rgba(text, 0.68)` |
-| `--md-accent` | Primary CTA, callout headers, link emphasis | Primary if vibrant, hue-shifted lighter if dark |
-| `--md-accent-soft` | Accent backgrounds, hover states | `rgba(accent, 0.14)` |
-| `--md-code-bg` | Inline code, fenced block bg | Bg ± 4-5% luminance |
-| `--md-link` | Hyperlinks | Iteratively walked to reach 4.5:1 contrast on bg |
-| `--md-link-hover` | Hover state | Link ± 6-8% luminance |
-| `--md-success` | OK / approved / passed | Green anchored, luminance-matched |
-| `--md-warn` | Caution / nit / TODO | Amber anchored, luminance-matched |
+- Keep timing consistent and purposeful; one well-orchestrated moment (staggered page load with `animation-delay`) beats scattered micro-interactions. Prefer CSS-only for HTML; Motion library for React. (Honor `prefers-reduced-motion` for public/multi-user projects.)
+- **Defaults for restrained/professional UIs** (a starting point, not law): micro-interactions ~150ms, larger transitions 200–250ms, ease-out. A playful/toy-like tone (design-thinking) may want spring/bounce and longer beats — match motion feel to the chosen direction rather than defaulting to these numbers.
+- **Choreography** — for anything beyond a single micro-interaction (route/page transitions, list reorder, reveals, shared elements), load [references/motion-choreography.md](references/motion-choreography.md): when a transition earns its keep (it must *communicate* something or get cut), which kinds to implement and in what order, **style by navigation type** (directional slide only for hierarchical/ordered — a slide between peers lies about depth; laterals fade), a duration table, and craft (compositor-only props, motion-blur on morphs, never raster-scale text, persistent-chrome isolation). Framework-agnostic.
 
-## Forcing-question library (Matt Pocock grill-with-docs pattern)
+### Scroll-driven narrative (scrollytelling)
 
-One question per turn, recommended answer, canon citation.
+For **explanatory / editorial / data-walkthrough** content, prefer **scroll-driven graphics over click-interactive widgets**. A reader scrolls by default; making them hunt for and click a toggle to advance an explanation adds friction and gets skipped. Use the NYT/Pudding pattern: pin one graphic (`position: sticky`) while short text "steps" scroll past it, and let each step drive the graphic's state.
 
-1. **What's your brand primary color?** Recommended: a HEX you already use in your product or docs — not a stock blue. Canon: Aarron Walter, *Designing for Emotion* (color carries brand affect).
-2. **Should accent be derived or set?** Recommended: derive on first run (hue-shift + lighten produces a coherent companion); set explicitly only if your brand kit specifies one. Canon: Adobe Spectrum, *Color Foundations*.
-3. **Editorial, technical, minimal, or playful?** Recommended: `technical` for engineering specs/reports, `editorial` for long-read narratives, `minimal` for sparse reference docs, `playful` for marketing/landing content. Canon: Ellen Lupton, *Thinking with Type* (style serves the rhetorical purpose).
-4. **Sticky-sidebar TOC, or inline?** Recommended: `sticky-sidebar` for documents over 800 words, `inline` for short reads. Canon: Nielsen-Norman, *Table of Contents Best Practices* (2023).
-5. **Save to global or per-project?** Recommended: global by default (consistent across your work); use `--scope project` only when this repo has a different brand. Canon: research-ops onboarding pattern, `research-ops/CLAUDE.md` §8.
+- **Mechanics:** one `IntersectionObserver` with `rootMargin: '-48% 0px -48% 0px'` (threshold 0) so a step goes "active" exactly as it crosses the viewport mid-line; the active index re-renders the pinned graphic. ~30 lines — this *is* scrollama minus the dependency; don't add a scroll library.
+- **Layout:** two columns — steps scroll in one, the graphic `sticky top-0 h-screen` in the other; stack on mobile with the graphic sticky on top. Give each step ~85vh so exactly one is centered at a time; dim the inactive step cards (`opacity:.3`) so the live one reads.
+- **Graphic is a pure function of the active step** (`graphic(active)`), holding no click state of its own — so it also screenshots/exports deterministically and degrades to a static figure. Animate *between* states (color / width / opacity, 300–700ms) so scrolling feels continuous, not steppy.
+- **When NOT to:** dashboards, tools, forms — anything the user *operates* rather than *reads* — stay interactive. Scrollytelling is for **narration**, where you own the order. (Public/multi-user builds: honor `prefers-reduced-motion` per the Motion note above; keep the state changes but drop the tweens.)
 
-## Customization in use (worked example)
+## Spatial composition & layout
 
-```bash
-# First-run onboarding (interactive, walks all 10 questions)
-python3 markdown-html/skills/design-system/scripts/onboard.py
+Grid systems, the 8-point spacing scale, visual-weight balance, alignment, and the render-then-critique loop live in **design-spatial** ([../design-spatial/SKILL.md](../design-spatial/SKILL.md)) — the mechanical counterpart to this file's tokens/type/color. Load it whenever composing pages, dashboards, or components. (Direction nugget that belongs here: match composition ambition to the vision — maximalist earns elaborate/layered code; minimal/refined demands restraint and precise spacing.)
 
-# Zero-touch defaults for CI / first-test
-python3 .../onboard.py --defaults
+## Nested radii (only when one rounded element sits inside another)
 
-# Change just the primary color and design style
-python3 .../onboard.py --set brand.primary=#FF6B35 --set design_style=editorial
+Not a push to round things — this governs the case where a rounded element is nested in
+another (a button in a card, an inset panel in a container). When nested:
 
-# Per-repo override
-python3 .../onboard.py --scope project --set design_style=minimal
+- **Child radius ≤ parent radius**, never larger (a child corner rounder than its parent looks
+  like it's bulging out).
+- **Concentric** is the ideal: `child_radius = parent_radius − gap` (the padding between them),
+  so the two curves run parallel and the inner corner echoes the outer. Flat/unrounded children
+  in a rounded parent are fine; what reads as broken is mismatched, non-concentric curves.
 
-# Reset and re-onboard
-python3 .../onboard.py --reset
-python3 .../onboard.py
+## Color
 
-# Inspect the effective config (project > global > defaults)
-python3 .../config_loader.py --show
-python3 .../config_loader.py --status
+- **Palette from domain**: colors should feel like they came *from* the product's world, not applied on top.
+- **Beyond temperature**: quiet vs loud, dense vs spacious, serious vs playful, geometric vs organic — not just warm/cool.
+- **Color carries meaning**: gray builds structure; color communicates status, action, emphasis, identity. Unmotivated color is noise. (Restraint — one accent, not five — is a direction principle; see design-thinking → *reserve impact for punctuation*.)
+- **Contrast — APCA for decisions, WCAG for the gate.** For *perceptual* contrast judgments (is this text comfortably readable on this surface?) prefer **APCA** ([apcacontrast.com](https://apcacontrast.com/)) — it models lightness perception far better than the WCAG 2 ratio, which mis-rates light-on-dark and mid-tones. Keep **WCAG 2 (4.5 / 3:1) as the compliance floor** — it's what `design-spatial`'s `layout-audit.js` gates on and what accessibility standards require. Use APCA to design, WCAG to certify.
+- **Interactive states gain contrast.** `:hover`, `:active`, `:focus` must read as *more* prominent than rest — more contrast, not less. A hover that lowers contrast (e.g. lightens text toward the bg) reads as disabled.
 
-# Bypass saved config (returns DEFAULTS only)
-MARKDOWN_HTML_NO_CONFIG=1 python3 .../config_loader.py --show
+Avoiding the generic/trend look (Inter, purple-on-white, the same dark-glass card) and varying across generations is **design-spatial §2** — not restated here.
 
-# Spot-check WCAG contrast before committing to a brand
-python3 .../brand_palette_validator.py --primary "#FF6B35" --accent "#00D4AA"
-```
+## Backgrounds & detail
 
-## Assumptions
+Atmosphere over flat fills — but matched to the chosen aesthetic, not a default. The reflexive gradient-mesh / noise / grain "premium" treatment is itself the designer-trend mean (design-spatial §2); reach for it only when the direction genuinely calls for it, never as decoration for its own sake.
 
-1. User has at least one brand HEX they want consistent across their HTML conversions.
-2. User accepts a 1-2 minute one-time setup.
-3. User is OK with Google Fonts as the typography source (CDN, no local font hosting).
-4. WCAG 2.2 AA is the accessibility floor (4.5:1 body, 3:1 large/UI). AAA (7:1) is out of scope.
+## Limitations
 
-## Non-goals
-
-- Not a full design-token system (Style Dictionary, Theo). Twelve tokens, not a hundred.
-- Not a custom-font hosting solution. Google Fonts only.
-- Not a dark/light mode switcher in the converters. `code_theme: auto` handles the prefers-color-scheme case for syntax highlighting; layout palette is single-mode per onboarding.
-- Not an accessibility audit suite (use axe-core / pa11y for that). We enforce contrast only.
-- Does not transform existing CSS — the derived palette is injected into freshly generated HTML.
-
-## Distinct from
-
-- **`marketing/landing/skills/landing/scripts/brand_palette_validator.py`** — that script's `derive_palette()` produces 8 tokens shaped for hero-page rendering (`--navy`, `--teal`, `--card-bg`, `--card-border`). This script produces 12 tokens shaped for document rendering (sticky surface, hairline border, code bg, link, link-hover, success, warn). Same WCAG + HSL math, different token taxonomy.
-- **`research-ops/skills/clinical-research/scripts/onboard.py`** — same pattern (interactive + `--defaults`/`--set`/`--show`/`--reset`/`--scope`), different question set (clinical alpha/power/dropout vs. brand palette/typography/layout).
-
-## Output artifact
-
-`~/.config/markdown-html/design-system.json` (global) or `./.markdown-html/design-system.json` (project). JSON schema lives at `assets/design_system_schema.json`.
-
-## Anti-patterns (do not)
-
-- ❌ Skip onboarding and run a converter with placeholder defaults — output looks unbranded.
-- ❌ Pick a vibrant brand primary as `brand.bg` directly (low text contrast). Use it as accent instead.
-- ❌ Set `MARKDOWN_HTML_NO_CONFIG=1` silently for an interactive user — they'll wonder why their tokens disappeared.
-- ❌ Encode brand semantics in `derived_palette` outside the 12-token taxonomy. Add a new token only with a deliberate name + purpose + derivation rule.
-
-## References
-
-- WCAG 2.2 — §1.4.3 (contrast), §1.4.4 (resize), §1.4.11 (non-text contrast)
-- Aarron Walter — *Designing for Emotion* (A Book Apart)
-- Ellen Lupton — *Thinking with Type*
-- Adobe Spectrum — *Color Foundations*
-- Nielsen-Norman — *Table of Contents Best Practices* (2023)
-- research-ops onboarding pattern: `research-ops/CLAUDE.md` §8
-- Brand palette math source: `marketing/landing/skills/landing/scripts/brand_palette_validator.py`
+- Use this skill only when the task clearly matches its upstream source and local project context.
+- Verify commands, generated code, dependencies, credentials, and external service behavior before applying changes.
+- Do not treat examples as a substitute for environment-specific tests, security review, or user approval for destructive or costly actions.

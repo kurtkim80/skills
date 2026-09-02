@@ -1,130 +1,127 @@
 ---
-name: ring:writing-skills
-description: "Writing or editing a Ring skill: SKILL.md structure, frontmatter and Agent-Search-Optimization rules, token-efficiency targets, and bulletproofing (Iron Law, rationalization tables, Red Flags) so discipline-enforcing skills resist excuses. Use when creating or revising a skill. Delegates pressure-testing to ring:testing-skills-with-subagents. Skip for pure reference skills with no rules, or project conventions (put those in CLAUDE.md)."
+name: writing-skills
+description: Use when creating, updating, or improving agent skills.
+metadata:
+  aas-category: meta
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
-# Writing Skills
+# Writing Skills (Excellence)
 
-## When to use
-- Creating a new skill
-- Editing an existing skill
-- Skill needs to resist rationalization under pressure
+Dispatcher for skill creation excellence. Use the decision tree below to find the right template and standards.
 
-## Skip when
-- Writing pure reference skill (API docs) → no rules to test
-- Skill has no compliance costs → no rationalization risk
+## ⚡ Quick Decision Tree
 
-## Related
-**Complementary:** ring:testing-skills-with-subagents
+### What do you need to do?
 
-**Writing skills IS TDD applied to process documentation.**
+1. **Create a NEW skill:**
+   - Is it simple (single file, <200 lines)? → [Tier 1 Architecture](references/tier-1-simple/README.md)
+   - Is it complex (multi-concept, 200-1000 lines)? → [Tier 2 Architecture](references/tier-2-expanded/README.md)
+   - Is it a massive platform (10+ products, AWS, Convex)? → [Tier 3 Architecture](references/tier-3-platform/README.md)
 
-Same Iron Law: No skill without failing test first.  
-Same cycle: RED (baseline) → GREEN (write skill) → REFACTOR (close loopholes).
+2. **Improve an EXISTING skill:**
+   - Fix "it's too long" -> [Modularize (Tier 3)](references/templates/tier-3-platform.md)
+   - Fix "AI ignores rules" -> [Anti-Rationalization](references/anti-rationalization/README.md)
+   - Fix "users can't find it" -> [CSO (Search Optimization)](references/cso/README.md)
 
-**REQUIRED BACKGROUND:** Understand ring:test-driven-development before using this skill.
+3. **Verify Compliance:**
+   - Check metadata/naming -> [Standards](references/standards/README.md)
+   - Add tests -> [Testing Guide](references/testing/README.md)
 
-## What is a Skill?
+## 📚 Component Index
 
-A reusable reference guide for proven techniques, patterns, or tools. **Not** a narrative about how you solved something once.
+| Component | Purpose |
+|-----------|---------|
+| **[CSO](references/cso/README.md)** | "SEO for LLMs". How to write descriptions that trigger. |
+| **[Standards](references/standards/README.md)** | File naming, YAML frontmatter, directory structure. |
+| **[Anti-Rationalization](references/anti-rationalization/README.md)**| How to write rules that agents won't ignore. |
+| **[Testing](references/testing/README.md)** | How to ensure your skill actually works. |
 
-**Create when:** technique wasn't obvious, you'd reference it again, applies broadly.  
-**Skip when:** one-off solution, project-specific convention (put in CLAUDE.md).
+## 🛠️ Templates
 
-## Skill Types
+- [Technique Skill](references/templates/technique.md) (How-to)
+- [Reference Skill](references/templates/reference.md) (Docs)
+- [Discipline Skill](references/templates/discipline.md) (Rules)
+- [Pattern Skill](references/templates/pattern.md) (Design Patterns)
 
-| Type | Examples |
-|------|---------|
-| Technique (steps to follow) | condition-based-waiting, root-cause-tracing |
-| Pattern (way of thinking) | flatten-with-flags, test-invariants |
-| Reference (docs/API) | API reference, command syntax |
+## When to Use
+- Creating a NEW skill from scratch
+- Improving an EXISTING skill that agents ignore
+- Debugging why a skill isn't being triggered
+- Standardizing skills across a team
 
-## SKILL.md Structure
+## How It Works
 
+1. **Identify goal** → Use decision tree above
+2. **Select template** → From `references/templates/`
+3. **Apply CSO** → Optimize description for discovery
+4. **Add anti-rationalization** → For discipline skills
+5. **Test** → RED-GREEN-REFACTOR cycle
+
+## Quick Example
+
+```yaml
+---
+name: my-technique
+description: Use when [specific symptom occurs].
+metadata:
+  category: technique
+  triggers: error-text, symptom, tool-name
+---
+
+# My Technique
+
+## When to Use
+- [Symptom A]
+- [Error message]
 ```
----
-name: ring:skill-name-with-hyphens
-description: Use when [triggers/symptoms] — [what it does, third person]
----
-# Skill Name
-## Overview (1-2 sentences)
-## When to Use (symptoms + skip conditions)
-## Core Pattern (before/after examples)
-## Quick Reference (table for scanning)
-## Implementation (inline or linked)
+
 ## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Description summarizes workflow | Use "Use when..." triggers only |
+| No `metadata.triggers` | Add 3+ keywords |
+| Generic name ("helper") | Use gerund (`creating-skills`) |
+| Long monolithic SKILL.md | Split into `references/` |
+
+See [gotchas.md](gotchas.md) for more.
+
+## ✅ Pre-Deploy Checklist
+
+Before deploying any skill:
+
+- [ ] `name` field matches directory name exactly
+- [ ] `SKILL.md` filename is ALL CAPS
+- [ ] Description starts with "Use when..."
+- [ ] `metadata.triggers` has 3+ keywords
+- [ ] Total lines < 500 (use `references/` for more)
+- [ ] No `@` force-loading in cross-references
+- [ ] Tested with real scenarios
+
+## 🔗 Related Skills
+
+- **opencode-expert**: For OpenCode environment configuration
+- Use `/write-skill` command for guided skill creation
+
+## Examples
+
+**Create a Tier 1 skill:**
+```bash
+mkdir -p ~/.config/opencode/skills/my-technique
+touch ~/.config/opencode/skills/my-technique/SKILL.md
 ```
 
-**Frontmatter rules:** Only `name` and `description`. Max 1024 chars total. `name`: letters, numbers, hyphens only. `description`: third-person, starts "Use when...", <500 chars if possible.
-
-## Agent Search Optimization (ASO)
-
-**Agents read description to decide which skills to load.** Make it answer: "Should I read this skill right now?"
-
-- Use concrete triggers and symptoms (problem-focused, not language-specific)
-- Use keywords agents would search: error messages, symptoms, tool names
-- Active voice, verb-first names: `creating-skills` not `skill-creation`
-- Reference skills by name only: `ring:test-driven-development`, no `@` links (force-loads context)
-
-## Token Efficiency
-
-| Skill Type | Target |
-|------------|--------|
-| Bootstrap/getting-started | <150 words (loads in every session) |
-| Simple technique | <500 words |
-| Discipline-enforcing | <2,000 words (need rationalization tables) |
-| Process/workflow | <4,000 words (multi-phase workflows) |
-
-## RED-GREEN-REFACTOR for Skills
-
-| Phase | Action |
-|-------|--------|
-| **RED** | Run pressure scenario WITHOUT skill → document agent choices/rationalizations verbatim |
-| **GREEN** | Write skill addressing specific failures → verify agent now complies |
-| **REFACTOR** | Find new rationalizations → add counters → re-test until bulletproof |
-
-**REQUIRED SUB-SKILL:** Use ring:testing-skills-with-subagents for pressure scenarios and hole-plugging.
-
-## The Iron Law
-
-```
-NO SKILL WITHOUT A FAILING TEST FIRST
+**Create a Tier 2 skill:**
+```bash
+mkdir -p ~/.config/opencode/skills/my-skill/references/core
+touch ~/.config/opencode/skills/my-skill/{SKILL.md,gotchas.md}
+touch ~/.config/opencode/skills/my-skill/references/core/README.md
 ```
 
-Applies to new skills AND edits. Delete untested skills and start over. No exceptions.
-
-## Bulletproofing Against Rationalization
-
-For discipline-enforcing skills:
-
-1. **Forbid specific workarounds explicitly** — don't just state the rule, list prohibited alternatives
-2. **Address "spirit vs letter" early:** `"Violating the letter is violating the spirit."`
-3. **Build rationalization table** from baseline testing — capture every excuse agents make
-4. **Create Red Flags list** — make self-checking easy
-
-```markdown
-## Red Flags — STOP
-- [symptom 1]
-- [symptom 2]
-All of these mean: [required action].
-```
-
-## Skill Creation Checklist
-
-| Phase | Requirements |
-|-------|--------------|
-| RED | 3+ pressure scenarios, run WITHOUT skill, document rationalizations verbatim |
-| GREEN | Valid frontmatter, description starts "Use when...", addresses baseline failures, one excellent example, verify compliance |
-| REFACTOR | Rationalization table, Red Flags list, re-test against new loopholes |
-| Quality | Flowchart only if non-obvious, quick ref table, no narrative |
-| Deploy | Commit and push |
-
-**STOP after each skill — do NOT batch-create without testing each.**
-
-## File Organization
-
-| Type | Structure |
-|------|-----------|
-| Self-contained | `skill/SKILL.md` only |
-| With tool | `SKILL.md` + reusable script |
-| Heavy reference | `SKILL.md` + `*.md` refs + `scripts/` |
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

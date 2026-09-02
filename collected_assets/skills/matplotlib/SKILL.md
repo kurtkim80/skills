@@ -1,208 +1,365 @@
 ---
 name: matplotlib
-description: "Generate publication-quality matplotlib/seaborn charts and diagrams. Produces colorblind-accessible, despined, annotation-rich figures using Tim's personal aesthetic (whitegrid, DejaVu Sans, cubehelix/ColorBrewer palettes). Use when creating any data visualization, chart, plot, or diagram."
-argument-hint: "[description of chart to create, e.g. 'bar chart of accuracy by model']"
-allowed-tools: Bash, Write, Read, Glob, Grep
+description: "Matplotlib is Python's foundational visualization library for creating static, animated, and interactive plots."
+license: https://github.com/matplotlib/matplotlib/tree/main/LICENSE
+metadata:
+    skill-author: K-Dense Inc.
+risk: critical
+source: community
 ---
 
-# Persona
+# Matplotlib
 
-You are an expert Python data visualization developer. You are opinionated about aesthetics and default to the style conventions below unless the user explicitly asks otherwise or the Design Philosophy principles clearly suggest a different approach.
+## Overview
 
-You produce clean, self-contained matplotlib/seaborn code. Every chart you generate follows the conventions in these reference files:
-- **Style specification:** `${CLAUDE_SKILL_DIR}/style-reference.md`
-- **Chart patterns:** Individual files in `${CLAUDE_SKILL_DIR}/patterns/` — see index below
+Matplotlib is Python's foundational visualization library for creating static, animated, and interactive plots. This skill provides guidance on using matplotlib effectively, covering both the pyplot interface (MATLAB-style) and the object-oriented API (Figure/Axes), along with best practices for creating publication-quality visualizations.
 
-Read the style spec before generating any code. Then identify the closest matching
-pattern from the index and read ONLY that pattern file.
+## When to Use This Skill
 
-# Design Philosophy
+This skill should be used when:
+- Creating any type of plot or chart (line, scatter, bar, histogram, heatmap, contour, etc.)
+- Generating scientific or statistical visualizations
+- Customizing plot appearance (colors, styles, labels, legends)
+- Creating multi-panel figures with subplots
+- Exporting visualizations to various formats (PNG, PDF, SVG, etc.)
+- Building interactive plots or animations
+- Working with 3D visualizations
+- Integrating plots into Jupyter notebooks or GUI applications
 
-These principles take precedence over pattern defaults. When a pattern's default
-conflicts with the communicative goal, adapt the pattern to serve the principle.
+## Core Concepts
 
- 1. Above all else, show the data. (Tufte — the prime directive)
- 2. Every element earns its ink. (Data-ink ratio, reframed as a test)
- 3. Prefer position over color, color over size. (Cleveland & McGill hierarchy, compressed)
- 4. Grey is a color. White space is a feature. (Muth + Schwabish — the minimalist foundation)
- 5. Despine, degrid, then add back only what the reader needs. (Tim's workflow, made explicit)
- 6. Annotate the insight, not just the axis. (Cairo + Knaflic — charts should say something)
- 7. Encode meaning twice — never rely on color alone. (Wilke/WCAG — accessibility as principle)
- 8. Consistency across panels; variety across charts. (Multi-panel coherence vs. chart-type adaptation)
- 9. The reader should never do arithmetic. (Cleveland — if they need to compare, plot the comparison)
-10. When in doubt, remove. (Darkhorse "remove to improve" + Tufte "erase non-data-ink")
+### The Matplotlib Hierarchy
 
-| Pattern | File | When to use |
-|---------|------|-------------|
-| P1 | `patterns/P1-horizontal-bar.md` | Ranked percentages, category comparisons |
-| P2 | `patterns/P2-vertical-bar.md` | Comparisons across categories, ranked values |
-| P3 | `patterns/P3-time-series.md` | Time series with rolling average |
-| P4 | `patterns/P4-violin-strip.md` | Distribution comparisons |
-| P5 | `patterns/P5-lollipop.md` | Min/max/avg ranges, model comparison |
-| P6 | `patterns/P6-decision-boundary.md` | Classification boundaries, probability maps |
-| P7 | `patterns/P7-heatmap.md` | Correlation matrices, spectrograms |
-| P8 | `patterns/P8-multi-panel.md` | Multi-panel grid layouts (2x2, 3x2, 3x3) |
-| P9 | `patterns/P9-pr-roc.md` | PR/ROC classification evaluation curves |
+Matplotlib uses a hierarchical structure of objects:
 
-# Phase 1 -- Understand the Request
+1. **Figure** - The top-level container for all plot elements
+2. **Axes** - The actual plotting area where data is displayed (one Figure can contain multiple Axes)
+3. **Artist** - Everything visible on the figure (lines, text, ticks, etc.)
+4. **Axis** - The number line objects (x-axis, y-axis) that handle ticks and labels
 
-Parse `$ARGUMENTS` and any surrounding conversation for:
-- **Chart type:** bar, line, scatter, violin, heatmap, lollipop, time series, PR/ROC, multi-panel grid, etc.
-- **Data source:** CSV path, DataFrame variable, inline data, or synthetic/example data
-- **Columns / variables:** Which columns map to x, y, hue, size, etc.
-- **Annotations:** Titles, axis labels, value labels, metric boxes (RMSE/R2), subplot labels
-- **Output context:** Standalone script (default), notebook cell, or function to add to a module
-- **Narrative intent:** What should the reader take away? Identify the communicative goal — comparison, trend, distribution, composition, relationship, or emphasis. Let this shape choices in Phase 2 (e.g., emphasis → selective color; neutral comparison → uniform palette).
-- **Creative brief** (internal — not shown to user): Based on the narrative intent, note which Design Philosophy principles are most relevant and any pattern defaults you plan to deviate from. This guides choices in Phase 3.
+### Two Interfaces
 
-If the request is ambiguous (e.g., just "make a chart"), ask the user what data and chart type they want. Do not guess.
-
-Determine the output format from context:
-- Working in a `.ipynb` file -> notebook cell
-- User says "add a function to..." -> function mode
-- User says "quick plot" or "exploratory" -> standalone script (PNG-only, 150 DPI)
-- User says "publication", "300 DPI", or "high resolution" -> standalone script (PDF+PNG, 300 DPI)
-- Otherwise -> standalone script (default: 150 DPI, PDF+PNG)
-
-# Phase 2 -- Determine Configuration
-
-Map the chart type to defaults from `style-reference.md`:
-- **figsize:** Use the sizing lookup table
-- **DPI:** 150 (default), 300 only when user explicitly requests "publication", "300 DPI", or "high resolution"
-- **Palette:** Match chart type to recommended palette
-- **Layout:** Single panel or GridSpec multi-panel
-- **Output format:** PDF+PNG dual save (default), or PNG-only for exploratory
-
-Override any default if the user explicitly requests it (e.g., "use a red color scheme", "make it 16:9").
-
-# Phase 3 -- Generate Code
-
-Read `${CLAUDE_SKILL_DIR}/style-reference.md` for the full style spec. Then read the matching pattern file from the index table above.
-
-Apply **style-reference invariants** (see Invariants Shorthand in style-reference.md).
-
-Then adapt the pattern's **Signature** elements — these define the pattern's visual
-identity and should be preserved unless the user explicitly requests otherwise.
-
-For everything else — palette, figsize, fontsize, alpha, padding, legend position,
-annotation format, grid visibility — start with the pattern's template defaults and
-adapt based on:
-- The Creative Brief from Phase 1
-- Data properties (category count, value range, density, label length)
-- Design Philosophy principles (especially P6: annotate the insight)
-
-Dependencies are limited to: `matplotlib`, `seaborn`, `numpy`, `pandas` (as needed by the chart).
-
-# Phase 4 -- Output Format
-
-## Standalone Script (default)
-
-Use PEP 723 header for `uv run` execution:
-
+**1. pyplot Interface (Implicit, MATLAB-style)**
 ```python
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "matplotlib",
-#     "seaborn",
-#     "numpy",
-#     "pandas",
-# ]
-# ///
+import matplotlib.pyplot as plt
+
+plt.plot([1, 2, 3, 4])
+plt.ylabel('some numbers')
+plt.show()
+```
+- Convenient for quick, simple plots
+- Maintains state automatically
+- Good for interactive work and simple scripts
+
+**2. Object-Oriented Interface (Explicit)**
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.plot([1, 2, 3, 4])
+ax.set_ylabel('some numbers')
+plt.show()
+```
+- **Recommended for most use cases**
+- More explicit control over figure and axes
+- Better for complex figures with multiple subplots
+- Easier to maintain and debug
+
+## Common Workflows
+
+### 1. Basic Plot Creation
+
+**Single plot workflow:**
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create figure and axes (OO interface - RECOMMENDED)
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Generate and plot data
+x = np.linspace(0, 2*np.pi, 100)
+ax.plot(x, np.sin(x), label='sin(x)')
+ax.plot(x, np.cos(x), label='cos(x)')
+
+# Customize
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_title('Trigonometric Functions')
+ax.legend()
+ax.grid(True, alpha=0.3)
+
+# Save and/or display
+plt.savefig('plot.png', dpi=300, bbox_inches='tight')
+plt.show()
 ```
 
-Structure:
-- Single `main()` function with numpy-style docstring (Parameters, Saves sections)
-- No type hints
-- Inline config values -- no constants file or module-level variables
-- Section comments: `# --- Style Setup ---`, `# --- Data ---`, `# --- Plot ---`, `# --- Save ---`
-- Helpers only when logic genuinely repeats; three similar lines > a premature abstraction
-- `if __name__ == "__main__": main()` at the bottom
-- Save to `./figures/` as both PDF and PNG at 150 DPI
-- Create `./figures/` directory with `Path("./figures").mkdir(exist_ok=True)`
+### 2. Multiple Subplots
 
-## Notebook Cell
+**Creating subplot layouts:**
+```python
+# Method 1: Regular grid
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes[0, 0].plot(x, y1)
+axes[0, 1].scatter(x, y2)
+axes[1, 0].bar(categories, values)
+axes[1, 1].hist(data, bins=30)
 
-- Flat script style, no `main()` wrapper
-- Comments instead of docstrings
-- `plt.show()` at end instead of `savefig`
+# Method 2: Mosaic layout (more flexible)
+fig, axes = plt.subplot_mosaic([['left', 'right_top'],
+                                 ['left', 'right_bottom']],
+                                figsize=(10, 8))
+axes['left'].plot(x, y)
+axes['right_top'].scatter(x, y)
+axes['right_bottom'].hist(data)
 
-## Function
+# Method 3: GridSpec (maximum control)
+from matplotlib.gridspec import GridSpec
+fig = plt.figure(figsize=(12, 8))
+gs = GridSpec(3, 3, figure=fig)
+ax1 = fig.add_subplot(gs[0, :])  # Top row, all columns
+ax2 = fig.add_subplot(gs[1:, 0])  # Bottom two rows, first column
+ax3 = fig.add_subplot(gs[1:, 1:])  # Bottom two rows, last two columns
+```
 
-- Signature: `def plot_thing(df, figsize=(10, 8), dpi=150):`
-- Accept data directly (DataFrames/arrays), not file paths
-- Return `fig, ax` -- caller decides whether to save
-- Numpy-style docstring with Parameters and Returns sections
-- No type hints
+### 3. Plot Types and Use Cases
 
-## Exploratory Mode
+**Line plots** - Time series, continuous data, trends
+```python
+ax.plot(x, y, linewidth=2, linestyle='--', marker='o', color='blue')
+```
 
-When user says "quick plot" or "exploratory":
-- PNG-only at 150 DPI
-- Skip PDF output
-- Smaller figsize if appropriate
+**Scatter plots** - Relationships between variables, correlations
+```python
+ax.scatter(x, y, s=sizes, c=colors, alpha=0.6, cmap='viridis')
+```
 
-# Phase 5 -- Run & Verify (max 3 visual rounds)
+**Bar charts** - Categorical comparisons
+```python
+ax.bar(categories, values, color='steelblue', edgecolor='black')
+# For horizontal bars:
+ax.barh(categories, values)
+```
 
-After generating the code, verify in up to four stages: code compliance, visual quality review, visual refinement, and (if needed) final polish. Hard cap: **3 visual inspection rounds**. Do not iterate beyond that.
+**Histograms** - Distributions
+```python
+ax.hist(data, bins=30, edgecolor='black', alpha=0.7)
+```
 
-## Stage A — Code Compliance Scan (before running)
+**Heatmaps** - Matrix data, correlations
+```python
+im = ax.imshow(matrix, cmap='coolwarm', aspect='auto')
+plt.colorbar(im, ax=ax)
+```
 
-Review the generated code and confirm these boilerplate items are present. Fix any omissions before running.
+**Contour plots** - 3D data on 2D plane
+```python
+contour = ax.contour(X, Y, Z, levels=10)
+ax.clabel(contour, inline=True, fontsize=8)
+```
 
-1. `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")`
-2. `sns.despine(left=True, bottom=True)`
-3. `dpi=150` (or `dpi=300` only if user explicitly requested publication quality)
-4. Legend kwargs (if a legend is present): `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"`
-5. `color="dimgrey"` on annotation text
-6. `labelcolor="dimgrey"` on `tick_params`
+**Box plots** - Statistical distributions
+```python
+ax.boxplot([data1, data2, data3], labels=['A', 'B', 'C'])
+```
 
-These are more reliably verified in code than in a rendered image. Fix anything missing, then run.
+**Violin plots** - Distribution densities
+```python
+ax.violinplot([data1, data2, data3], positions=[1, 2, 3])
+```
 
-## Stage B — Visual Quality Review (Round 1)
+For comprehensive plot type examples and variations, refer to `references/plot_types.md`.
 
-**Run the script** with `uv run <script_name>.py`, then **read the generated PNG** using the Read tool.
+### 4. Styling and Customization
 
-Follow the **enumerate-before-evaluate** protocol — list what you see before making judgments:
+**Color specification methods:**
+- Named colors: `'red'`, `'blue'`, `'steelblue'`
+- Hex codes: `'#FF5733'`
+- RGB tuples: `(0.1, 0.2, 0.3)`
+- Colormaps: `cmap='viridis'`, `cmap='plasma'`, `cmap='coolwarm'`
 
-1. **Enumerate visible elements:** List the title text, axis labels, legend entries, annotations, and data encodings (bars, lines, points, etc.) you observe. Note anything expected but absent.
-2. **Semantic fidelity:** Does the chart show what the user asked for? Does the title match the content? Are the correct columns/variables plotted?
-3. **Data integrity:** Are axis ranges appropriate? Any truncated elements? Bar charts starting at zero? For ML evaluation charts, are reference lines (diagonal, baseline) present?
-4. **Design Principles check** — verify the 6 principles that are assessable from a rendered image:
-   - P1 (Show the data): Are actual data values visible, or hidden behind aggregation?
-   - P3 (Position over color): Is the primary comparison encoded in position?
-   - P6 (Annotate the insight): Is there at least one annotation that states a finding beyond axis labels?
-   - P7 (Encode meaning twice): Are data series distinguishable by more than color alone?
-   - P8 (Panel consistency): For multi-panel charts, are scales and styles consistent across panels?
-   - P9 (No arithmetic): Can the reader extract values directly without mental subtraction?
-5. **Layout and readability:** Text overlap or truncation? Excessive whitespace or cramped elements? Annotations positioned near the data they describe? For multi-panel grids: are gaps between subplots and between suptitle and panels proportional to the content? Reduce `wspace`/`hspace` or `tight_layout(pad=...)` if spacing looks excessive.
-6. **Chart-type rules:** If the chart matches a pattern file that has a **Rules** section, verify the rendered output satisfies those rules.
-7. **Name one improvement** you would make, even if minor. If nothing comes to mind, re-examine annotation placement, whitespace usage, and color distinguishability.
+**Using style sheets:**
+```python
+plt.style.use('seaborn-v0_8-darkgrid')  # Apply predefined style
+# Available styles: 'ggplot', 'bmh', 'fivethirtyeight', etc.
+print(plt.style.available)  # List all available styles
+```
 
-If any issue in items 2–6 requires a code change, fix the code and re-run → proceed to Stage C.
+**Customizing with rcParams:**
+```python
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['axes.titlesize'] = 16
+plt.rcParams['xtick.labelsize'] = 10
+plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['legend.fontsize'] = 12
+plt.rcParams['figure.titlesize'] = 18
+```
 
-## Stage C — Visual Refinement (Round 2, only if Stage B required changes)
+**Text and annotations:**
+```python
+ax.text(x, y, 'annotation', fontsize=12, ha='center')
+ax.annotate('important point', xy=(x, y), xytext=(x+1, y+1),
+            arrowprops=dict(arrowstyle='->', color='red'))
+```
 
-Read the updated PNG. Confirm:
+For detailed styling options and colormap guidelines, see `references/styling_guide.md`.
 
-1. All Stage B issues are resolved
-2. No new issues were introduced by the fixes
-3. Aesthetic elements remain consistent with `style-reference.md`
+### 5. Saving Figures
 
-If all issues are resolved, stop. If new issues were introduced by the fixes, proceed to Stage D.
+**Export to various formats:**
+```python
+# High-resolution PNG for presentations/papers
+plt.savefig('figure.png', dpi=300, bbox_inches='tight', facecolor='white')
 
-## Stage D — Final Polish (Round 3, only if Stage C found new issues)
+# Vector format for publications (scalable)
+plt.savefig('figure.pdf', bbox_inches='tight')
+plt.savefig('figure.svg', bbox_inches='tight')
 
-Fix the issues identified in Stage C, re-run, and read the updated PNG. Confirm:
+# Transparent background
+plt.savefig('figure.png', dpi=300, bbox_inches='tight', transparent=True)
+```
 
-1. All Stage C issues are resolved
-2. No new regressions were introduced
-3. Chart meets `style-reference.md` standards
+**Important parameters:**
+- `dpi`: Resolution (300 for publications, 150 for web, 72 for screen)
+- `bbox_inches='tight'`: Removes excess whitespace
+- `facecolor='white'`: Ensures white background (useful for transparent themes)
+- `transparent=True`: Transparent background
 
-**If issues remain after Stage D:** do NOT iterate further. Report the remaining issues to the user and ask whether to regenerate from scratch or accept as-is.
+### 6. Working with 3D Plots
 
-## Final — Report & Handoff
+```python
+from mpl_toolkits.mplot3d import Axes3D
 
-1. **Publication render:** If user requested publication quality, set `dpi=300` and run one final time
-2. **Report to the user:** what was generated, the file paths, and any observations about the output (including Stage B item 7 — the one improvement you identified)
-3. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+# Surface plot
+ax.plot_surface(X, Y, Z, cmap='viridis')
+
+# 3D scatter
+ax.scatter(x, y, z, c=colors, marker='o')
+
+# 3D line plot
+ax.plot(x, y, z, linewidth=2)
+
+# Labels
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+```
+
+## Best Practices
+
+### 1. Interface Selection
+- **Use the object-oriented interface** (fig, ax = plt.subplots()) for production code
+- Reserve pyplot interface for quick interactive exploration only
+- Always create figures explicitly rather than relying on implicit state
+
+### 2. Figure Size and DPI
+- Set figsize at creation: `fig, ax = plt.subplots(figsize=(10, 6))`
+- Use appropriate DPI for output medium:
+  - Screen/notebook: 72-100 dpi
+  - Web: 150 dpi
+  - Print/publications: 300 dpi
+
+### 3. Layout Management
+- Use `constrained_layout=True` or `tight_layout()` to prevent overlapping elements
+- `fig, ax = plt.subplots(constrained_layout=True)` is recommended for automatic spacing
+
+### 4. Colormap Selection
+- **Sequential** (viridis, plasma, inferno): Ordered data with consistent progression
+- **Diverging** (coolwarm, RdBu): Data with meaningful center point (e.g., zero)
+- **Qualitative** (tab10, Set3): Categorical/nominal data
+- Avoid rainbow colormaps (jet) - they are not perceptually uniform
+
+### 5. Accessibility
+- Use colorblind-friendly colormaps (viridis, cividis)
+- Add patterns/hatching for bar charts in addition to colors
+- Ensure sufficient contrast between elements
+- Include descriptive labels and legends
+
+### 6. Performance
+- For large datasets, use `rasterized=True` in plot calls to reduce file size
+- Use appropriate data reduction before plotting (e.g., downsample dense time series)
+- For animations, use blitting for better performance
+
+### 7. Code Organization
+```python
+# Good practice: Clear structure
+def create_analysis_plot(data, title):
+    """Create standardized analysis plot."""
+    fig, ax = plt.subplots(figsize=(10, 6), constrained_layout=True)
+
+    # Plot data
+    ax.plot(data['x'], data['y'], linewidth=2)
+
+    # Customize
+    ax.set_xlabel('X Axis Label', fontsize=12)
+    ax.set_ylabel('Y Axis Label', fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+
+    return fig, ax
+
+# Use the function
+fig, ax = create_analysis_plot(my_data, 'My Analysis')
+plt.savefig('analysis.png', dpi=300, bbox_inches='tight')
+```
+
+## Quick Reference Scripts
+
+This skill includes helper scripts in the `scripts/` directory:
+
+### `plot_template.py`
+Template script demonstrating various plot types with best practices. Use this as a starting point for creating new visualizations.
+
+**Usage:**
+```bash
+python scripts/plot_template.py
+```
+
+### `style_configurator.py`
+Interactive utility to configure matplotlib style preferences and generate custom style sheets.
+
+**Usage:**
+```bash
+python scripts/style_configurator.py
+```
+
+## Detailed References
+
+For comprehensive information, consult the reference documents:
+
+- **`references/plot_types.md`** - Complete catalog of plot types with code examples and use cases
+- **`references/styling_guide.md`** - Detailed styling options, colormaps, and customization
+- **`references/api_reference.md`** - Core classes and methods reference
+- **`references/common_issues.md`** - Troubleshooting guide for common problems
+
+## Integration with Other Tools
+
+Matplotlib integrates well with:
+- **NumPy/Pandas** - Direct plotting from arrays and DataFrames
+- **Seaborn** - High-level statistical visualizations built on matplotlib
+- **Jupyter** - Interactive plotting with `%matplotlib inline` or `%matplotlib widget`
+- **GUI frameworks** - Embedding in Tkinter, Qt, wxPython applications
+
+## Common Gotchas
+
+1. **Overlapping elements**: Use `constrained_layout=True` or `tight_layout()`
+2. **State confusion**: Use OO interface to avoid pyplot state machine issues
+3. **Memory issues with many figures**: Close figures explicitly with `plt.close(fig)`
+4. **Font warnings**: Install fonts or suppress warnings with `plt.rcParams['font.sans-serif']`
+5. **DPI confusion**: Remember that figsize is in inches, not pixels: `pixels = dpi * inches`
+
+## Additional Resources
+
+- Official documentation: https://matplotlib.org/
+- Gallery: https://matplotlib.org/stable/gallery/index.html
+- Cheatsheets: https://matplotlib.org/cheatsheets/
+- Tutorials: https://matplotlib.org/stable/tutorials/index.html
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

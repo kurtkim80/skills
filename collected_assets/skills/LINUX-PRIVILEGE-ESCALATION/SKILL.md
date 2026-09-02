@@ -1,10 +1,28 @@
 ---
-name: Linux Privilege Escalation
-description: This skill should be used when the user asks to "escalate privileges on Linux", "find privesc vectors on Linux systems", "exploit sudo misconfigurations", "abuse SUID binaries", "exploit cron jobs for root access", "enumerate Linux systems for privilege escalation", or "gain root access from low-privilege shell". It provides comprehensive techniques for identifying and exploiting privilege escalation paths on Linux systems.
+name: linux-privilege-escalation
+description: Execute systematic privilege escalation assessments on Linux systems to identify and exploit misconfigurations, vulnerable services, and security weaknesses that allow elevation from low-privilege user access to root-level control.
 metadata:
-  author: zebbern
-  version: "1.1"
+  aas-risk: offensive
+  aas-source: community
+  aas-author: zebbern
+  aas-date-added: '2026-02-27'
 ---
+
+> **⚠️ AUTHORIZED USE ONLY**
+> This skill is for educational purposes or authorized security assessments only.
+> You must have explicit, written permission from the system owner before using this tool.
+> Misuse of this tool is illegal and strictly prohibited.
+
+> **Mandatory confirmation gate**
+> Before running any command that probes, exploits, changes, persists on, extracts data from, or attempts credential access against a target:
+> 1. Ask the user to state the exact target URL, IP, account, or resource.
+> 2. Ask the user to confirm written authorization and the permitted scope.
+> 3. Show the exact command(s) and explain their expected effect.
+> 4. Wait for explicit confirmation in the current conversation.
+>
+> Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
+
+> AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
 # Linux Privilege Escalation
 
@@ -140,8 +158,11 @@ echo $PATH
 Deploy automated scripts for comprehensive enumeration:
 
 ```bash
-# LinPEAS
-curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+# LinPEAS: download first, inspect the script, then execute only in an authorized lab
+curl -L -o linpeas.sh https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
+less linpeas.sh
+chmod +x linpeas.sh
+./linpeas.sh
 
 # LinEnum
 ./LinEnum.sh -t
@@ -502,3 +523,6 @@ uid=1000(user) gid=1000(user) euid=0(root)
 | Reverse shell not connecting | Check firewall; try ports 443/80; use staged payloads; check egress filtering |
 | SUID binary not exploitable | Verify version matches GTFOBins; check AppArmor/SELinux; some binaries drop privileges |
 | Cron job not executing | Verify cron running: `service cron status`; check +x permissions; verify PATH in crontab |
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.

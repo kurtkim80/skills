@@ -1,6 +1,9 @@
 ---
 name: loki-mode
-description: Multi-agent autonomous startup system for Claude Code. Triggers on "Loki Mode". Orchestrates 100+ specialized agents across engineering, QA, DevOps, security, data/ML, business operations, marketing, HR, and customer success. Takes PRD to fully deployed, revenue-generating product with zero human intervention. Features Task tool for subagent dispatch, parallel code review with 3 specialized reviewers, severity-based issue triage, distributed task queue with dead letter handling, automatic deployment to cloud providers, A/B testing, customer feedback loops, incident response, circuit breakers, and self-healing. Handles rate limits via distributed state checkpoints and auto-resume with exponential backoff. Requires --dangerously-skip-permissions flag.
+description: "Version 2.35.0 | PRD to Production | Zero Human Intervention > Research-enhanced: OpenAI SDK, DeepMind, Anthropic, AWS Bedrock, Agent SDK, HN Production (2025)"
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # Loki Mode - Multi-Agent Autonomous Startup System
@@ -94,7 +97,7 @@ Development <- QA <- Deployment <- Business Ops <- Growth Loop
 
 ```bash
 # Launch with autonomous permissions
-claude --dangerously-skip-permissions
+claude
 ```
 
 ---
@@ -118,7 +121,7 @@ These files are part of the running Loki Mode process. Editing them will crash t
 | File | Reason |
 |------|--------|
 | `~/.claude/skills/loki-mode/autonomy/run.sh` | Currently executing bash script |
-| `.loki/dashboard/*` | Served by active HTTP server |
+| `.loki/dashboard/*` | Legacy dashboard assets; network serving is disabled |
 
 If bugs are found in these files, document them in `.loki/CONTINUITY.md` under "Pending Fixes" for manual repair after the session ends.
 
@@ -719,3 +722,6 @@ Detailed documentation is split into reference files for progressive loading:
 ---
 
 **Version:** 2.32.0 | **Lines:** ~600 | **Research-Enhanced: Labs + HN Production Patterns**
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.

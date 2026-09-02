@@ -1,10 +1,26 @@
 ---
-name: Top 100 Web Vulnerabilities Reference
-description: This skill should be used when the user asks to "identify web application vulnerabilities", "explain common security flaws", "understand vulnerability categories", "learn about injection attacks", "review access control weaknesses", "analyze API security issues", "assess security misconfigurations", "understand client-side vulnerabilities", "examine mobile and IoT security flaws", or "reference the OWASP-aligned vulnerability taxonomy". Use this skill to provide comprehensive vulnerability definitions, root causes, impacts, and mitigation strategies across all major web security categories.
+name: top-web-vulnerabilities
+description: Provide a comprehensive, structured reference for the 100 most critical web application vulnerabilities organized by category. This skill enables systematic vulnerability identification, impact assessment, and remediation guidance across the full spectrum of web security threats.
 metadata:
-  author: zebbern
-  version: "1.1"
+  aas-risk: offensive
+  aas-source: community
+  aas-author: zebbern
+  aas-date-added: '2026-02-27'
 ---
+
+> **⚠️ AUTHORIZED USE ONLY**
+> This skill is for educational purposes or authorized security assessments only.
+> You must have explicit, written permission from the system owner before using this tool.
+> Misuse of this tool is illegal and strictly prohibited.
+
+> **Mandatory confirmation gate**
+> Before running any command that probes, exploits, changes, persists on, extracts data from, or attempts credential access against a target:
+> 1. Ask the user to state the exact target URL, IP, account, or resource.
+> 2. Ask the user to confirm written authorization and the permitted scope.
+> 3. Show the exact command(s) and explain their expected effect.
+> 4. Wait for explicit confirmation in the current conversation.
+>
+> Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # Top 100 Web Vulnerabilities Reference
 
@@ -541,3 +557,6 @@ Permissions-Policy: geolocation=(), microphone=()
 - OWASP Application Security Verification Standard (ASVS)
 - NIST Cybersecurity Framework
 - Source: Kumar MS - Top 100 Web Vulnerabilities
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.

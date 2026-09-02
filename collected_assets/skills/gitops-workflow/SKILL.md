@@ -1,6 +1,9 @@
 ---
 name: gitops-workflow
-description: Implement GitOps workflows with ArgoCD and Flux for automated, declarative Kubernetes deployments with continuous reconciliation. Use when implementing GitOps practices, automating Kubernetes deployments, or setting up declarative infrastructure management.
+description: "Complete guide to implementing GitOps workflows with ArgoCD and Flux for automated Kubernetes deployments."
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # GitOps Workflow
@@ -11,7 +14,7 @@ Complete guide to implementing GitOps workflows with ArgoCD and Flux for automat
 
 Implement declarative, Git-based continuous delivery for Kubernetes using ArgoCD or Flux CD, following OpenGitOps principles.
 
-## When to Use This Skill
+## Use this skill when
 
 - Set up GitOps for Kubernetes clusters
 - Automate application deployments from Git
@@ -19,6 +22,24 @@ Implement declarative, Git-based continuous delivery for Kubernetes using ArgoCD
 - Manage multi-cluster deployments
 - Configure automated sync policies
 - Set up secret management in GitOps
+
+## Do not use this skill when
+
+- You need a one-off manual deployment
+- You cannot manage cluster access or repo permissions
+- You are not deploying to Kubernetes
+
+## Instructions
+
+1. Define repo layout and desired-state conventions.
+2. Install ArgoCD or Flux and connect clusters.
+3. Configure sync policies, environments, and promotion flow.
+4. Validate rollbacks and secret handling.
+
+## Safety
+
+- Avoid auto-sync to production without approvals.
+- Keep secrets out of Git and use sealed or external secret managers.
 
 ## OpenGitOps Principles
 
@@ -87,7 +108,7 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
 ```
 
 ### 4. App of Apps Pattern
@@ -117,7 +138,14 @@ spec:
 
 ```bash
 # Install Flux CLI
-curl -s https://fluxcd.io/install.sh | sudo bash
+brew install fluxcd/tap/flux
+
+# Alternative: download the official installer, inspect it, then execute it
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+curl -fsSLo "$tmpdir/flux-install.sh" https://fluxcd.io/install.sh
+cat "$tmpdir/flux-install.sh"  # review the full installer before sudo
+sudo bash "$tmpdir/flux-install.sh"
 
 # Bootstrap Flux
 flux bootstrap github \
@@ -165,12 +193,11 @@ spec:
 ### Auto-Sync Configuration
 
 **ArgoCD:**
-
 ```yaml
 syncPolicy:
   automated:
-    prune: true # Delete resources not in Git
-    selfHeal: true # Reconcile manual changes
+    prune: true      # Delete resources not in Git
+    selfHeal: true   # Reconcile manual changes
     allowEmpty: false
   retry:
     limit: 5
@@ -181,7 +208,6 @@ syncPolicy:
 ```
 
 **Flux:**
-
 ```yaml
 spec:
   interval: 1m
@@ -206,11 +232,11 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 20
-        - pause: { duration: 1m }
-        - setWeight: 50
-        - pause: { duration: 2m }
-        - setWeight: 100
+      - setWeight: 20
+      - pause: {duration: 1m}
+      - setWeight: 50
+      - pause: {duration: 2m}
+      - setWeight: 100
 ```
 
 ### Blue-Green Deployment
@@ -240,9 +266,9 @@ spec:
   target:
     name: db-credentials
   data:
-    - secretKey: password
-      remoteRef:
-        key: prod/db/password
+  - secretKey: password
+    remoteRef:
+      key: prod/db/password
 ```
 
 ### Sealed Secrets
@@ -270,14 +296,12 @@ kubeseal --format yaml < secret.yaml > sealed-secret.yaml
 ## Troubleshooting
 
 **Sync failures:**
-
 ```bash
 argocd app get my-app
 argocd app sync my-app --prune
 ```
 
 **Out of sync status:**
-
 ```bash
 argocd app diff my-app
 argocd app sync my-app --force
@@ -287,3 +311,8 @@ argocd app sync my-app --force
 
 - `k8s-manifest-generator` - For creating manifests
 - `helm-chart-scaffolding` - For packaging applications
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

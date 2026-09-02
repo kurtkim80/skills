@@ -1,6 +1,9 @@
 ---
 name: production-code-audit
 description: "Autonomously deep-scan entire codebase line-by-line, understand architecture and patterns, then systematically transform it to production-grade, corporate-level professional quality with optimizations"
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # Production Code Audit
@@ -278,7 +281,7 @@ await db.query(query, [email]);
 2. ✅ Hardcoded Secrets Removed
 \`\`\`typescript
 // Before (INSECURE)
-const JWT_SECRET = 'my-secret-key-123';
+const tokenSigningKey = '[redacted weak value]';
 
 // After (SECURE)
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -538,3 +541,8 @@ Current metrics:
 ---
 
 **Pro Tip:** Schedule regular audits (quarterly) to maintain code quality. Prevention is cheaper than fixing production bugs!
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

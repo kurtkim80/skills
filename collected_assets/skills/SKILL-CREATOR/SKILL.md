@@ -1,14 +1,13 @@
 ---
 name: skill-creator
-description: "This skill should be used when the user asks to create a new skill, build a skill, make a custom skill, develop a CLI skill, or wants to extend the CLI with new capabilities. Automates the entire skill creation workflow from brainstorming to installation."
-version: 1.3.0
-author: Eric Andrade
-created: 2025-02-01
-updated: 2026-02-04
-platforms: [github-copilot-cli, claude-code, codex]
-category: meta
-tags: [automation, scaffolding, skill-creation, meta-skill]
-risk: safe
+description: To create new CLI skills following Anthropic's official best practices with zero manual configuration. This skill automates brainstorming, template application, validation, and installation processes while maintaining progressive disclosure patterns and writing style standards.
+metadata:
+  aas-category: meta
+  aas-risk: safe
+  aas-source: community
+  aas-tags: '[automation, scaffolding, skill-creation, meta-skill]'
+  aas-date-added: '2026-02-27'
+  aas-plugin: '{"targets":{"claude":"supported","codex":"supported"}}'
 ---
 
 # skill-creator
@@ -125,7 +124,7 @@ Display progress:
 
 1. **What should this skill do?** (Free-form description)
    - Example: "Help users debug Python code by analyzing stack traces"
-   
+
 2. **When should it trigger?** (Provide 3-5 trigger phrases)
    - Example: "debug Python error", "analyze stack trace", "fix Python exception"
 
@@ -261,7 +260,7 @@ if [[ "$PLATFORM" =~ "codex" ]]; then
          s/{{DATE}}/$(date +%Y-%m-%d)/g" \
         resources/templates/skill-template-codex.md \
         > ".codex/skills/$SKILL_NAME/SKILL.md"
-    
+
     sed "s/{{SKILL_NAME}}/$SKILL_NAME/g" \
         resources/templates/readme-template.md \
         > ".codex/skills/$SKILL_NAME/README.md"
@@ -465,7 +464,7 @@ Update progress:
 If platforms cannot be detected:
 ```
 ⚠️  Unable to detect GitHub Copilot CLI or Claude Code
-    
+
 Would you like to:
 1. Install for repository only (works when in repo)
 2. Specify platform manually
@@ -495,7 +494,7 @@ If content doesn't meet standards:
 1. YAML: Description not in third-person format
    Expected: "This skill should be used when..."
    Found: "Use this skill when..."
-   
+
 2. Content: Word count too high (5,342 words, max 5,000)
    Suggestion: Move detailed sections to references/
 
@@ -591,3 +590,8 @@ Executable utilities for skill maintenance:
 - **Repository:** https://github.com/yourusername/cli-ai-skills
 - **Writing Style Guide:** `resources/templates/writing-style-guide.md`
 - **Progress Tracker Template:** `resources/templates/progress-tracker.md`
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

@@ -1,100 +1,84 @@
 ---
 name: agent-memory
-description: Use when a project's CLAUDE.md has grown past what anyone reads and you want the agent to learn durable facts from its own sessions instead — or when asking why the agent keeps re-learning the same correction, why a remembered rule is wrong, or where a memory line came from. Implements a four-tier store (L0 transcripts / L1 candidates / L2 project context / L3 stable persona) where promotion is earned by recurrence across sessions and days, never by one confident statement, and nothing reaches a committed file without a human adopting it.
-argument-hint: "[optional: status | why \"<claim>\" | a tier name]"
+description: A hybrid memory system that provides persistent, searchable knowledge management for AI agents.
+risk: critical
+source: https://github.com/webzler/agentMemory/tree/main/
+source_repo: webzler/agentMemory
+source_type: community
+date_added: 2026-07-01
 license: MIT
-metadata:
-  version: 1.0.0
-  build_pattern: "Tencent TencentDB-Agent-Memory's tiering concept rebuilt natively on Claude Code hooks; deterministic recurrence gates, no LLM, no database"
-  distinct_from: "llm-wiki (a vault you write on purpose; this writes itself from sessions); skillopt-sleep (replays tasks to improve a skill; this extracts facts to remember); memory-engineering (audits and prices any memory system; this IS one, and is a legitimate subject of that audit)"
+license_source: https://github.com/webzler/agentMemory/blob/main/LICENSE
 ---
 
-# Agent Memory — promotion is earned, not asserted
+# agentMemory Skill
+## When to Use
 
-> **Portability:** stdlib only. No database, no embeddings, no network, no LLM calls.
+Use this skill when you need a hybrid memory system that provides persistent, searchable knowledge management for AI agents.
 
-## The problem
 
-A project's `CLAUDE.md` is a memory system with one tier and no eviction: every
-durable fact and every passing preference land in the same always-loaded file,
-until the important lines are diluted by the incidental ones. Facts learned
-mid-session vanish at teardown unless someone writes them down.
+This skill extends your capabilities by providing a persistent, searchable memory bank that automatically syncs with project documentation.
 
-**The fix is not more storage — it is a promotion ladder.** A claim earns its
-way toward always-loaded context by recurring; a human confirms the last step.
+## Prerequisites
 
-## The four tiers
+- Node.js installed
+- Check if `agentMemory` is already installed in the project:
+  ```bash
+  ls -la .agentMemory
+  ```
 
-Tiers are distinguished by **injection policy**, not storage format.
+## Setup
 
-| Tier | Holds | Injected | Committed |
-|---|---|---|---|
-| **L0** | raw session transcripts | never | no (already on disk) |
-| **L1** | candidate atoms | on relevance, at prompt time | no (gitignored) |
-| **L2** | this project's context | every session start | yes, after adopt |
-| **L3** | stable cross-project persona | always | yes, after adopt |
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-## The gates
+2. **Build the Project**:
+   ```bash
+   npm run compile
+   ```
 
-Nothing moves up because it sounded important. It moves up because it recurred.
+3. **Start the Memory Server**:
+   You need to run the MCP server to interact with the memory bank.
+   ```bash
+   npm run start-server <project_id> <absolute_path_to_workspace>
+   ```
+   *Note: This skill typically runs as a background process or via an mcp-server configuration. ensuring it is running is key.*
 
-- **L0 → L1** — an explicit marker fires (a directive, a correction, a stated
-  preference, a named lesson, a reproducible failure). Rule-based, high
-  precision, deliberately low recall.
-- **L1 → L2** — ≥ 3 distinct sessions spanning ≥ 2 distinct calendar days. A
-  claim stated outright needs 2 sessions; the distinct-day rule still applies. A
-  verified claim promotes on one observation and is the only day-exempt path.
-- **L2 → L3** — held in ≥ 2 distinct projects, aged ≥ 30 days, uncontested.
+## Capabilities (MCP Tools)
 
-**Two gates refuse rather than guess.** A claim whose text was altered by
-redaction never promotes on evidence alone — the flag firing is evidence the
-source was sensitive, and a lexical filter finding one secret is not proof it
-found all of them. A claim with an open contradiction is frozen at L1 until a
-human resolves it; the incumbent is never silently overwritten.
+Once the server is running, you can use these tools:
 
-## Use it
+### `memory_search`
+Search for memories by query, type, or tags.
+- **Args**: `query` (string), `type?` (string), `tags?` (string[])
+- **Usage**: "Find all authentication patterns" -> `memory_search({ query: "authentication", type: "pattern" })`
 
-```bash
-# what is remembered, and what is blocking the next promotion
-python3 scripts/memory_inspect.py --tier L1
+### `memory_write`
+Record new knowledge or decisions.
+- **Args**: `key` (string), `type` (string), `content` (string), `tags?` (string[])
+- **Usage**: "Save this architecture decision" -> `memory_write({ key: "auth-v1", type: "decision", content: "..." })`
 
-# where did this line come from — sessions, days, transcript, quoted source
-python3 scripts/memory_inspect.py --why "PR base branch is dev"
+### `memory_read`
+Retrieve specific memory content by key.
+- **Args**: `key` (string)
+- **Usage**: "Get the auth design" -> `memory_read({ key: "auth-v1" })`
 
-# every claim with an open contradiction, both directions of the join
-python3 scripts/memory_inspect.py --contested
+### `memory_stats`
+View analytics on memory usage.
+- **Usage**: "Show memory statistics" -> `memory_stats({})`
 
-# dry-run the promotion pass; writes nothing
-python3 scripts/memory_promote.py
-```
+## Workflow
 
-Three hooks run the loop unattended: `SessionStart` injects L2 + L3,
-`UserPromptSubmit` recalls relevant L1 atoms, `SessionEnd` captures and stages.
-Each is disabled independently with `AGENT_MEMORY_SESSIONSTART=0`,
-`AGENT_MEMORY_USERPROMPTSUBMIT=0`, `AGENT_MEMORY_SESSIONEND=0`. Every hook fails
-open: a broken memory system costs you memory, never a session.
+1. **Initialization**: The first time you run this in a project, it may attempt to import existing markdown memory banks from `.kilocode/`, `.clinerules/`, or `.roo/`.
+2. **Development Loop**:
+   - **Before Task**: Search memory for relevant context.
+   - **During Task**: Use read/search to answer questions.
+   - **After Task**: Write new findings to memory.
+3. **Sync**: Your writes are automatically synced to standard markdown files in the project.
 
-## Hard rules
+## Limitations
 
-1. **Redact before writing.** Every atom passes the filter before it reaches
-   disk. Anything altered is quarantined from promotion.
-2. **Propose, never apply.** Promotions land in `.memory/staged/`. Only an
-   explicit `/cs:memory adopt` touches a `CLAUDE.md`, and it backs both up first.
-3. **Cite, don't invent.** Every atom carries a back-pointer to the transcript
-   line that produced it. `--why` resolving to *ambiguous* prints nothing rather
-   than guess: a wrong citation is worse than a missing one.
-4. **Never surface a contested claim as fact.** It is still injected — hiding
-   the conflict is worse — but always tagged.
-5. **The committed tiers carry no paths.** Promotion strips the back-pointer
-   prefix, which embeds an OS username.
-
-## Forcing questions
-
-Walk these one at a time before trusting the store.
-
-1. Which line in your `CLAUDE.md` did you last actually read before acting?
-2. Would you rather the agent forget a true thing, or remember a false one?
-3. When two remembered rules disagree, who decides — and when?
-4. What would make you delete `.memory/` entirely?
-
-Rationale, open decisions, field schema: [`../../DESIGN.md`](../../DESIGN.md).
+- Use this skill only when the task clearly matches its upstream source and local project context.
+- Verify commands, generated code, dependencies, credentials, and external service behavior before applying changes.
+- Do not treat examples as a substitute for environment-specific tests, security review, or user approval for destructive or costly actions.

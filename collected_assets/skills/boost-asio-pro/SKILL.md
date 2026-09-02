@@ -1,6 +1,17 @@
 ---
-name: "boost-asio-pro"
-description: "Use when writing or reviewing asynchronous C++ networking code with Boost.Asio or standalone Asio — TCP/UDP servers and clients, SSL/TLS, timers, strands, io_context, co_spawn, awaitable, async_read/async_write, asio::spawn, yield_context, or pre-C++20 completion-handler callbacks."
+name: boost-asio-pro
+description: "Use when writing asynchronous C++ networking code with Boost.Asio or standalone Asio — TCP/UDP servers and clients, SSL/TLS, timers, strands, composed async ops. Covers io_context, co_spawn, awaitable, async_read/async_write, asio::spawn, yield_context, and pre-C++20 callback styles."
+category: development
+risk: safe
+source: community
+source_repo: alexprivalov/boost-asio-skill
+source_type: community
+date_added: "2026-08-18"
+author: alexprivalov
+tags: [cpp, boost, asio, async, networking, coroutines]
+tools: [claude, cursor, gemini]
+license: "MIT"
+license_source: "https://github.com/alexprivalov/boost-asio-skill/blob/main/LICENSE"
 ---
 
 # Boost.Asio / standalone Asio
@@ -11,7 +22,14 @@ Write async C++ networking code that compiles on the *user's* Boost, not the new
 
 **References:** [Boost.Asio](https://www.boost.org/doc/libs/latest/doc/html/boost_asio.html) · [standalone Asio](https://think-async.com/Asio/)
 
-Use this skill whenever async C++ networking code is being written or reviewed — and especially when the target toolchain is old, where coroutine examples simply will not compile. The three worked implementations it references are CI-verified from Boost 1.62 (2016) through 1.90.
+Asio's API changed shape three times, so the same task has three correct answers depending on the Boost version in front of you. This skill makes the agent establish that version first, then apply the rules that are genuinely easy to get wrong — strand versus write serialization, buffer and connection lifetime, composed reads for framing — and finally check its own output against a list before calling it done.
+
+## When to Use This Skill
+
+- Use when writing or reviewing async C++ networking code with Boost.Asio or standalone Asio: TCP/UDP servers and clients, SSL/TLS streams, timers, resolvers.
+- Use when the code involves `io_context`, `io_service`, `co_spawn`, `awaitable`, `async_read`, `async_write`, `strand`, `asio::spawn`, `yield_context`, or completion-handler callbacks.
+- Use when the target toolchain is old: an older Boost or a pre-C++20 standard, where coroutine examples will not compile.
+- Use when async code compiles but misbehaves: interleaved writes, dangling buffers, sockets closing early, `operation_aborted` treated as an error.
 
 ## Step 1: pick the style (do this before writing code)
 
@@ -63,7 +81,7 @@ Language, not library: the chrono literals `250ms` / `30s` are **C++14**. For a 
 
 **GCC needs `-fcoroutines`** for the C++20 style, and header-only Boost needs `BOOST_ERROR_CODE_HEADER_ONLY` defined in exactly one place (CMake).
 
-## Anti-Patterns
+## Common mistakes
 
 | Mistake | Fix |
 |---------|-----|
@@ -126,11 +144,11 @@ Check the code you just wrote against this list:
 
 ## Worked examples
 
-Three CI-verified implementations of the same full-duplex framed-protocol server, one per style — copy from the one matching Step 1. All three live in the upstream repository and are built by CI on every push.
+Three CI-verified implementations of the same full-duplex framed-protocol server, one per style — copy from the one matching Step 1. Paths are relative to this skill directory; if only the skill was installed, they are at https://github.com/alexprivalov/boost-asio-skill/tree/main/examples.
 
-- [market-data-feed](https://github.com/alexprivalov/boost-asio-skill/tree/main/examples/market-data-feed) — C++20 coroutines (Boost 1.77+; verified 1.83–1.90)
-- [market-data-feed-precpp20](https://github.com/alexprivalov/boost-asio-skill/tree/main/examples/market-data-feed-precpp20) — callbacks, C++11-clean (verified Boost 1.74+, incl. Windows/MSVC)
-- [market-data-feed-classic](https://github.com/alexprivalov/boost-asio-skill/tree/main/examples/market-data-feed-classic) — classic `io_service` (verified back to Boost 1.62 / Debian 9)
+- `../../examples/market-data-feed/` — C++20 coroutines (Boost 1.77+; verified 1.83–1.90)
+- `../../examples/market-data-feed-precpp20/` — callbacks, C++11-clean (verified Boost 1.74+, incl. Windows/MSVC)
+- `../../examples/market-data-feed-classic/` — classic `io_service` (verified back to Boost 1.62 / Debian 9)
 
 ## Official documentation
 
@@ -138,8 +156,17 @@ Three CI-verified implementations of the same full-duplex framed-protocol server
 - Reference: https://www.boost.org/doc/libs/latest/doc/html/boost_asio/reference.html
 - Examples: https://www.boost.org/doc/libs/latest/doc/html/boost_asio/examples.html
 
-## Cross-References
+## Limitations
 
-- `engineering/docker-development` — the old-Boost verification lanes this skill's floors come from are containerised builds (Debian 9 / bookworm, Fedora).
-- `engineering/chaos-engineering` — for exercising the failure paths this skill tells you to handle: half-open sockets, idle timeouts, partial frames.
-- `engineering-team/playwright-pro` — the client-side counterpart when the server built here is driven from browser-based integration tests.
+- This skill does not replace compiling and testing against the target toolchain. The version floors it documents are only real once built — build the code.
+- It does not cover Boost.Beast (HTTP/WebSocket), io_uring backends, or UDP multicast specifics.
+- Stop and ask when the Boost version and C++ standard cannot be determined; the style choice depends on them.
+
+## Security & Safety Notes
+
+- Read-only guidance: this skill contains no shell commands, network fetches, credentials, or mutation instructions. The commands it names (`dpkg -l libboost-dev`, `brew info boost`) are local version queries.
+- Networking code it produces accepts untrusted input. Validate length prefixes before allocating (`std::string body(n, 0)` with an attacker-controlled `n` is a memory-exhaustion vector — cap it), and verify peer certificates when using TLS rather than disabling verification to make a handshake pass.
+
+## Related Skills
+
+- `@cpp-pro` — general modern C++ idioms; this skill assumes them and adds the Asio-specific rules.

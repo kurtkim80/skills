@@ -1,6 +1,9 @@
 ---
 name: javascript-mastery
-description: "Comprehensive JavaScript reference covering 33+ essential concepts every developer should know. From fundamentals like primitives and closures to advanced patterns like async/await and functional programming. Use when explaining JS concepts, debugging JavaScript issues, or teaching JavaScript fundamentals."
+description: "33+ essential JavaScript concepts every developer should know, inspired by [33-js-concepts](https://github.com/leonardomso/33-js-concepts)."
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # 🧠 JavaScript Mastery
@@ -643,3 +646,8 @@ const value2 = 0 || "default"; // "default" (0 is falsy)
 - [JavaScript.info](https://javascript.info/)
 - [MDN JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide)
 - [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS)
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

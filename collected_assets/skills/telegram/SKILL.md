@@ -1,348 +1,584 @@
 ---
 name: telegram
-description: This skill should be used when fetching, searching, downloading, sending, editing, or publishing messages on Telegram. Use for queries like "show my Telegram messages", "search Telegram for...", "get unread messages", "send a message to...", "edit that message", "publish this draft to klodkot", or "add Telegram messages to my notes".
+description: Integracao completa com Telegram Bot API. Setup com BotFather, mensagens, webhooks, inline keyboards, grupos, canais. Boilerplates Node.js e Python.
+risk: critical
+source: community
+date_added: '2026-03-06'
+author: renat
+tags:
+- messaging
+- telegram
+- bots
+- webhooks
+tools:
+- claude-code
+- antigravity
+- cursor
+- gemini-cli
+- codex-cli
 ---
 
-# Telegram Message Skill
+# Telegram Bot API - Integracao Profissional
 
-Fetch, search, download, send, and publish Telegram messages with flexible filtering and output options.
+## Overview
 
-## Prerequisites
+Integracao completa com Telegram Bot API. Setup com BotFather, mensagens, webhooks, inline keyboards, grupos, canais. Boilerplates Node.js e Python.
 
-Authentication must be configured in `~/.telegram_dl/`. Run `setup` command to check status or get instructions:
+## When to Use This Skill
 
-```bash
-python3 scripts/telegram_fetch.py setup
+- When the user mentions "telegram" or related topics
+- When the user mentions "bot telegram" or related topics
+- When the user mentions "telegram bot" or related topics
+- When the user mentions "api telegram" or related topics
+- When the user mentions "chatbot telegram" or related topics
+- When the user mentions "mensagem telegram" or related topics
+
+## Do Not Use This Skill When
+
+- The task is unrelated to telegram
+- A simpler, more specific tool can handle the request
+- The user needs general-purpose assistance without domain expertise
+
+## How It Works
+
+Skill para implementar bots profissionais no Telegram usando a Bot API oficial. Suporta Node.js/TypeScript e Python.
+
+### Overview
+
+A Telegram Bot API permite criar bots que interagem com usuarios via mensagens, comandos, inline keyboards, pagamentos e muito mais. Bots sao criados pelo @BotFather e autenticados via token unico.
+
+**Base URL:** `https://api.telegram.org/bot<TOKEN>/METHOD_NAME`
+**Metodos HTTP:** GET e POST
+**Formatos de parametros:** query string, application/x-www-form-urlencoded, application/json, multipart/form-data (uploads)
+**Limite de arquivos:** 50MB download, 20MB upload (via multipart), 50MB via URL
+
+**Portas suportadas para webhooks:** 443, 80, 88, 8443
+
+**Pre-requisitos:**
+- Conta no Telegram
+- Bot criado via @BotFather (fornece o token)
+- Token no formato: `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11`
+
+Se o usuario nao tem um bot criado, oriente a conversar com @BotFather no Telegram e enviar `/newbot`.
+
+---
+
+## Decision Tree
+
+```
+O usuario precisa criar um bot?
+├── SIM → Secao "Setup com BotFather" abaixo
+└── NAO → Qual linguagem?
+    ├── Node.js/TypeScript
+    └── Python
+    → O que quer fazer?
+       ├── Enviar mensagens → Secao "Tipos de Mensagem"
+       ├── Receber mensagens → Secao "Receber Updates"
+       ├── Teclados interativos → Secao "Keyboards"
+       ├── Gerenciar grupos/canais → references/chat-management.md
+       ├── Webhook setup → references/webhook-setup.md
+       ├── Inline mode → references/advanced-features.md
+       ├── Pagamentos → references/advanced-features.md
+       ├── Bot de atendimento com IA → Secao "Automacao com IA"
+       └── Referencia completa da API → references/api-reference.md
 ```
 
-If not configured, follow these steps:
-1. Get API credentials from https://my.telegram.org/auth
-2. Clone telegram_dl: https://github.com/glebis/telegram_dl
-3. Run `python telegram_dl.py` and follow interactive prompts
-4. Verify with `python3 scripts/telegram_fetch.py setup`
-
-## Quick Start
-
-Run the script at `scripts/telegram_fetch.py` with appropriate commands:
-
+Para iniciar um projeto do zero com boilerplate pronto:
 ```bash
-# List available chats
-python3 scripts/telegram_fetch.py list
+python scripts/setup_project.py --language nodejs --path ./meu-bot-telegram
 
-# Get recent messages
-python3 scripts/telegram_fetch.py recent --limit 20
+## Ou
 
-# Search messages
-python3 scripts/telegram_fetch.py search "meeting"
-
-# Get unread messages
-python3 scripts/telegram_fetch.py unread
+python scripts/setup_project.py --language python --path ./meu-bot-telegram
 ```
 
-## Commands
-
-### List Chats
-
-To see available Telegram chats:
-
+Para testar se o token do bot funciona:
 ```bash
-python3 scripts/telegram_fetch.py list
-python3 scripts/telegram_fetch.py list --limit 50
-python3 scripts/telegram_fetch.py list --search "AI"
-python3 scripts/telegram_fetch.py list --search "claude code глеб + саши" --exact
+python scripts/test_bot.py --token "SEU_TOKEN"
 ```
 
-**Options:**
-- `--search "text"`: Filter by substring match (case-insensitive)
-- `--exact`: Require exact name match instead of substring (use with --search)
-- `--limit N`: Max chats to retrieve (default: 30, increase if chat not found)
-
-**Important:** If you're looking for a specific chat by exact name and it's not found, increase `--limit` to 100 or 200, as the chat may not be in the most recent 30.
-
-Returns JSON with chat IDs, names, types, and unread counts.
-
-### Fetch Recent Messages
-
-To get recent messages:
-
+Para enviar uma mensagem de teste:
 ```bash
-# From all chats (last 50 messages across top 10 chats)
-python3 scripts/telegram_fetch.py recent
-
-# From specific chat
-python3 scripts/telegram_fetch.py recent --chat "Tool Building Ape"
-python3 scripts/telegram_fetch.py recent --chat-id 123456789
-
-# With limits
-python3 scripts/telegram_fetch.py recent --limit 100
-python3 scripts/telegram_fetch.py recent --days 7
+python scripts/send_message.py --token "SEU_TOKEN" --chat-id "CHAT_ID" --text "Hello!"
 ```
 
-### Search Messages
+---
 
-To search message content:
+## Setup Com Botfather
 
-```bash
-# Global search across all chats
-python3 scripts/telegram_fetch.py search "project deadline"
+1. Abra o Telegram e busque @BotFather
+2. Envie `/newbot`
+3. Escolha nome de exibicao (ex: "Meu Bot Incrivel")
+4. Escolha username (deve terminar com "bot", ex: `meu_incrivel_bot`)
+5. BotFather retorna o token - guarde com seguranca
+6. Comandos uteis do BotFather:
+   - `/setdescription` - descricao do bot
+   - `/setabouttext` - texto "sobre" do bot
+   - `/setuserpic` - foto de perfil
+   - `/setcommands` - lista de comandos
+   - `/mybots` - gerenciar bots existentes
+   - `/setinline` - habilitar inline mode
+   - `/setprivacy` - modo privacidade em grupos
 
-# Search in specific chat
-python3 scripts/telegram_fetch.py search "meeting" --chat-id 123456789
+---
 
-# Limit results
-python3 scripts/telegram_fetch.py search "important" --limit 20
+## Variaveis De Ambiente
+
+```env
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 ```
 
-### Fetch Unread Messages
+## Node.Js/Typescript
 
-To get only unread messages:
+```typescript
+// Instalar: npm install telegraf dotenv
+// Para TypeScript: npm install -D typescript
+import { Telegraf } from 'telegraf';
+import dotenv from 'dotenv';
+dotenv.config();
 
-```bash
-python3 scripts/telegram_fetch.py unread
-python3 scripts/telegram_fetch.py unread --chat-id 123456789
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
+
+bot.start((ctx) => {
+  ctx.reply('Ola! Eu sou seu bot. Como posso ajudar?');
+});
+
+bot.on('text', (ctx) => {
+  if (!ctx.message.text.startsWith('/')) {
+    ctx.reply(`Voce disse: ${ctx.message.text}`);
+  }
+});
+
+bot.launch();
 ```
 
-### Send Messages
+## Python
 
-To send a message to a chat:
+```python
 
-```bash
-# Send to existing chat by name
-python3 scripts/telegram_fetch.py send --chat "John Doe" --text "Hello!"
+## Instalar: Pip Install Python-Telegram-Bot Python-Dotenv
 
-# Send to username (works even without prior conversation)
-python3 scripts/telegram_fetch.py send --chat "@username" --text "Hello!"
+import os
+from dotenv import load_dotenv
+from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-# Reply to a specific message (use message ID from recent/search output)
-python3 scripts/telegram_fetch.py send --chat "Tool Building Ape" --text "Thanks!" --reply-to 12345
+load_dotenv()
 
-# Send to a forum topic (for groups with topics enabled)
-python3 scripts/telegram_fetch.py send --chat "Group Name" --text "Hello topic!" --topic 12
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('Ola! Eu sou seu bot. Como posso ajudar?')
 
-# Send with markdown formatting (converts **bold**, _italic_, [links](url) to Telegram HTML)
-python3 scripts/telegram_fetch.py send --chat "@username" --text "**Bold** and _italic_ text" --markdown
+async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(f'Voce disse: {update.message.text}')
+
+app = Application.builder().token(os.getenv('TELEGRAM_BOT_TOKEN')).build()
+app.add_handler(CommandHandler('start', start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+app.run_polling()
 ```
 
-**Formatting (`--markdown` flag):**
-- Without `--markdown`: text is sent as-is (plain text, no formatting)
-- With `--markdown`: converts markdown to Telegram HTML (`**bold**` -> bold, `_italic_` -> italic, `[text](url)` -> link, `## Header` -> bold, `* item` -> arrow list)
-- **IMPORTANT**: Always use `--markdown` when sending draft content that contains markdown formatting
-- The `publish` command handles markdown conversion automatically; the `send` command does NOT unless `--markdown` is specified
+## Sem Biblioteca (Http Puro)
 
-### Send Files
+```python
+import requests
 
-To send images, documents, or videos:
+TOKEN = "SEU_TOKEN"
+BASE = f"https://api.telegram.org/bot{TOKEN}"
 
-```bash
-# Send an image
-python3 scripts/telegram_fetch.py send --chat "John Doe" --file "/path/to/image.jpg"
+## Verificar Bot
 
-# Send document with caption
-python3 scripts/telegram_fetch.py send --chat "@username" --file "report.pdf" --text "Here's the report"
+r = requests.get(f"{BASE}/getMe")
+print(r.json())
 
-# Reply with media
-python3 scripts/telegram_fetch.py send --chat "Group" --file "screenshot.png" --reply-to 12345
+## Enviar Mensagem
+
+r = requests.post(f"{BASE}/sendMessage", json={
+    "chat_id": "CHAT_ID",
+    "text": "Hello from pure HTTP!",
+    "parse_mode": "HTML"
+})
+print(r.json())
 ```
 
-**Chat resolution order:**
-1. `@username` - Resolves Telegram username directly
-2. Numeric ID - Resolves chat by Telegram ID
-3. Name match - Fuzzy search in existing dialogs
+---
 
-Returns JSON with send status, resolved chat name, message ID, and file info (for media).
+## Tipos De Mensagem
 
-### Edit Messages
+O Telegram suporta diversos tipos de conteudo. Todos os metodos aceitam `chat_id`, `reply_parameters` (para responder), `reply_markup` (para keyboards), `disable_notification` e `protect_content`.
 
-To edit an existing message:
+## Html (Recomendado)
 
-```bash
-# Edit a message by ID
-python3 scripts/telegram_fetch.py edit --chat "@mentalhealthtech" --message-id 76 --text "Updated text"
+await bot.send_message(
+    chat_id=chat_id,
+    text="<b>Negrito</b>, <i>italico</i>, <code>codigo</code>, <a href='https://example.com'>link</a>",
+    parse_mode="HTML"
+)
 
-# Edit in a group/channel
-python3 scripts/telegram_fetch.py edit --chat "Mental health tech" --message-id 123 --text "Corrected content"
+## Markdownv2 (Escapar Caracteres Especiais: _ * [ ] ( ) ~ ` > # + - = | { } . !)
+
+await bot.send_message(
+    chat_id=chat_id,
+    text="*Negrito*, _italico_, `codigo`, [link](https://example\\.com)",
+    parse_mode="MarkdownV2"
+)
 ```
 
-**Note:** You can only edit your own messages. Telegram formatting (**bold**, etc.) is preserved.
+## Foto (Por Url, File_Id Ou Upload)
 
-Returns JSON with edit status and message ID.
+await bot.send_photo(chat_id, photo="https://example.com/img.jpg", caption="Legenda aqui")
 
-### Download Attachments
+## Documento
 
-To download media files from a chat:
+await bot.send_document(chat_id, document=open("relatorio.pdf", "rb"), caption="Relatorio mensal")
 
-```bash
-# Download last 5 attachments from a chat (default)
-python3 scripts/telegram_fetch.py download --chat "Tool Building Ape"
+## Video
 
-# Download last 10 attachments
-python3 scripts/telegram_fetch.py download --chat "Project Group" --limit 10
+await bot.send_video(chat_id, video="https://example.com/video.mp4", caption="Assista!")
 
-# Download to custom directory
-python3 scripts/telegram_fetch.py download --chat "@username" --output "/path/to/folder"
+## Audio
 
-# Download from specific message
-python3 scripts/telegram_fetch.py download --chat "John Doe" --message-id 12345
+await bot.send_audio(chat_id, audio=open("musica.mp3", "rb"), title="Minha Musica")
+
+## Voz (Ogg Com Opus)
+
+await bot.send_voice(chat_id, voice=open("audio.ogg", "rb"))
+
+## Localizacao
+
+await bot.send_location(chat_id, latitude=-23.5505, longitude=-46.6333)
+
+## Contato
+
+await bot.send_contact(chat_id, phone_number="+5511999999999", first_name="Joao")
+
+## Enquete
+
+await bot.send_poll(
+    chat_id, question="Qual sua cor favorita?",
+    options=["Azul", "Verde", "Vermelho"],
+    is_anonymous=False
+)
+
+## Grupo De Midias
+
+await bot.send_media_group(chat_id, media=[
+    InputMediaPhoto("url1", caption="Foto 1"),
+    InputMediaPhoto("url2"),
+    InputMediaVideo("url3")
+])
+
+## Acao De Chat (Typing, Upload_Photo, Etc.)
+
+await bot.send_chat_action(chat_id, action="typing")
 ```
 
-**Default output:** `~/Downloads/telegram_attachments/`
+## Node.Js Equivalente
 
-Returns JSON with download results (file names, paths, sizes).
+```typescript
+// Foto
+bot.sendPhoto(chatId, 'https://example.com/img.jpg', { caption: 'Legenda' });
 
-### Fetch Forum Thread Messages
+// Documento
+bot.sendDocument(chatId, fs.createReadStream('relatorio.pdf'), { caption: 'Relatorio' });
 
-To get messages from a specific forum thread (topics in groups):
+// Localizacao
+bot.sendLocation(chatId, -23.5505, -46.6333);
 
-```bash
-# Fetch from thread 174 in Claude Code Lab
-python3 scripts/telegram_fetch.py thread --chat-id -1003237581133 --thread-id 174
-
-# Fetch with custom limit
-python3 scripts/telegram_fetch.py thread --chat-id -1003237581133 --thread-id 174 --limit 50
-
-# Save to file
-python3 scripts/telegram_fetch.py thread --chat-id -1003237581133 --thread-id 174 -o ~/thread.md
-
-# Append to daily note
-python3 scripts/telegram_fetch.py thread --chat-id -1003237581133 --thread-id 174 --to-daily
-
-# JSON output
-python3 scripts/telegram_fetch.py thread --chat-id -1003237581133 --thread-id 174 --json
+// Enquete
+bot.sendPoll(chatId, 'Qual sua cor favorita?', ['Azul', 'Verde', 'Vermelho']);
 ```
 
-**Messages are sorted newest first** (reverse chronological order).
+---
 
-**How to find thread ID:**
-- Forum topic IDs appear in the thread URL: `https://t.me/c/CHAT_ID/THREAD_ID`
-- Use `recent` command on the chat to see message IDs in threads
+## Inline Keyboard (Botoes Dentro Da Mensagem)
 
-Returns markdown or JSON with all messages from the specified thread.
+```python
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-### Publish Draft to Channel
+keyboard = InlineKeyboardMarkup([
+    [InlineKeyboardButton("Opcao A", callback_data="opt_a"),
+     InlineKeyboardButton("Opcao B", callback_data="opt_b")],
+    [InlineKeyboardButton("Abrir Site", url="https://example.com")],
+    [InlineKeyboardButton("Compartilhar", switch_inline_query="texto")]
+])
 
-To publish a draft from the klodkot channel to Telegram:
+await bot.send_message(chat_id, "Escolha uma opcao:", reply_markup=keyboard)
 
-```bash
-# Dry run (preview without sending)
-python3 scripts/telegram_fetch.py publish --draft "Channels/klodkot/drafts/20260122-anthropic-consciousness-question.md" --dry-run
+## Handler De Callback
 
-# Publish to channel
-python3 scripts/telegram_fetch.py publish --draft "Channels/klodkot/drafts/20260122-anthropic-consciousness-question.md"
+async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()  # Importante: sempre responder o callback
+    await query.edit_message_text(f"Voce escolheu: {query.data}")
+
+app.add_handler(CallbackQueryHandler(button_callback))
 ```
 
-**Workflow:**
-1. Parses draft frontmatter and body
-2. Validates channel field (must be "klodkot")
-3. Extracts media references from frontmatter `video:` field and wikilinks
-4. Resolves media paths in `Channels/klodkot/attachments/` or `Sources/`
-5. Strips draft headers (e.g., "# Title - Telegram Draft")
-6. Appends footer if not present: "**[КЛОДКОТ](https://t.me/klodkot)** — Claude Code и другие агенты: инструменты, кейсы, вдохновение"
-7. Sends to @klodkot channel (multiple media as album)
-8. Updates frontmatter with `published_date`, `telegram_message_id`
-9. Moves file from `drafts/` to `published/`
-10. Updates channel index with new entry at top
+## Reply Keyboard (Teclado Customizado)
 
-**Media handling:**
-- Frontmatter: `video: filename.mp4`
-- Wikilinks: `[[filename.mp4]]`, `[[image.png|alt text]]`
-- Multiple media sent as Telegram album
+```python
+from telegram import ReplyKeyboardMarkup, KeyboardButton
 
-**Safety:**
-- `--dry-run` shows preview without sending
-- Validates before sending
-- Rollback on send failure (file not moved)
-- Warnings on post-publish errors (file sent but move/index update failed)
+keyboard = ReplyKeyboardMarkup(
+    [[KeyboardButton("Enviar Localizacao", request_location=True)],
+     [KeyboardButton("Enviar Contato", request_contact=True)],
+     ["Opcao 1", "Opcao 2"]],
+    resize_keyboard=True,
+    one_time_keyboard=True
+)
 
-**Returns:** JSON with publish status, message ID, warnings (if any)
-
-## Output Options
-
-### Default (Markdown to stdout)
-
-By default, outputs formatted markdown suitable for Claude to read and summarize.
-
-### JSON Format
-
-Add `--json` flag for structured data:
-
-```bash
-python3 scripts/telegram_fetch.py recent --json
+await bot.send_message(chat_id, "Escolha:", reply_markup=keyboard)
 ```
 
-### Append to Obsidian Daily Note
+## Remover Teclado
 
-Add messages to today's daily note in the vault:
-
-```bash
-python3 scripts/telegram_fetch.py recent --to-daily
-python3 scripts/telegram_fetch.py search "project" --to-daily
+```python
+from telegram import ReplyKeyboardRemove
+await bot.send_message(chat_id, "Teclado removido", reply_markup=ReplyKeyboardRemove())
 ```
 
-Appends to `~/Brains/brain/Daily/YYYYMMDD.md`
+---
 
-### Append to Person's Note
+## Receber Updates
 
-Add messages to a specific person's note:
+Existem duas formas de receber updates: **Long Polling** e **Webhooks**.
 
-```bash
-python3 scripts/telegram_fetch.py recent --chat "John Doe" --to-person "John Doe"
+## Long Polling (Desenvolvimento)
+
+Mais simples, ideal para desenvolvimento. O bot faz requisicoes periodicas ao servidor do Telegram.
+
+```python
+
+## Python-Telegram-Bot Ja Faz Isso Automaticamente
+
+app.run_polling(allowed_updates=Update.ALL_TYPES)
 ```
 
-Creates or appends to `~/Brains/brain/{PersonName}.md`
-
-### Save to File (Token-Efficient)
-
-Save messages directly to file without consuming context tokens:
-
-```bash
-# Save 100 messages to markdown file
-python3 scripts/telegram_fetch.py recent --chat "AGENCY: Community" --limit 100 -o ~/chat_archive.md
-
-# Save with media files downloaded to same folder
-python3 scripts/telegram_fetch.py recent --chat "Project Group" --limit 50 -o ~/project/archive.md --with-media
-
-# Save search results to file
-python3 scripts/telegram_fetch.py search "meeting" -o ~/meetings.md
+```typescript
+// Telegraf com polling
+const bot = new Telegraf(token);
+bot.launch();
 ```
 
-Returns JSON with save status (file path, message count, media download results) - minimal token usage.
+## Webhooks (Producao)
 
-## Example User Requests
+Para producao, webhooks sao mais eficientes. O Telegram envia updates via POST para sua URL HTTPS.
 
-When user asks:
+Leia `references/webhook-setup.md` para configuracao completa com Express, Flask, ngrok e deploy.
 
-- "Show my recent Telegram messages" -> `recent --limit 20`
-- "What Telegram messages did I get today?" -> `recent --days 1`
-- "Search Telegram for messages about the project" -> `search "project"`
-- "Get unread messages from Tool Building Ape" -> `unread` + filter output
-- "Add my Telegram messages to daily note" -> `recent --to-daily`
-- "What chats do I have on Telegram?" -> `list`
-- "Find the exact chat named X" -> `list --search "X" --exact --limit 200`
-- "Send hello to John on Telegram" -> `send --chat "John" --text "Hello!"`
-- "Message @username on Telegram" -> `send --chat "@username" --text "..."`
-- "Reply to that message with thanks" -> `send --chat "..." --text "Thanks!" --reply-to <id>`
-- "Send this image to John" -> `send --chat "John" --file "/path/to/image.jpg"`
-- "Send report.pdf with caption" -> `send --chat "..." --file "report.pdf" --text "Here's the report"`
-- "Send to topic 12 in Group" -> `send --chat "Group" --text "..." --topic 12`
-- "Download attachments from Tool Building Ape" -> `download --chat "Tool Building Ape"`
-- "Download last 10 files from Project Group" -> `download --chat "Project Group" --limit 10`
-- "Save last 100 messages from AGENCY to file" -> `recent --chat "AGENCY: Community" --limit 100 -o ~/agency.md`
-- "Archive chat with media" -> `recent --chat "Group" -o ~/archive.md --with-media`
-- "Edit that message" -> `edit --chat "..." --message-id <id> --text "new text"`
-- "Fix the typo in message 123" -> `edit --chat "..." --message-id 123 --text "corrected text"`
-- "Is Telegram configured?" -> `setup`
-- "How do I set up Telegram?" -> `setup` (returns instructions if not configured)
-- "Publish this draft to klodkot" -> `publish --draft "Channels/klodkot/drafts/...md"`
-- "Preview this draft before publishing" -> `publish --draft "..." --dry-run`
+Setup rapido:
 
-## Rate Limiting
+```python
 
-The script includes built-in rate limiting (0.1s between messages) and handles Telegram's FloodWaitError automatically with backoff.
+## Flask Webhook
 
-## Dependencies
+from flask import Flask, request
+import requests
 
-Requires Python packages:
-- `telethon` - Telegram API client
-- `pyyaml` - YAML parsing for draft frontmatter
+app = Flask(__name__)
+TOKEN = "SEU_TOKEN"
+BASE = f"https://api.telegram.org/bot{TOKEN}"
 
-Install with: `pip install telethon pyyaml`
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    update = request.get_json()
+    if "message" in update and "text" in update["message"]:
+        chat_id = update["message"]["chat"]["id"]
+        text = update["message"]["text"]
+        requests.post(f"{BASE}/sendMessage", json={
+            "chat_id": chat_id,
+            "text": f"Recebi: {text}"
+        })
+    return "OK", 200
+
+## Registrar Webhook
+
+requests.post(f"{BASE}/setWebhook", json={
+    "url": "https://seu-dominio.com/webhook",
+    "allowed_updates": ["message", "callback_query"],
+    "secret_token": "seu_secret_seguro_aqui"
+})
+```
+
+---
+
+## Comandos Do Bot
+
+Registre comandos para aparecerem no menu do Telegram:
+
+```python
+from telegram import BotCommand
+
+await bot.set_my_commands([
+    BotCommand("start", "Iniciar o bot"),
+    BotCommand("help", "Ver comandos disponiveis"),
+    BotCommand("settings", "Configuracoes"),
+    BotCommand("status", "Ver status do servico"),
+])
+```
+
+Via HTTP:
+```bash
+curl -X POST "https://api.telegram.org/bot$TOKEN/setMyCommands" \
+  -H "Content-Type: application/json" \
+  -d '{"commands":[{"command":"start","description":"Iniciar o bot"},{"command":"help","description":"Ajuda"}]}'
+```
+
+---
+
+## Automacao Com Ia
+
+Padrao para bot de atendimento com IA (Claude, GPT, etc.):
+
+```python
+from telegram import Update
+from telegram.ext import Application, MessageHandler, filters, ContextTypes
+import anthropic  # ou openai
+
+client = anthropic.Anthropic()
+user_conversations = {}  # chat_id -> messages history
+
+async def ai_response(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.message.chat_id
+    user_text = update.message.text
+
+    # Indicar que esta digitando
+    await context.bot.send_chat_action(chat_id, "typing")
+
+    # Manter historico
+    if chat_id not in user_conversations:
+        user_conversations[chat_id] = []
+
+    user_conversations[chat_id].append({"role": "user", "content": user_text})
+
+    # Chamar IA
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=1024,
+        system="Voce e um assistente prestativo. Responda em portugues.",
+        messages=user_conversations[chat_id]
+    )
+
+    reply = response.content[0].text
+    user_conversations[chat_id].append({"role": "assistant", "content": reply})
+
+    # Limitar historico (ultimas 20 mensagens)
+    if len(user_conversations[chat_id]) > 20:
+        user_conversations[chat_id] = user_conversations[chat_id][-20:]
+
+    await update.message.reply_text(reply)
+
+app = Application.builder().token(TOKEN).build()
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, ai_response))
+app.run_polling()
+```
+
+---
+
+## Editar Texto
+
+await bot.edit_message_text(
+    chat_id=chat_id,
+    message_id=msg.message_id,
+    text="Texto atualizado!",
+    parse_mode="HTML"
+)
+
+## Editar Markup (Botoes)
+
+await bot.edit_message_reply_markup(
+    chat_id=chat_id,
+    message_id=msg.message_id,
+    reply_markup=new_keyboard
+)
+
+## Deletar Mensagem
+
+await bot.delete_message(chat_id=chat_id, message_id=msg.message_id)
+
+## Encaminhar Mensagem
+
+await bot.forward_message(
+    chat_id=dest_chat_id,
+    from_chat_id=source_chat_id,
+    message_id=msg.message_id
+)
+```
+
+---
+
+## Tratamento De Erros
+
+```python
+from telegram.error import TelegramError, BadRequest, TimedOut, NetworkError
+
+async def safe_send(bot, chat_id, text, **kwargs):
+    """Envio com retry e tratamento de erros."""
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            return await bot.send_message(chat_id, text, **kwargs)
+        except TimedOut:
+            if attempt < max_retries - 1:
+                await asyncio.sleep(2 ** attempt)
+                continue
+            raise
+        except BadRequest as e:
+            if "chat not found" in str(e).lower():
+                print(f"Chat {chat_id} nao encontrado")
+                return None
+            raise
+        except NetworkError:
+            if attempt < max_retries - 1:
+                await asyncio.sleep(2 ** attempt)
+                continue
+            raise
+```
+
+---
+
+## Rate Limits
+
+- **Mensagens em chat privado:** ~30 msg/segundo
+- **Mensagens em grupo:** ~20 msg/minuto por grupo
+- **Broadcast geral:** ~30 msg/segundo no total
+- **Bulk notifications:** use `asyncio.sleep(0.05)` entre envios para evitar flood
+
+Se receber erro 429 (Too Many Requests), respeite o `retry_after` retornado.
+
+---
+
+## Referencia De Arquivos
+
+| Topico | Arquivo |
+|--------|---------|
+| Setup de webhooks | `references/webhook-setup.md` |
+| Gerenciamento de chats | `references/chat-management.md` |
+| Recursos avancados | `references/advanced-features.md` |
+| Referencia completa da API | `references/api-reference.md` |
+| Boilerplate Node.js | `assets/boilerplate/nodejs/` |
+| Boilerplate Python | `assets/boilerplate/python/` |
+| Exemplos de payloads | `assets/examples/` |
+
+## Best Practices
+
+- Provide clear, specific context about your project and requirements
+- Review all suggestions before applying them to production code
+- Combine with other complementary skills for comprehensive analysis
+
+## Common Pitfalls
+
+- Using this skill for tasks outside its domain expertise
+- Applying recommendations without understanding your specific context
+- Not providing enough project context for accurate analysis
+
+## Related Skills
+
+- `instagram` - Complementary skill for enhanced analysis
+- `social-orchestrator` - Complementary skill for enhanced analysis
+- `whatsapp-cloud-api` - Complementary skill for enhanced analysis
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

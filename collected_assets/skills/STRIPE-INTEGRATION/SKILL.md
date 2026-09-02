@@ -1,6 +1,10 @@
 ---
 name: stripe-integration
-description: Implement Stripe payment processing for robust, PCI-compliant payment flows including checkout, subscriptions, and webhooks. Use when integrating Stripe payments, building subscription systems, or implementing secure checkout flows.
+description: Master Stripe payment processing integration for robust, PCI-compliant payment flows including checkout, subscriptions, webhooks, and refunds.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Stripe Integration
@@ -74,9 +78,10 @@ Master Stripe payment processing integration for robust, PCI-compliant payment f
 ## Quick Start
 
 ```python
+import os
 import stripe
 
-stripe.api_key = "sk_test_..."
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
 # Create a checkout session
 session = stripe.checkout.Session.create(
@@ -219,12 +224,13 @@ def create_customer_portal_session(customer_id):
 
 ### Secure Webhook Endpoint
 ```python
+import os
 from flask import Flask, request
 import stripe
 
 app = Flask(__name__)
 
-endpoint_secret = 'whsec_...'
+endpoint_secret = os.environ["STRIPE_WEBHOOK_SECRET"]
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -389,7 +395,9 @@ def handle_dispute(charge_id, evidence):
 
 ```python
 # Use test mode keys
-stripe.api_key = "sk_test_..."
+import os
+
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
 
 # Test card numbers
 TEST_CARDS = {
@@ -452,3 +460,8 @@ def test_payment_flow():
 - **Hardcoded Amounts**: Use cents/smallest currency unit
 - **No Retry Logic**: Implement retries for API calls
 - **Ignoring Test Mode**: Test all edge cases with test cards
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
