@@ -287,5 +287,26 @@
     "branch": "master",
     "skills_subpath": "skills",
     "description": "126 enterprise cloud and file transfer skills covering SFTP, FTPS, AS2, automation, and remote sync"
+  },
+  {
+    "name": "hmohamed01/powershell-expert",
+    "repo": "https://github.com/hmohamed01/powershell-expert.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Expert PowerShell development, scripts, modules, cmdlets, Pester testing, and WinForms/WPF GUIs"
+  },
+  {
+    "name": "aloth/PowerSkills",
+    "repo": "https://github.com/aloth/PowerSkills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Windows PowerShell automation suite for AI agents: system control, desktop UI automation, Microsoft 365, Graph API, and Outlook"
+  },
+  {
+    "name": "Misaka-Mikoto-Tech/agent-skills",
+    "repo": "https://github.com/Misaka-Mikoto-Tech/agent-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Reusable AI agent skills including powershell-safe-invocation for secure Windows command execution"
   }
 ]

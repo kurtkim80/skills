@@ -1,5 +1,0 @@
-# Personal/locale override — never commit (see config.local.example.json)
-config.local.json
-# Python bytecode
-__pycache__/
-*.pyc

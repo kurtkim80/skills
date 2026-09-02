@@ -1,4 +1,4 @@
 interface:
-  display_name: "Agent Skill Stack"
-  short_description: "Turn any goal into a minimal, audited Skill Stack"
-  default_prompt: "Use $agent-skill-stack to turn my goal into a minimal, compatible, project-specific Agent Skill Stack and explain it in plain language."
+  display_name: "Locus Unity Bridge"
+  short_description: "Control Unity safely through the Locus named-pipe bridge"
+  default_prompt: "Use $locus-unity-bridge to probe this Unity project and safely interact with its Locus bridge."

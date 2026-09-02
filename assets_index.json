@@ -43700,6 +43700,96 @@
       "source_name": "Files-com/files-cli",
       "path": "collected_assets/skills/recipe-generating-reports",
       "description_ko": "|"
+    },
+    "powershell-expert": {
+      "name": "powershell-expert",
+      "type": "skill",
+      "description": "Develop PowerShell scripts, tools, modules, and GUIs following Microsoft best practices. Use when writing PowerShell code, creating Windows Forms/WPF interfaces, working with PowerShell Gallery modules, or needing cmdlet/module recommendations. Covers script development, parameter design, pipeline handling, error management, and GUI creation patterns. Verifies module availability and cmdlet syntax against live documentation when accuracy is critical.",
+      "source_repo": "https://github.com/hmohamed01/powershell-expert.git",
+      "source_name": "hmohamed01/powershell-expert",
+      "path": "collected_assets/skills/powershell-expert",
+      "description_ko": "Microsoft 모범 사례에 따라 PowerShell 스크립트, 도구, 모듈 및 GUI를 개발합니다. PowerShell 코드 작성, Windows Forms/WPF 인터페이스 생성, PowerShell 갤러리 모듈 작업 또는 cmdlet/모듈 권장 사항이 필요할 때 사용합니다. 스크립트 개발, 매개변수 설계, 파이프라인 처리, 오류 관리 및 GUI 생성 패턴을 다룹니다. 정확성이 중요한 경우 실시간 문서에 대해 모듈 가용성 및 cmdlet 구문을 확인합니다."
+    },
+    "powerskills": {
+      "name": "powerskills",
+      "type": "skill",
+      "description": "Windows automation toolkit for AI agents. Provides Outlook email/calendar (COM), Microsoft 365 mail/calendar/Teams/SharePoint/OneDrive via Work IQ CLI, Edge browser (CDP), desktop screenshots/window management, and shell commands via PowerShell. Install this for the full suite, or install individual sub-skills (powerskills-outlook, powerskills-workiq, powerskills-browser, powerskills-desktop, powerskills-system) separately.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/powerskills",
+      "description_ko": "AI 에이전트용 Windows 자동화 도구 키트입니다. Work IQ CLI를 통해 Outlook 이메일/캘린더(COM), Microsoft 365 메일/캘린더/Teams/SharePoint/OneDrive, Edge 브라우저(CDP), 데스크톱 스크린샷/창 관리 및 PowerShell을 통한 셸 명령을 제공합니다. 전체 제품군에 대해 이를 설치하거나 개별 하위 기술(powerskills-outlook, powerskills-workiq, powerskills-browser, powerskills-desktop, powerskills-system)을 별도로 설치하십시오."
+    },
+    "desktop": {
+      "name": "powerskills-desktop",
+      "type": "skill",
+      "description": "Windows desktop automation. Take full-screen or window screenshots, list/focus/minimize/maximize windows, send keystrokes, launch applications. Use when needing to capture the Windows screen, manage windows, send keyboard input, or start programs.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/desktop",
+      "description_ko": "Windows 데스크탑 자동화. 전체 화면 또는 창 스크린샷을 찍고, 창을 나열/초점/최소화/최대화하고, 키 입력을 보내고, 응용 프로그램을 시작합니다. Windows 화면 캡처, 창 관리, 키보드 입력 보내기, 프로그램 시작 등이 필요할 때 사용합니다."
+    },
+    "system": {
+      "name": "powerskills-system",
+      "type": "skill",
+      "description": "Windows system commands and info via PowerShell. Execute shell commands, get system info (hostname, OS, uptime), list top processes, read environment variables. Use when needing to run commands, check system status, or inspect the Windows environment.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/system",
+      "description_ko": "PowerShell을 통한 Windows 시스템 명령 및 정보. 셸 명령을 실행하고, 시스템 정보(호스트 이름, OS, 가동 시간)를 가져오고, 상위 프로세스를 나열하고, 환경 변수를 읽습니다. 명령을 실행하거나, 시스템 상태를 확인하거나, Windows 환경을 검사해야 할 때 사용합니다."
+    },
+    "browser": {
+      "name": "powerskills-browser",
+      "type": "skill",
+      "description": "Edge browser automation via Chrome DevTools Protocol (CDP). List tabs, navigate, take screenshots, extract page content/HTML, execute JavaScript, click elements, type text, fill forms, scroll. Use when needing to control Edge browser, scrape web content, automate web forms, or take browser screenshots on Windows. Requires Edge with --remote-debugging-port=9222.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/browser",
+      "description_ko": "CDP(Chrome DevTools Protocol)를 통한 엣지 브라우저 자동화. 탭 나열, 탐색, 스크린샷 찍기, 페이지 콘텐츠/HTML 추출, JavaScript 실행, 요소 클릭, 텍스트 입력, 양식 채우기, 스크롤. Edge 브라우저를 제어하거나, 웹 콘텐츠를 스크랩하거나, 웹 양식을 자동화하거나, Windows에서 브라우저 스크린샷을 찍어야 할 때 사용하세요. --remote-debugging-port=9222를 사용하는 Edge가 필요합니다."
+    },
+    "workiq": {
+      "name": "powerskills-workiq",
+      "type": "skill",
+      "description": "Microsoft 365 automation via Work IQ (Graph-backed CLI). Ask natural-language questions against Outlook mail, calendar, Teams messages, SharePoint, OneDrive, and People. Fetch entities by URL, run OpenAPI actions (sendMail, copy, move), call functions (getSchedule, delta, reminderView), list Work IQ agents. Use when needing tenant-side M365 data without depending on a running Outlook desktop client. Includes install/check helpers so the skill covers first-time setup.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/workiq",
+      "description_ko": "Work IQ(그래프 지원 CLI)를 통한 Microsoft 365 자동화. Outlook 메일, 일정, Teams 메시지, SharePoint, OneDrive 및 People에 대해 자연어로 질문하세요. URL로 엔터티를 가져오고, OpenAPI 작업(sendMail, 복사, 이동)을 실행하고, 함수(getSchedule, delta, 알림 보기)를 호출하고, Work IQ 에이전트를 나열합니다. 실행 중인 Outlook 데스크톱 클라이언트에 의존하지 않고 테넌트 측 M365 데이터가 필요할 때 사용합니다. 기술이 최초 설정을 다룰 수 있도록 설치/확인 도우미가 포함되어 있습니다."
+    },
+    "outlook": {
+      "name": "powerskills-outlook",
+      "type": "skill",
+      "description": "Outlook email and calendar automation via COM. Read inbox, unread, sent items. Search emails. Send, reply, draft. List calendar events and mail folders. Use when needing to check work email, read/send Outlook messages, search mail, or view calendar. Requires Outlook desktop app on Windows.",
+      "source_repo": "https://github.com/aloth/PowerSkills.git",
+      "source_name": "aloth/PowerSkills",
+      "path": "collected_assets/skills/outlook",
+      "description_ko": "COM을 통한 Outlook 이메일 및 일정 자동화. 읽은 편지함, 읽지 않은 편지함, 보낸 편지함. 이메일을 검색하세요. 보내고, 답장하고, 초안을 작성하세요. 캘린더 이벤트 및 메일 폴더를 나열합니다. 업무 이메일 확인, 아웃룩 메시지 읽기/보내기, 메일 검색, 달력 보기 등이 필요할 때 사용하세요. Windows에는 Outlook 데스크톱 앱이 필요합니다."
+    },
+    "bilibili-page-reader": {
+      "name": "bilibili-page-reader",
+      "type": "skill",
+      "description": "Get content from Bilibili videos: official subtitles, danmaku (density/peaks/sample), comments. When no subtitles exist (no 投稿字幕), fall back to downloading audio + ASR transcription via FunASR.",
+      "source_repo": "https://github.com/Misaka-Mikoto-Tech/agent-skills.git",
+      "source_name": "Misaka-Mikoto-Tech/agent-skills",
+      "path": "collected_assets/skills/bilibili-page-reader",
+      "description_ko": "Bilibili 비디오에서 콘텐츠를 받으세요: 공식 자막, 탄막(밀도/피크/샘플), 댓글. 자막이 없으면(投稿字幕 없음) FunASR을 통해 오디오 + ASR 전사본 다운로드로 돌아갑니다."
+    },
+    "locus-unity-bridge": {
+      "name": "locus-unity-bridge",
+      "type": "skill",
+      "description": "Use when an agent needs to inspect or control a real Unity Editor through Locus, especially when Unity MCP is unavailable, a project may lack the Locus package, named-pipe discovery is needed, C# must be executed, or Unity scripts must be recompiled.",
+      "source_repo": "https://github.com/Misaka-Mikoto-Tech/agent-skills.git",
+      "source_name": "Misaka-Mikoto-Tech/agent-skills",
+      "path": "collected_assets/skills/locus-unity-bridge",
+      "description_ko": "에이전트가 Locus를 통해 실제 Unity 에디터를 검사하거나 제어해야 하는 경우, 특히 Unity MCP를 사용할 수 없는 경우, 프로젝트에 Locus 패키지가 부족할 수 있는 경우, 명명된 파이프 검색이 필요한 경우, C#을 실행해야 하는 경우 또는 Unity 스크립트를 다시 컴파일해야 하는 경우에 사용하세요."
+    },
+    "powershell-safe-invocation": {
+      "name": "powershell-safe-invocation",
+      "type": "skill",
+      "description": "Use when writing or running PowerShell on Windows, especially native programs, quoted paths, escaping, pwsh, Start-Process, file operations, or shell troubleshooting.",
+      "source_repo": "https://github.com/Misaka-Mikoto-Tech/agent-skills.git",
+      "source_name": "Misaka-Mikoto-Tech/agent-skills",
+      "path": "collected_assets/skills/powershell-safe-invocation",
+      "description_ko": "Windows에서 PowerShell, 특히 기본 프로그램, 인용 경로, 이스케이프, pwsh, 시작 프로세스, 파일 작업 또는 셸 문제 해결을 작성하거나 실행할 때 사용합니다."
     }
   },
   "commands": {
@@ -49838,8 +49928,8 @@
       "name": "openai",
       "type": "agent",
       "description": "interface:",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
+      "source_repo": "https://github.com/Misaka-Mikoto-Tech/agent-skills.git",
+      "source_name": "Misaka-Mikoto-Tech/agent-skills",
       "path": "collected_assets/agents/openai.yaml",
       "description_ko": "인터페이스:"
     },
