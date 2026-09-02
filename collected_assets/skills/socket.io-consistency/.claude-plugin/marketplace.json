@@ -1,0 +1,22 @@
+{
+  "name": "socket.io-consistency",
+  "owner": {
+    "name": "guidogl",
+    "email": "guidogl@gip.ventures"
+  },
+  "metadata": {
+    "description": "Write and review Socket.IO v4 code \u2014 explicit CORS, rooms and acknowledgements, reconnect-safe handlers, matched client/server versions.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "socket.io-consistency",
+      "description": "Write and review Socket.IO v4 code \u2014 explicit CORS, rooms and acknowledgements, reconnect-safe handlers, matched client/server versions.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

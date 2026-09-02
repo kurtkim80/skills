@@ -146,7 +146,7 @@ def sync_assets():
                     target_dir = skills_dir / s_name
                     if target_dir.exists():
                         shutil.rmtree(target_dir)
-                    shutil.copytree(folder, target_dir)
+                    shutil.copytree(folder, target_dir, ignore=shutil.ignore_patterns(".git", ".github", ".gitignore"))
 
                     index["skills"][s_name] = {
                         "name": meta.get("name", s_name),
