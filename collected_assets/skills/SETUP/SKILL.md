@@ -1,77 +1,77 @@
 ---
-name: "setup"
-description: "Set up a new autoresearch experiment interactively. Collects domain, target file, eval command, metric, direction, and evaluator. Use when the user runs /ar:setup or asks to start optimizing a file with the autoresearch loop."
-command: /ar:setup
+name: setup
+description: Set up, install, and configure CONFIDE local de-identification — installs Python deps (natasha, scrubadub, phonenumbers, pymorphy2), ensures Ollama + pulls the default qwen2.5:3b model, detects optional llama.cpp, and writes the optimal-default config so confide:anon and confide:red work with zero further config. Everything is local-first; raw text never leaves the machine. Use when the user says "set up confide", "install confide", "configure confide de-id", "confide setup", or "get confide ready".
 ---
 
-# /ar:setup — Create New Experiment
+# confide:setup
 
-Set up a new autoresearch experiment with all required configuration.
+One-shot installer + optimal-default config writer for the CONFIDE local de-identification
+toolkit. After running this, `confide:anon` (redact a transcript) and `confide:red` (residual
+re-identification risk check) work with no further configuration.
 
-## Usage
+**Local-first:** all detection and redaction run on the user's machine. Readiness checks and
+config writing never read, print, or transmit any transcript text or PII — only booleans and
+the config path.
 
-```
-/ar:setup                                    # Interactive mode
-/ar:setup engineering api-speed src/api.py "pytest bench.py" p50_ms lower
-/ar:setup --list                             # Show existing experiments
-/ar:setup --list-evaluators                  # Show available evaluators
-```
+## When to use
+Trigger phrasings: "set up confide", "install confide", "configure confide de-id",
+"confide setup", "get confide ready to anonymize".
 
-## What It Does
+## How to run
 
-### If arguments provided
+The entrypoint is `scripts/setup.py`. It imports the shared core (`shared/confide_core.py`)
+for the canonical `DEFAULTS` — do not redefine preferences here.
 
-Pass them directly to the setup script:
+1. **Check readiness (default, no install):**
+   ```bash
+   python3 skills/setup/scripts/setup.py --check
+   ```
+   Prints a ✓/✗ table: Python deps importable (natasha, scrubadub, phonenumbers, pymorphy2),
+   Ollama reachable (`GET ollama_host/api/tags`), the `anon_model` pulled, llama.cpp on PATH
+   (optional), and whether the config exists. Booleans only — no PII.
 
-```bash
-python {skill_path}/scripts/setup_experiment.py \
-  --domain {domain} --name {name} \
-  --target {target} --eval "{eval_cmd}" \
-  --metric {metric} --direction {direction} \
-  [--evaluator {evaluator}] [--scope {scope}]
-```
+2. **Install everything (best-effort, tolerates failures):**
+   ```bash
+   python3 skills/setup/scripts/setup.py --install            # core deps + ollama pull
+   python3 skills/setup/scripts/setup.py --install --with-presidio   # + optional EN baseline
+   ```
+   - pip-installs: `natasha scrubadub phonenumbers pymorphy2 pymorphy2-dicts-ru "setuptools<81"`
+     (`setuptools<81` supplies `pkg_resources` for pymorphy2). Optional `presidio-analyzer` behind
+     `--with-presidio`.
+   - If `ollama` is on PATH, runs `ollama pull qwen2.5:3b`.
+   - Each step reports ✓/✗; a failed step never aborts the others.
 
-### If no arguments (interactive mode)
+3. **Write the optimal-default config (idempotent):**
+   ```bash
+   python3 skills/setup/scripts/setup.py --write-config   # writes only if absent
+   python3 skills/setup/scripts/setup.py --reconfigure    # overwrites with defaults
+   python3 skills/setup/scripts/setup.py --show           # print current config
+   ```
+   On first run with no config present, the script writes the defaults automatically.
+   `--write-config` will **not** clobber an existing (user-customized) config; use
+   `--reconfigure` to force-reset.
 
-Collect each parameter one at a time:
+Config lives at `~/.config/confide/config.json`.
 
-1. **Domain** — Ask: "What domain? (engineering, marketing, content, prompts, custom)"
-2. **Name** — Ask: "Experiment name? (e.g., api-speed, blog-titles)"
-3. **Target file** — Ask: "Which file to optimize?" Verify it exists.
-4. **Eval command** — Ask: "How to measure it? (e.g., pytest bench.py, python evaluate.py)"
-5. **Metric** — Ask: "What metric does the eval output? (e.g., p50_ms, ctr_score)"
-6. **Direction** — Ask: "Is lower or higher better?"
-7. **Evaluator** (optional) — Show built-in evaluators. Ask: "Use a built-in evaluator, or your own?"
-8. **Scope** — Ask: "Store in project (.autoresearch/) or user (~/.autoresearch/)?"
+## Chosen optimal preferences (from SPEC.md)
 
-Then run `setup_experiment.py` with the collected parameters.
+Written from `confide_core.DEFAULTS`:
 
-### Listing
+| Key | Value | Why |
+|---|---|---|
+| `engine` | `ollama` | zero-config, Metal-accelerated, handles long docs (llama.cpp 400s on long RU) |
+| `anon_model` | `qwen2.5:3b` | fast local LLM layer for quasi-PII |
+| `red_attacker_model` | `qwen2.5:3b` | local default; it is a **floor** — a stronger attacker is the true ceiling |
+| `languages` | `["ru", "en"]` | bilingual corpus |
+| `layers` | `["regex", "natasha", "llm"]` | deterministic → RU NER → quasi-PII |
+| `redaction_style` | `typed_placeholder` | `[PERSON]`, `[DATE]`, … (reversible map kept locally, never shipped) |
+| `privacy.local_only` | `true` | raw text never leaves the machine |
+| `privacy.cloud_apis` | `false` | cloud disabled by default |
+| `privacy.cloud_only_on_synthetic` | `true` | cloud attacker only opt-in on synthetic/consented data |
+| `ollama_host` | `http://localhost:11434` | local Ollama |
 
-```bash
-# Show existing experiments
-python {skill_path}/scripts/setup_experiment.py --list
-
-# Show available evaluators
-python {skill_path}/scripts/setup_experiment.py --list-evaluators
-```
-
-## Built-in Evaluators
-
-| Name | Metric | Use Case |
-|------|--------|----------|
-| `benchmark_speed` | `p50_ms` (lower) | Function/API execution time |
-| `benchmark_size` | `size_bytes` (lower) | File, bundle, Docker image size |
-| `test_pass_rate` | `pass_rate` (higher) | Test suite pass percentage |
-| `build_speed` | `build_seconds` (lower) | Build/compile/Docker build time |
-| `memory_usage` | `peak_mb` (lower) | Peak memory during execution |
-| `llm_judge_content` | `ctr_score` (higher) | Headlines, titles, descriptions |
-| `llm_judge_prompt` | `quality_score` (higher) | System prompts, agent instructions |
-| `llm_judge_copy` | `engagement_score` (higher) | Social posts, ad copy, emails |
-
-## After Setup
-
-Report to the user:
-- Experiment path and branch name
-- Whether the eval command worked and the baseline metric
-- Suggest: "Run `/ar:run {domain}/{name}` to start iterating, or `/ar:loop {domain}/{name}` for autonomous mode."
+## Notes
+- llama.cpp is **optional** (reproducible engine) — detected and recorded if present, never required.
+- The bigger attacker model for `confide:red` is optional; the local 3b default under-reports risk.
+- Importable functions for programmatic / tested use: `readiness()`, `ensure_config(reconfigure=False)`,
+  `install(with_presidio=False)`, `show_config()`.
