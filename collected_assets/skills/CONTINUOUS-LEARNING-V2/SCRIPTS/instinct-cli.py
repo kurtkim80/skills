@@ -50,8 +50,13 @@ def parse_instinct_file(content: str) -> list[dict]:
     for line in content.split('\n'):
         if line.strip() == '---':
             if in_frontmatter:
-                # End of frontmatter - content comes next, don't append yet
+                # End of frontmatter
                 in_frontmatter = False
+                if current:
+                    current['content'] = '\n'.join(content_lines).strip()
+                    instincts.append(current)
+                    current = {}
+                    content_lines = []
             else:
                 # Start of frontmatter
                 in_frontmatter = True
@@ -67,7 +72,12 @@ def parse_instinct_file(content: str) -> list[dict]:
                 key = key.strip()
                 value = value.strip().strip('"').strip("'")
                 if key == 'confidence':
-                    current[key] = float(value)
+                    # v16: support both numeric (0.7) and text (HIGH/MEDIUM/LOW) confidence
+                    confidence_map = {'high': 0.9, 'medium': 0.6, 'low': 0.3}
+                    try:
+                        current[key] = float(value)
+                    except ValueError:
+                        current[key] = confidence_map.get(value.lower(), 0.5)
                 else:
                     current[key] = value
         else:
@@ -88,16 +98,14 @@ def load_all_instincts() -> list[dict]:
     for directory in [PERSONAL_DIR, INHERITED_DIR]:
         if not directory.exists():
             continue
-        yaml_files = sorted(
-            set(directory.glob("*.yaml"))
-            | set(directory.glob("*.yml"))
-            | set(directory.glob("*.md"))
-        )
-        for file in yaml_files:
+        for file in list(directory.glob("*.yaml")) + list(directory.glob("*.md")):
             try:
                 content = file.read_text()
                 parsed = parse_instinct_file(content)
                 for inst in parsed:
+                    # v16: .md instincts use 'name' instead of 'id'
+                    if not inst.get('id') and inst.get('name'):
+                        inst['id'] = inst['name'].lower().replace(' ', '-').replace('/', '-')
                     inst['_source_file'] = str(file)
                     inst['_source_type'] = directory.name
                 instincts.extend(parsed)
@@ -438,94 +446,13 @@ def cmd_evolve(args):
             print()
 
     if args.generate:
-        generated = _generate_evolved(skill_candidates, workflow_instincts, agent_candidates)
-        if generated:
-            print(f"\n✅ Generated {len(generated)} evolved structures:")
-            for path in generated:
-                print(f"   {path}")
-        else:
-            print("\nNo structures generated (need higher-confidence clusters).")
+        print("\n[Would generate evolved structures here]")
+        print("  Skills would be saved to:", EVOLVED_DIR / "skills")
+        print("  Commands would be saved to:", EVOLVED_DIR / "commands")
+        print("  Agents would be saved to:", EVOLVED_DIR / "agents")
 
     print(f"\n{'='*60}\n")
     return 0
-
-
-# ─────────────────────────────────────────────
-# Generate Evolved Structures
-# ─────────────────────────────────────────────
-
-def _generate_evolved(skill_candidates: list, workflow_instincts: list, agent_candidates: list) -> list[str]:
-    """Generate skill/command/agent files from analyzed instinct clusters."""
-    generated = []
-
-    # Generate skills from top candidates
-    for cand in skill_candidates[:5]:
-        trigger = cand['trigger'].strip()
-        if not trigger:
-            continue
-        name = re.sub(r'[^a-z0-9]+', '-', trigger.lower()).strip('-')[:30]
-        if not name:
-            continue
-
-        skill_dir = EVOLVED_DIR / "skills" / name
-        skill_dir.mkdir(parents=True, exist_ok=True)
-
-        content = f"# {name}\n\n"
-        content += f"Evolved from {len(cand['instincts'])} instincts "
-        content += f"(avg confidence: {cand['avg_confidence']:.0%})\n\n"
-        content += f"## When to Apply\n\n"
-        content += f"Trigger: {trigger}\n\n"
-        content += f"## Actions\n\n"
-        for inst in cand['instincts']:
-            inst_content = inst.get('content', '')
-            action_match = re.search(r'## Action\s*\n\s*(.+?)(?:\n\n|\n##|$)', inst_content, re.DOTALL)
-            action = action_match.group(1).strip() if action_match else inst.get('id', 'unnamed')
-            content += f"- {action}\n"
-
-        (skill_dir / "SKILL.md").write_text(content)
-        generated.append(str(skill_dir / "SKILL.md"))
-
-    # Generate commands from workflow instincts
-    for inst in workflow_instincts[:5]:
-        trigger = inst.get('trigger', 'unknown')
-        cmd_name = re.sub(r'[^a-z0-9]+', '-', trigger.lower().replace('when ', '').replace('implementing ', ''))
-        cmd_name = cmd_name.strip('-')[:20]
-        if not cmd_name:
-            continue
-
-        cmd_file = EVOLVED_DIR / "commands" / f"{cmd_name}.md"
-        content = f"# {cmd_name}\n\n"
-        content += f"Evolved from instinct: {inst.get('id', 'unnamed')}\n"
-        content += f"Confidence: {inst.get('confidence', 0.5):.0%}\n\n"
-        content += inst.get('content', '')
-
-        cmd_file.write_text(content)
-        generated.append(str(cmd_file))
-
-    # Generate agents from complex clusters
-    for cand in agent_candidates[:3]:
-        trigger = cand['trigger'].strip()
-        agent_name = re.sub(r'[^a-z0-9]+', '-', trigger.lower()).strip('-')[:20]
-        if not agent_name:
-            continue
-
-        agent_file = EVOLVED_DIR / "agents" / f"{agent_name}.md"
-        domains = ', '.join(cand['domains'])
-        instinct_ids = [i.get('id', 'unnamed') for i in cand['instincts']]
-
-        content = f"---\nmodel: sonnet\ntools: Read, Grep, Glob\n---\n"
-        content += f"# {agent_name}\n\n"
-        content += f"Evolved from {len(cand['instincts'])} instincts "
-        content += f"(avg confidence: {cand['avg_confidence']:.0%})\n"
-        content += f"Domains: {domains}\n\n"
-        content += f"## Source Instincts\n\n"
-        for iid in instinct_ids:
-            content += f"- {iid}\n"
-
-        agent_file.write_text(content)
-        generated.append(str(agent_file))
-
-    return generated
 
 
 # ─────────────────────────────────────────────

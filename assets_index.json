@@ -1362,11 +1362,11 @@
     "dependency-upgrade": {
       "name": "dependency-upgrade",
       "type": "skill",
-      "description": "Master major dependency version upgrades, compatibility analysis, staged upgrade strategies, and comprehensive testing approaches.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": "Manage major dependency version upgrades with compatibility analysis, staged rollout, and comprehensive testing. Use when upgrading framework versions, updating major dependencies, or managing breaking changes in libraries.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/dependency-upgrade",
-      "description_ko": "주요 종속성 버전 업그레이드, 호환성 분석, 단계별 업그레이드 전략 및 포괄적인 테스트 접근 방식을 마스터하세요."
+      "description_ko": "호환성 분석, 단계적 출시, 포괄적인 테스트를 통해 주요 종속성 버전 업그레이드를 관리하세요. 프레임워크 버전을 업그레이드하거나, 주요 종속성을 업데이트하거나, 라이브러리의 주요 변경 사항을 관리할 때 사용합니다."
     },
     "database-migration": {
       "name": "database-migration",
@@ -1516,8 +1516,8 @@
       "name": "stride-analysis-patterns",
       "type": "skill",
       "description": "Apply STRIDE methodology to systematically identify threats. Use when analyzing system security, conducting threat modeling sessions, or creating security documentation.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/stride-analysis-patterns",
       "description_ko": "STRIDE 방법론을 적용하여 위협을 체계적으로 식별합니다. 시스템 보안 분석, 위협 모델링 세션 수행 또는 보안 문서 작성 시 사용합니다."
     },
@@ -2271,11 +2271,11 @@
     "debugging-strategies": {
       "name": "debugging-strategies",
       "type": "skill",
-      "description": "Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": "Master systematic debugging techniques, profiling tools, and root cause analysis to efficiently track down bugs across any codebase or technology stack. Use when investigating bugs, performance issues, or unexpected behavior.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/debugging-strategies",
-      "description_ko": "입증된 전략, 강력한 도구 및 체계적인 접근 방식을 통해 디버깅을 좌절스러운 추측에서 체계적인 문제 해결로 전환합니다."
+      "description_ko": "체계적인 디버깅 기술, 프로파일링 도구 및 근본 원인 분석을 마스터하여 모든 코드베이스 또는 기술 스택에서 버그를 효율적으로 추적합니다. 버그, 성능 문제 또는 예상치 못한 동작을 조사할 때 사용합니다."
     },
     "code-review-excellence": {
       "name": "code-review-excellence",
@@ -21330,11 +21330,11 @@
     "systematic-debugging": {
       "name": "systematic-debugging",
       "type": "skill",
-      "description": "Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/systematic-debugging",
-      "description_ko": "수정 사항을 제안하기 전에 버그, 테스트 실패 또는 예상치 못한 동작이 발생할 때 사용하세요."
+      "description_ko": "|"
     },
     "makepad-dsl": {
       "name": "makepad-dsl",
@@ -23707,8 +23707,8 @@
       "name": "using-superpowers",
       "type": "skill",
       "description": "Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/using-superpowers",
       "description_ko": "대화를 시작할 때 사용 - 기술을 찾고 사용하는 방법을 설정하며, 명확한 질문을 포함하여 모든 응답 전에 기술 도구를 호출해야 합니다."
     },
@@ -24300,11 +24300,11 @@
     "skill-check": {
       "name": "skill-check",
       "type": "skill",
-      "description": "Validate Claude Code skills against the agentskills specification. Catches structural, semantic, and naming issues before users do.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": ">-",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
       "path": "collected_assets/skills/skill-check",
-      "description_ko": "Agentkills 사양을 기준으로 Claude Code 기술을 검증합니다. 사용자보다 먼저 구조적, 의미적, 명명 문제를 포착합니다."
+      "description_ko": ">-"
     },
     "azure-mgmt-applicationinsights-dotnet": {
       "name": "azure-mgmt-applicationinsights-dotnet",
@@ -29898,11 +29898,11 @@
     "manage-skills": {
       "name": "manage-skills",
       "type": "skill",
-      "description": "Discover, list, create, edit, toggle, copy, move, and delete AI agent skills across 11 tools (Cursor, Claude, Agents, Windsurf, Copilot, Codex, Cline, Aider, Continue, Roo Code, Augment)",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": "세션 변경사항을 분석하여 검증 스킬 누락을 탐지합니다. 기존 스킬을 동적으로 탐색하고, 새 스킬을 생성하거나 기존 스킬을 업데이트한 뒤 프로젝트 CLAUDE.md를 관리합니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/skills/manage-skills",
-      "description_ko": "11개 도구(Cursor, Claude, Agents, Windsurf, Copilot, Codex, Cline, Aider, Continue, Roo Code, Augment)에서 AI 에이전트 기술을 검색, 나열, 생성, 편집, 전환, 복사, 이동 및 삭제합니다."
+      "description_ko": "세션 변경사항을 분석하여 검증 스킬 누락을 탐지합니다. 기존 스킬을 동적으로 탐색하고, 새 스킬을 생성하거나 기존 스킬을 업데이트한 뒤 프로젝트 CLAUDE.md를 관리합니다."
     },
     "hugging-face-jobs": {
       "name": "hugging-face-jobs",
@@ -43790,6 +43790,312 @@
       "source_name": "Misaka-Mikoto-Tech/agent-skills",
       "path": "collected_assets/skills/powershell-safe-invocation",
       "description_ko": "Windows에서 PowerShell, 특히 기본 프로그램, 인용 경로, 이스케이프, pwsh, 시작 프로세스, 파일 작업 또는 셸 문제 해결을 작성하거나 실행할 때 사용합니다."
+    },
+    "zsh-shell": {
+      "name": "zsh-shell",
+      "type": "skill",
+      "description": "Zsh shell skill for macOS environments. Use this skill whenever: writing or running shell commands on macOS, debugging shell errors (glob failures, unbound variables, command not found), working with Oh My Zsh (plugins, themes, custom configs), the user mentions .zshrc/.zprofile/terminal customization, shell scripts fail with zsh-specific errors, the user asks about Homebrew/nvm/uv/dev environment setup, the user wants to learn terminal or shell scripting skills, Claude Code hits PATH or environment issues on macOS. This skill prevents the #1 class of macOS Claude Code failures: bash/zsh incompatibility. Also triggers for any request mentioning 'terminal', 'shell', 'command line', 'zsh', 'oh my zsh', or references to curriculum chapters.",
+      "source_repo": "https://github.com/martin-gleason/zsh_shell_skill_for_claude.git",
+      "source_name": "martin-gleason/zsh_shell_skill_for_claude",
+      "path": "collected_assets/skills/zsh-shell",
+      "description_ko": "macOS 환경을 위한 Zsh 쉘 기술. 언제든지 이 기술을 사용하십시오. macOS에서 셸 명령 작성 또는 실행, 셸 오류 디버깅(glob 오류, 바인딩 해제된 변수, 명령을 찾을 수 없음), Oh My Zsh(플러그인, 테마, 사용자 정의 구성) 작업, 사용자가 .zshrc/.zprofile/terminal 사용자 정의 언급, 셸 스크립트가 zsh 관련 오류로 실패, 사용자가 Homebrew/nvm/uv/dev 환경 설정에 대해 질문, 사용자가 터미널 또는 셸 스크립팅 기술을 배우고 싶어, Claude 코드가 PATH 또는 환경에 도달함 macOS의 문제. 이 기술은 macOS Claude Code 오류의 1위 클래스인 bash/zsh 비호환성을 방지합니다. 또한 '터미널', '셸', '명령줄', 'zsh', 'oh my zsh' 또는 커리큘럼 장에 대한 참조를 언급하는 요청에 대해서도 트리거됩니다."
+    },
+    "korean-spell-check": {
+      "name": "korean-spell-check",
+      "type": "skill",
+      "description": "Use Nara/PNU Korean spell-check surfaces conservatively to proofread Korean text, chunk long input, and return change-focused correction suggestions.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/korean-spell-check",
+      "description_ko": "나라/PNU 한국어 맞춤법 검사 화면을 보수적으로 사용하여 한국어 텍스트를 교정하고, 긴 입력을 청크하고, 변경 중심 수정 제안을 반환합니다."
+    },
+    "evaluating-code-models": {
+      "name": "evaluating-code-models",
+      "type": "skill",
+      "description": "Evaluates code generation models across HumanEval, MBPP, MultiPL-E, and 15+ benchmarks with pass@k metrics. Use when benchmarking code models, comparing coding abilities, testing multi-language support, or measuring code generation quality. Industry standard from BigCode Project used by HuggingFace leaderboards.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/evaluating-code-models",
+      "description_ko": "pass@k 지표를 사용하여 HumanEval, MBPP, MultiPL-E 및 15개 이상의 벤치마크에서 코드 생성 모델을 평가합니다. 코드 모델 벤치마킹, 코딩 능력 비교, 다국어 지원 테스트 또는 코드 생성 품질 측정 시 사용합니다. HuggingFace 순위표에서 사용되는 BigCode 프로젝트의 업계 표준입니다."
+    },
+    "prompts-chat": {
+      "name": "prompts-chat",
+      "type": "skill",
+      "description": "Use when searching, installing, or improving AI skills and prompts via prompts.chat or skills.sh. Triggers on skill search, prompt lookup, install skill, improve prompt, prompts.chat.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/prompts-chat",
+      "description_ko": "Prompts.chat 또는 Skill.sh를 통해 AI 기술 및 프롬프트를 검색, 설치 또는 개선할 때 사용합니다. 스킬 검색, 프롬프트 조회, 스킬 설치, 프롬프트 개선, 프롬프트.채팅에서 트리거됩니다."
+    },
+    "verification-engine": {
+      "name": "verification-engine",
+      "type": "skill",
+      "description": "Use when verifying build/test/lint before commit, PR, or completion claims. Runs verification pipeline in fresh subagent context with auto-repair. Triggers on /handoff-verify, pre-commit check, build verification, test validation.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/verification-engine",
+      "description_ko": "커밋, PR 또는 완료 요청 전에 빌드/테스트/린트를 확인할 때 사용합니다. 자동 복구를 통해 새로운 하위 에이전트 컨텍스트에서 확인 파이프라인을 실행합니다. /handoff-verify, 커밋 전 확인, 빌드 확인, 테스트 검증을 트리거합니다."
+    },
+    "session-wrap": {
+      "name": "session-wrap",
+      "type": "skill",
+      "description": "Use when wrapping up a session before ending. 4 parallel subagents detect doc updates, repeated patterns, learning points, and follow-ups, then a verifier deduplicates and presents choices. Triggers on /session-wrap, session wrap, session cleanup, end of session.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/session-wrap",
+      "description_ko": "세션을 종료하기 전에 마무리할 때 사용합니다. 4개의 병렬 하위 에이전트가 문서 업데이트, 반복 패턴, 학습 포인트 및 후속 조치를 감지한 후 검증자가 중복을 제거하고 선택 사항을 제시합니다. /session-wrap, 세션 랩, 세션 정리, 세션 종료 시 트리거됩니다."
+    },
+    "cc-dev-agent": {
+      "name": "cc-dev-agent",
+      "type": "skill",
+      "description": "Use when starting Claude Code projects, writing CLAUDE.md/spec.md, dispatching subagents, or requesting Agent Teams parallel development. Covers Spec-Driven Development, Context Engineering, and post-dev workflow.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/cc-dev-agent",
+      "description_ko": "Claude Code 프로젝트 시작, CLAUDE.md/spec.md 작성, 하위 에이전트 파견 또는 에이전트 팀 병렬 개발 요청 시 사용하세요. 사양 기반 개발, 컨텍스트 엔지니어링, 개발 후 워크플로우를 다룹니다."
+    },
+    "eval-harness": {
+      "name": "eval-harness",
+      "type": "skill",
+      "description": "Formal evaluation framework for Claude Code sessions implementing eval-driven development (EDD) principles",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/eval-harness",
+      "description_ko": "평가 중심 개발(EDD) 원칙을 구현하는 Claude Code 세션을 위한 공식 평가 프레임워크"
+    },
+    "frontend-code-review": {
+      "name": "frontend-code-review",
+      "type": "skill",
+      "description": "Trigger when the user requests a review of frontend files (e.g., `.tsx`, `.ts`, `.js`). Support both pending-change reviews and focused file reviews while applying the checklist rules.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/frontend-code-review",
+      "description_ko": "사용자가 프런트엔드 파일(예: `.tsx`, `.ts`, `.js`) 검토를 요청할 때 트리거됩니다. 체크리스트 규칙을 적용하는 동안 보류 중인 변경 검토와 집중 파일 검토를 모두 지원합니다."
+    },
+    "cache-components": {
+      "name": "cache-components",
+      "type": "skill",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/cache-components",
+      "description_ko": "|"
+    },
+    "summarize": {
+      "name": "summarize",
+      "type": "skill",
+      "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/summarize",
+      "description_ko": "URL, 팟캐스트, 로컬 파일에서 텍스트/대본을 요약하거나 추출합니다. (\"이 YouTube/동영상 내용 변환\"에 대한 훌륭한 대안)"
+    },
+    "blind-spot-pass": {
+      "name": "blind-spot-pass",
+      "type": "skill",
+      "description": "Use *before* starting work in a domain you don't know well, to surface the \"unknown unknowns\" — the things you don't even know to ask about — and learn just enough to prompt and decide well. Implements the \"blind spot pass\" pattern from Anthropic's Fable \"finding your unknowns\" field guide. Triggers when you say \"I'm new to this\", \"I don't know what to ask\", \"teach me before we start\", \"blind spot pass\", \"unknown unknowns\", \"find my unknowns\", or the Korean \"내가 뭘 모르는지 알려줘\" / \"이 분야 처음인데\" / \"먼저 가르쳐줘\" / \"블라인드 스팟\", or when you hand off a task while admitting you're a non-expert in that field (color grading, video editing, legal, tax, finance, design, an unfamiliar codebase, etc.). Do NOT use for simple factual questions, domains you already know, or directly-actionable work — answer those directly or route to planner / architect.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/blind-spot-pass",
+      "description_ko": "잘 모르는 영역에서 작업을 시작하기 *전에* 사용하여 \"알 수 없는 사항\"(물어볼 수도 없는 사항)을 표면화하고 메시지를 표시하고 잘 결정할 수 있을 만큼만 알아보세요. Anthropic's Fable의 \"미지의 존재 찾기\" 현장 가이드에서 \"사각지대 통과\" 패턴을 구현합니다. \"저는 이 분야가 처음이에요\", \"무엇을 물어봐야 할지 모르겠어요\", \"시작하기 전에 가르쳐주세요\", \"사각지대 통과\", \"알 수 없는 미지\", \"미지의 존재를 찾아주세요\"라고 말할 때 트리거됩니다. 또는 한국어 \"내가 무엇인지 알려줘\" / \"이렇게 처음인데\" / \"먼저 마셔줘\" / \"블라인드 장면\"이라고 말하거나 해당 분야의 비전문가임을 인정하면서 작업을 넘겨줄 때(컬러 그레이딩, 비디오 편집, 법률, 세금, 금융, 디자인, 익숙하지 않은 코드베이스 등). 단순한 사실 질문, 이미 알고 있는 영역 또는 직접 실행 가능한 작업에는 사용하지 마세요. 직접 답변하거나 기획자/설계자에게 전달하세요."
+    },
+    "humanize-korean": {
+      "name": "humanize-korean",
+      "type": "skill",
+      "description": "Clean up translation-ese and AI-writing tics in Korean prose so it reads like a person wrote it — content (facts, numbers, proper nouns, quotes) stays 100% unchanged, only style and rhythm are touched. Single-pass, done in this session. Triggers — AI 티 없애줘, 번역투 고쳐줘, 한글 자연스럽게 윤문해줘, sounds like a machine translation, remove AI tells from this Korean text, make this Korean read naturally. Not for: marketing copy generation (write it clean the first time — see rules/korean-writing-quality.md), English text, plain spell-check (see korean-spell-check), or book-length manuscripts.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/humanize-korean",
+      "description_ko": "한국어 산문의 번역 및 AI 작성 틱을 정리하여 사람이 쓴 것처럼 읽힙니다. 내용(사실, 숫자, 고유명사, 인용문)은 100% 변경되지 않고 스타일과 리듬만 변경됩니다. 이 세션에서 단일 패스가 완료되었습니다. Triggers — AI 티 자르기 줘, 텍스트를 넣어줘, 글자 윤문해줘, 기계 번역처럼 들리네요, 이 한국어 텍스트에서 AI 텔을 제거하고, 이 한국어를 자연스럽게 읽게 만드세요. 적합하지 않은 것: 마케팅 카피 생성(처음에는 깔끔하게 작성하세요 - rule/korean-writing-quality.md 참조), 영어 텍스트, 일반 철자 검사(한국어 철자 검사 참조) 또는 책 길이의 원고."
+    },
+    "skill-factory": {
+      "name": "skill-factory",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/skill-factory",
+      "description_ko": ">"
+    },
+    "korean-character-count": {
+      "name": "korean-character-count",
+      "type": "skill",
+      "description": "Count Korean text deterministically with exact grapheme, line, and byte contracts for self-intros and form limits.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/korean-character-count",
+      "description_ko": "자기 소개 및 형식 제한에 대한 정확한 자소, 행 및 바이트 계약을 사용하여 결정론적으로 한국어 텍스트를 계산합니다."
+    },
+    "verify-implementation": {
+      "name": "verify-implementation",
+      "type": "skill",
+      "description": "프로젝트의 모든 verify 스킬을 실행하여 통합 패턴 검증 보고서를 생성합니다. 기능 구현 후, PR 전, 코드 리뷰 시 사용.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/verify-implementation",
+      "description_ko": "프로젝트의 모든 verify 스킬을 실행하여 통합 패턴 검증 보고서를 생성합니다. 기능 구현 후, PR 전, 코드 리뷰 시 사용."
+    },
+    "loop-forge": {
+      "name": "loop-forge",
+      "type": "skill",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/loop-forge",
+      "description_ko": "|"
+    },
+    "team-orchestrator": {
+      "name": "team-orchestrator",
+      "type": "skill",
+      "description": "Use when orchestrating Agent Teams for parallel development - team composition, task distribution, dependency management, and result aggregation. Triggers on /orchestrate, multi-agent coordination, parallel team work, task delegation to teammates.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/team-orchestrator",
+      "description_ko": "팀 구성, 작업 배포, 종속성 관리, 결과 집계 등 병렬 개발을 위해 에이전트 팀을 조정할 때 사용합니다. /조정, 다중 에이전트 조정, 병렬 팀 작업, 팀원에 대한 작업 위임을 트리거합니다."
+    },
+    "harness-diet": {
+      "name": "harness-diet",
+      "type": "skill",
+      "description": "Measure and shrink the always-loaded context of a Claude Code harness (CLAUDE.md + rules without paths frontmatter) back under budget — migrate narrative to reference files, convert rules to path-scoped or skill-triggered loading, and verify zero governance loss with deterministic preservation checks. Use on \"harness diet\", \"context diet\", \"rules diet\", \"CLAUDE.md too long\", \"always-load budget\", \"trim my rules\", \"context bloat\", \"하네스 다이어트\", \"룰 다이어트\", \"컨텍스트 다이어트\", \"always-load 줄여줘\". Not for one-off prose editing or project docs cleanup.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/harness-diet",
+      "description_ko": "항상 로드되는 Claude 코드 하니스(CLAUDE.md + 경로가 없는 규칙)의 컨텍스트를 예산에 맞게 측정하고 축소합니다. 내러티브를 참조 파일로 마이그레이션하고, 규칙을 경로 범위 또는 스킬 트리거 로드로 변환하고, 결정론적 보존 확인을 통해 거버넌스 손실이 없는지 확인합니다. \"하네스 다이어트\", \"컨텍스트 다이어트\", \"규칙 다이어트\", \"CLAUDE.md가 너무 길다\", \"always-load Budget\", \"trim my rule\", \"context bloat\", \"하네스 다이어트\", \"룰 다이어트\", \"컨텍스트 다이어트\", \"always-load 경계줘\"에 사용하세요. 일회성 산문 편집이나 프로젝트 문서 정리에는 적합하지 않습니다."
+    },
+    "review-loop": {
+      "name": "review-loop",
+      "type": "skill",
+      "description": "Run the adversarial verification loop — implement, then hand the change to a fresh checker that did not write it, fix what it finds, and re-dispatch until APPROVE. Use before claiming any behavioural change is done, and on requests like \"review loop\", \"adversarial review\", \"independent review\", \"get this verified\", \"is this actually done\", \"maker checker\", \"second pair of eyes on this change\". Not for prose, docs or typo edits.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/review-loop",
+      "description_ko": "적대적 검증 루프를 실행합니다. 구현한 다음 변경 사항을 작성하지 않은 새로운 검사기에 전달하고 찾은 내용을 수정한 다음 승인될 때까지 다시 디스패치합니다. 행동 변화가 완료되었다고 주장하기 전, 그리고 \"검토 루프\", \"적대적 검토\", \"독립 검토\", \"검증 받기\", \"실제로 수행되었는지\", \"제작자 검사기\", \"이 변경에 대한 두 번째 눈\"과 같은 요청에 사용하세요. 산문, 문서 또는 오타 편집에는 적합하지 않습니다."
+    },
+    "continuous-learning-v2": {
+      "name": "continuous-learning-v2",
+      "type": "skill",
+      "description": "Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/continuous-learning-v2",
+      "description_ko": "후크를 통해 세션을 관찰하고, 신뢰도 점수를 통해 원자적 본능을 생성하고, 이를 기술/명령/에이전트로 발전시키는 본능 기반 학습 시스템입니다."
+    },
+    "extract-errors": {
+      "name": "extract-errors",
+      "type": "skill",
+      "description": "Use when adding new error messages to React, or seeing \"unknown error code\" warnings.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/extract-errors",
+      "description_ko": "React에 새로운 오류 메시지를 추가하거나 \"알 수 없는 오류 코드\" 경고를 볼 때 사용합니다."
+    },
+    "relay": {
+      "name": "relay",
+      "type": "skill",
+      "description": "Session relay — compresses what's been done so far (writes a one-liner for /compact) and generates a \"next task\" prompt (a baton) for the user to hand off. Use on requests like \"relay / hand off / next session / continue after compact / baton / handoff / clean up context and continue next task.\" Does not run /compact itself (a skill cannot do that) — it produces the one-liner the user pastes in.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/relay",
+      "description_ko": "세션 릴레이 — 지금까지 수행된 작업을 압축하고(/compact에 대해 한 줄로 작성) 사용자가 넘겨줄 \"다음 작업\" 프롬프트(봉)를 생성합니다. \"릴레이/핸드오프/다음 세션/압축 후 계속/배턴/핸드오프/컨텍스트 정리 및 다음 작업 계속\"과 같은 요청에 사용하세요. 자체적으로 /compact를 실행하지 않습니다(스킬로는 이를 수행할 수 없음). 사용자가 붙여넣는 한 줄짜리 항목을 생성합니다."
+    },
+    "build-system": {
+      "name": "build-system",
+      "type": "skill",
+      "description": "Use when detecting and running project build systems automatically. Supports npm/yarn/pnpm/pip/poetry/gradle/maven/cargo/go/make. Triggers on build, test run, project setup, package manager detection.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/build-system",
+      "description_ko": "프로젝트 빌드 시스템을 자동으로 감지하고 실행할 때 사용합니다. npm/yarn/pnpm/pip/poetry/gradle/maven/cargo/go/make를 지원합니다. 빌드, 테스트 실행, 프로젝트 설정, 패키지 관리자 감지 시 트리거됩니다."
+    },
+    "security-compliance": {
+      "name": "security-compliance",
+      "type": "skill",
+      "description": "Guides security professionals in implementing defense-in-depth security architectures, achieving compliance with industry frameworks (SOC2, ISO27001, GDPR, HIPAA), conducting threat modeling and risk assessments, managing security operations and incident response, and embedding security throughout the SDLC.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/security-compliance",
+      "description_ko": "심층 방어 보안 아키텍처 구현, 업계 프레임워크(SOC2, ISO27001, GDPR, HIPAA) 준수 달성, 위협 모델링 및 위험 평가 수행, 보안 운영 및 사고 대응 관리, SDLC 전체에 보안 내장에 대해 보안 전문가를 안내합니다."
+    },
+    "evaluating-llms-harness": {
+      "name": "evaluating-llms-harness",
+      "type": "skill",
+      "description": "Evaluates LLMs across 60+ academic benchmarks (MMLU, HumanEval, GSM8K, TruthfulQA, HellaSwag). Use when benchmarking model quality, comparing models, reporting academic results, or tracking training progress. Industry standard used by EleutherAI, HuggingFace, and major labs. Supports HuggingFace, vLLM, APIs.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/evaluating-llms-harness",
+      "description_ko": "60개 이상의 학술 벤치마크(MMLU, HumanEval, GSM8K, TruthfulQA, HellaSwag)에서 LLM을 평가합니다. 모델 품질을 벤치마킹하고, 모델을 비교하고, 학문적 결과를 보고하거나 훈련 진행 상황을 추적할 때 사용합니다. EleutherAI, HuggingFace 및 주요 연구소에서 사용하는 산업 표준입니다. HuggingFace, vLLM, API를 지원합니다."
+    },
+    "strategic-compact": {
+      "name": "strategic-compact",
+      "type": "skill",
+      "description": "Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/strategic-compact",
+      "description_ko": "임의의 자동 압축이 아닌 작업 단계를 통해 컨텍스트를 보존하기 위해 논리적 간격으로 수동 컨텍스트 압축을 제안합니다."
+    },
+    "security-pipeline": {
+      "name": "security-pipeline",
+      "type": "skill",
+      "description": "Use when security verification is needed - pre-commit security checks, vulnerability scanning, STRIDE threat analysis. Integrates with /handoff-verify --security and /commit-push-pr. CWE Top 25 based.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/skills/security-pipeline",
+      "description_ko": "보안 검증이 필요할 때 사용하세요 - 커밋 전 보안 검사, 취약점 스캐닝, STRIDE 위협 분석. /handoff-verify --security 및 /commit-push-pr과 통합됩니다. CWE 상위 25개 기반."
+    },
+    "skill": {
+      "name": "new-claude-tab",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/akexorcist/zsh-warp-claude-tab.git",
+      "source_name": "akexorcist/zsh-warp-claude-tab",
+      "path": "collected_assets/skills/skill",
+      "description_ko": ">"
+    },
+    "ux-guidelines": {
+      "name": "ux-guidelines",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
+      "path": "collected_assets/skills/ux-guidelines",
+      "description_ko": ">-"
+    },
+    "sh-check": {
+      "name": "sh-check",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
+      "path": "collected_assets/skills/sh-check",
+      "description_ko": ">-"
+    },
+    "skill-create": {
+      "name": "skill-create",
+      "type": "skill",
+      "description": "Create a skill, or improve and evaluate an existing one. Use to build one from scratch, edit or optimize it, run evals or benchmarks, tune a description for triggering accuracy, or on \"스킬 만들어줘\", \"/authoring:skill-create\". Authoring — authoring:skill-check audits.",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
+      "path": "collected_assets/skills/skill-create",
+      "description_ko": "기술을 만들거나 기존 기술을 개선하고 평가합니다. 처음부터 새로 만들고, 편집 또는 최적화하고, 평가 또는 벤치마크를 실행하고, 정확도 트리거에 대한 설명을 조정하거나 \"스킬 만들어줘\", \"/authoring:skill-create\"에 사용하세요. 저작 — 저작:기술 점검 감사."
+    },
+    "command-rename": {
+      "name": "command-rename",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
+      "path": "collected_assets/skills/command-rename",
+      "description_ko": ">-"
+    },
+    "skill-refactor": {
+      "name": "skill-refactor",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
+      "path": "collected_assets/skills/skill-refactor",
+      "description_ko": ">-"
     }
   },
   "commands": {
@@ -44174,11 +44480,11 @@
     "eval": {
       "name": "eval",
       "type": "command",
-      "description": "Evaluate a plugin or skill for quality",
-      "source_repo": "https://github.com/wshobson/agents.git",
-      "source_name": "wshobson/agents",
+      "description": "Manage eval-driven development workflow (define, check, report, list)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/commands/eval.md",
-      "description_ko": "플러그인이나 기술의 품질 평가"
+      "description_ko": "평가 중심 개발 워크플로우 관리(정의, 확인, 보고, 나열)"
     },
     "certify": {
       "name": "certify",
@@ -44273,11 +44579,11 @@
     "refactor-clean": {
       "name": "refactor-clean",
       "type": "command",
-      "description": "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyz",
-      "source_repo": "https://github.com/wshobson/agents.git",
-      "source_name": "wshobson/agents",
+      "description": "Safely identify and remove dead code with test verification",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/commands/refactor-clean.md",
-      "description_ko": "귀하는 클린 코드 원칙, SOLID 디자인 패턴 및 최신 소프트웨어 엔지니어링 모범 사례를 전문으로 하는 코드 리팩토링 전문가입니다. 분석"
+      "description_ko": "테스트 검증으로 데드코드를 안전하게 식별 및 제거"
     },
     "tech-debt": {
       "name": "tech-debt",
@@ -45047,11 +45353,11 @@
     "tdd": {
       "name": "tdd",
       "type": "command",
-      "description": "Run a red-green-refactor TDD workflow — generate failing tests first, implement to green, then check coverage gaps. Usage: /tdd. Slash command for Claude Code, Codex CLI, Gemini CLI.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
+      "description": "테스트 먼저 만들고 코드 작성. 한 단위 작업에 사용.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/commands/tdd.md",
-      "description_ko": "빨간색-녹색-리팩터링 TDD 워크플로를 실행합니다. 먼저 실패한 테스트를 생성하고 녹색으로 구현한 다음 적용 범위 격차를 확인합니다. 사용법: /tdd. Claude Code, Codex CLI, Gemini CLI에 대한 슬래시 명령입니다."
+      "description_ko": "테스트 먼저 만들고 코드 작성. 한 단위 작업에 사용."
     },
     "user-story": {
       "name": "user-story",
@@ -45317,11 +45623,11 @@
     "update-docs": {
       "name": "update-docs",
       "type": "command",
-      "description": "Update all the documentation related files.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
+      "description": "Sync documentation from source-of-truth (package.json, .env.example)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/commands/update-docs.md",
-      "description_ko": "모든 문서 관련 파일을 업데이트합니다."
+      "description_ko": "진실의 근원(package.json, .env.example)에서 문서 동기화"
     },
     "README": {
       "name": "README",
@@ -47617,6 +47923,321 @@
       "source_name": "Qovery/qovery-skills",
       "path": "collected_assets/commands/qovery-preview.md",
       "description_ko": "Qovery를 사용하여 PR 또는 지점에 대한 미리보기 환경 만들기"
+    },
+    "security-review": {
+      "name": "security-review",
+      "type": "command",
+      "description": "CWE 기반 보안 검토 + STRIDE 위협 모델링 (v6 - effort:max 강제)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/security-review.md",
+      "description_ko": "CWE 기반 보안 검토 + STRIDE 위치 관계(v6 - 노력:최대 강제)"
+    },
+    "agent-router": {
+      "name": "agent-router",
+      "type": "command",
+      "description": "전문 에이전트 자동 라우팅. 법률, 재무, 특허, SEO, 마케팅, 기획, BM 설계(BMC/Lean/JTBD/Wardley/Blue Ocean/Lightning Sprint), 코드리뷰, 아키텍처, 견적, CRM, HR/인사, 노무(노동법/해고/산재/취업규칙), 리서치, 데이터 분석, 제1원칙 사고, 주식 투자, 부동산 투자, 명리학, 회사운영(노란우산/창업혜택/고용지원/세무일정), 디자인 제작(배너/카드뉴스/SNS/광고/인포그래픽), FAQ/지식베이스(KCS/셀프서비스/아티클), 고객지원(CS응답/에스컬레이션) 등 50+ 에이전트",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/agent-router.md",
+      "description_ko": "전문 에이전트 자동 라우팅. 법률, 재무, 특허, SEO, 마케팅, 기획, BM 설계(BMC/Lean/JTBD/Wardley/Blue Ocean/Lightning Sprint), 코드리뷰, 아키텍처, 견적, CRM, HR/인사, 노무(노동법/해고/산재/취업규칙), 리서치, 데이터 분석, 제1원칙 사고, 주식 투자, 부동산 투자, 명리학, 회사운영(노란우산/창업혜택/고용지원/세무일정), 디자인 제작(배너/카드뉴스/SNS/광고/인포그래픽), FAQ/지식베이스(KCS/셀프서비스/아티클), 고객지원(CS응답/에스컬레이션) 등 50+ 에이전트"
+    },
+    "explore": {
+      "name": "explore",
+      "type": "command",
+      "description": "코드베이스를 탐색하여 구조를 파악합니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/explore.md",
+      "description_ko": "코드베이스를 탐색하여 구조를 파악합니다."
+    },
+    "learn": {
+      "name": "learn",
+      "type": "command",
+      "description": "교훈 기록 + 자동화 제안 (v6 - suggest-automation 통합)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/learn.md",
+      "description_ko": "안드로이드 기능 + 기능 기능(v6 - presents-automation 통합)"
+    },
+    "workflow-classify": {
+      "name": "workflow-classify",
+      "type": "command",
+      "description": "Classify task size (S/M/L/XL) and recommend the appropriate workflow pipeline.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/workflow-classify.md",
+      "description_ko": "작업 규모(S/M/L/XL)를 분류하고 적절한 워크플로우 파이프라인을 추천합니다."
+    },
+    "e2e": {
+      "name": "e2e",
+      "type": "command",
+      "description": "Generate and run end-to-end tests with Playwright. Creates test journeys, runs tests, captures screenshots/videos/traces, and uploads artifacts.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/e2e.md",
+      "description_ko": "Playwright를 사용하여 엔드투엔드 테스트를 생성하고 실행하세요. 테스트 여정을 생성하고, 테스트를 실행하고, 스크린샷/비디오/추적을 캡처하고, 아티팩트를 업로드합니다."
+    },
+    "loop-forge": {
+      "name": "loop-forge",
+      "type": "command",
+      "description": "Turn a one-line repetitive task into a reusable, self-guarding slash command (loop-forge)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/loop-forge.md",
+      "description_ko": "한 줄의 반복 작업을 재사용 가능한 자체 보호 슬래시 명령(loop-forge)으로 전환"
+    },
+    "auto": {
+      "name": "auto",
+      "type": "command",
+      "description": "계획부터 PR까지 원버튼 자동 실행. 중간에 멈추지 않습니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/auto.md",
+      "description_ko": "계획부터 PR까지 원버튼 자동 실행. 중간에 멈추지 않습니다."
+    },
+    "handoff-verify": {
+      "name": "handoff-verify",
+      "type": "command",
+      "description": "8 reviewer 병렬 검증 (Workflow tool 결정론 fan-out + CRITICAL/HIGH adversarial 재검증)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/handoff-verify.md",
+      "description_ko": "8명의 리뷰어 부정 관계 (워크플로 도구 결정론 팬아웃 + CRITICAL/HIGH 적대적 재검증)"
+    },
+    "next-task": {
+      "name": "next-task",
+      "type": "command",
+      "description": "다음 작업 추천 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/next-task.md",
+      "description_ko": "다음 작업 추천 (v6)"
+    },
+    "test-coverage": {
+      "name": "test-coverage",
+      "type": "command",
+      "description": "Analyze test coverage and generate missing tests to reach 80%+ coverage",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/test-coverage.md",
+      "description_ko": "테스트 커버리지를 분석하고 누락된 테스트를 생성하여 80% 이상의 커버리지에 도달"
+    },
+    "build-fix": {
+      "name": "build-fix",
+      "type": "command",
+      "description": "빌드 에러를 자동으로 분석하고 수정합니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/build-fix.md",
+      "description_ko": "빌드 에러를 자동으로 분석하고 수정합니다."
+    },
+    "quick-commit": {
+      "name": "quick-commit",
+      "type": "command",
+      "description": "간단한 수정용 빠른 커밋 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/quick-commit.md",
+      "description_ko": "간단한 수정용 빠른 커밋 (v6)"
+    },
+    "worktree-cleanup": {
+      "name": "worktree-cleanup",
+      "type": "command",
+      "description": "PR 완료 후 Git Worktree 정리 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/worktree-cleanup.md",
+      "description_ko": "PR 마무리 후 Git Worktree 정리 (v6)"
+    },
+    "checkpoint": {
+      "name": "checkpoint",
+      "type": "command",
+      "description": "작업 상태 저장/복원 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/checkpoint.md",
+      "description_ko": "작업 상태 저장/복원 (v6)"
+    },
+    "web-checklist": {
+      "name": "web-checklist",
+      "type": "command",
+      "description": "머지 후 웹 테스트 체크리스트 + 완료 추적 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/web-checklist.md",
+      "description_ko": "머지 후 웹 테스트 체크리스트 + 완료 추적 (v6)"
+    },
+    "verify-loop": {
+      "name": "verify-loop",
+      "type": "command",
+      "description": "자동 재검증 루프 (최대 3회 재시도, 실패 시 자동 수정)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/verify-loop.md",
+      "description_ko": "자동 재검증 루프 (최대 3회 재시도, 실패 시 자동 수정)"
+    },
+    "pull": {
+      "name": "pull",
+      "type": "command",
+      "description": "git pull origin main 빠르게 실행",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/pull.md",
+      "description_ko": "git pull Origin main빠른 실행"
+    },
+    "guide": {
+      "name": "guide",
+      "type": "command",
+      "description": "처음 사용자를 위한 인터랙티브 가이드. 약 3분이면 끝납니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/guide.md",
+      "description_ko": "처음 사용자를 위한 인터랙티브 가이드. 약 3분이면 끝납니다."
+    },
+    "init-project": {
+      "name": "init-project",
+      "type": "command",
+      "description": "프로젝트 초기 설정 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/init-project.md",
+      "description_ko": "프로젝트 초기 설정 (v6)"
+    },
+    "commit-push-pr": {
+      "name": "commit-push-pr",
+      "type": "command",
+      "description": "머지 전 /sync-docs 문서 동기화 의무 게이트 → 검증 → 커밋 & PR & 머지 + MCP 알림 (v7)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/commit-push-pr.md",
+      "description_ko": "머지 전 /sync-docs 문서 동기화 의무 게이트 → 검증 → 커밋 & PR & 머지 + MCP 알림 (v7)"
+    },
+    "sync": {
+      "name": "sync",
+      "type": "command",
+      "description": "git pull + 문서 동기화 통합 (pull → sync-docs v7 순차 실행)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/sync.md",
+      "description_ko": "git pull + 문서 회의 통합(pull → sync-docs v7 순차 실행)"
+    },
+    "code-review": {
+      "name": "code-review",
+      "type": "command",
+      "description": "방금 작성한 코드를 보안+품질 검사합니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/code-review.md",
+      "description_ko": "방금 작성한 코드를 보안+품질 검사합니다."
+    },
+    "worktree-start": {
+      "name": "worktree-start",
+      "type": "command",
+      "description": "병렬 개발용 Git Worktree 생성 + 도메인 템플릿 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/worktree-start.md",
+      "description_ko": "병렬 개발용 Git Worktree 생성 + 도메인 템플릿 (v6)"
+    },
+    "sync-docs": {
+      "name": "sync-docs",
+      "type": "command",
+      "description": "prompt_plan.md, spec.md, CLAUDE.md + rules/ 문서 동기화 (v7.1 — 흩어진 파일 housekeeping scan 통합)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/sync-docs.md",
+      "description_ko": "Prompt_plan.md, spec.md, CLAUDE.md + rule/ 비즈니스 킹 (v7.1 — 흩어진 파일 housekeeping scan 통합)"
+    },
+    "plan": {
+      "name": "plan",
+      "type": "command",
+      "description": "AI가 구현 계획을 세워줍니다. 확인 후 코딩 시작.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/plan.md",
+      "description_ko": "AI가 구현 계획을 세워줍니다. 확인 후 코딩 시작."
+    },
+    "show-setup": {
+      "name": "show-setup",
+      "type": "command",
+      "description": "현재 Claude Forge 설치 상태와 프로젝트 정보를 보여줍니다.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/show-setup.md",
+      "description_ko": "현재 Claude Forge 설치 상태와 프로젝트 정보를 보여줍니다."
+    },
+    "orchestrate": {
+      "name": "orchestrate",
+      "type": "command",
+      "description": "Agent Teams 기반 병렬 오케스트레이션 (v6)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/orchestrate.md",
+      "description_ko": "Agent Teams 기반 병렬 오케스트레이션 (v6)"
+    },
+    "suggest-automation": {
+      "name": "suggest-automation",
+      "type": "command",
+      "description": "반복 패턴 분석하여 자동화 기회 제안 (주기적 실행 권장)",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/suggest-automation.md",
+      "description_ko": "반복 패턴 분석하여 자동화 기회 제안 (주기적 실행 권장)"
+    },
+    "forge-update": {
+      "name": "forge-update",
+      "type": "command",
+      "description": "Claude Forge 프레임워크를 원격에서 최신 버전으로 업데이트",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/forge-update.md",
+      "description_ko": "Claude Forge 프레임워크를 원격에서 최신 버전으로 업데이트"
+    },
+    "update-codemaps": {
+      "name": "update-codemaps",
+      "type": "command",
+      "description": "Analyze codebase structure and update architecture documentation in codemaps/",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/update-codemaps.md",
+      "description_ko": "코드맵/에서 코드베이스 구조를 분석하고 아키텍처 문서를 업데이트합니다."
+    },
+    "instinct-export": {
+      "name": "instinct-export",
+      "type": "command",
+      "description": "Export instincts for sharing with teammates or other projects",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/instinct-export.md",
+      "description_ko": "팀원이나 다른 프로젝트와 공유하기 위한 본능 내보내기"
+    },
+    "instinct-import": {
+      "name": "instinct-import",
+      "type": "command",
+      "description": "Import instincts from teammates, Skill Creator, or other sources",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/instinct-import.md",
+      "description_ko": "팀원, Skill Creator 또는 기타 소스에서 본능 가져오기"
+    },
+    "instinct-status": {
+      "name": "instinct-status",
+      "type": "command",
+      "description": "Show all learned instincts with their confidence levels",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/instinct-status.md",
+      "description_ko": "학습된 본능을 모두 자신감 수준과 함께 표시합니다."
+    },
+    "evolve": {
+      "name": "evolve",
+      "type": "command",
+      "description": "Cluster related instincts into skills, commands, or agents",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/commands/evolve.md",
+      "description_ko": "관련된 본능을 기술, 명령 또는 에이전트로 클러스터링"
     }
   },
   "agents": {
@@ -47633,8 +48254,8 @@
       "name": "grader",
       "type": "agent",
       "description": "Evaluate expectations against an execution transcript and outputs.",
-      "source_repo": "https://github.com/anthropics/skills.git",
-      "source_name": "anthropics/skills",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
       "path": "collected_assets/agents/grader.md",
       "description_ko": "실행 기록 및 출력에 대한 기대치를 평가합니다."
     },
@@ -47642,19 +48263,19 @@
       "name": "comparator",
       "type": "agent",
       "description": "Compare two outputs WITHOUT knowing which skill produced them.",
-      "source_repo": "https://github.com/anthropics/skills.git",
-      "source_name": "anthropics/skills",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
       "path": "collected_assets/agents/comparator.md",
       "description_ko": "어떤 기술이 이를 생성했는지 알지 못한 채 두 가지 출력을 비교합니다."
     },
     "analyzer": {
       "name": "analyzer",
       "type": "agent",
-      "description": "You are analyzing a codebase to understand its architecture for building agent harness infrastructure.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
+      "description": "Analyze blind comparison results to understand WHY the winner won and generate improvement suggestions.",
+      "source_repo": "https://github.com/dEitY719/authoring-skills.git",
+      "source_name": "dEitY719/authoring-skills",
       "path": "collected_assets/agents/analyzer.md",
-      "description_ko": "에이전트 하네스 인프라 구축을 위한 아키텍처를 이해하기 위해 코드베이스를 분석하고 있습니다."
+      "description_ko": "블라인드 비교 결과를 분석하여 승자가 승리한 이유를 이해하고 개선 제안을 생성합니다."
     },
     "payment-integration": {
       "name": "payment-integration",
@@ -47794,11 +48415,11 @@
     "code-reviewer": {
       "name": "code-reviewer",
       "type": "agent",
-      "description": "Foundation Review: Reviews code quality, architecture, design patterns, algorithmic flow, and maintainability. Runs in parallel with other reviewers at Gate 8.",
-      "source_repo": "https://github.com/LerianStudio/ring.git",
-      "source_name": "LerianStudio/ring",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/agents/code-reviewer.md",
-      "description_ko": "기초 검토: 코드 품질, 아키텍처, 디자인 패턴, 알고리즘 흐름 및 유지 관리 가능성을 검토합니다. Gate 8의 다른 리뷰어와 병행하여 실행됩니다."
+      "description_ko": "|"
     },
     "debugger": {
       "name": "debugger",
@@ -48694,11 +49315,11 @@
     "architect": {
       "name": "architect",
       "type": "agent",
-      "description": "Architect agent. Reads orchestrator-output.md, AGENTS.md, and project-doc.md to produce a numbered step-by-step implementation plan. Pauses for human approval before implementation begins.",
-      "source_repo": "https://github.com/wshobson/agents.git",
-      "source_name": "wshobson/agents",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/agents/architect.md",
-      "description_ko": "건축가 에이전트. Orchestrator-output.md, AGENTS.md 및 project-doc.md를 읽어 번호가 매겨진 단계별 구현 계획을 생성합니다. 구현이 시작되기 전에 사람의 승인을 위해 일시 ​​중지합니다."
+      "description_ko": "|"
     },
     "qa": {
       "name": "qa",
@@ -50350,11 +50971,11 @@
     "refactor-cleaner": {
       "name": "refactor-cleaner",
       "type": "agent",
-      "description": ">",
-      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
-      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/agents/refactor-cleaner.md",
-      "description_ko": ">"
+      "description_ko": "|"
     },
     "api-designer": {
       "name": "api-designer",
@@ -50386,11 +51007,11 @@
     "build-error-resolver": {
       "name": "build-error-resolver",
       "type": "agent",
-      "description": ">",
-      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
-      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/agents/build-error-resolver.md",
-      "description_ko": ">"
+      "description_ko": "|"
     },
     "web-research-specialist": {
       "name": "web-research-specialist",
@@ -50647,11 +51268,11 @@
     "security-reviewer": {
       "name": "security-reviewer",
       "type": "agent",
-      "description": "Safety Review: Reviews vulnerabilities, authentication, input validation, and OWASP risks. Runs in parallel with other reviewers at Gate 8.",
-      "source_repo": "https://github.com/LerianStudio/ring.git",
-      "source_name": "LerianStudio/ring",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
       "path": "collected_assets/agents/security-reviewer.md",
-      "description_ko": "안전 검토: 취약점, 인증, 입력 유효성 검사 및 OWASP 위험을 검토합니다. Gate 8의 다른 리뷰어와 병행하여 실행됩니다."
+      "description_ko": "|"
     },
     "backend-ts": {
       "name": "backend-ts",
@@ -53154,6 +53775,114 @@
       "source_name": "Files-com/files-cli",
       "path": "collected_assets/agents/error-catalog.json",
       "description_ko": "{"
+    },
+    "rca-debugger": {
+      "name": "rca-debugger",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/rca-debugger.md",
+      "description_ko": "|"
+    },
+    "verify-agent": {
+      "name": "verify-agent",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/verify-agent.md",
+      "description_ko": "|"
+    },
+    "skeptical-auditor": {
+      "name": "skeptical-auditor",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/skeptical-auditor.md",
+      "description_ko": "|"
+    },
+    "systematic-debugger": {
+      "name": "systematic-debugger",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/systematic-debugger.md",
+      "description_ko": "|"
+    },
+    "doc-updater": {
+      "name": "doc-updater",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/doc-updater.md",
+      "description_ko": "|"
+    },
+    "adversarial-reviewer": {
+      "name": "adversarial-reviewer",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/adversarial-reviewer.md",
+      "description_ko": "|"
+    },
+    "e2e-runner": {
+      "name": "e2e-runner",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/e2e-runner.md",
+      "description_ko": "|"
+    },
+    "tdd-guide": {
+      "name": "tdd-guide",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/tdd-guide.md",
+      "description_ko": "|"
+    },
+    "planner": {
+      "name": "planner",
+      "type": "agent",
+      "description": "|",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/planner.md",
+      "description_ko": "|"
+    },
+    "database-reviewer": {
+      "name": "database-reviewer",
+      "type": "agent",
+      "description": "Use when writing SQL queries, creating migrations, or troubleshooting database performance in Supabase/PostgreSQL projects. Reviews indexes, RLS policies, schema types, N+1 patterns. Read-only reviewer with EXPLAIN ANALYZE capability.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/database-reviewer.md",
+      "description_ko": "Supabase/PostgreSQL 프로젝트에서 SQL 쿼리를 작성하거나, 마이그레이션을 생성하거나, 데이터베이스 성능 문제를 해결할 때 사용합니다. 인덱스, RLS 정책, 스키마 유형, N+1 패턴을 검토합니다. EXPLAIN ANALYZE 기능을 갖춘 읽기 전용 검토자입니다."
+    },
+    "escalation-fixer": {
+      "name": "escalation-fixer",
+      "type": "agent",
+      "description": "Last-resort fixer in the debugging escalation chain (build-error-resolver -> systematic-debugger -> rca-debugger -> escalation-fixer), invoked when narrower-scoped fixes have failed: most commonly when verify-loop retries and build-error-resolver could not resolve a build/type error, or when rca-debugger's long-term fix proposal needs architectural authority. Analyzes the full project context and allows architectural-level changes and multi-file refactoring that earlier stages are not permitted to make. Reads .claude/escalation-log.json to avoid repeating failed approaches.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/escalation-fixer.md",
+      "description_ko": "디버깅 에스컬레이션 체인(build-error-resolver ->systematic-debugger -> rca-debugger -> escalation-fixer)의 최후 수단 수정 프로그램은 더 좁은 범위의 수정이 실패했을 때 호출됩니다. 가장 일반적으로 검증 루프 재시도 및 빌드 오류 해결 프로그램이 빌드/유형 오류를 해결할 수 없거나 rca-debugger의 장기 수정 제안에 아키텍처 권한이 필요한 경우입니다. 전체 프로젝트 컨텍스트를 분석하고 이전 단계에서는 허용되지 않는 아키텍처 수준 변경 및 다중 파일 리팩토링을 허용합니다. 실패한 접근 방식을 반복하지 않도록 .claude/escalation-log.json을 읽습니다."
+    },
+    "observer": {
+      "name": "observer",
+      "type": "agent",
+      "description": "Background agent that analyzes session observations to detect patterns and create instincts. Uses Haiku for cost-efficiency.",
+      "source_repo": "https://github.com/sangrokjung/claude-forge.git",
+      "source_name": "sangrokjung/claude-forge",
+      "path": "collected_assets/agents/observer.md",
+      "description_ko": "세션 관찰을 분석하여 패턴을 감지하고 본능을 생성하는 백그라운드 에이전트입니다. 비용 효율성을 위해 Haiku를 사용합니다."
     }
   }
 }

@@ -308,5 +308,33 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "Reusable AI agent skills including powershell-safe-invocation for secure Windows command execution"
+  },
+  {
+    "name": "martin-gleason/zsh_shell_skill_for_claude",
+    "repo": "https://github.com/martin-gleason/zsh_shell_skill_for_claude.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Zsh shell master skill for macOS/Linux: Oh My Zsh, .zshrc/.zprofile configuration, globbing, PATH/environment management, and bash-to-zsh compatibility"
+  },
+  {
+    "name": "sangrokjung/claude-forge",
+    "repo": "https://github.com/sangrokjung/claude-forge.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Oh-My-Zsh styled comprehensive agent framework: 33 skills for Korean NLP, systematic debugging, code review, and prompt engineering"
+  },
+  {
+    "name": "akexorcist/zsh-warp-claude-tab",
+    "repo": "https://github.com/akexorcist/zsh-warp-claude-tab.git",
+    "branch": "main",
+    "skills_subpath": "skill",
+    "description": "Zsh plugin and terminal agent skill for Warp terminal automation and preloaded sessions"
+  },
+  {
+    "name": "dEitY719/authoring-skills",
+    "repo": "https://github.com/dEitY719/authoring-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Shell script audit (sh-check) and skill authoring toolkit"
   }
 ]

@@ -5,36 +5,14 @@
 # Claude Code passes hook data via stdin as JSON.
 #
 # Hook config (in ~/.claude/settings.json):
-#
-# If installed as a plugin, use ${CLAUDE_PLUGIN_ROOT}:
+# PostToolUse에만 등록 (PreToolUse는 성능상 미등록)
 # {
 #   "hooks": {
-#     "PreToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre" }]
-#     }],
 #     "PostToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post" }]
+#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh" }]
 #     }]
 #   }
 # }
-#
-# If installed manually to ~/.claude/skills:
-# {
-#   "hooks": {
-#     "PreToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre" }]
-#     }],
-#     "PostToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post" }]
-#     }]
-#   }
-# }
-
-set -e
 
 CONFIG_DIR="${HOME}/.claude/homunculus"
 OBSERVATIONS_FILE="${CONFIG_DIR}/observations.jsonl"
@@ -56,20 +34,27 @@ if [ -z "$INPUT_JSON" ]; then
   exit 0
 fi
 
-# Parse using python via stdin pipe (safe for all JSON payloads)
-PARSED=$(echo "$INPUT_JSON" | python3 -c '
-import json
+# 서브에이전트 내부에서는 observation 기록 불필요
+# Anthropic 공식: agent_id 필드가 있으면 서브에이전트 컨텍스트
+if echo "$INPUT_JSON" | grep -q '"agent_id"' 2>/dev/null; then
+  exit 0
+fi
+
+# Parse using python (more reliable than jq for complex JSON)
+export _CL_INPUT="$INPUT_JSON"
+PARSED=$(python3 << 'EOF'
+import json, os
 import sys
 
 try:
-    data = json.load(sys.stdin)
+    data = json.loads(os.environ.get("_CL_INPUT", "{}"))
 
     # Extract fields - Claude Code hook format
-    hook_type = data.get("hook_type", "unknown")  # PreToolUse or PostToolUse
-    tool_name = data.get("tool_name", data.get("tool", "unknown"))
-    tool_input = data.get("tool_input", data.get("input", {}))
-    tool_output = data.get("tool_output", data.get("output", ""))
-    session_id = data.get("session_id", "unknown")
+    hook_type = data.get('hook_type', 'unknown')  # PreToolUse or PostToolUse
+    tool_name = data.get('tool_name', data.get('tool', 'unknown'))
+    tool_input = data.get('tool_input', data.get('input', {}))
+    tool_output = data.get('tool_output', data.get('output', ''))
+    session_id = data.get('session_id', 'unknown')
 
     # Truncate large inputs/outputs
     if isinstance(tool_input, dict):
@@ -83,19 +68,20 @@ try:
         tool_output_str = str(tool_output)[:5000]
 
     # Determine event type
-    event = "tool_start" if "Pre" in hook_type else "tool_complete"
+    event = 'tool_start' if 'Pre' in hook_type else 'tool_complete'
 
     print(json.dumps({
-        "parsed": True,
-        "event": event,
-        "tool": tool_name,
-        "input": tool_input_str if event == "tool_start" else None,
-        "output": tool_output_str if event == "tool_complete" else None,
-        "session": session_id
+        'parsed': True,
+        'event': event,
+        'tool': tool_name,
+        'input': tool_input_str if event == 'tool_start' else None,
+        'output': tool_output_str if event == 'tool_complete' else None,
+        'session': session_id
     }))
 except Exception as e:
-    print(json.dumps({"parsed": False, "error": str(e)}))
-')
+    print(json.dumps({'parsed': False, 'error': str(e)}))
+EOF
+)
 
 # Check if parsing succeeded
 PARSED_OK=$(echo "$PARSED" | python3 -c "import json,sys; print(json.load(sys.stdin).get('parsed', False))")
@@ -103,11 +89,7 @@ PARSED_OK=$(echo "$PARSED" | python3 -c "import json,sys; print(json.load(sys.st
 if [ "$PARSED_OK" != "True" ]; then
   # Fallback: log raw input for debugging
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  TIMESTAMP="$timestamp" echo "$INPUT_JSON" | python3 -c "
-import json, sys, os
-raw = sys.stdin.read()[:2000]
-print(json.dumps({'timestamp': os.environ['TIMESTAMP'], 'event': 'parse_error', 'raw': raw}))
-" >> "$OBSERVATIONS_FILE"
+  echo "{\"timestamp\":\"$timestamp\",\"event\":\"parse_error\",\"raw\":$(echo "$INPUT_JSON" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()[:1000]))')}" >> "$OBSERVATIONS_FILE"
   exit 0
 fi
 
@@ -124,12 +106,15 @@ fi
 # Build and write observation
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-TIMESTAMP="$timestamp" echo "$PARSED" | python3 -c "
-import json, sys, os
+export _CL_PARSED="$PARSED"
+export _CL_TIMESTAMP="$timestamp"
+export _CL_OBS_FILE="$OBSERVATIONS_FILE"
+python3 << 'EOF'
+import json, os
 
-parsed = json.load(sys.stdin)
+parsed = json.loads(os.environ.get("_CL_PARSED", "{}"))
 observation = {
-    'timestamp': os.environ['TIMESTAMP'],
+    'timestamp': os.environ.get("_CL_TIMESTAMP", ""),
     'event': parsed['event'],
     'tool': parsed['tool'],
     'session': parsed['session']
@@ -140,8 +125,9 @@ if parsed['input']:
 if parsed['output']:
     observation['output'] = parsed['output']
 
-print(json.dumps(observation))
-" >> "$OBSERVATIONS_FILE"
+with open(os.environ.get("_CL_OBS_FILE", "/dev/null"), 'a') as f:
+    f.write(json.dumps(observation) + '\n')
+EOF
 
 # Signal observer if running
 OBSERVER_PID_FILE="${CONFIG_DIR}/.observer.pid"

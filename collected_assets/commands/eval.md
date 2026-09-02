@@ -1,70 +1,124 @@
 ---
-description: Evaluate a plugin or skill for quality
-argument-hint: <path> [--depth quick|standard]
+description: Manage eval-driven development workflow (define, check, report, list)
 ---
 
-Run the PluginEval quality evaluation on a plugin or skill directory.
+# Eval Command
+
+Manage eval-driven development workflow.
 
 ## Usage
 
-/eval <path> — evaluate at standard depth (static + LLM judge)
-/eval <path> --depth quick — static analysis only (instant)
+`/eval [define|check|report|list] [feature-name]`
 
-## Process
+## Define Evals
 
-### Step 1: Run Static Analysis (Layer 1)
+`/eval define feature-name`
 
-```bash
-cd "${CLAUDE_PLUGIN_ROOT}"
-uv run plugin-eval score {argument} --depth quick --output json
+Create a new eval definition:
+
+1. Create `.claude/evals/feature-name.md` with template:
+
+```markdown
+## EVAL: feature-name
+Created: $(date)
+
+### Capability Evals
+- [ ] [Description of capability 1]
+- [ ] [Description of capability 2]
+
+### Regression Evals
+- [ ] [Existing behavior 1 still works]
+- [ ] [Existing behavior 2 still works]
+
+### Success Criteria
+- pass@3 > 90% for capability evals
+- pass^3 = 100% for regression evals
 ```
 
-Parse the JSON output to get `composite.score`, `composite.dimensions`, and `layers[0].anti_patterns`.
+2. Prompt user to fill in specific criteria
 
-### Step 2: LLM Judge (Layer 2) — if NOT --depth quick
+## Check Evals
 
-Dispatch the `eval-judge` agent with the skill path:
+`/eval check feature-name`
 
-> Evaluate the skill at: {resolved_path}
-> Read the SKILL.md file and any references/ files, then score it on all 4 dimensions.
-> Return your scores as JSON.
+Run evals for a feature:
 
-The judge returns scores for: triggering_accuracy, orchestration_fitness, output_quality, scope_calibration.
-
-### Step 3: Compute Final Score
-
-**If quick depth:** Report the Layer 1 results directly from the CLI output.
-
-**If standard depth:** Blend Layer 1 and Layer 2 scores.
-
-For each dimension, use these blend weights (Static:Judge):
-- triggering_accuracy: 0.375:0.625
-- orchestration_fitness: 0.125:0.875
-- output_quality: 0.0:1.0 (judge only)
-- scope_calibration: 0.353:0.647
-- progressive_disclosure: 1.0:0.0 (static only)
-- token_efficiency: 0.8:0.2
-- robustness: 0.0:1.0 (judge only)
-- structural_completeness: 0.9:0.1
-- code_template_quality: 0.3:0.7
-- ecosystem_coherence: 0.85:0.15
-
-Dimension weights: triggering(0.25), orchestration(0.20), output(0.15), scope(0.12), disclosure(0.10), efficiency(0.06), robustness(0.05), structural(0.03), code_quality(0.02), coherence(0.02)
-
-Final = sum(weight * blended_score) * 100 * anti_pattern_penalty
-
-### Step 4: Present Results
+1. Read eval definition from `.claude/evals/feature-name.md`
+2. For each capability eval:
+   - Attempt to verify criterion
+   - Record PASS/FAIL
+   - Log attempt in `.claude/evals/feature-name.log`
+3. For each regression eval:
+   - Run relevant tests
+   - Compare against baseline
+   - Record PASS/FAIL
+4. Report current status:
 
 ```
-## Overall Score: {score}/100 {badge}
-## Layer Breakdown
-| Layer | Score |
-|-------|-------|
-## Dimension Scores
-| Dimension | Weight | Score | Grade |
-|-----------|--------|-------|-------|
-## Anti-Patterns Detected
-## Recommendations
+EVAL CHECK: feature-name
+========================
+Capability: X/Y passing
+Regression: X/Y passing
+Status: IN PROGRESS / READY
 ```
 
-Badge thresholds: Platinum(90+), Gold(80+), Silver(70+), Bronze(60+)
+## Report Evals
+
+`/eval report feature-name`
+
+Generate comprehensive eval report:
+
+```
+EVAL REPORT: feature-name
+=========================
+Generated: $(date)
+
+CAPABILITY EVALS
+----------------
+[eval-1]: PASS (pass@1)
+[eval-2]: PASS (pass@2) - required retry
+[eval-3]: FAIL - see notes
+
+REGRESSION EVALS
+----------------
+[test-1]: PASS
+[test-2]: PASS
+[test-3]: PASS
+
+METRICS
+-------
+Capability pass@1: 67%
+Capability pass@3: 100%
+Regression pass^3: 100%
+
+NOTES
+-----
+[Any issues, edge cases, or observations]
+
+RECOMMENDATION
+--------------
+[SHIP / NEEDS WORK / BLOCKED]
+```
+
+## List Evals
+
+`/eval list`
+
+Show all eval definitions:
+
+```
+EVAL DEFINITIONS
+================
+feature-auth      [3/5 passing] IN PROGRESS
+feature-search    [5/5 passing] READY
+feature-export    [0/4 passing] NOT STARTED
+```
+
+## Arguments
+
+$ARGUMENTS:
+- `define <name>` - Create new eval definition
+- `check <name>` - Run and check evals
+- `report <name>` - Generate full report
+- `list` - Show all evals
+- `clean` - Remove old eval logs (keeps last 10 runs)

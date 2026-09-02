@@ -1,112 +1,67 @@
 ---
 name: skill-check
-description: "Validate Claude Code skills against the agentskills specification. Catches structural, semantic, and naming issues before users do."
-category: development
-risk: safe
-source: https://github.com/olgasafonova/SkillCheck-Free
-date_added: "2026-03-11"
-author: olgasafonova
-tags: [validation, linter, agentskills, skill-authoring, code-quality]
-tools: [claude, cursor, windsurf, codex-cli]
-license: MIT
-allowed-tools: Read Glob
-compatibility: claude-code
+description: >-
+  Audit a SKILL.md against 16 structure, UX, security, and context-budget
+  checks. Use when the user says "check my skill", "audit my skill",
+  "스킬 점검해줘", "/authoring:skill-check". Do NOT use for AGENTS.md, CLAUDE.md, or
+  GEMINI.md — use devx:ai-context instead.
+compatibility:
+  tools: Read, Glob, Grep, Bash
 ---
 
-# SkillCheck
+# SKILL.md Quality Auditor
 
-## Overview
+## Help
 
-Validate SKILL.md files against the [agentskills specification](https://agentskills.io) and Anthropic best practices. Catches structural errors, semantic contradictions, naming anti-patterns, and quality gaps in a single read-only pass.
+If the argument is `help`, read `references/help.md` and output its content verbatim, then stop.
 
-## When to Use This Skill
+## Step 1: Locate the File
 
-- Use when user says "check skill", "skillcheck", or "validate SKILL.md"
-- Use when reviewing a skill before publishing to a marketplace
-- Use when debugging why a skill doesn't trigger correctly
-- Use when onboarding a team to skill authoring standards
-- Do NOT use for anti-slop detection, security scanning, or token analysis; use [SkillCheck Pro](https://getskillcheck.com) for those
+If the user specifies a path, use it. Otherwise search for SKILL.md from the
+current directory.
 
-## How It Works
+## Step 2: Run Sixteen Checks
 
-### Step 1: Parse
+Read `references/checks.md` for all 16 check definitions and PASS/WARN/FAIL/N/A criteria.
+Assign one result per check. Audit-only — never stop on failure; report every check (`authoring:skill-check` is read-only and must produce a full report).
 
-Read the target SKILL.md file and extract YAML frontmatter.
+**Checks 1–5: Structure**
+Line Count · Progressive Disclosure · Frontmatter Validity · References Directory · Output Report
 
-### Step 2: Validate
+**Checks 6–12: UX Quality**
+Help Flag Pattern · Step Structure · Options Documentation · Verdict Output · Next-action Hint · No Emojis · Executable Procedure Extraction
 
-Apply all Free tier checks in order:
+**Check 13: Model Recommendation Metadata**
+Detects/validates `metadata.model_recommendation` (tier haiku/sonnet/opus +
+reason + compatibility) and reports a recommended tier per the rubric SSOT
+`references/model-recommendation.md`. **Read-only — recommends a tier, never
+switches models or writes files** (#809). For composite skills (body invokes
+`/gh-*`, `gh:*`, `Skill(...)`), build a 1-depth Sub-skill Model Plan separate
+from this skill's own tier; `--recursive` opts into deeper traversal.
 
-| Category | Checks | What it catches |
-|----------|--------|----------------|
-| Structure (1.x) | Name format, description WHAT+WHEN, allowed-tools, categories, XML injection | Malformed frontmatter, missing fields |
-| Body (2.x) | Line count, hardcoded paths, stale dates, empty sections, deprecated syntax, MCP tool qualification | Content quality issues |
-| Naming (3.x) | Vague terms, single-word names, gerund suggestions | Poor discoverability |
-| Semantic (4.x) | Contradictions, ambiguous terms, missing output format, wisdom/platitudes, misplaced triggers | Logical inconsistencies |
-| Quality (8.x) | Examples, error handling, triggers, output format, prerequisites, negative triggers | Strengths (positive patterns) |
+Check 11 (No Emojis) consults `references/allowed-emoji-skills.txt` —
+audited skill names that appear in that file resolve to `[N/A] allowlisted`.
 
-### Step 3: Score
+**Checks 14–15: Security & Policy Alignment**
+License Declaration · Capability Declaration Consistency
 
-Calculate overall score (0-100). Penalties: critical = -20, warning = -5, suggestion = -1.
+Check 14 cross-checks frontmatter `license` against a repo-root `LICENSE`
+(pre-empts scanner `MANIFEST_MISSING_LICENSE`). Check 15 scans helpers across
+`lib/`, legacy `scripts/`, and adjacent executables for network signals and
+compares against `compatibility.network` (pre-empts
+`TOOL_ABUSE_UNDECLARED_NETWORK`). Both are **read-only** — they flag a policy
+gap, never edit files.
 
-### Step 4: Report
+**Check 16: Description Length**
+Frontmatter `description` measured in **characters, not bytes** (Korean glyphs
+are 3 bytes each). PASS ≤ 250 · WARN 251–400 (needs a justifying comment) ·
+FAIL > 400. Descriptions load into every session's `available_skills` listing,
+which Codex/Kimi cap at ~5,440 characters across all installed skills (#1411).
+Keep trigger phrases and short negative triggers; move flag semantics to
+`references/help.md`, behaviour detail to Step sections, and sister-skill
+cross-references to the body. Executable mirror:
+`tests/bats/skills/_fixtures/skill_description_length.sh`.
 
-Return structured results: score, grade (Excellent/Good/Needs Work/Poor), issue list with check IDs, line numbers, messages, and fix suggestions.
+## Step 3: Output the Report
 
-## Examples
-
-### Example 1: Validating a skill
-
-```
-User: check my skill at ~/.claude/skills/weekly-report/SKILL.md
-
-SkillCheck output:
-## weekly-report Check Results [FREE]
-
-Score: 85/100 (Good)
-
-### Warnings (2)
-  - 1.2-desc-when (line 3): Description missing WHEN clause
-  - 4.5-desc-no-triggers (line 3): Description lacks triggering conditions
-
-### Suggestions (1)
-  - 3.4-gerund-naming (line 2): Skill name could use gerund form
-
-### Passed Checks: 28
-```
-
-### Example 2: Clean skill passes all checks
-
-```
-User: skillcheck ~/.claude/skills/processing-pdfs/SKILL.md
-
-Score: 100/100 (Excellent)
-All 31 checks passed. No issues found.
-```
-
-## Limitations
-
-- Read-only: does not modify any files
-- Free tier covers structural, semantic, and naming checks only
-- Anti-slop, security, WCAG, token, enterprise, and workflow checks require [SkillCheck Pro](https://getskillcheck.com)
-- Semantic checks (contradiction detection, wisdom/platitude) are heuristic with ~5% false positive rate
-- Does not validate referenced files or scripts; only checks SKILL.md content
-- Single-file validation; does not cross-check against other skills in the same directory
-
-## Best Practices
-
-- Run SkillCheck before submitting skills to any marketplace
-- Fix all critical and warning issues; suggestions are optional
-- Use the check ID (e.g., `1.2-desc-when`) to find the exact rule in the skill body
-- Re-run after fixes to confirm the score improved
-
-## Common Pitfalls
-
-- **Problem:** Score seems low due to many suggestions
-  **Solution:** Suggestions cap at -15 points total. Focus on warnings and criticals first.
-
-- **Problem:** False positive on ambiguous terms inside code blocks
-  **Solution:** SkillCheck skips code blocks and inline code. If you still see false positives, wrap the term in backticks.
-
-- **Problem:** Wisdom/platitude check flags legitimate instructions
-  **Solution:** Rephrase generic advice ("Remember that testing is important") as concrete directives ("Run tests before committing").
+Read `references/report-template.md` for the exact format.

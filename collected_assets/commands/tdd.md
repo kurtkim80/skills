@@ -1,81 +1,342 @@
 ---
-title: "/tdd — Slash Command for AI Coding Agents"
-description: "Run a red-green-refactor TDD workflow — generate failing tests first, implement to green, then check coverage gaps. Usage: /tdd. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: 테스트 먼저 만들고 코드 작성. 한 단위 작업에 사용.
+allowed-tools: Agent, Read, Glob, Grep
 ---
 
-# /tdd
+# TDD Command
 
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/tdd.md">Source</a></span>
-</div>
+This command invokes the **tdd-guide** agent to enforce test-driven development methodology.
 
+## What This Command Does
 
-Drive a test-first workflow for `$ARGUMENTS` using the TDD Guide skill. The first word of `$ARGUMENTS` selects the mode (`generate`, `coverage`, or `validate`); the rest is the target file or directory. If `$ARGUMENTS` is empty, ask which mode and target.
+1. **Scaffold Interfaces** - Define types/interfaces first
+2. **Generate Tests First** - Write failing tests (RED)
+3. **Implement Minimal Code** - Write just enough to pass (GREEN)
+4. **Refactor** - Improve code while keeping tests green (REFACTOR)
+5. **Verify Coverage** - Ensure 80%+ test coverage
 
-> **Note on tooling:** the tdd-guide scripts are **Python library modules, not CLI tools** — import them; do not invoke them as commands. Runnable patterns below.
+## When to Use
 
-## Modes
+Use `/tdd` when:
+- Implementing new features
+- Adding new functions/components
+- **Fixing bugs** → Prove-It Pattern: 버그 재현 테스트 먼저, 수정은 그 다음
+- Refactoring existing code
+- Building critical business logic
 
-### `/tdd generate <file-or-dir>` — write failing tests FIRST
+### Prove-It Pattern (버그 수정 전용)
 
-1. Read `engineering-team/skills/tdd-guide/SKILL.md` and `engineering-team/skills/tdd-guide/references/tdd-best-practices.md` for the red-green-refactor discipline and test-case taxonomy (happy path, edge cases, error cases)
-2. Detect the project's test framework — use `engineering-team/skills/tdd-guide/references/framework-guide.md` for Jest/Vitest/pytest/JUnit conventions
-3. Write the tests **before** any implementation; run them and confirm they FAIL (red)
-4. Implement the minimum code to pass (green), then refactor with tests staying green
-5. Optionally use the library for stub scaffolding:
-
-```bash
-cd engineering-team/skills/tdd-guide/scripts && python3 -c "
-from test_generator import TestGenerator, TestFramework
-g = TestGenerator(framework=TestFramework.PYTEST, language='python')
-cases = g.generate_from_requirements({'acceptance_criteria': [
-    {'id': 'AC1', 'description': 'validates email format'},
-    {'id': 'AC2', 'description': 'rejects duplicate emails'}]})
-print(g.generate_test_file('registration', cases))
-"
+```
+BUG REPORT → REPRODUCE TEST (RED) → VERIFY FAIL → FIX (GREEN) → VERIFY PASS
 ```
 
-### `/tdd coverage <coverage-report>` — analyze gaps against a threshold
+버그 수정 시 "고쳤다"의 증거는 **실패→성공 전환**이다. 테스트 없이 수정하면 증상만 가린 것일 수 있다.
 
-1. Generate a real coverage report with the project's native runner first (`pytest --cov --cov-report=lcov`, `vitest run --coverage`, `jest --coverage`)
-2. Parse it and list prioritized gaps:
+## How It Works
 
-```bash
-cd engineering-team/skills/tdd-guide/scripts && python3 -c "
-from coverage_analyzer import CoverageAnalyzer
-a = CoverageAnalyzer()
-a.parse_coverage_report(open('<path-to-lcov-or-json>').read(), 'lcov')  # or 'json' / 'xml'
-print(a.calculate_summary())
-for gap in a.identify_gaps(threshold=80.0): print(gap)
-"
+The tdd-guide agent will:
+
+1. **Define interfaces** for inputs/outputs
+2. **Write tests that will FAIL** (because code doesn't exist yet)
+3. **Run tests** and verify they fail for the right reason
+4. **Write minimal implementation** to make tests pass
+5. **Run tests** and verify they pass
+6. **Refactor** code while keeping tests green
+7. **Check coverage** and add more tests if below 80%
+
+## TDD Cycle
+
+```
+RED → GREEN → REFACTOR → REPEAT
+
+RED:      Write a failing test
+GREEN:    Write minimal code to pass
+REFACTOR: Improve code, keep tests passing
+REPEAT:   Next feature/scenario
 ```
 
-(Smoke-test input available at `engineering-team/skills/tdd-guide/assets/sample_coverage_report.lcov`.)
+## Example Usage
 
-3. For each gap, return to `/tdd generate` — coverage gaps are filled with tests, not excuses
+```
+User: /tdd I need a function to calculate market liquidity score
 
-### `/tdd validate <test-file>` — review test quality
+Agent (tdd-guide):
+# TDD Session: Market Liquidity Score Calculator
 
-Read the test file and check it against `engineering-team/skills/tdd-guide/references/tdd-best-practices.md`:
+## Step 1: Define Interface (SCAFFOLD)
 
-- [ ] Every test has at least one meaningful assertion (no assertion-free tests)
-- [ ] Edge cases and error paths covered, not just happy path
-- [ ] Tests are independent (no order coupling, no shared mutable state)
-- [ ] Test names describe behavior, not implementation
-- [ ] No testing of private internals — behavior only
+```typescript
+// lib/liquidity.ts
+export interface MarketData {
+  totalVolume: number
+  bidAskSpread: number
+  activeTraders: number
+  lastTradeTime: Date
+}
 
-Report failures with concrete rewrite suggestions.
+export function calculateLiquidityScore(market: MarketData): number {
+  // TODO: Implementation
+  throw new Error('Not implemented')
+}
+```
 
-## CI Integration
+## Step 2: Write Failing Test (RED)
 
-For wiring coverage thresholds into CI, follow `engineering-team/skills/tdd-guide/references/ci-integration.md`.
+```typescript
+// lib/liquidity.test.ts
+import { calculateLiquidityScore } from './liquidity'
 
-## Repo Assets (verified paths)
+describe('calculateLiquidityScore', () => {
+  it('should return high score for liquid market', () => {
+    const market = {
+      totalVolume: 100000,
+      bidAskSpread: 0.01,
+      activeTraders: 500,
+      lastTradeTime: new Date()
+    }
 
-- Skill: `engineering-team/skills/tdd-guide/SKILL.md` (+ `HOW_TO_USE.md`)
-- Best practices: `engineering-team/skills/tdd-guide/references/tdd-best-practices.md`
-- Framework conventions: `engineering-team/skills/tdd-guide/references/framework-guide.md`
-- CI integration: `engineering-team/skills/tdd-guide/references/ci-integration.md`
-- Library modules: `engineering-team/skills/tdd-guide/scripts/` (test_generator, coverage_analyzer, tdd_workflow, fixture_generator, metrics_calculator — import-only)
-- Sample inputs: `engineering-team/skills/tdd-guide/assets/`
+    const score = calculateLiquidityScore(market)
+
+    expect(score).toBeGreaterThan(80)
+    expect(score).toBeLessThanOrEqual(100)
+  })
+
+  it('should return low score for illiquid market', () => {
+    const market = {
+      totalVolume: 100,
+      bidAskSpread: 0.5,
+      activeTraders: 2,
+      lastTradeTime: new Date(Date.now() - 86400000) // 1 day ago
+    }
+
+    const score = calculateLiquidityScore(market)
+
+    expect(score).toBeLessThan(30)
+    expect(score).toBeGreaterThanOrEqual(0)
+  })
+
+  it('should handle edge case: zero volume', () => {
+    const market = {
+      totalVolume: 0,
+      bidAskSpread: 0,
+      activeTraders: 0,
+      lastTradeTime: new Date()
+    }
+
+    const score = calculateLiquidityScore(market)
+
+    expect(score).toBe(0)
+  })
+})
+```
+
+## Step 3: Run Tests - Verify FAIL
+
+```bash
+npm test lib/liquidity.test.ts
+
+FAIL lib/liquidity.test.ts
+  ✕ should return high score for liquid market (2 ms)
+    Error: Not implemented
+
+1 test failed, 0 passed
+```
+
+✅ Tests fail as expected. Ready to implement.
+
+## Step 4: Implement Minimal Code (GREEN)
+
+```typescript
+// lib/liquidity.ts
+export function calculateLiquidityScore(market: MarketData): number {
+  // Handle zero volume edge case
+  if (market.totalVolume === 0) {
+    return 0
+  }
+
+  // Calculate component scores (0-100 scale)
+  const volumeScore = Math.min(market.totalVolume / 1000, 100)
+  const spreadScore = Math.max(100 - (market.bidAskSpread * 1000), 0)
+  const traderScore = Math.min(market.activeTraders / 10, 100)
+
+  // Recent activity bonus
+  const hoursSinceLastTrade = (Date.now() - market.lastTradeTime.getTime()) / (1000 * 60 * 60)
+  const recencyScore = Math.max(100 - (hoursSinceLastTrade * 10), 0)
+
+  // Weighted average
+  const score = (
+    volumeScore * 0.4 +
+    spreadScore * 0.3 +
+    traderScore * 0.2 +
+    recencyScore * 0.1
+  )
+
+  return Math.min(Math.max(score, 0), 100) // Clamp to 0-100
+}
+```
+
+## Step 5: Run Tests - Verify PASS
+
+```bash
+npm test lib/liquidity.test.ts
+
+PASS lib/liquidity.test.ts
+  ✓ should return high score for liquid market (3 ms)
+  ✓ should return low score for illiquid market (2 ms)
+  ✓ should handle edge case: zero volume (1 ms)
+
+3 tests passed
+```
+
+✅ All tests passing!
+
+## Step 6: Refactor (IMPROVE)
+
+```typescript
+// lib/liquidity.ts - Refactored with constants and better readability
+const WEIGHTS = {
+  VOLUME: 0.4,
+  SPREAD: 0.3,
+  TRADERS: 0.2,
+  RECENCY: 0.1,
+} as const
+
+const SCALE_FACTORS = {
+  VOLUME: 1000,
+  SPREAD: 1000,
+  TRADERS: 10,
+  RECENCY_PENALTY: 10,
+} as const
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
+export function calculateLiquidityScore(market: MarketData): number {
+  if (market.totalVolume === 0) return 0
+
+  const volumeScore = Math.min(market.totalVolume / SCALE_FACTORS.VOLUME, 100)
+  const spreadScore = clamp(100 - (market.bidAskSpread * SCALE_FACTORS.SPREAD), 0, 100)
+  const traderScore = Math.min(market.activeTraders / SCALE_FACTORS.TRADERS, 100)
+
+  const hoursSinceLastTrade = (Date.now() - market.lastTradeTime.getTime()) / (1000 * 60 * 60)
+  const recencyScore = clamp(100 - (hoursSinceLastTrade * SCALE_FACTORS.RECENCY_PENALTY), 0, 100)
+
+  const weightedScore =
+    volumeScore * WEIGHTS.VOLUME +
+    spreadScore * WEIGHTS.SPREAD +
+    traderScore * WEIGHTS.TRADERS +
+    recencyScore * WEIGHTS.RECENCY
+
+  return clamp(weightedScore, 0, 100)
+}
+```
+
+## Step 7: Verify Tests Still Pass
+
+```bash
+npm test lib/liquidity.test.ts
+
+PASS lib/liquidity.test.ts
+  ✓ should return high score for liquid market (3 ms)
+  ✓ should return low score for illiquid market (2 ms)
+  ✓ should handle edge case: zero volume (1 ms)
+
+3 tests passed
+```
+
+✅ Refactoring complete, tests still passing!
+
+## Step 8: Check Coverage
+
+```bash
+npm test -- --coverage lib/liquidity.test.ts
+
+File           | % Stmts | % Branch | % Funcs | % Lines
+---------------|---------|----------|---------|--------
+liquidity.ts   |   100   |   100    |   100   |   100
+
+Coverage: 100% ✅ (Target: 80%)
+```
+
+✅ TDD session complete!
+```
+
+## TDD Best Practices
+
+**DO:**
+- ✅ Write the test FIRST, before any implementation
+- ✅ Run tests and verify they FAIL before implementing
+- ✅ Write minimal code to make tests pass
+- ✅ Refactor only after tests are green
+- ✅ Add edge cases and error scenarios
+- ✅ Aim for 80%+ coverage (100% for critical code)
+
+**DON'T:**
+- ❌ Write implementation before tests
+- ❌ Skip running tests after each change
+- ❌ Write too much code at once
+- ❌ Ignore failing tests
+- ❌ Test implementation details (test behavior)
+- ❌ Mock everything (prefer integration tests)
+
+## Test Types to Include
+
+**Unit Tests** (Function-level):
+- Happy path scenarios
+- Edge cases (empty, null, max values)
+- Error conditions
+- Boundary values
+
+**Integration Tests** (Component-level):
+- API endpoints
+- Database operations
+- External service calls
+- React components with hooks
+
+**E2E Tests** (use `/e2e` command):
+- Critical user flows
+- Multi-step processes
+- Full stack integration
+
+## Coverage Requirements
+
+- **80% minimum** for all code
+- **100% required** for:
+  - Financial calculations
+  - Authentication logic
+  - Security-critical code
+  - Core business logic
+
+## Important Notes
+
+**MANDATORY**: Tests must be written BEFORE implementation. The TDD cycle is:
+
+1. **RED** - Write failing test
+2. **GREEN** - Implement to pass
+3. **REFACTOR** - Improve code
+
+Never skip the RED phase. Never write code before tests.
+
+## Integration with Other Commands
+
+- Use `/plan` first to understand what to build
+- Use `/tdd` to implement with tests
+- Use `/build-and-fix` if build errors occur
+- Use `/code-review` to review implementation
+- Use `/test-coverage` to verify coverage
+
+## Related Agents
+
+This command invokes the `tdd-guide` agent located at:
+`~/.claude/agents/tdd-guide.md`
+
+And can reference the `tdd-workflow` skill at:
+`~/.claude/skills/tdd-workflow/`
+
+---
+
+## 다음 단계
+
+구현이 완료되면:
+- `/code-review`로 품질 검사
