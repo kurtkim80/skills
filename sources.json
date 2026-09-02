@@ -91,5 +91,26 @@
     "skills_subpath": "skills",
     "agents_subpath": "agents",
     "description": "Clean Architecture, CQRS, ASP.NET Web API, MediatR, and Microservices expert rules for .NET"
+  },
+  {
+    "name": "wdm0006/python-skills",
+    "repo": "https://github.com/wdm0006/python-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Specialized Python skills covering FastAPI, async SQLAlchemy, Celery, and testing patterns"
+  },
+  {
+    "name": "rafaelkamimura/claude-tools",
+    "repo": "https://github.com/rafaelkamimura/claude-tools.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Python FastAPI Clean Architecture, async test patterns, and developer tools"
+  },
+  {
+    "name": "gvre/skills",
+    "repo": "https://github.com/gvre/skills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Modern Python developer skills enforcing uv, ruff, mypy, pytest, and Clean Code standards"
   }
 ]

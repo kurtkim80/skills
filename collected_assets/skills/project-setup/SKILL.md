@@ -1,81 +1,142 @@
 ---
-name: project-setup
-description: >
-  Tech-stack selection advisor for .NET projects: recommended defaults for
-  database, auth, caching, messaging, observability, and resilience, with the
-  rationale behind each default. Load when choosing or reviewing a project's
-  tech stack, or when the user says "tech stack", "which database", "pick a
-  stack", "recommended defaults", or "what should I use for". For project
-  initialization use dotnet-init, for codebase assessment use health-check,
-  for upgrades and schema changes use migrate.
+name: setting-up-python-libraries
+description: Sets up professional Python library projects with modern tooling (pyproject.toml, uv, ruff, pytest, pre-commit, GitHub Actions). Use when creating new Python libraries, modernizing existing projects to pyproject.toml, configuring linting/testing/CI, or setting up Makefiles and pre-commit hooks.
 ---
 
-# Project Setup — Tech-Stack Advisor
+# Python Library Project Setup
 
-This skill owns one thing: the kit's recommended tech-stack defaults and why. The workflows that consume it live elsewhere:
+## Quick Start
 
-- **Initializing a project / generating CLAUDE.md** → `dotnet-init` (interactive flow, architecture questionnaire, CLAUDE.md generation)
-- **Assessing an existing codebase** → `health-check` (the canonical 8-dimension graded assessment)
-- **EF Core schema, NuGet, or .NET version migrations** → `migrate`
-- **Choosing an architecture** → `architecture-advisor` (always ask before recommending)
-
-## Core Principles
-
-1. **Recommend a default, explain the why, let the user choose** — Every dimension has a kit default, but defaults are starting points, not mandates. State the trade-off in one line so the choice is informed.
-2. **Prefer built-in .NET over third-party** — `HybridCache` over Redis-client wrappers, built-in rate limiting over packages, built-in OpenAPI over Swashbuckle. Fewer dependencies means fewer licensing surprises and upgrade breaks.
-3. **License-aware picks** — MediatR (v13+), MassTransit (v9+), and FluentAssertions (v8+) went commercial. The kit defaults to MIT alternatives: Mediator, Wolverine, plain xUnit asserts.
-4. **Add messaging later, not never** — Most projects don't need a message bus on day one. Default to "None (add later)" and reach for Wolverine when async workflows actually appear.
-
-## Patterns
-
-### Tech-Stack Dimensions and Defaults
-
-| Dimension | Options | Default | Why |
-|-----------|---------|---------|-----|
-| Database | PostgreSQL, SQL Server, SQLite | PostgreSQL | Open source, best EF Core provider outside SQL Server, first-class Testcontainers support |
-| Auth | JWT Bearer, OIDC (Keycloak/Auth0), None | JWT Bearer | Simplest secure default for APIs; move to OIDC when an external IdP exists |
-| Caching | HybridCache, Redis, None | HybridCache | Built-in, stampede protection, L1+L2 — add Redis only as its L2 backend |
-| Messaging | Wolverine (RabbitMQ), MassTransit, None | None (add later) | Premature messaging adds ops burden; Wolverine (MIT) when needed |
-| Observability | Serilog + OpenTelemetry, Basic logging | Serilog + OTEL | Structured logs + traces from day one are cheap; retrofitting is not |
-| Resilience | Polly v8 pipelines, Basic retry | Polly v8 | `AddStandardResilienceHandler()` is one line for production-grade defaults |
-| API docs | Built-in OpenAPI + Scalar | OpenAPI + Scalar | Framework-maintained spec generation; Scalar replaces Swagger UI |
-| Testing | xUnit v3 + Testcontainers | xUnit v3 + Testcontainers | Real databases in tests; in-memory providers hide real bugs |
-
-Once dimensions are chosen, `dotnet-init` bakes them into the generated CLAUDE.md, and each choice maps to a skill to load when working in that area (`ef-core`, `authentication`, `caching`, `messaging`, `serilog`, `opentelemetry`, `resilience`, `openapi`, `scalar`, `testing`).
-
-## Anti-patterns
-
-### Prescribing a Stack Without Asking
+Create a new library with this structure:
 
 ```
-# BAD — assuming the kit defaults apply everywhere
-"You should use PostgreSQL and Wolverine."
-# The team runs SQL Server enterprise-wide and has zero async workflows.
-
-# GOOD — default + trade-off + question
-"Kit default is PostgreSQL (best OSS EF provider). Any organizational
-constraint — existing SQL Server licenses, DBA support — that should
-override it?"
+my-library/
+├── src/my_library/
+│   ├── __init__.py
+│   └── py.typed
+├── tests/
+├── pyproject.toml
+├── Makefile
+├── .pre-commit-config.yaml
+└── .github/workflows/ci.yml
 ```
 
-### Re-Running Workflows This Skill Doesn't Own
+Use `src/` layout to prevent accidental imports of development code.
+
+## Core Configuration
+
+For complete templates, see:
+- **[PYPROJECT.md](PYPROJECT.md)** - Full pyproject.toml with all tool configs
+- **[CI.md](CI.md)** - GitHub Actions and pre-commit setup
+- **[MAKEFILE.md](MAKEFILE.md)** - Makefile automation patterns
+
+## Minimal pyproject.toml
+
+```toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-library"
+version = "0.1.0"
+description = "What it does"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.1", "mypy>=1.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+```
+
+## Essential Commands
+
+```bash
+# Setup
+uv sync --extra dev
+pre-commit install
+
+# Daily workflow
+ruff check src tests        # Lint
+ruff format src tests       # Format
+pytest                      # Test
+mypy src                    # Type check
+```
+
+## Keep local checks identical to CI
+
+The most common CI failure is not a bug — it's a check that passes locally but
+fails in CI (or vice versa) because the two run different commands. Two rules
+prevent an entire class of "green locally, red in CI" (and chronically-red base
+branch) problems:
+
+**1. `make lint` must be read-only — never `--fix`.** A `lint` target that runs
+`ruff check --fix` mutates your files and almost always exits 0, so pre-existing
+violations silently sit on the branch while CI's read-only `ruff check` goes red.
+Put `--fix` only in `format` and the pre-commit hook. `make lint` should run the
+*exact* commands CI runs.
+
+**2. CI (and `make lint`) must check formatting too.** `ruff check` and
+`ruff format` are different tools: the linter passing says nothing about
+formatting. Gate on both, or formatting drift ships / turns a branch red
+unexpectedly:
+
+```bash
+ruff check src tests          # lint rules
+ruff format --check src tests # formatting — REQUIRED, not implied by ruff check
+```
+
+Lint the **same paths** in the Makefile and CI (add `examples/`, `docs/`, etc. if
+they contain Python) — a narrower local scope lets violations accumulate in dirs
+CI checks. Configure ruff under `[tool.ruff.lint]` (not the deprecated top-level
+`select`/`ignore`), and keep `requires-python` and `[tool.ruff] target-version`
+in sync so ruff doesn't apply upgrade rules for a version you don't support.
+
+For coverage, prefer running `pytest --cov` with a terminal report
+(`--cov-report=term-missing`) in the CI log over uploading to a third-party
+service — no external account, token, or network dependency in the gate.
+
+## Key Decisions
+
+| Choice | Recommendation | Why |
+|--------|---------------|-----|
+| Layout | `src/` | Catches packaging bugs early |
+| Build backend | setuptools | Mature, broad compatibility |
+| Linter | ruff | Fast, replaces flake8+isort+black |
+| Python range | `>=3.10` | Don't pin exact versions |
+| Dependencies | Minimal | Move optional deps to extras |
+
+## Checklist
 
 ```
-# BAD — improvising a health grading or init flow from this skill
-"Let me grade your codebase across 5 categories..."
-# That grading conflicts with the canonical one.
-
-# GOOD — route to the owner
-Init/CLAUDE.md → dotnet-init | Assessment → health-check | Upgrades → migrate
+Project Setup:
+- [ ] src/ layout with py.typed marker
+- [ ] pyproject.toml (not setup.py)
+- [ ] Makefile with dev/test/lint/format (lint read-only, no --fix)
+- [ ] `make lint` runs the exact `ruff check` + `ruff format --check` CI runs
+- [ ] Build-gating tools pinned (linter, formatter, toolchain, test runner) so upstream releases don't flip green/red on unrelated PRs
+- [ ] .pre-commit-config.yaml
+- [ ] .github/workflows/ci.yml
+- [ ] README.md, LICENSE, CHANGELOG.md
+- [ ] .gitignore
 ```
 
-## Decision Guide
+## Helper Script
 
-| Scenario | Route to |
-|----------|----------|
-| "Set up this project for Claude Code" | `dotnet-init` |
-| "Which database/auth/caching should I use?" | This skill — table above |
-| "How healthy is this codebase?" | `health-check` |
-| "Upgrade to .NET 10" / "update packages" | `migrate` |
-| "Which architecture fits?" | `architecture-advisor` |
-| Stack chosen, ready to build | `scaffold` for the first feature |
+Create a new project structure:
+```bash
+python scripts/create_project.py my-library --author "Name"
+```
+
+## Learn More
+
+This skill is based on the [Guide to Developing High-Quality Python Libraries](https://mcginniscommawill.com/guides/python-library-development/) by [Will McGinnis](https://mcginniscommawill.com/). See these posts for deeper coverage:
+
+- [Defining Library Scope](https://mcginniscommawill.com/posts/2025-01-17-defining-library-scope/)
+- [Dependency Management](https://mcginniscommawill.com/posts/2025-01-21-dependency-management/)
+- [Licensing Your Project](https://mcginniscommawill.com/posts/2025-01-24-licensing-your-project/)
+- [pyproject.toml Explained](https://mcginniscommawill.com/posts/2025-01-26-pyproject-toml-explained/)
