@@ -133,5 +133,26 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "Language-agnostic Clean Code, SOLID, Refactoring, and Clean Architecture standards"
+  },
+  {
+    "name": "tvhahn/matplotlib-skill",
+    "repo": "https://github.com/tvhahn/matplotlib-skill.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Publication-quality Matplotlib & Seaborn charting skills with colorblind-accessible themes and statistical plotting"
+  },
+  {
+    "name": "jaechang-hits/SciAgent-Skills",
+    "repo": "https://github.com/jaechang-hits/SciAgent-Skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "208+ scientific computing, data visualization (Plotly, Seaborn, Matplotlib, Pandas), and data analysis skills"
+  },
+  {
+    "name": "yudong-94/storytelling-viz-skill",
+    "repo": "https://github.com/yudong-94/storytelling-viz-skill.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Interactive Plotly and Seaborn chart storytelling, exploratory data analysis, and dashboard visualization"
   }
 ]

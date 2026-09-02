@@ -1,240 +1,115 @@
-# Smart Git Commit Command
+---
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(git add:*)
+description: Generate structured git commit with conventional format and file tracking
+argument-hint: [optional commit message]
+---
 
-Intelligent git commit system that stages only task-related changes and generates meaningful commit messages without AI tool references.
+# Git Commit Command
 
-## Purpose
-- Stage only files related to the current task
-- Generate professional commit messages
-- Exclude any mention of AI/agent tools
-- Maintain clean git history
+Generate a comprehensive, well-structured git commit message following conventional commit standards and best practices.
 
-## Execution Steps
+## Context Analysis
 
-### Step 1: Check for Task Context
+**Current repository status:**
+!`git status --porcelain`
 
-Use Bash tool to find most recent task file:
-- Command: `ls -t .claude/task-history/*.md 2>/dev/null | head -1`
-- Description: "Find most recent task history file"
+**Staged changes (if any):**
+!`git diff --cached --stat`
 
-If no task file exists, output: "No task history found. Proceeding with manual file selection."
+**Unstaged changes (if any):**
+!`git diff --stat`
 
-If task file exists:
-- Use Read tool to read the task file
-- Extract: task title, objective, files mentioned, success criteria
+**Current branch:**
+!`git branch --show-current`
 
-### Step 2: Analyze Git Status
+**Recent commit history for context:**
+!`git log --oneline -5`
 
-Use Bash tool to check git status:
-- Command: `git status --porcelain`
-- Description: "Check git repository status"
+## Your Task
 
-Parse output to categorize:
-- Modified files (M prefix)
-- Added files (A or ?? prefix)
-- Deleted files (D prefix)
-- Renamed files (R prefix)
+Based on the above git context, create a structured commit following these requirements:
 
-### Step 3: Identify Task-Related Files
+### 1. Analyze Changes
+- Review all staged and unstaged changes
+- Identify the primary purpose of the changes
+- Note any new files, deletions, or significant refactoring
+- Assess the scope and impact of modifications
 
-Based on task context (if available), identify files that:
-- Match file patterns from task description
-- Are in directories mentioned in task
-- Match technology/framework patterns from task
+### 2. Stage Appropriate Files
+- Add relevant untracked files to staging area if needed
+- Ensure only intended changes are staged for commit
 
-If no task context, consider all changed files as candidates.
+### 3. Generate Commit Message
+Use this exact format:
+```
+<emoji> <type>(<scope>): <subject>
 
-### Step 4: Present Staging Plan
+<body using bullet points if needed>
 
-Output a categorized list of changes:
-```markdown
-## Task: [Task Title or "Manual Commit"]
+<footer if applicable>
 
-### Will stage:
-- file1.js (modified) - implements feature X
-- file2.test.js (added) - tests for feature X
-
-### Possibly related (confirm):
-- config.json (modified) - may contain task settings
-
-### Will skip:
-- .env (modified) - local environment
-- debug.log (added) - temporary file
+Changed files:
+New: <list of new files>
+Modified: <list of modified files>
+Deleted: <list of deleted files if any>
 ```
 
-Then output: "Review staging plan. Adjust? (Reply with files to add/remove, or 'ok' to proceed):"
+### Commit Message Guidelines
 
-WAIT for user response.
+**Emoji Selection:**
+- new feature
+- bug fix
+- configuration/tooling
+- documentation
+- refactoring
+- style/formatting
+- performance
+- security
+- tests
+- deployment
 
-### Step 5: Stage Files
+**Type Classification:**
+- `feat` - new feature
+- `fix` - bug fix
+- `docs` - documentation
+- `style` - formatting, missing semi colons, etc
+- `refactor` - code restructuring
+- `test` - adding tests
+- `chore` - maintenance tasks
+- `perf` - performance improvements
+- `security` - security-related changes
 
-Use Bash tool to stage selected files:
-- Command: `git add [space-separated file paths]`
-- Description: "Stage task-related files"
+**Scope Examples:**
+- `auth` - authentication
+- `ui` - user interface
+- `api` - API changes
+- `config` - configuration
+- `deps` - dependencies
+- `build` - build system
+- `ci` - continuous integration
 
-### Step 6: Generate Commit Message
+**Subject Line:**
+- Use imperative mood ("add" not "added" or "adds")
+- Keep under 50 characters
+- No period at the end
+- Capitalize first letter
 
-Based on staged changes, generate a conventional commit message:
+**Body (if needed):**
+- Use bullet points for multiple changes
+- Explain the "why" not just the "what"
+- Reference issue numbers if applicable
+- Keep lines under 72 characters
 
-Format:
-```
-[type]: [concise description]
+### 4. Execute Commit
+- Run the git commit command with the generated message
+- Verify the commit was created successfully
+- Show final git status
 
-[optional body with details]
-```
+## Special Instructions
 
-Types: feat, fix, docs, style, refactor, perf, test, chore
+${ARGUMENTS ? `**Custom message context:** ${ARGUMENTS}` : ""}
 
-IMPORTANT: Never mention AI, agents, Claude, automation, or AI-assistance in the message.
-
-### Step 7: Present Commit Message
-
-Output:
-```markdown
-## Proposed Commit Message:
-```
-[generated message]
-```
-```
-
-Then output: "Use this commit message? (Reply 'yes' to commit, 'no' to edit, 'abort' to cancel):"
-
-WAIT for user response.
-
-If user says 'no', ask: "Enter your commit message:"
-WAIT for user's message.
-
-If user says 'abort':
-- Use Bash tool to unstage: `git reset`
-- Exit command
-
-### Step 8: Create Commit
-
-If user approves:
-
-1. Use Bash tool to create commit:
-   - Command: `git commit -m "[message]"`
-   - Description: "Create git commit"
-
-2. Use Bash tool to show result:
-   - Command: `git log --oneline -1 && git status`
-   - Description: "Show commit result and status"
-
-3. If task history file exists, append commit info using Edit tool
-
-### Step 9: Create Merge Request (Optional)
-
-Output: "Commit successful! Create a Merge Request / Pull Request? (y/n):"
-WAIT for user's response.
-
-If user says yes:
-
-Output: "Starting /mr-draft command..."
-
-Execute the `/mr-draft` slash command.
-
-If user says no, command complete.
-
-## Smart Detection Rules
-
-### File Pattern Matching
-Automatically detect task-related files based on:
-
-1. **Direct Mentions**
-   - Files explicitly mentioned in task description
-   - Files in paths specified in task
-
-2. **Technology Patterns**
-   - React task → *.jsx, *.tsx, components/
-   - API task → controllers/, routes/, *.api.*
-   - Database task → migrations/, models/, *.sql
-   - Testing task → *.test.*, *.spec.*, __tests__/
-   - Documentation task → *.md, docs/
-
-3. **Temporal Correlation**
-   - Files modified after task start time
-   - Files in same directory as other task files
-
-4. **Dependency Chain**
-   - Files that import/require task files
-   - Files imported by task files
-   - Config files affecting task files
-
-### Exclusion Rules
-Always exclude:
-- `.env`, `.env.local`, `.env.*`
-- `*.log`, `*.tmp`, `*.cache`
-- `.DS_Store`, `Thumbs.db`
-- `node_modules/`, `vendor/`, `target/`
-- Build outputs unless specifically part of task
-- Personal IDE settings (`.vscode/settings.json`, `.idea/`)
-
-## Error Handling
-
-### No Git Repository
-- Check if in git repository
-- Suggest `git init` if appropriate
-- Exit gracefully
-
-### No Changes to Commit
-- Show current status
-- Suggest checking task completion
-- Exit gracefully
-
-### Merge Conflicts
-- Detect merge conflict markers
-- Warn user to resolve conflicts first
-- Provide guidance on conflict resolution
-
-### Task File Issues
-- If no task history: Offer to proceed with manual file selection
-- If corrupt task file: Use fallback to git status only
-- If multiple active tasks: Ask which task to commit for
-
-## Command Options
-
-### Basic Usage
-```
-/commit
-```
-Runs full smart commit workflow
-
-### Manual Override
-If no task context or user wants manual control:
-1. STOP → "No task context. Enter files to stage (space-separated) or 'all' for git add -A:"
-2. STOP → "Enter commit message:"
-3. Proceed with standard commit
-
-## Integration with /task-init
-
-### Task Continuity
-- Reads task context from `.claude/task-history/`
-- Uses task success criteria to validate changes
-- Links commits back to original task
-
-### Workflow Connection
-```
-/task-init → [work on task] → /commit → [repeat as needed]
-```
-
-## Best Practices
-
-1. **One Task, One Commit**
-   - Keep commits focused on single task
-   - Use multiple commits for complex tasks
-   - Each commit should be independently valid
-
-2. **Message Quality**
-   - First line: 50 chars or less
-   - Use imperative mood ("add" not "added")
-   - Explain what and why, not how
-
-3. **Clean History**
-   - No WIP commits
-   - No debugging artifacts
-   - No commented code
-
-## Notes
-- Commit messages never mention AI assistance
-- Task history helps maintain commit context
-- Smart staging prevents accidental commits
-- Works with any git workflow (feature branches, trunk-based, etc.)
+- If there are no changes to commit, report the clean status and exit
+- If there are only unstaged changes, ask whether to stage them first
+- Always verify the commit succeeds and show confirmation
+- Include the commit hash in your final response
