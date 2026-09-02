@@ -1,234 +1,227 @@
 ---
 name: harness-engineering
-description: "This skill should be used when designing autonomous agent harnesses: research loops, evaluation scaffolds, locked and editable surfaces, durable logs, novelty gates, pruning, rollback, PR preparation, and human approval boundaries."
+description: 'Adopt repository-level harness engineering for coding agents. Use when a user wants to prevent repeated AI coding-agent mistakes by turning failures into durable instructions, drift checks, regression tests, failure memory, and adoption reports tailored to the target repository.'
 ---
 
 # Harness Engineering
 
-Harness engineering designs the control system around an agent: what it may edit, how it receives feedback, where it writes state, how failures recover, and who can approve irreversible actions. The harness is the difference between a helpful agent session and an autonomous loop that can run for days without corrupting its objective.
-
-## When to Activate
-
-Activate this skill when:
-
-- Building autonomous research or experimentation loops
-- Designing an agent environment with locked metrics and editable code or content
-- Creating PR-producing or background agents
-- Evaluating whether an agent can safely run without frequent human prompts
-- Adding novelty, ablation, pruning, rollback, or durable logging to an agent workflow
-- Preventing agents from gaming benchmarks, weakening rubrics, or losing state across compaction
-
-Do not activate this skill for adjacent work owned by other skills:
-- General quality gates, regression suites, or outcome metrics without autonomous control surfaces: `evaluation`.
-- Tool schemas, response formats, and recovery errors for harness tools: `tool-design`.
-- Project-level task-model fit, pipeline shape, and cost planning: `project-development`.
-- Remote sandbox, warm-pool, and hosted session infrastructure: `hosted-agents`.
-
-## Core Concepts
-
-### Harness Boundary
-
-Separate the agent from the environment it operates inside. The agent proposes actions; the harness defines allowed surfaces, feedback, persistence, and promotion rules.
-
-Use four surface classes:
-
-| Surface | Examples | Rule |
-| --- | --- | --- |
-| Locked | Eval metric, rubric, validation script, merge policy | Agent may read and propose changes, but cannot score itself with modified rules |
-| Editable | Skill draft, experiment file, prompt, config under test | Agent may mutate during the loop |
-| Append-only | Results log, research thread, rejected ideas | Agent may append, not rewrite |
-| Human-controlled | Merge, production deploy, credentials, destructive operations | Requires explicit human approval |
-
-### Tight Feedback Loops
-
-Autonomy works when feedback is fast, unambiguous, and hard to game. Karpathy's `autoresearch` is the minimal pattern: one editable file, one locked evaluation file, fixed wall-clock budget, one scalar metric, git rollback, and a durable results log. The lesson is not that every harness needs one metric; it is that ambiguous feedback creates ambiguous autonomy.
-
-For open-ended research-to-skill work, replace the scalar metric with locked rubrics, deterministic structure checks, source traceability, and human review thresholds.
-
-### Durable State
-
-Long-running agents must externalize state. Store plans, source queues, results, failures, and handoffs in files so future agents can resume without relying on chat history. Prime Intellect's autonomous nanoGPT work showed the value of durable scratchpads and `THREAD.md`-style logs for recovery, monitoring, and audit.
-
-Use append-only logs for:
-
-- What was tried
-- What improved or failed
-- Why a candidate was kept, discarded, or routed to review
-- Which upstream sources were checked
-- What the next agent should do
-
-### Search Discipline
-
-Agents tend to exploit the nearest surface, stack complexity, and under-run pruning. Add explicit search rules:
-
-1. Refresh upstream sources on a schedule.
-2. Require novelty checks before spending large budgets.
-3. Preserve rejected attempts to avoid rediscovery.
-4. Run leave-one-out pruning when a stack has multiple additions.
-5. Reward simplification when quality is equal.
-6. Use separate verification before promotion.
-
-### Mechanism Registry
-
-For research-to-skill systems, track accepted mechanisms separately from prose. A mechanism record should include a stable `mechanism_id`, `owning_skill`, `status`, activation scenario, behavior change, evidence, and failure modes. Novelty gates should compare against this registry before using broader corpus overlap, because keyword overlap catches stale phrasing while mechanism comparison catches real duplication.
-
-### Governance
-
-Autonomous agents may prepare PRs, but governance must be explicit. They can draft changes, run checks, and write PR summaries. They should not merge, deploy, or push without human approval unless the user has explicitly granted that permission for the specific action.
-
-## Detailed Topics
-
-### Autoresearch-Style Loop
-
-Use this pattern when optimizing an artifact against a stable evaluator:
+Harness engineering turns repeated coding-agent mistakes into durable
+repository artifacts:
 
 ```text
-read locked context -> choose hypothesis -> edit allowed surface -> commit/checkpoint
--> run evaluator -> log result -> keep if better -> discard or rollback if worse
--> repeat
+Harness = Instructions + Constraints + Feedback + Memory + Evaluation + Governance
 ```
 
-Required properties:
+Use this skill when the user asks to:
 
-- The evaluator is outside the editable surface.
-- The feedback cadence is fixed enough to compare attempts.
-- Failed attempts leave an audit trail.
-- Rollback is cheap.
-- The agent has a policy for crashes and timeouts.
+- make a repository more reliable for GitHub Copilot or other coding agents
+- add durable agent instructions, repository rules, or guardrails
+- prevent repeated AI coding-agent mistakes
+- record known failure paths and the checks that prevent recurrence
+- add lightweight drift checks for project rules
+- review, refresh, or update an existing agent harness
 
-### Research-To-Skill Loop
+Do not use this skill for ordinary feature implementation unless the user asks
+to improve the repository's agent operating environment.
 
-Use this pattern when sources become skill changes:
+## Core Principles
+
+- Treat the target repository as the source of truth.
+- Inspect before editing. Preserve the existing stack, package manager, CI,
+  docs, naming, and architecture.
+- Add the smallest useful harness. Prefer updating existing files over adding
+  duplicate guidance.
+- Make important rules enforceable where practical through tests, linters,
+  type checks, CI, pre-commit hooks, or drift scripts.
+- Use manual review points only when automation would be brittle or misleading.
+- Record high-risk failures that should not recur, and name the check or review
+  point that catches recurrence.
+- Do not copy generic templates blindly. Adapt every artifact to real evidence
+  in the target repository.
+
+## Discovery
+
+Before proposing or making harness changes, inspect the repository for existing
+rules and evidence.
+
+Read these files and folders when they exist:
+
+- `README.md`
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
+- `.github/instructions/`
+- `.github/workflows/`
+- `CONTRIBUTING.md`
+- package manifests such as `package.json`, `pyproject.toml`, `go.mod`,
+  `Cargo.toml`, `pom.xml`, or `build.gradle`
+- existing docs under `docs/`
+- existing scripts under `scripts/`
+- existing tests and CI checks
+
+Then summarize:
+
+- stack, package manager, and entry points
+- existing development and verification commands
+- current agent instructions or repository conventions
+- known failures, incidents, flaky paths, or repeated review comments
+- gaps where project rules are not enforced
+
+## Adoption Workflow
+
+Follow this sequence:
+
+1. Choose the harness surface that fits the target repository.
+2. Write target-specific agent instructions.
+3. Add enforceable checks for high-value rules.
+4. Record failure memory for high-risk or recurring failures.
+5. Add drift checks for guidance that can silently become stale.
+6. Report the adoption with evidence, assumptions, and follow-up.
+
+### 1. Choose the Harness Surface
+
+Pick only the surfaces that fit the target repository:
+
+| Need | Preferred artifact |
+| --- | --- |
+| Always-on agent behavior | `AGENTS.md` or `.github/copilot-instructions.md` |
+| File-scoped guidance | `.github/instructions/*.instructions.md` |
+| Recurring project checks | `scripts/check_*.py`, shell scripts, or package scripts |
+| CI enforcement | existing workflow files or a small new workflow |
+| Known failures | `docs/failures/*.md` |
+| Architecture or process decisions | `docs/decisions/*.md` |
+| Adoption evidence | `docs/harness/adoption-report.md` or similar |
+
+If the repository already has an equivalent location, update it instead of
+creating a parallel system.
+
+### 2. Write Agent Instructions
+
+Agent instructions should be concrete and operational. Include:
+
+- project purpose and major ownership boundaries
+- setup, test, lint, build, and verification commands
+- package manager and dependency rules
+- safe editing rules, generated file rules, and forbidden paths
+- testing expectations for changed code
+- PR and commit conventions if the repo has them
+- how to record new failures or decisions
+
+Avoid broad personality guidance, generic best practices, and rules that cannot
+be checked or reviewed.
+
+### 3. Add Enforceable Checks
+
+Convert high-value rules into checks. Good harness checks are:
+
+- narrow enough to avoid false positives
+- fast enough to run locally and in CI
+- named clearly so agents can run them before finishing
+- documented with the rule they protect
+
+Examples:
 
 ```text
-discover -> retrieve -> gate -> score -> extract mechanism
--> map to existing or new skill -> draft proposal -> validate structure
--> prepare PR -> human review
+Rule: Do not edit generated API clients.
+Check: script scans diffs for generated paths and fails with a clear message.
+
+Rule: Every failure memory note names a regression check.
+Check: script validates docs/failures/*.md for a "Detection" section.
+
+Rule: Profile docs and templates must stay aligned.
+Check: test compares profile README files to expected template files.
 ```
 
-The locked evaluator is a combination of source rubrics, skill-change rubrics, structure checks, and reviewer approval. The editable artifact is the proposed skill delta.
+### 4. Record Failure Memory
 
-### Metric Gaming Resistance
+Record failures when they are user-visible, high-risk, or likely to recur.
+Use a new file under `docs/failures/` unless an existing note already covers
+the same root cause.
 
-Assume an optimizing agent will learn the harness. Guard against:
+Recommended structure:
 
-- Editing evaluation code or rubrics and then using the new version for self-approval
-- Adding verbose content that pleases a judge but harms skill activation
-- Citing unretrieved sources
-- Optimizing aggregate scores while failing a critical dimension
-- Avoiding failed results in the log
+```markdown
+# Short Failure Title
 
-Mitigation: lock rubrics per run, report per-dimension scores, require source retrieval evidence, preserve rejected attempts, and route governance changes to human review.
+## Summary
 
-### Monitoring Agents
+What failed, who saw it, and why it matters.
 
-Use monitoring agents for long runs, but restrict them to read-only reporting unless explicitly tasked otherwise. Monitoring output should report:
+## Root Cause
 
-- Best current candidate
-- Active jobs or drafts
-- Last upstream refresh
-- Failed or stale loops
-- Disagreements between logs and claimed state
-- Next action and blocker
+The technical or process cause. Avoid blame.
 
-## Practical Guidance
+## Prevention
 
-### Harness Design Checklist
+Instruction, test, drift check, CI gate, fixture, or manual review point that
+prevents or detects recurrence.
 
-1. Define the objective in one sentence.
-2. Identify locked, editable, append-only, and human-controlled surfaces.
-3. Choose the feedback mechanism: scalar metric, rubric, deterministic tests, human review, or combination.
-4. Define keep, discard, crash, timeout, and review states.
-5. Create a durable thread log before the loop starts.
-6. Add source refresh, mechanism-registry novelty, and pruning rules for long-running loops.
-7. Define what the agent may do without asking and what requires approval.
-8. Validate the harness on one known good and one known bad artifact.
+## Evidence
 
-### File Layout
-
-```text
-research-run/
-  THREAD.md
-  sources/
-    queue.md
-    evaluations/
-  proposals/
-  logs/
-    results.tsv
-    rejected.md
-  drafts/
+Links to issue, PR, test, log, command output, or file paths.
 ```
 
-Use TSV or JSONL for append-only machine-readable logs. Use Markdown for handoffs and reviewer-facing summaries.
+If no automated check is practical, record the manual review point and why
+automation would be unsafe or misleading.
 
-## Examples
+### 5. Add Drift Checks
 
-**Example 1: Locked metric**
+Use drift checks for guidance that can silently become stale. Common examples:
 
-An agent optimizes `train.py`, but `prepare.py` owns data loading and evaluation. The agent can edit the model but cannot change the metric. Failed experiments are logged and rolled back.
+- docs mention commands that no longer exist
+- profile snippets and generated examples diverge
+- failure notes omit regression checks
+- decision records are missing for structural changes
+- CI references stale scripts or package commands
 
-**Example 2: Locked rubric**
+Prefer small scripts using the repository's existing language. If the repo has
+no scripting convention, Python with only the standard library is a portable
+default.
 
-An agent evaluates a new Anthropic or OpenAI engineering post, but the source curation rubric is locked for the run. If the source passes, the agent drafts a skill proposal. It cannot lower the rubric threshold to admit the source.
+### 6. Report the Adoption
 
-**Example 3: Auto-PR without auto-merge**
+Finish substantial harness work with an adoption report that includes:
 
-An agent prepares a branch and PR body after passing source, skill, and structure checks. The PR states unresolved risks and waits for human merge approval.
+- files changed
+- rules added or updated
+- checks added or reused
+- commands run and results
+- assumptions and manual follow-up
+- failure memory created or intentionally skipped
+- how effectiveness will be measured
 
-## Guidelines
+## Review Workflow
 
-1. Lock evaluators before starting the loop.
-2. Keep editable surfaces narrow enough for reliable diffs.
-3. Write durable logs before context compaction can erase state.
-4. Report per-dimension scores instead of only aggregate scores.
-5. Require source retrieval before citation.
-6. Add novelty gates for broad search and pruning gates for complex stacks.
-7. Prefer simplification when quality is equal.
-8. Separate PR preparation from merge authority.
-9. Revalidate harness changes with old and new evaluators.
-10. Treat stopped autonomous loops as harness failures, not agent personality quirks.
+When asked to review a harness change, take an opposing perspective. Look for:
 
-## Gotchas
+- generic rules copied without evidence from the target repository
+- duplicate or conflicting instruction files
+- broad checks that are likely to fail on valid changes
+- unenforced high-risk rules
+- missing failure memory for repeated mistakes or runtime failures
+- generated docs not refreshed after source changes
+- CI gates that do not run the relevant checks
+- target repository conventions being overwritten by harness defaults
 
-1. **Mutable evaluator**: If the agent can edit the metric, it may optimize the benchmark instead of the task. Keep rubrics and eval code locked during the run.
-2. **Chat-only memory**: Long runs fail after compaction when plans live only in conversation history. Write thread logs and result files from the start.
-3. **No discard record**: Without rejected-attempt logs, agents repeat failed ideas. Preserve failures with enough detail to avoid rediscovery.
-4. **Complexity accretion**: Agents stack changes and rarely remove them. Require pruning rounds and reward equal-quality simplification.
-5. **Premature novelty claims**: Agents label recombinations as novel. Compare against existing repo skills, source queue, and rejected logs before claiming novelty.
-6. **Monitor misreporting**: Monitoring agents can summarize stale or inconsistent state. Require them to cite the files or logs behind claims.
-7. **Human approval ambiguity**: "Prepare a PR" is not "merge a PR." Make approval boundaries explicit in the harness.
-8. **Volatile source drift**: Fast-moving lab claims age quickly. Put dated evidence in references and schedule revalidation.
+Report findings first, ordered by severity, with file and line references when
+available. Do not modify files during a review unless the user explicitly asks
+for fixes.
 
-## Integration
+## Output Contract
 
-This skill connects to:
+Before finishing harness adoption work, verify:
 
-- evaluation - Rubrics and quality gates provide the locked feedback surface
-- advanced-evaluation - Pairwise comparison and bias mitigation improve proposal review
-- filesystem-context - Durable logs, scratchpads, and thread files preserve state
-- multi-agent-patterns - Researcher, verifier, monitor, and writer agents need isolated contexts
-- tool-design - Harness tools must expose clear contracts and recovery errors
-- project-development - File-based pipelines and task-model fit analysis keep loops simple
-- hosted-agents - Background execution needs sandbox, snapshot, and approval boundaries
+- the target repository was inspected before edits
+- new guidance is specific to the target repository
+- changed checks can be run locally or have a documented manual substitute
+- failure memory was recorded when required, or the final response explains why
+  it was skipped
+- generated docs or indexes are refreshed
+- the final report names every command run and its result
 
-## References
+## Optional Reference
 
-Internal references:
-- `researcher/README.md` - Read when implementing the repo-native research-to-skill operating system
-- `researcher/rubrics/harness-change.md` - Read when evaluating changes to an agent harness
-- `researcher/runbooks/autonomous-research-loop.md` - Read when running a source-to-skill loop
-
-External resources:
-- Karpathy `autoresearch` - Constrained autonomous experiment loop with locked evaluation
-- Prime Intellect autonomous nanoGPT speedrun - Durable scratchpads, handoffs, monitoring, and autonomy failure modes
-- AlphaEvolve and FunSearch - LLM-generated candidates paired with systematic evaluators
-- HELM and LM Evaluation Harness - Transparent, reproducible evaluation infrastructure
-
----
-
-## Skill Metadata
-
-**Created**: 2026-05-14
-**Last Updated**: 2026-05-15
-**Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.1.0
+The prompt-first workflow in
+`https://github.com/baskduf/harness-starter-kit` is a reference implementation
+of these ideas. Use it as reference material only when the user asks for it or
+when the repository already includes it. The target repository remains the
+source of truth.

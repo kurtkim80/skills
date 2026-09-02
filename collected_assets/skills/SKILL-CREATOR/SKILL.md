@@ -1,597 +1,330 @@
 ---
 name: skill-creator
-description: To create new CLI skills following Anthropic's official best practices with zero manual configuration. This skill automates brainstorming, template application, validation, and installation processes while maintaining progressive disclosure patterns and writing style standards.
-metadata:
-  aas-category: meta
-  aas-risk: safe
-  aas-source: community
-  aas-tags: '[automation, scaffolding, skill-creation, meta-skill]'
-  aas-date-added: '2026-02-27'
-  aas-plugin: '{"targets":{"claude":"supported","codex":"supported"}}'
+description: Create new skills, improve existing skills, and test skill quality. Use when the user wants to build a skill from scratch, turn a workflow into a reusable skill, improve or refactor an existing SKILL.md, test how well a skill performs, optimize a skill's description so it triggers correctly, or asks "how do I make a skill for X". This is the meta-skill — it builds all other skills.
 ---
 
-# skill-creator
+# Skill Creator
 
-## Purpose
+A skill is a reusable, opinionated expert guide that makes an AI agent dramatically better at a specific domain. Not a prompt. Not a template. A skill is a production-grade system that encodes deep domain expertise, principled workflows, concrete examples, and an unambiguous definition of done — so the agent executes it the same way every time, without the user having to re-explain.
 
-To create new CLI skills following Anthropic's official best practices with zero manual configuration. This skill automates brainstorming, template application, validation, and installation processes while maintaining progressive disclosure patterns and writing style standards.
+Your job in this skill is to help the user go from "I want a skill for X" to a skill that works reliably in the real world.
 
-## When to Use This Skill
+---
 
-This skill should be used when:
-- User wants to extend CLI functionality with custom capabilities
-- User needs to create a skill following official standards
-- User wants to automate repetitive CLI tasks with a reusable skill
-- User needs to package domain knowledge into a skill format
-- User wants both local and global skill installation options
+## Skill Creator Principles
 
-## Core Capabilities
+- **Understand before writing.** A skill written without understanding the user's intent produces generic instructions that could apply to anything. Ask the right questions first.
+- **Skills generalize — test cases are just accelerants.** You iterate on 3–5 examples because it's fast. But the skill needs to work on the 10,000th prompt that nobody has seen yet. Avoid overfitting rules to the specific examples.
+- **Explain the why, not just the what.** Instructions that say "always do X" without explanation get followed blindly in the wrong context. Instructions that say "do X because Y" get applied with judgment. Smart models respond better to reasoning than to commandments.
+- **Lean beats padded.** Remove every instruction that isn't actively improving outputs. A 600-line skill where 200 lines are filler produces worse results than a tight 300-line skill where every line earns its place. If you find yourself writing ALWAYS/NEVER in all caps, step back — try explaining the reasoning instead.
+- **The description field is a trigger, not a summary.** The description is what the agent reads to decide whether to load the skill. It must contain explicit trigger conditions: "Use when the user asks to..." — not just what the skill is about.
+- **Test against reality, not intuition.** You cannot know if a skill works without running it. Gut-feel improvements compound errors. Run test cases. Look at the outputs. Iterate on evidence.
 
-1. **Interactive Brainstorming** - Collaborative session to define skill purpose and scope
-2. **Prompt Enhancement** - Optional integration with prompt-engineer skill for refinement
-3. **Template Application** - Automatic file generation from standardized templates
-4. **Validation** - YAML, content, and style checks against Anthropic standards
-5. **Installation** - Local repository or global installation with symlinks
-6. **Progress Tracking** - Visual gauge showing completion status at each step
+---
 
-## Step 0: Discovery
-
-Before starting skill creation, gather runtime information:
-
-```bash
-# Detect available platforms
-COPILOT_INSTALLED=false
-CLAUDE_INSTALLED=false
-CODEX_INSTALLED=false
-
-if command -v gh &>/dev/null && gh copilot --version &>/dev/null 2>&1; then
-    COPILOT_INSTALLED=true
-fi
-
-if [[ -d "$HOME/.claude" ]]; then
-    CLAUDE_INSTALLED=true
-fi
-
-if [[ -d "$HOME/.codex" ]]; then
-    CODEX_INSTALLED=true
-fi
-
-# Determine working directory
-REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-SKILLS_REPO="$REPO_ROOT"
-
-# Check if in cli-ai-skills repository
-if [[ ! -d "$SKILLS_REPO/.github/skills" ]]; then
-    echo "⚠️  Not in cli-ai-skills repository. Creating standalone skill."
-    STANDALONE=true
-fi
-
-# Get user info from git config
-AUTHOR=$(git config user.name || echo "Unknown")
-EMAIL=$(git config user.email || echo "")
-```
-
-**Key Information Needed:**
-- Which platforms to target (Copilot, Claude, Codex, or all three)
-- Installation preference (local, global, or both)
-- Skill name and purpose
-- Skill type (general, code, documentation, analysis)
-
-## Main Workflow
-
-### Progress Tracking Guidelines
-
-Throughout the workflow, display a visual progress bar before starting each phase to keep the user informed. The progress bar format is:
+## The Skill Creation Loop
 
 ```
-[████████████░░░░░░] 60% - Step 3/5: Creating SKILL.md
+Understand intent
+       ↓
+Write draft skill
+       ↓
+Run test prompts → review outputs
+       ↓
+Improve skill based on feedback
+       ↓
+Repeat until quality is satisfactory
+       ↓
+Optimize description for triggering accuracy
+       ↓
+Ship
 ```
 
-**Format specifications:**
-- 20 characters wide (use █ for filled, ░ for empty)
-- Percentage based on current step (Step 1=20%, Step 2=40%, Step 3=60%, Step 4=80%, Step 5=100%)
-- Step counter showing current/total (e.g., "Step 3/5")
-- Brief description of current phase
+Jump into this loop wherever the user is. If they already have a draft, skip to testing. If they're still fuzzy on intent, start at understanding. Always be flexible — if they want to skip evals and iterate by feel, that's a valid choice.
 
-**Display the progress bar using:**
-```bash
-echo "[████░░░░░░░░░░░░░░] 20% - Step 1/5: Brainstorming & Planning"
+---
+
+## Phase 1: Capture Intent
+
+### If the user says "turn this workflow into a skill"
+
+Read the conversation history. Extract:
+- What tools or steps were used
+- What corrections the user made along the way (these reveal requirements that weren't stated)
+- What the final output looked like
+- What the user seemed satisfied with
+
+Then confirm:
+```
+It looks like this skill is about [X]. It should:
+1. [Core step 1]
+2. [Core step 2]
+3. Produce [output type]
+
+Does that match what you have in mind? Anything I'm missing?
 ```
 
-### Phase 1: Brainstorming & Planning
+### If the user is starting from scratch
 
-**Progress:** Display before starting this phase:
-```bash
-echo "[████░░░░░░░░░░░░░░] 20% - Step 1/5: Brainstorming & Planning"
+Ask up to 5 focused questions — not all at once, unless the user is clearly experienced:
+
+1. **What is the one job this skill does?** Name it in a single sentence.
+2. **Who triggers it?** What does a user say or do that should activate this skill?
+3. **What does the output look like?** A document, code, analysis, structured data?
+4. **What does "good" look like?** What separates a 10/10 output from a 6/10?
+5. **What does "bad" look like?** What specific failure modes must this skill avoid?
+
+If the user is non-technical, avoid terms like "JSON", "assertions", "eval pipeline" — use plain language equivalents:
+- "test cases" not "evals"
+- "checking the results" not "running assertions"
+- "try it on some examples" not "benchmark"
+
+---
+
+## Phase 2: Write the Draft Skill
+
+### Required SKILL.md Structure
+
+Every skill must have this structure, in this order:
+
+```markdown
+---
+name: skill-name-in-kebab-case
+description: [See description rules below]
+---
+
+# Skill Title
+
+[Opening paragraph: mindset and approach. What kind of expert does this well and why does their approach produce better outcomes.]
+
+---
+
+## [Skill Name] Principles
+
+[5–8 load-bearing beliefs. These are the "why" behind the entire skill.
+Each principle should be a thing that, if violated, produces a noticeably worse output.
+Not rules. Beliefs. The agent applies judgment from principles — not from rule-lookup.]
+
+---
+
+## Step 0: Ground the Work Before Starting
+
+[What to establish, ask, or read before taking any action.
+This section prevents the skill from diving in before understanding the situation.
+The most common failure mode in any skilled domain is premature action.]
+
+---
+
+## [Main execution sections]
+
+[The workflow, patterns, templates, examples, code snippets.
+Each section should have a clear job. If a section's purpose is unclear, cut it or merge it.]
+
+---
+
+## Definition of Done
+
+[Checkbox checklist. Every item must be:
+- Verifiable — the agent or user can confirm it is met
+- Specific — no vague items like "quality looks good"
+- Necessary — if removing the item wouldn't affect quality, remove it]
 ```
 
-Display progress:
+### Description Field Rules
+
+The `description` field is the most important line in the file. It determines when the skill gets loaded.
+
+**Rules:**
+- Maximum 2 sentences
+- Must include explicit trigger conditions: "Use when the user asks to...", "Use when the user mentions..."
+- Must name the domain + the specific action, not just the domain
+- Must distinguish this skill from adjacent skills
+
+**Bad description:**
 ```
-╔══════════════════════════════════════════════════════════════╗
-║     🛠️  SKILL CREATOR - Creating New Skill                  ║
-╠══════════════════════════════════════════════════════════════╣
-║ → Phase 1: Brainstorming                 [10%]               ║
-║ ○ Phase 2: Prompt Refinement                                 ║
-║ ○ Phase 3: File Generation                                   ║
-║ ○ Phase 4: Validation                                        ║
-║ ○ Phase 5: Installation                                      ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  10%              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Ask the user:**
-
-1. **What should this skill do?** (Free-form description)
-   - Example: "Help users debug Python code by analyzing stack traces"
-
-2. **When should it trigger?** (Provide 3-5 trigger phrases)
-   - Example: "debug Python error", "analyze stack trace", "fix Python exception"
-
-3. **What type of skill is this?**
-   - [ ] General purpose (default template)
-   - [ ] Code generation/modification
-   - [ ] Documentation creation/maintenance
-   - [ ] Analysis/investigation
-
-4. **Which platforms should support this skill?**
-   - [ ] GitHub Copilot CLI
-   - [ ] Claude Code
-    - [ ] Codex
-    - [ ] All three (recommended)
-
-5. **Provide a one-sentence description** (will appear in metadata)
-   - Example: "Analyzes Python stack traces and suggests fixes"
-
-**Capture responses and prepare for next phase.**
-
-### Phase 2: Prompt Enhancement (Optional)
-
-**Progress:** Display before starting this phase:
-```bash
-echo "[████████░░░░░░░░░░] 40% - Step 2/5: Prompt Enhancement"
+Helps with writing documents.
 ```
 
-Update progress:
+**Good description:**
 ```
-╔══════════════════════════════════════════════════════════════╗
-║ ✓ Phase 1: Brainstorming                                     ║
-║ → Phase 2: Prompt Refinement             [30%]               ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: █████████░░░░░░░░░░░░░░░░░░░░░  30%              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Ask the user:**
-"Would you like to refine the skill description using the prompt-engineer skill?"
-- [ ] Yes - Use prompt-engineer to enhance clarity and structure
-- [ ] No - Proceed with current description
-
-If **Yes**:
-1. Check if prompt-engineer skill is available
-2. Invoke with current description as input
-3. Review enhanced output with user
-4. Ask: "Accept enhanced version or keep original?"
-
-If **No** or prompt-engineer unavailable:
-- Proceed with original user input
-
-### Phase 3: File Generation
-
-**Progress:** Display before starting this phase:
-```bash
-echo "[████████████░░░░░░] 60% - Step 3/5: File Generation"
+Structured co-authoring workflow for PRDs, design docs, RFCs, and proposals.
+Use when the user wants to write a PRD, design doc, RFC, or any structured
+document where quality and completeness matter — goes deeper than general
+writing help by guiding through context gathering, section refinement,
+and reader testing.
 ```
 
-Update progress:
+**Template:**
 ```
-╔══════════════════════════════════════════════════════════════╗
-║ ✓ Phase 1: Brainstorming                                     ║
-║ ✓ Phase 2: Prompt Refinement                                 ║
-║ → Phase 3: File Generation               [50%]               ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: ███████████████░░░░░░░░░░░░░░░  50%              ║
-╚══════════════════════════════════════════════════════════════╝
+[What it does — domain + specific action + key method].
+Use when the user [trigger condition 1], [trigger condition 2], or [trigger condition 3].
 ```
 
-**Generate skill structure:**
+---
 
-```bash
-# Convert skill name to kebab-case
-SKILL_NAME=$(echo "$USER_INPUT" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+## Phase 3: Write Test Cases
 
-# Create directories
-if [[ "$PLATFORM" =~ "copilot" ]]; then
-    mkdir -p ".github/skills/$SKILL_NAME"/{references,examples,scripts}
-fi
+Write 3–5 test prompts that a real user would send. These should:
 
-if [[ "$PLATFORM" =~ "claude" ]]; then
-    mkdir -p ".claude/skills/$SKILL_NAME"/{references,examples,scripts}
-fi
+- Cover the core use case (what the skill is for)
+- Cover at least one edge case (unusual input, partial information)
+- Cover at least one failure-adjacent case (something that sounds like the skill's domain but isn't quite)
+- Use realistic language — not "test the skill on a widget factory", but something a real user in the target audience would actually type
 
-if [[ "$PLATFORM" =~ "codex" ]]; then
-    mkdir -p ".codex/skills/$SKILL_NAME"/{references,examples,scripts}
-fi
+**Test case format:**
+
+```markdown
+## Test Cases — [Skill Name]
+
+### Test 1: Core use case
+**Prompt:** [Realistic user prompt]
+**Expected output:** [What a good response looks like]
+**Pass criteria:**
+- [ ] [Specific, checkable criterion]
+- [ ] [Specific, checkable criterion]
+
+### Test 2: Edge case
+**Prompt:** [Edge case prompt]
+**Expected output:** [What a good response looks like]
+**Pass criteria:**
+- [ ] [Criterion]
+
+### Test 3: Failure-adjacent
+**Prompt:** [Something that might accidentally trigger the skill but shouldn't, or should trigger a graceful handling]
+**Expected output:** [What the skill should do here]
+**Pass criteria:**
+- [ ] [Criterion]
 ```
 
-**Apply templates:**
+---
 
-1. **SKILL.md** - Use appropriate template:
-   - `skill-template-copilot.md`, `skill-template-claude.md`, or `skill-template-codex.md`
-   - Substitute placeholders:
-     - `{{SKILL_NAME}}` → kebab-case name
-     - `{{DESCRIPTION}}` → one-line description
-     - `{{TRIGGERS}}` → comma-separated trigger phrases
-     - `{{PURPOSE}}` → detailed purpose from brainstorming
-     - `{{AUTHOR}}` → from git config
-     - `{{DATE}}` → current date (YYYY-MM-DD)
-     - `{{VERSION}}` → "1.0.0"
+## Phase 4: Run and Review
 
-2. **README.md** - Use `readme-template.md`:
-   - User-facing documentation (300-500 words)
-   - Include installation instructions
-   - Add usage examples
+After writing the draft skill and test cases:
 
-3. **References/** (optional but recommended):
-   - Create `detailed-guide.md` for extended documentation (2k-5k words)
-   - Move lengthy content here to keep SKILL.md under 2k words
+1. **Run each test prompt** with the skill active
+2. **Read the full output** — not just whether it looked OK, but whether every pass criterion was met
+3. **Look for patterns across test cases**:
+   - Did the agent do the same unnecessary thing on every test? The skill is probably prompting it.
+   - Did the agent skip the same important step on every test? The skill is missing something.
+   - Did the outputs vary wildly in quality? The skill's instructions are ambiguous.
 
-**File creation commands:**
+### Qualitative Review Questions
 
-```bash
-# Apply template with substitution
-sed "s/{{SKILL_NAME}}/$SKILL_NAME/g; \
-     s/{{DESCRIPTION}}/$DESCRIPTION/g; \
-     s/{{AUTHOR}}/$AUTHOR/g; \
-     s/{{DATE}}/$(date +%Y-%m-%d)/g" \
-    resources/templates/skill-template-copilot.md \
-    > ".github/skills/$SKILL_NAME/SKILL.md"
+For each test output, ask:
+- Does the output match what a domain expert would produce?
+- Is anything present that shouldn't be? (filler, repetition, unnecessary preamble)
+- Is anything missing that should be? (the skill's core value-add)
+- Did the agent explain its reasoning at the right level, or was it either too shallow or too verbose?
+- Would the target user be satisfied with this output? Why or why not?
 
-# Create README
-sed "s/{{SKILL_NAME}}/$SKILL_NAME/g" \
-    resources/templates/readme-template.md \
-    > ".github/skills/$SKILL_NAME/README.md"
+---
 
-# Apply template for Codex if selected
-if [[ "$PLATFORM" =~ "codex" ]]; then
-    sed "s/{{SKILL_NAME}}/$SKILL_NAME/g; \
-         s/{{DESCRIPTION}}/$DESCRIPTION/g; \
-         s/{{AUTHOR}}/$AUTHOR/g; \
-         s/{{DATE}}/$(date +%Y-%m-%d)/g" \
-        resources/templates/skill-template-codex.md \
-        > ".codex/skills/$SKILL_NAME/SKILL.md"
+## Phase 5: Improve the Skill
 
-    sed "s/{{SKILL_NAME}}/$SKILL_NAME/g" \
-        resources/templates/readme-template.md \
-        > ".codex/skills/$SKILL_NAME/README.md"
-fi
+### How to think about improvements
+
+**Generalize, don't overfit.** If the skill only works on the 3 test cases and nobody else's prompts, it's useless. When fixing a problem that appeared in a specific test case, ask: "Is this a specific fix or a general principle?" Prefer general principles.
+
+**Read the execution trace, not just the output.** The most revealing information is the *process* the agent followed. Did it take a pointless detour? Did it repeat itself? Did it do something that wasn't in the skill instructions but should have been? The trace tells you what to add or remove.
+
+**Remove before adding.** Before adding a new instruction, check if the problem can be fixed by removing an instruction that is creating the wrong behavior. Shorter is usually better.
+
+**When you find yourself writing ALWAYS or NEVER in all caps:** Pause. Ask if you can explain the underlying principle instead. `"ALWAYS check X"` → `"Check X because Y will fail if you don't — the most common failure mode in this domain is Z"`. The second version produces better judgment.
+
+### Common improvement patterns
+
+| Problem observed | Likely cause | Fix |
+|---|---|---|
+| Agent starts with a long preamble every time | Step 0 asks too many questions | Tighten Step 0 to only essential questions |
+| Output quality varies wildly | Principles are vague | Make each principle concrete with an example of what violating it looks like |
+| Agent skips a critical step | Step not in the skill | Add it with an explanation of why it matters |
+| Agent does something unhelpful on every test | Skill instructions cause it | Remove or reframe the instruction |
+| Output is technically correct but feels wrong | Missing voice/tone guidance | Add a "How to write" section with examples |
+| Agent over-explains its process | Skill says to explain everything | Add "show your work only when it adds value for the reader" |
+
+---
+
+## Phase 6: Optimize the Description
+
+After the skill body is solid, optimize the description for triggering accuracy.
+
+The description has two jobs:
+1. **Load when it should** — the agent recognizes the right moment to invoke it
+2. **Not load when it shouldn't** — the agent doesn't mistakenly invoke it for adjacent tasks
+
+### Description optimization process
+
+1. Write 5 prompts that **should** trigger this skill
+2. Write 5 prompts that **should not** trigger this skill (but are close)
+3. Read your description and check: does it distinguish between the two sets?
+4. Rewrite until it does
+
+**Example — `doc-coauthoring` description optimization:**
+
+Should trigger:
+- "Help me write a PRD for the new payments feature"
+- "I need to draft a design doc for the auth refactor"
+- "Can you help me write up a technical spec?"
+
+Should NOT trigger (close but different):
+- "Write a quick Slack message about the deployment" → use `internal-comms`
+- "Update the README with the new API endpoints" → use `technical-writer`
+- "Summarize this design doc for me" → general task, no skill needed
+
+Revised description: adds "PRD, design doc, RFC" explicitly + "goes deeper than general writing help" to distinguish from `technical-writer`.
+
+---
+
+## Phase 7: Final Quality Gate
+
+Before declaring the skill done, run this checklist:
+
+### Skill body quality
+- [ ] Opening paragraph establishes the mindset — not just "what it does" but "how an expert approaches it"
+- [ ] 5–8 principles that are genuinely load-bearing (removing any one would degrade outputs)
+- [ ] Step 0 grounds the work before any action — prevents premature execution
+- [ ] All main sections have a clear, named purpose
+- [ ] Examples are realistic — not widget factories or foo/bar placeholders
+- [ ] Code snippets (if any) are correct and runnable
+- [ ] Definition of Done has ≥ 8 specific, verifiable, necessary items
+- [ ] No ALWAYS/NEVER all-caps commandments — reasoning used instead
+- [ ] Minimum 200 lines — if shorter, the skill probably lacks depth
+
+### Description quality
+- [ ] ≤ 2 sentences
+- [ ] Names the domain + the specific action
+- [ ] Contains explicit trigger phrases: "Use when the user asks to..."
+- [ ] Distinguishes this skill from the 2–3 most similar skills
+- [ ] Tested against 5 should-trigger and 5 should-not-trigger prompts
+
+### Test quality
+- [ ] At least 3 test cases written
+- [ ] Core use case covered
+- [ ] At least 1 edge case covered
+- [ ] Pass criteria are specific and checkable — not "output looks good"
+- [ ] All 3 test cases pass at an acceptable quality level
+
+---
+
+## Skill File Location
+
+Save new skills at:
+```
+SKILL/<skill-name>/SKILL.md
 ```
 
-**Display created structure:**
-```
-✅ Created:
-   .github/skills/your-skill-name/ (if Copilot selected)
-   .claude/skills/your-skill-name/ (if Claude selected)
-   .codex/skills/your-skill-name/ (if Codex selected)
-   ├── SKILL.md (832 lines)
-   ├── README.md (347 lines)
-   ├── references/
-   ├── examples/
-   └── scripts/
-```
-
-### Phase 4: Validation
-
-**Progress:** Display before starting this phase:
-```bash
-echo "[████████████████░░] 80% - Step 4/5: Validation"
-```
-
-Update progress:
-```
-╔══════════════════════════════════════════════════════════════╗
-║ ✓ Phase 3: File Generation                                   ║
-║ → Phase 4: Validation                    [70%]               ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: █████████████████████░░░░░░░░░  70%              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Run validation scripts:**
-
-```bash
-# Validate YAML frontmatter
-scripts/validate-skill-yaml.sh ".github/skills/$SKILL_NAME"
-
-# Validate content quality
-scripts/validate-skill-content.sh ".github/skills/$SKILL_NAME"
-```
-
-**Expected output:**
-```
-🔍 Validating YAML frontmatter...
-✅ YAML frontmatter valid!
-
-🔍 Validating content...
-✅ Word count excellent: 1847 words
-✅ Content validation complete!
-```
-
-**If validation fails:**
-- Display specific errors
-- Offer to fix automatically (common issues)
-- Ask user to manually correct complex issues
-
-**Common auto-fixes:**
-- Convert second-person to imperative form
-- Reformat description to third-person
-- Add missing required fields
-
-### Phase 5: Installation
-
-**Progress:** Display before starting this phase:
-```bash
-echo "[████████████████████] 100% - Step 5/5: Installation"
-```
-
-Update progress:
-```
-╔══════════════════════════════════════════════════════════════╗
-║ ✓ Phase 4: Validation                                        ║
-║ → Phase 5: Installation                  [90%]               ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: ██████████████████████████░░░░░  90%              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Ask the user:**
-"How would you like to install this skill?"
-
-- [ ] **Repository only** - Files created in `.github/skills/` (works when in repo)
-- [ ] **Global installation** - Create symlinks in `~/.copilot/skills/` (works everywhere)
-- [ ] **Both** - Repository + global symlinks (recommended, auto-updates with git pull)
-- [ ] **Skip installation** - Just create files
-
-**If global installation selected:**
-
-```bash
-# Detect which platforms to install for
-INSTALL_TARGETS=()
-
-if [[ "$COPILOT_INSTALLED" == "true" ]] && [[ "$PLATFORM" =~ "copilot" ]]; then
-    INSTALL_TARGETS+=("copilot")
-fi
-
-if [[ "$CLAUDE_INSTALLED" == "true" ]] && [[ "$PLATFORM" =~ "claude" ]]; then
-    INSTALL_TARGETS+=("claude")
-fi
-
-if [[ "$CODEX_INSTALLED" == "true" ]] && [[ "$PLATFORM" =~ "codex" ]]; then
-    INSTALL_TARGETS+=("codex")
-fi
-
-# Ask user to confirm detected platforms
-echo "Detected platforms: ${INSTALL_TARGETS[*]}"
-echo "Install for these platforms? [Y/n]"
-```
-
-**Installation process:**
-
-```bash
-# GitHub Copilot CLI
-if [[ " ${INSTALL_TARGETS[*]} " =~ " copilot " ]]; then
-    ln -sf "$SKILLS_REPO/.github/skills/$SKILL_NAME" \
-           "$HOME/.copilot/skills/$SKILL_NAME"
-    echo "✅ Installed for GitHub Copilot CLI"
-fi
-
-# Claude Code
-if [[ " ${INSTALL_TARGETS[*]} " =~ " claude " ]]; then
-    ln -sf "$SKILLS_REPO/.claude/skills/$SKILL_NAME" \
-           "$HOME/.claude/skills/$SKILL_NAME"
-    echo "✅ Installed for Claude Code"
-fi
-
-# Codex
-if [[ " ${INSTALL_TARGETS[*]} " =~ " codex " ]]; then
-    ln -sf "$SKILLS_REPO/.codex/skills/$SKILL_NAME" \
-           "$HOME/.codex/skills/$SKILL_NAME"
-    echo "✅ Installed for Codex"
-fi
-```
-
-**Verify installation:**
-
-```bash
-# Check symlinks
-ls -la ~/.copilot/skills/$SKILL_NAME 2>/dev/null
-ls -la ~/.claude/skills/$SKILL_NAME 2>/dev/null
-ls -la ~/.codex/skills/$SKILL_NAME 2>/dev/null
-```
-
-### Phase 6: Completion
-
-**Progress:** Display completion message:
-```bash
-echo "[████████████████████] 100% - ✓ Skill created successfully!"
-```
-
-Update progress:
-```
-╔══════════════════════════════════════════════════════════════╗
-║ ✓ Phase 5: Installation                                      ║
-║ ✅ SKILL CREATION COMPLETE!                                  ║
-╠══════════════════════════════════════════════════════════════╣
-║ Progress: ██████████████████████████████  100%              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-**Display summary:**
-
-```
-🎉 Skill created successfully!
-
-📦 Skill Name: your-skill-name
-📁 Location: .github/skills/your-skill-name/
-🔗 Installed: Global (Copilot + Claude)
-
-📋 Files Created:
-   ✅ SKILL.md (1,847 words)
-   ✅ README.md (423 words)
-   ✅ references/ (empty, ready for extended docs)
-   ✅ examples/ (empty, ready for code samples)
-   ✅ scripts/ (empty, ready for utilities)
-
-🚀 Next Steps:
-   1. Test the skill: Try trigger phrases in CLI
-   2. Add examples: Create working code samples in examples/
-   3. Extend docs: Add detailed guides to references/
-   4. Commit changes: git add .github/skills/your-skill-name && git commit
-   5. Share: Push to repository for team use
-
-💡 Pro Tips:
-   - Keep SKILL.md under 2,000 words (currently: 1,847)
-   - Move detailed content to references/ folder
-   - Add executable scripts to scripts/ folder
-   - Update README.md with real usage examples
-   - Run validation before committing: scripts/validate-skill-yaml.sh
-```
-
-## Error Handling
-
-### Platform Detection Issues
-
-If platforms cannot be detected:
-```
-⚠️  Unable to detect GitHub Copilot CLI or Claude Code
-
-Would you like to:
-1. Install for repository only (works when in repo)
-2. Specify platform manually
-3. Skip installation
-```
-
-### Template Not Found
-
-If templates are missing:
-```
-❌ Error: Template not found at resources/templates/
-
-This skill requires the cli-ai-skills repository structure.
-
-Options:
-1. Clone cli-ai-skills: git clone <repo-url>
-2. Create minimal skill structure manually
-3. Exit and set up templates first
-```
-
-### Validation Failures
-
-If content doesn't meet standards:
-```
-⚠️  Validation Issues Found:
-
-1. YAML: Description not in third-person format
-   Expected: "This skill should be used when..."
-   Found: "Use this skill when..."
-
-2. Content: Word count too high (5,342 words, max 5,000)
-   Suggestion: Move detailed sections to references/
-
-Fix automatically? [Y/n]
-```
-
-### Installation Conflicts
-
-If symlink already exists:
-```
-⚠️  Skill already installed at ~/.copilot/skills/your-skill-name
-
-Options:
-1. Overwrite existing installation
-2. Rename new skill
-3. Skip installation
-4. Install to different location
-```
-
-## Bundled Resources
-
-This skill includes additional resources in subdirectories:
-
-### references/
-
-Detailed documentation loaded when needed:
-- `anthropic-best-practices.md` - Official Anthropic skill development guidelines
-- `writing-style-guide.md` - Writing standards and examples
-- `progressive-disclosure.md` - Content organization patterns
-- `validation-checklist.md` - Pre-commit quality checks
-
-### examples/
-
-Working examples demonstrating skill usage:
-- `basic-skill-creation.md` - Simple skill creation walkthrough
-- `advanced-skill-bundled-resources.md` - Complex skill with references/
-- `global-installation.md` - Installing skills system-wide
-
-### scripts/
-
-Executable utilities for skill maintenance:
-- `validate-all-skills.sh` - Batch validation of all skills in repository
-- `update-skill-version.sh` - Bump version and update changelog
-- `generate-skill-index.sh` - Auto-generate skills catalog
-
-## Technical Implementation Notes
-
-**Template Substitution:**
-- Use `sed` for simple replacements
-- Preserve YAML formatting exactly
-- Handle multi-line descriptions with proper escaping
-
-**Symlink Strategy:**
-- Always use absolute paths: `ln -sf /full/path/to/source ~/.copilot/skills/name`
-- Verify symlink before considering installation complete
-- Benefits: Auto-updates when repository is pulled
-
-**Validation Integration:**
-- Run validation before installation
-- Block installation if critical errors found
-- Warnings are informational only
-
-**Git Integration:**
-- Extract author from `git config user.name`
-- Use repository root detection: `git rev-parse --show-toplevel`
-- Respect `.gitignore` patterns
-
-## Quality Standards
-
-**SKILL.md Requirements:**
-- 1,500-2,000 words (ideal)
-- Under 5,000 words (maximum)
-- Third-person description format
-- Imperative/infinitive writing style
-- Progressive disclosure pattern
-
-**README.md Requirements:**
-- 300-500 words
-- User-facing language
-- Clear installation instructions
-- Practical usage examples
-
-**Validation Checks:**
-- YAML frontmatter completeness
-- Description format (third-person)
-- Word count limits
-- Writing style (no second-person)
-- Required fields present
-
-## References
-
-- **Anthropic Official Skill Development Guide:** https://github.com/anthropics/claude-plugins-official/blob/main/plugins/plugin-dev/skills/skill-development/SKILL.md
-- **Repository:** https://github.com/yourusername/cli-ai-skills
-- **Writing Style Guide:** `resources/templates/writing-style-guide.md`
-- **Progress Tracker Template:** `resources/templates/progress-tracker.md`
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+Skill name rules:
+- `lowercase-kebab-case`
+- Describes the **role** not the task: `database-architect` not `write-sql`
+- Unique — check existing skills before naming
+
+---
+
+## Quick Reference: The 5 Signs of a Good Skill
+
+1. **You can name its single job in one sentence** — if you need two sentences, it's two skills
+2. **The description triggers on the right prompts and not on the wrong ones**
+3. **The principles explain the *why*, not just the what**
+4. **Step 0 prevents the #1 failure mode in this domain**
+5. **The Definition of Done is a checklist you can actually check** — every item is specific and verifiable

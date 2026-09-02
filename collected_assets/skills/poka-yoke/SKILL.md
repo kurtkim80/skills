@@ -1,172 +1,203 @@
 ---
 name: poka-yoke
-description: "Mistake-proof code, config and process: make the wrong action impossible or self-announcing rather than documented."
-category: development
-risk: safe
-source: rainmanjam/poka-yoke
-source_repo: rainmanjam/poka-yoke
-source_type: community
-date_added: "2026-08-25"
-author: rainmanjam
-tags: [mistake-proofing, code-review, api-design, guardrails, reliability]
-tools: [claude, cursor, codex]
-license: "MIT"
-license_source: "https://github.com/rainmanjam/poka-yoke/blob/v0.1.2/LICENSE"
+description: 'Mistake-proof code so misuse cannot be expressed, rather than warning against it. Use when designing an interface, schema, or state machine and the user wants it hard to get wrong ("make invalid states unrepresentable", "so callers cannot screw it up", "type-safe API", "pit of success"); when auditing existing code for footguns ("what could bite us here", "what is easy to misuse", "poka-yoke this repo", "review this diff for ways to get it wrong"); or when a bug has recurred and the fix must close the class rather than the case ("make sure this never happens again", "this is the third time"). Especially for money, auth, permissions, deletion, migrations, and pipelines where failure is silent. Classifies every finding by what happens when the mistake occurs and how the device notices, which is what keeps it from collapsing into generic code review.'
+license: MIT
+compatibility: 'Cross-platform. The bundled scanner needs Python 3.9+ and no third-party packages. Everything else is language-agnostic guidance; worked examples are TypeScript, Python, Go, Rust and SQL.'
+metadata:
+  version: '1.0'
+  source: https://github.com/rainmanjam/poka-yoke
 ---
 
-# Poka-Yoke: Mistake-Proofing for Software
+# Poka-Yoke: Make the Mistake Unsayable
 
-Shigeo Shingo's insight, from the Toyota Production System: **people will always make
-mistakes; that is not the problem worth solving. The problem is letting a mistake become a
-defect.** So you stop trying to make humans more careful and start redesigning the work so
-the mistake either cannot physically happen or announces itself immediately.
+**People will always make mistakes. That is not the problem worth solving. The problem is
+letting a mistake become a defect.**
 
-A poka-yoke ("poh-kah yoh-kay", ポカヨケ) is a *device*: a jig, a shape, a counter: not
-an instruction. In software: a type, a constraint, a hook, a schema, a state machine. The
-single most important consequence:
+Shigeo Shingo, a Japanese industrial engineer, worked this out on a switch assembly line in
+1961. Workers kept forgetting a spring. The fix was not a reminder: the job was split so the
+worker first laid both springs in a dish, then fitted them from the dish. A spring left over
+was the error announcing itself, before the unit could move on.
 
-> **A comment, a docstring, a wiki page, a code review checklist, or a line in CLAUDE.md
-> saying "don't do X" is not a poka-yoke.** It is training. Training degrades. A device
-> does not. If your proposed fix relies on someone remembering something, keep going.
+The dish is a device. "Please remember the spring" is not.
 
-## When to Use This Skill
+## The line that does most of the work
 
-- Use when the user says "poka-yoke this", "mistake-proof it", or "make this harder to get wrong".
-- Use when designing an interface, schema or state machine and the ask is "make invalid states unrepresentable" or "so callers cannot screw it up".
-- Use when auditing existing code for footguns: "what could bite us here", "what is easy to misuse".
-- Use after an incident, when the fix must close the class rather than the case: "make sure this never happens again", "this is the third time".
-- Especially for money, auth, permissions, deletion, migrations and pipelines, where failure is silent.
+> A comment, a docstring, a wiki page, a review checklist, or a line in an instructions file
+> saying "don't do X" is **not** a poka-yoke. It is training, and training degrades. A device
+> does not. If your fix relies on someone remembering something, keep going.
 
-## The two axes
+This applies to your own instructions too. A rule written into a config file competes for
+attention with every other rule there and loses a little more as the file grows. A check that
+fails the build does not.
 
-Every real poka-yoke answers two questions. Use both when you classify a hazard or propose a
-device. They are the difference between this method and generic code review.
+## What this changes about the output
 
-### Axis 1, Regulatory function: what happens when the mistake occurs?
+Given a design, models will readily list what to fix. They rarely state what the fix makes
+*impossible*, and that is the difference between advice you agree with and a constraint you
+can rely on. That habit is most of what this skill is for.
 
-This is a strict preference ladder. Always reach for the highest rung you can afford.
+The other half is refusing to accept a non-device as a fix. "Add validation", "be careful with
+this function", "document the invariant" are all rung zero. Each has a real device behind it,
+and naming that device is the work.
 
-| Rung | Name | What it does | Software examples |
-|---|---|---|---|
-| **1** | **Control** | The mistake is **impossible**. The work cannot proceed. | Type won't compile · `NOT NULL` / `CHECK` / unique constraint · required function argument · private constructor + smart constructor · PreToolUse hook returns deny · protected branch |
-| **2** | **Warning** | The mistake is possible but **announced at the moment it happens**. | Lint error in the editor · failing CI gate · runtime assertion that throws · confirmation prompt naming the exact thing being destroyed |
-| **3** | **Detection** | The mistake ships, and something **finds it afterward**. | Tests · monitoring · alerting · reconciliation job |
-| **0** | *(not a poka-yoke)* | Relies on a human remembering. | Docs · comments · training · "be careful" · review checklists |
+## Axis 1: what happens when the mistake occurs
 
-Shingo's rule: prefer **control** over **warning**, always, and only settle for warning when
-control is genuinely too expensive, then say *why* out loud. In software the honest reason
-is usually "the language can't express it" or "it would break every existing caller," and
-both are worth stating explicitly so the tradeoff is visible.
+Rank every finding on this ladder, and say which rung the current code sits on and which rung
+your fix reaches.
 
-### Axis 2, Setting function: how does the device notice?
+| Rung | Name | Meaning |
+|---|---|---|
+| 1 | **Control** | The wrong action cannot be performed. Type error, database constraint, missing permission. |
+| 2 | **Warning** | It is possible, but announces itself as it happens. A linter, a runtime assertion, a confirmation you cannot skip. |
+| 3 | **Detection** | It happens, and you find out afterwards. Tests, logging, monitoring, code review. |
+| 0 | **rung zero** | Telling people to be careful. Docs, comments, "please remember to". |
 
-Shingo's three detection methods map cleanly onto software. These are your **inspection
-lenses**, run all three over any interface and you will find hazards that a general
-code review misses.
+Detection is not failure; sometimes it is all that is available. But a plan that stops at
+Detection should say so, rather than presenting it as prevention.
 
-| Method | Factory floor | The question to ask code | Software devices |
-|---|---|---|---|
-| **Contact** | The part physically won't seat unless it's the right shape and orientation | **Can the wrong thing fit?** | Distinct types instead of shared primitives · branded/newtype IDs · parse-don't-validate at boundaries · units in the type · discriminated unions instead of bags of optionals |
-| **Fixed-value** | A counter says all 6 screws were fitted | **Can the wrong count or an incomplete set pass?** | Exhaustive `match`/`switch` over an enum · required fields · "all migrations applied" check · row-count guard on a bulk write · checksums · config validated as a whole at boot |
-| **Motion-step** | A sensor confirms step 3 happened before step 4 | **Can the steps happen in the wrong order, or be skipped?** | Typestate · builder that cannot `.build()` until required steps run · state machines with illegal transitions unrepresentable · idempotency keys · RAII / `defer` / context managers · transactions |
+## Axis 2: how the device notices
 
-### The third principle: inspect at the source
+Shingo's three inspection lenses. They are a checklist for *finding* hazards, not decoration:
 
-Shingo separated **source inspection** from **informative inspection**, which finds the defect
-only after it exists and comes in two forms. Ranked best first, that is three places you can
-put the device.
+- **Contact** — can the wrong thing physically fit? Two adjacent parameters of the same type can be swapped silently. A `string` that should be one of four values. Money as a float.
+- **Fixed-value** — is the set complete? A switch with no exhaustiveness check. A config where a missing key silently means "off". An enum handled in three of five places.
+- **Motion-step** — is the order right, and did every step happen? A two-phase write with no transaction. A retry with no idempotency key. A resource acquired on one path and released on another.
 
-1. **Source inspection**: check the *conditions* before the error can occur. Designed in
-   where you can, enforced at runtime where you cannot.
-   The type, the constraint, the signature.
-2. **Self-check** (informative): the work checks itself as it happens. Runtime. Assertions,
-   fail-fast, validation at the boundary.
-3. **Successive check** (informative): the next station checks the previous one. Review, CI,
-   QA.
+## Inspect at the source
 
-Push every device as far up this list as it will go. A CI gate that catches a bad migration
-is good; a schema that makes the bad migration unwritable is better and costs less forever.
+The cheapest place to catch a mistake is where it is made, not where it surfaces. A validation
+that runs three layers below the input has already let the bad value travel, and the stack
+trace will point at the wrong module. Push the check to the boundary the value crosses.
 
-## How to use this skill
+## Designing something new
 
-Apply the method directly to the subject in front of you. A Terraform module, a support
-runbook, a spreadsheet everyone edits, a release checklist, a
-prompt template, an onboarding process, a physical workflow: the method works on any of them,
-because Shingo developed it on an assembly line, for people fitting springs into switches, and
-not for software at all.
+Mistake-proofing is cheapest before the code has callers. Once it has them, every device is a
+migration; before it has them, a device is free.
 
-Applying it directly means four steps, in order:
+Work from the call site. A signature that reads fine in isolation often reads terribly where
+it is used:
 
-1. **Name what is being done, and by whom.** A device protects a specific action taken by a
-   specific person or system. "The pipeline" is not an action; "an engineer re-runs the deploy
-   job after it fails halfway" is.
-2. **Run the three lenses** over that action, can the wrong thing fit, can an incomplete or
-   wrong-sized set pass, can the steps happen in the wrong order. Most subjects yield
-   something on at least one.
-3. **For each hazard found, state it as a mistake someone could make**, what happens when they
-   do, whether it is silent, and what exists today to stop it.
-4. **Propose the highest-rung device you can afford**, and say which rung it reaches. If you
-   land on Warning, say what Control would have required and why you did not take it.
+```python
+# the mistake is expressible: nothing stops refunding an order that was never paid
+def refund(order: dict) -> Refund:
+    return payments.refund(order["payment_id"])
 
-Then apply the two rules in *How to talk about this* below: name the mistake rather than the
-mistaken, and never let the answer come out as "be more careful" or "document it". Those are
-rung zero, and the whole method exists because they do not work.
+# the mistake is no longer expressible
+def refund(order: PaidOrder) -> Refund: ...
+```
 
-**If the request is bare**, `/poka-yoke` with nothing attached, look at what is actually in
-front of you: the current diff, the file under discussion, the thing the conversation has been
-about. Say what you picked in one line before starting, so it is cheap to redirect you. If
-there is genuinely no subject, ask what they want mistake-proofed rather than guessing.
+The moves, roughly in order of how often they apply:
 
-## How to talk about this
+**Make invalid states unrepresentable.** A bag of optional fields where only certain
+combinations are legal becomes a discriminated union where the illegal ones cannot be
+constructed.
 
-Two habits keep the analysis honest and keep people from getting defensive:
+**Parse, don't validate.** Convert unstructured input into a type that carries proof at the
+boundary, once, rather than re-checking the same string in nine places.
 
-**Name the mistake, not the mistaken.** "This signature lets a caller swap the two IDs" is
-actionable and true. "The developer should have been more careful" is neither. Shingo was
-emphatic that blaming the operator is how organizations avoid fixing the process. Write
-findings about the code's affordances, never about who wrote it.
+**Distinguish concepts that share a primitive.** `transfer(from: str, to: str)` accepts its
+arguments transposed. Distinct types for the two concepts, or keyword-only parameters, make the
+transposition a compile error.
 
-**Say which rung you achieved, and what stopped you going higher.** A recommendation that
-reads "added a runtime assertion (warning), control would need a newtype, which touches 40
-call sites" gives the reader a real decision. One that reads "added validation" does not.
+**Encode the order.** When calls must happen in sequence, let each step return the type the
+next step requires, so the wrong order does not typecheck.
 
-## Example
+**Make the destructive path narrower than the safe one.** A required, non-defaulting argument
+for the scope of a delete. A default that means "nothing" rather than "everything".
 
-Suppose a destructive API accepts `deleteAccount(accountId: string, tenantId: string)`.
-The two identifiers can be swapped, and the call can target an account outside the caller's
-tenant.
+Close by naming what the design now makes impossible, and, just as importantly, **what you
+deliberately left possible and why**. A design whose limits are unstated will be trusted past
+them.
 
-1. **Contact lens:** two plain strings have the same shape, so the wrong value fits.
-2. **Motion-step lens:** deletion can run before tenant ownership is established.
-3. **Control device:** replace the strings with distinct validated ID types and expose a
-   deletion operation that accepts only an account loaded through the authenticated tenant.
-4. **Warning fallback:** if compatibility prevents that interface change, reject ownership
-   mismatches at the boundary and require a confirmation that names the exact account. State
-   explicitly that this is weaker than making the invalid call unrepresentable.
-5. **Detection:** retain audit logging and reconciliation for failures the control does not
-   cover; do not present those after-the-fact checks as the poka-yoke itself.
+## Auditing code that already exists
 
-## Applying changes
+You are not looking for bugs. A bug is a mistake that already happened. You are looking for
+**mistakes that are available**: places where doing the wrong thing is easy, silent, and looks
+correct.
 
-Propose before you edit. Show the hazard, the proposed device, and the rung it reaches, then
-wait for a go-ahead before changing files: the whole point of this method is that it changes
-the shape of an interface, and that is precisely the kind of change people want to see first.
-Once approved, apply it and record the prevented mistake where future maintainers can verify
-the constraint without mistaking the explanation itself for the device.
+Run the bundled scanner first for the textually detectable shapes, then read for the ones no
+scanner can see:
 
-The exception is when someone has explicitly asked you to write new code: mistake-proofing
-*is* the code they asked for, so build it, then narrate which hazards
-you designed out and why.
+```bash
+python3 scripts/detect_hazards.py --paths .          # whole tree
+python3 scripts/detect_hazards.py --staged           # pre-commit
+python3 scripts/detect_hazards.py --diff --json      # CI, exits non-zero on findings
+python3 scripts/detect_hazards.py --severity high
+```
 
-## Limitations
+No dependencies, so it runs in CI and in a pre-commit hook without an install step. It reports
+what it scanned: a scan of zero files exits non-zero rather than reporting a clean bill of
+health, because an all-clear you got by typo is worse than no check.
 
-- Poka-yoke reduces predictable misuse; it cannot prove that a design is correct or cover
-  hazards the analysis never identifies.
-- The strongest control may be unavailable in the current language, platform or compatibility
-  envelope. When that happens, state the tradeoff and retain appropriate tests, monitoring and
-  recovery paths instead of presenting a warning as complete prevention.
-- A guard can itself be wrong, overbroad or operationally expensive. Validate proposed devices
-  against real callers and failure modes, especially for destructive, financial, authentication
-  and authorization flows.
-- This method complements, but does not replace, domain review, security review, testing,
-  observability or incident response.
+Rank findings by **blast radius times ease of the mistake**. An unchecked value reaching a
+write, a delete, a payment or an auth decision outranks one that can only produce a clean
+crash. For each finding, state: where it is, what the mistake is, what the consequence is, what
+device exists today, what device would close it, and which rung that reaches.
+
+`references/hazard-catalog.md` is the taxonomy of shapes with their IDs and devices.
+Language-specific patterns are in `references/lang-python.md`, `references/lang-typescript.md`
+and `references/lang-rust-go.md`.
+
+## After an incident
+
+Separate three things that get conflated, because the fix belongs to the third:
+
+- **Defect** — what the user experienced.
+- **Mistake** — the specific wrong action someone took.
+- **Hazard** — the property of the system that made that mistake available.
+
+Fixing the mistake fixes one case. Fixing the hazard fixes the class. Then **sweep**: the same
+shape almost certainly exists elsewhere, and finding the second and third instance is the
+difference between a patch and a lesson.
+
+Attribute cause to the system rather than to a person. Not primarily for kindness: "they made a
+mistake" is a complete-sounding explanation that predicts nothing and prevents nothing, and it
+ends the investigation early.
+
+## What good output looks like
+
+- **Anchored to lines.** `orders.py:142, apply_discount` is reviewable; "the discount logic" is not.
+- **Ranked, with the ranking visible**, so a reader who stops halfway has still covered the ones that matter.
+- **A named device per finding**, not "add validation".
+- **The rung stated**, before and after.
+- **The limits stated.** What the fix does not cover is the part readers most need and most often do not get.
+- **Sized honestly.** Three findings that matter beat eleven padded to a round number.
+
+## What to avoid
+
+**Accepting rung zero as a fix.** If the proposal is a comment, a doc, or a convention, the
+work is not finished.
+
+**Devices nobody can bypass being confused with devices nobody does bypass.** A pre-commit hook
+is skippable with `--no-verify`; it needs CI behind it to be a real gate. Say which one you are
+proposing.
+
+**Over-fitting to one incident.** Machinery that prevents one specific failure must itself be
+understood and maintained. Ask whether the shape is common enough to justify it.
+
+**Treating monitoring as prevention.** Detection lowers the cost of a failure; it does not lower
+the likelihood. Both are worth having, and conflating them means the likelihood never gets
+addressed.
+
+## Evidence, and its limits
+
+This method was benchmarked at 591 blind-graded runs across six model families, scored against
+assertions written before the runs by a grader that never saw which configuration produced a
+response. The behaviour it most reliably changes is stating what a design forecloses: **45% of
+responses did that unprompted, 80% with the method applied**, across 132 graded verdicts.
+
+That average conceals where the effect lives. Asked squarely to design an interface, models
+already do it 77% of the time; the skills add eleven points. The large gains are in tasks
+where nobody asked for a design review — writing an endpoint goes 14% to 79%, shipping an
+agent feature 33% to 83%, building a form 29% to 64%.
+
+Stated honestly, because the limits matter: every run was the first turn of a fresh session, so
+this measures the ceiling rather than what survives a long working session. The comparison was
+against no methodology at all, not against a different one, so it does not establish that
+*this* method is what produced the gain. And the method costs something measurable: responses
+became somewhat worse at spotting the specific defect already on the page while becoming better
+at changing the shape that allowed it. If you want the bug in front of you found, use a
+reviewer. If you want that class of bug to stop being expressible, use this.
+
+Raw runs, the harness and the assertion checklists are at
+<https://github.com/rainmanjam/poka-yoke>.

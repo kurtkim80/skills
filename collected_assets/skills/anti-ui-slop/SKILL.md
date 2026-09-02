@@ -1,80 +1,58 @@
 ---
 name: anti-ui-slop
-description: "Stop coding agents from shipping generic UI. Extend the product's design system, use UIZZE evidence only when useful, cover required states, and inspect the rendered result."
-category: frontend
-risk: safe
-source: https://github.com/uizze/uizze/tree/main/skills/anti-ui-slop
-source_repo: uizze/uizze
-source_type: official
-date_added: "2026-08-16"
-author: UIZZE
-tags: [ui, ux, frontend, design, anti-ui-slop]
-tools: [claude, codex, cursor, copilot]
+description: 'Stop coding agents from shipping generic UI. Use UIZZE''s 800,000+ real web and iOS screens to build product-specific interfaces, define a design contract, cover required states, and run a hard finish gate. Use when designing, implementing, redesigning, critiquing, or pre-ship reviewing a web or iOS interface in Codex, Claude Code, Cursor, Copilot, or another coding agent. Trigger with "anti-ui-slop", "stop UI slop", "ground this UI in real screens", or "run the UI finish gate".'
 license: MIT
-license_source: https://github.com/uizze/uizze/blob/main/LICENSE
+metadata:
+  version: "1.2.13"
+  author: "UIZZE <business@uizze.com>"
+  compatibility: "Designed for Claude Code, Codex, Cursor, and GitHub Copilot; works in any agent that can read project files and fetch a URL."
+  tags: "ui-design, design-system, design-review, frontend, web-ui, ios-ui"
 ---
+
+> **Stop AI coding agents from shipping generic UI.**
 
 # Stop Making UI Slop
 
-Build product-specific UI with 800,000+ real web and iOS screens via
-[UIZZE](https://uizze.com).
+Build product-specific UI with 800,000+ real web and iOS screens via [UIZZE](https://uizze.com).
+
+![Stop Making UI Slop with UIZZE](https://uizze.com/landing/anti-ui-slop-skill-banner.png)
 
 ## Overview
 
-Use the product brief, existing interface, components, and local design system
-before reaching for outside references. UIZZE evidence is optional: it should
-answer a concrete visual question, not turn every interface task into a research
-project.
+Use the product brief, existing UI, components, and local design system to make intentional interfaces. Uizze supplies focused design guidance and, when useful, a small number of relevant visual references.
 
-## When to Use
+## Prerequisites
 
-Use this skill when designing, implementing, redesigning, critiquing, or doing a
-pre-ship review of a web or iOS interface.
+- A screen or component to build, redesign, or review — a file path or a short description.
+- The product's existing components, design tokens, and visual language, so the build extends them instead of inventing a new system.
+- Optional access to the paid Uizze MCP for focused references and hosted materials.
 
-## Work From the Product
+## Authentication
 
-1. Identify the screen's real job, primary user and action, required content,
-   and important loading, empty, error, success, disabled, and permission states.
-2. Reuse the repository's components, semantic tokens, typography, spacing, and
-   interaction conventions before adding a new abstraction or visual language.
-3. For a new interface or major redesign, write a short design contract covering
-   hierarchy, workflow shape, allowed components, required states, responsive
-   behavior, and observable acceptance criteria. Keep smaller changes smaller.
-4. Use product-specific labels and data. Do not invent metrics, activity,
-   testimonials, users, or placeholder workflows to make a layout look complete.
+- The free skill and public catalogue work without an account, token, MCP connection, dependency, script, or executable.
+- The optional full UIZZE MCP may use the host's normal connection and authentication flow. Never claim it is connected without an actual host result.
 
-## Optional UIZZE Evidence
+## Work from the product
 
-The free skill and public catalogue work without an account, token, dependency,
-script, or executable. If a concrete unresolved visual question would benefit
-from evidence, use the smallest relevant set of screens or materials.
+Read the brief, existing UI, components, tokens, and constraints before designing. They always outrank this skill. Keep familiar interaction conventions and make the product's own objects, workflow, and priorities visually clear. Do not add novelty for its own sake.
 
-The optional authenticated UIZZE MCP exposes exactly `find_ui_references` and
-`find_ui_materials`. Use it only when those tools are actually available. If a
-search returns nothing, continue silently from repository evidence. Never claim
-an MCP-backed result that was not returned by the host.
+## Load one playbook
 
-Treat references as evidence, not templates. Transfer useful decisions about
-hierarchy, density, navigation, controls, responsive behavior, and state
-handling; never copy another product's branding, proprietary text, imagery, or
-exact layout.
+Choose at most one file for the current request:
 
-Install the current free skill directly from its canonical source:
+- New interface or major redesign: `reference/new-work.md`
+- Product or dashboard work: `reference/operate.md`
+- Refinement and polish: `reference/polish.md`
+- Simplification or distillation: `reference/distill.md`
+- Explicit audit: `reference/audit.md`
+- Native iOS work: `reference/ios.md`
 
-```bash
-npx skills add https://uizze.com --skill anti-ui-slop
-```
+Do not load a second playbook. Apply judgment rather than treating its examples as a checklist.
+
+## Optional Uizze evidence
+
+Read `references/uizze-reference-policy.md` before using the paid MCP. It exposes exactly `find_ui_references` and `find_ui_materials`. Use them only when a concrete unresolved visual or material question would benefit from evidence. If they return nothing, continue silently.
 
 ## Finish
 
-When the environment supports it, render and inspect the result once. Fix
-observable breakage such as clipping, overlap, distorted media, inaccessible or
-inert controls, missing required states, and unintentional responsive behavior.
-Run the project's normal checks and keep the handoff concise.
-
-## Limitations
-
-- This workflow does not replace product validation, accessibility review,
-  security review, or project-specific tests.
-- UIZZE evidence is optional and may legitimately return no useful result.
-- A reference is not permission to copy another product's identity or assets.
+Complete the requested scope. When the environment supports it, render and inspect once. Fix observable breakage such as clipping, overlap, distorted media, inaccessible controls, or inert interactions. Keep the handoff concise.

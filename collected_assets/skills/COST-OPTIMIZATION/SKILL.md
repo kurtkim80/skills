@@ -1,294 +1,107 @@
 ---
 name: cost-optimization
-description: "Strategies and patterns for optimizing cloud costs across AWS, Azure, and GCP."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Cuts cloud spend without cutting reliability by finding the few levers that move most of the bill — idle and orphaned resources, over-committed on-demand spend that qualifies for reserved or savings-plan discounts, and oversized fleets — and going after them in dollar order. Use this whenever the user asks how to reduce their cloud bill, reacts to a cost spike or a finance escalation, wants to find waste, or is deciding between on-demand, reserved, and spot pricing. For matching resource size to real usage use `rightsizing`, and for knowing who owns each dollar use `resource-tagging`.
+license: MIT
 ---
 
-# Cloud Cost Optimization
+# Cost Optimization
 
-Strategies and patterns for optimizing cloud costs across AWS, Azure, and GCP.
+Cloud bills rarely have one villain — they have a long tail of small waste and a short list of
+big levers. Teams that start by auditing every line item burn weeks on savings measured in
+dollars, while the resource that's 40% of the bill sits untouched because nobody sorted by size
+first. Optimization is a prioritization problem before it's an engineering problem.
 
-## Do not use this skill when
+The other trap is treating cost cutting as a one-time project. Spend drifts every time someone
+ships a new service, forgets to delete a test environment, or a traffic pattern shifts enough to
+make last quarter's instance sizes wrong. A cost review that runs once and declares victory is
+already stale by the next billing cycle.
 
-- The task is unrelated to cloud cost optimization
-- You need a different domain or tool outside this scope
+**Find the biggest lever with data, pull it, then come back for the next one.**
 
-## Instructions
+For a ranked catalog of savings levers and how to find candidates, read
+`references/savings-levers.md`.
 
-- Clarify goals, constraints, and required inputs.
-- Apply relevant best practices and validate outcomes.
-- Provide actionable steps and verification.
-- If detailed examples are required, open `resources/implementation-playbook.md`.
+## 1. Rank levers by dollar impact before touching anything
 
-## Purpose
+Sort the bill by service, then by resource, before deciding what to fix. A single oversized
+database instance can dwarf a dozen idle load balancers combined, and no amount of enthusiasm for
+cleaning up small things substitutes for finding the one thing that's actually expensive.
 
-Implement systematic cost optimization strategies to reduce cloud spending while maintaining performance and reliability.
+- **Pull the billing export or cost-explorer report first** — don't optimize from memory of what
+  "feels" expensive.
+- **Work top-down** — the top five line items usually explain most of the spend variance.
+- **Ignore anything under a threshold that isn't worth an engineer's time** — a $20/month savings
+  is not worth a change-review cycle.
 
-## Use this skill when
+**Done when:** the top five cost drivers are known by name and dollar amount, not by guess.
 
-- Reduce cloud spending
-- Right-size resources
-- Implement cost governance
-- Optimize multi-cloud costs
-- Meet budget constraints
+## 2. Kill idle and orphaned resources first — they buy nothing
 
-## Cost Optimization Framework
+An idle resource — a stopped-but-not-deleted instance, an unattached volume, a load balancer with
+no healthy targets, a snapshot nobody restores from — delivers zero value at full price. Unlike
+rightsizing or commitment purchases, removing it carries no performance trade-off to weigh, which
+makes it the fastest win available.
 
-### 1. Visibility
-- Implement cost allocation tags
-- Use cloud cost management tools
-- Set up budget alerts
-- Create cost dashboards
+- **Unattached storage volumes and old snapshots** accumulate silently after every resize or
+  redeploy that doesn't clean up after itself.
+- **Load balancers and IPs with no traffic** are easy to find and carry no risk to remove.
+- **Non-production environments left running** outside business hours are pure waste multiplied
+  by however many nights and weekends they sit idle.
 
-### 2. Right-Sizing
-- Analyze resource utilization
-- Downsize over-provisioned resources
-- Use auto-scaling
-- Remove idle resources
+**Done when:** every resource flagged as idle for 30+ days is either justified in writing or
+deleted.
 
-### 3. Pricing Models
-- Use reserved capacity
-- Leverage spot/preemptible instances
-- Implement savings plans
-- Use committed use discounts
+## 3. Buy commitment discounts only for the baseline you're sure of
 
-### 4. Architecture Optimization
-- Use managed services
-- Implement caching
-- Optimize data transfer
-- Use lifecycle policies
+Reserved instances and savings plans trade a discount for a commitment — they pay off only against
+usage you're confident will persist. Committing against your peak, or against usage you haven't
+rightsized yet, locks in savings on top of waste instead of on top of real need.
 
-## AWS Cost Optimization
+- **Commit against the sustained floor**, not the peak — use on-demand or spot to cover the
+  variable part above it.
+- **Rightsize before you buy commitments**, not after — a commitment against an oversized fleet
+  bakes the oversizing in for the contract term.
+- **Stagger commitment terms** so you're never re-betting the whole fleet at once as usage
+  patterns evolve.
 
-### Reserved Instances
-```
-Savings: 30-72% vs On-Demand
-Term: 1 or 3 years
-Payment: All/Partial/No upfront
-Flexibility: Standard or Convertible
-```
+**Done when:** committed spend covers a measured baseline, not a hopeful estimate, and no
+commitment was purchased before the underlying fleet was rightsized.
 
-### Savings Plans
-```
-Compute Savings Plans: 66% savings
-EC2 Instance Savings Plans: 72% savings
-Applies to: EC2, Fargate, Lambda
-Flexible across: Instance families, regions, OS
-```
+## 4. Rightsize before you optimize pricing
 
-### Spot Instances
-```
-Savings: Up to 90% vs On-Demand
-Best for: Batch jobs, CI/CD, stateless workloads
-Risk: 2-minute interruption notice
-Strategy: Mix with On-Demand for resilience
-```
+A perfectly-priced instance that's twice the size it needs to be is still twice the cost it needs
+to be — pricing optimization and sizing optimization are independent levers, and skipping the
+sizing one leaves money on the table no discount can recover. See `rightsizing` for how to size
+from measured usage instead of guessing.
 
-### S3 Cost Optimization
-```hcl
-resource "aws_s3_bucket_lifecycle_configuration" "example" {
-  bucket = aws_s3_bucket.example.id
+**Done when:** no cost-optimization pass ships without checking whether the resource is the right
+size, not just the right price.
 
-  rule {
-    id     = "transition-to-ia"
-    status = "Enabled"
+## 5. Treat tagging as a prerequisite, not an afterthought
 
-    transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
-    }
+You cannot prioritize by dollar impact, attribute an idle resource to an owner, or hold a team
+accountable for its own spend if resources aren't tagged to a cost center or owner. Cost
+optimization work done on untagged infrastructure degrades into guessing who to ask before
+anything can be deleted. See `resource-tagging` for the taxonomy and enforcement mechanics.
 
-    transition {
-      days          = 90
-      storage_class = "GLACIER"
-    }
+**Done when:** every resource under review is tagged well enough to identify an accountable owner
+without asking around.
 
-    expiration {
-      days = 365
-    }
-  }
-}
-```
+## 6. Re-run the analysis on a cadence, not once
 
-## Azure Cost Optimization
+Spend drifts continuously — new services launch, traffic patterns shift, commitments expire. A
+cost review that happens once and is declared done misses every dollar of drift that accumulates
+afterward, and the next spike arrives looking just as urgent as the last one.
 
-### Reserved VM Instances
-- 1 or 3 year terms
-- Up to 72% savings
-- Flexible sizing
-- Exchangeable
+- **Schedule the review**, don't wait for a finance escalation to trigger it.
+- **Track savings realized versus identified** — a list of recommendations that never gets acted
+  on isn't optimization.
 
-### Azure Hybrid Benefit
-- Use existing Windows Server licenses
-- Up to 80% savings with RI
-- Available for Windows and SQL Server
+**Done when:** cost review is a recurring calendar item with an owner, not a one-off project.
 
-### Azure Advisor Recommendations
-- Right-size VMs
-- Delete unused resources
-- Use reserved capacity
-- Optimize storage
+## Report
 
-## GCP Cost Optimization
-
-### Committed Use Discounts
-- 1 or 3 year commitment
-- Up to 57% savings
-- Applies to vCPUs and memory
-- Resource-based or spend-based
-
-### Sustained Use Discounts
-- Automatic discounts
-- Up to 30% for running instances
-- No commitment required
-- Applies to Compute Engine, GKE
-
-### Preemptible VMs
-- Up to 80% savings
-- 24-hour maximum runtime
-- Best for batch workloads
-
-## Tagging Strategy
-
-### AWS Tagging
-```hcl
-locals {
-  common_tags = {
-    Environment = "production"
-    Project     = "my-project"
-    CostCenter  = "engineering"
-    Owner       = "team@example.com"
-    ManagedBy   = "terraform"
-  }
-}
-
-resource "aws_instance" "example" {
-  ami           = "ami-12345678"
-  instance_type = "t3.medium"
-
-  tags = merge(
-    local.common_tags,
-    {
-      Name = "web-server"
-    }
-  )
-}
-```
-
-**Reference:** See `references/tagging-standards.md`
-
-## Cost Monitoring
-
-### Budget Alerts
-```hcl
-# AWS Budget
-resource "aws_budgets_budget" "monthly" {
-  name              = "monthly-budget"
-  budget_type       = "COST"
-  limit_amount      = "1000"
-  limit_unit        = "USD"
-  time_period_start = "2024-01-01_00:00"
-  time_unit         = "MONTHLY"
-
-  notification {
-    comparison_operator        = "GREATER_THAN"
-    threshold                  = 80
-    threshold_type            = "PERCENTAGE"
-    notification_type         = "ACTUAL"
-    subscriber_email_addresses = ["team@example.com"]
-  }
-}
-```
-
-### Cost Anomaly Detection
-- AWS Cost Anomaly Detection
-- Azure Cost Management alerts
-- GCP Budget alerts
-
-## Architecture Patterns
-
-### Pattern 1: Serverless First
-- Use Lambda/Functions for event-driven
-- Pay only for execution time
-- Auto-scaling included
-- No idle costs
-
-### Pattern 2: Right-Sized Databases
-```
-Development: t3.small RDS
-Staging: t3.large RDS
-Production: r6g.2xlarge RDS with read replicas
-```
-
-### Pattern 3: Multi-Tier Storage
-```
-Hot data: S3 Standard
-Warm data: S3 Standard-IA (30 days)
-Cold data: S3 Glacier (90 days)
-Archive: S3 Deep Archive (365 days)
-```
-
-### Pattern 4: Auto-Scaling
-```hcl
-resource "aws_autoscaling_policy" "scale_up" {
-  name                   = "scale-up"
-  scaling_adjustment     = 2
-  adjustment_type        = "ChangeInCapacity"
-  cooldown              = 300
-  autoscaling_group_name = aws_autoscaling_group.main.name
-}
-
-resource "aws_cloudwatch_metric_alarm" "cpu_high" {
-  alarm_name          = "cpu-high"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "60"
-  statistic           = "Average"
-  threshold           = "80"
-  alarm_actions       = [aws_autoscaling_policy.scale_up.arn]
-}
-```
-
-## Cost Optimization Checklist
-
-- [ ] Implement cost allocation tags
-- [ ] Delete unused resources (EBS, EIPs, snapshots)
-- [ ] Right-size instances based on utilization
-- [ ] Use reserved capacity for steady workloads
-- [ ] Implement auto-scaling
-- [ ] Optimize storage classes
-- [ ] Use lifecycle policies
-- [ ] Enable cost anomaly detection
-- [ ] Set budget alerts
-- [ ] Review costs weekly
-- [ ] Use spot/preemptible instances
-- [ ] Optimize data transfer costs
-- [ ] Implement caching layers
-- [ ] Use managed services
-- [ ] Monitor and optimize continuously
-
-## Tools
-
-- **AWS:** Cost Explorer, Cost Anomaly Detection, Compute Optimizer
-- **Azure:** Cost Management, Advisor
-- **GCP:** Cost Management, Recommender
-- **Multi-cloud:** CloudHealth, Cloudability, Kubecost
-
-## Reference Files
-
-- `references/tagging-standards.md` - Tagging conventions
-- `assets/cost-analysis-template.xlsx` - Cost analysis spreadsheet
-
-## Related Skills
-
-- `terraform-module-library` - For resource provisioning
-- `multi-cloud-architecture` - For cloud selection
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+State the top cost drivers found, the dollar amount of idle/orphaned waste removed, and the
+commitment coverage achieved against the measured baseline. Name the honest gap — usually a
+category of spend (data transfer, third-party SaaS, an unrightsized fleet still under commitment)
+that wasn't fully addressed this pass — rather than claiming the bill is now optimal.

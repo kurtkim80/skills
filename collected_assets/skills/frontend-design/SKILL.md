@@ -1,283 +1,83 @@
 ---
 name: frontend-design
-description: You are a frontend designer-engineer, not a layout generator.
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: Design and implement distinctive, production-ready web interfaces. Use when creating or substantially redesigning a page, component, dashboard, marketing site, or product UI; when choosing visual direction, typography, layout, responsive behavior, states, or accessibility; or when an existing interface feels generic, inconsistent, or poorly structured.
 ---
 
-# Frontend Design (Distinctive, Production-Grade)
+# Frontend Design
 
-You are a **frontend designer-engineer**, not a layout generator.
+Create an interface with a clear point of view that serves its users and works in the existing product. Do not default to fashionable AI-generated aesthetics, decorative effects, or a familiar component-library layout when they are not justified by the brief.
 
-Your goal is to create **memorable, high-craft interfaces** that:
+## 1. Establish the brief
 
-* Avoid generic “AI UI” patterns
-* Express a clear aesthetic point of view
-* Are fully functional and production-ready
-* Translate design intent directly into code
+Before changing code, identify or explicitly state:
 
-This skill prioritizes **intentional design systems**, not default frameworks.
+- **Subject:** What is being designed?
+- **Audience:** Who uses it and what do they need to understand or do?
+- **Primary job:** What is the one most important outcome for this page or flow?
+- **Context:** Is this a new surface, an extension of an established product, or a redesign?
+- **Constraints:** Existing design system, brand rules, framework, content, assets, browser support, and deadline.
 
----
+For an existing product, inspect the relevant routes, components, styles, tokens, assets, and UI conventions first. Preserve purposeful conventions; do not introduce a parallel design system merely to make the page look new.
 
-## 1. Core Design Mandate
+If a decision is genuinely blocked by missing product information, ask one focused question. Otherwise, make a stated, reversible assumption and proceed.
 
-Every output must satisfy **all four**:
+## 2. Set a deliberate visual direction
 
-1. **Intentional Aesthetic Direction**
-   A named, explicit design stance (e.g. *editorial brutalism*, *luxury minimal*, *retro-futurist*, *industrial utilitarian*).
+Write a compact design plan before implementation. Include:
 
-2. **Technical Correctness**
-   Real, working HTML/CSS/JS or framework code — not mockups.
+- **Concept:** One sentence that ties the design to the subject, not a visual trend.
+- **Hierarchy:** What a person sees first, second, and next.
+- **Tokens:** A restrained palette (4–6 named colors), type roles, spacing rhythm, radii, borders, and shadows.
+- **Layout:** Content regions, reading order, breakpoints, and an ASCII wireframe when the page is structurally complex.
+- **Signature:** One memorable but useful element—such as a data treatment, interaction, visual metaphor, or editorial composition.
+- **Motion:** The few interactions or transitions that clarify state or add atmosphere. Respect `prefers-reduced-motion`.
 
-3. **Visual Memorability**
-   At least one element the user will remember 24 hours later.
+Choose typography for role and readability. Pair display, body, and utility styles intentionally; establish a type scale and use it consistently. Use familiar defaults only when they suit the product and audience, not because they are easy.
 
-4. **Cohesive Restraint**
-   No random decoration. Every flourish must serve the aesthetic thesis.
+Avoid making every brief converge on cream-and-serif editorial layouts, dark pages with neon accents, gradients, floating glass cards, excessive rounded rectangles, or generic hero-stat layouts. Use any of these only when the content and brand support the choice.
 
-❌ No default layouts
-❌ No design-by-components
-❌ No “safe” palettes or fonts
-✅ Strong opinions, well executed
+## 3. Design the complete experience
 
----
+Model the real content and task flow before polishing the happy path.
 
-## 2. Design Feasibility & Impact Index (DFII)
+- Put the primary action where it is expected and describe it with a specific verb.
+- Use labels and headings that reflect user language, not implementation language.
+- Make structure carry meaning: use groups, dividers, labels, tabs, timelines, and numbered steps only when they represent real relationships.
+- Define loading, empty, success, error, disabled, hover, focus, selected, and overflow states where they apply.
+- Keep copy concise and operational. A button should describe its outcome; an error should say what happened and what to do next.
+- Spend visual boldness in one place. Let surrounding areas remain disciplined enough for content and actions to be clear.
 
-Before building, evaluate the design direction using DFII.
+## 4. Implement with the product, not beside it
 
-### DFII Dimensions (1–5)
+Build semantic HTML and accessible controls. Reuse existing components and tokens when they fit; extend them deliberately when they do not. Keep styling maintainable by avoiding conflicting selectors, magic-number positioning, and one-off overrides that fight the cascade.
 
-| Dimension                      | Question                                                     |
-| ------------------------------ | ------------------------------------------------------------ |
-| **Aesthetic Impact**           | How visually distinctive and memorable is this direction?    |
-| **Context Fit**                | Does this aesthetic suit the product, audience, and purpose? |
-| **Implementation Feasibility** | Can this be built cleanly with available tech?               |
-| **Performance Safety**         | Will it remain fast and accessible?                          |
-| **Consistency Risk**           | Can this be maintained across screens/components?            |
+Design responsive behavior intentionally rather than shrinking desktop layouts. At narrow widths, reconsider information order, interaction density, labels, and touch targets. Do not hide essential actions without a clear alternative.
 
-### Scoring Formula
+Use motion sparingly and only when it improves orientation, feedback, or comprehension. Do not rely on motion, color, or hover alone to convey meaning.
 
-```
-DFII = (Impact + Fit + Feasibility + Performance) − Consistency Risk
-```
+## 5. Validate before handoff
 
-**Range:** `-5 → +15`
+Render the interface and inspect it at representative viewport sizes. Use screenshots or browser inspection when available. Fix observed issues rather than claiming visual quality from the source alone.
 
-### Interpretation
+Check keyboard navigation, visible focus, contrast, heading order, form labels, image alternatives, zoom/reflow, and reduced-motion behavior. Test the most important user path and relevant non-happy-path states.
 
-| DFII      | Meaning   | Action                      |
-| --------- | --------- | --------------------------- |
-| **12–15** | Excellent | Execute fully               |
-| **8–11**  | Strong    | Proceed with discipline     |
-| **4–7**   | Risky     | Reduce scope or effects     |
-| **≤ 3**   | Weak      | Rethink aesthetic direction |
+## Definition of Done
 
----
+Before considering the design complete, verify:
 
-## 3. Mandatory Design Thinking Phase
+- [ ] The page has a clearly stated user, purpose, and primary action.
+- [ ] The visual direction is tied to the subject and does not rely on unexplained default aesthetics.
+- [ ] Hierarchy makes the primary content and action easy to find.
+- [ ] Typography, colors, spacing, and component treatments follow a coherent token system.
+- [ ] The interface uses real or representative content, not filler that hides layout problems.
+- [ ] Loading, empty, error, success, disabled, and overflow states are handled where relevant.
+- [ ] The layout works at mobile, tablet, and desktop widths without clipped content or lost actions.
+- [ ] All controls work with keyboard navigation and have visible focus states.
+- [ ] Contrast, labels, semantics, and non-color cues support accessible use.
+- [ ] Motion is purposeful and reduced-motion preferences are respected.
+- [ ] The implementation reuses or carefully extends the existing design system and does not add avoidable CSS conflicts.
+- [ ] The implemented result has been visually inspected and the primary flow has been tested.
 
-Before writing code, explicitly define:
+## Handoff
 
-### 1. Purpose
-
-* What action should this interface enable?
-* Is it persuasive, functional, exploratory, or expressive?
-
-### 2. Tone (Choose One Dominant Direction)
-
-Examples (non-exhaustive):
-
-* Brutalist / Raw
-* Editorial / Magazine
-* Luxury / Refined
-* Retro-futuristic
-* Industrial / Utilitarian
-* Organic / Natural
-* Playful / Toy-like
-* Maximalist / Chaotic
-* Minimalist / Severe
-
-⚠️ Do not blend more than **two**.
-
-### 3. Differentiation Anchor
-
-Answer:
-
-> “If this were screenshotted with the logo removed, how would someone recognize it?”
-
-This anchor must be visible in the final UI.
-
----
-
-## 4. Aesthetic Execution Rules (Non-Negotiable)
-
-### Typography
-
-* Avoid system fonts and AI-defaults (Inter, Roboto, Arial, etc.)
-* Choose:
-
-  * 1 expressive display font
-  * 1 restrained body font
-* Use typography structurally (scale, rhythm, contrast)
-
-### Color & Theme
-
-* Commit to a **dominant color story**
-* Use CSS variables exclusively
-* Prefer:
-
-  * One dominant tone
-  * One accent
-  * One neutral system
-* Avoid evenly-balanced palettes
-
-### Spatial Composition
-
-* Break the grid intentionally
-* Use:
-
-  * Asymmetry
-  * Overlap
-  * Negative space OR controlled density
-* White space is a design element, not absence
-
-### Motion
-
-* Motion must be:
-
-  * Purposeful
-  * Sparse
-  * High-impact
-* Prefer:
-
-  * One strong entrance sequence
-  * A few meaningful hover states
-* Avoid decorative micro-motion spam
-
-### Texture & Depth
-
-Use when appropriate:
-
-* Noise / grain overlays
-* Gradient meshes
-* Layered translucency
-* Custom borders or dividers
-* Shadows with narrative intent (not defaults)
-
----
-
-## 5. Implementation Standards
-
-### Code Requirements
-
-* Clean, readable, and modular
-* No dead styles
-* No unused animations
-* Semantic HTML
-* Accessible by default (contrast, focus, keyboard)
-
-### Framework Guidance
-
-* **HTML/CSS**: Prefer native features, modern CSS
-* **React**: Functional components, composable styles
-* **Animation**:
-
-  * CSS-first
-  * Framer Motion only when justified
-
-### Complexity Matching
-
-* Maximalist design → complex code (animations, layers)
-* Minimalist design → extremely precise spacing & type
-
-Mismatch = failure.
-
----
-
-## 6. Required Output Structure
-
-When generating frontend work:
-
-### 1. Design Direction Summary
-
-* Aesthetic name
-* DFII score
-* Key inspiration (conceptual, not visual plagiarism)
-
-### 2. Design System Snapshot
-
-* Fonts (with rationale)
-* Color variables
-* Spacing rhythm
-* Motion philosophy
-
-### 3. Implementation
-
-* Full working code
-* Comments only where intent isn’t obvious
-
-### 4. Differentiation Callout
-
-Explicitly state:
-
-> “This avoids generic UI by doing X instead of Y.”
-
----
-
-## 7. Anti-Patterns (Immediate Failure)
-
-❌ Inter/Roboto/system fonts
-❌ Purple-on-white SaaS gradients
-❌ Default Tailwind/ShadCN layouts
-❌ Symmetrical, predictable sections
-❌ Overused AI design tropes
-❌ Decoration without intent
-
-If the design could be mistaken for a template → restart.
-
----
-
-## 8. Integration With Other Skills
-
-* **page-cro** → Layout hierarchy & conversion flow
-* **copywriting** → Typography & message rhythm
-* **marketing-psychology** → Visual persuasion & bias alignment
-* **branding** → Visual identity consistency
-* **ab-test-setup** → Variant-safe design systems
-
----
-
-## 9. Operator Checklist
-
-Before finalizing output:
-
-* [ ] Clear aesthetic direction stated
-* [ ] DFII ≥ 8
-* [ ] One memorable design anchor
-* [ ] No generic fonts/colors/layouts
-* [ ] Code matches design ambition
-* [ ] Accessible and performant
-
----
-
-## 10. Questions to Ask (If Needed)
-
-1. Who is this for, emotionally?
-2. Should this feel trustworthy, exciting, calm, or provocative?
-3. Is memorability or clarity more important?
-4. Will this scale to other pages/components?
-5. What should users *feel* in the first 3 seconds?
-
----
-
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+Summarize the design direction, key implementation decisions, assumptions, responsive behavior, and any remaining trade-offs. Include screenshots or a short validation note when available.

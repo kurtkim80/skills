@@ -16,7 +16,6 @@ Repository overlay (optional):
 Read only the files you need:
 Load these files from `github/gh-aw` (they are not available locally).
 - `.github/aw/action-container-substitutions.md`
-- `.github/aw/agent-runtime-instructions.md`
 - `.github/aw/agentic-chat.md`
 - `.github/aw/agentic-workflows-mcp.md`
 - `.github/aw/asciicharts.md`
@@ -32,19 +31,13 @@ Load these files from `github/gh-aw` (they are not available locally).
 - `.github/aw/debug-agentic-workflow.md`
 - `.github/aw/dependabot.md`
 - `.github/aw/deployment-status.md`
-- `.github/aw/designer-mappings.md`
 - `.github/aw/designer.md`
-- `.github/aw/drive-memory.md`
-- `.github/aw/enclaves.md`
 - `.github/aw/evals.md`
 - `.github/aw/experiments.md`
 - `.github/aw/github-agentic-workflows.md`
 - `.github/aw/github-mcp-server-pagination.md`
-- `.github/aw/github-mcp-server-tools.md`
 - `.github/aw/github-mcp-server.md`
 - `.github/aw/instructions.md`
-- `.github/aw/intent.md`
-- `.github/aw/jobs.md`
 - `.github/aw/linter-workflows.md`
 - `.github/aw/llms.md`
 - `.github/aw/loop.md`

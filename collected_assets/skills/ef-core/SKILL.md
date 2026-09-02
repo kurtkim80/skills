@@ -1,309 +1,75 @@
 ---
 name: ef-core
-description: >
-  Entity Framework Core patterns for .NET 10. Covers DbContext configuration,
-  migrations workflow, interceptors, compiled queries, ExecuteUpdateAsync,
-  ExecuteDeleteAsync, value converters, and query optimization.
-  Load this skill when working with databases, writing queries, managing schema
-  changes, or when the user mentions "EF Core", "Entity Framework", "DbContext",
-  "migration", "LINQ query", "database", "SQL", "N+1", "Include", "split query",
-  "value converter", "interceptor", or "compiled query".
+description: 'Get best practices for Entity Framework Core'
 ---
 
-# EF Core (.NET 10)
+# Entity Framework Core Best Practices
 
-## Core Principles
+Your goal is to help me follow best practices when working with Entity Framework Core.
 
-1. **EF Core is the default ORM** — Use it unless you have a specific reason not to (extreme perf, legacy DB without FK constraints). See ADR-003.
-2. **DbContext is a unit of work** — Don't wrap it in another UoW abstraction. EF Core already implements Unit of Work and Repository patterns internally.
-3. **Queries should be projections** — Use `.Select()` to project into DTOs instead of loading full entities. This avoids over-fetching and N+1 issues.
-4. **Migrations are code** — Treat them like any other source code. Review them, test them, never auto-apply in production.
+## Data Context Design
 
-## Patterns
+- Keep DbContext classes focused and cohesive
+- Use constructor injection for configuration options
+- Override OnModelCreating for fluent API configuration
+- Separate entity configurations using IEntityTypeConfiguration
+- Consider using DbContextFactory pattern for console apps or tests
 
-### DbContext Configuration
+## Entity Design
 
-Use `IEntityTypeConfiguration<T>` to keep entity configs separate and discoverable.
+- Use meaningful primary keys (consider natural vs surrogate keys)
+- Implement proper relationships (one-to-one, one-to-many, many-to-many)
+- Use data annotations or fluent API for constraints and validations
+- Implement appropriate navigational properties
+- Consider using owned entity types for value objects
 
-```csharp
-// Persistence/AppDbContext.cs
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
-{
-    public DbSet<Order> Orders => Set<Order>();
-    public DbSet<Product> Products => Set<Product>();
+## Performance
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-    }
-}
+- Use AsNoTracking() for read-only queries
+- Implement pagination for large result sets with Skip() and Take()
+- Use Include() to eager load related entities when needed
+- Consider projection (Select) to retrieve only required fields
+- Use compiled queries for frequently executed queries
+- Avoid N+1 query problems by properly including related data
 
-// Persistence/Configurations/OrderConfiguration.cs
-public class OrderConfiguration : IEntityTypeConfiguration<Order>
-{
-    public void Configure(EntityTypeBuilder<Order> builder)
-    {
-        builder.HasKey(o => o.Id);
+## Migrations
 
-        builder.Property(o => o.Total)
-            .HasPrecision(18, 2);
+- Create small, focused migrations
+- Name migrations descriptively
+- Verify migration SQL scripts before applying to production
+- Consider using migration bundles for deployment
+- Add data seeding through migrations when appropriate
 
-        builder.HasMany(o => o.Items)
-            .WithOne()
-            .HasForeignKey(i => i.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
+## Querying
 
-        builder.HasIndex(o => o.CustomerId);
-        builder.HasIndex(o => o.CreatedAt);
-    }
-}
-```
+- Use IQueryable judiciously and understand when queries execute
+- Prefer strongly-typed LINQ queries over raw SQL
+- Use appropriate query operators (Where, OrderBy, GroupBy)
+- Consider database functions for complex operations
+- Implement specifications pattern for reusable queries
 
-### Registration
+## Change Tracking & Saving
 
-```csharp
-// Program.cs
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-```
+- Use appropriate change tracking strategies
+- Batch your SaveChanges() calls
+- Implement concurrency control for multi-user scenarios
+- Consider using transactions for multiple operations
+- Use appropriate DbContext lifetimes (scoped for web apps)
 
-### Query Projections (Avoid Over-Fetching)
+## Security
 
-```csharp
-// GOOD — project to DTO, only loads needed columns
-public async Task<OrderResponse?> GetOrderAsync(Guid id, CancellationToken ct)
-{
-    return await db.Orders
-        .Where(o => o.Id == id)
-        .Select(o => new OrderResponse(
-            o.Id,
-            o.Total,
-            o.CreatedAt,
-            o.Items.Select(i => new OrderItemResponse(i.ProductName, i.Quantity, i.Price)).ToList()))
-        .FirstOrDefaultAsync(ct);
-}
-```
+- Avoid SQL injection by using parameterized queries
+- Implement appropriate data access permissions
+- Be careful with raw SQL queries
+- Consider data encryption for sensitive information
+- Use migrations to manage database user permissions
 
-### Pagination
+## Testing
 
-```csharp
-public async Task<PagedList<OrderSummary>> ListOrdersAsync(int page, int pageSize, CancellationToken ct)
-{
-    var query = db.Orders
-        .OrderByDescending(o => o.CreatedAt)
-        .Select(o => new OrderSummary(o.Id, o.CustomerName, o.Total, o.Status));
+- Use in-memory database provider for unit tests
+- Create separate testing contexts with SQLite for integration tests
+- Mock DbContext and DbSet for pure unit tests
+- Test migrations in isolated environments
+- Consider snapshot testing for model changes
 
-    var totalCount = await query.CountAsync(ct);
-    var items = await query
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync(ct);
-
-    return new PagedList<OrderSummary>(items, totalCount, page, pageSize);
-}
-```
-
-### ExecuteUpdateAsync / ExecuteDeleteAsync
-
-Bulk operations that bypass change tracking for better performance.
-
-```csharp
-// Update without loading entities
-await db.Orders
-    .Where(o => o.Status == OrderStatus.Pending && o.CreatedAt < cutoff)
-    .ExecuteUpdateAsync(s => s
-        .SetProperty(o => o.Status, OrderStatus.Expired)
-        .SetProperty(o => o.UpdatedAt, clock.GetUtcNow()),
-        ct);
-
-// Delete without loading entities
-await db.Orders
-    .Where(o => o.Status == OrderStatus.Cancelled && o.CreatedAt < archiveCutoff)
-    .ExecuteDeleteAsync(ct);
-```
-
-### Interceptors
-
-Use interceptors for cross-cutting concerns like audit trails and soft deletes.
-
-```csharp
-public class AuditInterceptor(TimeProvider clock) : SaveChangesInterceptor
-{
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData eventData,
-        InterceptionResult<int> result,
-        CancellationToken ct = default)
-    {
-        var context = eventData.Context;
-        if (context is null) return ValueTask.FromResult(result);
-
-        var now = clock.GetUtcNow();
-
-        foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = now;
-                    entry.Entity.UpdatedAt = now;
-                    break;
-                case EntityState.Modified:
-                    entry.Entity.UpdatedAt = now;
-                    break;
-            }
-        }
-
-        return ValueTask.FromResult(result);
-    }
-}
-
-// Registration
-builder.Services.AddDbContext<AppDbContext>((sp, options) =>
-    options
-        .UseNpgsql(connectionString)
-        .AddInterceptors(sp.GetRequiredService<AuditInterceptor>()));
-```
-
-### Compiled Queries
-
-Use for hot-path queries that execute frequently with the same shape.
-
-```csharp
-public class OrderQueries
-{
-    public static readonly Func<AppDbContext, Guid, CancellationToken, Task<Order?>> GetById =
-        EF.CompileAsyncQuery((AppDbContext db, Guid id, CancellationToken ct) =>
-            db.Orders
-                .Include(o => o.Items)
-                .FirstOrDefault(o => o.Id == id));
-}
-
-// Usage
-var order = await OrderQueries.GetById(db, orderId, ct);
-```
-
-### Value Converters
-
-```csharp
-// Store enum as string
-builder.Property(o => o.Status)
-    .HasConversion<string>()
-    .HasMaxLength(50);
-
-// Strongly-typed IDs
-public readonly record struct OrderId(Guid Value);
-
-builder.Property(o => o.Id)
-    .HasConversion(id => id.Value, value => new OrderId(value));
-```
-
-### Migrations Workflow
-
-```bash
-# Create a migration
-dotnet ef migrations add AddOrderIndex --project src/MyApp.Infrastructure --startup-project src/MyApp.Api
-
-# Review the generated migration — ALWAYS review before applying
-# Check for data loss, index strategy, constraint names
-
-# Apply to development database
-dotnet ef database update --project src/MyApp.Infrastructure --startup-project src/MyApp.Api
-
-# Generate SQL script for production
-dotnet ef migrations script --idempotent --output migrations.sql
-```
-
-### Global Query Filters
-
-```csharp
-// Soft delete filter
-builder.HasQueryFilter(o => !o.IsDeleted);
-
-// Multi-tenant filter
-builder.HasQueryFilter(o => o.TenantId == _tenantProvider.TenantId);
-
-// Bypass when needed
-var allOrders = await db.Orders.IgnoreQueryFilters().ToListAsync(ct);
-```
-
-## Anti-patterns
-
-### Don't Wrap DbContext in a Repository
-
-```csharp
-// BAD — unnecessary abstraction that limits EF Core's power
-public interface IOrderRepository
-{
-    Task<Order?> GetByIdAsync(Guid id);
-    Task AddAsync(Order order);
-    Task SaveChangesAsync();
-}
-
-// GOOD — use DbContext directly in handlers
-public class Handler(AppDbContext db)
-{
-    public async Task<Order?> Handle(GetOrder.Query query, CancellationToken ct)
-    {
-        return await db.Orders.FindAsync([query.Id], ct);
-    }
-}
-```
-
-### Don't Use Lazy Loading
-
-```csharp
-// BAD — lazy loading causes N+1 queries and hides data access
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseLazyLoadingProxies()); // DON'T
-
-// GOOD — explicit loading with Include or projection
-var orders = await db.Orders
-    .Include(o => o.Items)
-    .Where(o => o.CustomerId == customerId)
-    .ToListAsync(ct);
-```
-
-### Don't Use .ToListAsync() Then Filter in Memory
-
-```csharp
-// BAD — loads ALL orders, filters in C#
-var orders = await db.Orders.ToListAsync(ct);
-var pending = orders.Where(o => o.Status == OrderStatus.Pending);
-
-// GOOD — filter in the database
-var pending = await db.Orders
-    .Where(o => o.Status == OrderStatus.Pending)
-    .ToListAsync(ct);
-```
-
-### Don't Forget to Await Async Methods
-
-```csharp
-// BAD — missing await, returns before save completes
-public void Handle(CreateOrder.Command command)
-{
-    db.Orders.Add(order);
-    db.SaveChangesAsync(); // Fire-and-forget BUG
-}
-
-// GOOD
-public async Task Handle(CreateOrder.Command command, CancellationToken ct)
-{
-    db.Orders.Add(order);
-    await db.SaveChangesAsync(ct);
-}
-```
-
-## Decision Guide
-
-| Scenario | Recommendation |
-|----------|---------------|
-| Standard CRUD | DbContext with projections |
-| Bulk updates (100+ rows) | `ExecuteUpdateAsync` / `ExecuteDeleteAsync` |
-| Hot-path read query | Compiled query |
-| Complex reporting query | Raw SQL with `FromSqlInterpolated` or Dapper |
-| Audit trails | `SaveChangesInterceptor` |
-| Multi-tenancy | Global query filter |
-| Soft deletes | Global query filter + interceptor |
-| Strongly-typed IDs | Value converter |
-| Production migration | Idempotent SQL script, never auto-migrate |
+When reviewing my EF Core code, identify issues and suggest improvements that follow these best practices.

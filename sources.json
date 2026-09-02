@@ -196,5 +196,96 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "Comprehensive agent skills collection covering WebSockets, SignalR, TCP sockets, and network protocols"
+  },
+  {
+    "name": "microsoft/upgrade-agent-plugins",
+    "repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+    "branch": "main",
+    "skills_subpath": "plugins",
+    "description": "Official Microsoft .NET Core migration and modern ASP.NET Core upgrade agent skills (102 SKILL.md)"
+  },
+  {
+    "name": "SebastienDegodez/copilot-instructions",
+    "repo": "https://github.com/SebastienDegodez/copilot-instructions.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "C# .NET Core Clean Architecture, .NET MCP Server creation, and modern C# guidelines"
+  },
+  {
+    "name": "HermeticOrmus/linux-sysadmin-skills",
+    "repo": "https://github.com/HermeticOrmus/linux-sysadmin-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Specialized Linux System Administration skills (performance tuning, diagnostics, security hardening, monitoring, maintenance)"
+  },
+  {
+    "name": "kirbeeinsipid671/linux-server-skill",
+    "repo": "https://github.com/kirbeeinsipid671/linux-server-skill.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Comprehensive Linux server administration, service management, Docker, and deployment skills"
+  },
+  {
+    "name": "bregman-arie/devops-sre-skills",
+    "repo": "https://github.com/bregman-arie/devops-sre-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "DevOps, SRE, and Linux infrastructure diagnostics, Kubernetes triage, and incident response skills"
+  },
+  {
+    "name": "github/awesome-copilot",
+    "repo": "https://github.com/github/awesome-copilot.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Official GitHub Awesome Copilot skills and agents collection (430+ skills including Debian Linux triage)"
+  },
+  {
+    "name": "arjunprabhulal/devops-skills",
+    "repo": "https://github.com/arjunprabhulal/devops-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "88 production DevOps skills: Kubernetes operations/networking/security, Helm charts, CI/CD pipelines, GitOps/ArgoCD, Terraform, SRE observability"
+  },
+  {
+    "name": "abdullahkhawer/devops-skills",
+    "repo": "https://github.com/abdullahkhawer/devops-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "DevOps CLI & pipeline automation: Jenkins CLI, GitLab CI, GitHub CLI, Dockerfile, Terraform Helm upgrade plans, and AWS EKS"
+  },
+  {
+    "name": "stevenke1981/linux-agent-skills",
+    "repo": "https://github.com/stevenke1981/linux-agent-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "61+ Linux, Kubernetes kubectl, Ingress, Docker containerization, backup, and CI/CD troubleshooting skills"
+  },
+  {
+    "name": "Qovery/qovery-skills",
+    "repo": "https://github.com/Qovery/qovery-skills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Kubernetes application deployment, Terraform integration, preview environments, and cloud infrastructure skills"
+  },
+  {
+    "name": "CODE-SAURABH/OpenSkills",
+    "repo": "https://github.com/CODE-SAURABH/OpenSkills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "49 production-grade AI agent skills for CI/CD release engineering, deployment automation, security, and benchmarking"
+  },
+  {
+    "name": "eraycc/ftp-client-skill",
+    "repo": "https://github.com/eraycc/ftp-client-skill.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Full-featured FTP/FTPS client skills (ftp-client, ftp-client-php) for connecting to remote FTP servers, listing, uploading, downloading, and file management"
+  },
+  {
+    "name": "Files-com/files-cli",
+    "repo": "https://github.com/Files-com/files-cli.git",
+    "branch": "master",
+    "skills_subpath": "skills",
+    "description": "126 enterprise cloud and file transfer skills covering SFTP, FTPS, AS2, automation, and remote sync"
   }
 ]

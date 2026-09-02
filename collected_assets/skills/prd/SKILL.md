@@ -1,66 +1,143 @@
 ---
 name: prd
-description: "Gated PRD generation — interrogates problem, user, and metric before drafting; refuses to draft on unknowns. Usage: /prd <feature-or-problem>"
-argument-hint: <feature-or-problem>
+description: 'Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered features. Includes executive summaries, user stories, technical specifications, and risk analysis.'
+license: MIT
 ---
 
-# /prd
+# Product Requirements Document (PRD)
 
-Generate a concise, evidence-gated product requirements document for `$ARGUMENTS`.
+## Overview
 
-## Usage
+Design comprehensive, production-grade Product Requirements Documents (PRDs) that bridge the gap between business vision and technical execution. This skill works for modern software systems, ensuring that requirements are clearly defined.
 
-```bash
-/prd <feature-or-problem>
+## When to Use
+
+Use this skill when:
+
+- Starting a new product or feature development cycle
+- Translating a vague idea into a concrete technical specification
+- Defining requirements for AI-powered features
+- Stakeholders need a unified "source of truth" for project scope
+- User asks to "write a PRD", "document requirements", or "plan a feature"
+
+---
+
+## Operational Workflow
+
+### Phase 1: Discovery (The Interview)
+
+Before writing a single line of the PRD, you **MUST** interrogate the user to fill knowledge gaps. Do not assume context.
+
+**Ask about:**
+
+- **The Core Problem**: Why are we building this now?
+- **Success Metrics**: How do we know it worked?
+- **Constraints**: Budget, tech stack, or deadline?
+
+### Phase 2: Analysis & Scoping
+
+Synthesize the user's input. Identify dependencies and hidden complexities.
+
+- Map out the **User Flow**.
+- Define **Non-Goals** to protect the timeline.
+
+### Phase 3: Technical Drafting
+
+Generate the document using the **Strict PRD Schema** below.
+
+---
+
+## PRD Quality Standards
+
+### Requirements Quality
+
+Use concrete, measurable criteria. Avoid "fast", "easy", or "intuitive".
+
+```diff
+# Vague (BAD)
+- The search should be fast and return relevant results.
+- The UI must look modern and be easy to use.
+
+# Concrete (GOOD)
++ The search must return results within 200ms for a 10k record dataset.
++ The search algorithm must achieve >= 85% Precision@10 in benchmark evals.
++ The UI must follow the 'Vercel/Next.js' design system and achieve 100% Lighthouse Accessibility score.
 ```
 
-`$ARGUMENTS` is the feature, initiative, or problem statement. If empty, ask for it before doing anything else.
+---
 
-## Phase 1 — Forcing Questions (before any drafting)
+## Strict PRD Schema
 
-Walk these one at a time. Do not batch them. Each answer feeds a required PRD section.
+You **MUST** follow this exact structure for the output:
 
-1. **Problem** — What user problem does this solve, and how do you know it exists? (Evidence: support tickets, interview quotes, funnel data — "the CEO wants it" is not evidence.)
-2. **User** — Who specifically has this problem? (Segment, role, frequency of pain. "Everyone" is a non-answer.)
-3. **Metric** — What single number moves if this works, by how much, measured where?
-4. **Alternatives** — What do these users do today instead? Why is that not good enough?
-5. **Non-goals** — What adjacent asks are explicitly out of scope for v1?
+### 1. Executive Summary
 
-## Drafting Gate (hard refusal)
+- **Problem Statement**: 1-2 sentences on the pain point.
+- **Proposed Solution**: 1-2 sentences on the fix.
+- **Success Criteria**: 3-5 measurable KPIs.
 
-**Refuse to draft the PRD if the answer to question 1 (problem), 2 (user), or 3 (metric) is unknown, circular, or "we'll figure it out later."** Instead, output the open questions and the cheapest way to answer each (e.g., 5 customer interviews, a funnel query, a fake-door test). A PRD without a problem, a user, and a metric is a feature wish, not a requirements document.
+### 2. User Experience & Functionality
 
-## Phase 2 — Draft (required-sections checklist)
+- **User Personas**: Who is this for?
+- **User Stories**: `As a [user], I want to [action] so that [benefit].`
+- **Acceptance Criteria**: Bulleted list of "Done" definitions for each story.
+- **Non-Goals**: What are we NOT building?
 
-Every PRD must contain all of these sections — emit the checklist at the end and mark each:
+### 3. AI System Requirements (If Applicable)
 
-- [ ] Problem statement (with the evidence from Q1)
-- [ ] Target user and segment (from Q2)
-- [ ] Goals and explicit non-goals (from Q5)
-- [ ] User stories with acceptance criteria
-- [ ] Success metric + threshold + measurement source (from Q3)
-- [ ] Alternatives considered / "do nothing" baseline (from Q4)
-- [ ] Scope, dependencies, and timeline assumptions
-- [ ] Open questions and risks
+- **Tool Requirements**: What tools and APIs are needed?
+- **Evaluation Strategy**: How to measure output quality and accuracy.
 
-Keep it to ~2 pages. Use the repo template as the skeleton.
+### 4. Technical Specifications
 
-## Phase 3 — Prioritization hook (optional)
+- **Architecture Overview**: Data flow and component interaction.
+- **Integration Points**: APIs, DBs, and Auth.
+- **Security & Privacy**: Data handling and compliance.
 
-If the user has multiple candidate features, offer to RICE-score them before committing the PRD:
+### 5. Risks & Roadmap
 
-```bash
-python3 product-team/skills/product-manager-toolkit/scripts/rice_prioritizer.py features.csv --capacity 20
-```
+- **Phased Rollout**: MVP -> v1.1 -> v2.0.
+- **Technical Risks**: Latency, cost, or dependency failures.
 
-## Repo Assets (verified paths)
+---
 
-- Skill: `product-team/skills/product-manager-toolkit/SKILL.md`
-- PRD template: `product-team/skills/product-manager-toolkit/assets/prd_template.md`
-- PRD patterns reference: `product-team/skills/product-manager-toolkit/references/prd_templates.md`
-- RICE tool: `product-team/skills/product-manager-toolkit/scripts/rice_prioritizer.py`
+## Implementation Guidelines
 
-## Related
+### DO (Always)
 
-- `/code-to-prd` — reverse-engineer a PRD from an existing codebase
-- `/rice` — standalone RICE prioritization
+- **Define Testing**: For AI systems, specify how to test and validate output quality.
+- **Iterate**: Present a draft and ask for feedback on specific sections.
+
+### DON'T (Avoid)
+
+- **Skip Discovery**: Never write a PRD without asking at least 2 clarifying questions first.
+- **Hallucinate Constraints**: If the user didn't specify a tech stack, ask or label it as `TBD`.
+
+---
+
+## Example: Intelligent Search System
+
+### 1. Executive Summary
+
+**Problem**: Users struggle to find specific documentation snippets in massive repositories.
+**Solution**: An intelligent search system that provides direct answers with source citations.
+**Success**:
+
+- Reduce search time by 50%.
+- Citation accuracy >= 95%.
+
+### 2. User Stories
+
+- **Story**: As a developer, I want to ask natural language questions so I don't have to guess keywords.
+- **AC**:
+  - Supports multi-turn clarification.
+  - Returns code blocks with "Copy" button.
+
+### 3. AI System Architecture
+
+- **Tools Required**: `codesearch`, `grep`, `webfetch`.
+
+### 4. Evaluation
+
+- **Benchmark**: Test with 50 common developer questions.
+- **Pass Rate**: 90% must match expected citations.

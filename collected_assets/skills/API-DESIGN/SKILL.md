@@ -1,238 +1,404 @@
 ---
-name: designing-python-apis
-description: Designs intuitive Python library APIs following principles of simplicity, consistency, and discoverability. Handles API evolution, deprecation, breaking changes, and error handling. Use when designing new library APIs, reviewing existing APIs for improvements, or managing API versioning and deprecations.
+name: api-design
+description: Design production-grade APIs — REST, GraphQL, gRPC, and WebSocket — with a focus on consistency, versioning, error standards, and developer experience. Use when the user asks to design an API, define endpoints, choose between REST and GraphQL, structure request/response schemas, handle API versioning, design pagination, or produce an OpenAPI/Swagger spec.
 ---
 
-# Python API Design
+# API Design
 
-## Core Principles
+Approach every API as a product. The developer calling your API is your user. An API that is hard to understand, inconsistent, or unpredictable is a broken product — even if it technically works.
 
-1. **Simplicity**: Simple things simple, complex things possible
-2. **Consistency**: Similar operations work similarly
-3. **Least Surprise**: Behave as users expect
-4. **Discoverability**: Find via autocomplete and help
+Design the API before writing a single line of implementation. An API is a contract. Changing it after clients depend on it is expensive. Getting it right upfront is cheap.
 
-## Progressive Disclosure Pattern
+---
 
-```python
-# Level 1: Simple functions
-from mylib import encode, decode
-result = encode(37.7749, -122.4194)
+## API Design Principles
 
-# Level 2: Configurable classes
-from mylib import Encoder
-encoder = Encoder(precision=15)
+- **Spec first, implement second.** Write the OpenAPI spec, GraphQL schema, or proto file before any implementation. The spec is the contract. Implementation details are irrelevant to the caller.
+- **Consistency is the most important quality.** Every endpoint in an API should behave according to the same rules: same error format, same naming convention, same pagination pattern, same auth mechanism. Inconsistency forces callers to write special-case code for every endpoint.
+- **APIs are forever.** Every field you add is a field you must support until you version or sunset the API. Every field you remove is a breaking change. Design with permanence in mind.
+- **Design for the caller, not the data model.** Your database schema is an implementation detail. Your API shape should reflect what callers need, not what your ORM produces.
+- **Explicit over implicit.** Undefined behaviour in an API becomes the behaviour callers depend on. Make every behaviour explicit: required vs optional fields, error codes, rate limits, pagination behaviour at the end of a list.
+- **Developer experience is a first-class requirement.** An API that requires a PhD to understand will not be adopted. Good error messages, consistent naming, and accurate documentation are as important as correct behaviour.
 
-# Level 3: Low-level access
-from mylib.internals import BitEncoder
+---
+
+## Step 0: Ground the API Design
+
+Before designing any endpoint, answer these questions:
+
+1. **Who is the caller?** Internal service, third-party developer, mobile app, browser, CLI? Each has different needs (auth mechanism, response size, error verbosity).
+2. **What resources does the API expose?** List the core domain entities the API manages.
+3. **What operations does each resource support?** CRUD is not always the right decomposition — sometimes `cancel`, `approve`, `publish` are better verbs than generic CRUD.
+4. **What are the read/write patterns?** High-read, low-write? Real-time? Bulk operations? Streaming? This determines the API style.
+5. **What are the latency and payload size constraints?** A mobile API on a 3G connection has different constraints than a backend-to-backend integration.
+6. **What versioning strategy is needed from day one?** If this API will have external consumers, versioning must be designed in before the first endpoint ships.
+
+---
+
+## Choosing the Right API Style
+
+| Style | Best for | Avoid when |
+|-------|----------|------------|
+| **REST** | Resource-oriented APIs, public APIs, broad client compatibility, simple CRUD | Complex queries with many relationships, real-time, or highly variable response shapes |
+| **GraphQL** | Flexible queries, multiple clients with different data needs, frontend-driven development, deeply nested data | Simple APIs, teams without GraphQL tooling, when over-fetching is not a real problem |
+| **gRPC** | High-performance internal service communication, streaming, strongly-typed contracts, polyglot microservices | Browser clients (requires grpc-web proxy), teams unfamiliar with protobuf |
+| **WebSocket** | Real-time bidirectional communication (chat, live dashboards, multiplayer) | Request-response patterns that do not need real-time; adds complexity without benefit |
+| **Webhooks** | Asynchronous event notification to external systems | When the caller needs to poll or query state; use REST polling or SSE instead |
+
+---
+
+## REST API Design Standards
+
+### URL Structure
+```
+# Pattern
+/{version}/{resource}/{id}/{sub-resource}
+
+# Examples — good
+GET    /v1/users
+GET    /v1/users/{userId}
+GET    /v1/users/{userId}/orders
+POST   /v1/users
+PUT    /v1/users/{userId}
+PATCH  /v1/users/{userId}
+DELETE /v1/users/{userId}
+
+# Actions that don't map to CRUD — use sub-resources
+POST   /v1/orders/{orderId}/cancel
+POST   /v1/invoices/{invoiceId}/send
+POST   /v1/users/{userId}/password-reset
 ```
 
-## Naming Conventions
+**URL rules:**
+- Always lowercase, hyphen-separated (`user-profiles`, not `userProfiles` or `user_profiles`)
+- Nouns for resources, not verbs (`/users`, not `/getUsers`)
+- Plural for collections (`/users`, not `/user`)
+- Version in the URL path (`/v1/`) for public APIs — query param or header for internal APIs
+- Never expose database IDs directly where possible (use UUIDs or opaque string IDs)
 
-```python
-# Actions: verbs
-encode(), decode(), validate()
+### HTTP Methods — Correct Usage
+| Method | Semantics | Idempotent | Safe |
+|--------|-----------|------------|------|
+| `GET` | Retrieve resource(s) | ✅ | ✅ |
+| `POST` | Create a new resource or trigger an action | ❌ | ❌ |
+| `PUT` | Replace a resource entirely | ✅ | ❌ |
+| `PATCH` | Partially update a resource | ❌ (should be) | ❌ |
+| `DELETE` | Remove a resource | ✅ | ❌ |
 
-# Retrieval: get_*
-get_user(), get_config()
+**Rule:** `GET` requests must never have side effects. Never use `GET` to trigger a state change.
 
-# Boolean: is_*, has_*, can_*
-is_valid(), has_permission()
+### Request & Response Shape
 
-# Conversion: to_*, from_*
-to_dict(), from_json()
+**Request body — always:**
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "role": "admin"
+}
 ```
 
-## Error Handling
-
-```python
-class MyLibError(Exception):
-    """Base exception with helpful messages."""
-    def __init__(self, message: str, *, hint: str = None):
-        super().__init__(message)
-        self.hint = hint
-
-# Usage
-raise ValidationError(
-    f"Latitude must be -90 to 90, got {lat}",
-    hint="Did you swap latitude and longitude?"
-)
+**Single resource response:**
+```json
+{
+  "id": "usr_01HXYZ",
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "role": "admin",
+  "createdAt": "2026-01-15T10:30:00Z",
+  "updatedAt": "2026-01-15T10:30:00Z"
+}
 ```
 
-### Fail Loud, Not Silent
-
-The most expensive bugs are the ones where **failure is indistinguishable from
-success**. A caller who gets no error assumes everything worked. These patterns
-all turned a real failure into a silent wrong answer in shipped code — guard
-against every one.
-
-**Don't write the success sentinel on the failure path.** An `except` block that
-sets the same state a successful run would makes failed jobs look complete.
-
-```python
-# BAD — any failure is reported to the user as a finished result.
-try:
-    result = run_job()
-    status = "READY"
-except Exception:
-    status = "READY"        # failure now looks identical to success
-
-# GOOD — distinct terminal states; the UI/caller can react.
-try:
-    result = run_job()
-    status = "READY"
-except Exception:
-    log.exception("job failed")
-    status = "ERROR"
+**Collection response — always wrap in an envelope:**
+```json
+{
+  "data": [
+    { "id": "usr_01HXYZ", "name": "Jane Doe" },
+    { "id": "usr_02HABC", "name": "John Smith" }
+  ],
+  "pagination": {
+    "cursor": "eyJpZCI6InVzcl8wMkhBQkMifQ==",
+    "hasMore": true,
+    "total": 247
+  }
+}
 ```
 
-**Don't swallow distinct failures into one generic message.** A broad
-`except Exception` that returns `"error: something went wrong"` (or worse, an
-empty result) collapses parse errors, missing files, and bugs into the same
-opaque string — undebuggable and often mistaken for "no problems found." Catch
-the specific exceptions you can handle; let the rest propagate.
+**Why an envelope?** Adding metadata (pagination, request ID, warnings) to a bare array response is a breaking change. An envelope allows non-breaking additions forever.
 
-**An empty/partial result is not an error signal.** Returning `[]`, an empty
-`DataFrame`, or "what I fetched before the connection dropped" looks like a valid
-answer. Pagination that returns partial pages on a mid-stream `RequestError`, then
-gets aggregated as if complete, produces silently wrong analytics. Either raise,
-or return an explicit "incomplete" marker the caller must check — never let
-truncation masquerade as the full set.
+### Naming Conventions
+- Field names: `camelCase` for JSON APIs (`firstName`, not `first_name` or `FirstName`)
+- Timestamps: ISO 8601 UTC (`"2026-01-15T10:30:00Z"`) — never Unix timestamps in the response body
+- Booleans: positive framing (`isActive`, not `isNotActive`; `isEnabled`, not `isDisabled`)
+- IDs: string type always, even if internally numeric (prevents JavaScript integer overflow)
+- Money: integer cents, never floating-point (`"amount": 1999` means $19.99)
+- Enums: SCREAMING_SNAKE_CASE (`"status": "IN_PROGRESS"`)
 
-**Meter external work where it actually happens.** A quota or request budget
-charged once around `list_all_items()` undercounts whenever that helper follows
-pagination internally: one budget unit can hide ten HTTP requests. Spend at the
-lowest shared request boundary so every page, retry, and detail fetch is counted.
+---
 
-```python
-# BAD — the helper may issue an unbounded number of requests.
-budget.spend()
-items = client.list_all_items()
+## Error Response Standard
 
-# GOOD — pagination cannot bypass the meter.
-def request(method, url, *, budget, **kwargs):
-    budget.spend()
-    return http.request(method, url, **kwargs)
+Every API must have one error format used consistently across all endpoints:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "details": [
+      {
+        "field": "email",
+        "code": "INVALID_FORMAT",
+        "message": "Must be a valid email address"
+      }
+    ],
+    "requestId": "req_01HXYZ123",
+    "docsUrl": "https://docs.example.com/errors/VALIDATION_ERROR"
+  }
+}
 ```
 
-Keep the budget above the raw HTTP call if cache hits should be free, and below
-retry logic if every retry consumes provider quota. Test with a fake paginated
-transport that returns multiple pages and assert both the result values and the
-exact number of budget spends; a one-page fake cannot prove this contract.
+**Rules:**
+- `code` is a machine-readable string constant — callers switch on this, not on the HTTP status
+- `message` is human-readable — never put a machine-parseable value here
+- `details` is an array — multiple validation errors in one response, never force callers to fix one error at a time
+- `requestId` on every error response — this is how support traces the request in logs
+- `docsUrl` for each error code — link to documentation explaining the error and how to fix it
 
-**A no-op on unexpected input is a silent corruption.** Code that skips columns
-of the wrong type, ignores a key it doesn't recognize, or `continue`s past a file
-it can't parse — with no error and no report — leaves the caller believing the
-operation applied. If you can't act on an input, say so (raise, warn, or return a
-per-item error list); don't quietly do nothing.
+### HTTP Status Codes — Correct Usage
+| Code | When to use |
+|------|------------|
+| `200 OK` | Successful GET, PATCH, PUT |
+| `201 Created` | Successful POST that creates a resource |
+| `204 No Content` | Successful DELETE or action with no response body |
+| `400 Bad Request` | Validation error, malformed request |
+| `401 Unauthorized` | Not authenticated |
+| `403 Forbidden` | Authenticated but not authorized for this resource |
+| `404 Not Found` | Resource does not exist |
+| `409 Conflict` | State conflict (duplicate, version mismatch) |
+| `422 Unprocessable Entity` | Semantically invalid request (valid syntax, invalid business logic) |
+| `429 Too Many Requests` | Rate limit exceeded |
+| `500 Internal Server Error` | Unexpected server error |
+| `503 Service Unavailable` | Planned downtime or dependency unavailable |
 
-**Validation errors must not leave partial mutations behind.** An `inplace=True`
-API that renames caller-owned columns and only then validates another argument can
-raise the right exception while still corrupting the caller's next operation.
-Validate every parameter and precondition before the first mutation. When work
-cannot be validated up front, stage it on a copy and commit only after success.
+**Never use `200` with an error body.** `{ "success": false, "error": "..." }` with a 200 status is a broken API.
 
-```python
-# BAD — invalid max_fraction still changes the caller's dataframe.
-def detect(data, *, max_fraction=0.1, inplace=True):
-    target = data if inplace else data.copy()
-    target.rename(columns={"time": "timestamp"}, inplace=True)
-    if not 0 < max_fraction < 0.5:
-        raise ValueError("max_fraction must be between 0 and 0.5")
-    return analyze(target)
+---
 
-# GOOD — the error path is side-effect free.
-def detect(data, *, max_fraction=0.1, inplace=True):
-    if not 0 < max_fraction < 0.5:
-        raise ValueError("max_fraction must be between 0 and 0.5")
-    target = data if inplace else data.copy()
-    target.rename(columns={"time": "timestamp"}, inplace=True)
-    return analyze(target)
+## Pagination Patterns
+
+### Cursor-based Pagination (recommended for most cases)
+```
+GET /v1/users?cursor=eyJpZCI6InVzcl8wMkhBQkMifQ==&limit=20
+```
+**When:** Ordered, append-heavy collections (feeds, logs, events). Stable pages even when new items are inserted.
+
+### Offset-based Pagination (simple, but has edge cases)
+```
+GET /v1/products?page=3&pageSize=20
+```
+**When:** Admin UIs where users jump to specific pages. Avoid for large or frequently-updated datasets (items shift as pages load).
+
+### Keyset Pagination (for high-performance sorted queries)
+```
+GET /v1/orders?afterId=ord_01HXYZ&limit=50
+```
+**When:** Database queries on an indexed column where offset queries become slow.
+
+**Pagination response fields (always include):**
+- `cursor` or `nextPage` — how to get the next page
+- `hasMore` (boolean) — whether more results exist after this page
+- `total` (optional) — total count (expensive on large datasets; omit if not needed)
+- `limit` — the limit that was applied (echo it back)
+
+---
+
+## API Versioning Strategy
+
+### URL Path Versioning (recommended for public APIs)
+```
+/v1/users
+/v2/users
+```
+**Pros:** Explicit, easy to route in proxies/gateways, cacheable.
+**Use for:** External/public APIs, mobile app APIs (clients pin to a version).
+
+### Header Versioning (recommended for internal APIs)
+```
+API-Version: 2026-01-15
+```
+**Pros:** Keeps URLs clean; date-based versions are self-documenting.
+**Use for:** Internal services, APIs with sophisticated clients.
+
+### Breaking vs Non-Breaking Changes
+**Non-breaking (safe to add without versioning):**
+- Adding new optional fields to responses
+- Adding new optional request parameters
+- Adding new endpoints
+- Loosening validation on existing fields
+
+**Breaking (requires version bump):**
+- Removing or renaming fields
+- Changing field types
+- Changing HTTP status codes
+- Tightening validation
+- Changing authentication requirements
+- Removing endpoints
+
+**Deprecation policy:** Mark deprecated fields with a `X-Deprecated-Fields` response header and a `deprecated` note in the OpenAPI spec. Give callers a minimum of 6 months notice before removal.
+
+---
+
+## OpenAPI Spec Standards
+
+Every REST API ships with an OpenAPI 3.x spec. No exceptions.
+
+```yaml
+openapi: 3.1.0
+info:
+  title: User Management API
+  version: 1.0.0
+  description: Manages user accounts and profiles
+
+paths:
+  /v1/users/{userId}:
+    get:
+      summary: Get a user by ID
+      operationId: getUserById
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  schemas:
+    User:
+      type: object
+      required: [id, name, email, createdAt]
+      properties:
+        id:
+          type: string
+          example: usr_01HXYZ
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
 ```
 
-Pin the contract in tests: snapshot caller-owned state, trigger a late validation
-error with `inplace=True`, and assert the object is unchanged. Testing only the
-exception type misses the damaging half of this bug.
+**OpenAPI rules:**
+- `operationId` on every endpoint — used for SDK generation
+- `tags` on every endpoint — groups endpoints in documentation
+- Every response code documented — not just 200
+- `$ref` for shared schemas — no duplication
+- Realistic `example` values — not `string`, `foo`, or `123`
+- Security schemes defined and applied to every protected endpoint
 
-```python
-before = frame.copy(deep=True)
-with pytest.raises(ValueError, match="max_fraction"):
-    detect(frame, max_fraction=0.5, inplace=True)
-pd.testing.assert_frame_equal(frame, before)
+---
+
+## Rate Limiting
+
+Every public API must implement rate limiting. Communicate it clearly:
+
+**Response headers (always include on rate-limited APIs):**
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 842
+X-RateLimit-Reset: 1737892800
+Retry-After: 60        (only on 429 responses)
 ```
 
-**Filtering down to empty must never read as "all clear."** When you narrow a rule
-set, check set, or work list and the filter yields nothing, an "evaluate all →
-0 problems" path reports a perfect score while actually checking nothing. Guard
-the empty case explicitly:
+**Rate limit strategy:**
+- Per API key / per user: prevents one caller from starving others
+- Per endpoint: expensive endpoints get tighter limits than cheap ones
+- Sliding window preferred over fixed window (avoids burst at window boundary)
+- Return `429` with `Retry-After` header — never silently drop requests
 
-```python
-selected = [r for r in rules if r.category in requested]
-if not selected:                       # empty filter ≠ everything passed
-    raise ValueError(f"no rules match {requested!r}")
-```
+---
 
-**Never fabricate a fallback that looks real.** Substituting sample/random data
-when a fetch fails (so the UI "has something to show") presents invented numbers
-as genuine. Surface the failure instead; a visible error beats a plausible lie.
+## Authentication Standards
 
-**Don't discard the real output on a non-zero exit.** A subprocess wrapper that
-returns `f"Error: {stderr}"` whenever `returncode != 0` loses the answer for tools
-that exit non-zero by design and write results to **stdout** — reporting a
-successful run as an empty `"Error: "`. Inspect stdout and the actual exit
-semantics before deciding it failed.
+| Mechanism | Use case |
+|-----------|----------|
+| **Bearer JWT** | User-facing APIs, mobile/web clients |
+| **API Key** (`Authorization: Bearer sk_...`) | Server-to-server, third-party integrations |
+| **OAuth 2.0 + PKCE** | Third-party access on behalf of a user |
+| **mTLS** | High-security internal service communication |
 
-## Deprecation
+**Rules:**
+- Always use `Authorization: Bearer <token>` header — never query parameters for auth tokens
+- API keys in query parameters appear in server logs. Never.
+- Short-lived access tokens (15 min – 1 hour) with refresh token rotation
+- Scopes on API keys — a key should only have access to what it needs
 
-Deprecate gracefully: warn now, document the removal version, and remove only in a
-major release. The warning mechanics (including deprecating parameters, classes,
-and modules) and the migration-guide template are owned by the
-`managing-python-releases` skill — see
-**[../release-management/MIGRATION.md](../release-management/MIGRATION.md)**.
+---
 
-## Anti-Patterns
+## Bundled Reference
 
-```python
-# Bad: Boolean trap
-process(data, True, False, True)
+Read [openapi-review.md](./references/openapi-review.md) when reviewing or writing an OpenAPI contract. It supplements, but does not replace, the API-specific requirements in this skill.
 
-# Good: Keyword arguments
-process(data, validate=True, cache=False)
-```
+## API Design Review Checklist
 
-The mutable-default-argument trap (`def f(x: list = [])`) is covered by the
-`improving-python-code-quality` skill.
+Before finalising any API design:
 
-For detailed patterns, see:
-- **[PATTERNS.md](PATTERNS.md)** - Builder, factory, and advanced patterns
-- **[EVOLUTION.md](EVOLUTION.md)** - API versioning and migration guides
+**Resource & URL Design**
+- [ ] URLs are nouns, lowercase, hyphenated
+- [ ] HTTP methods used correctly (no state-changing GETs)
+- [ ] Version included in URL or header strategy defined
+- [ ] IDs are string type (not integer)
+- [ ] Actions not mappable to CRUD use sub-resource + POST
 
-## Review Checklist
+**Request & Response**
+- [ ] Collections wrapped in an envelope object
+- [ ] Consistent field naming (camelCase)
+- [ ] Timestamps in ISO 8601 UTC format
+- [ ] Money in integer cents, not floats
+- [ ] All required fields documented
 
-```
-Naming:
-- [ ] Clear, self-documenting names
-- [ ] Consistent patterns throughout
-- [ ] Boolean params read naturally
+**Errors**
+- [ ] Single error format used across all endpoints
+- [ ] Machine-readable error codes defined
+- [ ] Field-level validation errors returned in one response (not one at a time)
+- [ ] Correct HTTP status codes used
+- [ ] RequestId on every error response
 
-Parameters:
-- [ ] Minimal required parameters
-- [ ] Sensible defaults
-- [ ] Keyword-only after positional clarity
+**Pagination**
+- [ ] All collection endpoints paginated (never return unbounded lists)
+- [ ] Pagination strategy documented
+- [ ] `hasMore` and cursor/nextPage in every paginated response
 
-Errors:
-- [ ] Custom exceptions with context
-- [ ] Helpful error messages
-- [ ] Documented in docstrings
-- [ ] Failures fail loud — no success sentinel on the error path
-- [ ] Empty/partial results never masquerade as a complete answer
-- [ ] No silent no-ops or fabricated fallback data
-- [ ] Validation failures leave caller-owned inputs unchanged
-```
+**Versioning & Breaking Changes**
+- [ ] Versioning strategy defined before first endpoint ships
+- [ ] Deprecation policy defined
+- [ ] No breaking changes to existing endpoints without a version bump
 
-## Learn More
+**Security**
+- [ ] Auth mechanism defined for all endpoints
+- [ ] Rate limiting applied and communicated via headers
+- [ ] No secrets in URLs or query parameters
+- [ ] HTTPS only — no HTTP fallback
 
-This skill is based on the [Ergonomics](https://mcginniscommawill.com/guides/python-library-development/#ergonomics-the-joy-of-good-design) section of the [Guide to Developing High-Quality Python Libraries](https://mcginniscommawill.com/guides/python-library-development/) by [Will McGinnis](https://mcginniscommawill.com/). See these posts for deeper coverage:
-
-- [The Art of API Design](https://mcginniscommawill.com/posts/2025-02-03-art-of-api-design/)
-- [Designing for Developer Joy](https://mcginniscommawill.com/posts/2025-02-06-designing-for-developer-joy/)
+**Documentation**
+- [ ] OpenAPI 3.x spec complete with all endpoints, schemas, and error responses
+- [ ] Realistic examples on all request/response fields
+- [ ] Authentication documented with example token format
+- [ ] Rate limits documented

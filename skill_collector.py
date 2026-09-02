@@ -130,15 +130,19 @@ def sync_assets():
                 # 1. Skills 수집 (SKILL.md)
                 for skill_file in root.rglob("SKILL.md"):
                     folder = skill_file.parent
-                    s_name = folder.name
-                    if s_name.startswith("."):
-                        continue
                     try:
                         content = skill_file.read_text(encoding="utf-8", errors="ignore")
                     except Exception:
                         continue
 
                     meta = parse_frontmatter(content)
+                    s_name = folder.name
+                    if folder == root:
+                        s_name = meta.get("name") or repo_name.split("/")[-1]
+
+                    if s_name.startswith("."):
+                        continue
+
                     target_dir = skills_dir / s_name
                     if target_dir.exists():
                         shutil.rmtree(target_dir)

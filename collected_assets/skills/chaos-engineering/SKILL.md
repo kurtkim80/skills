@@ -1,231 +1,135 @@
 ---
 name: chaos-engineering
-description: Use when planning, running, or learning from chaos engineering experiments. Triggers on "chaos experiment", "fault injection", "gameday", "resilience test", "blast radius", "steady state", "abort criteria", "Chaos Toolkit", "Chaos Mesh", "Litmus", "Gremlin", "AWS FIS", or any deliberate failure-injection question. Ships experiment designer, blast-radius calculator, and postmortem generator (all stdlib Python), 4 references on chaos principles + experiment design + attack taxonomy + tooling landscape, and a /chaos-experiment slash command. Composes with feature-flags-architect (kill switches as abort triggers) and kubernetes-operator (common chaos targets).
-context: fork
-version: 2.9.0
-author: claude-code-skills
+description: Deliberately injects controlled failure into a system to find weaknesses before they find you in production, using a stated hypothesis, a bounded blast radius, and a defined steady-state metric to verify against. Use this whenever the user wants to run a game day, test resilience by killing pods or nodes, ask "what happens if this dependency goes down," or validate that a failover or circuit breaker actually works. For the drill that validates region/backup failover use `disaster-recovery`; for injecting load rather than failure use `load-testing`.
 license: MIT
-tags: [chaos-engineering, resilience, fault-injection, gameday, sre, reliability, chaos-toolkit, chaos-mesh, litmus, gremlin, aws-fis]
-compatible_tools: [claude-code, codex-cli, cursor, antigravity, opencode, gemini-cli]
 ---
 
 # Chaos Engineering
 
-Design experiments that surface real weaknesses in production systems — without becoming outages. Most "chaos engineering" attempts skip steady-state measurement, define no abort criteria, and have no blast-radius bound. This skill enforces the discipline that makes chaos experiments safe and useful.
+Most systems have never actually experienced the failures their architecture claims to handle.
+The retry logic, the circuit breaker, the multi-AZ failover — these are assumptions that live
+in a design doc until something breaks them for real, usually in production, usually at the
+worst time. Chaos engineering moves that first real test from an incident to a planned
+experiment, where you control the timing and the blast radius.
 
-## When to use
+The point is not to break things randomly — random breakage is what production does on its
+own. The point is to test a specific belief about how the system behaves under a specific
+failure, and find out you were wrong somewhere safer than 3am on a Saturday.
 
-- Planning a chaos experiment (what to break, where, when, how to abort)
-- Calculating blast radius before running the experiment
-- Reviewing an existing experiment plan for safety
-- Choosing a chaos tool (Chaos Toolkit / Chaos Mesh / Litmus / Gremlin / AWS FIS)
-- Writing a chaos experiment postmortem
-- Running a Game Day exercise
+**Test a stated hypothesis about failure, don't just cause chaos.**
 
-## When NOT to use
+## 1. Start from a hypothesis, not a stunt
 
-- General incident response (use `incident-response`)
-- Threat hunting / red-team (use `red-team`, `threat-detection`)
-- Performance load testing (different goal — chaos is about failure modes, not capacity)
-- Production debugging (chaos discovers weaknesses preemptively, not after-the-fact)
+"Let's kill a random pod and see what happens" is not an experiment, it's a demo. A real chaos
+experiment states, in advance, what you believe will happen — "if we kill the primary database
+instance, the read replica promotes within 30 seconds and error rate stays under 1%" — so that
+when reality diverges from the belief, you have found something specific and actionable, not
+just a surprising graph.
 
-## Core principle: chaos without abort criteria is an outage
+- **Write the hypothesis before running anything** — what you expect, and the metric that
+  would prove or disprove it.
+- **Base it on a real dependency**, not an arbitrary one — pick failures your architecture
+  actually claims to survive.
+- **A confirmed hypothesis is still valuable** — it's evidence the system works as designed,
+  not a wasted experiment.
 
-The 4 Principles of Chaos Engineering (Netflix, 2016):
+**Done when:** the experiment has a written hypothesis and a specific metric that will confirm
+or refute it.
 
-1. **Build a hypothesis around steady-state behavior.** Not "what breaks?" but "X holds; will it still hold under fault Y?"
-2. **Vary real-world events.** Inject realistic failures: kill nodes, slow networks, lose cache, throttle dependencies.
-3. **Run experiments in production.** Staging never has the same failure modes. Start small.
-4. **Automate experiments to run continuously.** One-off chaos is a press release; continuous chaos is engineering.
+## 2. Define steady-state before you break anything
 
-Add a fifth: **Define abort criteria up front.** A chaos experiment with no abort criteria is an outage by another name.
-
-## Quick start
-
-```bash
-SKILL=engineering/chaos-engineering/skills/chaos-engineering
-
-# 1. Design an experiment
-python "$SKILL/scripts/experiment_designer.py" --target "checkout-svc" --hypothesis "p99 latency stays <500ms" --attack latency --duration-min 15
-
-# 2. Calculate blast radius
-python "$SKILL/scripts/blast_radius_calculator.py" --traffic-share 0.05 --user-pop 1000000 --duration-min 15
-
-# 3. Generate postmortem after the experiment
-python "$SKILL/scripts/experiment_postmortem.py" --plan experiment.json --result-log results.txt
-```
-
-## The 3 Python tools
-
-All stdlib-only. Run with `--help`.
-
-### `experiment_designer.py`
-
-Generates a structured experiment plan from inputs. Enforces the required sections (hypothesis, steady-state metric, blast radius, abort criteria, rollback).
-
-```bash
-python scripts/experiment_designer.py \
-  --target "checkout-svc" \
-  --hypothesis "p99 latency stays <500ms when payment-svc is slow" \
-  --attack latency \
-  --magnitude "+200ms" \
-  --duration-min 15 \
-  --blast-radius "5% of US traffic" \
-  --abort-if "p99 > 1000ms OR error_rate > baseline + 1pp"
-```
-
-Outputs a markdown plan with: hypothesis, steady-state, attack, magnitude, duration, blast radius, abort criteria, rollback procedure, monitoring dashboards, and learning question.
-
-### `blast_radius_calculator.py`
-
-Computes the blast radius of a planned experiment. Given traffic share + user population + duration, calculates expected affected users, expected error budget burn, and a risk score.
-
-```bash
-python scripts/blast_radius_calculator.py \
-  --traffic-share 0.05 \
-  --user-pop 1000000 \
-  --duration-min 15 \
-  --baseline-availability 0.999 \
-  --expected-impact-availability 0.95
-```
-
-Outputs:
-- Expected affected users
-- Error budget consumed (in minutes of error budget)
-- Risk score: GREEN / YELLOW / RED
-- Recommendation: PROCEED / REDUCE / ABORT
-
-GREEN = <1% error budget; YELLOW = 1-10%; RED = >10%.
-
-### `experiment_postmortem.py`
-
-Produces a structured postmortem from an experiment plan + results. Catches the common postmortem failure modes: no learning recorded, no follow-up actions, blame-laden language.
-
-```bash
-python scripts/experiment_postmortem.py --plan experiment.json --result-log results.txt
-```
-
-Outputs markdown with: summary, hypothesis (was it confirmed/refuted?), what we learned, what surprised us, follow-up actions with owners, and link to next experiment.
-
-## The 7 attack types (taxonomy)
-
-Different attacks reveal different weaknesses. See `references/attack_taxonomy.md` for full detail.
-
-| Attack | What it tests | Tooling |
-|---|---|---|
-| **Latency** | Timeouts, retries, circuit breakers | tc, Chaos Mesh `NetworkChaos` |
-| **Error** | Error handling, fallback paths | Chaos Mesh `HTTPChaos`, Toxiproxy |
-| **Resource** (CPU, memory, disk) | Saturation handling, autoscaling | Chaos Mesh `StressChaos`, stress-ng |
-| **Network partition** | Split-brain, consensus, failover | Chaos Mesh `NetworkChaos` partition |
-| **Dependency failure** | Graceful degradation, fallback | Service mesh fault injection |
-| **Time** | Clock skew, NTP issues | libfaketime, Chaos Mesh `TimeChaos` |
-| **Infrastructure** (kill instance) | Auto-recovery, failover | AWS FIS, Chaos Monkey |
-
-Pick the attack that matches the hypothesis. "What happens if X is slow?" → latency. "What happens if X loses network?" → partition.
-
-## Tooling chooser
-
-| Tool | Best for | Pricing | Stack |
-|---|---|---|---|
-| **Chaos Toolkit** | Lightweight, language-agnostic, JSON experiments | OSS | Any |
-| **Chaos Mesh** | Kubernetes-native, rich CRDs, in-cluster | OSS | Kubernetes |
-| **Litmus** | Kubernetes, Argo-integrated, large library | OSS + Enterprise | Kubernetes |
-| **Gremlin** | Enterprise SaaS, multi-cloud, audit | Paid | Any |
-| **AWS FIS** | AWS-native, IAM-integrated, EC2/ECS/EKS | Paid (AWS) | AWS |
-| **Custom** | Niche needs, single-cloud, low budget | None | Any |
-
-Decision rules:
-- k8s-only stack + OSS → Chaos Mesh or Litmus (Litmus has bigger experiment library)
-- Multi-cloud + OSS → Chaos Toolkit
-- AWS-heavy + simple needs → AWS FIS
-- Enterprise + audit/compliance → Gremlin
-
-See `references/tooling_landscape.md` for trade-offs.
-
-## Workflows
-
-### Workflow 1: Design and run a single experiment
+You cannot tell whether an experiment caused harm if you don't know what "normal" looked like
+a minute before you started. Steady-state is a small set of metrics — error rate, latency,
+throughput — that represent the system behaving correctly, measured and agreed on before
+injection starts.
 
 ```
-1. State a hypothesis: "When [fault], steady-state metric X stays within Y."
-2. Identify the steady-state metric — must be measurable BEFORE the experiment.
-3. Run blast_radius_calculator.py — confirm GREEN before proceeding.
-4. Run experiment_designer.py to produce the plan.
-5. Get a peer review of the plan; confirm abort criteria are concrete.
-6. Notify the on-call team in #incidents (or whatever channel).
-7. Run the experiment with monitoring open.
-8. If abort criteria are hit, abort immediately; record what happened.
-9. Run experiment_postmortem.py to capture learnings.
-10. File follow-up actions; link to next experiment.
+steady_state:
+  error_rate: < 0.5%
+  p99_latency: < 400ms
+  checkout_success_rate: > 99%
 ```
 
-### Workflow 2: Game Day exercise
+- **Use business-relevant metrics**, not just infrastructure ones — "checkout succeeds" tells
+  you more than "CPU is nominal."
+- **Confirm steady-state holds for a few minutes before injecting** — don't start an
+  experiment during an unrelated blip.
+- **The experiment's success criterion is "steady-state holds through and after"**, not
+  "nothing crashed."
 
-```
-1. Pick a scenario (e.g., "primary database fails over").
-2. Identify all dependent services that should keep working.
-3. Build a multi-experiment plan covering each layer.
-4. Schedule with stakeholders; on-call coverage required.
-5. Run with a facilitator who manages the scenario.
-6. Capture observations in a shared doc as they happen.
-7. Single combined postmortem covering all observations.
-8. Track follow-up actions in a board with owners.
-```
+**Done when:** steady-state metrics and their acceptable thresholds are defined and observed
+as normal before injection begins.
 
-### Workflow 3: Continuous chaos (game days → daily)
+## 3. Bound the blast radius deliberately
 
-```
-1. Start: weekly Game Day in staging.
-2. Move to: weekly Game Day in production with limited blast radius.
-3. Mature to: continuous chaos via scheduled experiments (Litmus chaos schedule, Gremlin scenarios).
-4. Wire to deployment: every prod deploy triggers a baseline chaos sweep.
-5. Track: experiments per week, weaknesses discovered, MTTR trend.
-```
+An experiment that can take down more than you intended is not an experiment, it's an incident
+you started on purpose. Scope every chaos run to the smallest slice that still tests the
+hypothesis — one pod, one AZ, a percentage of traffic — and have a kill switch that's faster
+than the damage can spread.
 
-## Composition with other skills
+- **Scope to a percentage or a single instance first**, widen only after it's proven safe.
+- **Always have an automatic abort** — if steady-state metrics breach a hard threshold, the
+  experiment stops itself, it does not wait for a human to notice.
+- **Run during business hours with responders present**, not at 2am unattended — the whole
+  point is controlled conditions.
 
-This skill explicitly composes with two others in this library:
+**Done when:** the experiment has an explicit scope limit and an automatic abort condition,
+both tested before the first real run.
 
-| Skill | Composition |
-|---|---|
-| `feature-flags-architect` | Kill switches defined there are the abort triggers here |
-| `kubernetes-operator` | Operators are common chaos targets (test reconcile under fault) |
-| `incident-response` | Chaos experiments that escalate become incidents |
+## 4. Progress from staging to production deliberately
 
-## Anti-patterns
+Staging never fully represents production traffic patterns, data volume, or scale — some
+failure modes only appear under real load. But production chaos without staging first is
+reckless. The right sequence is staging to validate the experiment mechanics are safe, then
+production with a small blast radius, widening only as confidence builds.
 
-- **No hypothesis** — "let's break things" is sabotage, not engineering
-- **No steady-state metric** — without a baseline, you can't tell if X broke
-- **No blast radius bound** — full-prod experiment without limits = outage
-- **No abort criteria** — see above; this is mandatory
-- **No on-call coverage** — chaos without monitoring is unmonitored production
-- **Chaos in staging only** — staging never has prod failure modes
-- **Chaos in dev** — useless; dev has different failure modes from prod
-- **One-off chaos** — single experiment is a press release; learning requires recurrence
-- **Blame-laden postmortem** — record causes, not blame; teams stop running chaos otherwise
+- **Staging tells you the experiment tooling and abort mechanism work** — it does not tell you
+  how the real system behaves under real load.
+- **The first production run should target the smallest reasonable slice** and be ready to
+  abort, even if staging went perfectly.
+- **Some things only chaos-test safely in production** — DNS failover, cross-region traffic
+  shifts — because staging's topology doesn't match; be honest about that gap rather than
+  pretending staging coverage is equivalent.
 
-## References
+**Done when:** the experiment has run successfully in staging and at least once in production
+at limited scope.
 
-- `references/chaos_principles.md` — the 4 principles, history, when to start
-- `references/experiment_design.md` — hypothesis structure, steady-state metrics, abort criteria
-- `references/attack_taxonomy.md` — 7 attack types with examples and tooling
-- `references/tooling_landscape.md` — Chaos Toolkit / Mesh / Litmus / Gremlin / FIS / DIY
+## 5. Run it as a game day, not a solo script
 
-## Slash command
+A chaos experiment run alone by one engineer against a dashboard only tests the system. A game
+day — with the on-call team, the IC, and the actual alerting and paging path all live — tests
+the system *and* the humans and process meant to respond to it. That's usually where the more
+valuable findings are: alerts that don't fire, runbooks that are stale, an on-call engineer
+who didn't know this dependency existed.
 
-`/chaos-experiment` — interactive experiment design wizard that runs all 3 tools.
+- **Page for real** — trigger the actual alerting path, not a simulated one, to test whether
+  it works.
+- **Have the responder use the real runbook** — see `runbooks` — and note where it was wrong
+  or missing.
+- **Debrief immediately after**, while the experience is fresh, and file findings the same way
+  as an incident postmortem.
 
-## Asset templates
+**Done when:** a game day has exercised the real alert and response path, not just the failure
+injection itself.
 
-- `assets/experiment_template.md` — fill-in plan template
-- `assets/postmortem_template.md` — structured postmortem template
+## 6. Turn every finding into a fix, not a footnote
 
-## Verifiable success
+An experiment that reveals a weakness and then goes nowhere is worse than not running it — it
+means the organization now knows about a gap and left it open. The output of chaos engineering
+is a prioritized list of concrete fixes, tracked the same way a production bug would be.
 
-A team using this skill should achieve:
+- **File every gap as a ticket with an owner**, not as a line in a slide deck.
+- **Re-run the same experiment after the fix ships** to confirm it actually closed the gap.
+- **Build a library of experiments** you re-run periodically — resilience regresses silently
+  as the system changes underneath it.
 
-- 100% of chaos experiments have a written hypothesis, abort criteria, and blast-radius calculation
-- Blast radius for any single experiment never exceeds 10% of error budget
-- Mean time between chaos experiments <14 days (continuous, not one-off)
-- Each experiment produces ≥1 follow-up action that gets shipped
-- No chaos experiment escalates to a customer-impacting incident in trailing 90 days
+**Done when:** every finding from the experiment has a tracked owner, and previously-fixed
+experiments are scheduled to re-run.
+
+## Report
+
+State the hypothesis tested, the steady-state metrics and whether they held, the blast radius
+used, and every gap the experiment surfaced. Name explicitly which failure modes are still
+untested — a system that has only been chaos-tested against pod death has not been
+chaos-tested against region loss or dependency failure, and claiming resilience beyond what
+was actually tested is the exact overconfidence this practice exists to prevent.
