@@ -154,5 +154,26 @@
     "branch": "main",
     "skills_subpath": "",
     "description": "Interactive Plotly and Seaborn chart storytelling, exploratory data analysis, and dashboard visualization"
+  },
+  {
+    "name": "vanterx/mssql-performance-skills",
+    "repo": "https://github.com/vanterx/mssql-performance-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "26 specialized Microsoft SQL Server performance tuning, execution plan review, wait statistics, and Query Store skills"
+  },
+  {
+    "name": "hmohamed01/SQL-Expert",
+    "repo": "https://github.com/hmohamed01/SQL-Expert.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "T-SQL and SQL Server expert query optimization, transaction isolation, and deadlock analysis"
+  },
+  {
+    "name": "u1pns/skill-dba",
+    "repo": "https://github.com/u1pns/skill-dba.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Professional Database Administrator (DBA) rules and index optimization for SQL Server, PostgreSQL, MySQL"
   }
 ]
