@@ -970,9 +970,9 @@ body {{
   </a>
 
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon" onclick="triggerSearch()" style="cursor: pointer;" title="클릭하여 검색 실행">🔍</span>
     <input class="search-input" id="searchInput" type="text"
-           placeholder="스킬, 에이전트, 커맨드 검색 (단축키 /)" />
+           placeholder="검색어 입력 후 Enter (단축키 /)" />
     <button id="aiToggleBtn" class="btn-ai-toggle" onclick="toggleAiMode()" title="브라우저 내장 AI 벡터 시맨틱 검색 모드">
       <span class="ai-sparkle">✨</span>
       <span id="aiToggleText">AI 검색</span>
@@ -1180,7 +1180,7 @@ function toggleAiMode() {{
   if (aiMode) {{
     btn.classList.add('active');
     btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 켜짐</span>';
-    inp.placeholder = "자연어로 질문해보세요 (예: '쿠버네티스 파드 죽었을 때', 'FTP 업로드')";
+    inp.placeholder = "자연어 질문 입력 후 Enter (예: '쿠버네티스 파드 죽었을 때', 'FTP 업로드')";
     showToast('🧠 AI 시맨틱(벡터) 검색 모드가 활성화되었습니다.');
     if (!aiLoaded) {{
       initAiEngine();
@@ -1190,7 +1190,7 @@ function toggleAiMode() {{
   }} else {{
     btn.classList.remove('active');
     btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 검색</span>';
-    inp.placeholder = '스킬, 에이전트, 커맨드 검색 (단축키 /)';
+    inp.placeholder = '검색어 입력 후 Enter (단축키 /)';
     aiScores.clear();
     const statusEl = document.getElementById('aiStatusBar');
     if (statusEl) statusEl.style.display = 'none';
@@ -1335,28 +1335,47 @@ function setTab(cat) {{
   render();
 }}
 
-/* ── Search ────────────────────────────────────────────── */
-function onSearch(val) {{
+/* ── Search Execution (Enter 키 또는 🔍 아이콘 클릭 시만 실행) ── */
+function triggerSearch() {{
+  const inp = document.getElementById('searchInput');
+  const val = inp ? inp.value.trim() : '';
   curSearch = val;
-  document.getElementById('searchInput').value = val;
+
   if (aiMode) {{
     clearTimeout(aiDebounceTimer);
-    aiDebounceTimer = setTimeout(() => runAiSearch(val), 350);
+    if (!val) {{
+      aiScores.clear();
+      render();
+    }} else {{
+      runAiSearch(val);
+    }}
   }} else {{
     render();
   }}
 }}
-document.getElementById('searchInput').addEventListener('input', e => onSearch(e.target.value));
+
+// 텍스트를 모두 지웠을 때(빈 값)만 전체 목록으로 즉시 복원
+document.getElementById('searchInput').addEventListener('input', (e) => {{
+  if (e.target.value === '') {{
+    curSearch = '';
+    aiScores.clear();
+    render();
+  }}
+}});
+
+// 검색창에서 Enter 키를 눌렀을 때만 검색 실행
+document.getElementById('searchInput').addEventListener('keydown', (e) => {{
+  if (e.key === 'Enter') {{
+    e.preventDefault();
+    triggerSearch();
+  }}
+}});
 
 /* ── Keyboard shortcuts ────────────────────────────────── */
-document.addEventListener('keydown', e => {{
+document.addEventListener('keydown', (e) => {{
   const inp = document.getElementById('searchInput');
   if (e.key === '/' && document.activeElement !== inp) {{
     e.preventDefault(); inp.focus();
-  }}
-  if (e.key === 'Enter' && document.activeElement === inp && aiMode) {{
-    clearTimeout(aiDebounceTimer);
-    runAiSearch(inp.value);
   }}
   if (e.key === 'Escape') closeModal();
 }});
