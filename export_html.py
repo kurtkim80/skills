@@ -359,13 +359,13 @@ body {{
   position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
   color: var(--text-muted); font-size: 13px; pointer-events: none;
 }}
-.btn-ai-toggle {{
+.btn-search-submit {{
   position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
+  background: linear-gradient(135deg, #0071e3 0%, #a855f7 100%);
+  border: none;
+  color: #ffffff;
   border-radius: 980px;
-  padding: 4px 10px;
+  padding: 4px 12px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
@@ -373,30 +373,13 @@ body {{
   align-items: center;
   gap: 4px;
   font-family: inherit;
-  transition: all .25s ease;
+  transition: all .2s ease;
   user-select: none;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.35);
 }}
-.btn-ai-toggle:hover {{
-  color: var(--text);
-  border-color: var(--apple-blue);
-  background: var(--card-hover);
-}}
-.btn-ai-toggle.active {{
-  background: linear-gradient(135deg, #0071e3 0%, #a855f7 100%);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
-}}
-.ai-sparkle {{
-  display: inline-block;
-  transition: transform .3s ease;
-}}
-.btn-ai-toggle.active .ai-sparkle {{
-  animation: ai-pulse-glow 1.5s infinite alternate;
-}}
-@keyframes ai-pulse-glow {{
-  0% {{ transform: scale(1) rotate(0deg); }}
-  100% {{ transform: scale(1.25) rotate(15deg); }}
+.btn-search-submit:hover {{
+  transform: translateY(-50%) scale(1.02);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.45);
 }}
 
 .ai-status-bar {{
@@ -970,12 +953,11 @@ body {{
   </a>
 
   <div class="search-wrap">
-    <span class="search-icon" onclick="triggerSearch()" style="cursor: pointer;" title="클릭하여 검색 실행">🔍</span>
+    <span class="search-icon" onclick="triggerSearch()" style="cursor: pointer;" title="클릭하여 AI 시맨틱 검색 실행">🔍</span>
     <input class="search-input" id="searchInput" type="text"
-           placeholder="검색어 입력 후 Enter (단축키 /)" />
-    <button id="aiToggleBtn" class="btn-ai-toggle" onclick="toggleAiMode()" title="브라우저 내장 AI 벡터 시맨틱 검색 모드">
-      <span class="ai-sparkle">✨</span>
-      <span id="aiToggleText">AI 검색</span>
+           placeholder="자연어 질문 입력 후 Enter (예: '쿠버네티스 파드 재시작', 'FTP 업로드')" />
+    <button id="searchSubmitBtn" class="btn-search-submit" onclick="triggerSearch()" title="AI 시맨틱 검색 실행 (Enter)">
+      <span>AI 검색 ↵</span>
     </button>
   </div>
 
@@ -1092,13 +1074,11 @@ let curSearch = '';
 let curCard = null;
 
 /* ── In-Browser Vector AI Search State ───────────────────── */
-let aiMode = false;
 let aiLoaded = false;
 let aiLoading = false;
 let aiVectors = null; // Float32Array (6186 * 384)
 let aiPipelineInstance = null;
 const aiScores = new Map(); // id -> score (float)
-let aiDebounceTimer = null;
 
 /* ── Theme Switcher ────────────────────────────────────── */
 function initTheme() {{
@@ -1154,7 +1134,7 @@ async function initAiEngine() {{
 
     aiLoaded = true;
     aiLoading = false;
-    textEl.textContent = '✅ 브라우저 AI 벡터 검색 준비 완료! (6,186개 실시간 유사도 분석)';
+    textEl.textContent = '✅ 브라우저 AI 벡터 검색 준비 완료! (6,186개 실시간 시맨틱 분석)';
     setTimeout(() => {{
       if (!curSearch) statusEl.style.display = 'none';
     }}, 2500);
@@ -1165,36 +1145,7 @@ async function initAiEngine() {{
   }} catch (err) {{
     console.error('AI Engine init error:', err);
     aiLoading = false;
-    textEl.textContent = '⚠️ AI 모델 로드 실패 (기본 키워드 검색으로 자동 전환됩니다)';
-    setTimeout(() => {{
-      statusEl.style.display = 'none';
-    }}, 4000);
-  }}
-}}
-
-function toggleAiMode() {{
-  aiMode = !aiMode;
-  const btn = document.getElementById('aiToggleBtn');
-  const inp = document.getElementById('searchInput');
-
-  if (aiMode) {{
-    btn.classList.add('active');
-    btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 켜짐</span>';
-    inp.placeholder = "자연어 질문 입력 후 Enter (예: '쿠버네티스 파드 죽었을 때', 'FTP 업로드')";
-    showToast('🧠 AI 시맨틱(벡터) 검색 모드가 활성화되었습니다.');
-    if (!aiLoaded) {{
-      initAiEngine();
-    }} else if (curSearch) {{
-      runAiSearch(curSearch);
-    }}
-  }} else {{
-    btn.classList.remove('active');
-    btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 검색</span>';
-    inp.placeholder = '검색어 입력 후 Enter (단축키 /)';
-    aiScores.clear();
-    const statusEl = document.getElementById('aiStatusBar');
-    if (statusEl) statusEl.style.display = 'none';
-    render();
+    textEl.textContent = '⚠️ AI 모델 로드 실패: 네트워크 상태를 확인하세요.';
   }}
 }}
 
@@ -1205,14 +1156,16 @@ async function runAiSearch(query) {{
     return;
   }}
 
-  if (!aiLoaded) {{
-    initAiEngine();
-    return;
-  }}
-
   const statusEl = document.getElementById('aiStatusBar');
   const textEl = document.getElementById('aiStatusText');
   statusEl.style.display = 'flex';
+
+  if (!aiLoaded) {{
+    textEl.textContent = `⏳ AI 벡터 엔진 로딩 중... 로드 후 "${{query}}" 검색이 바로 실행됩니다.`;
+    await initAiEngine();
+    if (!aiLoaded) return;
+  }}
+
   textEl.textContent = `🧠 "${{query}}" 의미 벡터 계산 및 유사도 랭킹 산출 중...`;
 
   try {{
@@ -1249,7 +1202,7 @@ async function runAiSearch(query) {{
 function render() {{
   let filtered = [];
 
-  if (aiMode && aiScores.size > 0 && curSearch.trim()) {{
+  if (curSearch.trim() && aiScores.size > 0) {{
     // AI 시맨틱 유사도 기반 랭킹
     const withScores = DATA.map(c => ({{
       card: c,
@@ -1267,18 +1220,10 @@ function render() {{
       .map(item => ({{ ...item.card, aiScore: item.score }}));
 
     document.getElementById('resultsLabel').innerHTML =
-      `🧠 AI 시맨틱 추천: <span id="resultsCount">${{filtered.length}}</span>개 (의미 유사도 순)`;
+      `🧠 AI 시맨틱 검색 결과: <span id="resultsCount">${{filtered.length}}</span>개 (의미 유사도 순)`;
   }} else {{
-    // 기본 고속 키워드 검색
-    const q = curSearch.toLowerCase();
-    filtered = DATA.filter(c => {{
-      const matchCat = curCat === 'all' || c.cat_id === curCat;
-      const matchQ = !q ||
-        c.name.toLowerCase().includes(q) ||
-        (c.desc && c.desc.toLowerCase().includes(q)) ||
-        (c.desc_en && c.desc_en.toLowerCase().includes(q));
-      return matchCat && matchQ;
-    }});
+    // 검색어가 없을 때는 카테고리 전체 목록 표시
+    filtered = DATA.filter(c => curCat === 'all' || c.cat_id === curCat);
     document.getElementById('resultsLabel').innerHTML =
       `전체 <span id="resultsCount">${{filtered.length}}</span>개 에셋`;
   }}
@@ -1335,22 +1280,17 @@ function setTab(cat) {{
   render();
 }}
 
-/* ── Search Execution (Enter 키 또는 🔍 아이콘 클릭 시만 실행) ── */
+/* ── Search Execution (Enter 키 또는 🔍 아이콘/검색 버튼 클릭 시만 실행) ── */
 function triggerSearch() {{
   const inp = document.getElementById('searchInput');
   const val = inp ? inp.value.trim() : '';
   curSearch = val;
 
-  if (aiMode) {{
-    clearTimeout(aiDebounceTimer);
-    if (!val) {{
-      aiScores.clear();
-      render();
-    }} else {{
-      runAiSearch(val);
-    }}
-  }} else {{
+  if (!val) {{
+    aiScores.clear();
     render();
+  }} else {{
+    runAiSearch(val);
   }}
 }}
 
@@ -1491,6 +1431,7 @@ function escAttr(s) {{
 /* ── Init ─────────────────────────────────────────────── */
 initTheme();
 render();
+initAiEngine();
 </script>
 </body>
 </html>
