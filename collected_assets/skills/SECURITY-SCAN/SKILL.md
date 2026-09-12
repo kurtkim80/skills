@@ -1,121 +1,343 @@
 ---
 name: security-scan
-description: >
-  Deep security scanning for .NET applications across 6 layers: vulnerable packages,
-  secrets detection, OWASP code patterns, auth configuration, CORS policy, and
-  data protection. Produces severity-rated findings with specific remediation steps.
-  Load this skill when: "security scan", "security audit", "check for vulnerabilities",
-  "find secrets", "OWASP", "auth review", "CORS check", "security review",
-  "penetration test prep", "CVE check", "vulnerability scan", "hardcoded password",
-  "data protection", "security posture".
+description: >-
+  Security scan: scan code for security vulnerabilities including OWASP Top 10, secrets,
+  and misconfigurations, with severity thresholds. Use when you need comprehensive
+  security analysis of a codebase.
+slug: security-scan
+version: 1.0.0
+displayName: security-scan
 ---
 
-# /security-scan — 6-Layer Security Pipeline
+# Security Scan
 
-## What
+Comprehensive security vulnerability detection for codebases.
 
-Runs a defense-in-depth static scan across 6 layers. A project with zero CVEs
-can still have hardcoded secrets, SQL injection, and missing auth — each layer
-catches a different vulnerability class. Findings map to the **OWASP Top
-10:2025** taxonomy and are rated Critical/High/Medium/Low by exploitability,
-impact, and exposure — a Critical SQL injection on a public endpoint outranks a
-Low info-disclosure on an admin page.
-
-Detection patterns, OWASP mappings, remediation code, and the report template
-live in `references/scan-layers.md` — read it before executing.
-
-**Honesty rule:** this is static analysis, not a penetration test. It catches
-known patterns but misses business-logic flaws, complex authorization bypasses,
-and runtime-only vulnerabilities. Every report states this.
-
-## When
-
-- Pre-release security gate — full scan, non-negotiable before production
-- "Security scan", "security audit", "find secrets", "CVE check", "OWASP"
-- After a dependency update (Layer 1), auth changes (Layer 4), config changes
-  (Layer 2), or logging changes (Layer 6)
-- Pre-pentest preparation — fix static issues before paying for a pentest
-- Incident response and quarterly reviews
-
-## How
-
-### Step 1: Choose Layers
-
-| Scenario | Layers |
-|----------|--------|
-| Pre-release gate / pentest prep / incident / quarterly | All 6 |
-| After dependency update | 1 |
-| New endpoint added | 3, 4, 5 |
-| Auth system changes | 4 |
-| Config file changes | 2 |
-| Logging changes | 6 |
-| Public API exposure | 3, 4, 5 |
-| Internal-only service | 1, 2, 3 |
-
-### Step 2: Execute the Layers
-
-Read `references/scan-layers.md` for the detection patterns per layer.
-Delegate deep auth and secrets review to the `security-auditor` agent, pairing
-the `authentication` and `configuration` skills.
-
-| # | Layer | OWASP 2025 | Method |
-|---|-------|-----------|--------|
-| 1 | Package vulnerabilities | A03 Supply Chain | `dotnet list package --vulnerable --include-transitive` |
-| 2 | Secrets detection | — | Pattern scan over .cs/.json/.yml/.xml/.config |
-| 3 | OWASP code patterns | A05 Injection, A08 Integrity, A04 Crypto, A01 Access Control | Source scan: raw SQL, `Html.Raw`, `BinaryFormatter`, MD5/SHA1, IDOR |
-| 4 | Auth configuration | A07 Authentication, A01 Access Control | `get_endpoint_map` — every route's auth posture in one call; flag `unmarked` endpoints; then JWT validation settings |
-| 5 | CORS policy | A02 Misconfiguration | Wildcard origins, credentials combos, method/header breadth |
-| 6 | Data protection | A04 Crypto, A09 Logging & Alerting | PII in logs, over-broad responses, plaintext sensitive storage |
-
-### Step 3: Rate with Context
-
-Severity must match actual risk — over-classification causes alert fatigue and
-buries the real Critical:
-
-- Test-fixture "secrets" and appsettings.Development.json values are expected —
-  skip or mark INFO, don't flag as HIGH
-- A missing XML comment is never a security finding
-- Reserve Critical for exploitable-now issues: injection on public endpoints,
-  exposed production secrets, auth bypass
-
-### Step 4: Report
-
-Every finding: `[SEVERITY] file:line — title`, OWASP category, what's wrong,
-impact if exploited, and remediation code (before/after). Produce the summary
-table + per-layer status table from the reference template, prefixed with the
-static-analysis disclaimer.
-
-## Example
+## Quick Start
 
 ```
-User: /security-scan before we ship
-
-Claude: Running all 6 layers...
-
-| Layer | Status | Findings |
-|-------|--------|----------|
-| 1. Packages | PASS | 0 CVEs (142 packages incl. transitive) |
-| 2. Secrets | PASS | 0 real secrets (2 dev-only values skipped) |
-| 3. OWASP Patterns | FAIL | 1 SQL injection |
-| 4. Auth Config | WARN | 2 endpoints missing explicit auth attributes |
-| 5. CORS | PASS | Explicit origins from configuration |
-| 6. Data Protection | WARN | Customer email logged at Information level |
-
-[HIGH] SearchOrders.cs:34 — SQL Injection (A05:2025)
-  FromSqlRaw($"...LIKE '%{search}%'") → attacker controls the query.
-  Fix: db.Orders.Where(o => EF.Functions.Like(o.Name, $"%{search}%"))
-
-[MEDIUM] OrderEndpoints.cs:18,31 — no [Authorize]/[AllowAnonymous]; behavior
-  depends on ambient global policy. Make intent explicit per endpoint.
-
-[LOW] OrderPlacedHandler.cs:22 — PII in logs (A09:2025). Log CustomerId, not email.
-
-Note: static analysis only — this does not replace a penetration test.
+/security-scan                    # Full scan of current directory
+/security-scan --scope src/       # Scan specific directory
+/security-scan --quick            # Fast scan (critical issues only)
+/security-scan --focus injection  # Focus on specific category
 ```
 
-## Related
+## What This Skill Does
 
-- `references/scan-layers.md` — detection patterns, OWASP 2025 mappings, report template
-- `/verify` — Phase 5 runs a lightweight version of this scan per change set
-- `/health-check` — Dimension 7 (Security Posture) is the spot-check version
-- `authentication` / `configuration` — remediation patterns for Layers 4 and 2
+Analyzes code for security vulnerabilities across multiple categories:
+
+1. **OWASP Top 10** - Industry-standard web vulnerability categories
+2. **Secrets Detection** - Hardcoded credentials, API keys, tokens
+3. **Injection Flaws** - SQL, XSS, command injection patterns
+4. **Cryptographic Issues** - Weak algorithms, insecure implementations
+5. **Configuration Problems** - Insecure defaults, misconfigurations
+
+## Scan Modes
+
+### Full Scan (Default)
+Comprehensive analysis of all security categories.
+
+```
+/security-scan
+```
+
+**Checks performed:**
+- All OWASP Top 10 categories
+- Secrets and credential detection
+- Dependency vulnerabilities (if package files exist)
+- Configuration file review
+
+**Duration:** 2-5 minutes depending on codebase size
+
+### Quick Scan
+Fast check for critical and high-severity issues only.
+
+```
+/security-scan --quick
+```
+
+**Checks performed:**
+- Critical injection patterns
+- Exposed secrets
+- Known dangerous functions
+
+**Duration:** Under 1 minute
+
+### Focused Scan
+Target specific vulnerability category.
+
+```
+/security-scan --focus <category>
+```
+
+**Categories:**
+- `injection` - SQL, XSS, command injection
+- `secrets` - Credentials, API keys, tokens
+- `crypto` - Cryptographic weaknesses
+- `auth` - Authentication/authorization issues
+- `config` - Configuration security
+
+## Output Format
+
+### Severity Levels
+
+| Level | Icon | Meaning | Action Required |
+|-------|------|---------|-----------------|
+| CRITICAL | `[!]` | Exploitable vulnerability | Immediate fix |
+| HIGH | `[H]` | Serious security risk | Fix before deploy |
+| MEDIUM | `[M]` | Potential vulnerability | Plan to address |
+| LOW | `[L]` | Minor issue or hardening | Consider fixing |
+| INFO | `[i]` | Informational finding | Awareness only |
+
+### Finding Format
+
+```
+[SEVERITY] CATEGORY: Brief description
+  File: path/to/file.ext:line
+  Pattern: What was detected
+  Risk: Why this is dangerous
+  Fix: How to remediate
+```
+
+### Summary Report
+
+```
+SECURITY SCAN RESULTS
+=====================
+
+Scope: src/
+Files scanned: 127
+Duration: 45 seconds
+
+FINDINGS BY SEVERITY
+  Critical: 2
+  High: 5
+  Medium: 12
+  Low: 8
+
+TOP ISSUES
+1. [!] SQL Injection in src/api/users.ts:45
+2. [!] Hardcoded AWS key in src/config.ts:12
+3. [H] XSS vulnerability in src/components/Comment.tsx:89
+...
+
+Run `/security-scan --details` for full report.
+```
+
+## OWASP Top 10 Coverage
+
+| # | Category | Detection Approach |
+|---|----------|-------------------|
+| A01 | Broken Access Control | Authorization pattern analysis |
+| A02 | Cryptographic Failures | Weak crypto detection |
+| A03 | Injection | Pattern matching + data flow |
+| A04 | Insecure Design | Security control gaps |
+| A05 | Security Misconfiguration | Config file analysis |
+| A06 | Vulnerable Components | Dependency scanning |
+| A07 | Auth Failures | Auth pattern review |
+| A08 | Data Integrity Failures | Deserialization checks |
+| A09 | Logging Failures | Audit log analysis |
+| A10 | SSRF | Request pattern detection |
+
+See `references/owasp/` for detailed detection rules per category.
+
+## Detection Patterns
+
+### Injection Detection
+
+**SQL Injection:**
+```
+- String concatenation in queries
+- Unsanitized user input in database calls
+- Dynamic query construction
+```
+
+**Cross-Site Scripting (XSS):**
+```
+- innerHTML assignments with user data
+- document.write() with dynamic content
+- Unescaped template interpolation
+```
+
+**Command Injection:**
+```
+- exec(), system(), popen() with user input
+- Shell command string construction
+- Unsanitized subprocess arguments
+```
+
+See `references/patterns/` for language-specific patterns.
+
+### Secrets Detection
+
+**High-Confidence Patterns:**
+```
+AWS Access Key:     AKIA[0-9A-Z]{16}
+AWS Secret Key:     [A-Za-z0-9/+=]{40}
+GitHub Token:       gh[pousr]_[A-Za-z0-9]{36,}
+Stripe Key:         sk_live_[A-Za-z0-9]{24,}
+Private Key:        -----BEGIN (RSA |EC )?PRIVATE KEY-----
+```
+
+**Medium-Confidence Patterns:**
+```
+Generic API Key:    api[_-]?key.*[=:]\s*['"][a-zA-Z0-9]{16,}
+Password in Code:   password\s*[=:]\s*['"][^'"]+['"]
+Connection String:  (mysql|postgres|mongodb)://[^:]+:[^@]+@
+```
+
+### Cryptographic Weaknesses
+
+**Weak Algorithms:**
+```
+- MD5 for password hashing
+- SHA1 for security purposes
+- DES/3DES encryption
+- RC4 stream cipher
+```
+
+**Implementation Issues:**
+```
+- Hardcoded encryption keys
+- Weak random number generation
+- Missing salt in password hashing
+- ECB mode encryption
+```
+
+## Integration with Other Skills
+
+### With `/secrets-scan`
+Focused deep-dive on credential detection:
+```
+/secrets-scan              # Dedicated secrets analysis
+/secrets-scan --entropy    # High-entropy string detection
+```
+
+### With `/dependency-scan`
+Package vulnerability analysis:
+```
+/dependency-scan           # Check all dependencies
+/dependency-scan --fix     # Auto-fix where possible
+```
+
+### With `/config-scan`
+Infrastructure and configuration review:
+```
+/config-scan               # All config files
+/config-scan --docker      # Container security
+/config-scan --iac         # Infrastructure as Code
+```
+
+## Scan Execution Protocol
+
+### Phase 1: Discovery
+```
+1. Identify project type (languages, frameworks)
+2. Locate relevant files (source, config, dependencies)
+3. Determine applicable security rules
+```
+
+### Phase 2: Static Analysis
+```
+1. Pattern matching for known vulnerabilities
+2. Data flow analysis for injection paths
+3. Configuration review
+```
+
+### Phase 3: Secrets Scanning
+```
+1. High-confidence pattern matching
+2. Entropy analysis for potential secrets
+3. Git history check (optional)
+```
+
+### Phase 4: Dependency Analysis
+```
+1. Parse package manifests
+2. Check against vulnerability databases
+3. Identify outdated packages
+```
+
+### Phase 5: Reporting
+```
+1. Deduplicate findings
+2. Assign severity scores
+3. Generate actionable report
+4. Provide remediation guidance
+```
+
+## Configuration
+
+### Project-Level Config
+
+Create `.security-scan.yaml` in project root:
+
+```yaml
+# Scan configuration
+scan:
+  exclude:
+    - "node_modules/**"
+    - "vendor/**"
+    - "**/*.test.ts"
+    - "**/__mocks__/**"
+
+# Severity thresholds
+thresholds:
+  fail_on: critical    # critical, high, medium, low
+  warn_on: medium
+
+# Category toggles
+categories:
+  injection: true
+  secrets: true
+  crypto: true
+  auth: true
+  config: true
+  dependencies: true
+
+# Custom patterns
+patterns:
+  secrets:
+    - name: "Internal API Key"
+      pattern: "INTERNAL_[A-Z]{3}_KEY_[a-zA-Z0-9]{32}"
+      severity: high
+```
+
+### Ignore Patterns
+
+Create `.security-scan-ignore` for false positives:
+
+```
+# Ignore specific files
+src/test/fixtures/mock-credentials.ts
+
+# Ignore specific lines (use inline comment)
+# security-scan-ignore: test fixture
+const mockApiKey = "sk_test_fake123";
+```
+
+## Command Reference
+
+| Command | Description |
+|---------|-------------|
+| `/security-scan` | Full security scan |
+| `/security-scan --quick` | Critical issues only |
+| `/security-scan --scope <path>` | Scan specific path |
+| `/security-scan --focus <cat>` | Single category |
+| `/security-scan --details` | Verbose output |
+| `/security-scan --json` | JSON output |
+| `/security-scan --fix` | Auto-fix where possible |
+
+## Related Skills
+
+- `/secrets-scan` - Deep secrets detection
+- `/dependency-scan` - Package vulnerability analysis
+- `/config-scan` - Configuration security review
+- `/review-code` - General code review (includes security)
+
+## References
+
+- `references/owasp/` - OWASP Top 10 detection details
+- `references/patterns/` - Language-specific vulnerability patterns
+- `references/remediation/` - Fix guidance by vulnerability type
+- `assets/severity-matrix.md` - Severity scoring criteria

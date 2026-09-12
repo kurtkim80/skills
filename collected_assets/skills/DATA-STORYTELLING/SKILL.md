@@ -1,29 +1,13 @@
 ---
 name: data-storytelling
-description: Transform raw data into compelling narratives that drive decisions and inspire action.
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: Transform data into compelling narratives using visualization, context, and persuasive structure. Use when presenting analytics to stakeholders, creating data reports, or building executive presentations.
 ---
 
 # Data Storytelling
 
 Transform raw data into compelling narratives that drive decisions and inspire action.
 
-## Do not use this skill when
-
-- The task is unrelated to data storytelling
-- You need a different domain or tool outside this scope
-
-## Instructions
-
-- Clarify goals, constraints, and required inputs.
-- Apply relevant best practices and validate outcomes.
-- Provide actionable steps and verification.
-- If detailed examples are required, open `resources/implementation-playbook.md`.
-
-## Use this skill when
+## When to Use This Skill
 
 - Presenting analytics to executives
 - Creating quarterly business reviews
@@ -38,6 +22,7 @@ Transform raw data into compelling narratives that drive decisions and inspire a
 
 ```
 Setup → Conflict → Resolution
+
 
 Setup: Context and baseline
 Conflict: The problem or opportunity
@@ -248,10 +233,13 @@ This/That (emphasize difference):
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 fig, ax = plt.subplots(figsize=(12, 6))
+
 
 # Plot the main data
 ax.plot(dates, revenue, linewidth=2, color='#2E86AB')
+
 
 # Add annotation for key events
 ax.annotate(
@@ -263,13 +251,16 @@ ax.annotate(
     color='#E63946'
 )
 
+
 # Highlight a region
 ax.axvspan(growth_start, growth_end, alpha=0.2, color='green',
            label='Growth Period')
 
+
 # Add threshold line
 ax.axhline(y=target, color='gray', linestyle='--',
            label=f'Target: ${target:,.0f}')
+
 
 ax.set_title('Revenue Growth Story', fontsize=14, fontweight='bold')
 ax.legend()
@@ -310,30 +301,36 @@ ax.legend()
 Slide 1: THE HEADLINE
 "We can grow 40% faster by fixing onboarding"
 
+
 Slide 2: THE CONTEXT
 Current state metrics
 Industry benchmarks
 Gap analysis
+
 
 Slide 3: THE DISCOVERY
 What the data revealed
 Surprising finding
 Pattern identification
 
+
 Slide 4: THE DEEP DIVE
 Root cause analysis
 Segment breakdowns
 Statistical significance
+
 
 Slide 5: THE RECOMMENDATION
 Proposed actions
 Resource requirements
 Timeline
 
+
 Slide 6: THE IMPACT
 Expected outcomes
 ROI calculation
 Risk assessment
+
 
 Slide 7: THE ASK
 Specific request
@@ -467,8 +464,3 @@ Present ranges:
 - [Storytelling with Data (Cole Nussbaumer)](https://www.storytellingwithdata.com/)
 - [The Pyramid Principle (Barbara Minto)](https://www.amazon.com/Pyramid-Principle-Logic-Writing-Thinking/dp/0273710516)
 - [Resonate (Nancy Duarte)](https://www.duarte.com/resonate/)
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

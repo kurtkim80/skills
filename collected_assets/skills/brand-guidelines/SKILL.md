@@ -1,319 +1,164 @@
 ---
 name: brand-guidelines
-description: Apply brand voice, tone, colors, typography, and visual style consistently across any artifact. Use when the user wants to ensure a document, presentation, email, website, or any content matches their brand identity — including color palette, font choices, tone of voice, imagery guidelines, and design standards. Also use when the user says "make it on-brand", "apply our brand style", or shares brand guidelines to follow.
+description: >
+  Mobile application brand identity creation and application guide.
+  Brand voice and tone, colour palette standards, typography system,
+  icon and visual language, App Store assets, and consistency across all
+  touchpoints. Use when: defining brand voice, tone of voice, copywriting
+  standards, writing App Store descriptions, push notification copy,
+  onboarding copy, error message writing, brand colours, logo usage,
+  visual identity consistency.
+version: 1.0.0
+allowed-tools: Read, Glob, Grep
 ---
 
-# Brand Guidelines
+# Brand Guidelines — Mobile Application Brand Identity
 
-Brand is not decoration — it is recognition. Every time a user encounters your product, email, presentation, or doc, they either build trust or erode it. Consistency builds trust. Inconsistency erodes it.
-
-This skill applies brand identity across any artifact: presentations, documents, emails, landing pages, marketing copy, UI components, or any written content. It covers both visual identity (colors, fonts, spacing) and verbal identity (voice, tone, word choices).
-
----
-
-## Brand Guidelines Principles
-
-- **Consistency is the work.** One perfectly on-brand artifact is easy. Applying the same standards to the 50th artifact in a quarter is the actual challenge. Document decisions so they can be applied without re-inventing each time.
-- **Brand is a system, not a vibe.** "Make it feel premium" is not actionable. "Use Playfair Display at 40pt for headlines, #1A1A2E for text, and never use more than two typeface weights on a page" is actionable.
-- **Voice is harder than colors.** Anyone can apply a hex code. Writing in a consistent voice — warm but not casual, authoritative but not cold — requires explicit rules and examples.
-- **Exceptions must be deliberate.** Breaking brand rules is sometimes right (a playful social post, a technical doc for developers). But it must be a conscious choice, not an accident.
-- **When in doubt, ask for the guidelines.** Never invent brand colors or voice. If the user hasn't shared guidelines, ask. A wrong brand color is worse than no color.
-
----
-
-## Step 0: Gather Brand Assets
-
-Before applying anything, collect:
-
-1. **Color palette** — primary, secondary, accent, neutral, semantic (success/error/warning)
-2. **Typography** — headline font, body font, monospace font, sizes, weights, line heights
-3. **Logo** — file format, clear space rules, do/don't use cases
-4. **Voice and tone guidelines** — adjectives that describe the brand voice, examples of good/bad copy
-5. **Imagery style** — photography direction, illustration style, icon style
-6. **Spacing and layout rules** — grid system, margins, component spacing
-
-If the user has a brand guide document, ask them to share it. If they only have partial guidelines, ask the targeted questions above and document what they provide.
+> A consistent brand experience builds user trust and recognition.
+> This guide ensures that everyone — from developers to content writers —
+> produces the same voice and visual presentation.
 
 ---
 
-## Visual Identity Application
+## 1. Brand Voice
 
-### Color System
+Voice is fixed and reflects the same personality across all platforms and content types. Tone adjusts based on context.
 
-Define and apply colors as a semantic system — never use raw hex values scattered throughout:
+### Defining the Voice Character
 
-```
-PRIMARY PALETTE
-━━━━━━━━━━━━━━
-Primary:     #[hex]  — Main CTAs, key UI elements, headlines
-Primary Dark:#[hex]  — Hover states, dark mode accents
-Primary Light:#[hex] — Backgrounds, subtle highlights
+A brand's voice is defined by three to five adjectives. For each adjective, "what it means" and "what it does not mean" are established with concrete examples.
 
-SECONDARY PALETTE
-━━━━━━━━━━━━━━━━
-Secondary:   #[hex]  — Supporting elements, secondary CTAs
-Accent:      #[hex]  — Highlights, callouts, badges
+**Example: Productivity application**
 
-NEUTRAL PALETTE
-━━━━━━━━━━━━━━
-Text Primary:  #[hex]  — Body text, labels
-Text Secondary:#[hex]  — Captions, metadata, muted text
-Background:    #[hex]  — Page/slide background
-Surface:       #[hex]  — Cards, panels, modal backgrounds
-Border:        #[hex]  — Dividers, input borders
+Trustworthy — but not arrogant. A trustworthy statement reads "Your data is encrypted and stored on your device." An arrogant one reads "We are the most secure app on the market."
 
-SEMANTIC COLORS
-━━━━━━━━━━━━━━
-Success: #[hex]  — Confirmations, completed states
-Warning: #[hex]  — Caution states, pending items
-Error:   #[hex]  — Errors, destructive actions
-Info:    #[hex]  — Informational states, tips
-```
+Clear — but not dry. A clear statement reads "Get started in three steps." A dry one reads "The onboarding process offers an optimised experience."
 
-**Contrast requirements (WCAG AA minimum):**
-- Normal text (< 18pt): 4.5:1 contrast ratio against background
-- Large text (≥ 18pt or 14pt bold): 3:1 contrast ratio
-- UI components and icons: 3:1 contrast ratio
+Human — but not informal. A human statement reads "Great — you've completed the first item on your list." An informal one reads "Yo! First task done 🔥🔥"
 
-Check contrast: https://webaim.org/resources/contrastchecker/
+### Tone Adjustment by Context
 
-### Typography System
+While voice remains constant, tone is flexible. Five distinct situations call for different tone adjustments.
 
-```
-TYPEFACE STACK
-━━━━━━━━━━━━━
-Heading:    [Font Name], [fallback], sans-serif
-Body:       [Font Name], [fallback], serif
-Monospace:  [Font Name], [fallback], monospace
+For **success messages**, use short, measured energy. Avoid over-celebration. "Done." or "Saved — you're ready." are appropriate.
 
-TYPE SCALE
-━━━━━━━━━━
-Display:    48–64px / 1.1 line-height / -0.02em tracking
-H1:         36–40px / 1.15 line-height / -0.01em tracking
-H2:         28–32px / 1.2 line-height / -0.01em tracking
-H3:         22–24px / 1.25 line-height / 0em tracking
-H4:         18–20px / 1.3 line-height / 0em tracking
-Body Large: 18px / 1.6 line-height / 0em tracking
-Body:       16px / 1.6 line-height / 0em tracking
-Body Small: 14px / 1.5 line-height / 0em tracking
-Caption:    12px / 1.4 line-height / 0.02em tracking
+For **error messages**, use non-blaming, solution-oriented, concise language. "Connection lost. Try again." is preferable to "An error has occurred."
 
-FONT WEIGHTS
-━━━━━━━━━━━
-Use maximum 2 weights per design:
-Regular (400): body text
-Medium (500):  labels, UI elements
-SemiBold (600):subheadings
-Bold (700):    headlines, emphasis
-```
+For **onboarding**, use a welcoming and guiding tone, presenting steps one at a time. Avoid overwhelming the user with choices.
 
-### Applying to Presentations (PPTX)
+For **empty states**, use hopeful and action-oriented language. "No tasks yet. Add your first one to get started."
 
-```python
-from pptx.dml.color import RGBColor
-from pptx.util import Pt
-
-# Brand colors (never use # prefix in pptxgenjs)
-BRAND = {
-    "primary":     RGBColor(0x1A, 0x1A, 0x2E),
-    "accent":      RGBColor(0xE9, 0x4F, 0x37),
-    "light":       RGBColor(0xF8, 0xF9, 0xFA),
-    "text":        RGBColor(0x21, 0x25, 0x29),
-    "text_muted":  RGBColor(0x6C, 0x75, 0x7D),
-}
-
-def apply_brand_text(run, style: str = "body"):
-    """Apply brand typography to a text run."""
-    if style == "heading":
-        run.font.name = "Poppins"       # or brand heading font
-        run.font.bold = True
-        run.font.color.rgb = BRAND["text"]
-    elif style == "body":
-        run.font.name = "Lora"          # or brand body font
-        run.font.bold = False
-        run.font.color.rgb = BRAND["text"]
-    elif style == "accent":
-        run.font.name = "Poppins"
-        run.font.bold = True
-        run.font.color.rgb = BRAND["accent"]
-```
-
-### Applying to HTML/CSS
-
-```css
-/* Brand Design Tokens */
-:root {
-  /* Colors */
-  --color-primary:       #1A1A2E;
-  --color-primary-dark:  #0F0F1A;
-  --color-accent:        #E94F37;
-  --color-background:    #FFFFFF;
-  --color-surface:       #F8F9FA;
-  --color-text:          #212529;
-  --color-text-muted:    #6C757D;
-  --color-border:        #DEE2E6;
-
-  /* Typography */
-  --font-heading:        'Poppins', Arial, sans-serif;
-  --font-body:           'Lora', Georgia, serif;
-
-  /* Spacing scale (4px base) */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
-  --space-16: 64px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  color: var(--color-primary);
-  line-height: 1.2;
-}
-
-body, p, li {
-  font-family: var(--font-body);
-  color: var(--color-text);
-  line-height: 1.6;
-}
-```
+For **push notifications**, lead with value. Do not manufacture urgency unless a genuine deadline exists. "Your weekly report is ready."
 
 ---
 
-## Verbal Identity (Voice & Tone)
+## 2. Writing Standards
 
-Visual brand is only half the work. Voice consistency is what makes written content feel on-brand.
+### General Rules
 
-### Defining Brand Voice
+Address users with "you" in a direct, friendly manner — mobile applications call for a degree of informality. Sentences are kept short; long text is not read on a mobile screen. Active voice is preferred over passive. Technical jargon is avoided unless the target audience is known to be familiar with it.
 
-Document voice along four axes. Rate each 1–5:
+### App Store Description Writing
 
-| Axis | 1 | 5 |
-|---|---|---|
-| **Formal ↔ Casual** | Legal/corporate | Conversational/friendly |
-| **Serious ↔ Playful** | Clinical precision | Wit and humor |
-| **Authoritative ↔ Humble** | Expert pronouncements | Collaborative, asking |
-| **Technical ↔ Accessible** | Deep jargon | Plain language |
+The first sentence must contain the application category and the primary benefit. The description presents a list of outcomes, not a list of features. Rather than "Task list", say "Tasks you can complete without losing focus."
 
-Example: Stripe = Formal(3) Serious(3) Authoritative(4) Technical(3) — precise but human, expert but not arrogant.
+Keywords are embedded organically throughout the description. Keyword stuffing is penalised by the App Store algorithm.
 
-### Voice Application Rules
+### Onboarding Text Framework
 
-For each brand voice, create explicit do/don't rules:
+Every onboarding step follows three elements: what the user is looking at, why it matters, and what the next action is.
 
 ```
-BRAND VOICE: [Company Name]
-━━━━━━━━━━━━━━━━━━━━━━━━━
-We are:   [3 adjectives]
-We aren't:[3 adjectives]
-
-DO:
-✅ Use active voice: "We help teams ship faster" not "Teams are helped to ship faster"
-✅ Lead with user benefit: "You get X" not "We provide X"
-✅ Be specific: "Reduces deploy time by 40%" not "Significantly faster"
-✅ Use contractions: "you'll", "we're", "it's" — sounds human
-✅ Address the reader as "you" — direct, personal
-
-DON'T:
-❌ Use filler superlatives: "amazing", "incredible", "game-changing"
-❌ Use passive voice in marketing copy
-❌ Start sentences with "We are excited to announce..."
-❌ Use jargon without explanation in user-facing copy
-❌ Use ALL CAPS for emphasis — use bold instead
-❌ Use more than one exclamation point per page
+Headline: "Set your daily goal"
+Body:     "Choosing a single priority each day
+           is enough to stay focused."
+Button:   "Set my goal"
 ```
 
-### Tone Adaptation by Context
+### Error Message Framework
 
-Brand voice stays constant. Tone adapts to context:
+A well-formed error message answers three questions: what did not happen, the likely reason, and what the user can do next. The third element is the most important — without a clear exit, the user has nowhere to go.
 
-| Context | Tone shift | Example |
-|---|---|---|
-| Marketing copy | More energetic, aspirational | "Ship with confidence." |
-| Error messages | More direct, helpful, calm | "Your session expired. Sign in again to continue." |
-| Onboarding | Warmer, encouraging | "You're almost ready — just one more step." |
-| Technical docs | More precise, less personality | "The API returns a 401 status code when..." |
-| Crisis / incident | Calm, factual, direct | "We identified an issue affecting X users at HH:MM UTC." |
+```
+Poor:  "Error 403: Unauthorised access."
+Good:  "You don't have permission to view this content.
+        Check your account settings."
+
+Poor:  "Transaction could not be completed."
+Good:  "Payment failed. Check your card details
+        and try again."
+```
+
+The formula is: what did not happen + possible reason + what the user can do.
 
 ---
 
-## Brand Audit Checklist
+## 3. Visual Identity Standards
 
-Run this on any artifact before delivering:
+### Colour Palette
 
-### Visual
-- [ ] All colors are from the brand palette — no off-brand hex values
-- [ ] All fonts are brand-specified fonts (or approved fallbacks)
-- [ ] Font sizes follow the type scale — no arbitrary sizes
-- [ ] Contrast ratios meet WCAG AA on all text
-- [ ] Logo used correctly — correct version, correct clear space
-- [ ] No unapproved color combinations (e.g., accent on accent)
-- [ ] Spacing follows the grid/scale — no random padding values
-- [ ] Images match the brand photography/illustration direction
+Three usage rules are established for each brand colour: primary use, secondary use, and prohibited use.
 
-### Verbal
-- [ ] Voice matches the brand voice profile (formal/casual, serious/playful)
-- [ ] No banned words or phrases (per do/don't list)
-- [ ] CTAs are specific and active ("Start your free trial" not "Get started")
-- [ ] No filler superlatives ("amazing", "revolutionary", "game-changing")
-- [ ] Contractions used appropriately for the voice
-- [ ] Technical terms defined or linked on first use
-- [ ] All copy reviewed for tone match to context
+Brand colours are defined as semantic tokens in the `AppColors` class. This creates a bridge between the design tool (Figma) and developer code — both sides reference the same token names.
 
-### Consistency
-- [ ] Same terminology used throughout — no synonym drift ("workspace" vs "project" vs "board")
-- [ ] Product names spelled and capitalized correctly every time
-- [ ] Date/number formats consistent (US vs EU, $1,000 vs $1.000)
-
----
-
-## Brand Style Reference Card
-
-When guidelines are provided by the user, document them here for reference:
-
-```markdown
-## [Company] Brand Quick Reference
-
-### Colors
-| Name | Hex | Use |
-|---|---|---|
-| Primary | #______ | [use case] |
-| Accent | #______ | [use case] |
-| Background | #______ | [use case] |
-| Text | #______ | [use case] |
-
-### Typography
-| Element | Font | Size | Weight |
-|---|---|---|---|
-| Headline | | | |
-| Subheading | | | |
-| Body | | | |
-| Caption | | | |
-
-### Voice
-- Tone: [adjectives]
-- Do: [key dos]
-- Don't: [key don'ts]
-
-### Logo Rules
-- Minimum size: [px or mm]
-- Clear space: [measurement]
-- Approved on: [white / dark / brand color]
-- Never: [common misuses]
+```dart
+static const brandPrimary   = Color(0xFF...);  // Primary action colour
+static const brandSecondary = Color(0xFF...);  // Supporting colour
+static const brandAccent    = Color(0xFF...);  // Emphasis points
 ```
 
+### Contrast Requirements
+
+Text and background combinations must meet the WCAG AA standard, which requires a minimum contrast ratio of 4.5:1. When a brand colour is used as a background, this ratio must be verified; the shade is adjusted if the requirement is not met.
+
+### Typography Selection
+
+Brand typography encompasses three decisions. The display font establishes character and commands attention. It is used for large headings, splash screens, and marketing materials. The body font prioritises readability and is used in lists, descriptions, and form fields. On iOS, deviating from the system font (SF Pro) can weaken the user experience. The mono font is used for numerical content such as code, prices, and data tables.
+
 ---
 
-## Definition of Done — Brand Guidelines
+## 4. Visual Language
 
-- [ ] Brand palette documented with named tokens and hex values
-- [ ] Typography stack documented with sizes, weights, and line heights
-- [ ] Voice profile documented with do/don't examples
-- [ ] Tone adaptation defined for at least 3 key contexts
-- [ ] All artifacts pass the visual brand audit checklist
-- [ ] All copy passes the verbal brand audit checklist
-- [ ] Consistency audit done — no synonym drift, no off-brand terminology
-- [ ] Brand style reference card updated with any new decisions
+### Icon Style
+
+All icons come from a single style — outline or filled, not both at the same time. Size and padding are consistent. SF Symbols is the preferred choice for iOS, as it is familiar to iOS users and supports dynamic sizing.
+
+### Visual Content (Photography and Illustration)
+
+When photography is used, a consistent style must be maintained: whether a dark or light background is preferred, whether filters are applied, and the framing logic are all defined and applied uniformly.
+
+When illustration is used, stroke weight, colour palette alignment, and corner rounding must remain consistent with the brand system.
+
+### Animation Personality
+
+Animations carry the brand voice as much as copy does. A professional or enterprise brand uses low, elegant motion with long ease-out curves (400–600 ms). An energetic or youth-focused brand uses fast, bouncy spring animations. A minimal or calm brand uses fade-only transitions with minimal movement (200–300 ms).
+
+---
+
+## 5. App Store Visual Assets
+
+### Application Icon
+
+iOS and Android must be evaluated independently, as the background colour renders differently in the App Store and Play Store.
+
+The iOS App Store applies rounded corners automatically; the icon is submitted as a square. This means no critical visual elements should be placed near the corners of the icon.
+
+### Screenshots
+
+Each screenshot carries a single message. Attempting to demonstrate multiple features in a single frame weakens clarity. Text overlays must be large, readable, and compliant with contrast requirements.
+
+### App Preview Video
+
+The first three seconds determine whether the video is watched. The strongest feature is therefore placed at the very beginning. The video must be comprehensible without sound, since the App Store defaults to muted playback.
+
+---
+
+## 6. Consistency Checklist
+
+Every new touchpoint — a new screen, a new notification, a new App Store text update — is reviewed against the following checklist.
+
+**Voice and Tone.** Is the content aligned with the brand voice adjectives? Is the tone appropriate for the context? Is the language free of blame or unnecessary complexity?
+
+**Visual.** Are brand colour tokens used? Is the typography hierarchy consistent? Does the icon style match the others?
+
+**Copy.** Does the first sentence contain a value proposition? Is the call to action clear and singular? Is the readability at an appropriate level for a general audience?

@@ -1,21 +1,25 @@
 ---
 name: verification-before-completion
-description: Claiming work is complete without verification is dishonesty, not efficiency. Use when ANY variation of success/completion claims, ANY expression of satisfaction, or ANY positive statement about work state.
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: >-
+  > Run verification commands and confirm fresh output before claiming work
+  complete—evidence before assertions, never claim done without verification. Use when
+  about to claim work is complete, fixed, or passing, before committing or creating PRs.
+  NOT for: stage-level aggregation of a whole DoD spec — that is stage-gate, which runs
+  the full gate and never fixes.
+slug: verification-before-completion
+version: 1.0.0
+displayName: verification-before-completion
 ---
 
 # Verification Before Completion
 
 ## Overview
 
-Claiming work is complete without verification is dishonesty, not efficiency.
-
 **Core principle:** Evidence before claims, always.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
+
+**边界（与 stage-gate 分工）：** 本技能 = 单次验证（一条命令/一个声明/一次提交前）；`stage-gate` = 阶段级聚合（整份 stage-spec DoD 逐条执行，只验不修）——单点验证先行，阶段收口再跑门禁。
 
 ## The Iron Law
 
@@ -109,16 +113,8 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
-## Why This Matters
+## When To Apply
 
-From 24 failure memories:
-- your human partner said "I don't believe you" - trust broken
-- Undefined functions shipped - would crash
-- Missing requirements shipped - incomplete features
-- Time wasted on false completion → redirect → rework
-- Violates: "Honesty is a core value. If you lie, you'll be replaced."
-
-## When to Use
 **ALWAYS before:**
 - ANY variation of success/completion claims
 - ANY expression of satisfaction
@@ -132,19 +128,3 @@ From 24 failure memories:
 - Paraphrases and synonyms
 - Implications of success
 - ANY communication suggesting completion/correctness
-
-## The Bottom Line
-
-**No shortcuts for verification.**
-
-Run the command. Read the output. THEN claim the result.
-
-This is non-negotiable.
-
-### When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

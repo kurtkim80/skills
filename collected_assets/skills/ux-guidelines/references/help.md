@@ -1,7 +1,9 @@
 # UX Guidelines Skill Help — Usage and Triggers
 
 Use this skill when you need consistent UX output for shell help text and
-user-facing commands in the dotfiles repository.
+user-facing commands in the `dEitY719/dotfiles` repository. Every
+`shell-common/...` path below is relative to that checkout: `$SHELL_COMMON`,
+which defaults to `$HOME/dotfiles/shell-common`.
 
 ## Usage
 
@@ -9,8 +11,8 @@ user-facing commands in the dotfiles repository.
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `[target]` | Function, module, or glob to bring in line with `UX_GUIDELINES.md`. | ask |
-| `help` | Print this help and stop. No files are read or written. | — |
+| `[target]` | Function, module, file, or directory to bring in line with `UX_GUIDELINES.md`. | ask |
+| `-h`, `--help`, `help` | Print this help and stop. No files are read or written. | off |
 
 ## Typical Requests
 
@@ -27,7 +29,8 @@ user-facing commands in the dotfiles repository.
    - Target: one function or module.
    - Goal: replace hardcoded formatting with semantic `ux_*` calls.
 2. **Bulk compliance review**
-   - Target: `shell-common/**/*.sh`.
+   - Target: the files and directories passed to `lib/scan-ux.sh`; with no
+     argument it falls back to `$SHELL_COMMON`.
    - Goal: produce a review document with violations, severity, and fixes.
 
 ## Inputs to Confirm

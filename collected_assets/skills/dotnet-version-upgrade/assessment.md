@@ -79,7 +79,7 @@ These will be addressed as part of the upgrade.
 
 *Continue reading - Edge case handling and final checklist follow this section.*
 
-The `generate_dotnet_upgrade_assessment` tool creates `assessment.md` on disk. Do **not** rewrite, reformat, or supplement the generated file — it is complete as-is.
+The `generate_dotnet_upgrade_assessment` tool creates `assessment.md` on disk. Do **not** rewrite or reformat it yourself — the engine's content is complete as-is. Scenario extensions may have changed it through the assessment worker; leave any attributed extension content in place.
 
 ### 2.1 Open Assessment in Editor
 

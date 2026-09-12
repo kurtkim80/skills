@@ -1,36 +1,17 @@
 ---
 name: grill-me
-description: A relentless interview to sharpen a plan or design.
-disable-model-invocation: true
-category: "productivity"
-risk: "safe"
-source: "community"
-source_repo: "mattpocock/skills"
-source_type: "community"
-date_added: "2026-06-19"
-author: "Matt Pocock"
-license: "MIT"
-license_source: "https://github.com/mattpocock/skills/blob/main/LICENSE"
-tags:
-  - productivity
-  - workflow
-  - coding-agents
-tools:
-  - claude-code
-  - codex-cli
-  - cursor
+description: >-
+  User-invoked entry that runs a /plan-grilling session — a relentless interview to
+  sharpen a plan or design. Use when the user wants to stress-test a plan, decision, or
+  idea before committing to it.
+slug: grill-me
+version: 1.0.0
+displayName: grill-me
 ---
 
-## When to Use
+# Grill Me
 
-Use when this workflow matches the user request: A relentless interview to sharpen a plan or design.
+Thin entry point. Immediately follow **`plan-grilling`**:
 
-
-_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)._Run a `/grilling` session.
-
-
-## Limitations
-
-- Requires the upstream tool, account, API key, or local setup when the workflow names one.
-- Does not authorize destructive, production, paid, or external-message actions without explicit user approval.
-- Validate generated artifacts or recommendations against the user's real sources before treating them as final.
+1. Load and execute the `plan-grilling` skill on the user's plan/decision/idea.
+2. Do not invent a separate workflow — delegate entirely to `plan-grilling`.

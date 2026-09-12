@@ -1,212 +1,468 @@
 ---
-name: ui-ux-designer
-description: Create interface designs, wireframes, and design systems. Masters user research, accessibility standards, and modern design tools.
-risk: critical
-source: community
-date_added: '2026-02-27'
+name: ux-writing
+description: Create user-centered, accessible interface copy (microcopy) for digital products including buttons, labels, error messages, notifications, forms, onboarding, empty states, success messages, and help text. Use when writing or editing any text that appears in apps, websites, or software interfaces, designing conversational flows, establishing voice and tone guidelines, auditing product content for consistency and usability, reviewing UI strings, or improving existing interface copy. Applies UX writing best practices based on four quality standards — purposeful, concise, conversational, and clear. Includes accessibility guidelines, research-backed benchmarks (sentence length, comprehension rates, reading levels), expanded error patterns, tone adaptation frameworks, and comprehensive reference materials.
 ---
 
-## Use this skill when
+# UX Writing
 
-- Working on ui ux designer tasks or workflows
-- Needing guidance, best practices, or checklists for ui ux designer
+Write clear, concise, user-centered interface copy (UX text/microcopy) for digital products and experiences. This skill provides frameworks, patterns, and best practices for creating text that helps users accomplish their goals.
 
-## Do not use this skill when
+**Compatible with:** Claude Desktop, Claude Code, and Codex (CLI and IDE extensions)
 
-- The task is unrelated to ui ux designer
-- You need a different domain or tool outside this scope
+**Note:** This skill works with Codex CLI/IDE, not ChatGPT. ChatGPT cannot install or use skills.
 
-## Instructions
+## When to Use This Skill
 
-- Clarify goals, constraints, and required inputs.
-- Apply relevant best practices and validate outcomes.
-- Provide actionable steps and verification.
-- If detailed examples are required, open `resources/implementation-playbook.md`.
+Use this skill when:
 
-You are a UI/UX design expert specializing in user-centered design, modern design systems, and accessible interface creation.
+- Writing interface copy (buttons, labels, titles, messages, forms)
+- Editing existing UX text for clarity and effectiveness
+- Creating error messages, notifications, or success messages
+- Designing conversational flows or onboarding experiences
+- Establishing voice and tone for a product
+- Auditing product content for consistency and usability
 
-## Purpose
-Expert UI/UX designer specializing in design systems, accessibility-first design, and modern design workflows. Masters user research methodologies, design tokenization, and cross-platform design consistency while maintaining focus on inclusive user experiences.
+## Core UX Writing Principles
 
-## Capabilities
+### The Four Quality Standards
 
-### Design Systems Mastery
-- Atomic design methodology with token-based architecture
-- Design token creation and management (Figma Variables, Style Dictionary)
-- Component library design with comprehensive documentation
-- Multi-brand design system architecture and scaling
-- Design system governance and maintenance workflows
-- Version control for design systems with branching strategies
-- Design-to-development handoff optimization
-- Cross-platform design system adaptation (web, mobile, desktop)
+Every piece of UX text should be:
 
-### Modern Design Tools & Workflows
-- Figma advanced features (Auto Layout, Variants, Components, Variables)
-- Figma plugin development for workflow optimization
-- Design system integration with development tools (Storybook, Chromatic)
-- Collaborative design workflows and real-time team coordination
-- Design version control and branching strategies
-- Prototyping with advanced interactions and micro-animations
-- Design handoff tools and developer collaboration
-- Asset generation and optimization for multiple platforms
+1. **Purposeful** — Helps users or the business achieve goals
+2. **Concise** — Uses the fewest words possible without losing meaning
+3. **Conversational** — Sounds natural and human, not robotic
+4. **Clear** — Unambiguous, accurate, and easy to understand
 
-### User Research & Analysis
-- Quantitative and qualitative research methodologies
-- User interview planning, execution, and analysis
-- Usability testing design and moderation
-- A/B testing design and statistical analysis
-- User journey mapping and experience flow optimization
-- Persona development based on research data
-- Card sorting and information architecture validation
-- Analytics integration and user behavior analysis
+### Key Best Practices
 
-### Accessibility & Inclusive Design
-- WCAG 2.1/2.2 AA and AAA compliance implementation
-- Accessibility audit methodologies and remediation strategies
-- Color contrast analysis and accessible color palette creation
-- Screen reader optimization and semantic markup planning
-- Keyboard navigation and focus management design
-- Cognitive accessibility and plain language principles
-- Inclusive design patterns for diverse user needs
-- Accessibility testing integration into design workflows
+**Conciseness**
 
-### Information Architecture & UX Strategy
-- Site mapping and navigation hierarchy optimization
-- Content strategy and content modeling
-- User flow design and conversion optimization
-- Mental model alignment and cognitive load reduction
-- Task analysis and user goal identification
-- Information hierarchy and progressive disclosure
-- Search and findability optimization
-- Cross-platform information consistency
+- Use 40-60 characters per line maximum
+- Every word must have a job
+- Break dense text into scannable chunks
+- Front-load important information
 
-### Visual Design & Brand Systems
-- Typography systems and vertical rhythm establishment
-- Color theory application and systematic palette creation
-- Layout principles and grid system design
-- Iconography design and systematic icon libraries
-- Brand identity integration and visual consistency
-- Design trend analysis and timeless design principles
-- Visual hierarchy and attention management
-- Responsive design principles and breakpoint strategy
+**Clarity**
 
-### Interaction Design & Prototyping
-- Micro-interaction design and animation principles
-- State management and feedback design
-- Error handling and empty state design
-- Loading states and progressive enhancement
-- Gesture design for touch interfaces
-- Voice UI and conversational interface design
-- AR/VR interface design principles
-- Cross-device interaction consistency
+- Use plain language (7th grade reading level for general, 10th for professional)
+- Avoid jargon, idioms, and technical terms
+- Use consistent terminology throughout
+- Choose meaningful, specific verbs
 
-### Design Research & Validation
-- Design sprint facilitation and workshop moderation
-- Stakeholder alignment and requirement gathering
-- Competitive analysis and market research
-- Design validation methodologies and success metrics
-- Post-launch analysis and iterative improvement
-- User feedback collection and analysis systems
-- Design impact measurement and ROI calculation
-- Continuous discovery and learning integration
+**Conversational Tone**
 
-### Cross-Platform Design Excellence
-- Responsive web design and mobile-first approaches
-- Native mobile app design (iOS Human Interface Guidelines, Material Design)
-- Progressive Web App (PWA) design considerations
-- Desktop application design patterns
-- Wearable interface design principles
-- Smart TV and connected device interfaces
-- Email design and multi-client compatibility
-- Print design integration and brand consistency
+- Write how you speak
+- Use active voice 85% of the time
+- Include prepositions and articles
+- Avoid robotic phrasing
 
-### Design System Implementation
-- Component documentation and usage guidelines
-- Design token naming conventions and hierarchies
-- Multi-theme support and dark mode implementation
-- Internationalization and localization considerations
-- Performance implications of design decisions
-- Design system analytics and adoption tracking
-- Training and onboarding materials creation
-- Design system community building and feedback loops
+**User-Centered**
 
-### Advanced Design Techniques
-- Design system automation and code generation
-- Dynamic content design and personalization strategies
-- Data visualization and dashboard design
-- E-commerce and conversion optimization design
-- Content management system integration
-- SEO-friendly design patterns
-- Performance-optimized design decisions
-- Design for emerging technologies (AI, ML, IoT)
+- Focus on user benefits, not features
+- Anticipate and answer user questions
+- Use second-person ("you") language
+- Match user's language and mental models
 
-### Collaboration & Communication
-- Design presentation and storytelling techniques
-- Cross-functional team collaboration strategies
-- Design critique facilitation and feedback integration
-- Client communication and expectation management
-- Design documentation and specification creation
-- Workshop facilitation and ideation techniques
-- Design thinking process implementation
-- Change management and design adoption strategies
+## UX Text Patterns
 
-### Design Technology Integration
-- Design system integration with CI/CD pipelines
-- Automated design testing and quality assurance
-- Design API integration and dynamic content handling
-- Performance monitoring for design decisions
-- Analytics integration for design validation
-- Accessibility testing automation
-- Design system versioning and release management
-- Developer handoff automation and optimization
+Apply these common patterns for interface elements.
 
-## Behavioral Traits
-- Prioritizes user needs and accessibility in all design decisions
-- Creates systematic, scalable design solutions over one-off designs
-- Validates design decisions with research and testing data
-- Maintains consistency across all platforms and touchpoints
-- Documents design decisions and rationale comprehensively
-- Collaborates effectively with developers and stakeholders
-- Stays current with design trends while focusing on timeless principles
-- Advocates for inclusive design and diverse user representation
-- Measures and iterates on design performance continuously
-- Balances business goals with user needs ethically
+### Titles
 
-## Knowledge Base
-- Design system best practices and industry standards
-- Accessibility guidelines and assistive technology compatibility
-- Modern design tools and workflow optimization
-- User research methodologies and behavioral psychology
-- Cross-platform design patterns and native conventions
-- Performance implications of design decisions
-- Design token standards and implementation strategies
-- Inclusive design principles and diverse user needs
-- Design team scaling and organizational design maturity
-- Emerging design technologies and future trends
+- **Purpose**: Orient users to where they are
+- **Format**: Noun phrases, sentence case
+- **Types**: Brand titles, content titles, category titles, task titles
+- **Examples**: "Account settings", "Your library", "Create new post"
 
-## Response Approach
-1. **Research user needs** and validate assumptions with data
-2. **Design systematically** with tokens and reusable components
-3. **Prioritize accessibility** and inclusive design from concept stage
-4. **Document design decisions** with clear rationale and guidelines
-5. **Collaborate with developers** for optimal implementation
-6. **Test and iterate** based on user feedback and analytics
-7. **Maintain consistency** across all platforms and touchpoints
-8. **Measure design impact** and optimize for continuous improvement
+### Buttons and Links
 
-## Example Interactions
-- "Design a comprehensive design system with accessibility-first components"
-- "Create user research plan for a complex B2B software redesign"
-- "Optimize conversion flow with A/B testing and user journey analysis"
-- "Develop inclusive design patterns for users with cognitive disabilities"
-- "Design cross-platform mobile app following platform-specific guidelines"
-- "Create design token architecture for multi-brand product suite"
-- "Conduct accessibility audit and remediation strategy for existing product"
-- "Design data visualization dashboard with progressive disclosure"
+- **Purpose**: Enable users to take action
+- **Format**: Active imperative verbs, sentence case
+- **Pattern**: `[Verb] [object]`
+- **Examples**: "Save changes", "Delete account", "View details"
+- **Avoid**: Generic labels like "OK", "Submit", "Click here"
 
-Focus on user-centered, accessible design solutions with comprehensive documentation and systematic thinking. Include research validation, inclusive design considerations, and clear implementation guidelines.
+### Error Messages
 
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+- **Purpose**: Explain problem and provide solution
+- **Format**: Empathetic, clear, actionable
+- **Pattern**: `[What failed]. [Why/context]. [What to do].`
+
+**Error Message Types**
+
+**Validation Errors (Inline)**
+
+- Show as user completes field or on blur
+- Brief, specific guidance to correct input
+- Pattern: `[Field] [specific requirement]`
+- Examples:
+  - "Email must include @"
+  - "Password must be at least 8 characters"
+  - "Choose a date in the future"
+- Timing: Real-time or on field exit
+- Location: Below or beside the field
+
+**System Errors (Modal/Banner)**
+
+- Show when backend operations fail
+- Explain what happened and why
+- Pattern: `[Action failed]. [Likely cause]. [Recovery step].`
+- Examples:
+  - "Payment failed. Your card was declined. Try a different payment method."
+  - "Couldn't save changes. Connection lost. Reconnect and try again."
+  - "Upload failed. File is too large. Choose a file under 10MB."
+- Timing: Immediately after failure
+- Location: Modal dialog or prominent banner
+
+**Blocking Errors (Full-screen)**
+
+- Prevent continued use until resolved
+- Clear explanation of blocker and resolution
+- Pattern: `[What's blocked]. [Why]. [Specific action needed].`
+- Examples:
+  - "Update required. This version is no longer supported. Update now to continue."
+  - "Subscription expired. Your account is paused. Renew subscription to restore access."
+  - "Verification needed. Confirm your email to access features. Check your inbox."
+- Timing: On app launch or feature access
+- Location: Full screen or large modal
+
+**Permission Errors**
+
+- Explain benefit before requesting permission
+- Pattern: `[User benefit]. [Permission needed].`
+- Examples:
+  - "Get notified when orders ship. Enable notifications."
+  - "Find nearby stores. Allow location access."
+  - "Back up your photos. Grant storage permission."
+- Timing: When feature is first used
+- Location: In context of the feature
+
+**What to Avoid**
+
+- Technical codes without explanation ("Error 403")
+- Blame language ("invalid input", "illegal character")
+- Robotic tone ("An error has occurred")
+- Dead ends (error with no recovery path)
+- Vague causes ("Something went wrong")
+
+### Success Messages
+
+- **Purpose**: Confirm action completion
+- **Format**: Past tense, specific, encouraging
+- **Pattern**: `[Action] [result/benefit]`
+- **Examples**: "Changes saved", "Email sent", "Profile updated"
+
+### Empty States
+
+- **Purpose**: Guide users when content is absent
+- **Types**: First-use, user-cleared, error/no results
+- **Format**: Explanation + CTA to populate
+- **Example**: "No messages yet. Start a conversation to connect with your team."
+
+### Form Fields
+
+- **Labels**: Clear noun phrases describing input ("Email address", "Phone number")
+- **Instructions**: Verb-first, explain why information is needed
+- **Placeholder**: Use sparingly, only for standard inputs like "name@example.com"
+- **Helper text**: Static, on-demand, or automatic based on importance
+
+### Notifications
+
+- **Purpose**: Deliver timely, valuable information
+- **Types**: Action-required (intrusive), Passive (less intrusive)
+- **Format**: Verb-first title + contextual description
+- **Example**: "Update required. Install the latest version to continue."
+
+## Voice and Tone
+
+### Voice (Consistent Brand Personality)
+
+Voice is the consistent personality of the product. Establish voice using:
+
+- **Concepts**: 3-5 key brand principles/values
+- **Voice characteristics**: Descriptive adjectives for each concept
+- **Do/Don't examples**: Concrete examples showing voice in action
+
+See references/voice-chart-template.md for creating a voice chart.
+
+### Tone (Adaptive to Context)
+
+Tone is how voice adapts to specific situations. While voice remains constant, tone shifts based on user context and emotional state.
+
+**Tone Variables**
+
+- **Purpose**: Why user is seeing this text (information, action, confirmation)
+- **Context**: What user is trying to do (learning, completing task, recovering from error)
+- **Emotional state**: How user likely feels (frustrated, excited, confused, cautious)
+- **Stakes**: Impact of the action (low: changing theme, high: deleting account)
+
+**Tone Adaptation by User Emotional State**
+
+**Frustrated** (errors, failures, blockers)
+
+- Empathetic and solution-focused
+- Acknowledge the problem without blame
+- Provide clear recovery path
+- Example: "Payment failed. Your card was declined. Try a different payment method."
+
+**Confused** (first use, complex features)
+
+- Patient and explanatory
+- Break down steps clearly
+- Provide context and guidance
+- Example: "Connect your bank to see spending insights. We'll guide you through it."
+
+**Confident** (routine tasks, return visits)
+
+- Efficient and direct
+- Minimal explanation
+- Quick confirmation
+- Example: "Saved"
+
+**Cautious** (high-stakes actions, data loss)
+
+- Serious and transparent
+- Clear consequences
+- Respectful of user's decision
+- Example: "Delete account? You'll lose all data and this can't be undone."
+
+**Successful** (completions, achievements)
+
+- Positive and encouraging
+- Proportional to achievement
+- Brief celebration
+- Example: "Profile updated. Your changes are live."
+
+**Tone Adaptation by Content Type**
+
+**Error messages**: Empathetic, reassuring, solution-focused
+
+- Never blame user
+- Explain what happened
+- Provide clear next step
+
+**Success messages**: Positive, specific, encouraging
+
+- Confirm what happened
+- Proportional to action importance
+- Brief and clear
+
+**Instructions**: Clear, direct, helpful
+
+- Front-load key action
+- Explain why when needed
+- Use simple steps
+
+**Onboarding**: Inviting, encouraging, concise
+
+- Welcome without overwhelming
+- Focus on value
+- Celebrate early wins
+
+**Confirmations**: Serious, transparent, respectful
+
+- Clear about consequences
+- No manipulation
+- Easy to back out
+
+**Empty states**: Hopeful, actionable, guiding
+
+- Explain why it's empty
+- Provide clear next action
+- Keep encouraging tone
+
+## Editing Process
+
+Edit UX text in four phases:
+
+### Phase 1: Purposeful
+
+- Does text help user achieve their goal?
+- Does text serve business objectives?
+- Is value to user clear?
+- Are concerns anticipated and addressed?
+
+### Phase 2: Concise
+
+- Remove unnecessary words
+- Combine redundant information
+- Ensure every word earns its space
+- Front-load important concepts
+
+### Phase 3: Conversational
+
+- Read aloud—would you say this?
+- Use active voice (unless passive is clearer)
+- Include natural connecting words
+- Avoid corporate jargon
+
+### Phase 4: Clear
+
+- Use specific, accurate verbs
+- Maintain consistent terminology
+- Test readability (Hemingway Editor, Flesch-Kincaid)
+- Ensure unambiguous meaning
+
+## Workflow
+
+1. **Understand context**
+   - User goals and needs
+   - Business objectives
+   - Technical constraints
+   - Emotional state of user
+
+2. **Draft content**
+   - Start with conversation (what would you say?)
+   - Apply appropriate pattern
+   - Consider voice and tone
+   - Front-load important information
+
+3. **Edit iteratively**
+   - Phase 1: Purposeful
+   - Phase 2: Concise
+   - Phase 3: Conversational
+   - Phase 4: Clear
+
+4. **Test and measure**
+   - Review with team
+   - Test with users when possible
+   - Measure task completion, comprehension
+   - Iterate based on feedback
+
+## Accessibility in UX Writing
+
+Writing accessible content ensures all users, including those using assistive technology, can understand and interact with your product.
+
+### Core Accessibility Principles
+
+**Screen Reader Optimization**
+
+- Label all interactive elements explicitly ("Submit form" not just "Submit")
+- Write descriptive link text ("Read pricing details" not "Click here")
+- Structure error messages to work with screen readers (error + field label read together)
+- Use ARIA labels when visual context isn't sufficient
+
+**Cognitive Accessibility**
+
+- Target 8-14 words per sentence (8 words = 100% comprehension, 14 words = 90%)
+- Break complex information into scannable chunks
+- Use clear headings and logical hierarchy
+- Provide consistent, predictable patterns
+
+**Multi-Modal Communication**
+
+- Don't rely on color alone to convey meaning
+- Pair visual indicators with text ("Error: Email required" with red icon)
+- Provide text alternatives for icons and images
+- Ensure sufficient color contrast (WCAG AA minimum: 4.5:1)
+
+**Plain Language for All**
+
+- Target 7th-8th grade reading level for general audience
+- Define technical terms when first used
+- Avoid idioms, metaphors, and cultural references
+- Use common, everyday words
+
+### Accessible Pattern Examples
+
+**Buttons**
+
+- ❌ Poor: "Submit" (context missing for screen readers)
+- ✅ Good: "Submit application"
+
+**Links**
+
+- ❌ Poor: "Click here for more information"
+- ✅ Good: "Read our privacy policy"
+
+**Error Messages**
+
+- ❌ Poor: Red text showing "Invalid"
+- ✅ Good: "Error: Email must include @" (with error icon)
+
+**Form Labels**
+
+- ❌ Poor: Placeholder-only fields
+- ✅ Good: Visible label + optional placeholder
+
+## UX Text Benchmarks
+
+Use these research-backed metrics to create effective UX text.
+
+### Sentence Length Targets
+
+**By Content Type**
+
+- **Buttons/CTAs**: 2-4 words ideal, 6 word maximum
+- **Titles**: 3-6 words, 40 characters maximum
+- **Error messages**: 12-18 words (including solution)
+- **Instructions**: 20 words maximum, 14 ideal
+- **Body copy**: 15-20 words per sentence average
+- **Notifications**: 10-15 words for title + body
+
+**Comprehension Rates**
+
+- 8 words or fewer: 100% user comprehension
+- 14 words or fewer: 90% user comprehension
+- 25 words: Maximum before significant comprehension drop
+
+### Character and Line Length
+
+**Optimal Ranges**
+
+- **Line length**: 40-60 characters for maximum readability
+- **Button labels**: 15-25 characters
+- **Page titles**: 30-50 characters
+- **Notification titles**: 35-45 characters
+
+### Reading Level Guidelines
+
+**By Audience**
+
+- **General public**: 7th-8th grade (Flesch-Kincaid)
+- **Professional tools**: 9th-10th grade
+- **Technical products**: 10th-11th grade
+- **Specialized fields**: 11th-12th grade (only when necessary)
+
+**Testing Tools**
+
+- Hemingway Editor: Highlights complex sentences
+- Readable.com: Provides multiple readability scores
+- Microsoft Word: Built-in Flesch-Kincaid scoring
+
+## Common Mistakes to Avoid
+
+- Using passive voice excessively
+- Generic button labels ("Submit", "OK")
+- Blaming users in error messages
+- Overly clever humor in serious contexts
+- Inconsistent terminology
+- Hidden instructions or explanations
+- System-oriented language vs. user language
+- Too many words (not concise enough)
+- Robotic, corporate tone
+- Relying on color alone for meaning
+- Writing inaccessible link text ("Click here")
+
+## Quick Reference
+
+**Sentence case**: "Save your changes" (not "Save Your Changes")  
+**Active imperative for buttons**: "Delete account" (not "Account deletion")  
+**User-focused**: "Save time with shortcuts" (not "We offer shortcuts")  
+**Specific verbs**: "Delete" (not "Remove" when permanently deleting)  
+**Front-loaded**: "Password must be 8 characters" (not "Must be 8 characters for your password")
+
+## Resources
+
+This skill includes:
+
+- **references/accessibility-guidelines.md**: Comprehensive guide to writing accessible UX text for all users
+- **references/voice-chart-template.md**: Template for creating a product voice chart
+- **references/content-usability-checklist.md**: Comprehensive checklist for evaluating UX text quality
+- **references/patterns-detailed.md**: Extended examples of UX text patterns in different voices
+- **examples/real-world-improvements.md**: Before/after transformations with detailed analysis and scoring
+- **templates/error-message-template.md**: Fillable template for writing effective error messages
+- **templates/empty-state-template.md**: Guide for creating helpful empty states
+- **templates/onboarding-flow-template.md**: Framework for designing clear onboarding experiences
+- **docs/claude-figma-integration.md**: Guide for using this skill with Claude Code and Figma MCP
+- **docs/codex-figma-integration.md**: Guide for using this skill with Codex CLI/IDE and Figma MCP

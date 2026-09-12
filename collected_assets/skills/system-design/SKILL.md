@@ -1,151 +1,468 @@
 ---
-name: system-design
-description: Expert system design guidance for architects and senior engineers. Use when the user asks about microservices, monolith design, event-driven architecture, scalability, reliability, caching strategies, queue design, load balancers, or API gateways.
+name: ux-writing
+description: Create user-centered, accessible interface copy (microcopy) for digital products including buttons, labels, error messages, notifications, forms, onboarding, empty states, success messages, and help text. Use when writing or editing any text that appears in apps, websites, or software interfaces, designing conversational flows, establishing voice and tone guidelines, auditing product content for consistency and usability, reviewing UI strings, or improving existing interface copy. Applies UX writing best practices based on four quality standards — purposeful, concise, conversational, and clear. Includes accessibility guidelines, research-backed benchmarks (sentence length, comprehension rates, reading levels), expanded error patterns, tone adaptation frameworks, and comprehensive reference materials.
 ---
 
-# System Design
+# UX Writing
 
-Approach every system design task as a principal engineer who has operated distributed systems at scale and learned what breaks. You are not designing for the demo — you are designing for the 18-month horizon when the team has tripled, traffic has grown 10x, and the original author has left. Every structural decision must be justifiable, reversible where possible, and honest about its trade-offs.
+Write clear, concise, user-centered interface copy (UX text/microcopy) for digital products and experiences. This skill provides frameworks, patterns, and best practices for creating text that helps users accomplish their goals.
 
----
+**Compatible with:** Claude Desktop, Claude Code, and Codex (CLI and IDE extensions)
 
-## Step 0: Frame Before You Draw
+**Note:** This skill works with Codex CLI/IDE, not ChatGPT. ChatGPT cannot install or use skills.
 
-Before any diagram or component list, answer these:
+## When to Use This Skill
 
-1. **What is the system's single job?** One sentence. If it does two things, it may be two systems.
-2. **Who are the consumers?** Internal services, external clients, third-party integrations — each has different trust and latency requirements.
-3. **What are the scale targets?** Requests per second, data volume, geographic distribution, SLA. Design to real numbers, not hypothetical extremes.
-4. **What are the failure tolerance requirements?** Which parts must never go down? Which can degrade gracefully?
-5. **What are the consistency requirements?** Strong consistency, eventual consistency, or something in between — this drives almost every storage and communication choice.
+Use this skill when:
 
-State these explicitly. A system designed without answers to these questions is a guess wearing an architecture diagram.
+- Writing interface copy (buttons, labels, titles, messages, forms)
+- Editing existing UX text for clarity and effectiveness
+- Creating error messages, notifications, or success messages
+- Designing conversational flows or onboarding experiences
+- Establishing voice and tone for a product
+- Auditing product content for consistency and usability
 
----
+## Core UX Writing Principles
 
-## Monolith vs Microservices
+### The Four Quality Standards
 
-Start with the question: **does the complexity of distribution justify itself here?**
+Every piece of UX text should be:
 
-**Choose a monolith when:**
-- The team is small (fewer than 3 squads owning distinct domains)
-- The domain boundaries are not yet understood
-- Operational maturity is low — distributed systems require mature CI/CD, observability, and on-call practices
-- Latency between components matters and network hops are expensive
+1. **Purposeful** — Helps users or the business achieve goals
+2. **Concise** — Uses the fewest words possible without losing meaning
+3. **Conversational** — Sounds natural and human, not robotic
+4. **Clear** — Unambiguous, accurate, and easy to understand
 
-**Choose microservices when:**
-- Independent deployment of components has clear business value
-- Teams need to scale independently — both in engineering headcount and compute
-- Domain boundaries are stable and well-understood
-- The organisation has the operational maturity to run and observe many services
+### Key Best Practices
 
-**The modular monolith is often the right answer for greenfield:** enforce hard module boundaries inside a single deployable, then extract services when the boundary proves stable and the team proves ready.
+**Conciseness**
 
-**Never distribute for distribution's sake.** Every service boundary is a distributed systems problem: network latency, partial failure, data consistency across services, distributed tracing, and independent deployment pipelines. These are costs. They need to be justified.
+- Use 40-60 characters per line maximum
+- Every word must have a job
+- Break dense text into scannable chunks
+- Front-load important information
 
----
+**Clarity**
 
-## Event-Driven Architecture
+- Use plain language (7th grade reading level for general, 10th for professional)
+- Avoid jargon, idioms, and technical terms
+- Use consistent terminology throughout
+- Choose meaningful, specific verbs
 
-Use events when:
-- Producers should not know about consumers — the source of truth emits facts, not commands
-- Operations can be async — user registration triggers welcome email, audit log, CRM sync; none of these need to block the response
-- You need audit trails — events are immutable records of what happened
-- You need fan-out — one event consumed by many downstream systems
+**Conversational Tone**
 
-**Design rules:**
-- Events describe facts in past tense: `UserRegistered`, `OrderPlaced`, `PaymentFailed` — not commands
-- Events are immutable once published — never mutate a published event schema without versioning
-- Consumers must be idempotent — the same event may arrive more than once
-- Every consumer must have a dead-letter queue for events it cannot process
-- Schema changes follow a compatibility strategy: add fields, never remove; version the event type when breaking changes are unavoidable
-- Do not use events as a replacement for synchronous calls where the caller needs the result immediately
+- Write how you speak
+- Use active voice 85% of the time
+- Include prepositions and articles
+- Avoid robotic phrasing
 
----
+**User-Centered**
 
-## Scalability Patterns
+- Focus on user benefits, not features
+- Anticipate and answer user questions
+- Use second-person ("you") language
+- Match user's language and mental models
 
-**Horizontal scaling** — add instances, not bigger machines. Design services to be stateless; push state to the data layer.
+## UX Text Patterns
 
-**Caching strategy:**
-- Cache at the layer closest to the consumer
-- Define cache invalidation before caching anything — stale data costs more than a cache miss
-- Cache layers in order of distance from compute: in-process (L1) → distributed cache (L2, e.g. Redis) → CDN (L3, for static and semi-static content)
-- Use TTL as a safety net, not a primary invalidation strategy
-- Never cache user-specific sensitive data in a shared cache without isolation
+Apply these common patterns for interface elements.
 
-**Queue design:**
-- Queues absorb burst traffic and decouple producer throughput from consumer throughput
-- Size your consumer pool to drain the queue under peak load with headroom
-- Monitor queue depth as a primary health signal — a growing queue is a system that is falling behind
-- Separate queues by priority: high-priority jobs should never be blocked behind bulk processing jobs
-- Design for at-least-once delivery; build consumers that handle duplicates
+### Titles
 
-**Database scaling:**
-- Read replicas before sharding — most systems read far more than they write
-- Connection pooling at the application layer — databases do not scale connections linearly
-- Shard only when a single node cannot hold the working set or sustain the write throughput — sharding adds enormous operational complexity
-- CQRS (Command Query Responsibility Segregation) when read and write models diverge significantly — separate the write model from the read model, sync via events
+- **Purpose**: Orient users to where they are
+- **Format**: Noun phrases, sentence case
+- **Types**: Brand titles, content titles, category titles, task titles
+- **Examples**: "Account settings", "Your library", "Create new post"
 
----
+### Buttons and Links
 
-## Load Balancers
+- **Purpose**: Enable users to take action
+- **Format**: Active imperative verbs, sentence case
+- **Pattern**: `[Verb] [object]`
+- **Examples**: "Save changes", "Delete account", "View details"
+- **Avoid**: Generic labels like "OK", "Submit", "Click here"
 
-- Use layer 7 (HTTP) load balancers for application traffic — they enable path-based routing, header inspection, SSL termination, and health checks
-- Use layer 4 (TCP) load balancers for raw throughput where HTTP inspection is unnecessary overhead
-- Health check every upstream — remove unhealthy instances before clients see errors
-- Configure connection draining — allow in-flight requests to complete before removing an instance from rotation
-- Sticky sessions are a code smell — if a service requires them, it has state that belongs in the data layer
+### Error Messages
 
----
+- **Purpose**: Explain problem and provide solution
+- **Format**: Empathetic, clear, actionable
+- **Pattern**: `[What failed]. [Why/context]. [What to do].`
 
-## API Gateway
+**Error Message Types**
 
-Use an API gateway to enforce cross-cutting concerns at the edge, not inside every service:
-- Authentication and token validation
-- Rate limiting and throttling per consumer
-- Request routing and versioning
-- SSL termination
-- Request/response transformation
-- Logging and tracing injection
+**Validation Errors (Inline)**
 
-**Do not put business logic in the API gateway.** It is infrastructure, not application code. Business logic in a gateway is logic that cannot be tested, versioned, or deployed independently.
+- Show as user completes field or on blur
+- Brief, specific guidance to correct input
+- Pattern: `[Field] [specific requirement]`
+- Examples:
+  - "Email must include @"
+  - "Password must be at least 8 characters"
+  - "Choose a date in the future"
+- Timing: Real-time or on field exit
+- Location: Below or beside the field
 
----
+**System Errors (Modal/Banner)**
 
-## Reliability Patterns
+- Show when backend operations fail
+- Explain what happened and why
+- Pattern: `[Action failed]. [Likely cause]. [Recovery step].`
+- Examples:
+  - "Payment failed. Your card was declined. Try a different payment method."
+  - "Couldn't save changes. Connection lost. Reconnect and try again."
+  - "Upload failed. File is too large. Choose a file under 10MB."
+- Timing: Immediately after failure
+- Location: Modal dialog or prominent banner
 
-- **Circuit breaker** — stop calling a failing downstream; fail fast and return a fallback until the downstream recovers
-- **Bulkhead** — isolate thread pools or connection pools per downstream dependency; one slow dependency should not exhaust shared resources and cascade failures
-- **Retry with backoff and jitter** — retry transient failures; add jitter to prevent thundering herd on recovery
-- **Timeout everywhere** — every network call has an explicit timeout; never rely on the remote end to close
-- **Graceful degradation** — define what the system does when a non-critical dependency is unavailable; returning partial data is better than returning an error
-- **Health checks and readiness probes** — distinguish between a service that is alive and a service that is ready to serve traffic; never route to an instance that has not finished startup
+**Blocking Errors (Full-screen)**
 
----
+- Prevent continued use until resolved
+- Clear explanation of blocker and resolution
+- Pattern: `[What's blocked]. [Why]. [Specific action needed].`
+- Examples:
+  - "Update required. This version is no longer supported. Update now to continue."
+  - "Subscription expired. Your account is paused. Renew subscription to restore access."
+  - "Verification needed. Confirm your email to access features. Check your inbox."
+- Timing: On app launch or feature access
+- Location: Full screen or large modal
 
-## Observability in Distributed Systems
+**Permission Errors**
 
-A distributed system you cannot observe is a system you cannot operate.
+- Explain benefit before requesting permission
+- Pattern: `[User benefit]. [Permission needed].`
+- Examples:
+  - "Get notified when orders ship. Enable notifications."
+  - "Find nearby stores. Allow location access."
+  - "Back up your photos. Grant storage permission."
+- Timing: When feature is first used
+- Location: In context of the feature
 
-- **Distributed tracing** — propagate a trace ID across every service boundary; use OpenTelemetry as the standard
-- **Structured logs** — every log line includes: `traceId`, `spanId`, `service`, `timestamp`, `level`, `message`
-- **Service-level objectives (SLOs)** — define availability and latency targets per service; alert on SLO burn rate, not raw error counts
-- **Dependency maps** — know which services call which; a change in one service has known downstream consumers
-- **Chaos engineering** — periodically inject failures (kill instances, delay responses, drop packets) to verify that reliability patterns actually work
+**What to Avoid**
 
----
+- Technical codes without explanation ("Error 403")
+- Blame language ("invalid input", "illegal character")
+- Robotic tone ("An error has occurred")
+- Dead ends (error with no recovery path)
+- Vague causes ("Something went wrong")
 
-## Trade-off Framework
+### Success Messages
 
-Every design decision involves a trade-off. Make it explicit:
+- **Purpose**: Confirm action completion
+- **Format**: Past tense, specific, encouraging
+- **Pattern**: `[Action] [result/benefit]`
+- **Examples**: "Changes saved", "Email sent", "Profile updated"
 
-| Axis | Option A | Option B |
-|------|----------|----------|
-| Consistency vs Availability | Strong consistency (CP) | High availability (AP) |
-| Latency vs Throughput | Optimise for p99 latency | Optimise for bulk throughput |
-| Simplicity vs Flexibility | Monolith | Microservices |
-| Cost vs Resilience | Single region | Multi-region active-active |
-| Speed vs Safety | Move fast, migrate later | Design schema carefully upfront |
+### Empty States
 
-Name the trade-off you are making. The worst system designs are the ones where the trade-off was made accidentally.
+- **Purpose**: Guide users when content is absent
+- **Types**: First-use, user-cleared, error/no results
+- **Format**: Explanation + CTA to populate
+- **Example**: "No messages yet. Start a conversation to connect with your team."
+
+### Form Fields
+
+- **Labels**: Clear noun phrases describing input ("Email address", "Phone number")
+- **Instructions**: Verb-first, explain why information is needed
+- **Placeholder**: Use sparingly, only for standard inputs like "name@example.com"
+- **Helper text**: Static, on-demand, or automatic based on importance
+
+### Notifications
+
+- **Purpose**: Deliver timely, valuable information
+- **Types**: Action-required (intrusive), Passive (less intrusive)
+- **Format**: Verb-first title + contextual description
+- **Example**: "Update required. Install the latest version to continue."
+
+## Voice and Tone
+
+### Voice (Consistent Brand Personality)
+
+Voice is the consistent personality of the product. Establish voice using:
+
+- **Concepts**: 3-5 key brand principles/values
+- **Voice characteristics**: Descriptive adjectives for each concept
+- **Do/Don't examples**: Concrete examples showing voice in action
+
+See references/voice-chart-template.md for creating a voice chart.
+
+### Tone (Adaptive to Context)
+
+Tone is how voice adapts to specific situations. While voice remains constant, tone shifts based on user context and emotional state.
+
+**Tone Variables**
+
+- **Purpose**: Why user is seeing this text (information, action, confirmation)
+- **Context**: What user is trying to do (learning, completing task, recovering from error)
+- **Emotional state**: How user likely feels (frustrated, excited, confused, cautious)
+- **Stakes**: Impact of the action (low: changing theme, high: deleting account)
+
+**Tone Adaptation by User Emotional State**
+
+**Frustrated** (errors, failures, blockers)
+
+- Empathetic and solution-focused
+- Acknowledge the problem without blame
+- Provide clear recovery path
+- Example: "Payment failed. Your card was declined. Try a different payment method."
+
+**Confused** (first use, complex features)
+
+- Patient and explanatory
+- Break down steps clearly
+- Provide context and guidance
+- Example: "Connect your bank to see spending insights. We'll guide you through it."
+
+**Confident** (routine tasks, return visits)
+
+- Efficient and direct
+- Minimal explanation
+- Quick confirmation
+- Example: "Saved"
+
+**Cautious** (high-stakes actions, data loss)
+
+- Serious and transparent
+- Clear consequences
+- Respectful of user's decision
+- Example: "Delete account? You'll lose all data and this can't be undone."
+
+**Successful** (completions, achievements)
+
+- Positive and encouraging
+- Proportional to achievement
+- Brief celebration
+- Example: "Profile updated. Your changes are live."
+
+**Tone Adaptation by Content Type**
+
+**Error messages**: Empathetic, reassuring, solution-focused
+
+- Never blame user
+- Explain what happened
+- Provide clear next step
+
+**Success messages**: Positive, specific, encouraging
+
+- Confirm what happened
+- Proportional to action importance
+- Brief and clear
+
+**Instructions**: Clear, direct, helpful
+
+- Front-load key action
+- Explain why when needed
+- Use simple steps
+
+**Onboarding**: Inviting, encouraging, concise
+
+- Welcome without overwhelming
+- Focus on value
+- Celebrate early wins
+
+**Confirmations**: Serious, transparent, respectful
+
+- Clear about consequences
+- No manipulation
+- Easy to back out
+
+**Empty states**: Hopeful, actionable, guiding
+
+- Explain why it's empty
+- Provide clear next action
+- Keep encouraging tone
+
+## Editing Process
+
+Edit UX text in four phases:
+
+### Phase 1: Purposeful
+
+- Does text help user achieve their goal?
+- Does text serve business objectives?
+- Is value to user clear?
+- Are concerns anticipated and addressed?
+
+### Phase 2: Concise
+
+- Remove unnecessary words
+- Combine redundant information
+- Ensure every word earns its space
+- Front-load important concepts
+
+### Phase 3: Conversational
+
+- Read aloud—would you say this?
+- Use active voice (unless passive is clearer)
+- Include natural connecting words
+- Avoid corporate jargon
+
+### Phase 4: Clear
+
+- Use specific, accurate verbs
+- Maintain consistent terminology
+- Test readability (Hemingway Editor, Flesch-Kincaid)
+- Ensure unambiguous meaning
+
+## Workflow
+
+1. **Understand context**
+   - User goals and needs
+   - Business objectives
+   - Technical constraints
+   - Emotional state of user
+
+2. **Draft content**
+   - Start with conversation (what would you say?)
+   - Apply appropriate pattern
+   - Consider voice and tone
+   - Front-load important information
+
+3. **Edit iteratively**
+   - Phase 1: Purposeful
+   - Phase 2: Concise
+   - Phase 3: Conversational
+   - Phase 4: Clear
+
+4. **Test and measure**
+   - Review with team
+   - Test with users when possible
+   - Measure task completion, comprehension
+   - Iterate based on feedback
+
+## Accessibility in UX Writing
+
+Writing accessible content ensures all users, including those using assistive technology, can understand and interact with your product.
+
+### Core Accessibility Principles
+
+**Screen Reader Optimization**
+
+- Label all interactive elements explicitly ("Submit form" not just "Submit")
+- Write descriptive link text ("Read pricing details" not "Click here")
+- Structure error messages to work with screen readers (error + field label read together)
+- Use ARIA labels when visual context isn't sufficient
+
+**Cognitive Accessibility**
+
+- Target 8-14 words per sentence (8 words = 100% comprehension, 14 words = 90%)
+- Break complex information into scannable chunks
+- Use clear headings and logical hierarchy
+- Provide consistent, predictable patterns
+
+**Multi-Modal Communication**
+
+- Don't rely on color alone to convey meaning
+- Pair visual indicators with text ("Error: Email required" with red icon)
+- Provide text alternatives for icons and images
+- Ensure sufficient color contrast (WCAG AA minimum: 4.5:1)
+
+**Plain Language for All**
+
+- Target 7th-8th grade reading level for general audience
+- Define technical terms when first used
+- Avoid idioms, metaphors, and cultural references
+- Use common, everyday words
+
+### Accessible Pattern Examples
+
+**Buttons**
+
+- ❌ Poor: "Submit" (context missing for screen readers)
+- ✅ Good: "Submit application"
+
+**Links**
+
+- ❌ Poor: "Click here for more information"
+- ✅ Good: "Read our privacy policy"
+
+**Error Messages**
+
+- ❌ Poor: Red text showing "Invalid"
+- ✅ Good: "Error: Email must include @" (with error icon)
+
+**Form Labels**
+
+- ❌ Poor: Placeholder-only fields
+- ✅ Good: Visible label + optional placeholder
+
+## UX Text Benchmarks
+
+Use these research-backed metrics to create effective UX text.
+
+### Sentence Length Targets
+
+**By Content Type**
+
+- **Buttons/CTAs**: 2-4 words ideal, 6 word maximum
+- **Titles**: 3-6 words, 40 characters maximum
+- **Error messages**: 12-18 words (including solution)
+- **Instructions**: 20 words maximum, 14 ideal
+- **Body copy**: 15-20 words per sentence average
+- **Notifications**: 10-15 words for title + body
+
+**Comprehension Rates**
+
+- 8 words or fewer: 100% user comprehension
+- 14 words or fewer: 90% user comprehension
+- 25 words: Maximum before significant comprehension drop
+
+### Character and Line Length
+
+**Optimal Ranges**
+
+- **Line length**: 40-60 characters for maximum readability
+- **Button labels**: 15-25 characters
+- **Page titles**: 30-50 characters
+- **Notification titles**: 35-45 characters
+
+### Reading Level Guidelines
+
+**By Audience**
+
+- **General public**: 7th-8th grade (Flesch-Kincaid)
+- **Professional tools**: 9th-10th grade
+- **Technical products**: 10th-11th grade
+- **Specialized fields**: 11th-12th grade (only when necessary)
+
+**Testing Tools**
+
+- Hemingway Editor: Highlights complex sentences
+- Readable.com: Provides multiple readability scores
+- Microsoft Word: Built-in Flesch-Kincaid scoring
+
+## Common Mistakes to Avoid
+
+- Using passive voice excessively
+- Generic button labels ("Submit", "OK")
+- Blaming users in error messages
+- Overly clever humor in serious contexts
+- Inconsistent terminology
+- Hidden instructions or explanations
+- System-oriented language vs. user language
+- Too many words (not concise enough)
+- Robotic, corporate tone
+- Relying on color alone for meaning
+- Writing inaccessible link text ("Click here")
+
+## Quick Reference
+
+**Sentence case**: "Save your changes" (not "Save Your Changes")  
+**Active imperative for buttons**: "Delete account" (not "Account deletion")  
+**User-focused**: "Save time with shortcuts" (not "We offer shortcuts")  
+**Specific verbs**: "Delete" (not "Remove" when permanently deleting)  
+**Front-loaded**: "Password must be 8 characters" (not "Must be 8 characters for your password")
+
+## Resources
+
+This skill includes:
+
+- **references/accessibility-guidelines.md**: Comprehensive guide to writing accessible UX text for all users
+- **references/voice-chart-template.md**: Template for creating a product voice chart
+- **references/content-usability-checklist.md**: Comprehensive checklist for evaluating UX text quality
+- **references/patterns-detailed.md**: Extended examples of UX text patterns in different voices
+- **examples/real-world-improvements.md**: Before/after transformations with detailed analysis and scoring
+- **templates/error-message-template.md**: Fillable template for writing effective error messages
+- **templates/empty-state-template.md**: Guide for creating helpful empty states
+- **templates/onboarding-flow-template.md**: Framework for designing clear onboarding experiences
+- **docs/claude-figma-integration.md**: Guide for using this skill with Claude Code and Figma MCP
+- **docs/codex-figma-integration.md**: Guide for using this skill with Codex CLI/IDE and Figma MCP

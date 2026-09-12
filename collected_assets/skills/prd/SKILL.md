@@ -58,6 +58,7 @@ Use concrete, measurable criteria. Avoid "fast", "easy", or "intuitive".
 - The search should be fast and return relevant results.
 - The UI must look modern and be easy to use.
 
+
 # Concrete (GOOD)
 + The search must return results within 200ms for a 10k record dataset.
 + The search algorithm must achieve >= 85% Precision@10 in benchmark evals.

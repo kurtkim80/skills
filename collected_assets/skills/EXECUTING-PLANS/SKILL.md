@@ -1,31 +1,37 @@
 ---
 name: executing-plans
-description: "Use when you have a written implementation plan to execute in a separate session with review checkpoints"
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: >-
+  Executing Plans: execute a written implementation plan — load the plan, review it
+  critically, execute all tasks with per-task commits and review checkpoints, and report
+  when complete. Use when you have a written implementation plan to execute in a separate
+  session (use subagent-driven-development instead if subagents are available). NOT for:
+  verifying a stage against its spec — that is stage-gate, which only verifies and never
+  executes.
+slug: executing-plans
+version: 1.0.0
+displayName: executing-plans
 ---
 
 # Executing Plans
 
 ## Overview
 
-Load plan, review critically, execute tasks in batches, report for review between batches.
-
-**Core principle:** Batch execution with checkpoints for architect review.
+Load plan, review critically, execute all tasks, report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
+
+**Note:** Tell your human partner that Superpowers works much better with access to subagents (Claude Code, Codex CLI, Codex App, Copilot CLI, and Gemini CLI all qualify; see the per-platform tool refs in `../using-superpowers/references/`). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
 
 ## The Process
 
 ### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+1. Ensure an isolated workspace: use superpowers:using-git-worktrees to create one or verify the existing one
+2. Read plan file
+3. Review critically - identify any questions or concerns about the plan
+4. If concerns: Raise them with your human partner before starting
+5. If no concerns: Create todos for the plan items and proceed
 
-### Step 2: Execute Batch
-**Default: First 3 tasks**
+### Step 2: Execute Tasks
 
 For each task:
 1. Mark as in_progress
@@ -33,29 +39,23 @@ For each task:
 3. Run verifications as specified
 4. Mark as completed
 
-### Step 3: Report
-When batch complete:
-- Show what was implemented
-- Show verification output
-- Say: "Ready for feedback."
-
-### Step 4: Continue
-Based on feedback:
-- Apply changes if needed
-- Execute next batch
-- Repeat until complete
-
-### Step 5: Complete Development
+### Step 3: Complete Development
 
 After all tasks complete and verified:
 - Announce: "I'm using the finishing-a-development-branch skill to complete this work."
 - **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
 - Follow that skill to verify tests, present options, execute choice
 
+## 边界（与 stage-gate 分工）
+
+- **executing-plans**（本技能）：执行计划——逐任务实现 + 提交 + 验证。
+- **stage-gate**：阶段完成检查——读 stage-spec DoD 逐条验证（只验不修，交回开发）。
+- 顺序：执行完所有任务 → 阶段声称完成时 → 跑 `stage-gate` 验证阶段契约；执行过程中不做门禁，门禁结果不自己修（差异交回开发）。
+
 ## When to Stop and Ask for Help
 
 **STOP executing immediately when:**
-- Hit a blocker mid-batch (missing dependency, test fails, instruction unclear)
+- Hit a blocker (missing dependency, test fails, instruction unclear)
 - Plan has critical gaps preventing starting
 - You don't understand an instruction
 - Verification fails repeatedly
@@ -75,13 +75,5 @@ After all tasks complete and verified:
 - Follow plan steps exactly
 - Don't skip verifications
 - Reference skills when plan says to
-- Between batches: just report and wait
 - Stop when blocked, don't guess
-
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+- Never start implementation on main/master branch without explicit user consent

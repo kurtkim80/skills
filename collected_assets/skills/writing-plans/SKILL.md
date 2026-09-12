@@ -1,9 +1,6 @@
 ---
 name: writing-plans
-description: "Use when you have a spec or requirements for a multi-step task, before touching code"
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
 # Writing Plans
@@ -23,6 +20,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 ## Bite-Sized Task Granularity
 
 **Each step is one action (2-5 minutes):**
+
 - "Write the failing test" - step
 - "Run it to make sure it fails" - step
 - "Implement the minimal code to make the test pass" - step
@@ -49,10 +47,11 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ## Task Structure
 
-```markdown
+````markdown
 ### Task N: [Component Name]
 
 **Files:**
+
 - Create: `exact/path/to/file.py`
 - Modify: `exact/path/to/existing.py:123-145`
 - Test: `tests/exact/path/to/test.py`
@@ -64,6 +63,7 @@ def test_specific_behavior():
     result = function(input)
     assert result == expected
 ```
+````
 
 **Step 2: Run test to verify it fails**
 
@@ -88,7 +88,9 @@ Expected: PASS
 git add tests/path/test.py src/path/file.py
 git commit -m "feat: add specific feature"
 ```
+
 ```
+
 
 ## Remember
 - Exact file paths always
@@ -97,31 +99,32 @@ git commit -m "feat: add specific feature"
 - Reference relevant skills with @ syntax
 - DRY, YAGNI, TDD, frequent commits
 
+
 ## Execution Handoff
+
 
 After saving the plan, offer execution choice:
 
+
 **"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
+
 
 **1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
 
+
 **2. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
 
+
 **Which approach?"**
+
 
 **If Subagent-Driven chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
 - Stay in this session
 - Fresh subagent per task + code review
 
+
 **If Parallel Session chosen:**
 - Guide them to open new session in worktree
 - **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
-
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+```

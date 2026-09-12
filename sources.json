@@ -336,5 +336,54 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "Shell script audit (sh-check) and skill authoring toolkit"
+  },
+  {
+    "name": "NinjaSln-labs/agent-skills",
+    "repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "87 software planning, discovery-to-delivery, PRD development, Domain-Driven Design (DDD), and implementation planning skills"
+  },
+  {
+    "name": "zzafergok/skills",
+    "repo": "https://github.com/zzafergok/skills.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "108 architecture and planning skills: C4 architecture, system design, technical diagramming, implementation planning, and product management"
+  },
+  {
+    "name": "leonardopordeus/tailor-spec",
+    "repo": "https://github.com/leonardopordeus/tailor-spec.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Spec-driven phased implementation planning: turns fuzzy feature requests into review-gated technical roadmaps"
+  },
+  {
+    "name": "DragonJames2026/prd-discuss",
+    "repo": "https://github.com/DragonJames2026/prd-discuss.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "Adversarial evidence-first product requirements discussion and PRD structuring skill before writing code"
+  },
+  {
+    "name": "Lucky2024-pllove/requirements-to-prd",
+    "repo": "https://github.com/Lucky2024-pllove/requirements-to-prd.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "7-layer requirements engineering (EARS, GWT, scope, verification closure) for delivery-ready PRDs"
+  },
+  {
+    "name": "tigerless-labs/design-harness",
+    "repo": "https://github.com/tigerless-labs/design-harness.git",
+    "branch": "main",
+    "skills_subpath": "plugins/design-harness/skills",
+    "description": "Evidence-based system design and architecture reasoning harness with visual canvas integration"
+  },
+  {
+    "name": "iamthenop/infurnet-skills",
+    "repo": "https://github.com/iamthenop/infurnet-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Technical design doc conventions, schema design, API standards, and workflow modeling skills"
   }
 ]

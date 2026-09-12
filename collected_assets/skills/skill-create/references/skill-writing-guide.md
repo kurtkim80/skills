@@ -30,14 +30,15 @@ markdown-only and use `lib/` when the step should be run, not merely read.
 Skills use a three-level loading system:
 
 1. **Metadata** (name + description) - Always in context (~100 words)
-2. **SKILL.md body** - In context whenever skill triggers (<500 lines ideal)
+2. **SKILL.md body** - In context whenever skill triggers
 3. **Bundled resources** - As needed (unlimited, scripts can execute without loading)
 
-These word counts are approximate and you can feel free to go longer if needed.
+This repo's own bar is stricter than the upstream default — see `authoring:skill-check`
+Check 1 in `skills/skill-check/references/checks.md`. Write to that bar, not a looser one.
 
 **Key patterns:**
 
-- Keep SKILL.md under 500 lines; if approaching this limit, add hierarchy with pointers
+- Keep SKILL.md at or under 100 lines; push detail into `references/` well before you hit the limit
 - Reference files clearly from SKILL.md with guidance on when to read them
 - For large reference files (>300 lines), include a table of contents
 - Prefer executable helpers over prose when the procedure is deterministic, repetitive, or easier to verify in code
@@ -56,8 +57,8 @@ Keep prose for judgment calls, policy rationale, output interpretation, and user
 Show direct invocation patterns in SKILL.md, for example:
 
 ```bash
-bash claude/skills/<name>/lib/<script>.sh
-python claude/skills/<name>/lib/<script>.py
+bash skills/<name>/lib/<script>.sh
+python skills/<name>/lib/<script>.py
 ```
 
 **Domain organization**: When a skill supports multiple domains/frameworks, organize by variant:
@@ -114,7 +115,8 @@ Try to explain to the model why things are important in lieu of heavy-handed mus
   not bytes: Korean trigger phrases are 3 bytes per glyph. Every installed
   skill's description is loaded into the session's `available_skills` listing,
   and Codex/Kimi cap that listing at ~5,440 characters across all skills — a
-  long description does not just cost this skill, it crowds out others (#1411).
+  long description does not just cost this skill, it crowds out others
+  (dEitY719/dotfiles#1411).
   This does **not** contradict the "pushy" rule above: keep trigger phrases in
   both Korean and English plus short negative triggers, and move the rest —
   flag semantics to `references/help.md`, behaviour detail to Step sections,

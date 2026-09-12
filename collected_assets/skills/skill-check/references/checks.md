@@ -70,25 +70,68 @@ N/A — skill is terminal (no natural follow-up action exists)
 
 ### Check 11: No Emojis
 PASS — no emoji glyphs in SKILL.md body or `references/*.md`
-FAIL — emoji present AND skill name NOT in `references/allowed-emoji-skills.txt`
-N/A — skill name IS in allowlist (`[N/A] allowlisted in references/allowed-emoji-skills.txt`)
-WARN — allowlist file missing (degrade rather than block; authoring:skill-check stays read-only)
+FAIL — emoji present AND the skill's allowlist key is NOT in
+`references/allowed-emoji-skills.txt`
+N/A — the key IS in the allowlist (`[N/A] allowlisted in references/allowed-emoji-skills.txt`)
+WARN — allowlist file missing, or an allowlist entry resolves to nothing in the
+audited scope (see "Stale entries" below). Degrade rather than block;
+authoring:skill-check stays read-only.
 
 Rationale: CLAUDE.md "No emojis anywhere" policy with one exception — the
 `ai-metrics` footer's `📊 👤 🤖` glyphs inside `<details>` / `<!-- ai-metrics -->`
-blocks (#317 F-2, PR #320, #367 wrapper).
+blocks (dEitY719/dotfiles#317 F-2, PR #320, #367 wrapper).
 
-Detection: grep for codepoints in the ranges `U+1F300-U+1FAFF` (pictographic
-extended) and `U+2600-U+27BF` (misc symbols & dingbats). Range is intentionally
-narrower than "all emoji" to avoid false positives on BMP symbols (✓ ✗ etc).
+Detection: the enforcing gate is
+`dEitY719/harness-skills/.github/workflows/skill-check.yml`, so it owns the
+definition and this rubric quotes it rather than restating a second range:
 
-Skill name resolution: take frontmatter `name:` colon form and convert to
-hyphen form (`gh:add-ai-metrics` → `gh-add-ai-metrics`), or fall back to the
-directory basename when frontmatter `name:` is absent.
+```python
+def is_emoji(ch):
+    cp = ord(ch)
+    return 0x1F000 <= cp <= 0x1FAFF or cp == 0xFE0F
+```
 
-Allowlist: `claude/skills/skill-check/references/allowed-emoji-skills.txt` —
-one skill name per line, `#` comments allowed, blank lines ignored. Each
-entry must carry an inline rationale comment.
+`U+2600-U+27BF` sits below the range on purpose, so the BMP symbol block —
+`✓ ✗ ✅ ❌` and the rest of it — is out of scope for this ban rather than
+adjudicated glyph by glyph. `U+FE0F` counts, so a text-presentation glyph plus a
+variation selector (`⏸️` = U+23F8 U+FE0F) is caught. The `U+1FAFF` upper bound
+keeps plane-2 CJK extension ideographs from reading as emoji. The test is per
+character, matching the gate: a ZWJ or skin-tone sequence trips on its base
+codepoint, so sequences need no separate rule.
+
+Allowlist key resolution: the key is `<plugin>:<skill>`.
+
+- `<plugin>` — the `name` field of the audited repo's
+  `.claude-plugin/plugin.json`. Read it; never infer it from the path. No such
+  manifest (a personal skills tree, or a lone skill directory) means there is no
+  plugin to qualify with: fall back to the pre-split key — frontmatter `name:`
+  as written, colon form converted to hyphens, else the directory basename — and
+  say so in the output, because the collision guard below is not in force on
+  that path.
+- `<skill>` — frontmatter `name:`, falling back to the SKILL.md directory
+  basename when absent. In a marketplace repo `name:` must be bare (a colon
+  there is a hard CI failure, `skill-check.yml`: `name must be bare, not
+  namespaced`), so in practice the two agree — which is exactly why the *key*
+  cannot be bare too.
+
+A bare key in this repo's allowlist is invalid and must be reported as one — the
+fallback above is a reader for manifest-less trees, not a licence to write bare
+keys here. `create` resolves to three different skills — `gh-issue:create`,
+`gh-pr:create`, `packaging:create` — so a bare `create` would silently exempt
+all three when only two earn it.
+
+Stale entries: an entry whose `<plugin>` matches a repo in the audited scope but
+whose `<skill>` directory does not exist there is stale — report it as a WARN
+naming the key. Entries for plugins outside the audited scope are out of reach,
+not stale: when auditing one repo, do not flag the other repos' entries. Without
+this state a full allowlist and an empty one look identical, which is how every
+key survived the repo split unnoticed.
+
+Allowlist: `skills/skill-check/references/allowed-emoji-skills.txt` — one key
+per line, `#` comments allowed, blank lines ignored. Each entry must carry an
+inline rationale comment. This file governs the rubric only; CI exemptions are
+separate `allow-emoji-paths` entries in each repo's
+`.github/workflows/validate.yml`, and neither implies the other.
 
 FAIL output: list up to 5 matched files+lines and append the guidance
 `Remove emoji or add to references/allowed-emoji-skills.txt with rationale`.
@@ -115,8 +158,13 @@ Heuristics to look for:
 
 WARN/FAIL remediation must name a concrete helper candidate, its expected
 inputs/outputs, and a direct call pattern such as
-`bash claude/skills/<name>/lib/<script>.sh` or
-`python claude/skills/<name>/lib/<script>.py`.
+`bash skills/<name>/lib/<script>.sh` or
+`python skills/<name>/lib/<script>.py`.
+
+`authoring:skill-check` extracts its own six mechanical checks (1, 11, 13
+shape, 14, 15, 16) plus the score/verdict arithmetic this way:
+`skills/skill-check/lib/skill_check.sh` — usage, the full I/O contract, and
+exit codes are documented in that script's own header. Invoked from Step 2.
 
 ---
 
@@ -125,7 +173,8 @@ inputs/outputs, and a direct call pattern such as
 ### Check 13: Model Recommendation Metadata
 Read `references/model-recommendation.md` (rubric SSOT) for the full schema,
 tier rubric, migration gate, and compatibility policy. This check is
-**read-only — it recommends a tier, never switches models or writes files** (#809).
+**read-only — it recommends a tier, never switches models or writes files**
+(dEitY719/dotfiles#809).
 
 Detect `metadata.model_recommendation` in the SKILL.md frontmatter:
 
@@ -204,9 +253,10 @@ analysis, while `authoring:skill-check` audits a single SKILL.md.
 Skill descriptions are loaded into every session's `available_skills` listing,
 so their combined length is a per-session context cost. Codex/Kimi cap that
 listing at roughly 2% of context (~5,440 characters across **all** installed
-skills) — the reason `scripts/setup-skills-ssot.sh` needs a `.codex-allowlist`
-escape hatch. Check 16 keeps one description inside its share of that budget.
-Read-only — it reports the overage, never edits the file (audit-only invariant).
+skills); this repo's own CI (`.github/workflows/validate.yml`) enforces the
+same budget across every installed skill. Check 16 keeps one description
+inside its share of that budget. Read-only — it reports the overage, never
+edits the file (audit-only invariant).
 
 ### Check 16: Description Length
 Count the frontmatter `description` in **characters, not bytes** — Korean
@@ -235,15 +285,16 @@ text.
 - sister-skill cross-references (`Sister skills: ...`) → a Related Skills line
   in the SKILL.md body
 
-Executable mirror: `tests/bats/skills/_fixtures/skill_description_length.sh`
-(`skill_desc_extract` / `skill_desc_length` / `skill_desc_verdict`), pinned by
-`tests/bats/skills/skill_check_description_length.bats`. Keep the thresholds
-byte-identical between that fixture and the table above.
+Executable mirror: `skills/skill-check/lib/skill_check.sh` Check 16 (see Check
+12 above), self-tested by `skills/skill-check/lib/selftest.sh`. Keep the
+thresholds identical between that script and the table above.
 
 **This check measures length only.** A description can pass Check 16 and still
-have stopped triggering — that is the failure mode #1411's diet risked and
-#1417 had to measure separately. Trigger accuracy is out of scope for a
-read-only audit (it costs API budget per query), so it lives in a manual
-harness instead: `references/trigger-eval-procedure.md` →
-`claude/tools/run-trigger-eval.sh`. Run it when a description is shrunk, when a
-skill is renamed, or when a competing pair's boundary wording changes.
+have stopped triggering — that is the failure mode dEitY719/dotfiles#1411's
+diet risked and dEitY719/dotfiles#1417 had to measure separately. Trigger
+accuracy is out of scope for a read-only audit (it costs API budget per query),
+so it lives in a manual harness instead:
+`references/trigger-eval-procedure.md` (the harness script that procedure
+describes is not shipped in this repo — see that file's note). Run it when a
+description is shrunk, when a skill is renamed, or when a competing pair's
+boundary wording changes.
