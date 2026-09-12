@@ -1,0 +1,481 @@
+@page "/"
+@inject HttpClient Http
+@inject VectorSearchService SearchService
+@inject IJSRuntime JS
+
+<!-- Apple Global Navigation -->
+<header class="header">
+    <a href="#" class="header-logo">
+        <div class="logo-badge"></div>
+        <div>
+            <div class="logo-title">OpenCode &amp; OpenWork Hub</div>
+        </div>
+    </a>
+
+    <div class="search-wrap">
+        <span class="search-icon" @onclick="TriggerSearch" style="cursor: pointer;" title="클릭하여 AI 시맨틱 검색 실행">🔍</span>
+        <input class="search-input"
+               type="text"
+               placeholder="자연어 질문 입력 후 Enter (예: '쿠버네티스 파드 재시작', 'FTP 업로드')"
+               value="@_searchQuery"
+               @oninput="OnSearchInput"
+               @onkeydown="OnSearchKeyDown" />
+        <button class="btn-search-submit" @onclick="TriggerSearch" title="AI 시맨틱 검색 실행 (Enter)">
+            <span>AI 검색 ↵</span>
+        </button>
+    </div>
+
+    <div class="header-actions">
+        <a href="https://github.com/kurtkim80/skills" target="_blank" rel="noopener noreferrer" class="btn-apple btn-github" title="GitHub 저장소 바로가기" style="text-decoration: none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>GitHub</span>
+        </a>
+        <button @onclick="ToggleTheme" class="btn-apple" title="다크/라이트 테마 전환">@(_currentTheme == "light" ? "☀️ 라이트" : "🌙 다크")</button>
+        <button @onclick="TriggerSync" class="btn-primary" disabled="@_isSyncing">@(_isSyncing ? "⏳ 수집 중..." : "🔄 Sync")</button>
+        <div class="header-stat">
+            <small>TOTAL</small>
+            <strong>@(SearchService.AllItems.Count > 0 ? SearchService.AllItems.Count.ToString("N0") : "6,186")</strong>
+        </div>
+    </div>
+</header>
+
+<!-- AI Status Banner -->
+@if (_showStatusBar)
+{
+    <div class="ai-status-bar">
+        <div class="ai-status-inner">
+            @if (_isAiWorking)
+            {
+                <span class="ai-spinner"></span>
+            }
+            <span>@_statusText</span>
+        </div>
+        <small style="opacity:0.8;">C# .NET 10 WebAssembly + SIMD Vector DB</small>
+    </div>
+}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-eyebrow">Next-Generation AI Agent Toolkit</div>
+    <h1>OpenCode &amp; OpenWork Hub</h1>
+    <p>인터넷과 GitHub의 최고 성능 AI 코딩 에이전트 스킬, 커맨드, 페르소나를 한 곳에서 탐색하고 원클릭으로 설치하세요.</p>
+</section>
+
+<!-- Segmented Tabs Navigation -->
+<div class="tabs-container">
+    <div class="tabs">
+        @foreach (var cat in _categories)
+        {
+            var count = GetCategoryCount(cat.Id);
+            <button class="tab-btn @(cat.Id == _selectedCategory ? "active" : "")"
+                    @onclick="() => SelectCategory(cat.Id)">
+                @cat.Label <span class="tab-count">@count</span>
+            </button>
+        }
+    </div>
+</div>
+
+<!-- Main Content Area -->
+<main class="main">
+    <div class="results-bar">
+        @if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            <p>🧠 AI 시맨틱 검색 결과: <span>@_displayItems.Count</span>개 (의미 유사도 순, C# SIMD)</p>
+        }
+        else
+        {
+            <p>전체 <span>@_displayItems.Count</span>개 에셋</p>
+        }
+    </div>
+
+    @if (_displayItems.Count == 0 && SearchService.IsLoaded)
+    {
+        <div class="empty" style="display: block;">
+            <div class="empty-icon">🔍</div>
+            <h3>검색 결과가 없습니다</h3>
+            <p>다른 검색어나 카테고리를 선택해 보세요.</p>
+        </div>
+    }
+    else
+    {
+        <div class="grid">
+            @foreach (var item in _displayItems)
+            {
+                var isCommand = item.Type == "command";
+                var badgeClass = isCommand ? "badge-command" : "badge-skill";
+                var badgeLabel = isCommand ? "COMMAND" : "SKILL";
+                var desc = string.IsNullOrEmpty(item.Desc) ? "상세 지침 및 사양을 보려면 카드를 클릭하세요." : item.Desc;
+                var srcShort = item.Source.Length > 22 ? item.Source.Substring(0, 22) + "…" : item.Source;
+
+                <div class="card" @onclick="() => OpenModal(item)">
+                    <div class="card-badges">
+                        <span class="badge @badgeClass">@badgeLabel</span>
+                        @if (item.AiScore > 0f)
+                        {
+                            <span class="badge badge-ai-score" title="C# TensorPrimitives 코사인 유사도 점수">
+                                🧠 AI 매칭 @(Math.Round(item.AiScore * 100))%
+                            </span>
+                        }
+                        @if (!string.IsNullOrEmpty(item.RepoUrl))
+                        {
+                            <a href="@item.RepoUrl" target="_blank" rel="noopener noreferrer" class="badge-src-link" @onclick:stopPropagation="true" title="원본 GitHub 저장소 바로가기: @item.Source">
+                                🐙 @srcShort ↗
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="badge-src" title="@item.Source">@srcShort</span>
+                        }
+                    </div>
+
+                    <div class="card-cat">@item.CatLabel</div>
+                    <div class="card-name">@item.Name</div>
+                    <div class="card-desc">@desc</div>
+
+                    <div class="card-footer">
+                        <span class="card-footer-label">세부 사양 보기 →</span>
+                        <button class="btn-install" title="설치 명령어 복사" @onclick="() => CopyCommand(item.Install)" @onclick:stopPropagation="true">
+                            📋 설치
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <p>OpenCode &amp; OpenWork Skills Dashboard · Apple HIG Design System · Blazor WebAssembly (.NET 10)</p>
+        <a href="https://github.com/kurtkim80/skills" target="_blank" rel="noopener noreferrer" class="footer-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>github.com/kurtkim80/skills 바로가기 ↗</span>
+        </a>
+    </div>
+</footer>
+
+<!-- Modal (iOS Sheet) -->
+@if (_selectedModalItem != null)
+{
+    var modal = _selectedModalItem;
+    var isCommand = modal.Type == "command";
+    var badgeClass = isCommand ? "badge-command" : "badge-skill";
+    var badgeLabel = isCommand ? "COMMAND" : "SKILL";
+
+    <div class="modal-overlay @(_isModalOpen ? "open" : "")" @onclick="CloseModal">
+        <div class="modal" @onclick:stopPropagation="true">
+            <div class="modal-head">
+                <div class="modal-head-info">
+                    <div class="modal-badges">
+                        <span class="badge @badgeClass">@badgeLabel</span>
+                        <span class="badge" style="background:var(--segment-bg);color:var(--text-secondary)">@modal.CatLabel</span>
+                        @if (!string.IsNullOrEmpty(modal.RepoUrl))
+                        {
+                            <a href="@modal.RepoUrl" target="_blank" rel="noopener noreferrer" class="btn-apple" style="padding: 3px 10px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-left: 4px;" title="원본 GitHub 저장소 새 탭으로 열기">
+                                🐙 원본 GitHub: @modal.Source ↗
+                            </a>
+                        }
+                        else
+                        {
+                            <span style="font-size:11px;color:var(--text-muted);margin-left:4px">출처: @modal.Source</span>
+                        }
+                    </div>
+                    <div class="modal-name">@modal.Name</div>
+                    <div class="modal-desc">@modal.Desc</div>
+                </div>
+                <button class="btn-close" @onclick="CloseModal">✕</button>
+            </div>
+
+            <div class="modal-install">
+                <code>@modal.Install</code>
+                <button class="btn-copy @(_isCopied ? "copied" : "")" @onclick="() => CopyModalInstall(modal.Install)">
+                    @(_isCopied ? "✅ 복사됨" : "📋 복사")
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-body-label">SPECIFICATION &amp; INSTRUCTIONS</div>
+                <div class="mac-terminal">
+                    <div class="mac-terminal-bar">
+                        <span class="mac-dot dot-red"></span>
+                        <span class="mac-dot dot-yellow"></span>
+                        <span class="mac-dot dot-green"></span>
+                        <span class="mac-terminal-title">SKILL.md preview</span>
+                    </div>
+                    <pre class="modal-content-pre">@(string.IsNullOrEmpty(modal.Content) ? "// 상세 내용 없음" : modal.Content)</pre>
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <small>ESC 키 또는 바깥 영역을 클릭하여 닫기</small>
+                <button class="btn-apple" @onclick="CloseModal">닫기</button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Toast -->
+@if (_showToast)
+{
+    <div class="toast show">✅ <span>@_toastMessage</span></div>
+}
+
+@code {
+    private string _searchQuery = "";
+    private string _selectedCategory = "all";
+    private List<SkillItem> _displayItems = new();
+    private bool _isSearchActive = false;
+    private bool _isAiWorking = false;
+    private string _statusText = "";
+    private bool _showStatusBar = false;
+    private SkillItem? _selectedModalItem;
+    private bool _isModalOpen = false;
+    private bool _isCopied = false;
+    private string _currentTheme = "dark";
+    private bool _isSyncing = false;
+    private string _toastMessage = "";
+    private bool _showToast = false;
+    private DotNetObjectReference<Home>? _dotNetRef;
+
+    private readonly record struct CategoryInfo(string Id, string Label);
+    private readonly List<CategoryInfo> _categories = new()
+    {
+        new("all", "전체"),
+        new("rag_search", "🔍 RAG & 시맨틱 검색"),
+        new("llm_ai", "🧠 LLM & AI 개발"),
+        new("frontend", "🎨 프론트엔드 & UI/UX"),
+        new("backend", "⚙️ 백엔드 & API"),
+        new("database", "🗄️ DB & 데이터"),
+        new("devops", "☁️ DevOps & 클라우드"),
+        new("security", "🛡️ 보안 & 취약점"),
+        new("testing", "🧪 테스트 & QA"),
+        new("architecture", "🏗️ 아키텍처 & 리뷰"),
+        new("mobile_sys", "📱 모바일 & 시스템"),
+        new("general_dev", "💻 일반 언어 & 도구"),
+        new("workflow", "⚡ 워크플로우 커맨드"),
+        new("agent", "🤖 자율 에이전트")
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dotNetRef = DotNetObjectReference.Create(this);
+
+        _showStatusBar = true;
+        _isAiWorking = true;
+        _statusText = "스킬 데이터 및 AI 벡터 엔진 초기화 중...";
+
+        await SearchService.EnsureLoadedAsync(status =>
+        {
+            _statusText = status;
+            StateHasChanged();
+        });
+
+        _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+        _isAiWorking = false;
+
+        _ = Task.Delay(2500).ContinueWith(_ =>
+        {
+            if (!_isSearchActive)
+            {
+                _showStatusBar = false;
+                InvokeAsync(StateHasChanged);
+            }
+        });
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                _currentTheme = await JS.InvokeAsync<string>("getSavedTheme");
+                await JS.InvokeVoidAsync("setAppTheme", _currentTheme);
+                StateHasChanged();
+            }
+            catch { }
+        }
+    }
+
+    private int GetCategoryCount(string catId)
+    {
+        if (catId == "all") return SearchService.AllItems.Count;
+        return SearchService.AllItems.Count(x => x.CatId == catId);
+    }
+
+    private void SelectCategory(string catId)
+    {
+        _selectedCategory = catId;
+        if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _displayItems = SearchService.GetFilteredSearchResults(_selectedCategory);
+        }
+        else
+        {
+            _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+        }
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        _searchQuery = e.Value?.ToString() ?? "";
+        // 사용자가 검색어를 완전히 지웠을 때만 즉시 전체 목록으로 복원 (글자 입력 중에는 검색 안 함)
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _isSearchActive = false;
+            SearchService.ResetScores();
+            _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+            _showStatusBar = false;
+        }
+    }
+
+    private async Task OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await TriggerSearch();
+        }
+    }
+
+    private async Task TriggerSearch()
+    {
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _isSearchActive = false;
+            SearchService.ResetScores();
+            _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+            _showStatusBar = false;
+            return;
+        }
+
+        _isSearchActive = true;
+        _showStatusBar = true;
+        _isAiWorking = true;
+        _statusText = $"🧠 \"{_searchQuery}\" 자연어 의미 벡터 계산 및 C# SIMD 유사도 랭킹 산출 중...";
+        StateHasChanged();
+
+        try
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            // 1. 브라우저 내 Transformers.js로 384차원 쿼리 벡터 추출
+            var qVec = await JS.InvokeAsync<float[]>("vectorizeQuery", _searchQuery, _dotNetRef);
+            sw.Stop();
+
+            if (qVec != null && qVec.Length == 384)
+            {
+                var simdSw = System.Diagnostics.Stopwatch.StartNew();
+                // 2. C# SIMD 가속 TensorPrimitives.CosineSimilarity 로 6,186개 항목 코사인 유사도 랭킹 산출
+                _displayItems = SearchService.Search(qVec, _selectedCategory, limit: 80);
+                simdSw.Stop();
+
+                _statusText = $"⚡ 6,186개 에셋 C# SIMD 시맨틱 비교 완료 (C# SIMD: {simdSw.Elapsed.TotalMilliseconds:F1}ms, 임베딩: {sw.ElapsedMilliseconds}ms)";
+            }
+            else
+            {
+                _statusText = "⚠️ AI 벡터 추출 실패. 다시 시도해 주세요.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _statusText = $"❌ AI 검색 오류: {ex.Message}";
+        }
+        finally
+        {
+            _isAiWorking = false;
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void OnModelDownloadProgress(int progress)
+    {
+        _statusText = $"AI 모델 다운로드 중 ({progress}%)...";
+        StateHasChanged();
+    }
+
+    private void OpenModal(SkillItem item)
+    {
+        _selectedModalItem = item;
+        _isModalOpen = true;
+        _isCopied = false;
+    }
+
+    private void CloseModal()
+    {
+        _isModalOpen = false;
+        _selectedModalItem = null;
+    }
+
+    private async Task CopyModalInstall(string cmd)
+    {
+        await CopyCommand(cmd);
+        _isCopied = true;
+        _ = Task.Delay(2000).ContinueWith(_ =>
+        {
+            _isCopied = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private async Task CopyCommand(string cmd)
+    {
+        await JS.InvokeVoidAsync("copyToClipboard", cmd);
+        await ShowToast("설치 명령어 복사 완료!");
+    }
+
+    private async Task ShowToast(string message)
+    {
+        _toastMessage = message;
+        _showToast = true;
+        StateHasChanged();
+
+        await Task.Delay(2400);
+        _showToast = false;
+        StateHasChanged();
+    }
+
+    private async Task ToggleTheme()
+    {
+        _currentTheme = _currentTheme == "light" ? "dark" : "light";
+        await JS.InvokeVoidAsync("setAppTheme", _currentTheme);
+    }
+
+    private async Task TriggerSync()
+    {
+        _isSyncing = true;
+        StateHasChanged();
+        try
+        {
+            var res = await Http.PostAsync("/api/sync", null);
+            if (res.IsSuccessStatusCode)
+            {
+                await ShowToast("수집 및 동기화 완료! 페이지를 새로고침합니다.");
+                await Task.Delay(1500);
+                await JS.InvokeVoidAsync("location.reload");
+            }
+            else
+            {
+                await ShowToast("수집 실패. 서버 로그를 확인하세요.");
+            }
+        }
+        catch
+        {
+            await ShowToast("❌ 로컬 서버(server.py) 모드에서만 수집 버튼을 사용할 수 있습니다.");
+        }
+        finally
+        {
+            _isSyncing = false;
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        _dotNetRef?.Dispose();
+    }
+}

@@ -1,9 +1,18 @@
-# OpenCode & OpenWork Asset Collector (Skills, Commands, Agents)
+# OpenCode & OpenWork Hub (C# Blazor WebAssembly)
 
-인터넷(GitHub)의 OpenCode / OpenWork 커뮤니티 저장소들로부터 **스킬(Skills)**, **커맨드(Commands)**, **에이전트(Agents)**를 자동으로 탐색, 수집, 검색, 설치하는 올인원 CLI 도구입니다.
+인터넷(GitHub)의 AI 에이전트 커뮤니티로부터 수집한 6,186개 이상의 **스킬(Skills)**, **커맨드(Commands)**, **에이전트(Agents)**를 탐색, 자연어 AI 시맨틱 검색, 설치할 수 있는 웹 & CLI 플랫폼입니다.
+
+👉 **실시간 라이브 웹 데모**: [https://kurtkim80.github.io/skills/](https://kurtkim80.github.io/skills/)
+
+## ⚡ C# Blazor WebAssembly & In-Browser AI Engine
+- **프론트엔드**: .NET 10 C# Blazor WebAssembly (Apple Human Interface Guidelines 스타일)
+- **자연어 시맨틱 검색**: 
+  - 검색창에 질문 입력 후 **Enter** 키 또는 버튼을 누를 때만 초고속 동작 (글자 입력 렉 제로)
+  - 브라우저 내 경량 AI 모델(`all-MiniLM-L6-v2`)을 통해 자연어 쿼리를 384차원 벡터로 변환
+  - **C# .NET SIMD 가속 (`System.Numerics.Tensors.TensorPrimitives.CosineSimilarity`)**으로 6,186개 에셋 전체를 밀리초(ms) 단위로 실시간 비교 및 유사도 랭킹 산출
+- **100% Client-Side**: 별도의 유료 API 서버 없이 브라우저 단독으로 완전히 구동되며, GitHub Pages에 정적 호스팅됩니다.
 
 ---
-[https://kurtkim80.github.io/skills/]https://kurtkim80.github.io/skills/
 
 ## 🌟 지원하는 에셋 종류
 

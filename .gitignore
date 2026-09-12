@@ -1,3 +1,11 @@
 __pycache__/
 server.log
 .DS_Store
+BlazorHub/bin/
+BlazorHub/obj/
+BlazorHub/publish/
+BlazorHub/.dotnet/
+BlazorHub/.local/
+*.br
+*.gz
+

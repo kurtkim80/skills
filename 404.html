@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenCode &amp; OpenWork Hub (Blazor WebAssembly)</title>
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.write('<base href="/" />');
+        } else {
+            document.write('<base href="/skills/" />');
+        }
+    </script>
+    <link href="_framework/dotnet.4k81owbr43.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-bBbtzZNCzLG1Y4sH7c5opdHYjcre+HuqOO79g+nR6x0=" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="BlazorHub.styles.css" rel="stylesheet" />
+    <script type="importmap">{
+  "imports": {
+    "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.w3qd1tpl0e.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.4k81owbr43.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.vzj2a6aakt.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.zbexyp8zrs.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/blazor.webassembly.js": "sha256-lDXsDYFgm62F+YUvxES7IOTCXYpiHpU3uR45YdC6mq4=",
+    "./_framework/blazor.webassembly.w3qd1tpl0e.js": "sha256-lDXsDYFgm62F+YUvxES7IOTCXYpiHpU3uR45YdC6mq4=",
+    "./_framework/dotnet.4k81owbr43.js": "sha256-bBbtzZNCzLG1Y4sH7c5opdHYjcre+HuqOO79g+nR6x0=",
+    "./_framework/dotnet.js": "sha256-bBbtzZNCzLG1Y4sH7c5opdHYjcre+HuqOO79g+nR6x0=",
+    "./_framework/dotnet.native.js": "sha256-RezASHv+dbqV50cFnld76YiLhk4B+BjMAKs/euUdNyE=",
+    "./_framework/dotnet.native.vzj2a6aakt.js": "sha256-RezASHv+dbqV50cFnld76YiLhk4B+BjMAKs/euUdNyE=",
+    "./_framework/dotnet.runtime.js": "sha256-MZMguyke9CroSQl+L/SHIGFkPTD+LtYGXkXjAvwWx40=",
+    "./_framework/dotnet.runtime.zbexyp8zrs.js": "sha256-MZMguyke9CroSQl+L/SHIGFkPTD+LtYGXkXjAvwWx40="
+  }
+}</script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; color: #f5f5f7; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+            <div style="font-size: 36px; margin-bottom: 16px;"></div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">OpenCode &amp; OpenWork Hub</div>
+            <div style="font-size: 13px; color: #86868b; margin-bottom: 24px;">C# .NET 10 Blazor WebAssembly &amp; SIMD AI Engine 초기화 중...</div>
+            <div class="ai-spinner" style="width: 24px; height: 24px; border-width: 3px;"></div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        오류가 발생했습니다.
+        <a href="." class="reload" style="color: white; text-decoration: underline; margin-left: 8px;">새로고침</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="js/aiSearch.js"></script>
+    <script src="_framework/blazor.webassembly.w3qd1tpl0e.js"></script>
+</body>
+
+</html>
