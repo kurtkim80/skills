@@ -172,6 +172,7 @@ def generate_dashboard():
                 install_cmd = f"mkdir -p ~/.config/opencode/skills/{key} && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/{rel} -o ~/.config/opencode/skills/{key}/SKILL.md"
 
             raw_cards.append({
+                "idx": len(raw_cards),
                 "id": key,
                 "name": name,
                 "type": item_type,
@@ -333,15 +334,15 @@ body {{
 .logo-title {{ font-weight: 600; }}
 .logo-subtitle {{ font-size: 11px; color: var(--text-muted); font-weight: 400; }}
 
-/* ── Search Bar (Apple Pill Style) ─────────────────────── */
-.search-wrap {{ flex: 1; max-width: 420px; position: relative; }}
+/* ── Search Bar (Apple Pill Style & AI Semantic Button) ─── */
+.search-wrap {{ flex: 1; max-width: 480px; position: relative; }}
 .search-input {{
   width: 100%;
   background: var(--segment-bg);
   border: 1px solid transparent;
   color: var(--text);
   border-radius: 980px;
-  padding: 7px 14px 7px 34px;
+  padding: 7px 110px 7px 34px;
   font-size: 13px;
   outline: none;
   font-family: inherit;
@@ -357,6 +358,93 @@ body {{
 .search-icon {{
   position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
   color: var(--text-muted); font-size: 13px; pointer-events: none;
+}}
+.btn-ai-toggle {{
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: 980px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  transition: all .25s ease;
+  user-select: none;
+}}
+.btn-ai-toggle:hover {{
+  color: var(--text);
+  border-color: var(--apple-blue);
+  background: var(--card-hover);
+}}
+.btn-ai-toggle.active {{
+  background: linear-gradient(135deg, #0071e3 0%, #a855f7 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
+}}
+.ai-sparkle {{
+  display: inline-block;
+  transition: transform .3s ease;
+}}
+.btn-ai-toggle.active .ai-sparkle {{
+  animation: ai-pulse-glow 1.5s infinite alternate;
+}}
+@keyframes ai-pulse-glow {{
+  0% {{ transform: scale(1) rotate(0deg); }}
+  100% {{ transform: scale(1.25) rotate(15deg); }}
+}}
+
+.ai-status-bar {{
+  max-width: 1400px;
+  margin: 12px auto 0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  font-size: 12px;
+  color: #c084fc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: apple-toast-in .25s ease-out;
+}}
+[data-theme="light"] .ai-status-bar {{
+  background: rgba(147, 51, 234, 0.08);
+  border-color: rgba(147, 51, 234, 0.2);
+  color: #7e22ce;
+}}
+.ai-status-inner {{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}}
+.ai-spinner {{
+  width: 14px; height: 14px;
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  border-top-color: #a855f7;
+  border-radius: 50%;
+  animation: ai-spin .8s linear infinite;
+  display: inline-block;
+}}
+@keyframes ai-spin {{
+  to {{ transform: rotate(360deg); }}
+}}
+
+.badge-ai-score {{
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  font-weight: 600;
+}}
+[data-theme="light"] .badge-ai-score {{
+  background: rgba(147, 51, 234, 0.1);
+  color: #7e22ce;
+  border-color: rgba(147, 51, 234, 0.25);
 }}
 
 /* ── Header Actions (Apple Capsule Buttons) ─────────────── */
@@ -885,6 +973,10 @@ body {{
     <span class="search-icon">🔍</span>
     <input class="search-input" id="searchInput" type="text"
            placeholder="스킬, 에이전트, 커맨드 검색 (단축키 /)" />
+    <button id="aiToggleBtn" class="btn-ai-toggle" onclick="toggleAiMode()" title="브라우저 내장 AI 벡터 시맨틱 검색 모드">
+      <span class="ai-sparkle">✨</span>
+      <span id="aiToggleText">AI 검색</span>
+    </button>
   </div>
 
   <div class="header-actions">
@@ -902,6 +994,15 @@ body {{
     </div>
   </div>
 </header>
+
+<!-- AI Status Banner (When AI Search Mode is Active) -->
+<div id="aiStatusBar" class="ai-status-bar" style="display: none;">
+  <div class="ai-status-inner">
+    <span class="ai-spinner" id="aiSpinner"></span>
+    <span id="aiStatusText">AI 벡터 엔진 로딩 중...</span>
+  </div>
+  <small style="opacity:0.8;">In-Browser WebAssembly Vector DB (Transformers.js)</small>
+</div>
 
 <!-- Hero Section -->
 <section class="hero">
@@ -990,6 +1091,15 @@ let curCat = 'all';
 let curSearch = '';
 let curCard = null;
 
+/* ── In-Browser Vector AI Search State ───────────────────── */
+let aiMode = false;
+let aiLoaded = false;
+let aiLoading = false;
+let aiVectors = null; // Float32Array (6186 * 384)
+let aiPipelineInstance = null;
+const aiScores = new Map(); // id -> score (float)
+let aiDebounceTimer = null;
+
 /* ── Theme Switcher ────────────────────────────────────── */
 function initTheme() {{
   const saved = localStorage.getItem('opencode_theme') || 'dark';
@@ -1011,19 +1121,168 @@ function setTheme(theme) {{
   }}
 }}
 
+/* ── AI Vector Engine (WASM + Precomputed Embeddings) ───── */
+async function initAiEngine() {{
+  if (aiLoaded || aiLoading) return;
+  aiLoading = true;
+  const statusEl = document.getElementById('aiStatusBar');
+  const textEl = document.getElementById('aiStatusText');
+  statusEl.style.display = 'flex';
+  textEl.textContent = '1/2: 사전 빌드된 6,186개 벡터 데이터베이스 로드 중 (embeddings.bin)...';
+
+  try {{
+    // 1. Fetch precomputed embeddings binary
+    const res = await fetch('embeddings.bin');
+    if (!res.ok) throw new Error('embeddings.bin fetch failed');
+    const buf = await res.arrayBuffer();
+    aiVectors = new Float32Array(buf);
+
+    textEl.textContent = '2/2: 브라우저 WebAssembly AI 모델 로드 중 (all-MiniLM-L6-v2)...';
+
+    // 2. Load Hugging Face Transformers.js in-browser
+    const {{ pipeline, env }} = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+    env.allowLocalModels = false;
+
+    aiPipelineInstance = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {{
+      quantized: true,
+      progress_callback: (d) => {{
+        if (d.status === 'progress' && d.progress) {{
+          textEl.textContent = `AI 모델 다운로드 중 (${{Math.round(d.progress)}}%)...`;
+        }}
+      }}
+    }});
+
+    aiLoaded = true;
+    aiLoading = false;
+    textEl.textContent = '✅ 브라우저 AI 벡터 검색 준비 완료! (6,186개 실시간 유사도 분석)';
+    setTimeout(() => {{
+      if (!curSearch) statusEl.style.display = 'none';
+    }}, 2500);
+
+    if (curSearch) {{
+      runAiSearch(curSearch);
+    }}
+  }} catch (err) {{
+    console.error('AI Engine init error:', err);
+    aiLoading = false;
+    textEl.textContent = '⚠️ AI 모델 로드 실패 (기본 키워드 검색으로 자동 전환됩니다)';
+    setTimeout(() => {{
+      statusEl.style.display = 'none';
+    }}, 4000);
+  }}
+}}
+
+function toggleAiMode() {{
+  aiMode = !aiMode;
+  const btn = document.getElementById('aiToggleBtn');
+  const inp = document.getElementById('searchInput');
+
+  if (aiMode) {{
+    btn.classList.add('active');
+    btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 켜짐</span>';
+    inp.placeholder = "자연어로 질문해보세요 (예: '쿠버네티스 파드 죽었을 때', 'FTP 업로드')";
+    showToast('🧠 AI 시맨틱(벡터) 검색 모드가 활성화되었습니다.');
+    if (!aiLoaded) {{
+      initAiEngine();
+    }} else if (curSearch) {{
+      runAiSearch(curSearch);
+    }}
+  }} else {{
+    btn.classList.remove('active');
+    btn.innerHTML = '<span class="ai-sparkle">✨</span> <span>AI 검색</span>';
+    inp.placeholder = '스킬, 에이전트, 커맨드 검색 (단축키 /)';
+    aiScores.clear();
+    const statusEl = document.getElementById('aiStatusBar');
+    if (statusEl) statusEl.style.display = 'none';
+    render();
+  }}
+}}
+
+async function runAiSearch(query) {{
+  if (!query || !query.trim()) {{
+    aiScores.clear();
+    render();
+    return;
+  }}
+
+  if (!aiLoaded) {{
+    initAiEngine();
+    return;
+  }}
+
+  const statusEl = document.getElementById('aiStatusBar');
+  const textEl = document.getElementById('aiStatusText');
+  statusEl.style.display = 'flex';
+  textEl.textContent = `🧠 "${{query}}" 의미 벡터 계산 및 유사도 랭킹 산출 중...`;
+
+  try {{
+    const t0 = performance.now();
+    // 1. Convert user query to 384-dimensional unit vector
+    const out = await aiPipelineInstance(query.trim(), {{ pooling: 'mean', normalize: true }});
+    const qVec = out.data;
+
+    // 2. Ultra-fast cosine similarity (dot product) against 6,186 precomputed vectors
+    const D = 384;
+    aiScores.clear();
+    const N = DATA.length;
+    for (let i = 0; i < N; i++) {{
+      let sum = 0;
+      const off = i * D;
+      for (let j = 0; j < D; j++) {{
+        sum += qVec[j] * aiVectors[off + j];
+      }}
+      aiScores.set(DATA[i].id, sum);
+    }}
+    const elapsed = (performance.now() - t0).toFixed(1);
+    textEl.textContent = `⚡ 6,186개 에셋 시맨틱 비교 완료 (${{elapsed}}ms)`;
+    setTimeout(() => {{
+      statusEl.style.display = 'none';
+    }}, 2000);
+
+    render();
+  }} catch (e) {{
+    console.error('runAiSearch error:', e);
+  }}
+}}
+
 /* ── Render ────────────────────────────────────────────── */
 function render() {{
-  const q = curSearch.toLowerCase();
-  const filtered = DATA.filter(c => {{
-    const matchCat = curCat === 'all' || c.cat_id === curCat;
-    const matchQ = !q ||
-      c.name.toLowerCase().includes(q) ||
-      (c.desc && c.desc.toLowerCase().includes(q)) ||
-      (c.desc_en && c.desc_en.toLowerCase().includes(q));
-    return matchCat && matchQ;
-  }});
+  let filtered = [];
 
-  document.getElementById('resultsCount').textContent = filtered.length;
+  if (aiMode && aiScores.size > 0 && curSearch.trim()) {{
+    // AI 시맨틱 유사도 기반 랭킹
+    const withScores = DATA.map(c => ({{
+      card: c,
+      score: aiScores.get(c.id) || 0
+    }}));
+    withScores.sort((a, b) => b.score - a.score);
+
+    // 카테고리 필터링 및 유사도 상위 80개 추출 (유사도 0.15 이상)
+    filtered = withScores
+      .filter(item => {{
+        const matchCat = curCat === 'all' || item.card.cat_id === curCat;
+        return matchCat && item.score >= 0.15;
+      }})
+      .slice(0, 80)
+      .map(item => ({{ ...item.card, aiScore: item.score }}));
+
+    document.getElementById('resultsLabel').innerHTML =
+      `🧠 AI 시맨틱 추천: <span id="resultsCount">${{filtered.length}}</span>개 (의미 유사도 순)`;
+  }} else {{
+    // 기본 고속 키워드 검색
+    const q = curSearch.toLowerCase();
+    filtered = DATA.filter(c => {{
+      const matchCat = curCat === 'all' || c.cat_id === curCat;
+      const matchQ = !q ||
+        c.name.toLowerCase().includes(q) ||
+        (c.desc && c.desc.toLowerCase().includes(q)) ||
+        (c.desc_en && c.desc_en.toLowerCase().includes(q));
+      return matchCat && matchQ;
+    }});
+    document.getElementById('resultsLabel').innerHTML =
+      `전체 <span id="resultsCount">${{filtered.length}}</span>개 에셋`;
+  }}
+
   const grid = document.getElementById('grid');
   const empty = document.getElementById('emptyState');
 
@@ -1045,9 +1304,13 @@ function render() {{
       </a>` :
       `<span class="badge-src" title="${{escAttr(c.source)}}">${{escHtml(srcShort)}}</span>`;
 
+    const aiBadge = (typeof c.aiScore === 'number') ?
+      `<span class="badge badge-ai-score" title="시맨틱 코사인 유사도 점수">🧠 AI 매칭 ${{Math.round(c.aiScore * 100)}}%</span>` : '';
+
     return `<div class="card" onclick="openModal('${{escAttr(c.id)}}')">
       <div class="card-badges">
         <span class="badge ${{bClass}}">${{bLabel}}</span>
+        ${{aiBadge}}
         ${{repoBtn}}
       </div>
       <div class="card-cat">${{escHtml(c.cat_label)}}</div>
@@ -1076,7 +1339,12 @@ function setTab(cat) {{
 function onSearch(val) {{
   curSearch = val;
   document.getElementById('searchInput').value = val;
-  render();
+  if (aiMode) {{
+    clearTimeout(aiDebounceTimer);
+    aiDebounceTimer = setTimeout(() => runAiSearch(val), 350);
+  }} else {{
+    render();
+  }}
 }}
 document.getElementById('searchInput').addEventListener('input', e => onSearch(e.target.value));
 
@@ -1085,6 +1353,10 @@ document.addEventListener('keydown', e => {{
   const inp = document.getElementById('searchInput');
   if (e.key === '/' && document.activeElement !== inp) {{
     e.preventDefault(); inp.focus();
+  }}
+  if (e.key === 'Enter' && document.activeElement === inp && aiMode) {{
+    clearTimeout(aiDebounceTimer);
+    runAiSearch(inp.value);
   }}
   if (e.key === 'Escape') closeModal();
 }});
