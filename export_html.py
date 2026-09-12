@@ -1075,7 +1075,7 @@ let curCard = null;
 
 /* ── In-Browser Vector AI Search State ───────────────────── */
 let aiLoaded = false;
-let aiLoading = false;
+let aiInitPromise = null;
 let aiVectors = null; // Float32Array (6186 * 384)
 let aiPipelineInstance = null;
 const aiScores = new Map(); // id -> score (float)
@@ -1102,51 +1102,53 @@ function setTheme(theme) {{
 }}
 
 /* ── AI Vector Engine (WASM + Precomputed Embeddings) ───── */
-async function initAiEngine() {{
-  if (aiLoaded || aiLoading) return;
-  aiLoading = true;
-  const statusEl = document.getElementById('aiStatusBar');
-  const textEl = document.getElementById('aiStatusText');
-  statusEl.style.display = 'flex';
-  textEl.textContent = '1/2: 사전 빌드된 6,186개 벡터 데이터베이스 로드 중 (embeddings.bin)...';
+function initAiEngine() {{
+  if (aiInitPromise) return aiInitPromise;
 
-  try {{
-    // 1. Fetch precomputed embeddings binary
-    const res = await fetch('embeddings.bin');
-    if (!res.ok) throw new Error('embeddings.bin fetch failed');
-    const buf = await res.arrayBuffer();
-    aiVectors = new Float32Array(buf);
+  aiInitPromise = (async () => {{
+    const statusEl = document.getElementById('aiStatusBar');
+    const textEl = document.getElementById('aiStatusText');
+    if (statusEl) statusEl.style.display = 'flex';
+    if (textEl) textEl.textContent = '1/2: 사전 빌드된 6,186개 벡터 데이터베이스 로드 중 (embeddings.bin)...';
 
-    textEl.textContent = '2/2: 브라우저 WebAssembly AI 모델 로드 중 (all-MiniLM-L6-v2)...';
+    try {{
+      // 1. Fetch precomputed embeddings binary
+      const res = await fetch('embeddings.bin');
+      if (!res.ok) throw new Error('embeddings.bin fetch failed');
+      const buf = await res.arrayBuffer();
+      aiVectors = new Float32Array(buf);
 
-    // 2. Load Hugging Face Transformers.js in-browser
-    const {{ pipeline, env }} = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
-    env.allowLocalModels = false;
+      if (textEl) textEl.textContent = '2/2: 브라우저 WebAssembly AI 모델 로드 중 (all-MiniLM-L6-v2)...';
 
-    aiPipelineInstance = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {{
-      quantized: true,
-      progress_callback: (d) => {{
-        if (d.status === 'progress' && d.progress) {{
-          textEl.textContent = `AI 모델 다운로드 중 (${{Math.round(d.progress)}}%)...`;
+      // 2. Load Hugging Face Transformers.js in-browser
+      const {{ pipeline, env }} = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+      env.allowLocalModels = false;
+
+      aiPipelineInstance = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {{
+        quantized: true,
+        progress_callback: (d) => {{
+          if (d.status === 'progress' && d.progress && textEl) {{
+            textEl.textContent = `AI 모델 다운로드 중 (${{Math.round(d.progress)}}%)...`;
+          }}
         }}
-      }}
-    }});
+      }});
 
-    aiLoaded = true;
-    aiLoading = false;
-    textEl.textContent = '✅ 브라우저 AI 벡터 검색 준비 완료! (6,186개 실시간 시맨틱 분석)';
-    setTimeout(() => {{
-      if (!curSearch) statusEl.style.display = 'none';
-    }}, 2500);
+      aiLoaded = true;
+      if (textEl) textEl.textContent = '✅ 브라우저 AI 벡터 검색 준비 완료! (6,186개 실시간 시맨틱 분석)';
+      setTimeout(() => {{
+        if (!curSearch && statusEl) statusEl.style.display = 'none';
+      }}, 2500);
 
-    if (curSearch) {{
-      runAiSearch(curSearch);
+      return true;
+    }} catch (err) {{
+      console.error('AI Engine init error:', err);
+      aiInitPromise = null; // 실패 시 재시도 허용
+      if (textEl) textEl.textContent = '⚠️ AI 모델 로드 실패: 네트워크 연결을 확인하세요.';
+      return false;
     }}
-  }} catch (err) {{
-    console.error('AI Engine init error:', err);
-    aiLoading = false;
-    textEl.textContent = '⚠️ AI 모델 로드 실패: 네트워크 상태를 확인하세요.';
-  }}
+  }})();
+
+  return aiInitPromise;
 }}
 
 async function runAiSearch(query) {{
@@ -1158,15 +1160,18 @@ async function runAiSearch(query) {{
 
   const statusEl = document.getElementById('aiStatusBar');
   const textEl = document.getElementById('aiStatusText');
-  statusEl.style.display = 'flex';
+  if (statusEl) statusEl.style.display = 'flex';
 
   if (!aiLoaded) {{
-    textEl.textContent = `⏳ AI 벡터 엔진 로딩 중... 로드 후 "${{query}}" 검색이 바로 실행됩니다.`;
-    await initAiEngine();
-    if (!aiLoaded) return;
+    if (textEl) textEl.textContent = `⏳ AI 벡터 엔진 로딩 중... 로드 완료 즉시 "${{query}}" 검색이 실행됩니다.`;
+    const ok = await initAiEngine();
+    if (!ok || !aiLoaded) {{
+      if (textEl) textEl.textContent = '⚠️ AI 모델을 불러오지 못했습니다. 네트워크 상태를 확인하세요.';
+      return;
+    }}
   }}
 
-  textEl.textContent = `🧠 "${{query}}" 의미 벡터 계산 및 유사도 랭킹 산출 중...`;
+  if (textEl) textEl.textContent = `🧠 "${{query}}" 의미 벡터 계산 및 유사도 랭킹 산출 중...`;
 
   try {{
     const t0 = performance.now();
@@ -1187,14 +1192,15 @@ async function runAiSearch(query) {{
       aiScores.set(DATA[i].id, sum);
     }}
     const elapsed = (performance.now() - t0).toFixed(1);
-    textEl.textContent = `⚡ 6,186개 에셋 시맨틱 비교 완료 (${{elapsed}}ms)`;
+    if (textEl) textEl.textContent = `⚡ 6,186개 에셋 시맨틱 비교 완료 (${{elapsed}}ms)`;
     setTimeout(() => {{
-      statusEl.style.display = 'none';
+      if (statusEl) statusEl.style.display = 'none';
     }}, 2000);
 
     render();
   }} catch (e) {{
     console.error('runAiSearch error:', e);
+    if (textEl) textEl.textContent = '❌ 검색 중 오류 발생: ' + e;
   }}
 }}
 
@@ -1210,11 +1216,11 @@ function render() {{
     }}));
     withScores.sort((a, b) => b.score - a.score);
 
-    // 카테고리 필터링 및 유사도 상위 80개 추출 (유사도 0.15 이상)
+    // 카테고리 필터링 및 유사도 상위 80개 추출 (점수 0.02 이상으로 가장 유사한 순위 제공)
     filtered = withScores
       .filter(item => {{
         const matchCat = curCat === 'all' || item.card.cat_id === curCat;
-        return matchCat && item.score >= 0.15;
+        return matchCat && item.score > 0.02;
       }})
       .slice(0, 80)
       .map(item => ({{ ...item.card, aiScore: item.score }}));
