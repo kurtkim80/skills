@@ -90,7 +90,7 @@
         }
     </div>
 
-    @if (_displayItems.Count == 0 && SearchService.IsLoaded)
+    @if (_displayItems.Count == 0 && SearchService.IsCatalogLoaded)
     {
         <div class="empty" style="display: block;">
             <div class="empty-icon">🔍</div>
@@ -207,7 +207,7 @@
                         <span class="mac-dot dot-green"></span>
                         <span class="mac-terminal-title">SKILL.md preview</span>
                     </div>
-                    <pre class="modal-content-pre">@(string.IsNullOrEmpty(modal.Content) ? "// 상세 내용 없음" : modal.Content)</pre>
+                    <pre class="modal-content-pre">@_modalContent</pre>
                 </div>
             </div>
 
@@ -234,6 +234,7 @@
     private string _statusText = "";
     private bool _showStatusBar = false;
     private SkillItem? _selectedModalItem;
+    private string _modalContent = "";
     private bool _isModalOpen = false;
     private bool _isCopied = false;
     private string _currentTheme = "dark";
@@ -265,26 +266,14 @@
     {
         _dotNetRef = DotNetObjectReference.Create(this);
 
-        _showStatusBar = true;
-        _isAiWorking = true;
-        _statusText = "스킬 데이터 및 AI 벡터 엔진 초기화 중...";
-
-        await SearchService.EnsureLoadedAsync(status =>
-        {
-            _statusText = status;
-            StateHasChanged();
-        });
-
+        // 1단계: 초경량 4.5MB 카탈로그 먼저 로드하여 즉시 화면 렌더링
+        await SearchService.LoadCatalogAsync();
         _displayItems = SearchService.GetCategoryItems(_selectedCategory);
-        _isAiWorking = false;
 
-        _ = Task.Delay(2500).ContinueWith(_ =>
+        // 2단계: 9.5MB AI 벡터 DB는 백그라운드에서 비동기로 조용히 로드 (화면 블로킹 없음)
+        _ = Task.Run(async () =>
         {
-            if (!_isSearchActive)
-            {
-                _showStatusBar = false;
-                InvokeAsync(StateHasChanged);
-            }
+            await SearchService.EnsureVectorsLoadedAsync();
         });
     }
 
@@ -370,7 +359,7 @@
             {
                 var simdSw = System.Diagnostics.Stopwatch.StartNew();
                 // 2. C# SIMD 가속 TensorPrimitives.CosineSimilarity 로 6,186개 항목 코사인 유사도 랭킹 산출
-                _displayItems = SearchService.Search(qVec, _selectedCategory, limit: 80);
+                _displayItems = await SearchService.SearchAsync(qVec, _selectedCategory, limit: 80);
                 simdSw.Stop();
 
                 _statusText = $"⚡ 6,186개 에셋 C# SIMD 시맨틱 비교 완료 (C# SIMD: {simdSw.Elapsed.TotalMilliseconds:F1}ms, 임베딩: {sw.ElapsedMilliseconds}ms)";
@@ -398,17 +387,24 @@
         StateHasChanged();
     }
 
-    private void OpenModal(SkillItem item)
+    private async Task OpenModal(SkillItem item)
     {
         _selectedModalItem = item;
         _isModalOpen = true;
         _isCopied = false;
+        _modalContent = "⏳ 상세 사양 불러오는 중...";
+        StateHasChanged();
+
+        // 3단계: 모달을 열었을 때만 온디맨드로 상세 마크다운 파일(1~3KB) 비동기 로드
+        _modalContent = await SearchService.GetContentAsync(item);
+        StateHasChanged();
     }
 
     private void CloseModal()
     {
         _isModalOpen = false;
         _selectedModalItem = null;
+        _modalContent = "";
     }
 
     private async Task CopyModalInstall(string cmd)

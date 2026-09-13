@@ -37,6 +37,9 @@ public class SkillItem
     [JsonPropertyName("install")]
     public string Install { get; set; } = string.Empty;
 
+    [JsonPropertyName("doc")]
+    public string Doc { get; set; } = string.Empty;
+
     [JsonIgnore]
     public float AiScore { get; set; } = 0f;
 }
