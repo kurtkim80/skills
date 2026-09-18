@@ -1,343 +1,164 @@
 ---
 name: security-scan
-description: >-
-  Security scan: scan code for security vulnerabilities including OWASP Top 10, secrets,
-  and misconfigurations, with severity thresholds. Use when you need comprehensive
-  security analysis of a codebase.
-slug: security-scan
-version: 1.0.0
-displayName: security-scan
+description: AgentShield を使用して、Claude Code の設定（.claude/ ディレクトリ）のセキュリティ脆弱性、設定ミス、インジェクションリスクをスキャンします。CLAUDE.md、settings.json、MCP サーバー、フック、エージェント定義をチェックします。
 ---
 
-# Security Scan
+# Security Scan Skill
 
-Comprehensive security vulnerability detection for codebases.
+[AgentShield](https://github.com/affaan-m/agentshield) を使用して、Claude Code の設定のセキュリティ問題を監査します。
 
-## Quick Start
+## 起動タイミング
 
-```
-/security-scan                    # Full scan of current directory
-/security-scan --scope src/       # Scan specific directory
-/security-scan --quick            # Fast scan (critical issues only)
-/security-scan --focus injection  # Focus on specific category
-```
+- 新しい Claude Code プロジェクトのセットアップ時
+- `.claude/settings.json`、`CLAUDE.md`、または MCP 設定の変更後
+- 設定変更をコミットする前
+- 既存の Claude Code 設定を持つ新しいリポジトリにオンボーディングする際
+- 定期的なセキュリティ衛生チェック
 
-## What This Skill Does
+## スキャン対象
 
-Analyzes code for security vulnerabilities across multiple categories:
+| ファイル | チェック内容 |
+|------|--------|
+| `CLAUDE.md` | ハードコードされたシークレット、自動実行命令、プロンプトインジェクションパターン |
+| `settings.json` | 過度に寛容な許可リスト、欠落した拒否リスト、危険なバイパスフラグ |
+| `mcp.json` | リスクのある MCP サーバー、ハードコードされた環境シークレット、npx サプライチェーンリスク |
+| `hooks/` | 補間によるコマンドインジェクション、データ流出、サイレントエラー抑制 |
+| `agents/*.md` | 無制限のツールアクセス、プロンプトインジェクション表面、欠落したモデル仕様 |
 
-1. **OWASP Top 10** - Industry-standard web vulnerability categories
-2. **Secrets Detection** - Hardcoded credentials, API keys, tokens
-3. **Injection Flaws** - SQL, XSS, command injection patterns
-4. **Cryptographic Issues** - Weak algorithms, insecure implementations
-5. **Configuration Problems** - Insecure defaults, misconfigurations
+## 前提条件
 
-## Scan Modes
+AgentShield がインストールされている必要があります。確認し、必要に応じてインストールします：
 
-### Full Scan (Default)
-Comprehensive analysis of all security categories.
+```bash
+# インストール済みか確認
+npx ecc-agentshield --version
 
-```
-/security-scan
-```
+# グローバルにインストール（推奨）
+npm install -g ecc-agentshield
 
-**Checks performed:**
-- All OWASP Top 10 categories
-- Secrets and credential detection
-- Dependency vulnerabilities (if package files exist)
-- Configuration file review
-
-**Duration:** 2-5 minutes depending on codebase size
-
-### Quick Scan
-Fast check for critical and high-severity issues only.
-
-```
-/security-scan --quick
+# または npx 経由で直接実行（インストール不要）
+npx ecc-agentshield scan .
 ```
 
-**Checks performed:**
-- Critical injection patterns
-- Exposed secrets
-- Known dangerous functions
+## 使用方法
 
-**Duration:** Under 1 minute
+### 基本スキャン
 
-### Focused Scan
-Target specific vulnerability category.
+現在のプロジェクトの `.claude/` ディレクトリに対して実行します：
 
-```
-/security-scan --focus <category>
-```
+```bash
+# 現在のプロジェクトをスキャン
+npx ecc-agentshield scan
 
-**Categories:**
-- `injection` - SQL, XSS, command injection
-- `secrets` - Credentials, API keys, tokens
-- `crypto` - Cryptographic weaknesses
-- `auth` - Authentication/authorization issues
-- `config` - Configuration security
+# 特定のパスをスキャン
+npx ecc-agentshield scan --path /path/to/.claude
 
-## Output Format
-
-### Severity Levels
-
-| Level | Icon | Meaning | Action Required |
-|-------|------|---------|-----------------|
-| CRITICAL | `[!]` | Exploitable vulnerability | Immediate fix |
-| HIGH | `[H]` | Serious security risk | Fix before deploy |
-| MEDIUM | `[M]` | Potential vulnerability | Plan to address |
-| LOW | `[L]` | Minor issue or hardening | Consider fixing |
-| INFO | `[i]` | Informational finding | Awareness only |
-
-### Finding Format
-
-```
-[SEVERITY] CATEGORY: Brief description
-  File: path/to/file.ext:line
-  Pattern: What was detected
-  Risk: Why this is dangerous
-  Fix: How to remediate
+# 最小深刻度フィルタでスキャン
+npx ecc-agentshield scan --min-severity medium
 ```
 
-### Summary Report
+### 出力フォーマット
 
-```
-SECURITY SCAN RESULTS
-=====================
+```bash
+# ターミナル出力（デフォルト） — グレード付きのカラーレポート
+npx ecc-agentshield scan
 
-Scope: src/
-Files scanned: 127
-Duration: 45 seconds
+# JSON — CI/CD 統合用
+npx ecc-agentshield scan --format json
 
-FINDINGS BY SEVERITY
-  Critical: 2
-  High: 5
-  Medium: 12
-  Low: 8
+# Markdown — ドキュメント用
+npx ecc-agentshield scan --format markdown
 
-TOP ISSUES
-1. [!] SQL Injection in src/api/users.ts:45
-2. [!] Hardcoded AWS key in src/config.ts:12
-3. [H] XSS vulnerability in src/components/Comment.tsx:89
-...
-
-Run `/security-scan --details` for full report.
+# HTML — 自己完結型のダークテーマレポート
+npx ecc-agentshield scan --format html > security-report.html
 ```
 
-## OWASP Top 10 Coverage
+### 自動修正
 
-| # | Category | Detection Approach |
-|---|----------|-------------------|
-| A01 | Broken Access Control | Authorization pattern analysis |
-| A02 | Cryptographic Failures | Weak crypto detection |
-| A03 | Injection | Pattern matching + data flow |
-| A04 | Insecure Design | Security control gaps |
-| A05 | Security Misconfiguration | Config file analysis |
-| A06 | Vulnerable Components | Dependency scanning |
-| A07 | Auth Failures | Auth pattern review |
-| A08 | Data Integrity Failures | Deserialization checks |
-| A09 | Logging Failures | Audit log analysis |
-| A10 | SSRF | Request pattern detection |
+安全な修正を自動的に適用します（自動修正可能とマークされた修正のみ）：
 
-See `references/owasp/` for detailed detection rules per category.
-
-## Detection Patterns
-
-### Injection Detection
-
-**SQL Injection:**
-```
-- String concatenation in queries
-- Unsanitized user input in database calls
-- Dynamic query construction
+```bash
+npx ecc-agentshield scan --fix
 ```
 
-**Cross-Site Scripting (XSS):**
-```
-- innerHTML assignments with user data
-- document.write() with dynamic content
-- Unescaped template interpolation
+これにより以下が実行されます：
+- ハードコードされたシークレットを環境変数参照に置き換え
+- ワイルドカード権限をスコープ付き代替に厳格化
+- 手動のみの提案は変更しない
+
+### Opus 4.6 ディープ分析
+
+より深い分析のために敵対的な3エージェントパイプラインを実行します：
+
+```bash
+# ANTHROPIC_API_KEY が必要
+export ANTHROPIC_API_KEY=your-key
+npx ecc-agentshield scan --opus --stream
 ```
 
-**Command Injection:**
-```
-- exec(), system(), popen() with user input
-- Shell command string construction
-- Unsanitized subprocess arguments
+これにより以下が実行されます：
+1. **攻撃者（レッドチーム）** — 攻撃ベクトルを発見
+2. **防御者（ブルーチーム）** — 強化を推奨
+3. **監査人（最終判定）** — 両方の観点を統合
+
+### 安全な設定の初期化
+
+新しい安全な `.claude/` 設定をゼロから構築します：
+
+```bash
+npx ecc-agentshield init
 ```
 
-See `references/patterns/` for language-specific patterns.
+作成されるもの：
+- スコープ付き権限と拒否リストを持つ `settings.json`
+- セキュリティベストプラクティスを含む `CLAUDE.md`
+- `mcp.json` プレースホルダー
 
-### Secrets Detection
+### GitHub Action
 
-**High-Confidence Patterns:**
-```
-AWS Access Key:     AKIA[0-9A-Z]{16}
-AWS Secret Key:     [A-Za-z0-9/+=]{40}
-GitHub Token:       gh[pousr]_[A-Za-z0-9]{36,}
-Stripe Key:         sk_live_[A-Za-z0-9]{24,}
-Private Key:        -----BEGIN (RSA |EC )?PRIVATE KEY-----
-```
-
-**Medium-Confidence Patterns:**
-```
-Generic API Key:    api[_-]?key.*[=:]\s*['"][a-zA-Z0-9]{16,}
-Password in Code:   password\s*[=:]\s*['"][^'"]+['"]
-Connection String:  (mysql|postgres|mongodb)://[^:]+:[^@]+@
-```
-
-### Cryptographic Weaknesses
-
-**Weak Algorithms:**
-```
-- MD5 for password hashing
-- SHA1 for security purposes
-- DES/3DES encryption
-- RC4 stream cipher
-```
-
-**Implementation Issues:**
-```
-- Hardcoded encryption keys
-- Weak random number generation
-- Missing salt in password hashing
-- ECB mode encryption
-```
-
-## Integration with Other Skills
-
-### With `/secrets-scan`
-Focused deep-dive on credential detection:
-```
-/secrets-scan              # Dedicated secrets analysis
-/secrets-scan --entropy    # High-entropy string detection
-```
-
-### With `/dependency-scan`
-Package vulnerability analysis:
-```
-/dependency-scan           # Check all dependencies
-/dependency-scan --fix     # Auto-fix where possible
-```
-
-### With `/config-scan`
-Infrastructure and configuration review:
-```
-/config-scan               # All config files
-/config-scan --docker      # Container security
-/config-scan --iac         # Infrastructure as Code
-```
-
-## Scan Execution Protocol
-
-### Phase 1: Discovery
-```
-1. Identify project type (languages, frameworks)
-2. Locate relevant files (source, config, dependencies)
-3. Determine applicable security rules
-```
-
-### Phase 2: Static Analysis
-```
-1. Pattern matching for known vulnerabilities
-2. Data flow analysis for injection paths
-3. Configuration review
-```
-
-### Phase 3: Secrets Scanning
-```
-1. High-confidence pattern matching
-2. Entropy analysis for potential secrets
-3. Git history check (optional)
-```
-
-### Phase 4: Dependency Analysis
-```
-1. Parse package manifests
-2. Check against vulnerability databases
-3. Identify outdated packages
-```
-
-### Phase 5: Reporting
-```
-1. Deduplicate findings
-2. Assign severity scores
-3. Generate actionable report
-4. Provide remediation guidance
-```
-
-## Configuration
-
-### Project-Level Config
-
-Create `.security-scan.yaml` in project root:
+CI パイプラインに追加します：
 
 ```yaml
-# Scan configuration
-scan:
-  exclude:
-    - "node_modules/**"
-    - "vendor/**"
-    - "**/*.test.ts"
-    - "**/__mocks__/**"
-
-# Severity thresholds
-thresholds:
-  fail_on: critical    # critical, high, medium, low
-  warn_on: medium
-
-# Category toggles
-categories:
-  injection: true
-  secrets: true
-  crypto: true
-  auth: true
-  config: true
-  dependencies: true
-
-# Custom patterns
-patterns:
-  secrets:
-    - name: "Internal API Key"
-      pattern: "INTERNAL_[A-Z]{3}_KEY_[a-zA-Z0-9]{32}"
-      severity: high
+- uses: affaan-m/agentshield@v1
+  with:
+    path: '.'
+    min-severity: 'medium'
+    fail-on-findings: true
 ```
 
-### Ignore Patterns
+## 深刻度レベル
 
-Create `.security-scan-ignore` for false positives:
+| グレード | スコア | 意味 |
+|-------|-------|---------|
+| A | 90-100 | 安全な設定 |
+| B | 75-89 | 軽微な問題 |
+| C | 60-74 | 注意が必要 |
+| D | 40-59 | 重大なリスク |
+| F | 0-39 | クリティカルな脆弱性 |
 
-```
-# Ignore specific files
-src/test/fixtures/mock-credentials.ts
+## 結果の解釈
 
-# Ignore specific lines (use inline comment)
-# security-scan-ignore: test fixture
-const mockApiKey = "sk_test_fake123";
-```
+### クリティカルな発見（即座に修正）
+- 設定ファイル内のハードコードされた API キーまたはトークン
+- 許可リスト内の `Bash(*)`（無制限のシェルアクセス）
+- `${file}` 補間によるフック内のコマンドインジェクション
+- シェルを実行する MCP サーバー
 
-## Command Reference
+### 高い発見（本番前に修正）
+- CLAUDE.md 内の自動実行命令（プロンプトインジェクションベクトル）
+- 権限内の欠落した拒否リスト
+- 不要な Bash アクセスを持つエージェント
 
-| Command | Description |
-|---------|-------------|
-| `/security-scan` | Full security scan |
-| `/security-scan --quick` | Critical issues only |
-| `/security-scan --scope <path>` | Scan specific path |
-| `/security-scan --focus <cat>` | Single category |
-| `/security-scan --details` | Verbose output |
-| `/security-scan --json` | JSON output |
-| `/security-scan --fix` | Auto-fix where possible |
+### 中程度の発見（推奨）
+- フック内のサイレントエラー抑制（`2>/dev/null`、`|| true`）
+- 欠落した PreToolUse セキュリティフック
+- MCP サーバー設定内の `npx -y` 自動インストール
 
-## Related Skills
+### 情報の発見（認識）
+- MCP サーバーの欠落した説明
+- 正しくフラグ付けされた禁止命令（グッドプラクティス）
 
-- `/secrets-scan` - Deep secrets detection
-- `/dependency-scan` - Package vulnerability analysis
-- `/config-scan` - Configuration security review
-- `/review-code` - General code review (includes security)
+## リンク
 
-## References
-
-- `references/owasp/` - OWASP Top 10 detection details
-- `references/patterns/` - Language-specific vulnerability patterns
-- `references/remediation/` - Fix guidance by vulnerability type
-- `assets/severity-matrix.md` - Severity scoring criteria
+- **GitHub**: [github.com/affaan-m/agentshield](https://github.com/affaan-m/agentshield)
+- **npm**: [npmjs.com/package/ecc-agentshield](https://www.npmjs.com/package/ecc-agentshield)

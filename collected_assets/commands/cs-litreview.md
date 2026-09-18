@@ -1,9 +1,15 @@
 ---
-name: "cs-litreview"
-description: "/cs:litreview <research-question> — Academic literature orientation. Grill-me intake (question + framework + depth), free-lane recon (PubMed E-utilities + OpenAlex, keyless; Consensus MCP added only when connected), framework checkpoint, sequential budget-allocated searches (5/10/20), 8-section .docx research guide output. Sibling of /cs:pulse (research pack)."
+title: "/cs-litreview — Slash Command for AI Coding Agents"
+description: "/cs:litreview <research-question> — Academic literature orientation. Grill-me intake (question + framework + depth), free-lane recon (PubMed. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:litreview — Academic Literature Orientation
+# /cs-litreview
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/litreview/commands/cs-litreview.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:litreview <research question>`
 
@@ -133,8 +139,8 @@ python ../skills/litreview/scripts/citation_tracker.py --action close --session 
 
 ## Related
 
-- Agent: [`cs-litreview`](../agents/cs-litreview.md)
-- Skill: [`litreview`](../skills/litreview/SKILL.md)
+- Agent: [`cs-litreview`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md)
+- Skill: [`litreview`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/SKILL.md)
 - Source spec: `megaprompts/09-litreview-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling: `/cs:pulse` (research pack)
 - Future siblings: `/cs:grants`, `/cs:patent`, `/cs:dossier`, `/cs:syllabus`

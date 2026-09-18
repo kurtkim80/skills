@@ -1,9 +1,15 @@
 ---
-description: Spend categorization + supplier rationalization + purchasing-cycle analysis. NOT vendor performance scoring (sibling vendor-management). NOT financial close (finance). Direct invocation of the procurement-optimizer skill.
-argument-hint: "<spend export path or category to analyze>"
+title: "/cs-procurement — Slash Command for AI Coding Agents"
+description: "Spend categorization + supplier rationalization + purchasing-cycle analysis. NOT vendor performance scoring (sibling vendor-management). NOT. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:procurement — Spend audit + supplier consolidation
+# /cs-procurement
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-procurement.md">Source</a></span>
+</div>
+
 
 Run the `procurement-optimizer` skill on this input:
 

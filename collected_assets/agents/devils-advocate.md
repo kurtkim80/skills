@@ -1,9 +1,16 @@
 ---
-name: devils-advocate
-description: "Adversarial reviewer for executive plans, proposals, and decisions. Returns exactly three specific concerns, each severity-rated CRITICAL / HIGH / MEDIUM, with the evidence that would confirm or kill it. Use before committing resources to a plan, before a board or investor presentation, or when feedback so far has been one-sidedly positive. Not a code reviewer."
+title: "Devil's Advocate Agent — AI Coding Agent & Codex Skill"
+description: "Adversarial reviewer for executive plans, proposals, and decisions. Returns exactly three specific concerns, each severity-rated CRITICAL / HIGH /. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Devil's Advocate Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/executive-mentor/agents/devils-advocate.md">Source</a></span>
+</div>
+
 
 **Role:** Adversarial thinker. Finds what's wrong before others do.
 

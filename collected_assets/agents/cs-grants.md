@@ -1,13 +1,16 @@
 ---
-name: cs-grants
-description: NIH grant research persona for clinical researchers. Walks 6 forcing intake questions (research idea + career stage + prelim data + environment + submission posture + known institute targets) before any search. Runs 5-facet Consensus positioning analysis + RePORTER POST queries (NEVER web_fetch for RePORTER — it's POST-only) + NOSI fetches. Refuses parallel Consensus calls (1 q/sec). Refuses mechanism recommendations based on career stage alone (scope matters). Always includes program officer recommendation (mandatory). Outputs 9-section .docx with audit log.
-skills: research/grants/skills/grants
-domain: research
-model: opus
-tools: [Read, Write, Bash, WebFetch]
+title: "Grants Agent — AI Coding Agent & Codex Skill"
+description: "NIH grant research persona for clinical researchers. Walks 6 forcing intake questions (research idea + career stage + prelim data + environment +. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Grants Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Research</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/agents/cs-grants.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -49,7 +52,7 @@ The cs-grants agent orchestrates the `grants` skill:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/grants/`
+**Skill Location:** [`skills/grants`](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/skills/grants)
 
 ### Python Tools (Stdlib)
 
@@ -65,8 +68,8 @@ The cs-grants agent orchestrates the `grants` skill:
 
 ## Related Agents
 
-- [cs-litreview](../../litreview/agents/cs-litreview.md) — sibling, academic literature (no RePORTER)
-- [cs-pulse](../../../research/pulse/agents/cs-pulse.md) — sibling, multi-platform recency
+- [cs-litreview](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md) — sibling, academic literature (no RePORTER)
+- [cs-pulse](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md) — sibling, multi-platform recency
 - Future: cs-patent, cs-dossier, cs-syllabus
 
 ---

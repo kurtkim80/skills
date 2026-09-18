@@ -1,9 +1,15 @@
 ---
-name: "cs-research"
-description: "/cs:research <question> — Default research entry point. Hybrid router: classifies question deterministically and either delegates to specialist (pulse / grants / litreview / dossier / patent / syllabus) OR runs own plan-decompose-search-synthesize fallback. Always surfaces routing decision; accepts override. NEVER silent delegation."
+title: "/cs-research — Slash Command for AI Coding Agents"
+description: "/cs:research <question> — Default research entry point. Hybrid router: classifies question deterministically and either delegates to specialist. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:research — Hybrid Research Router + Fallback
+# /cs-research
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/research/commands/cs-research.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:research <research question>`
 
@@ -157,8 +163,8 @@ python ../skills/research/scripts/fallback_decomposer.py --question "<Q1>"
 
 ## Related
 
-- Agent: [`cs-research`](../agents/cs-research.md)
-- Skill: [`research`](../skills/research/SKILL.md)
+- Agent: [`cs-research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/research/agents/cs-research.md)
+- Skill: [`research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/research/skills/research/SKILL.md)
 - Source spec: `megaprompts/13-research-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Routing targets: `/cs:pulse`, `/cs:litreview`, `/cs:grants`, `/cs:dossier`, `/cs:patent`, `/cs:syllabus`
 - Adjacent (NOT a routing target): `/cs:notebooklm` (different mode), `engineering/autoresearch-agent` (different use case)

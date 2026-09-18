@@ -1,15 +1,9 @@
 ---
-title: "/cs-grill-pm — Slash Command for AI Coding Agents"
-description: "Matt Pocock-style interrogation of a delivery plan against the PM canon (Kanban Guide 2025, Vacanti, DORA 2025, EBM, Klein, GitLab async-first). One. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Matt Pocock-style interrogation of a delivery plan against the PM canon (Kanban Guide 2025, Vacanti, DORA 2025, EBM, Klein, GitLab async-first). One forcing question per turn with a recommended answer; refuses to invoke any sub-skill or start a loop until the lane-defining decisions are locked. Use before running /cs:pm or /cs:pm-loop on a fuzzy plan.
+argument-hint: "<delivery plan, goal, or status quo to interrogate>"
 ---
 
-# /cs-grill-pm
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/project-management/commands/cs-grill-pm.md">Source</a></span>
-</div>
-
+# /cs:grill-pm — grill a delivery plan before running it
 
 Interrogate this plan — do not execute anything yet:
 

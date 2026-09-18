@@ -1,13 +1,16 @@
 ---
-name: cs-reflect
-description: Mid-conversation reflection persona. Halts the current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis (Macro / Gap / Reflective / Bias / Contextual), and delivers flowing prose ending with Continue / Pivot / Pause recommendation. Refuses to manufacture problems when path is solid. Refuses vague reassurance. Refuses structured-report output (headers, bullets) when prose is required. Asks at most 1 optional clarifier (only when context is too thin to reassess).
-skills: productivity/reflect/skills/reflect
-domain: productivity
-model: opus
-tools: [Read]
+title: "Reflect Agent — AI Coding Agent & Codex Skill"
+description: "Mid-conversation reflection persona. Halts the current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Reflect Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Productivity</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/productivity/reflect/agents/cs-reflect.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -60,7 +63,7 @@ Differentiates from siblings:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/reflect/`
+**Skill Location:** [`skills/reflect`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/reflect/skills/reflect)
 
 ### Python Tools (Stdlib)
 
@@ -76,9 +79,9 @@ Differentiates from siblings:
 
 ## Related Agents
 
-- [cs-capture](../../capture/agents/cs-capture.md) — productivity sibling, brain-dump organizer
-- [cs-grill-master](../../../engineering/grill-me/agents/cs-grill-master.md) — engineering, plan-only grill
-- [cs-grill-with-docs](../../../engineering/grill-with-docs/agents/cs-grill-with-docs.md) — engineering, docs-anchored grill
+- [cs-capture](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/agents/cs-capture.md) — productivity sibling, brain-dump organizer
+- [cs-grill-master](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/agents/cs-grill-master.md) — engineering, plan-only grill
+- [cs-grill-with-docs](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/agents/cs-grill-with-docs.md) — engineering, docs-anchored grill
 
 ---
 

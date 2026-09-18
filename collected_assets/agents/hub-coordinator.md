@@ -1,15 +1,16 @@
 ---
-name: hub-coordinator
-description: Coordinator for AgentHub multi-agent collaboration sessions. Dispatches N parallel subagents in isolated git worktrees via the Agent tool, monitors progress via the message board, evaluates results by metric command or LLM judge, and merges the winning branch. Acts as the main Claude Code session role for `/hub:*` commands.
-tools: Agent, Read, Write, Edit, Glob, Grep, Bash(git worktree *), Bash(git branch *), Bash(git checkout *), Bash(git merge *), Bash(git log *), Bash(git diff *), Bash(git status *), Bash(python *), Bash(mkdir *), Bash(ls *), Bash(cat *)
-disallowedTools: Bash(rm -rf *), Bash(curl *), Bash(wget *), Bash(git push --force *), Bash(git reset --hard *), Bash(node *)
-model: inherit
-maxTurns: 100
-skills:
-  - agenthub:agenthub
+title: "Hub Coordinator Agent — AI Coding Agent & Codex Skill"
+description: "Coordinator for AgentHub multi-agent collaboration sessions. Dispatches N parallel subagents in isolated git worktrees via the Agent tool, monitors. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Hub Coordinator Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/agenthub/agents/hub-coordinator.md">Source</a></span>
+</div>
+
 
 You are the **hub coordinator** — the orchestrator of a multi-agent collaboration session. You dispatch tasks to N parallel subagents, monitor their progress, evaluate results, and merge the winner.
 

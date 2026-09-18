@@ -2912,6 +2912,12 @@
           "type": "file",
           "required": false,
           "description": "Preview watermark image applied to all bundle items."
+        },
+        {
+          "name": "--watermark-value",
+          "type": "object",
+          "required": false,
+          "description": "Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value"
         }
       ]
     },
@@ -3138,6 +3144,12 @@
           "type": "file",
           "required": false,
           "description": "Preview watermark image applied to all bundle items."
+        },
+        {
+          "name": "--watermark-value",
+          "type": "object",
+          "required": false,
+          "description": "Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value"
         },
         {
           "name": "--workspace-id",
@@ -3487,6 +3499,26 @@
           "type": "int64",
           "required": true,
           "description": "Custom Domain ID."
+        }
+      ]
+    },
+    {
+      "name": "custom-domains create-allocate-ip",
+      "group": "custom-domains",
+      "description": "Allocate dedicated IP addresses to this Custom Domain",
+      "auth_required": true,
+      "parameters": [
+        {
+          "name": "--id",
+          "type": "int64",
+          "required": true,
+          "description": "Custom Domain ID."
+        },
+        {
+          "name": "--count",
+          "type": "int64",
+          "required": true,
+          "description": "Number of dedicated IP addresses to allocate."
         }
       ]
     },
@@ -5176,6 +5208,12 @@
           "description": "Path to operate on."
         },
         {
+          "name": "--custom-metadata",
+          "type": "object",
+          "required": false,
+          "description": "Custom metadata map to save when `action=end` completes the upload.  Replaces existing metadata; an empty map clears it.  No separate metadata-edit permission is required.  Supported on native files and configured remote mounts, excluding remote server automount paths.  Limited to 32 keys, 256 characters per key and 1024 characters per value."
+        },
+        {
           "name": "--length",
           "type": "int64",
           "required": false,
@@ -6386,6 +6424,12 @@
           "description": "If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level."
         },
         {
+          "name": "--s3-compatible-endpoint-permission",
+          "type": "bool",
+          "required": false,
+          "description": "If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false."
+        },
+        {
           "name": "--desktop-configuration-profile-id",
           "type": "int64",
           "required": false,
@@ -6476,6 +6520,12 @@
           "type": "bool",
           "required": false,
           "description": "If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level."
+        },
+        {
+          "name": "--s3-compatible-endpoint-permission",
+          "type": "bool",
+          "required": false,
+          "description": "If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false."
         },
         {
           "name": "--desktop-configuration-profile-id",
@@ -6835,7 +6885,7 @@
           "name": "--query-failure-type",
           "type": "string",
           "required": false,
-          "description": "If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`, `insecure_ftp`, `insecure_cipher`, `rate_limited`"
+          "description": "If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`, `insecure_ftp`, `insecure_cipher`, `rate_limited`, `no_s3_compatible_endpoint_permission`"
         },
         {
           "name": "--query-target-id",
@@ -10505,86 +10555,6 @@
       ]
     },
     {
-      "name": "remote-servers configuration-file",
-      "group": "remote-servers",
-      "description": "Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)",
-      "auth_required": false,
-      "parameters": [
-        {
-          "name": "--id",
-          "type": "int64",
-          "required": true,
-          "description": "Remote Server ID."
-        },
-        {
-          "name": "--api-token",
-          "type": "string",
-          "required": false,
-          "description": "Files Agent API Token"
-        },
-        {
-          "name": "--permission-set",
-          "type": "string",
-          "required": false,
-          "description": "The permission set for the agent ['read_write', 'read_only', 'write_only']"
-        },
-        {
-          "name": "--root",
-          "type": "string",
-          "required": false,
-          "description": "The root directory for the agent"
-        },
-        {
-          "name": "--hostname",
-          "type": "string",
-          "required": false,
-          "description": ""
-        },
-        {
-          "name": "--port",
-          "type": "int64",
-          "required": false,
-          "description": "Incoming port for files agent connections"
-        },
-        {
-          "name": "--status",
-          "type": "string",
-          "required": false,
-          "description": "either running or shutdown"
-        },
-        {
-          "name": "--config-version",
-          "type": "string",
-          "required": false,
-          "description": "agent config version"
-        },
-        {
-          "name": "--private-key",
-          "type": "string",
-          "required": false,
-          "description": "The private key for the agent"
-        },
-        {
-          "name": "--public-key",
-          "type": "string",
-          "required": false,
-          "description": "public key"
-        },
-        {
-          "name": "--server-host-key",
-          "type": "string",
-          "required": false,
-          "description": ""
-        },
-        {
-          "name": "--subdomain",
-          "type": "string",
-          "required": false,
-          "description": "Files.com subdomain site name"
-        }
-      ]
-    },
-    {
       "name": "remote-servers update",
       "group": "remote-servers",
       "description": "Update Remote Server",
@@ -11939,6 +11909,12 @@
           "description": "If true, use this SFTP Host Key."
         },
         {
+          "name": "--custom-domain-id",
+          "type": "int64",
+          "required": false,
+          "description": "Custom Domain ID. If set, this key is used only for that Custom Domain."
+        },
+        {
           "name": "--name",
           "type": "string",
           "required": false,
@@ -11969,6 +11945,12 @@
           "type": "bool",
           "required": false,
           "description": "If true, use this SFTP Host Key."
+        },
+        {
+          "name": "--custom-domain-id",
+          "type": "int64",
+          "required": false,
+          "description": "Custom Domain ID. If set, this key is used only for that Custom Domain."
         },
         {
           "name": "--name",
@@ -13580,12 +13562,6 @@
           "description": "Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period."
         },
         {
-          "name": "--bundle-watermark-value",
-          "type": "object",
-          "required": false,
-          "description": "Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value"
-        },
-        {
           "name": "--group-admins-can-add-users",
           "type": "bool",
           "required": false,
@@ -13914,6 +13890,12 @@
           "type": "bool",
           "required": false,
           "description": "Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?"
+        },
+        {
+          "name": "--bundle-watermark-value",
+          "type": "object",
+          "required": false,
+          "description": "Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value"
         },
         {
           "name": "--icon16-file",
@@ -15753,6 +15735,12 @@
           "description": "Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)"
         },
         {
+          "name": "--s3-compatible-endpoint-permission",
+          "type": "bool",
+          "required": false,
+          "description": "Can the user access the S3-compatible endpoint? Defaults to true."
+        },
+        {
           "name": "--self-managed",
           "type": "bool",
           "required": false,
@@ -16215,6 +16203,12 @@
           "type": "bool",
           "required": false,
           "description": "Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)"
+        },
+        {
+          "name": "--s3-compatible-endpoint-permission",
+          "type": "bool",
+          "required": false,
+          "description": "Can the user access the S3-compatible endpoint? Defaults to true."
         },
         {
           "name": "--self-managed",

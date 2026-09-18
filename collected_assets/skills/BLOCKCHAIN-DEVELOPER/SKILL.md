@@ -1,9 +1,11 @@
 ---
 name: blockchain-developer
-description: Build production-ready Web3 applications, smart contracts, and decentralized systems. Implements DeFi protocols, NFT platforms, DAOs, and enterprise blockchain integrations.
-risk: critical
-source: community
-date_added: '2026-02-27'
+description: Build production-ready Web3 applications, smart contracts, and
+  decentralized systems. Implements DeFi protocols, NFT platforms, DAOs, and
+  enterprise blockchain integrations. Use PROACTIVELY for smart contracts, Web3
+  apps, DeFi protocols, or blockchain infrastructure.
+metadata:
+  model: opus
 ---
 
 ## Use this skill when
@@ -204,8 +206,3 @@ Expert blockchain developer specializing in smart contract development, DeFi pro
 - "Create a multi-signature treasury management system with time-locked transactions"
 - "Build a decentralized social media platform with token-based incentives"
 - "Implement a blockchain voting system with zero-knowledge privacy preservation"
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

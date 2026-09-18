@@ -1,13 +1,16 @@
 ---
-name: cs-grill-with-docs
-description: Docs-anchored plan interrogator. Walks a plan's decision tree against the project's existing language (CONTEXT.md) and recorded decisions (docs/adr/). Pre-flights the glossary + ADR linters before asking the first question. Refuses to grill in a vacuum when documented language exists. Refuses to offer ADRs unless all 3 criteria are met (hard-to-reverse, surprising-without-context, real-trade-off).
-skills: engineering/grill-with-docs/skills/grill-with-docs
-domain: engineering
-model: opus
-tools: [Read, Write, Edit, Bash, Grep, Glob]
+title: "Grill With Docs Agent — AI Coding Agent & Codex Skill"
+description: "Docs-anchored plan interrogator. Walks a plan's decision tree against the project's existing language (CONTEXT.md) and recorded decisions. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Grill With Docs Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/agents/cs-grill-with-docs.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -51,30 +54,30 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/grill-with-docs/`
+**Skill Location:** [`skills/grill-with-docs`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs)
 
 ### Python Tools (Stdlib)
 
 1. **CONTEXT.md Linter**
-   - Path: `../skills/grill-with-docs/scripts/context_md_linter.py`
+   - Path: [`scripts/context_md_linter.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/scripts/context_md_linter.py)
    - Usage: `python context_md_linter.py CONTEXT.md`
    - Validates structure (H1, Language section with bold terms + `_Avoid_:` aliases, Relationships, example dialogue) and flags rule violations as PASS/WARN/FAIL.
 
 2. **ADR Scanner**
-   - Path: `../skills/grill-with-docs/scripts/adr_scanner.py`
+   - Path: [`scripts/adr_scanner.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/scripts/adr_scanner.py)
    - Usage: `python adr_scanner.py docs/adr/`
    - Walks the ADR directory, checks `NNNN-slug.md` filename pattern, surfaces numbering gaps/duplicates, validates each ADR has an H1 + non-empty body, sanity-checks optional status frontmatter values.
 
 3. **Glossary↔Code Consistency**
-   - Path: `../skills/grill-with-docs/scripts/glossary_code_consistency.py`
+   - Path: [`scripts/glossary_code_consistency.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/scripts/glossary_code_consistency.py)
    - Usage: `python glossary_code_consistency.py --context CONTEXT.md --code src/`
    - Extracts bold terms from CONTEXT.md, greps the codebase, flags defined-but-unused terms (dead glossary) and high-frequency code-only proper nouns that may need definitions. Outputs grilling-question seeds.
 
 ### Knowledge Bases
 
-- `../skills/grill-with-docs/references/ubiquitous_language.md` — why a glossary belongs in source control (7 sources: Evans, Vernon, Khononov, Wlaschin, Brandolini, Avram & Marinescu, Fowler)
-- `../skills/grill-with-docs/references/adr_practice.md` — when an ADR earns its keep (7 sources: Nygard, Tyree & Akerman IEEE 2005, Zimmermann Y-statements, MADR, ThoughtWorks Tech Radar, adr-tools, Backstage)
-- `../skills/grill-with-docs/references/context_md_as_artifact.md` — CONTEXT.md as living artifact (7 sources: Khononov, Kernighan, BoundedContext bliki, Confluent data contracts, EventStorming, ubiquitous-language-as-architecture, conformist pattern)
+- [`references/ubiquitous_language.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/references/ubiquitous_language.md) — why a glossary belongs in source control (7 sources: Evans, Vernon, Khononov, Wlaschin, Brandolini, Avram & Marinescu, Fowler)
+- [`references/adr_practice.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/references/adr_practice.md) — when an ADR earns its keep (7 sources: Nygard, Tyree & Akerman IEEE 2005, Zimmermann Y-statements, MADR, ThoughtWorks Tech Radar, adr-tools, Backstage)
+- [`references/context_md_as_artifact.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/references/context_md_as_artifact.md) — CONTEXT.md as living artifact (7 sources: Khononov, Kernighan, BoundedContext bliki, Confluent data contracts, EventStorming, ubiquitous-language-as-architecture, conformist pattern)
 
 ## Workflows
 
@@ -182,16 +185,16 @@ Re-grill trigger: [language drift signal, ADR supersession, new bounded context]
 
 ## Related Agents
 
-- [cs-grill-master](../../grill-me/agents/cs-grill-master.md) — plan-only grill (sibling skill, no docs anchor)
-- [cs-skill-author](../../write-a-skill/agents/cs-skill-author.md) — different domain (skill authoring)
-- [cs-caveman-mode](../../caveman/agents/cs-caveman-mode.md) — different mode (compression)
-- [cs-handoff-author](../../handoff/agents/cs-handoff-author.md) — uses grill output for session handoff
+- [cs-grill-master](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (sibling skill, no docs anchor)
+- [cs-skill-author](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/write-a-skill/agents/cs-skill-author.md) — different domain (skill authoring)
+- [cs-caveman-mode](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/caveman/agents/cs-caveman-mode.md) — different mode (compression)
+- [cs-handoff-author](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/handoff/agents/cs-handoff-author.md) — uses grill output for session handoff
 
 ## References
 
-- Skill: [../skills/grill-with-docs/SKILL.md](../skills/grill-with-docs/SKILL.md)
-- Format specs: [ADR-FORMAT.md](../skills/grill-with-docs/ADR-FORMAT.md), [CONTEXT-FORMAT.md](../skills/grill-with-docs/CONTEXT-FORMAT.md)
-- Sibling command: [`/cs:grill-with-docs`](../commands/cs-grill-with-docs.md)
+- Skill: [../skills/grill-with-docs/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/SKILL.md)
+- Format specs: [ADR-FORMAT.md](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/ADR-FORMAT.md), [CONTEXT-FORMAT.md](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/CONTEXT-FORMAT.md)
+- Sibling command: [`/cs:grill-with-docs`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/commands/cs-grill-with-docs.md)
 
 ---
 

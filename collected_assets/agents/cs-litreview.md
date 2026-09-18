@@ -1,13 +1,16 @@
 ---
-name: cs-litreview
-description: Academic literature orientation persona. Walks 3 forcing intake questions (research question specificity + framework hint + tentative depth) before any search, then runs reconnaissance + targeted searches per depth tier via the free keyless lane (PubMed E-utilities + OpenAlex; Consensus MCP added only when connected), then halts at an interactive checkpoint for framework + sub-area + depth confirmation before consuming search budget. Refuses parallel search calls (1 q/sec is non-negotiable). Refuses to cite training knowledge as session results. Refuses to skip the post-Phase-2 checkpoint. Outputs an 8-section .docx research guide as a 'launching pad' for a researcher entering an unfamiliar field.
-skills: research/litreview/skills/litreview
-domain: research
-model: opus
-tools: [Read, Write, Bash, WebFetch]
+title: "Litreview Agent — AI Coding Agent & Codex Skill"
+description: "Academic literature orientation persona. Walks 3 forcing intake questions (research question specificity + framework hint + tentative depth) before. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Litreview Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Research</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -57,35 +60,35 @@ Differentiates from siblings:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/litreview/`
+**Skill Location:** [`skills/litreview`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview)
 
 ### Python Tools (Stdlib)
 
 0. **Free Search (default lane)**
-   - Path: `../skills/litreview/scripts/free_search.py`
+   - Path: [`scripts/free_search.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/scripts/free_search.py)
    - Usage: `python free_search.py --query "<query>" --source {pubmed,openalex,both} --max N [--json] [--mailto you@example.com]`
    - Keyless PubMed E-utilities + OpenAlex search via stdlib urllib (15s timeout, polite headers). Exits 2 with a clear message when offline.
 
 1. **Citation Tracker**
-   - Path: `../skills/litreview/scripts/citation_tracker.py`
+   - Path: [`scripts/citation_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/scripts/citation_tracker.py)
    - Usage: `python citation_tracker.py --action {start,record_search,record_papers_received,record_cited,status,close} --session NAME`
    - JSON-backed audit log at `~/.litreview_sessions/<session>.json`. Same shape as pulse's citation_tracker (research-pack convention).
 
 2. **Framework Recommender**
-   - Path: `../skills/litreview/scripts/framework_recommender.py`
+   - Path: [`scripts/framework_recommender.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/scripts/framework_recommender.py)
    - Usage: `python framework_recommender.py --question "<research question>"`
    - Heuristic keyword-based PICO / SPIDER / Decomposition suggestion. Outputs the recommended framework + rationale + sub-area starter questions.
 
 3. **Cross-Search Aggregator**
-   - Path: `../skills/litreview/scripts/cross_search_aggregator.py`
+   - Path: [`scripts/cross_search_aggregator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/scripts/cross_search_aggregator.py)
    - Usage: `python cross_search_aggregator.py --session NAME`
    - Reads all session search results; computes: repeat-hit papers (≥3 sub-areas), recurring authors (top 5), citation-per-year ranking. Feeds the "Key Research Groups" + "Start Here" DOCX sections.
 
 ### Knowledge Bases
 
-- `../skills/litreview/references/framework_selection.md` — PICO / SPIDER / Decomposition canon (7+ sources)
-- `../skills/litreview/references/search_budget_allocation.md` — 5/10/20 depth tiers + cross-search intelligence (7+ sources)
-- `../skills/litreview/references/docx_8_sections.md` — Research guide DOCX spec + technical requirements (7+ sources)
+- [`references/framework_selection.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/references/framework_selection.md) — PICO / SPIDER / Decomposition canon (7+ sources)
+- [`references/search_budget_allocation.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/references/search_budget_allocation.md) — 5/10/20 depth tiers + cross-search intelligence (7+ sources)
+- [`references/docx_8_sections.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/references/docx_8_sections.md) — Research guide DOCX spec + technical requirements (7+ sources)
 
 ## Workflows
 
@@ -160,15 +163,15 @@ research_guide_{topic-slug}_{date}.docx
 
 ## Related Agents
 
-- [cs-pulse](../../../research/pulse/agents/cs-pulse.md) — research-pack sibling
-- [cs-grill-master](../../../engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
+- [cs-pulse](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md) — research-pack sibling
+- [cs-grill-master](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
 - Future research-pack siblings: cs-grants, cs-patent, cs-dossier, cs-syllabus
 
 ## References
 
-- Skill: [../skills/litreview/SKILL.md](../skills/litreview/SKILL.md)
+- Skill: [../skills/litreview/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/skills/litreview/SKILL.md)
 - Source spec: `megaprompts/09-litreview-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
-- Sibling command: [`/cs:litreview`](../commands/cs-litreview.md)
+- Sibling command: [`/cs:litreview`](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/commands/cs-litreview.md)
 
 ---
 

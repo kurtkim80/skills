@@ -1,9 +1,15 @@
 ---
-name: "cs-workflow-build"
-description: "/cs:workflow-build <task-description> — Design and write a deterministic Claude Code workflow (.js). Opens with intake questions, infers-and-proposes a topology when the request is vague, then scaffolds + validates the file. Use when building or running a custom Claude Code workflow."
+title: "/cs-workflow-build — Slash Command for AI Coding Agents"
+description: "/cs:workflow-build <task-description> — Design and write a deterministic Claude Code workflow (.js). Opens with intake questions, infers-and-proposes. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:workflow-build — Workflow Architect Intake
+# /cs-workflow-build
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/workflow-builder/commands/cs-workflow-build.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:workflow-build <task-description>`
 
@@ -86,8 +92,8 @@ export CLAUDE_CODE_WORKFLOWS=1   # the feature is off by default
 
 ## Related
 
-- Agent: [`cs-workflow-architect`](../agents/cs-workflow-architect.md)
-- Skill: [`workflow-builder`](../skills/workflow-builder/SKILL.md)
+- Agent: [`cs-workflow-architect`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/workflow-builder/agents/cs-workflow-architect.md)
+- Skill: [`workflow-builder`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/workflow-builder/skills/workflow-builder/SKILL.md)
 - Adjacent: `/cs:write-a-skill` (authoring skills, not workflows)
 
 ---

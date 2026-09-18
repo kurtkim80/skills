@@ -1,14 +1,16 @@
 ---
-name: wiki-ingestor
-description: Dispatched sub-agent that ingests a new source into an LLM Wiki vault. Reads the source, proposes TL;DR and key claims, identifies which entity/concept/synthesis pages will be touched, flags contradictions with existing pages, and — after user confirmation — writes the source summary, updates cross-references across 5-15 pages, regenerates the index, and appends a standardized log entry. Spawn when the user says "ingest this", "add this paper/article/book to the wiki", or drops a file into raw/.
-skills: engineering/llm-wiki
-domain: engineering
-model: opus
-tools: [Read, Write, Edit, Bash, Grep, Glob]
-context: fork
+title: "wiki-ingestor — AI Coding Agent & Codex Skill"
+description: "Dispatched sub-agent that ingests a new source into an LLM Wiki vault. Reads the source, proposes TL;DR and key claims, identifies which. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # wiki-ingestor
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/llm-wiki/agents/wiki-ingestor.md">Source</a></span>
+</div>
+
 
 ## Role
 

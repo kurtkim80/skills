@@ -1,16 +1,4 @@
----
-title: "Persona-Based Agents — AI Coding Agent & Codex Skill"
-description: "Persona-Based Agents — agent-native AI orchestrator for Personas. Works with Claude Code, Codex CLI, Gemini CLI, and OpenClaw."
----
-
 # Persona-Based Agents
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Personas</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/personas/README.md">Source</a></span>
-</div>
-
 
 Pre-configured agent personas with curated skill loadouts, workflows, and distinct personalities.
 

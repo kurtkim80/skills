@@ -1,10 +1,12 @@
 ---
 name: seo-audit
-description: Diagnose and audit SEO issues affecting crawlability, indexation, rankings, and organic performance.
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: >
+  Diagnose and audit SEO issues affecting crawlability, indexation, rankings,
+  and organic performance. Use when the user asks for an SEO audit, technical SEO
+  review, ranking diagnosis, on-page SEO review, meta tag audit, or SEO health check.
+  This skill identifies issues and prioritizes actions but does not execute changes.
+  For large-scale page creation, use programmatic-seo. For structured data, use
+  schema-markup.
 ---
 
 # SEO Audit
@@ -113,11 +115,9 @@ If critical context is missing, **state assumptions explicitly** before proceedi
 
 **Key Metrics**
 
-* LCP at or below 2.5s
-* INP at or below 200ms
-* CLS at or below 0.1
-
-Evaluate field data at the 75th percentile with the relevant device population. Keep lab diagnostics distinct from observed field performance; see [Google’s Core Web Vitals guidance](https://developers.google.com/search/docs/appearance/core-web-vitals).
+* LCP < 2.5s
+* INP < 200ms
+* CLS < 0.1
 
 **Contributing Factors**
 
@@ -221,7 +221,7 @@ Evaluate field data at the 75th percentile with the relevant device population. 
 
 ### Purpose
 
-The optional **SEO Health Index** is a subjective audit rubric, not a validated search-engine metric. It can organize findings only when its weights, scope and deductions are disclosed. Do not invent points for unavailable data or imply an effect on rankings.
+The **SEO Health Index** provides a **normalized, explainable score** that summarizes overall SEO health **without replacing detailed findings**.
 
 It is designed to:
 
@@ -247,7 +247,7 @@ The score is a **weighted composite**, not an average.
 | Authority & Trust Signals | 10      |
 | **Total**                 | **100** |
 
-> Mark uninspected categories as unknown. If presenting a scoped score, name its scope and do not compare it with an earlier full-site score.
+> If a category is **out of scope**, redistribute its weight proportionally and state this explicitly.
 
 ---
 
@@ -270,7 +270,8 @@ Start each category at **100** and subtract points based on issues found.
 
 #### Confidence Modifier
 
-Keep confidence separate from severity. An uncertain critical finding needs verification; reducing its numerical deduction does not make the site safer to index.
+If confidence is **Medium**, apply **50%** of the deduction
+If confidence is **Low**, apply **25%** of the deduction
 
 ---
 
@@ -279,11 +280,11 @@ Keep confidence separate from severity. An uncertain critical finding needs veri
 > Crawlability & Indexation (Weight: 30)
 
 * Noindex on key category pages → Critical (−25, High confidence)
-* XML sitemap includes redirected URLs → Medium (−5, Medium confidence; verify separately)
+* XML sitemap includes redirected URLs → Medium (−5, Medium confidence → −2.5)
 * Missing sitemap reference in robots.txt → Low (−2)
 
-**Raw score:** 100 − 32 = **68**
-**Weighted contribution:** 68 × 0.30 = **20.4**
+**Raw score:** 100 − 29.5 = **70.5**
+**Weighted contribution:** 70.5 × 0.30 = **21.15**
 
 ---
 
@@ -300,9 +301,9 @@ Rounded to nearest whole number.
 
 ---
 
-## Illustrative bands (optional)
+## Health Bands (Required)
 
-If a rubric is requested, label its bands as internal planning labels rather than measured SEO performance:
+Always classify the final score into a band:
 
 | Score Range | Health Status | Interpretation                                  |
 | ----------- | ------------- | ----------------------------------------------- |
@@ -316,7 +317,7 @@ If a rubric is requested, label its bands as internal planning labels rather tha
 
 ## Output Requirements (Scoring Section)
 
-If a score is requested, include this after the evidence-based findings:
+Include this **after the Executive Summary**:
 
 ### SEO Health Index
 
@@ -400,7 +401,7 @@ These fields are **mandatory** and directly inform the SEO Health Index.
   A short explanation of the SEO impact in plain language.
 
 * **Score Impact**
-  Optional rubric deduction, with confidence reported separately; omit when no score is requested.
+  The point deduction applied to the relevant category **before weighting**, including confidence modifier.
 
 * **Recommendation**
   What should be done to resolve the issue.
@@ -410,7 +411,7 @@ These fields are **mandatory** and directly inform the SEO Health Index.
 
 ### Prioritized Action Plan (Derived from Findings)
 
-Derive the action plan from observed findings, affected URLs and product importance. A subjective score must not override crawl/indexation evidence.
+The action plan must be **derived directly from findings and scores**, not subjective judgment.
 
 Group actions as follows:
 
@@ -428,7 +429,7 @@ Group actions as follows:
 3. **Quick Wins**
 
    * Low or Medium severity issues
-   * Easy to fix with a verifiable user or crawlability benefit
+   * Easy to fix with measurable score improvement
 
 4. **Longer-Term Opportunities**
 
@@ -438,16 +439,35 @@ Group actions as follows:
 For each action group:
 
 * Reference the **related findings**
-* Define the observable verification after remediation
+* Explain **expected score recovery range**
 * Avoid timelines unless explicitly requested
 
 ---
 
-### Evidence sources
+### Tools (Evidence Sources Only)
 
-Use Search Console for reported indexing and field data, crawlers for sampled URL
-behavior, and logs for observed requests. Record dates, scope and missing coverage.
-Cross-check material claims against the actual page; tool scores are not authority.
+Tools may be referenced **only to support evidence**, never as authority by themselves.
+
+Acceptable uses:
+
+* Demonstrating an issue exists
+* Quantifying impact
+* Providing reproducible data
+
+Examples:
+
+* Search Console (coverage, CWV, indexing)
+* PageSpeed Insights (field vs lab metrics)
+* Crawlers (URL discovery, metadata validation)
+* Log analysis (crawl behavior, frequency)
+
+Rules:
+
+* Do not rely on a single tool for conclusions
+* Do not report tool “scores” without interpretation
+* Always explain *what the data shows* and *why it matters*
+
+---
 
 ### Related Skills (Non-Overlapping)
 
@@ -465,18 +485,3 @@ Use these skills **only after the audit is complete** and findings are accepted.
 * **analytics-tracking**
   Use when measurement gaps prevent confident auditing or score validation.
 
-
-## When to Use
-
-Use for a specific indexing/crawlability issue, a migration check or a scoped organic-performance audit. Start from the declared production URLs and available Search Console/crawl evidence; local source changes do not prove live deployment or indexing.
-
-## Worked example
-
-Input: a legacy URL redirects to a new catalog. Fetch the legacy URL and every redirect hop, inspect final status/canonical/robots directives, and compare the destination with sitemap/internal links. Expected: a finite redirect chain to the intended indexable URL, with no conflicting canonical. Then check Search Console separately; a correct HTTP response does not prove that Google selected or indexed it.
-
-## Limitations
-
-- Rankings and traffic depend on demand, competition and search-engine processing; technical corrections do not guarantee recovery.
-- A sampled crawl cannot establish that every URL or rendered state is correct.
-- Canonical tags are signals, and sitemap inclusion is not proof of indexation.
-- Lab performance, field percentiles and an internal audit score answer different questions; report the source and date of each.

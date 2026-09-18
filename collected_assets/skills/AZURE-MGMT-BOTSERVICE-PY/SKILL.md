@@ -1,9 +1,8 @@
 ---
 name: azure-mgmt-botservice-py
-description: Azure Bot Service Management SDK for Python. Use for creating, managing, and configuring Azure Bot Service resources.
-risk: critical
-source: community
-date_added: '2026-02-27'
+description: |
+  Azure Bot Service Management SDK for Python. Use for creating, managing, and configuring Azure Bot Service resources.
+  Triggers: "azure-mgmt-botservice", "AzureBotService", "bot management", "conversational AI", "bot channels".
 ---
 
 # Azure Bot Service Management SDK for Python
@@ -247,7 +246,6 @@ if hasattr(keys.properties, 'properties'):
 ### Create Connection Setting
 
 ```python
-import os
 from azure.mgmt.botservice.models import (
     ConnectionSetting,
     ConnectionSettingProperties
@@ -261,7 +259,7 @@ connection = client.bot_connection.create(
         location="global",
         properties=ConnectionSettingProperties(
             client_id="<oauth-client-id>",
-            client_secret=os.environ["BOT_OAUTH_CLIENT_SECRET"],
+            client_secret="<oauth-client-secret>",
             scopes="User.Read",
             service_provider_id="<service-provider-id>"
         )
@@ -320,11 +318,3 @@ for conn in connections:
 5. **Rotate Direct Line keys** periodically
 6. **Use managed identity** when possible for bot connections
 7. **Configure proper CORS** for Web Chat channel
-
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

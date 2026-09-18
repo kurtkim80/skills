@@ -1,10 +1,9 @@
 ---
 name: seo-structure-architect
 description: Analyzes and optimizes content structure including header hierarchy, suggests schema markup, and internal linking opportunities. Creates search-friendly content organization.
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-02-27'
+risk: safe
+source: community
+date_added: '2026-02-27'
 ---
 
 ## Use this skill when

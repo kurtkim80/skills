@@ -1,9 +1,15 @@
 ---
-description: Discount matrix designer + T&C library + exception policy. New ground — designs the policy that deal-desk applies per deal. Direct invocation of the commercial-policy skill.
-argument-hint: "<inputs: deal-band data, current discount distribution, target NRR>"
+title: "/cs-commercial-policy — Slash Command for AI Coding Agents"
+description: "Discount matrix designer + T&C library + exception policy. New ground — designs the policy that deal-desk applies per deal. Direct invocation of the. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:commercial-policy — Discount matrix + exception flow
+# /cs-commercial-policy
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-commercial-policy.md">Source</a></span>
+</div>
+
 
 Run the `commercial-policy` skill on this input:
 

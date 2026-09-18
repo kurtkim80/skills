@@ -1,15 +1,9 @@
 ---
-title: "/cs-pm-loop — Slash Command for AI Coding Agents"
-description: "Drive a project-delivery goal through a bounded agentic loop — Jira MCP snapshot → flow/sprint analytics bridge → routed sub-skill execution →. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Drive a project-delivery goal through a bounded agentic loop — Jira MCP snapshot → flow/sprint analytics bridge → routed sub-skill execution → machine-verified gates → close refused until everything is verified or human-waived. The PM-domain adapter over engineering/agent-harness.
+argument-hint: "<delivery goal, e.g. 'get sprint 14 to a verified close with health >= 70'>"
 ---
 
-# /cs-pm-loop
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/project-management/commands/cs-pm-loop.md">Source</a></span>
-</div>
-
+# /cs:pm-loop — run a delivery goal to a verified close
 
 Goal:
 

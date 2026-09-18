@@ -1,9 +1,15 @@
 ---
-name: "cs-dossier"
-description: "/cs:dossier <entity> — Decision-grade entity research with mandatory hypothesis-testing. 6-Q grill-me intake (Q4 hypothesis MANDATORY) → ≥30% disconfirming search budget → 9-section .docx with verdict (SUPPORTED/PARTIALLY/DISPROVEN/INCONCLUSIVE) + 3-5 finding-tied conversation hooks."
+title: "/cs-dossier — Slash Command for AI Coding Agents"
+description: "/cs:dossier <entity> — Decision-grade entity research with mandatory hypothesis-testing. 6-Q grill-me intake (Q4 hypothesis MANDATORY) → ≥30%. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:dossier — Decision-Grade Entity Research
+# /cs-dossier
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/dossier/commands/cs-dossier.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:dossier <entity>`
 
@@ -129,8 +135,8 @@ Every fact in the DOCX tagged with tier (primary / secondary / tertiary):
 
 ## Related
 
-- Agent: [`cs-dossier`](../agents/cs-dossier.md)
-- Skill: [`dossier`](../skills/dossier/SKILL.md)
+- Agent: [`cs-dossier`](https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/agents/cs-dossier.md)
+- Skill: [`dossier`](https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/skills/dossier/SKILL.md)
 - Source spec: `megaprompts/12-dossier-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Siblings: `/cs:litreview`, `/cs:grants`, `/cs:pulse`
 - Future: `/cs:patent`, `/cs:syllabus`

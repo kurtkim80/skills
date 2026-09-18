@@ -1,9 +1,15 @@
 ---
-description: Per-deal review. Score margin + risk, route discount approval to the right human, redline T&Cs against commercial policy. Never auto-approves. Direct invocation of the deal-desk skill.
-argument-hint: "<deal context: ARR, term, discount, customer tier, strategic value>"
+title: "/cs-deal-review — Slash Command for AI Coding Agents"
+description: "Per-deal review. Score margin + risk, route discount approval to the right human, redline T&Cs against commercial policy. Never auto-approves. Direct. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:deal-review — Per-deal scoring + discount routing + redline
+# /cs-deal-review
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-deal-review.md">Source</a></span>
+</div>
+
 
 Run the `deal-desk` skill on this input:
 

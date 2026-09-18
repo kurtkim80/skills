@@ -1,9 +1,15 @@
 ---
-description: Convert long-form markdown (specs, RFCs, reports, plans, explainers) into a single-file interactive HTML document. Runs the md-document pipeline (parser → renderer → injector) with the user's design-system tokens. Sticky TOC, search filter, code-copy buttons, scrollspy, WCAG-AA palette. Refuses input < 100 lines (Shihipar) or unfinished onboarding. Output is a single .html file (Google Fonts + Prism.js CDN as the only externals).
-argument-hint: "<path to markdown file> [--out <dir>] [--features search,copycode,smoothscroll,scrollspy]"
+title: "/cs-md-document — Slash Command for AI Coding Agents"
+description: "Convert long-form markdown (specs, RFCs, reports, plans, explainers) into a single-file interactive HTML document. Runs the md-document pipeline. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:md-document — Long-form markdown → HTML
+# /cs-md-document
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-md-document.md">Source</a></span>
+</div>
+
 
 Convert the markdown at **$ARGUMENTS** into a single-file interactive HTML document.
 

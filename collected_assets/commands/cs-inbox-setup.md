@@ -1,9 +1,15 @@
 ---
-name: "cs-inbox-setup"
-description: "/cs:inbox-setup — Interactive 8-section interview that builds a personalized 7-file email-triage knowledge base. ~25-31 grill-me questions, one at a time. Run ONCE; re-run when business/pricing/priorities change. Companion to /cs:inbox-triage."
+title: "/cs-inbox-setup — Slash Command for AI Coding Agents"
+description: "/cs:inbox-setup — Interactive 8-section interview that builds a personalized 7-file email-triage knowledge base. ~25-31 grill-me questions, one at a. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:inbox-setup — Email Triage Onboarding
+# /cs-inbox-setup
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/email/commands/cs-inbox-setup.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:inbox-setup`
 
@@ -25,7 +31,7 @@ This is one half of a pair:
 - `/cs:inbox-setup` (this command) — **writes** the KB (run once)
 - `/cs:inbox-triage` — **reads + appends** the KB (run recurringly)
 
-Both share a strict 7-file contract. See [`kb_file_contract.md`](../skills/inbox-setup/references/kb_file_contract.md) for the spec.
+Both share a strict 7-file contract. See [`kb_file_contract.md`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/references/kb_file_contract.md) for the spec.
 
 ## What You'll Get
 
@@ -121,8 +127,8 @@ python ../skills/inbox-setup/scripts/section_progress_tracker.py --action close 
 ## Related
 
 - Companion: [`/cs:inbox-triage`](./cs-inbox-triage.md) — runs after setup is complete
-- Agent: [`cs-inbox-setup`](../agents/cs-inbox-setup.md)
-- Skill: [`inbox-setup`](../skills/inbox-setup/SKILL.md)
+- Agent: [`cs-inbox-setup`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/agents/cs-inbox-setup.md)
+- Skill: [`inbox-setup`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/SKILL.md)
 - Source spec: `megaprompts/06-inbox-setup-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 
 ---

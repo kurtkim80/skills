@@ -1,10 +1,15 @@
 ---
-description: Run or manage the SkillOpt-Sleep self-evolution cycle (review past sessions, replay tasks offline, consolidate validated memory + skills; can also schedule nightly runs)
-argument-hint: "[run | dry-run | status | adopt | harvest | schedule | unschedule] (default: status)"
-allowed-tools: Bash, Read
+title: "/skillopt-sleep — Slash Command for AI Coding Agents"
+description: "Run or manage the SkillOpt-Sleep self-evolution cycle (review past sessions, replay tasks offline, consolidate validated memory + skills; can also. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /skillopt-sleep — SkillOpt-Sleep nightly self-evolution
+# /skillopt-sleep
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/skillopt-sleep/commands/skillopt-sleep.md">Source</a></span>
+</div>
+
 
 You are driving **SkillOpt-Sleep**: a tool that lets this user's Claude agent
 improve offline by reviewing past sessions, replaying recurring tasks, and

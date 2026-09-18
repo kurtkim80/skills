@@ -1,9 +1,15 @@
 ---
-name: "cs-pulse"
-description: "/cs:pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per platform), optional X/Twitter, cross-platform synthesis. Output: ${RESEARCH_DIR}/pulse/<slug>-<date>.md + full briefing in chat."
+title: "/cs-pulse — Slash Command for AI Coding Agents"
+description: "/cs:pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:pulse — Multi-Source Recency Research
+# /cs-pulse
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/pulse/commands/cs-pulse.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:pulse <topic>`
 
@@ -75,7 +81,7 @@ Saved to `${RESEARCH_DIR}/pulse/<topic-slug>-<YYYY-MM-DD>.md` AND pasted in chat
 - **Source discipline** — cite only session-call results. `[Background]` for training knowledge, excluded from cited count.
 - **Three-count tracking** — sent / received / cited in audit log.
 - **Retry once after 3s** — then log. 3 consecutive failures across sources → stop.
-- **Graceful degradation** — prefer a supplied X export. Skip only when no export or live interface exists.
+- **Graceful degradation** — single source failure → continue with rest. Never fail the whole run on one source.
 
 ## Workflow
 
@@ -90,10 +96,7 @@ python ../skills/pulse/scripts/citation_tracker.py --action start --session NAME
 #    HN: Algolia stories + comments with timestamp filter
 #    Web: 2–3 targeted queries
 
-# C. Phase 4 (optional, sequential): normalize a supplied export first
-python ../skills/pulse/scripts/citation_tracker.py --action import_sources \
-  --session NAME --input /path/to/x-search.json --platform x
-#    If no export exists, try Grok / X API / browser automation.
+# C. Phase 4 (optional, sequential): X/Twitter via Grok / X API / browser automation
 
 # D. Synthesis: cross-platform pattern detection
 
@@ -112,9 +115,8 @@ python ../skills/pulse/scripts/citation_tracker.py --action close --session NAME
 - Starting any search before Q1 (topic specificity) commits
 - Batching intake questions
 - Hardcoded URLs that won't survive API changes (note format, explain may evolve)
-- Irrelevant person or brand references
+- Specific person/brand references
 - Tight coupling to one X/Twitter interface
-- Treating duplicate Tweet IDs or repeated citation URLs as separate sources
 - Missing fallback behavior
 - "Just use [specific tool]" without explaining what the tool does
 - Citing training knowledge as session results
@@ -122,8 +124,8 @@ python ../skills/pulse/scripts/citation_tracker.py --action close --session NAME
 
 ## Related
 
-- Agent: [`cs-pulse`](../agents/cs-pulse.md)
-- Skill: [`pulse`](../skills/pulse/SKILL.md)
+- Agent: [`cs-pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md)
+- Skill: [`pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/SKILL.md)
 - Source spec: `megaprompts/01-pulse-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling research skills (after build): `/cs:litreview`, `/cs:grants`, `/cs:syllabus`, `/cs:patent`, `/cs:dossier`, `/cs:research` (router)
 

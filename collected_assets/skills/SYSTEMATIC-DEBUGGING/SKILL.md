@@ -1,17 +1,13 @@
 ---
 name: systematic-debugging
-description: >-
-  Systematic Debugging: find the root cause before proposing fixes — symptom fixes are
-  failure; reproduce, isolate, and verify the fix addresses the actual cause. Use when
-  encountering any bug, test failure, or unexpected behavior, before proposing fixes.
-slug: systematic-debugging
-version: 1.0.0
-displayName: systematic-debugging
+description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
 ---
 
 # Systematic Debugging
 
 ## Overview
+
+Random fixes waste time and create new bugs. Quick patches mask underlying issues.
 
 **Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
 
@@ -192,7 +188,6 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
-   - Use the `superpowers:verification-before-completion` skill before claiming success
 
 4. **If Fix Doesn't Work**
    - STOP
@@ -242,7 +237,7 @@ If you catch yourself thinking:
 - "Is that not happening?" - You assumed without verifying
 - "Will it show us...?" - You should have added evidence gathering
 - "Stop guessing" - You're proposing fixes without understanding
-- "Ultra-think this" - Question fundamentals, not just symptoms
+- "Ultrathink this" - Question fundamentals, not just symptoms
 - "We're stuck?" (frustrated) - Your approach isn't working
 
 **When you see these:** STOP. Return to Phase 1.
@@ -288,11 +283,14 @@ These techniques are part of systematic debugging and available in this director
 - **`defense-in-depth.md`** - Add validation at multiple layers after finding root cause
 - **`condition-based-waiting.md`** - Replace arbitrary timeouts with condition polling
 
-## Relationship to sibling skills
+**Related skills:**
+- **superpowers:test-driven-development** - For creating failing test case (Phase 4, Step 1)
+- **superpowers:verification-before-completion** - Verify fix worked before claiming success
 
-- `problem-dive` — when the user reports a problem/UX issue and the work is still "what's
-  going on", use that skill first (evidence, 5-whys, research). This skill is for the
-  **code-bug** path once the issue is a technical defect.
-- `problem-resolution-flow` — end-to-end pipeline from symptom to shipped fix (classify,
-  scope, research, TDD fix, close). This skill is the root-cause protocol used inside
-  that pipeline's code path.
+## Real-World Impact
+
+From debugging sessions:
+- Systematic approach: 15-30 minutes to fix
+- Random fixes approach: 2-3 hours of thrashing
+- First-time fix rate: 95% vs 40%
+- New bugs introduced: Near zero vs common
