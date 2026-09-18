@@ -12,6 +12,11 @@
   - **C# .NET SIMD 가속 (`System.Numerics.Tensors.TensorPrimitives.CosineSimilarity`)**으로 6,186개 에셋 전체를 밀리초(ms) 단위로 실시간 비교 및 유사도 랭킹 산출
 - **100% Client-Side**: 별도의 유료 API 서버 없이 브라우저 단독으로 완전히 구동되며, GitHub Pages에 정적 호스팅됩니다.
 
+## 🤖 GitHub Actions 무인 자동 수집 파이프라인
+- **스케줄 자동 실행**: 매일 한국 시간 자정(00:00 KST / 15:00 UTC)에 GitHub Actions 클라우드 러너가 자동으로 최신 스킬을 수집하고, AI 벡터를 갱신하여 GitHub Pages에 배포합니다.
+- **수동 즉시 실행**: GitHub 저장소의 [Actions](https://github.com/kurtkim80/skills/actions) 탭에서 `Automated Skills Sync & Deploy` 워크플로우를 선택하고 **Run workflow** 버튼을 클릭하면 언제든 즉시 전체 수집 및 배포가 실행됩니다.
+- **저장소 추가 시 자동 트리거**: `sources.json` 파일에 새로운 GitHub 저장소를 추가하여 푸시하면 워크플로우가 즉시 감지하여 자동 동기화를 시작합니다.
+
 ---
 
 ## 🌟 지원하는 에셋 종류
