@@ -709,7 +709,7 @@
           "name": "--path",
           "type": "string",
           "required": false,
-          "description": "Folder path restriction for `office_integration` permission set API keys."
+          "description": "Restricts this API key to the specified folder and its descendants. Applies to every permission set and all paths accessed by a request, including copy and move destinations. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read."
         },
         {
           "name": "--permission-set",
@@ -2147,7 +2147,7 @@
           "name": "--disable-parent-folder-behavior",
           "type": "bool",
           "required": false,
-          "description": "If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree."
+          "description": "If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types."
         },
         {
           "name": "--recursive",
@@ -2247,7 +2247,7 @@
           "name": "--disable-parent-folder-behavior",
           "type": "bool",
           "required": false,
-          "description": "If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree."
+          "description": "If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types."
         },
         {
           "name": "--recursive",
@@ -5265,7 +5265,7 @@
           "name": "--copy-behaviors",
           "type": "bool",
           "required": false,
-          "description": "If copying a folder, also copy supported behaviors to the destination folder tree?"
+          "description": "If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?"
         },
         {
           "name": "--structure",
@@ -5413,7 +5413,7 @@
           "name": "--copy-behaviors",
           "type": "bool",
           "required": false,
-          "description": "If copying a folder, also copy supported behaviors to the destination folder tree?"
+          "description": "If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?"
         },
         {
           "name": "--structure",
@@ -6885,7 +6885,7 @@
           "name": "--query-failure-type",
           "type": "string",
           "required": false,
-          "description": "If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`, `insecure_ftp`, `insecure_cipher`, `rate_limited`, `no_s3_compatible_endpoint_permission`"
+          "description": "If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`, `insecure_ftp`, `insecure_cipher`, `rate_limited`, `no_s3_compatible_endpoint_permission`, `mobile_ip_mismatch`, `mobile_api_key_not_used_quickly_enough`"
         },
         {
           "name": "--query-target-id",
