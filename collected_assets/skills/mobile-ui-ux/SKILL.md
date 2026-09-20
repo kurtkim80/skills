@@ -8,7 +8,6 @@ description: >
   iOS/Android UI components, design systems, color palettes, typography,
   dark mode, animations, layouts, spacing, touch targets, glassmorphism,
   neumorphism, minimalism, gestures, or safe area handling.
-version: 2.0.0
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -39,7 +38,7 @@ Never assume. Ask for clarification when any of the following are undefined:
 ### Style Categories
 
 **1. Modern iOS Native (Default Recommendation)**
-SF Pro typography, system colours, native blur effects, Dynamic Island compatibility, iOS 17+ aesthetics. Recommended for most consumer apps targeting iOS users.
+Use current Apple platform typography, system colours, native materials, safe-area behavior, and interaction conventions appropriate to the app's deployment target. Verify current Human Interface Guidelines before version-sensitive work.
 
 **2. Glassmorphism / Frosted Glass**
 Translucent layers, blur effects, subtle borders, light reflections, depth perception. Implemented with `BackdropFilter + ClipRRect + BoxDecoration`. Ideal for premium apps, music players, weather, and finance.

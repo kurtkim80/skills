@@ -1,348 +1,208 @@
 ---
-name: flutter-development
-description: Build beautiful cross-platform mobile apps with Flutter and Dart. Covers widgets, state management with Provider/BLoC, navigation, API integration, and material design.
+name: ui-ux-pro-max
+description: >-
+  UI/UX Pro Max design intelligence for web and mobile: searchable local database with
+  styles, color palettes, font pairings, product types, UX guidelines, icons, GSAP motion
+  presets, and chart types across major stacks (React, Next.js, Vue, Nuxt, Svelte, Astro,
+  SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and more). Use when designing,
+  building, or reviewing UI: pages, components, color schemes, typography, layout,
+  accessibility, animation, or data visualization — including design system and
+  stack-guideline steps.
+slug: ui-ux-pro-max
+version: 1.0.0
+displayName: ui-ux-pro-max
 ---
 
-# Flutter Development
+# UI/UX Pro Max - Design Intelligence
 
-## Overview
+Searchable database of UI/UX design rules with priority-based recommendations: 84 styles, 192 color palettes, 74 font pairings, 192 product types with reasoning rules, 98 UX guidelines, 104 icon entries, 16 GSAP motion presets, and 25 chart types across 22 technology stacks.
 
-Create high-performance, visually stunning mobile applications using Flutter with Dart language. Master widget composition, state management patterns, navigation, and API integration.
+## When to Apply
 
-## When to Use
+Use this Skill when the task involves **UI structure, visual design decisions, interaction patterns, or user experience quality control**: designing new pages, creating/refactoring UI components, choosing color/ui-typography/spacing/layout systems, reviewing UI for UX/accessibility/consistency, implementing navigation/ui-animation/responsive behavior, or improving perceived quality and usability.
 
-- Building iOS and Android apps with native performance
-- Designing custom UIs with Flutter's widget system
-- Implementing complex animations and visual effects
-- Rapid app development with hot reload
-- Creating consistent UX across platforms
+Skip it for pure backend logic, API/database design, non-visual performance work, infrastructure/DevOps, or non-visual scripts — unless the task changes how something **looks, feels, moves, or is interacted with**.
 
-## Instructions
+## Rule Categories by Priority
 
-### 1. **Project Structure & Navigation**
+*Follow priority 1→10 to decide which category to focus on first; use `--domain <Domain>` to query full details. The full rule text for every category lives in `references/quick-reference.md` — read it on demand rather than loading it every time.*
 
-```dart
-// pubspec.yaml
-name: my_flutter_app
-version: 1.0.0
+| Priority | Category | Impact | Domain | Key Checks (Must Have) | Anti-Patterns (Avoid) |
+|----------|----------|--------|--------|------------------------|------------------------|
+| 1 | Accessibility | CRITICAL | `ux` | Contrast 4.5:1, Alt text, Keyboard nav, Aria-labels | Removing focus rings, Icon-only buttons without labels |
+| 2 | Touch & Interaction | CRITICAL | `ux` | Min size 44×44px, 8px+ spacing, Loading feedback | Reliance on hover only, Instant state changes (0ms) |
+| 3 | Performance | HIGH | `ux` | WebP/AVIF, Lazy loading, Reserve space (CLS &lt; 0.1) | Layout thrashing, Cumulative Layout Shift |
+| 4 | Style Selection | HIGH | `style`, `product` | Match product type, Consistency, SVG icons (no emoji) | Mixing flat & skeuomorphic randomly, Emoji as icons |
+| 5 | Layout & Responsive | HIGH | `ux` | Mobile-first breakpoints, Viewport meta, No horizontal scroll | Horizontal scroll, Fixed px container widths, Disable zoom |
+| 6 | Typography & Color | MEDIUM | `ui-typography`, `color` | Base 16px, Line-height 1.5, Semantic color tokens | Text &lt; 12px body, Gray-on-gray, Raw hex in components |
+| 7 | Animation | MEDIUM | `ux`, `gsap` | Duration 150–300ms, Motion conveys meaning, Spatial continuity | Decorative-only ui-animation, Animating width/height, No reduced-motion |
+| 8 | Forms & Feedback | MEDIUM | `ux` | Visible labels, Error near field, Helper text, Progressive disclosure | Placeholder-only label, Errors only at top, Overwhelm upfront |
+| 9 | Navigation Patterns | HIGH | `ux` | Predictable back, Bottom nav ≤5, Deep linking | Overloaded nav, Broken back behavior, No deep links |
+| 10 | Charts & Data | LOW | `chart` | Legends, Tooltips, Accessible colors | Relying on color alone to convey meaning |
 
+For the full rule list per category (all ~98 UX guidelines with rationale), read `references/quick-reference.md`. For app-specific polish rules (icons, touch feedback, dark mode contrast, safe areas) and the canonical pre-delivery checklist, read `references/pro-rules.md`.
 
-dependencies:
-  flutter:
-    sdk: flutter
-  provider: ^6.0.0
-  http: ^1.1.0
-  go_router: ^12.0.0
+---
 
+## Running the search tool
 
-// main.dart with GoRouter navigation
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+The search script lives inside this skill's own directory, not the project directory. Always invoke it by its full path relative to this skill's root (do not assume the working directory is the skill dir, and do not hardcode a Claude-specific path — this skill works across Claude Code / Deep Code / Cursor):
 
-
-void main() {
-  runApp(const MyApp());
-}
-
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter App',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      routerConfig: _router,
-    );
-  }
-}
-
-
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-      routes: [
-        GoRoute(
-          path: 'details/:id',
-          builder: (context, state) => DetailsScreen(
-            itemId: state.pathParameters['id']!
-          ),
-        ),
-      ],
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
-    ),
-  ],
-);
+```bash
+python "scripts/search.py" "<query>" --domain <domain>
 ```
 
-### 2. **State Management with Provider**
+If the script is not found, resolve it via this skill's own directory (e.g. `<skill-root>/scripts/search.py`).
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+If `python` is not found, try `python3`, then `py -3`. Requires Python 3.x, no external dependencies (see README for install instructions if Python is missing).
 
+## Workflow
 
-class User {
-  final String id;
-  final String name;
-  final String email;
+### Step 1: Analyze User Requirements
 
+Extract from the user request:
+- **Product type**: SaaS, e-commerce, portfolio, dashboard, entertainment, tool, productivity, or hybrid
+- **Target audience & context**: age group, usage context (commute, leisure, work)
+- **Style keywords**: playful, vibrant, minimal, dark mode, content-first, immersive, etc.
+- **Stack**: detect from the project — check `package.json` deps (react/next/vue/svelte/nuxt/@angular), `pubspec.yaml` (Flutter), `*.xcodeproj`/`Package.swift` (SwiftUI), `composer.json` (Laravel), or React Native markers (`app.json` + `react-native` dep). If nothing is detectable, ask the user or default to `html-tailwind`. **Never assume a stack** — a hardcoded default silently misroutes every recommendation.
 
-  User({required this.id, required this.name, required this.email});
+### Step 2: Generate Design System (REQUIRED for new pages/projects)
 
+Always start with `--design-system` to get comprehensive recommendations with reasoning:
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-    );
-  }
-}
-
-
-class UserProvider extends ChangeNotifier {
-  User? _user;
-  bool _isLoading = false;
-  String? _error;
-
-
-  User? get user => _user;
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-
-
-  Future<void> fetchUser(String userId) async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-
-
-    try {
-      final response = await http.get(
-        Uri.parse('https://api.example.com/users/$userId'),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-
-      if (response.statusCode == 200) {
-        _user = User.fromJson(jsonDecode(response.body));
-      } else {
-        _error = 'Failed to fetch user';
-      }
-    } catch (e) {
-      _error = 'Error: ${e.toString()}';
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-
-  void logout() {
-    _user = null;
-    notifyListeners();
-  }
-}
-
-
-class ItemsProvider extends ChangeNotifier {
-  List<Map<String, dynamic>> _items = [];
-
-
-  List<Map<String, dynamic>> get items => _items;
-
-
-  Future<void> fetchItems() async {
-    try {
-      final response = await http.get(
-        Uri.parse('https://api.example.com/items'),
-      );
-
-
-      if (response.statusCode == 200) {
-        _items = List<Map<String, dynamic>>.from(
-          jsonDecode(response.body) as List
-        );
-        notifyListeners();
-      }
-    } catch (e) {
-      print('Error fetching items: $e');
-    }
-  }
-}
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
 ```
 
-### 3. **Screens with Provider Integration**
+This searches product/style/color/landing/ui-typography domains in parallel, applies reasoning rules from `ui-reasoning.csv`, and returns pattern, style, colors, ui-typography, effects, and anti-patterns to avoid.
 
-```dart
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      Provider.of<ItemsProvider>(context, listen: false).fetchItems();
-    });
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home Feed')),
-      body: Consumer<ItemsProvider>(
-        builder: (context, itemsProvider, child) {
-          if (itemsProvider.items.isEmpty) {
-            return const Center(child: Text('No items found'));
-          }
-          return ListView.builder(
-            itemCount: itemsProvider.items.length,
-            itemBuilder: (context, index) {
-              final item = itemsProvider.items[index];
-              return ItemCard(item: item);
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-
-class ItemCard extends StatelessWidget {
-  final Map<String, dynamic> item;
-
-
-  const ItemCard({required this.item, Key? key}) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: ListTile(
-        title: Text(item['title'] ?? 'Untitled'),
-        subtitle: Text(item['description'] ?? ''),
-        trailing: const Icon(Icons.arrow_forward),
-        onTap: () => context.go('/details/${item['id']}'),
-      ),
-    );
-  }
-}
-
-
-class DetailsScreen extends StatelessWidget {
-  final String itemId;
-
-
-  const DetailsScreen({required this.itemId, Key? key}) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Details')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Item ID: $itemId', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => context.pop(),
-              child: const Text('Go Back'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: Consumer<UserProvider>(
-        builder: (context, userProvider, child) {
-          if (userProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (userProvider.error != null) {
-            return Center(child: Text('Error: ${userProvider.error}'));
-          }
-          final user = userProvider.user;
-          if (user == null) {
-            return const Center(child: Text('No user data'));
-          }
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Name: ${user.name}', style: const TextStyle(fontSize: 18)),
-                Text('Email: ${user.email}', style: const TextStyle(fontSize: 16)),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => userProvider.logout(),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+**Example:**
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "beauty spa wellness service" --design-system -p "Serenity Spa"
 ```
 
-## Best Practices
+### Step 2b: Persist Design System (Master + Overrides Pattern)
 
-### ✅ DO
+To save the design system for retrieval across sessions, add `--persist` **and always pass `--output-dir` pointed at the project root** — without it, files are written relative to whatever directory the tool happens to run from:
 
-- Use widgets for every UI element
-- Implement proper state management
-- Use const constructors where possible
-- Dispose resources in state lifecycle
-- Test on multiple device sizes
-- Use meaningful widget names
-- Implement error handling
-- Use responsive design patterns
-- Test on both iOS and Android
-- Document custom widgets
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<query>" --design-system --persist -p "Project Name" --output-dir "<project-root>"
+```
 
-### ❌ DON'T
+This creates:
+- `design-system/<project-slug>/MASTER.md` — Global Source of Truth
+- `design-system/<project-slug>/pages/` — Folder for page-specific overrides
 
-- Build entire screens in build() method
-- Use setState for complex state logic
-- Make network calls in build()
-- Ignore platform differences
-- Create overly nested widget trees
-- Hardcode strings
-- Ignore performance warnings
-- Skip testing
-- Forget to handle edge cases
-- Deploy without thorough testing
+With a page-specific override, add `--page "dashboard"` to also create `design-system/<project-slug>/pages/dashboard.md`.
+
+If `design-system/<project-slug>/MASTER.md` already exists, `--persist` **skips writing and leaves it untouched** unless you also pass `--force` — check whether it exists first (and read it) before regenerating, so you don't silently discard prior decisions the user or a teammate made.
+
+**Retrieval when building a specific page:**
+1. Read `design-system/<project-slug>/MASTER.md`
+2. Check if `design-system/<project-slug>/pages/<page-name>.md` exists — if so, its rules override Master
+3. Otherwise use Master rules exclusively
+
+### Step 2c: Design Dials (optional)
+
+Three optional 1-10 sliders that tune `--design-system` output without changing your query. Add any combination of them to the same command:
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<query>" --design-system --variance <1-10> --motion <1-10> --density <1-10>
+```
+
+| Dial | Low (1-3) | Mid (4-7) | High (8-10) |
+|------|-----------|-----------|-------------|
+| `--variance` | Centered / minimal (biases toward Minimalism-style categories) | Balanced / modern | Bold / asymmetric (biases toward Brutalism, Bento Grids) |
+| `--motion` | Subtle micro-interactions | Standard scroll/stagger motion | Complex choreography (pin, Flip, SplitText) |
+| `--density` | Spacious (24-96px spacing scale) | Standard (16-64px, current default) | Dense/dashboard (8-32px spacing scale) |
+
+- `--motion` attaches a ready-to-use GSAP snippet (with framework notes, Do/Don't, and performance notes) pulled from `--domain gsap`, matched to the resolved tier (Subtle/Standard/Complex).
+- `--density` overrides the `--space-*` CSS variable table in the ASCII/markdown/MASTER.md output — use it for dashboards (high) vs. marketing pages (low) without hand-editing tokens.
+- Leaving a dial unset keeps that part of the output exactly as it was before (no behavior change).
+
+**Example:**
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "internal analytics dashboard" --design-system --variance 8 --motion 7 --density 8 -p "Ops Console"
+```
+
+### Step 3: Supplement with Detailed Searches (as needed)
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<keyword>" --domain <domain> [-n <max_results>]
+```
+
+| Need | Domain | Example |
+|------|--------|---------|
+| Product type patterns | `product` | `--domain product "entertainment social"` |
+| More style options | `style` | `--domain style "glassmorphism dark"` |
+| Color palettes | `color` | `--domain color "entertainment vibrant"` |
+| Font pairings | `ui-typography` | `--domain ui-typography "playful modern"` |
+| Individual Google Fonts | `google-fonts` | `--domain google-fonts "sans serif popular variable"` |
+| Chart recommendations | `chart` | `--domain chart "real-time dashboard"` |
+| UX best practices | `ux` | `--domain ux "ui-animation accessibility"` |
+| Landing page structure | `landing` | `--domain landing "hero social-proof"` |
+| Icon recommendations | `icons` | `--domain icons "navigation outline"` |
+| GSAP ui-animation presets | `gsap` | `--domain gsap "scroll reveal stagger"` |
+| React/Next.js performance | `react` | `--domain react "rerender memo list"` |
+| App/native interface guidelines | `web` | `--domain web "accessibilityLabel touch safe-areas"` |
+
+Domain is auto-detected from the query if `--domain` is omitted — but auto-detection can misroute overlapping terms (e.g. "font" matches both `ui-typography` and `google-fonts`). If results look off-topic, pass `--domain` explicitly.
+
+### Step 4: Stack Guidelines
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<keyword>" --stack <stack>
+```
+
+**Available stacks:** `react`, `nextjs`, `vue`, `svelte`, `astro`, `nuxtjs`, `nuxt-ui`, `angular`, `laravel`, `swiftui`, `react-native`, `flutter`, `jetpack-compose`, `html-tailwind`, `shadcn`, `threejs`, `javafx`, `wpf`, `winui`, `avalonia`, `uno`, `uwp`. Use the stack detected in Step 1.
+
+---
+
+## If a search returns 0 results
+
+Do not fabricate output. Instead:
+1. Retry once with broader or differently-worded keywords (try product + style separately rather than combined).
+2. If still empty, fall back to the priority table above and say explicitly to the user that this recommendation came from the built-in defaults, not a database match (e.g. "no palette match for X, using general SaaS defaults").
+3. Never present a 0-result search as if it returned data.
+
+## Example Workflow
+
+**User request:** "Make an AI search homepage." (stack detected as Next.js from `package.json`)
+
+```bash
+## Step 2: design system
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "AI search tool modern minimal" --design-system -p "AI Search"
+
+## Step 3: supplement
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "search loading ui-animation" --domain ux
+
+## Step 4: stack guidelines
+python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "suspense streaming bundle" --stack nextjs
+```
+
+Then synthesize the design system + detailed searches and implement.
+
+## Output Formats
+
+`--design-system` supports `-f ascii` (default, terminal display), `-f markdown` (documentation), and `--json` (machine-readable, includes the raw design system dict plus persistence status).
+
+## Tips for Better Results
+
+- Use **multi-dimensional keywords** — combine product + industry + tone + density: `"entertainment social vibrant content-dense"`, not just `"app"`
+- Try different phrasings for the same need: `"playful neon"` → `"vibrant dark"` → `"content-first minimal"`
+- Use `--design-system` first for full recommendations, then `--domain` to deep-dive any dimension you're unsure about
+- Pass the detected stack explicitly for implementation-specific guidance
+
+| Problem | What to Do |
+|---------|------------|
+| Can't decide on style/color | Re-run `--design-system` with different keywords |
+| Dark mode contrast issues | `references/quick-reference.md` §6: `color-dark-mode` + `color-accessible-pairs` |
+| Animations feel unnatural | `references/quick-reference.md` §7: `spring-physics` + `easing` + `exit-faster-than-enter` |
+| Form UX is poor | `references/quick-reference.md` §8: `inline-validation` + `error-clarity` + `focus-management` |
+| Navigation feels confusing | `references/quick-reference.md` §9: `nav-hierarchy` + `bottom-nav-limit` + `back-behavior` |
+| Layout breaks on small screens | `references/quick-reference.md` §5: `mobile-first` + `breakpoint-consistency` |
+| Performance / jank | `references/quick-reference.md` §3: `virtualize-lists` + `main-thread-budget` + `debounce-throttle` |
+
+## Before Delivering App UI
+
+Read `references/pro-rules.md` and run through its canonical Pre-Delivery Checklist. It covers icon/visual-element discipline, interaction feedback, light/dark contrast, safe-area layout, and accessibility — scoped to native/mobile app UI (iOS/Android/React Native/Flutter).

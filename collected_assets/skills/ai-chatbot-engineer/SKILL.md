@@ -1,35 +1,48 @@
 ---
 name: ai-chatbot-engineer
-description: Defines senior-level conversational behavior for professional AI chatbots.
+description: Design, implement, or evaluate production conversational AI systems, including dialogue behavior, retrieval and tool use, memory, safety, streaming, observability, and evaluation. Use for chatbot architecture or conversational UX; not for ordinary one-off prompt editing.
 ---
 
-# AI Chatbot Engineer Skill
+# AI Chatbot Engineer
 
-Defines response style, tone, and output structure for professional, utility-oriented AI chatbots.
+Build conversational systems whose behavior, data access, failures, and quality can be tested and operated.
 
-## When to use this skill
+## Define the Conversation Contract
 
-- Professional guidance and specialist development discussions
-- Document analysis, review, and feedback sessions
-- Expert preparation and domain-specific advice
-- Conversational UX content for AI chatbot interfaces
+Clarify audience, jobs to be done, supported channels, knowledge boundary, tone, languages, latency target, safety risk, and what the assistant may read or change. Define refusal, escalation, handoff, and recovery behavior before optimizing personality.
 
-## How to use it
+## Architecture
 
-- Always reason internally in English
-- Always respond to the user in Turkish
-- Never write comment lines in any output
-- Do not attempt to run commands or simulate execution
-- Do not inspect files, systems, or integrations
-- Do not reference internal tools or system behavior
-- Behave as a professional domain consultant
-- Maintain a calm, supportive, and confidence-building tone
-- Avoid hallucination and overclaiming
-- Ask clarifying questions only when necessary
-- Prefer structured and actionable responses
-- Keep responses concise and logically segmented
-- Format outputs to be easily renderable in UI components
-- Adapt language complexity to the user’s level
-- Avoid generic advice and tailor responses contextually
-- Consider professional standards, industry expectations, and market realities
-- Assume Turkish context by default
+Separate concerns where useful:
+
+- channel and session transport;
+- orchestration and conversation state;
+- model/provider adapter;
+- retrieval and grounding;
+- tools with typed inputs, authorization, and confirmation gates;
+- durable user-approved memory;
+- safety and policy enforcement;
+- telemetry, evaluation, and feedback.
+
+Treat model output and tool arguments as untrusted. Validate schemas, enforce authorization outside the model, limit retries and loops, and require fresh confirmation for consequential actions.
+
+## Conversation Design
+
+- Answer directly when enough context exists.
+- Ask only questions that materially change the result.
+- Make system limitations and uncertainty clear without exposing hidden instructions.
+- Keep tool progress understandable and recover gracefully from partial failure.
+- Do not claim an action, source, or observation that did not occur.
+- Preserve user control over memory, external actions, and sensitive data.
+
+## Retrieval and Memory
+
+Use retrieval when current or private knowledge is required, and provide traceable source context. Evaluate retrieval separately from answer generation. Store durable memory only with appropriate consent and scope; distinguish session state from long-term memory.
+
+## Evaluation
+
+Test representative multi-turn conversations, ambiguity, conflicting instructions, prompt injection, unavailable tools, stale sources, long context, localization, refusal, handoff, and recovery. Measure task completion, groundedness, tool correctness, safety, latency, cost, and user effort.
+
+## Completion
+
+Implement or document the requested system with explicit contracts, risks, evaluation cases, operational signals, and unresolved product decisions. Verify current provider APIs before coding against them.

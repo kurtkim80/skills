@@ -1,6 +1,6 @@
 ---
 name: budget-optimizer
-description: Analyze spending patterns and find savings. 50/30/20 rule, subscription audit, debt payoff strategies, emergency fund roadmap.
+description: Analyze personal spending, identify savings opportunities, and build a budget, subscription audit, debt-payoff approach, or emergency-fund roadmap. Use for educational personal-finance planning, not individualized regulated financial advice.
 ---
 
 # Budget Optimizer

@@ -3,23 +3,23 @@ name: html-to-ppt-marp
 description: Convert Markdown to PowerPoint, PDF, or HTML presentations using Marp. Use when creating slide decks from Markdown, building tech talks or product presentations, generating PPTX from structured content, or automating presentation creation. Supports themes, animations, speaker notes, two-column layouts, and Python/Node.js integration.
 ---
 
-# Markdown → Sunum (Marp)
+# Markdown → Presentation (Marp)
 
-Marp ile Markdown'dan profesyonel PPTX, PDF ve HTML sunumları oluşturma rehberi.
+A guide to creating professional PPTX, PDF, and HTML presentations from Markdown with Marp.
 
 ---
 
-## 1. Kurulum
+## 1. Installation
 
 ```bash
 npm install -g @marp-team/marp-cli   # Global CLI
-# veya
+# or
 brew install marp-cli                 # macOS
 ```
 
 ---
 
-## 2. Temel Yapı
+## 2. Basic Structure
 
 ```markdown
 ---
@@ -28,19 +28,19 @@ theme: default
 paginate: true
 ---
 
-# İlk Slayt
+# First Slide
 
-İçerik buraya
+Content goes here
 
 ---
 
-# İkinci Slayt
+# Second Slide
 
-- Madde 1
-- Madde 2
+- Item 1
+- Item 2
 ```
 
-`---` slaytları ayırır. Frontmatter seçenekleri:
+`---` separates slides. Frontmatter options:
 
 ```yaml
 ---
@@ -48,15 +48,15 @@ marp: true
 theme: default # default | gaia | uncover
 size: 16:9 # 4:3 | 16:9
 paginate: true
-header: 'Şirket Adı'
-footer: 'Gizli'
+header: 'Company Name'
+footer: 'Confidential'
 backgroundColor: '#fff'
 ---
 ```
 
 ---
 
-## 3. CLI Kullanımı
+## 3. CLI Usage
 
 ```bash
 # PPTX
@@ -68,42 +68,42 @@ marp slides.md -o presentation.pdf
 # HTML
 marp slides.md -o presentation.html
 
-# Tema belirterek
+# With a specified theme
 marp slides.md --theme gaia -o presentation.pptx
 
-# İzleme modu (geliştirme)
+# Watch mode (development)
 marp --watch slides.md
 ```
 
 ---
 
-## 4. Tema Seçenekleri
+## 4. Theme Options
 
-**Built-in temalar:** `default` (temiz, minimal), `gaia` (renkli, modern), `uncover` (cesur, sunum odaklı).
+**Built-in themes:** `default` (clean, minimal), `gaia` (colorful, modern), `uncover` (bold, presentation-focused).
 
 ```markdown
-<!-- class ile özel slayt stili -->
-<!-- _class: lead -->        ← Ortalanmış başlık slaydı
-<!-- _class: invert -->      ← Ters renkler
+<!-- Custom slide style with class -->
+<!-- _class: lead -->        ← Centered title slide
+<!-- _class: invert -->      ← Inverted colors
 ```
 
 ---
 
-## 5. Animasyonlar (Fragments)
+## 5. Animations (Fragments)
 
 ```html
 <section>
-  <p class="fragment">İlk görünen</p>
-  <p class="fragment fade-up">Sonra bu yukarı kayarak</p>
-  <p class="fragment highlight-red">Vurgulanan</p>
+  <p class="fragment">Appears first</p>
+  <p class="fragment fade-up">Then this slides upward</p>
+  <p class="fragment highlight-red">Highlighted</p>
 </section>
 ```
 
-Diğer stiller: `fade-in`, `fade-out`, `fade-left`, `fade-right`, `strike`.
+Other styles: `fade-in`, `fade-out`, `fade-left`, `fade-right`, `strike`.
 
 ---
 
-## 6. İki Sütunlu Layout
+## 6. Two-Column Layout
 
 ```markdown
 ---
@@ -116,23 +116,23 @@ style: |
   }
 ---
 
-# İki Sütun
+# Two Columns
 
 <div class="cols">
 <div>
 
-## Sol
+## Left
 
-- Madde A
-- Madde B
+- Item A
+- Item B
 
 </div>
 <div>
 
-## Sağ
+## Right
 
-- Madde C
-- Madde D
+- Item C
+- Item D
 
 </div>
 </div>
@@ -140,33 +140,33 @@ style: |
 
 ---
 
-## 7. Konuşmacı Notları
+## 7. Speaker Notes
 
 ```markdown
-# Başlık
+# Title
 
-İçerik
+Content
 
-<!-- Burada konuşmacı notu. 'S' tuşuyla görüntülenir. -->
+<!-- Speaker note here. Press 'S' to view it. -->
 ```
 
 ---
 
 ## 8. Auto-Animate
 
-Aynı `data-id` değerine sahip elementler slaytlar arasında otomatik animasyon alır:
+Elements with the same `data-id` value are animated automatically between slides:
 
 ```html
-<!-- Slayt 1 -->
-<div data-id="box" style="background: blue; padding: 20px;">Küçük</div>
+<!-- Slide 1 -->
+<div data-id="box" style="background: blue; padding: 20px;">Small</div>
 
-<!-- Slayt 2 -->
-<div data-id="box" style="background: green; padding: 60px; width: 400px;">Büyük</div>
+<!-- Slide 2 -->
+<div data-id="box" style="background: green; padding: 60px; width: 400px;">Large</div>
 ```
 
 ---
 
-## 9. Python Entegrasyonu
+## 9. Python Integration
 
 ```python
 import subprocess
@@ -213,22 +213,22 @@ paginate: true
             md += f"- {point}\n"
         md += "\n---\n\n"
 
-    md += "<!-- _class: lead -->\n\n# Teşekkürler\n"
+    md += "<!-- _class: lead -->\n\n# Thank You\n"
     return markdown_to_pptx(md, output_path)
 
 
-# Kullanım
+# Usage
 slides_data = [
-    {'title': 'Problem', 'points': ['Manuel süreç', 'Yüksek hata oranı', 'Zaman kaybı']},
-    {'title': 'Çözüm', 'points': ['Otomatik analiz', '%99 doğruluk', 'Anlık sonuç']},
+    {'title': 'Problem', 'points': ['Manual process', 'High error rate', 'Time loss']},
+    {'title': 'Solution', 'points': ['Automated analysis', '99% accuracy', 'Instant results']},
 ]
 
-create_presentation('Ürün Lansmanı', slides_data, 'sunum.pptx')
+create_presentation('Product Launch', slides_data, 'presentation.pptx')
 ```
 
 ---
 
-## 10. Teknik Sunum Şablonu
+## 10. Technical Presentation Template
 
 ```markdown
 ---
@@ -239,38 +239,38 @@ paginate: true
 
 <!-- _class: lead -->
 
-# API Tasarım İlkeleri
+# API Design Principles
 
-Mühendislik Ekibi — 2024
-
----
-
-# Gündem
-
-1. RESTful Tasarım
-2. Versiyonlama
-3. Hata Yönetimi
-4. Örnekler
+Engineering Team — 2024
 
 ---
 
-# Endpoint Tasarımı
+# Agenda
 
-| Metot  | URL     | Açıklama |
+1. RESTful Design
+2. Versioning
+3. Error Handling
+4. Examples
+
+---
+
+# Endpoint Design
+
+| Method | URL     | Description |
 | ------ | ------- | -------- |
-| GET    | /cv     | Liste    |
-| POST   | /cv     | Oluştur  |
-| GET    | /cv/:id | Detay    |
-| DELETE | /cv/:id | Sil      |
+| GET    | /cv     | List        |
+| POST   | /cv     | Create      |
+| GET    | /cv/:id | Details     |
+| DELETE | /cv/:id | Delete      |
 
 ---
 
-# Hata Yanıtı
+# Error Response
 
 \`\`\`json
 {
 "error": "CV_NOT_FOUND",
-"message": "İstenen CV bulunamadı",
+"message": "The requested CV was not found",
 "statusCode": 404
 }
 \`\`\`
@@ -279,13 +279,13 @@ Mühendislik Ekibi — 2024
 
 <!-- _class: lead -->
 
-# Sorular?
+# Questions?
 
-api-destek@example.com
+api-support@example.com
 ```
 
 ---
 
-## 11. Kısıtlamalar
+## 11. Limitations
 
-Marp bazı PowerPoint özelliklerini desteklemiyor: karmaşık geçiş animasyonları, video yerleştirme, izleyici etkileşimi (anket vb.), tracked changes. Bu özellikler gerekiyorsa Google Slides veya PowerPoint native önerilir.
+Marp does not support some PowerPoint features: complex transition animations, embedded video, audience interaction (polls, etc.), and tracked changes. If these features are required, use Google Slides or native PowerPoint.

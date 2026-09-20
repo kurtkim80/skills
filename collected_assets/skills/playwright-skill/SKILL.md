@@ -5,19 +5,19 @@ description: Browser automation and E2E testing with Playwright. Use when testin
 
 # Playwright Skill — Browser Automation
 
-Playwright ile web uygulaması E2E testi ve browser otomasyonu rehberi.
+A guide to web application E2E testing and browser automation with Playwright.
 
 ## When to use this skill
 
-- Web uygulaması fonksiyonel test edilirken
-- Kullanıcı flow'ları otomatize edilirken
-- Responsive tasarım kontrol edilirken
-- Login akışları ve form submission test edilirken
-- Screenshot alınırken (görsel doğrulama)
+- When functionally testing a web application
+- When automating user flows
+- When checking responsive design
+- When testing login flows and form submission
+- When taking screenshots for visual verification
 
 ---
 
-## 1. Kurulum
+## 1. Installation
 
 ```bash
 npm install playwright
@@ -26,19 +26,19 @@ npx playwright install chromium
 
 ---
 
-## 2. Temel Workflow
+## 2. Basic Workflow
 
-**Adım 1 — Dev server tespit et:**
+**Step 1 — Detect the development server:**
 
 ```bash
-# Çalışan port'ları kontrol et
+# Check running ports
 npx detect-port 3000 3001 3002 4000 8080 | grep -v "available"
 ```
 
-**Adım 2 — Test script'i `/tmp`'ye yaz:**
-Test dosyalarını proje dizinine değil `/tmp/playwright-test-*.js`'e yaz.
+**Step 2 — Write the test script to `/tmp`:**
+Write test files to `/tmp/playwright-test-*.js`, not to the project directory.
 
-**Adım 3 — Çalıştır:**
+**Step 3 — Run:**
 
 ```bash
 node /tmp/playwright-test-example.js
@@ -46,9 +46,9 @@ node /tmp/playwright-test-example.js
 
 ---
 
-## 3. Temel Pattern'lar
+## 3. Basic Patterns
 
-### Sayfa Yükleme ve Screenshot
+### Page Loading and Screenshot
 
 ```javascript
 const { chromium } = require('playwright')
@@ -61,18 +61,18 @@ const TARGET_URL = 'http://localhost:3000'
 
   try {
     await page.goto(TARGET_URL, { waitUntil: 'networkidle', timeout: 10000 })
-    console.log('Başlık:', await page.title())
+    console.log('Title:', await page.title())
     await page.screenshot({ path: '/tmp/screenshot.png', fullPage: true })
     console.log('📸 Screenshot: /tmp/screenshot.png')
   } catch (error) {
-    console.error('❌ Hata:', error.message)
+    console.error('❌ Error:', error.message)
   } finally {
     await browser.close()
   }
 })()
 ```
 
-### Form Doldurma ve Submit
+### Form Filling and Submission
 
 ```javascript
 const { chromium } = require('playwright')
@@ -84,19 +84,19 @@ const TARGET_URL = 'http://localhost:3000'
   const page = await browser.newPage()
   await page.goto(`${TARGET_URL}/contact`)
 
-  await page.fill('input[name="name"]', 'Test Kullanıcı')
+  await page.fill('input[name="name"]', 'Test User')
   await page.fill('input[name="email"]', 'test@example.com')
-  await page.fill('textarea[name="message"]', 'Test mesajı')
+  await page.fill('textarea[name="message"]', 'Test message')
   await page.click('button[type="submit"]')
 
   await page.waitForSelector('.success-message')
-  console.log('✅ Form başarıyla gönderildi')
+  console.log('✅ Form submitted successfully')
 
   await browser.close()
 })()
 ```
 
-### Login Akışı Testi
+### Login Flow Test
 
 ```javascript
 const { chromium } = require('playwright')
@@ -113,13 +113,13 @@ const TARGET_URL = 'http://localhost:3000'
   await page.click('button[type="submit"]')
 
   await page.waitForURL('**/dashboard', { timeout: 5000 })
-  console.log("✅ Login başarılı, dashboard'a yönlendirildi")
+  console.log('✅ Login successful; redirected to dashboard')
 
   await browser.close()
 })()
 ```
 
-### Responsive Tasarım Testi
+### Responsive Design Test
 
 ```javascript
 const { chromium } = require('playwright')
@@ -152,7 +152,7 @@ const TARGET_URL = 'http://localhost:3000'
 })()
 ```
 
-### Kırık Link Kontrolü
+### Broken Link Check
 
 ```javascript
 const { chromium } = require('playwright')
@@ -179,9 +179,9 @@ const { chromium } = require('playwright')
     }
   }
 
-  console.log(`✅ Çalışan linkler: ${results.working}`)
+  console.log(`✅ Working links: ${results.working}`)
   if (results.broken.length > 0) {
-    console.log(`❌ Kırık linkler:`, results.broken)
+    console.log(`❌ Broken links:`, results.broken)
   }
 
   await browser.close()
@@ -206,10 +206,10 @@ const { chromium } = require('playwright')
   await page.waitForTimeout(2000)
 
   if (consoleErrors.length > 0) {
-    console.log('🚨 Console hataları bulundu:')
+    console.log('🚨 Console errors found:')
     consoleErrors.forEach((err) => console.log(`  - ${err}`))
   } else {
-    console.log('✅ Console hatası yok')
+    console.log('✅ No console errors')
   }
 
   await browser.close()
@@ -218,46 +218,46 @@ const { chromium } = require('playwright')
 
 ---
 
-## 4. Bekleme Stratejileri
+## 4. Waiting Strategies
 
 ```javascript
-// ✅ İyi — duruma göre bekle
+// ✅ Good — wait for a state
 await page.waitForURL('**/dashboard')
 await page.waitForSelector('.success-message')
 await page.waitForLoadState('networkidle')
 await page.waitForResponse((response) => response.url().includes('/api/'))
 
-// ❌ Kötü — sabit timeout (çok kırılgan)
-await page.waitForTimeout(3000) // Sadece gerektiğinde
+// ❌ Bad — fixed timeout (very fragile)
+await page.waitForTimeout(3000) // Only when necessary
 ```
 
 ---
 
-## 5. Kullanışlı Seçiciler
+## 5. Useful Selectors
 
 ```javascript
-// En sağlam — test-id ile
+// Most robust — with test ID
 await page.locator('[data-testid="submit-button"]').click()
 
-// ARIA role ile
-await page.getByRole('button', { name: 'Kaydet' }).click()
+// With ARIA role
+await page.getByRole('button', { name: 'Save' }).click()
 await page.getByRole('textbox', { name: 'Email' }).fill('test@example.com')
 
-// Label ile
-await page.getByLabel('Email adresi').fill('test@example.com')
+// With label
+await page.getByLabel('Email address').fill('test@example.com')
 
-// Metin ile
-await page.getByText('Başarıyla kaydedildi').waitFor()
+// With text
+await page.getByText('Saved successfully').waitFor()
 
-// CSS seçici (daha kırılgan)
+// CSS selector (more fragile)
 await page.locator('button[type="submit"]').click()
 ```
 
 ---
 
-## 6. Talent Architect için Özel Test Senaryoları
+## 6. Application Flow Examples
 
-### CV Yükleme Testi
+### File Upload Test
 
 ```javascript
 const { chromium } = require('playwright')
@@ -267,35 +267,33 @@ const path = require('path')
   const browser = await chromium.launch({ headless: false })
   const page = await browser.newPage()
 
-  await page.goto('http://localhost:3000/cv/upload')
+  await page.goto('http://localhost:3000/upload')
 
   const fileChooserPromise = page.waitForEvent('filechooser')
-  await page.click('[data-testid="upload-area"]')
+  await page.getByRole('button', { name: /upload/i }).click()
   const fileChooser = await fileChooserPromise
-  await fileChooser.setFiles(path.join(__dirname, 'test-cv.pdf'))
+  await fileChooser.setFiles(path.join(__dirname, 'fixture.pdf'))
 
   await page.waitForSelector('[data-testid="upload-success"]', { timeout: 30000 })
-  console.log('✅ CV yükleme başarılı')
+  console.log('✅ File upload successful')
 
   await browser.close()
 })()
 ```
 
-### ATS Analiz Akışı Testi
+### Long-Running Operation Test
 
 ```javascript
 ;(async () => {
   const browser = await chromium.launch({ headless: false })
   const page = await browser.newPage()
 
-  await page.goto('http://localhost:3000/ats')
-  await page.fill('[data-testid="job-description"]', 'Senior Software Engineer...')
-  await page.click('[data-testid="analyze-button"]')
+  await page.goto('http://localhost:3000/analyze')
+  await page.getByLabel('Input').fill('Example input')
+  await page.getByRole('button', { name: /analyze/i }).click()
 
-  // AI analizi uzun sürebilir
-  await page.waitForSelector('[data-testid="ats-score"]', { timeout: 60000 })
-  const score = await page.textContent('[data-testid="ats-score"]')
-  console.log('✅ ATS skoru:', score)
+  await page.getByTestId('analysis-result').waitFor({ timeout: 60000 })
+  console.log('✅ Operation completed')
 
   await browser.close()
 })()
@@ -303,11 +301,11 @@ const path = require('path')
 
 ---
 
-## 7. İpuçları
+## 7. Tips
 
-- **DEFAULT**: `headless: false` — görsel debugging için
-- **Test dosyaları**: `/tmp/playwright-test-*.js` — projeyi kirletme
-- **URL parametrize et**: Her script'te `const TARGET_URL = '...'`
-- **Try-catch zorunlu**: Robust automation için
-- **Slow mo kullan**: `slowMo: 100` — aksiyonları izlemeyi kolaylaştırır
-- **Sabit timeout kullanma**: `waitForSelector`, `waitForURL` tercih et
+- **DEFAULT**: `headless: false` — for visual debugging
+- **Test files**: `/tmp/playwright-test-*.js` — do not clutter the project
+- **Parameterize the URL**: Use `const TARGET_URL = '...'` in every script
+- **Try-catch is required**: For robust automation
+- **Use slow motion**: `slowMo: 100` — makes actions easier to observe
+- **Do not use fixed timeouts**: Prefer `waitForSelector` and `waitForURL`

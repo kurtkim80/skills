@@ -1,38 +1,38 @@
 ---
 name: office-to-markdown
-description: Convert Office documents (Word, Excel, PowerPoint, PDF) to Markdown using Microsoft's markitdown library. Use when extracting content from Office files for version control, AI processing, documentation archiving, or RAG corpus creation. Supports batch conversion, metadata preservation, and AI-enhanced image description via Claude.
+description: Convert Word, Excel, PowerPoint, PDF, and related files to Markdown with Microsoft's MarkItDown library. Use for text extraction, version control, archiving, or RAG preparation when layout fidelity is not the primary output; verify the installed MarkItDown version and conversion options.
 ---
 
 # Office → Markdown (markitdown)
 
-Microsoft'un açık kaynaklı `markitdown` kütüphanesi ile Office dosyalarını Markdown'a dönüştürme rehberi.
+A guide to converting Office files to Markdown with Microsoft's open-source `markitdown` library.
 
 ---
 
-## 1. Kurulum
+## 1. Installation
 
 ```bash
-pip install markitdown          # Temel
-pip install markitdown[all]     # Görsel OCR + ses transkripsiyon dahil
+pip install markitdown          # Basic
+pip install markitdown[all]     # Includes image OCR and audio transcription
 ```
 
 ---
 
-## 2. Desteklenen Formatlar
+## 2. Supported Formats
 
-| Format     | Uzantı     | Notlar                            |
+| Format     | Extension  | Notes                             |
 | ---------- | ---------- | --------------------------------- |
-| Word       | .docx      | Metin, tablo, temel biçimlendirme |
-| Excel      | .xlsx      | Sayfalar → Markdown tabloları     |
-| PowerPoint | .pptx      | Slaytlar → Bölümler               |
-| PDF        | .pdf       | Metin çıkarma                     |
-| HTML       | .html      | Temiz Markdown                    |
-| Görsel     | .jpg, .png | LLM ile OCR (opsiyonel)           |
-| ZIP        | .zip       | İçerdiği dosyaları işler          |
+| Word       | .docx      | Text, tables, basic formatting    |
+| Excel      | .xlsx      | Sheets → Markdown tables          |
+| PowerPoint | .pptx      | Slides → Sections                 |
+| PDF        | .pdf       | Text extraction                   |
+| HTML       | .html      | Clean Markdown                    |
+| Image      | .jpg, .png | OCR with an LLM (optional)        |
+| ZIP        | .zip       | Processes contained files         |
 
 ---
 
-## 3. Temel Kullanım
+## 3. Basic Usage
 
 ```python
 from markitdown import MarkItDown
@@ -40,83 +40,69 @@ from pathlib import Path
 
 md = MarkItDown()
 
-# Tek dosya dönüştürme
-result = md.convert("rapor.docx")
+# Convert a single file
+result = md.convert("report.docx")
 print(result.text_content)
 
-# Dosyaya kaydet
-Path("rapor.md").write_text(result.text_content, encoding='utf-8')
+# Save to a file
+Path("report.md").write_text(result.text_content, encoding='utf-8')
 ```
 
-### CLI ile
+### With the CLI
 
 ```bash
-markitdown rapor.docx > rapor.md
-markitdown rapor.docx -o rapor.md
+markitdown report.docx > report.md
+markitdown report.docx -o report.md
 ```
 
 ---
 
-## 4. Format Örnekleri
+## 4. Format Examples
 
-### Word Çıktısı
+### Word Output
 
 ```markdown
-# Yıllık Rapor 2024
+# Annual Report 2024
 
-## Yönetici Özeti
+## Executive Summary
 
-Bu rapor temel başarıları özetlemektedir...
+This report summarizes the key achievements...
 
-### Temel Metrikler
+### Key Metrics
 
-| Metrik | 2023 | 2024 | Değişim |
-| ------ | ---- | ---- | ------- |
-| Gelir  | 10M₺ | 12M₺ | +%20    |
+| Metric  | 2023 | 2024 | Change |
+| ------- | ---- | ---- | ------ |
+| Revenue | ₺10M | ₺12M | +20%   |
 ```
 
-### PowerPoint Çıktısı
+### PowerPoint Output
 
-Her slayt bir bölüm olur, konuşmacı notları da dahil edilir.
+Each slide becomes a section, and speaker notes are included.
 
 ```markdown
-# Slayt 1: Şirket Genel Bakışı
+# Slide 1: Company Overview
 
-Misyonumuz şudur...
+Our mission is...
 
-## Temel Noktalar
+## Key Points
 
-- İnovasyon önce gelir
-- Müşteri odaklılık
+- Innovation comes first
+- Customer focus
 
 ---
 
-# Slayt 2: Pazar Analizi
+# Slide 2: Market Analysis
 ```
 
 ---
 
-## 5. Görsel İçin AI Entegrasyonu
+## 5. AI Integration for Images
 
-```python
-import anthropic
-from markitdown import MarkItDown
-
-client = anthropic.Anthropic()
-
-md = MarkItDown(
-    llm_client=client,
-    llm_model="claude-sonnet-4-20250514"
-)
-
-# Görsel içerikleri açıklamaya dönüştürür
-result = md.convert("diyagram.png")
-print(result.text_content)
-```
+If the installed MarkItDown version supports it, image descriptions can be added by configuring the multimodal provider approved by the project. The provider client and model name vary by version; check the official API for the installed version. Before sending visual content to an external provider, verify privacy, data residency, and cost requirements.
 
 ---
 
-## 6. Toplu Dönüşüm
+## 6. Batch Conversion
 
 ```python
 from markitdown import MarkItDown
@@ -143,17 +129,17 @@ def batch_convert(input_dir: str, output_dir: str) -> None:
                 print(f"✗ {file.name}: {e}")
 
     if errors:
-        print(f"\n{len(errors)} hata oluştu:")
+        print(f"\n{len(errors)} errors occurred:")
         for name, err in errors:
             print(f"  - {name}: {err}")
 
 
-batch_convert('./belgeler', './markdown')
+batch_convert('./documents', './markdown')
 ```
 
 ---
 
-## 7. Metadata ile Arşivleme
+## 7. Archiving with Metadata
 
 ```python
 from datetime import datetime
@@ -166,7 +152,6 @@ def archive_with_metadata(doc_path: str, archive_dir: str) -> str:
 
     filename = Path(doc_path).name
     output = f"""---
-source: {filename}
 converted: {datetime.now().strftime('%Y-%m-%d')}
 ---
 
@@ -183,7 +168,7 @@ converted: {datetime.now().strftime('%Y-%m-%d')}
 
 ---
 
-## 8. RAG / AI Corpus Oluşturma
+## 8. Creating a RAG / AI Corpus
 
 ```python
 import json
@@ -206,27 +191,27 @@ def create_ai_corpus(doc_folder: str, output_file: str) -> list[dict]:
                 'content': result.text_content,
             })
         except Exception as e:
-            print(f"Atlandı {doc.name}: {e}")
+            print(f"Skipped {doc.name}: {e}")
 
     Path(output_file).write_text(
         json.dumps(corpus, ensure_ascii=False, indent=2),
         encoding='utf-8'
     )
-    print(f"{len(corpus)} belge corpus'a eklendi.")
+    print(f"{len(corpus)} documents added to the corpus.")
     return corpus
 
 
-create_ai_corpus('./sirket-belgeleri', './corpus.json')
+create_ai_corpus('./company-documents', './corpus.json')
 ```
 
 ---
 
-## 9. Kısıtlamalar
+## 9. Limitations
 
-Karmaşık biçimlendirme basitleştirilebilir. Görseller Markdown'a gömülmez (LLM ile açıklama alınabilir). Bazı tablo yapıları mükemmel dönüşmeyebilir. Word'deki izlenen değişiklikler ve yorumlar korunmaz.
+Complex formatting may be simplified. Images are not embedded in Markdown (descriptions can be obtained with an LLM). Some table structures may not convert perfectly. Tracked changes and comments in Word are not preserved.
 
 ---
 
 ## 10. Best Practices
 
-Dönüştürülen Markdown'ı kaynak belgesiyle karşılaştırarak kalite kontrol yap. Önemli görseller için LLM entegrasyonunu aktif et. Büyük toplu işlemler için try-except ile hata toleransı ekle. Arşivlenen belgelere kaynak ve tarih metadata'sı ekle. Dönüştürülmüş içerikleri Git ile versiyon kontrolüne al.
+Perform quality control by comparing the converted Markdown with the source document. Enable LLM integration for important images. Add error tolerance with try-except for large batch operations. Add source and date metadata to archived documents. Put converted content under Git version control.

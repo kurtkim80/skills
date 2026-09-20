@@ -1,36 +1,50 @@
 ---
 name: ui-design-system
-description: UI design system toolkit for Senior UI Designer including design token generation, component documentation, responsive design calculations, and developer handoff tools. Use for creating design systems, maintaining visual consistency, and facilitating design-dev collaboration.
+description: Create, evolve, or document a product design system with semantic tokens, accessible components, variants, governance, and developer handoff. Use when multiple interfaces need shared visual and interaction rules; do not trigger for a single isolated component unless it exposes a system-level gap.
 ---
 
 # UI Design System
 
-Professional toolkit for creating and maintaining scalable design systems.
+Build a design system that reduces repeated decisions and keeps product behavior coherent across teams and surfaces.
 
-## Core Capabilities
+## Assess Before Expanding
 
-- Design token generation (colors, typography, spacing)
-- Component system architecture
-- Responsive design calculations
-- Accessibility compliance
-- Developer handoff documentation
+Inventory existing tokens, components, duplicated patterns, accessibility behavior, and adoption constraints. Identify whether the real need is a new primitive, a variant, composition guidance, documentation, or cleanup of inconsistent usage.
 
-## Key Scripts
+Do not replace a working system solely to introduce a preferred naming scheme or library.
 
-### design_token_generator.py
+## Token Architecture
 
-Generates complete design system tokens from brand colors.
+Use layers when they provide a real distinction:
 
-**Usage**: `python scripts/design_token_generator.py [brand_color] [style] [format]`
+1. primitive values such as palette steps, font families, and base spacing;
+2. semantic roles such as `surface`, `text-muted`, `border-danger`, and `focus-ring`;
+3. component tokens only for stable component-specific decisions.
 
-- Styles: modern, classic, playful
-- Formats: json, css, scss
+Support themes by remapping semantic roles rather than duplicating component styles. Define units, naming, fallback behavior, and contrast requirements. Generate scales only when the inputs and algorithm are explicit; do not claim to have run a generator that is not available.
 
-**Features**:
+## Component Contracts
 
-- Complete color palette generation
-- Modular typography scale
-- 8pt spacing grid system
-- Shadow and animation tokens
-- Responsive breakpoints
-- Multiple export formats
+For each shared component, define:
+
+- purpose and appropriate use;
+- anatomy and content constraints;
+- variants, sizes, and supported composition;
+- interactive and validation states;
+- keyboard and assistive-technology behavior;
+- responsive and localization behavior;
+- API, defaults, escape hatches, and deprecated patterns.
+
+Prefer composable primitives over large components with many unrelated boolean props. Avoid exposing visual details that bypass tokens without a justified escape hatch.
+
+## Governance and Migration
+
+- Treat changes to shared tokens and component APIs as compatibility-sensitive.
+- Document breaking changes and provide an incremental migration path.
+- Validate components visually, behaviorally, and with accessibility checks.
+- Measure adoption and remove obsolete paths only after consumers migrate.
+- Keep design and code sources aligned; identify which one is authoritative for each artifact.
+
+## Deliverable
+
+Produce the requested tokens, components, documentation, or migration guidance. Include examples only where they clarify a contract or edge case. Verify representative consumers rather than considering an isolated story or screenshot sufficient.

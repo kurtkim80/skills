@@ -5,82 +5,82 @@ description: Design, implement, and evolve professional monitoring dashboards. C
 
 # System Monitoring Expert Skill
 
-Modern yazılım platformlarının monitoring altyapısını ve admin dashboard'larını tasarlama ve geliştirme skill'i.
+Design and develop monitoring infrastructure and admin dashboards for modern software platforms.
 
 ## When to use this skill
 
-- Admin monitoring sayfaları üzerinde çalışılırken
-- Monitoring altyapısı geliştirilirken
-- Monitoring API route'ları eklenirken/değiştirilirken
-- Yeni telemetry event tipi tanımlanırken
-- Monitoring dashboard layout'u gözden geçirilirken
-- Platform health KPI'ları belirlenirken
+- When working on admin monitoring pages
+- When developing monitoring infrastructure
+- When adding or changing monitoring API routes
+- When defining a new telemetry event type
+- When reviewing a monitoring dashboard layout
+- When determining platform health KPIs
 
 ## How to use it
 
-- Her zaman içsel olarak İngilizce düşün
-- Her zaman kullanıcıya Türkçe yanıt ver
-- Kod veya konfigürasyon dosyalarına comment satırı yazma
+- Always reason internally in English
+- Always respond to the user in Turkish
+- Do not add comment lines to code or configuration files
 
 ---
 
-## 1. KPI Hiyerarşisi
+## 1. KPI Hierarchy
 
-### Temel KPI'lar
+### Core KPIs
 
-#### Platform Health (Operasyonel — Real-time)
+#### Platform Health (Operational — Real-time)
 
 ```yaml
-Kullanılabilirlik:
-  - Route başarı oranı (%)
-  - Aktif incident sayısı
-  - Son 1 saatte hata sayısı
+Availability:
+  - Route success rate (%)
+  - Active incident count
+  - Error count in the last hour
 
-Performans:
-  - Median yanıt süresi (ms)
-  - P95 yanıt süresi (ms)
-  - Yavaş route'lar (>2s)
+Performance:
+  - Median response time (ms)
+  - P95 response time (ms)
+  - Slow routes (>2s)
 
-AI Servisleri:
-  - AI completion başarı oranı (%)
-  - Ortalama AI yanıt süresi (ms)
-  - Rate limit isabetleri (saatlik)
+AI Services:
+  - AI completion success rate (%)
+  - Average AI response time (ms)
+  - Rate-limit hits (hourly)
 ```
 
-#### Kullanıcı Metrikleri (Taktik — Günlük/Haftalık)
+#### User Metrics (Tactical — Daily/Weekly)
 
 ```yaml
-Kullanım:
-  - Günlük aktif kullanıcı (DAU)
-  - Feature başına kullanım oranları
-  - Oturum başına ortalama işlem sayısı
+Usage:
+  - Daily active users (DAU)
+  - Usage rates per feature
+  - Average number of actions per session
 
-Dönüşüm:
-  - Ücretsiz → Ücretli dönüşüm oranı
+Conversion:
+  - Free → Paid conversion rate
   - Feature adoption rate
 
-Kalite:
-  - Kullanıcı memnuniyet skorları
-  - İş akışı tamamlanma oranları
-  - Oturum başarı oranları
+Quality:
+  - User satisfaction scores
+  - Workflow completion rates
+  - Session success rates
 ```
 
 ---
 
 ## 2. Best Practices
 
-### Dashboard Tasarımı
+### Dashboard Design
 
-- Maksimum 5–7 KPI tek ekranda — odak yeteneği sınırlı
-- Trend olmadan tek değer anlamsız — zaman karşılaştırması ekle
-- Metodoloji gizleme — hesaplama açıklaması her metrik yanında
-- Dashboard responsive olmalı
-- 3D grafik kullanma — algıyı bozar
-- Actionable olmayan "vanity metric"lerden kaçın
+- Keep at most 5–7 KPIs on one screen — attention is limited
+- A single value without a trend is meaningless — add a time comparison
+- Do not hide the methodology — place the calculation explanation beside each metric
+- The dashboard must be responsive
+- Do not use 3D charts — they distort perception
+- Avoid non-actionable vanity metrics
 
-### Veri Güvenliği
+### Data Security
 
-- Admin route'ları yetkilendirme ile korunmalı
-- Monitoring event'lerinde PII (Kişisel Veri) bulunmamalı (redaction zorunlu)
-- TTL field'ı her event'e yazılmalı — otomatik temizlik
-- Rate limiting monitoring intake endpoint'lerine uygulanmalı
+- Admin routes must be protected with authorization
+- Monitoring events must not contain PII (Personally Identifiable Information); redaction is mandatory
+- A TTL field must be written to every event for automatic cleanup
+- Rate limiting must be applied to monitoring intake endpoints

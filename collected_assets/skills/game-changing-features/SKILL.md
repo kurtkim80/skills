@@ -7,7 +7,6 @@ description: >
   'product strategy', or 'what should we build next'. Covers mobile-specific
   opportunities: widget extensions, offline-first, push personalisation,
   App Store rating optimisation, onboarding conversion, and retention mechanics.
-version: 2.0.0
 ---
 
 # 10x Mode — Mobile Product Strategy

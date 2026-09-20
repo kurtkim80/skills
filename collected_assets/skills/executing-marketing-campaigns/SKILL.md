@@ -7,12 +7,13 @@ description: >
   marketing, and analytics. Use when developing go-to-market strategies,
   campaign messaging, App Store copy, performance measurement, or managing
   execution across digital channels for a mobile product.
-version: 2.0.0
 ---
 
 # Executing Marketing Campaigns — Mobile-First
 
 This skill helps plan campaigns, develop messaging, manage execution across channels, and measure results — with a primary focus on mobile app marketing.
+
+Verify current store, ad-platform, consent, tracking, and messaging rules before execution; examples and benchmarks are planning aids, not guaranteed current limits.
 
 ---
 

@@ -1,270 +1,438 @@
 ---
 name: opentelemetry
-description: >
-  OpenTelemetry observability for .NET 10 applications. Covers traces, metrics,
-  and logs using the OpenTelemetry SDK with OTLP export. Includes custom
-  ActivitySource, IMeterFactory metrics, resource configuration, and Aspire
-  Dashboard integration.
-  Load this skill when setting up distributed tracing, custom metrics, OTLP
-  export, or when the user mentions "OpenTelemetry", "OTLP", "traces", "spans",
-  "Activity", "ActivitySource", "metrics", "IMeterFactory", "Meter", "Counter",
-  "Histogram", "Gauge", "telemetry", "observability", "distributed tracing",
-  "OTEL", or "Aspire Dashboard".
+description: Instrument applications and infrastructure with OpenTelemetry for unified
+  traces, metrics, and logs.
+category: devops
+risk: critical
+source: https://github.com/BagelHole/DevOps-Security-Agent-Skills
+source_repo: BagelHole/DevOps-Security-Agent-Skills
+source_type: community
+date_added: '2026-09-20'
+license: MIT
+license_source: https://github.com/BagelHole/DevOps-Security-Agent-Skills/blob/main/LICENSE
+compatibility: Requires the relevant platform CLIs (kubectl, helm, terraform, git,
+  CI runners) and authorized access to the target environment. Docs-only; helper scripts
+  and templates not bundled.
+metadata:
+  author: devops-skills
+  version: '1.0'
 ---
 
 # OpenTelemetry
 
-## Core Principles
+Adopt vendor-neutral telemetry with consistent instrumentation across services.
 
-1. **Three pillars, one setup** — Configure traces, metrics, and logs through a single `AddOpenTelemetry()` call. Use `UseOtlpExporter()` for cross-cutting export to any OTLP-compatible backend.
-2. **Use `IMeterFactory` for metrics** — Never create `Meter` instances with `new`. The factory manages lifetime through DI and prevents leaks.
-3. **Null-safe activities** — `StartActivity()` returns `null` when no listener is attached. Always use `?.` when setting tags or events.
-4. **Environment variables over code** — Use `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_SERVICE_NAME` so deployments control telemetry routing without code changes.
-5. **Low-cardinality metric tags** — Keep metric tag combinations under ~1000 per instrument. Use span attributes or logs for high-cardinality data like user IDs or request IDs.
+## Prerequisites
 
-## Patterns
+- Application services running in containers or on VMs
+- Backend for traces (Jaeger, Tempo, Datadog, or any OTLP receiver)
+- Backend for metrics (Prometheus, Mimir, or OTLP receiver)
+- Kubernetes cluster (for collector deployment) or VM with systemd
+- Network access from services to collector, and collector to backends
 
-### Full Setup with All Three Signals
+## Core Workflow
 
-```csharp
-// Program.cs
-var builder = WebApplication.CreateBuilder(args);
+1. Define semantic conventions for services, environments, and versions.
+2. Add SDK or auto-instrumentation in each service.
+3. Run an OpenTelemetry Collector to receive, transform, and export telemetry.
+4. Validate cardinality and sampling to control cost.
+5. Create golden signals dashboards and alerting from collected data.
 
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(resource => resource
-        .AddService(
-            serviceName: builder.Environment.ApplicationName,
-            serviceVersion: "1.0.0"))
-    .WithTracing(tracing => tracing
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddEntityFrameworkCoreInstrumentation()
-        .AddSource("MyApp.Orders"))
-    .WithMetrics(metrics => metrics
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddMeter("MyApp.Orders"))
-    .WithLogging()             // no per-signal exporter here —
-    .UseOtlpExporter();        // UseOtlpExporter covers all three signals
+## Collector Production Configuration
 
-// UseOtlpExporter replaces per-signal AddOtlpExporter calls. Never combine
-// the two — mixing them throws NotSupportedException (see Anti-patterns).
+```yaml
+# otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # Scrape Prometheus endpoints
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: "kubernetes-pods"
+          kubernetes_sd_configs:
+            - role: pod
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: "true"
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+              action: replace
+              target_label: __address__
+              regex: (.+)
+              replacement: $$1
+
+  # Host metrics for infrastructure monitoring
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      cpu: {}
+      memory: {}
+      disk: {}
+      network: {}
+      load: {}
+
+processors:
+  batch:
+    send_batch_size: 1024
+    timeout: 5s
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+  attributes:
+    actions:
+      - key: deployment.environment
+        value: production
+        action: upsert
+
+  # Drop high-cardinality attributes to control cost
+  filter/drop-debug:
+    traces:
+      span:
+        - 'attributes["http.request.header.x-debug"] == "true"'
+
+  # Reduce cardinality on URL paths
+  transform/normalize-routes:
+    trace_statements:
+      - context: span
+        statements:
+          - replace_pattern(attributes["url.path"], "/users/[0-9]+", "/users/{id}")
+          - replace_pattern(attributes["url.path"], "/orders/[0-9]+", "/orders/{id}")
+
+  # Resource detection for cloud environments
+  resourcedetection:
+    detectors: [env, system, gcp, aws, azure]
+    timeout: 5s
+
+exporters:
+  # Send traces to Tempo/Jaeger
+  otlp/traces:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+  # Send metrics to Prometheus via remote write
+  prometheusremotewrite:
+    endpoint: http://mimir:9009/api/v1/push
+    tls:
+      insecure: true
+
+  # Send logs to Loki
+  otlp/logs:
+    endpoint: loki:4317
+    tls:
+      insecure: true
+
+  # Debug exporter for development
+  debug:
+    verbosity: basic
+
+service:
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      address: 0.0.0.0:8888
+
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resourcedetection, transform/normalize-routes, batch, attributes]
+      exporters: [otlp/traces]
+    metrics:
+      receivers: [otlp, prometheus, hostmetrics]
+      processors: [memory_limiter, resourcedetection, batch, attributes]
+      exporters: [prometheusremotewrite]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resourcedetection, batch, attributes]
+      exporters: [otlp/logs]
 ```
 
-The OTLP endpoint defaults to `http://localhost:4317` (gRPC). Override via:
-```
-OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4317
-OTEL_SERVICE_NAME=MyApp.Api
-```
+## Collector Kubernetes Deployment
 
-### Custom Metrics with IMeterFactory
-
-Register a metrics class as a singleton. `IMeterFactory` handles `Meter` disposal through DI.
-
-```csharp
-public sealed class OrderMetrics
-{
-    private readonly Counter<int> _ordersCreated;
-    private readonly Histogram<double> _orderDuration;
-    private readonly UpDownCounter<int> _activeOrders;
-    private readonly Gauge<double> _queueDepth;
-
-    public OrderMetrics(IMeterFactory meterFactory)
-    {
-        var meter = meterFactory.Create("MyApp.Orders");
-
-        _ordersCreated = meter.CreateCounter<int>(
-            "myapp.orders.created", "{orders}", "Number of orders created");
-
-        _orderDuration = meter.CreateHistogram<double>(
-            "myapp.orders.duration", "s", "Order processing duration",
-            advice: new InstrumentAdvice<double>
-            {
-                HistogramBucketBoundaries = [0.01, 0.05, 0.1, 0.5, 1, 5, 10]
-            });
-
-        _activeOrders = meter.CreateUpDownCounter<int>(
-            "myapp.orders.active", "{orders}", "Currently active orders");
-
-        _queueDepth = meter.CreateGauge<double>(
-            "myapp.orders.queue_depth", "{items}", "Current queue depth");
-    }
-
-    public void OrderCreated() => _ordersCreated.Add(1);
-    public void RecordDuration(double seconds) => _orderDuration.Record(seconds);
-    public void OrderStarted() => _activeOrders.Add(1);
-    public void OrderCompleted() => _activeOrders.Add(-1);
-    public void SetQueueDepth(double depth) => _queueDepth.Record(depth);
-}
-
-// Registration
-builder.Services.AddSingleton<OrderMetrics>();
-```
-
-### Multi-Dimensional Metric Tags
-
-Three or fewer tags are allocation-free. For more, use `TagList`.
-
-```csharp
-// Allocation-free (3 or fewer tags)
-_ordersCreated.Add(1,
-    new KeyValuePair<string, object?>("order.type", "standard"),
-    new KeyValuePair<string, object?>("payment.method", "credit_card"));
-
-// 4+ tags — use TagList to avoid allocations
-var tags = new TagList
-{
-    { "order.type", "standard" },
-    { "payment.method", "credit_card" },
-    { "region", "us-east" },
-    { "priority", "high" }
-};
-_ordersCreated.Add(1, tags);
-```
-
-### Custom ActivitySource for Distributed Tracing
-
-```csharp
-public sealed class OrderService(ILogger<OrderService> logger)
-{
-    private static readonly ActivitySource Source = new("MyApp.Orders");
-
-    public async Task<Order> ProcessOrderAsync(CreateOrderRequest request, CancellationToken ct)
-    {
-        using var activity = Source.StartActivity("ProcessOrder", ActivityKind.Internal);
-        activity?.SetTag("order.customer_id", request.CustomerId);
-
-        try
-        {
-            await ValidateOrder(request, ct);
-            activity?.AddEvent(new ActivityEvent("OrderValidated"));
-
-            var order = await SaveOrder(request, ct);
-            activity?.SetTag("order.id", order.Id.ToString());
-            activity?.SetStatus(ActivityStatusCode.Ok);
-            return order;
-        }
-        catch (Exception ex)
-        {
-            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            activity?.RecordException(ex);
-            throw;
-        }
-    }
-}
+```yaml
+# otel-collector-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+        - name: collector
+          image: otel/opentelemetry-collector-contrib:0.98.0
+          args: ["--config=/etc/otel/config.yaml"]
+          ports:
+            - containerPort: 4317
+              name: otlp-grpc
+            - containerPort: 4318
+              name: otlp-http
+            - containerPort: 8888
+              name: metrics
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/otel
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 13133
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 13133
+      volumes:
+        - name: config
+          configMap:
+            name: otel-collector-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  selector:
+    app: otel-collector
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+    - name: metrics
+      port: 8888
+      targetPort: 8888
 ```
 
-Register the source: `.AddSource("MyApp.Orders")` in the tracing builder.
+## Python SDK Instrumentation
 
-### Aspire Dashboard for Local Development
+```python
+# tracing_setup.py
+"""Initialize OpenTelemetry tracing and metrics for a Python service."""
+from opentelemetry import trace, metrics
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+import os
 
-Run the standalone Aspire Dashboard without Aspire orchestration:
+def init_telemetry(service_name: str, service_version: str):
+    """Initialize OTel SDK with traces and metrics."""
+    resource = Resource.create({
+        "service.name": service_name,
+        "service.version": service_version,
+        "deployment.environment": os.getenv("DEPLOY_ENV", "development"),
+    })
+
+    # Traces
+    trace_exporter = OTLPSpanExporter(
+        endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://otel-collector:4317"),
+        insecure=True,
+    )
+    tracer_provider = TracerProvider(resource=resource)
+    tracer_provider.add_span_processor(BatchSpanProcessor(trace_exporter))
+    trace.set_tracer_provider(tracer_provider)
+
+    # Metrics
+    metric_exporter = OTLPMetricExporter(
+        endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://otel-collector:4317"),
+        insecure=True,
+    )
+    metric_reader = PeriodicExportingMetricReader(metric_exporter, export_interval_millis=15000)
+    meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
+    metrics.set_meter_provider(meter_provider)
+
+    # Auto-instrument common libraries
+    RequestsInstrumentor().instrument()
+    SQLAlchemyInstrumentor().instrument()
+
+    return trace.get_tracer(service_name), metrics.get_meter(service_name)
+
+# Usage example
+tracer, meter = init_telemetry("order-service", "1.2.0")
+
+# Custom span
+with tracer.start_as_current_span("process_order") as span:
+    span.set_attribute("order.id", order_id)
+    span.set_attribute("order.total", total)
+    # ... business logic ...
+
+# Custom metric
+request_counter = meter.create_counter(
+    "app.requests",
+    description="Total application requests",
+)
+request_counter.add(1, {"route": "/api/orders", "method": "POST"})
+```
+
+## Node.js SDK Instrumentation
+
+```javascript
+// tracing.js
+// Initialize OpenTelemetry for a Node.js service.
+// Load this file BEFORE any other imports: node -r ./tracing.js app.js
+const { NodeSDK } = require("@opentelemetry/sdk-node");
+const { OTLPTraceExporter } = require("@opentelemetry/exporter-trace-otlp-grpc");
+const { OTLPMetricExporter } = require("@opentelemetry/exporter-metrics-otlp-grpc");
+const { PeriodicExportingMetricReader } = require("@opentelemetry/sdk-metrics");
+const { getNodeAutoInstrumentations } = require("@opentelemetry/auto-instrumentations-node");
+const { Resource } = require("@opentelemetry/resources");
+const { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } = require("@opentelemetry/semantic-conventions");
+
+const resource = new Resource({
+  [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME || "node-service",
+  [ATTR_SERVICE_VERSION]: process.env.SERVICE_VERSION || "1.0.0",
+  "deployment.environment": process.env.DEPLOY_ENV || "development",
+});
+
+const sdk = new NodeSDK({
+  resource,
+  traceExporter: new OTLPTraceExporter({
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || "http://otel-collector:4317",
+  }),
+  metricReader: new PeriodicExportingMetricReader({
+    exporter: new OTLPMetricExporter({
+      url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || "http://otel-collector:4317",
+    }),
+    exportIntervalMillis: 15000,
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      "@opentelemetry/instrumentation-http": {
+        ignoreIncomingPaths: ["/health", "/ready"],
+      },
+      "@opentelemetry/instrumentation-express": { enabled: true },
+      "@opentelemetry/instrumentation-pg": { enabled: true },
+      "@opentelemetry/instrumentation-redis": { enabled: true },
+    }),
+  ],
+});
+
+sdk.start();
+process.on("SIGTERM", () => sdk.shutdown());
+```
+
+## Auto-Instrumentation with Kubernetes Operator
+
+```yaml
+# otel-auto-instrumentation.yaml
+# Install the OTel Operator first:
+#   helm install opentelemetry-operator open-telemetry/opentelemetry-operator \
+#     --namespace observability --create-namespace
+
+# Define instrumentation for Python services
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: python-instrumentation
+  namespace: default
+spec:
+  exporter:
+    endpoint: http://otel-collector.observability:4317
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: "0.25"
+  python:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:0.44b0
+    env:
+      - name: OTEL_PYTHON_LOG_CORRELATION
+        value: "true"
+---
+# Define instrumentation for Node.js services
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: nodejs-instrumentation
+  namespace: default
+spec:
+  exporter:
+    endpoint: http://otel-collector.observability:4317
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: "0.25"
+  nodejs:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:0.49.1
+```
+
+To instrument a pod, add the annotation:
+
+```yaml
+# For Python:
+metadata:
+  annotations:
+    instrumentation.opentelemetry.io/inject-python: "true"
+
+# For Node.js:
+metadata:
+  annotations:
+    instrumentation.opentelemetry.io/inject-nodejs: "true"
+```
+
+
+## Contents
+
+- [Sampling Strategies](references/details.md)
+- [Best Practices](references/details.md)
+- [Troubleshooting](references/details.md)
+- [Related Skills](references/details.md)
+
+## When to Use This Skill
+
+- Debugging latency across microservices
+- Standardizing observability data model and naming
+- Sending telemetry to Prometheus, Grafana, Datadog, or OTLP backends
+- Building SLO dashboards with trace-to-log correlation
+- Instrumenting Python or Node.js applications with tracing and metrics
+- Setting up auto-instrumentation for existing services without code changes
+
+## Limitations
+
+- Guidance executes against real environments: confirm target, blast radius, and rollback plan before applying anything.
+- Never deploy to production without explicit approval. Docs-only import: upstream scripts and templates not bundled.
+
+### Example
 
 ```bash
-docker run --rm -it -p 18888:18888 -p 4317:18889 \
-    mcr.microsoft.com/dotnet/aspire-dashboard:latest
+git status && git diff --stat
+kubectl diff -f manifest.yaml
 ```
 
-Then point your app at it:
-```
-OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
-```
-
-Dashboard UI is at `http://localhost:18888`.
-
-### Source-Generated Logging with OTel
-
-For maximum performance, use `[LoggerMessage]` — eliminates boxing and allocations.
-
-```csharp
-public partial class OrderService(ILogger<OrderService> logger)
-{
-    [LoggerMessage(Level = LogLevel.Information,
-        Message = "Processing order {OrderId} for customer {CustomerId}")]
-    partial void LogOrderProcessing(Guid orderId, Guid customerId);
-}
-```
-
-OpenTelemetry logging automatically includes `TraceId` and `SpanId` when an `Activity` is current.
-
-## Anti-patterns
-
-### Don't Create Meters Per Request
-
-```csharp
-// BAD — new Meter per request causes memory leaks
-public void HandleRequest()
-{
-    var meter = new Meter("MyApp");
-    meter.CreateCounter<int>("requests").Add(1);
-}
-
-// GOOD — singleton via IMeterFactory
-public class MyMetrics(IMeterFactory meterFactory)
-{
-    private readonly Counter<int> _requests =
-        meterFactory.Create("MyApp").CreateCounter<int>("myapp.requests");
-    public void RequestHandled() => _requests.Add(1);
-}
-```
-
-### Don't Skip Null Checks on Activity
-
-```csharp
-// BAD — NullReferenceException when no listener is attached
-using var activity = source.StartActivity("Work");
-activity.SetTag("key", "value");
-
-// GOOD — null-safe
-activity?.SetTag("key", "value");
-```
-
-### Don't Use High-Cardinality Metric Tags
-
-```csharp
-// BAD — unbounded cardinality causes memory explosion in collectors
-_counter.Add(1, new("request.id", Guid.NewGuid().ToString()));
-_counter.Add(1, new("user.id", userId));
-
-// GOOD — low-cardinality dimensions only
-_counter.Add(1, new("http.method", "GET"), new("http.status_code", 200));
-```
-
-### Don't Mix UseOtlpExporter with AddOtlpExporter
-
-```csharp
-// BAD — throws NotSupportedException at runtime
-builder.Services.AddOpenTelemetry()
-    .UseOtlpExporter()
-    .WithTracing(t => t.AddOtlpExporter());
-
-// GOOD — use one approach
-builder.Services.AddOpenTelemetry().UseOtlpExporter();
-```
-
-### Don't Forget to Register Custom Sources
-
-```csharp
-// BAD — activities silently dropped (no listener registered)
-var source = new ActivitySource("MyApp.Custom");
-using var activity = source.StartActivity("Work"); // null!
-
-// GOOD — register in the tracing builder
-otel.WithTracing(t => t.AddSource("MyApp.Custom"));
-otel.WithMetrics(m => m.AddMeter("MyApp.Custom"));
-```
-
-## Decision Guide
-
-| Scenario | Recommendation |
-|----------|---------------|
-| Full observability setup | `AddOpenTelemetry()` with all three signals + `UseOtlpExporter()` |
-| Custom business metrics | `IMeterFactory` + singleton metrics class |
-| Custom trace spans | `ActivitySource` + `StartActivity()` |
-| Local development backend | Aspire Dashboard standalone container |
-| Production backend | OTel Collector as intermediary to Grafana/Datadog/etc. |
-| Sampling in production | `OTEL_TRACES_SAMPLER=parentbased_traceidratio` with 10% ratio |
-| High-performance logging | `[LoggerMessage]` source generator |
-| Metric tag cardinality | Max ~1000 combinations per instrument |
-| Environment configuration | `OTEL_*` env vars (also work via `appsettings.json`) |
+> Adapted from [BagelHole/DevOps-Security-Agent-Skills](https://github.com/BagelHole/DevOps-Security-Agent-Skills) (MIT); frontmatter, When to Use/Limitations, and safety boundaries added for upstream compliance. Docs-only import: helper scripts and templates not bundled.

@@ -5,13 +5,13 @@ description: TypeScript service layer architecture with Result types, typed erro
 
 # TypeScript Service Layer Patterns
 
-Tip-güvenli hata yönetimi ve domain servis mimarisi için production-ready pattern'lar. Framework'ten bağımsız — Next.js, Node.js ve TypeScript destekleyen her projede kullanılabilir.
+Production-ready patterns for type-safe error handling and domain service architecture. Framework-agnostic — usable in Next.js, Node.js, and any project that supports TypeScript.
 
 ---
 
 ## 1. Result Type Pattern
 
-Exception fırlatmak yerine başarı veya hata durumunu explicit olarak döndür.
+Return the success or error state explicitly instead of throwing exceptions.
 
 ```typescript
 type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E }
@@ -20,17 +20,17 @@ const Ok = <T>(value: T): Result<T, never> => ({ ok: true, value })
 const Err = <E>(error: E): Result<never, E> => ({ ok: false, error })
 ```
 
-### Neden Result Type?
+### Why Use a Result Type?
 
 ```typescript
-// ❌ Exception tabanlı — hata durumu tip sisteminde görünmez
+// ❌ Exception-based — the error state is not visible in the type system
 async function fetchUser(id: string): Promise<User> {
   const user = await db.findById(id)
-  if (!user) throw new Error('Bulunamadı') // Caller bunu bilmez
+  if (!user) throw new Error('Not found') // The caller does not know this
   return user
 }
 
-// ✅ Result tabanlı — hata durumu imzada görünür
+// ✅ Result-based — the error state is visible in the signature
 async function fetchUser(id: string): Promise<Result<User, 'NOT_FOUND' | 'DB_ERROR'>> {
   try {
     const user = await db.findById(id)
@@ -41,11 +41,11 @@ async function fetchUser(id: string): Promise<Result<User, 'NOT_FOUND' | 'DB_ERR
   }
 }
 
-// Caller her iki durumu handle etmek zorunda
+// The caller must handle both states
 const result = await fetchUser('123')
 if (!result.ok) {
   if (result.error === 'NOT_FOUND') redirect('/404')
-  else showErrorToast('Bir hata oluştu')
+  else showErrorToast('An error occurred')
   return
 }
 const user = result.value // Type-safe: User
@@ -62,7 +62,7 @@ async function tryAsync<T>(fn: () => Promise<T>): Promise<Result<T, Error>> {
   }
 }
 
-// Kullanım
+// Usage
 const result = await tryAsync(() => db.cvs.findById(id))
 ```
 
@@ -70,9 +70,9 @@ const result = await tryAsync(() => db.cvs.findById(id))
 
 ## 2. Typed Error Definitions
 
-Domain hatalarını string literal union ile tanımla — runtime overhead yok, compile-time güvenlik var.
+Define domain errors with a string literal union — no runtime overhead, with compile-time safety.
 
-### Basit Error Union
+### Simple Error Union
 
 ```typescript
 type CvServiceError = 'CV_NOT_FOUND' | 'CV_TOO_LARGE' | 'INVALID_FORMAT' | 'STORAGE_FULL'
@@ -90,7 +90,7 @@ async function uploadCv(file: File, userId: string): Promise<Result<CvDocument, 
 
 ### Structured Error Objects
 
-Ek bağlam taşıması gereken hatalar için:
+For errors that need to carry additional context:
 
 ```typescript
 type CvError =
@@ -110,18 +110,18 @@ async function getCv(cvId: string, requestingUserId: string): Promise<Result<CvD
   return Ok(cv)
 }
 
-// Caller discriminated union ile handler yazar
+// The caller writes a handler using the discriminated union
 const result = await getCv(cvId, userId)
 if (!result.ok) {
   switch (result.error.code) {
     case 'NOT_FOUND':
-      return NextResponse.json({ error: 'CV bulunamadı' }, { status: 404 })
+      return NextResponse.json({ error: 'CV not found' }, { status: 404 })
     case 'UNAUTHORIZED':
-      return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 403 })
+      return NextResponse.json({ error: 'Unauthorized access' }, { status: 403 })
     case 'TOO_LARGE':
       return NextResponse.json(
         {
-          error: `Dosya boyutu ${result.error.sizeMb}MB, limit ${result.error.limitMb}MB`,
+          error: `File size is ${result.error.sizeMb}MB; the limit is ${result.error.limitMb}MB`,
         },
         { status: 400 },
       )
@@ -131,31 +131,31 @@ if (!result.ok) {
 
 ---
 
-## 3. Service Layer Mimarisi
+## 3. Service Layer Architecture
 
-### Katmanlı Yapı
+### Layered Structure
 
 ```
 UI / API Route Layer
   ↓ HTTP request/response
-Service Layer          ← Business logic burada
+Service Layer          ← Business logic lives here
   ↓ Domain operations
-Repository Layer       ← Data access burada
+Repository Layer       ← Data access lives here
   ↓ Database queries
 Database / External API
 ```
 
-### Service Tanımı Kuralları
+### Service Definition Rules
 
-Servisler şunları YAPMAMALIDI:
+Services MUST NOT:
 
-- UI state veya toast notification import etmemeli
-- HTTP request/response nesnesi bilmemeli
-- Exception fırlatmak yerine Result döndürmeli
-- Framework'e özgü bağımlılıklar içermemeli
+- Import UI state or toast notifications
+- Know about HTTP request/response objects
+- Throw exceptions instead of returning a Result
+- Contain framework-specific dependencies
 
 ```typescript
-// ✅ Pure service — framework bağımsız, test edilebilir
+// ✅ Pure service — framework-agnostic and testable
 export class CvAnalysisService {
   constructor(
     private readonly cvRepository: CvRepository,
@@ -181,7 +181,7 @@ export class CvAnalysisService {
 }
 ```
 
-### API Route'ta Kullanım (Next.js)
+### Usage in an API Route (Next.js)
 
 ```typescript
 // app/api/cv/[id]/analyze/route.ts
@@ -212,7 +212,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 ## 4. Repository Pattern
 
 ```typescript
-// Tip-güvenli repository interface
+// Type-safe repository interface
 interface CvRepository {
   findById(id: string): Promise<Result<CvDocument, 'NOT_FOUND'>>
   findByUserId(userId: string): Promise<CvDocument[]>
@@ -220,7 +220,7 @@ interface CvRepository {
   delete(id: string): Promise<Result<void, 'NOT_FOUND' | 'DELETE_ERROR'>>
 }
 
-// Firestore implementasyonu
+// Firestore implementation
 class FirestoreCvRepository implements CvRepository {
   async findById(id: string): Promise<Result<CvDocument, 'NOT_FOUND'>> {
     const doc = await db.collection('cvs').doc(id).get()
@@ -236,7 +236,7 @@ class FirestoreCvRepository implements CvRepository {
   }
 }
 
-// Test için mock implementasyonu
+// Mock implementation for tests
 class MockCvRepository implements CvRepository {
   constructor(private cvs: Map<string, CvDocument> = new Map()) {}
 
@@ -249,12 +249,12 @@ class MockCvRepository implements CvRepository {
 
 ---
 
-## 5. Test Edilebilirlik
+## 5. Testability
 
 ```typescript
-// Service test — gerçek DB veya AI yok
+// Service test — no real database or AI
 describe('CvAnalysisService', () => {
-  it('unauthorized kullanıcıya UNAUTHORIZED döndürür', async () => {
+  it('returns UNAUTHORIZED for an unauthorized user', async () => {
     const mockCv = { id: 'cv-1', userId: 'user-1', content: '...' }
     const repository = new MockCvRepository(new Map([['cv-1', mockCv]]))
     const aiService = { analyzeAts: jest.fn() }
@@ -271,22 +271,22 @@ describe('CvAnalysisService', () => {
 
 ---
 
-## 6. Best Practices Özeti
+## 6. Best Practices Summary
 
-Exception fırlatmak yerine `Result<T, E>` döndür. Hata tiplerini string literal union olarak tanımla. Servisler UI bağımlılığı içermemeli. Repository interface'leri sayesinde test'te mock kullan. Her service metodu tek bir iş yapmalı. Bağımlılıkları constructor'dan enjekte et — `new Service()` yerine DI kullan.
+Return `Result<T, E>` instead of throwing exceptions. Define error types as string literal unions. Services must not contain UI dependencies. Use mocks in tests through repository interfaces. Each service method should do one job. Inject dependencies through the constructor — use dependency injection instead of `new Service()`.
 
 ```typescript
-// ❌ Hataları swallow etme
+// ❌ Do not swallow errors
 try {
   await service.doSomething()
 } catch {
-  // sessizce görmezden gel
+  // silently ignored
 }
 
-// ✅ Her zaman handle et
+// ✅ Always handle them
 const result = await service.doSomething()
 if (!result.ok) {
   logger.error('[ServiceName]', result.error)
-  // uygun yanıt ver
+  // return an appropriate response
 }
 ```

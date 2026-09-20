@@ -5,26 +5,26 @@ description: Search Engine Optimization specialist for Next.js and web projects.
 
 # SEO Optimizer
 
-Next.js ve genel web projeleri için kapsamlı SEO rehberi — içerik optimizasyonu, teknik SEO ve ölçüm stratejileri.
+A comprehensive SEO guide for Next.js and general web projects, covering content optimization, technical SEO, and measurement strategies.
 
 ---
 
-## 1. Keyword Araştırması ve Strateji
+## 1. Keyword Research and Strategy
 
-### Arama Niyeti Kategorileri
+### Search Intent Categories
 
-Her keyword dört niyetten birine hizmet eder. İçeriği buna göre yaz.
+Every keyword serves one of four intents. Write the content accordingly.
 
-| Niyet          | Örnek                        | İçerik Tipi             |
+| Intent         | Example                      | Content Type            |
 | -------------- | ---------------------------- | ----------------------- |
-| Bilgilendirici | "React hooks nedir"          | Rehber, makale          |
-| Gezinme        | "Next.js docs"               | Landing page            |
-| İşlemsel       | "CV oluşturma aracı indir"   | Ürün sayfası            |
-| Ticari         | "En iyi ATS analiz araçları" | Karşılaştırma, inceleme |
+| Informational  | "what are React hooks"       | Guide, article          |
+| Navigational   | "Next.js docs"               | Landing page            |
+| Transactional  | "download CV builder"        | Product page            |
+| Commercial     | "best ATS analysis tools"    | Comparison, review      |
 
-### Keyword Optimizasyon Formülü
+### Keyword Optimization Formula
 
-Primary keyword şu yerlerde geçmeli: başlık tag'i, H1, ilk paragrafın ilk 100 kelimesi, URL, meta description. Yoğunluk hedefi %1-2, doğal kullanım esas.
+The primary keyword should appear in the title tag, H1, first 100 words of the opening paragraph, URL, and meta description. Target a density of 1–2%, with natural usage taking priority.
 
 ---
 
@@ -33,11 +33,11 @@ Primary keyword şu yerlerde geçmeli: başlık tag'i, H1, ilk paragrafın ilk 1
 ### Title Tag
 
 ```html
-<!-- ✅ Anahtar kelime başta, 60 karakter altı, açıklayıcı -->
-<title>CV Oluşturma Rehberi 2024 — Talent Architect</title>
+<!-- ✅ Keyword first, under 60 characters, descriptive -->
+<title>Product Usage Guide — Example Product</title>
 
-<!-- ❌ Çok uzun, keyword stuffing, jenerik -->
-<title>CV Oluştur CV Yap CV Hazırla CV Örneği CV Şablonu Online CV</title>
+<!-- ❌ Too long, keyword stuffing, generic -->
+<title>Create CV Make CV Prepare CV CV Example CV Template Online CV</title>
 ```
 
 Next.js App Router'da:
@@ -47,67 +47,67 @@ Next.js App Router'da:
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'CV Oluşturma Rehberi 2024 — Talent Architect',
+  title: 'Product Usage Guide — Example Product',
   description:
-    'ATS uyumlu profesyonel CV nasıl oluşturulur? Adım adım rehber, şablonlar ve uzman ipuçları. 10 dakikada etkileyici CV hazırlayın.',
+    'How do you create an ATS-friendly professional CV? A step-by-step guide, templates, and expert tips. Prepare an impressive CV in 10 minutes.',
 }
 ```
 
 ### Meta Description
 
-150-160 karakter, değer önerisi + CTA içermeli, her sayfada benzersiz olmalı.
+Use 150–160 characters, include a value proposition and CTA, and make it unique on every page.
 
 ```typescript
 export const metadata: Metadata = {
   description:
-    'ATS uyumlu profesyonel CV nasıl oluşturulur? Adım adım rehber, şablonlar ve uzman ipuçları. 10 dakikada etkileyici CV hazırlayın.',
+    'How do you create an ATS-friendly professional CV? A step-by-step guide, templates, and expert tips. Prepare an impressive CV in 10 minutes.',
   openGraph: {
-    title: 'CV Oluşturma Rehberi',
+    title: 'CV Creation Guide',
     description: '...',
     images: [{ url: '/og/cv-guide.jpg', width: 1200, height: 630 }],
   },
 }
 ```
 
-### Heading Hiyerarşisi
+### Heading Hierarchy
 
 ```html
-<h1>Ana Sayfa Başlığı (Primary Keyword)</h1>
-<h2>Bölüm Başlığı (İlgili Keyword)</h2>
-<h3>Alt Bölüm</h3>
-<h3>Alt Bölüm</h3>
-<h2>Başka Bölüm</h2>
+<h1>Main Page Title (Primary Keyword)</h1>
+<h2>Section Title (Related Keyword)</h2>
+<h3>Subsection</h3>
+<h3>Subsection</h3>
+<h2>Another Section</h2>
 ```
 
-Her sayfada yalnızca bir H1. H2/H3 başlıkları anlam taşımalı, dekoratif olmamalı.
+Use only one H1 per page. H2/H3 headings must be meaningful, not decorative.
 
-### URL Yapısı
+### URL Structure
 
 ```
-✅ /rehber/ats-uyumlu-cv-hazirlama
-✅ /arac/cv-olusturucu
-✅ /blog/is-basvurusu-ipuclari
+✅ /guide/create-ats-friendly-cv
+✅ /tool/cv-builder
+✅ /blog/job-application-tips
 
 ❌ /page.php?id=123&ref=xyz
 ❌ /kategori-1/alt-kategori-2/item-999
 ```
 
-### Görsel Optimizasyonu
+### Image Optimization
 
 ```tsx
 import Image from 'next/image'
 
-// ✅ next/image — otomatik optimizasyon + CLS önleme
+// ✅ next/image — automatic optimization + CLS prevention
 ;<Image
-  src='/images/cv-ornek.webp'
-  alt='ATS uyumlu CV örneği — bölüm başlıkları ve anahtar kelimeler vurgulanmış'
+  src='/images/cv-example.webp'
+  alt='ATS-friendly CV example with section headings and keywords highlighted'
   width={800}
   height={600}
-  priority // Above-fold görseller için
+  priority // For above-the-fold images
 />
 ```
 
-Alt text: bilgi içeren görseller için açıklayıcı, dekoratif görseller için `alt=""`.
+Alt text: descriptive for informative images; use `alt=""` for decorative images.
 
 ---
 
@@ -130,7 +130,7 @@ export default function BlogPage({ post }: { post: BlogPost }) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Talent Architect',
+      name: 'Example Product',
       logo: { '@type': 'ImageObject', url: 'https://example.com/logo.png ' },
     },
   }
@@ -141,29 +141,29 @@ export default function BlogPage({ post }: { post: BlogPost }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      {/* sayfa içeriği */}
+      {/* page content */}
     </>
   )
 }
 ```
 
-### Sık Kullanılan Schema Tipleri
+### Common Schema Types
 
-`Article` — blog yazıları, `Product` — araçlar ve özellikler, `FAQ` — soru-cevap bölümleri, `HowTo` — adım adım rehberler, `BreadcrumbList` — navigasyon yolu, `Organization` — şirket bilgisi.
+`Article` — blog posts, `Product` — tools and features, `FAQ` — question-and-answer sections, `HowTo` — step-by-step guides, `BreadcrumbList` — navigation path, `Organization` — company information.
 
 ### Canonical Tag
 
 ```typescript
 export const metadata: Metadata = {
   alternates: {
-    canonical: 'https://example.com/orijinal-sayfa ',
+    canonical: 'https://example.com/original-page ',
   },
 }
 ```
 
-URL parametreleri olan sayfalar (filtreleme, sıralama) için özellikle önemli.
+Especially important for pages with URL parameters, such as filtering and sorting.
 
-### Robots ve Sitemap (Next.js)
+### Robots and Sitemap (Next.js)
 
 ```typescript
 // app/robots.ts
@@ -199,21 +199,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 ## 4. Core Web Vitals
 
-### Hedef Değerler
+### Target Values
 
-| Metrik                          | Hedef   | Ölçüm                   |
+| Metric                          | Target  | Measurement             |
 | ------------------------------- | ------- | ----------------------- |
-| LCP (Largest Contentful Paint)  | < 2.5s  | En büyük içerik yükleme |
-| INP (Interaction to Next Paint) | < 200ms | Etkileşim yanıt süresi  |
-| CLS (Cumulative Layout Shift)   | < 0.1   | Layout kayması          |
+| LCP (Largest Contentful Paint)  | < 2.5s  | Largest content load    |
+| INP (Interaction to Next Paint) | < 200ms | Interaction response time |
+| CLS (Cumulative Layout Shift)   | < 0.1   | Layout shift            |
 
-### LCP İyileştirme
+### LCP Improvement
 
 ```tsx
-// Hero görsel için priority ekle — preload tetikler
+// Add priority to the hero image — triggers preload
 ;<Image src='/hero.webp' alt='...' width={1200} height={600} priority />
 
-// Kritik kaynakları preload et
+// Preload critical resources
 // app/layout.tsx
 export default function RootLayout() {
   return (
@@ -226,92 +226,92 @@ export default function RootLayout() {
 }
 ```
 
-### CLS Önleme
+### CLS Prevention
 
 ```tsx
-// ✅ Her zaman width/height belirt — alan rezerve edilir
+// ✅ Always specify width/height — space is reserved
 ;<Image width={800} height={600} src='...' alt='...' />
 
-// ✅ Skeleton ile layout rezervasyonu
+// ✅ Reserve layout space with a skeleton
 {
   isLoading ? <Skeleton className='h-48 w-full' /> : <Content />
 }
 
-// ❌ Dinamik içerik mevcut içeriğin üstüne ekleme
-// (banner, cookie notice, reklam — sayfa yüklendikten sonra ekleme)
+// ❌ Do not insert dynamic content above existing content
+// (banner, cookie notice, ad — do not add after the page loads)
 ```
 
-### JavaScript Optimizasyonu (INP)
+### JavaScript Optimization (INP)
 
 ```typescript
-// Ağır hesaplamayı defer et
+// Defer heavy computation
 const [isPending, startTransition] = useTransition()
 
 startTransition(() => {
   setFilteredResults(heavyFilter(data))
 })
 
-// Büyük modülleri lazy load et
+// Lazy-load large modules
 const HeavyChart = dynamic(() => import('./HeavyChart'), { ssr: false })
 ```
 
 ---
 
-## 5. İçerik Stratejisi
+## 5. Content Strategy
 
-### İçerik Uzunluğu Rehberi
+### Content Length Guide
 
-| Sayfa Tipi           | Minimum      | Optimum     |
+| Page Type            | Minimum      | Optimal     |
 | -------------------- | ------------ | ----------- |
-| Blog yazısı          | 1.000 kelime | 1.500-2.500 |
-| Ürün/özellik sayfası | 300 kelime   | 500-800     |
-| Kategori sayfası     | 500 kelime   | 800-1.200   |
-| Ana sayfa            | 400 kelime   | 600+        |
+| Blog post            | 1,000 words  | 1,500–2,500 |
+| Product/feature page | 300 words    | 500–800     |
+| Category page        | 500 words    | 800–1,200   |
+| Home page            | 400 words    | 600+        |
 
-### Featured Snippet İçin Optimizasyon
+### Optimization for Featured Snippets
 
 ```markdown
-## ATS Nedir?
+## What Is an ATS?
 
-ATS (Applicant Tracking System), işverenler tarafından iş başvurularını
-otomatik olarak taramak ve filtrelemek için kullanılan yazılımdır.
-Başvurular anahtar kelimeler, deneyim ve nitelikler bazında puanlanır.
+An ATS (Applicant Tracking System) is software employers use to
+automatically scan and filter job applications.
+Applications are scored based on keywords, experience, and qualifications.
 
-## ATS Uyumlu CV Nasıl Hazırlanır?
+## How Do You Prepare an ATS-Friendly CV?
 
-1. İş ilanındaki anahtar kelimeleri CV'ye ekleyin
-2. Standart bölüm başlıkları kullanın (Deneyim, Eğitim, Beceriler)
-3. Sade format tercih edin — tablo ve grafik kullanmayın
-4. PDF yerine DOCX formatında gönderin (belirtilmemişse)
+1. Add keywords from the job posting to the CV
+2. Use standard section headings (Experience, Education, Skills)
+3. Prefer a simple format — do not use tables or graphics
+4. Submit in DOCX format instead of PDF unless otherwise specified
 ```
 
-### Dahili Linkleme Stratejisi
+### Internal Linking Strategy
 
-Her 1.000 kelime için 3-5 dahili link hedefle. Açıklayıcı anchor text kullan. "Buraya tıklayın" yerine "ATS analiz rehberi" gibi bağlamsal ifadeler seç. Eski içeriklere yeni içeriklerden link ver.
-
----
-
-## 6. SEO Kontrol Listesi
-
-Yayın öncesi kontrol:
-
-- [ ] Primary keyword title tag'de (60 karakter altı)
-- [ ] Meta description 150-160 karakter, CTA içeriyor
-- [ ] H1 primary keyword içeriyor, sayfada yalnızca bir tane
-- [ ] URL slug optimize ve okunabilir
-- [ ] Görseller WebP formatında, açıklayıcı alt text içeriyor
-- [ ] 3-5 dahili link mevcut
-- [ ] Schema markup uygulandı (gerekiyorsa)
-- [ ] Canonical tag doğru
-- [ ] Mobil uyumlu
-- [ ] Sayfa yükleme süresi < 3s
-- [ ] Kırık link yok
-- [ ] Open Graph ve Twitter Card meta tag'leri var
+Target 3–5 internal links per 1,000 words. Use descriptive anchor text. Choose contextual phrases such as "ATS analysis guide" instead of "click here." Link from new content to older content.
 
 ---
 
-## 7. İzleme ve Analiz
+## 6. SEO Checklist
 
-Temel araçlar: Google Search Console (performans, indeksleme sorunları), Google Analytics 4 (trafik, dönüşüm), PageSpeed Insights (Core Web Vitals), Screaming Frog (teknik denetim).
+Pre-publication checks:
 
-İzlenecek temel metrikler: organik trafik trendi, keyword sıralamaları, tıklama oranı (CTR), hemen çıkma oranı, organik trafikten dönüşüm, Core Web Vitals puanları.
+- [ ] Primary keyword is in the title tag (under 60 characters)
+- [ ] Meta description is 150–160 characters and includes a CTA
+- [ ] H1 contains the primary keyword, with only one H1 on the page
+- [ ] URL slug is optimized and readable
+- [ ] Images are in WebP format and include descriptive alt text
+- [ ] 3–5 internal links are present
+- [ ] Schema markup is implemented when needed
+- [ ] Canonical tag is correct
+- [ ] Mobile-friendly
+- [ ] Page load time is under 3 seconds
+- [ ] No broken links
+- [ ] Open Graph and Twitter Card meta tags are present
+
+---
+
+## 7. Monitoring and Analysis
+
+Core tools: Google Search Console (performance, indexing issues), Google Analytics 4 (traffic, conversion), PageSpeed Insights (Core Web Vitals), and Screaming Frog (technical audit).
+
+Core metrics to monitor: organic traffic trends, keyword rankings, click-through rate (CTR), bounce rate, conversion from organic traffic, and Core Web Vitals scores.

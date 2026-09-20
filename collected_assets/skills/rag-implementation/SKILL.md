@@ -42,7 +42,7 @@ Master Retrieval-Augmented Generation (RAG) to build LLM applications that provi
 - **all-MiniLM-L6-v2** (Sentence Transformers): Fast, lightweight
 - **e5-large-v2**: High quality, multilingual
 - **Instructor**: Task-specific instructions
-- **bge-large-en-v1.5**: SOTA performance
+- **bge-large-en-v1.5**: Candidate model; benchmark it against current alternatives on the target corpus
 
 ### 3. Retrieval Strategies
 
@@ -442,17 +442,6 @@ def evaluate_rag_system(qa_chain, test_cases):
 
     return {k: sum(v)/len(v) for k, v in metrics.items()}
 ```
-
-## Resources
-
-- **references/vector-databases.md**: Detailed comparison of vector DBs
-- **references/embeddings.md**: Embedding model selection guide
-- **references/retrieval-strategies.md**: Advanced retrieval techniques
-- **references/reranking.md**: Reranking methods and when to use them
-- **references/context-window.md**: Managing context limits
-- **assets/vector-store-config.yaml**: Configuration templates
-- **assets/retriever-pipeline.py**: Complete RAG pipeline
-- **assets/embedding-models.md**: Model comparison and benchmarks
 
 ## Best Practices
 

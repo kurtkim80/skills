@@ -1,111 +1,42 @@
 ---
 name: continuous-learning
-description: Automatically extract reusable patterns from Claude Code sessions and save them as learned skills for future use.
+description: Extract reusable, evidence-backed lessons from completed work and propose focused updates to skills, project guidance, or team documentation. Use when the user explicitly requests a retrospective or asks to preserve a learned workflow; do not automatically persist every session.
 ---
 
-# Continuous Learning Skill
+# Continuous Learning
 
-Automatically evaluates Claude Code sessions on end to extract reusable patterns that can be saved as learned skills.
+Turn demonstrated outcomes into small, durable improvements without overfitting to a single incident.
 
-## How It Works
+## Identify a Candidate Lesson
 
-This skill runs as a **Stop hook** at the end of each session:
+A useful lesson has evidence and future value. Look for:
 
-1. **Session Evaluation**: Checks if session has enough messages (default: 10+)
-2. **Pattern Detection**: Identifies extractable patterns from the session
-3. **Skill Extraction**: Saves useful patterns to `~/.claude/skills/learned/`
+- a repeated failure with a confirmed cause;
+- a non-obvious project invariant;
+- a workflow that consistently reduced errors or effort;
+- a tool or command whose exact usage is hard to rediscover;
+- a decision boundary that prevented misrouting or unsafe action.
 
-## Configuration
+Do not preserve guesses, one-off preferences, generic advice, sensitive data, or rules already enforced by the host environment.
 
-Edit `config.json` to customize:
+## Generalize Carefully
 
-```json
-{
-  "min_session_length": 10,
-  "extraction_threshold": "medium",
-  "auto_approve": false,
-  "learned_skills_path": "~/.claude/skills/learned/",
-  "patterns_to_detect": [
-    "error_resolution",
-    "user_corrections",
-    "workarounds",
-    "debugging_techniques",
-    "project_specific"
-  ],
-  "ignore_patterns": ["simple_typos", "one_time_fixes", "external_api_issues"]
-}
-```
+Record the triggering situation, observed evidence, lesson, scope, exceptions, and verification. Keep a project-specific lesson in project guidance. Put a reusable workflow in a skill only when it applies across realistic tasks and changes agent behavior.
 
-## Pattern Types
+Prefer a narrow correction over adding an absolute rule. A past failure does not prove every similar situation requires the same response.
 
-| Pattern                | Description                           |
-| ---------------------- | ------------------------------------- |
-| `error_resolution`     | How specific errors were resolved     |
-| `user_corrections`     | Patterns from user corrections        |
-| `workarounds`          | Solutions to framework/library quirks |
-| `debugging_techniques` | Effective debugging approaches        |
-| `project_specific`     | Project-specific conventions          |
+## Validate
 
-## Hook Setup
+Before proposing persistence:
 
-Add to your `~/.claude/settings.json`:
+1. confirm the outcome and causal evidence;
+2. check for an existing authoritative instruction;
+3. identify conflicts or duplication;
+4. test the lesson against at least one different but realistic scenario;
+5. choose the smallest appropriate destination.
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/skills/continuous-learning/evaluate-session.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+## Persist Only with Authorization
 
-## Why Stop Hook?
+Show the proposed update and obtain any authorization required by the host environment. Never silently edit shared instructions, install skills, or store personal context.
 
-- **Lightweight**: Runs once at session end
-- **Non-blocking**: Doesn't add latency to every message
-- **Complete context**: Has access to full session transcript
-
-## Related
-
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Section on continuous learning
-- `/learn` command - Manual pattern extraction mid-session
-
----
-
-## Comparison Notes (Research: Jan 2025)
-
-### vs Homunculus (github.com/humanplane/homunculus)
-
-Homunculus v2 takes a more sophisticated approach:
-
-| Feature     | Our Approach               | Homunculus v2                                |
-| ----------- | -------------------------- | -------------------------------------------- |
-| Observation | Stop hook (end of session) | PreToolUse/PostToolUse hooks (100% reliable) |
-| Analysis    | Main context               | Background agent (Haiku)                     |
-| Granularity | Full skills                | Atomic "instincts"                           |
-| Confidence  | None                       | 0.3-0.9 weighted                             |
-| Evolution   | Direct to skill            | Instincts → cluster → skill/command/agent    |
-| Sharing     | None                       | Export/import instincts                      |
-
-**Key insight from homunculus:**
-
-> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time. v2 uses hooks for observation (100% reliable) and instincts as the atomic unit of learned behavior."
-
-### Potential v2 Enhancements
-
-1. **Instinct-based learning** - Smaller, atomic behaviors with confidence scoring
-2. **Background observer** - Haiku agent analyzing in parallel
-3. **Confidence decay** - Instincts lose confidence if contradicted
-4. **Domain tagging** - code-style, testing, git, debugging, etc.
-5. **Evolution path** - Cluster related instincts into skills/commands
-
-See: `/Users/affoon/Documents/tasks/12-continuous-learning-v2.md` for full spec.
+After updating, report the destination, exact lesson, and evidence. Add a review date when the lesson depends on a tool, API, policy, or other drift-prone fact.

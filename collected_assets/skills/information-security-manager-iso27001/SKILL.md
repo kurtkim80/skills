@@ -1,6 +1,6 @@
 ---
 name: information-security-manager-iso27001
-description: Senior Information Security Manager specializing in ISO 27001 and ISO 27002 implementation for HealthTech and MedTech companies. Provides ISMS implementation, cybersecurity risk assessment, security controls management, and compliance oversight. Use for ISMS design, security risk assessments, control implementation, and ISO 27001 certification activities.
+description: Design or assess an ISO 27001-aligned information security management system for HealthTech or MedTech, including risk assessment, controls, governance, monitoring, and audit preparation. Verify current standards, certification rules, and applicable regulation; this skill does not itself establish compliance.
 ---
 
 # Senior Information Security Manager - ISO 27001/27002 Specialist
@@ -52,9 +52,9 @@ Conduct systematic information security risk assessments ensuring comprehensive 
    - **Decision Point**: Determine asset criticality and protection requirements
 
 2. **Threat and Vulnerability Analysis**
-   - **For Healthcare Data**: Follow references/healthcare-threat-modeling.md
-   - **For Medical Devices**: Follow references/device-security-assessment.md
-   - **For Cloud Services**: Follow references/cloud-security-evaluation.md
+   - For healthcare data, include sector-specific threats and applicable privacy obligations
+   - For medical devices, include safety impact and product-security lifecycle risks
+   - For cloud services, include shared-responsibility, identity, tenancy, and supply-chain risks
    - Threat landscape analysis and modeling
 
 3. **Risk Analysis and Evaluation**
@@ -253,27 +253,3 @@ Ensure comprehensive compliance with healthcare security regulations and standar
 - **GDPR Security Requirements**: Technical and organizational measures
 - **FDA Cybersecurity Guidance**: Medical device cybersecurity compliance
 - **NIST Cybersecurity Framework**: Cybersecurity risk management integration
-
-## Resources
-
-### scripts/
-
-- `isms-performance-dashboard.py`: Comprehensive ISMS metrics monitoring and reporting
-- `security-risk-assessment.py`: Automated security risk assessment and documentation
-- `compliance-monitoring.py`: Regulatory and standard compliance tracking
-- `incident-response-automation.py`: Security incident workflow automation
-
-### references/
-
-- `iso27001-implementation-guide.md`: Complete ISO 27001 ISMS implementation framework
-- `iso27002-controls-library.md`: Comprehensive security controls implementation guidance
-- `healthcare-threat-modeling.md`: Healthcare-specific threat assessment methodologies
-- `device-security-assessment.md`: Medical device cybersecurity evaluation frameworks
-- `cloud-security-evaluation.md`: Cloud service security assessment criteria
-
-### assets/
-
-- `isms-templates/`: Information security policy, procedure, and documentation templates
-- `risk-assessment-tools/`: Security risk assessment worksheets and calculation tools
-- `audit-checklists/`: ISO 27001 and security compliance audit checklists
-- `training-materials/`: Information security awareness and training programs

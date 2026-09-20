@@ -5,28 +5,28 @@ description: Translate Figma designs into production-ready code with 1:1 visual 
 
 # Figma Implement Skill
 
-Figma tasarımlarını Figma MCP Server kullanarak pixel-perfect koda dönüştürme rehberi.
+A guide to converting Figma designs into pixel-perfect code using the Figma MCP Server.
 
 ## When to use this skill
 
-- Figma URL veya node ID verildiğinde
-- "Bu Figma tasarımını implement et" denildiğinde
-- Design-to-code fidelity kontrolü gerektiğinde
+- When a Figma URL or node ID is provided
+- When asked to "implement this Figma design"
+- When a design-to-code fidelity check is needed
 
-**Gereksinim**: Figma MCP Server bağlantısı aktif olmalı.
+**Requirement**: The Figma MCP Server connection must be active.
 
 ---
 
-## 1. URL'den Node ID Çıkarma
+## 1. Extracting a Node ID from a URL
 
 ```
 https://figma.com/design/ :fileKey/:fileName?node-id=1-2
 
-fileKey: URL'de /design/ sonrası segment
-nodeId:  node-id parametresinin değeri (1-2)
+fileKey: The segment after /design/ in the URL
+nodeId:  The value of the node-id parameter (1-2)
 ```
 
-**Örnek:**
+**Example:**
 
 ```
 https://figma.com/design/kL9xQn2VwM8pYrTb4ZcHjF/DesignSystem?node-id=42-15
@@ -36,121 +36,121 @@ https://figma.com/design/kL9xQn2VwM8pYrTb4ZcHjF/DesignSystem?node-id=42-15
 
 ---
 
-## 2. Zorunlu Adımlar (Sıra Değişmez)
+## 2. Required Steps (Order Must Not Change)
 
-### Adım 1 — Design Context Al
+### Step 1 — Get Design Context
 
 ```
 get_design_context(fileKey=":fileKey", nodeId="1-2")
 ```
 
-Layout, typography, renk, spacing, component yapısı buradan gelir.
+Layout, typography, color, spacing, and component structure come from this context.
 
-**Yanıt çok büyükse:**
+**If the response is too large:**
 
 ```
 get_metadata(fileKey=":fileKey", nodeId="1-2")
-→ Child node'ları belirle
-→ Her major bölüm için ayrı get_design_context çağrısı
+→ Identify child nodes
+→ Make a separate get_design_context call for each major section
 ```
 
-### Adım 2 — Screenshot Al
+### Step 2 — Get a Screenshot
 
 ```
 get_screenshot(fileKey=":fileKey", nodeId="1-2")
 ```
 
-Bu screenshot implementasyon süresince görsel referans olarak kullanılır.
+Use this screenshot as the visual reference throughout implementation.
 
-### Adım 3 — Asset'leri İndir
+### Step 3 — Download Assets
 
-- Figma MCP'nin döndürdüğü `localhost` URL'li asset'leri direkt kullan
-- Yeni icon paketi ekleme — asset'ler Figma payload'dan gelir
-- Placeholder kullanma — `localhost` source varsa onu kullan
+- Use the assets with `localhost` URLs returned by Figma MCP directly
+- Do not add a new icon package — assets come from the Figma payload
+- Do not use placeholders — use the `localhost` source when available
 
-### Adım 4 — Proje Convention'larına Çevir
+### Step 4 — Adapt to Project Conventions
 
-Figma çıktısı (genellikle React + Tailwind) tasarımın temsilidir, final kod stili değil.
+Figma output (usually React + Tailwind) represents the design, not the final code style.
 
 ```
-Yap:
-✅ Proje token'larını kullan (semantic colors, spacing)
-✅ Mevcut component'leri yeniden kullan
-✅ Proje routing/state pattern'larını uygula
+Do:
+✅ Use project tokens (semantic colors, spacing)
+✅ Reuse existing components
+✅ Apply the project's routing and state patterns
 
-Yapma:
-❌ Tailwind class'larını direkt kopyalama (proje farklı sistem kullanıyor olabilir)
-❌ Hardcode renk — design token kullan
-❌ Mevcut button/input/card component varken sıfırdan yazma
+Do not:
+❌ Copy Tailwind classes directly (the project may use a different system)
+❌ Hardcode colors — use design tokens
+❌ Rebuild buttons, inputs, or cards when existing components are available
 ```
 
-### Adım 5 — 1:1 Visual Parity Sağla
+### Step 5 — Achieve 1:1 Visual Parity
 
-Teslim öncesi kontrol:
+Pre-delivery checklist:
 
-- [ ] Layout eşleşiyor (spacing, alignment, sizing)
-- [ ] Typography eşleşiyor (font, boyut, weight, line-height)
-- [ ] Renkler tam eşleşiyor
-- [ ] Interactive state'ler çalışıyor (hover, active, disabled)
-- [ ] Responsive davranış Figma constraint'lerine uyuyor
-- [ ] Asset'ler doğru render ediliyor
-- [ ] Accessibility standartları karşılanıyor
+- [ ] Layout matches (spacing, alignment, sizing)
+- [ ] Typography matches (font, size, weight, line-height)
+- [ ] Colors match exactly
+- [ ] Interactive states work (hover, active, disabled)
+- [ ] Responsive behavior follows Figma constraints
+- [ ] Assets render correctly
+- [ ] Accessibility standards are met
 
 ---
 
-## 3. Yaygın Sorunlar
+## 3. Common Issues
 
-### Figma çıktısı truncated
-
-```
-→ get_metadata ile node yapısına bak
-→ Her major bölüm için ayrı ayrı get_design_context çağır
-```
-
-### Tasarım eşleşmiyor
+### Figma output is truncated
 
 ```
-→ Step 2'deki screenshot ile karşılaştır
-→ Design context'teki spacing/color/typography değerlerini kontrol et
+→ Inspect the node structure with get_metadata
+→ Call get_design_context separately for each major section
 ```
 
-### Asset yüklenmiyor
+### Design does not match
 
 ```
-→ Figma MCP assets endpoint erişilebilir mi kontrol et
-→ localhost URL'leri doğrudan kullan, değiştirme
+→ Compare it with the screenshot from Step 2
+→ Check the spacing, color, and typography values in the design context
 ```
 
-### Design token farkı
+### Asset does not load
 
 ```
-→ Proje token'larını Figma değerleri yerine tercih et
-→ Visual fidelity için spacing/sizing minimal ayarla
+→ Check whether the Figma MCP assets endpoint is accessible
+→ Use localhost URLs directly; do not modify them
+```
+
+### Design token mismatch
+
+```
+→ Prefer project tokens over Figma values
+→ Make only minimal spacing and sizing adjustments for visual fidelity
 ```
 
 ---
 
-## 4. Desktop App ile Kullanım (figma-desktop MCP)
+## 4. Using the Desktop App (figma-desktop MCP)
 
-Figma desktop app açık ve node seçiliyse URL gerekmez:
+If the Figma desktop app is open and a node is selected, no URL is required:
 
 ```
-get_design_context(nodeId="seçili-node-id")
+get_design_context(nodeId="selected-node-id")
 ```
 
-Sadece `figma-desktop` MCP ile çalışır. Remote MCP URL gerektirir.
+This works only with the `figma-desktop` MCP. Remote MCP requires a URL.
 
 ---
 
-## 5. Prensip Özeti
+## 5. Principle Summary
 
 ```
-Figma çıktısı = Tasarımın temsili
-Proje kodu  = Uygulamanın gerçeği
+Figma output = Representation of the design
+Project code = Reality of the application
 
 Design system first:
-→ Mevcut component varsa extend et, yeniden yazma
-→ Proje token sistemi Figma değerlerinden önce gelir
-→ Her sayfanın nasıl görüneceğini Figma söyler
-→ Nasıl kodlanacağını proje convention'ı söyler
+→ Extend existing components; do not rewrite them
+→ The project's token system takes precedence over Figma values
+→ Figma determines how each page should look
+→ Project conventions determine how it should be coded
 ```

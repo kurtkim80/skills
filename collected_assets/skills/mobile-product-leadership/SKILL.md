@@ -9,11 +9,6 @@ description: >
   making technology or architecture decisions, mentoring developers, writing
   product roadmaps, performing competitive analysis, or scaling a 2–10 person
   mobile-first team.
-version: 3.0.0
-merged-from:
-  - mobile-product-leadership v2.0.0
-  - product-strategist v1.0.0
-  - product-manager-toolkit v1.0.0
 ---
 
 # Mobile Product Leadership

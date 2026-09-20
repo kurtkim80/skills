@@ -1,142 +1,36 @@
 ---
 name: nanobanana-skill
-description: Generate or edit images using Google Gemini API via nanobanana Python script. Use when asked to create, generate, or edit images with AI assistance.
+description: Generate or edit images with a locally installed Nano Banana-compatible tool or Google Gemini image API. Use only when the user explicitly requests this tool or provider; inspect the available command or SDK first and verify current model names and supported edit operations.
 ---
 
-# Nanobanana Image Generation Skill
+# Nano Banana Image Generation
 
-Google Gemini API üzerinden AI destekli görsel oluşturma ve düzenleme rehberi.
+Create or edit an image through the Nano Banana or Gemini image workflow actually available in the environment. Do not assume a `nanobanana.py` script, command-line flags, or model alias exists.
 
-## When to use this skill
+## Discover the Tool
 
-- AI ile görsel oluşturulacağında
-- Mevcut görseller düzenlenecekken
-- Logo, banner, illüstrasyon, wallpaper üretilirken
+Check for a project script, installed command, documented package, or existing provider integration. Read its help or current official documentation before constructing a command. Confirm required credentials without printing them.
 
----
+If no compatible tool is installed, report the missing dependency or use another image workflow only when the user accepts that substitution.
 
-## 1. Gereksinimler
+## Prepare the Request
 
-```bash
-# GEMINI_API_KEY gerekli
-export GEMINI_API_KEY="your-api-key"
-# veya ~/.nanobanana.env dosyasında
+Capture:
 
-# Bağımlılıklar
-pip install google-genai Pillow python-dotenv
-```
+- generation versus edit;
+- target subject, composition, style, lighting, and mood;
+- aspect ratio, resolution, file format, and transparency;
+- text that must appear exactly;
+- source images and which details must remain unchanged;
+- output path and number of variants;
+- brand, rights, privacy, and safety constraints.
 
----
+For edits, inspect the source image before writing the edit prompt. Preserve identity, product geometry, logos, and other invariant details the user specifies.
 
-## 2. Temel Kullanım
+## Execute Safely
 
-```bash
-# Basit görsel oluşturma
-python3 nanobanana.py --prompt "Gün batımında dağ manzarası"
+Use the discovered interface exactly as documented. Avoid overwriting the source unless explicitly requested; write a new output by default. Do not expose API keys in commands, logs, or generated metadata. Record the chosen model and material parameters when reproducibility matters.
 
-# Özel boyut ve çıktı dosyası
-python3 nanobanana.py \
-  --prompt "Minimalist tech startup logosu" \
-  --size 1024x1024 \
-  --output "logo.png"
+## Verify
 
-# Görsel düzenleme
-python3 nanobanana.py \
-  --prompt "Gökyüzüne gökkuşağı ekle" \
-  --input photo.png \
-  --output "photo-with-rainbow.png"
-
-# Hızlı model ile
-python3 nanobanana.py \
-  --prompt "Kedi çizimi" \
-  --model gemini-2.5-flash-image \
-  --output "cat.png"
-
-# Yüksek çözünürlük
-python3 nanobanana.py \
-  --prompt "Fütüristik şehir manzarası" \
-  --size 1344x768 \
-  --resolution 2K \
-  --output "cityscape.png"
-```
-
----
-
-## 3. Parametreler
-
-### Boyut (--size)
-
-| Boyut       | Oran | Kullanım                  |
-| ----------- | ---- | ------------------------- |
-| `1024x1024` | 1:1  | Logo, sosyal medya        |
-| `768x1344`  | 9:16 | Story, mobil (varsayılan) |
-| `1344x768`  | 16:9 | Wallpaper, banner         |
-| `864x1184`  | 3:4  | Dikey içerik              |
-| `1184x864`  | 4:3  | Yatay içerik              |
-| `1536x672`  | 21:9 | Ultra geniş               |
-
-### Model (--model)
-
-| Model                        | Özellik                    |
-| ---------------------------- | -------------------------- |
-| `gemini-3-pro-image-preview` | Yüksek kalite (varsayılan) |
-| `gemini-2.5-flash-image`     | Hızlı üretim               |
-
-### Çözünürlük (--resolution)
-
-`1K` (varsayılan), `2K`, `4K`
-
----
-
-## 4. Etkili Prompt Yazma
-
-**Spesifik ol:**
-
-```
-❌ "Bir şehir görseli"
-✅ "Modern Tokyo sokağı, gece, neon ışıklar, yağmurlu, fotogerçekçi"
-```
-
-**Stil belirt:**
-
-```
-✅ "Minimalist vektör illüstrasyon, düz renkler, siyah arka plan"
-✅ "Fotogerçekçi, 8K, sinematik ışıklandırma"
-✅ "Suluboya resim tarzı, yumuşak renkler"
-```
-
-**Kategori önerileri:**
-
-- Logo/grafik: `1024x1024`, minimalist vektör stil
-- Sosyal medya story: `768x1344`, canlı renkler
-- Wallpaper: `1344x768` veya `1536x672`, `2K` çözünürlük
-- Thumbnail: `1184x864`, güçlü odak noktası
-
----
-
-## 5. Çoklu Görsel Düzenleme
-
-```bash
-# Birden fazla görsel birleştir
-python3 nanobanana.py \
-  --prompt "Bu iki görseli tek bir panoramada birleştir" \
-  --input sol_gorsel.png sag_gorsel.png \
-  --size 1536x672 \
-  --output "panorama.png"
-```
-
----
-
-## 6. Hata Yönetimi
-
-```
-❌ API key hatası:
-   → GEMINI_API_KEY export edildi mi? ~/.nanobanana.env var mı?
-
-❌ Görsel oluşturulmadı:
-   → Prompt daha spesifik yap, "görsel oluştur" ibaresini ekle
-
-❌ Düşük kalite:
-   → Resolution'ı artır: --resolution 2K
-   → Model değiştir: --model gemini-3-pro-image-preview
-```
+Open the output and check dimensions, format, composition, requested edits, text rendering, artifacts, and preservation constraints. Regenerate or refine only based on observed differences. Clearly report if the tool cannot perform an exact edit or deterministic reproduction.

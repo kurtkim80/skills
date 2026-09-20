@@ -8,7 +8,6 @@ description: >
   implementing repository pattern, choosing dependency injection, defining domain
   entities, structuring use cases, writing Either/Failure error handling, or
   establishing a test strategy.
-version: 2.0.0
 allowed-tools: Read, Glob, Grep
 ---
 

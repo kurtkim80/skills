@@ -709,13 +709,13 @@
           "name": "--path",
           "type": "string",
           "required": false,
-          "description": "Restricts this API key to the specified folder and its descendants. Applies to every permission set and all paths accessed by a request, including copy and move destinations. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read."
+          "description": "Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions endpoints, to the specified folder and its descendants, including copy and move destinations. Other endpoints do not apply the path restriction; use the `files_only` permission set to confine a key to the endpoints that do. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read."
         },
         {
           "name": "--permission-set",
           "type": "enum",
           "required": false,
-          "description": "Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user."
+          "description": "Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can use only the files, folders, and file_actions endpoints, where they perform file operations as a full-access file user in the key's workspace scope, along with `GET /file_migrations/{id}` and `GET /api_key`. They cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user, and every other endpoint denies them with `not-authorized/api-key-only-for-file-operations`."
         },
         {
           "name": "--workspace-id",
@@ -747,7 +747,7 @@
           "name": "--permission-set",
           "type": "enum",
           "required": false,
-          "description": "Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user."
+          "description": "Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can use only the files, folders, and file_actions endpoints, where they perform file operations as a full-access file user in the key's workspace scope, along with `GET /file_migrations/{id}` and `GET /api_key`. They cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user, and every other endpoint denies them with `not-authorized/api-key-only-for-file-operations`."
         }
       ]
     },
@@ -1550,12 +1550,6 @@
           "description": "Path on which this Automation runs.  Supports globs, except on remote mounts."
         },
         {
-          "name": "--legacy-sync-ids",
-          "type": "string",
-          "required": false,
-          "description": "A list of legacy sync IDs the automation is associated with. If sent as a string, it should be comma-delimited."
-        },
-        {
           "name": "--sync-ids",
           "type": "string",
           "required": false,
@@ -1818,12 +1812,6 @@
           "type": "string",
           "required": false,
           "description": "Path on which this Automation runs.  Supports globs, except on remote mounts."
-        },
-        {
-          "name": "--legacy-sync-ids",
-          "type": "string",
-          "required": false,
-          "description": "A list of legacy sync IDs the automation is associated with. If sent as a string, it should be comma-delimited."
         },
         {
           "name": "--sync-ids",
@@ -8488,6 +8476,12 @@
           "type": "string",
           "required": true,
           "description": "Pairing key for the partner site request"
+        },
+        {
+          "name": "--partner-id",
+          "type": "int64",
+          "required": false,
+          "description": "ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created."
         }
       ]
     },
@@ -8752,6 +8746,12 @@
           "type": "string",
           "required": false,
           "description": "The name of the Partner."
+        },
+        {
+          "name": "--partnership-role",
+          "type": "enum",
+          "required": false,
+          "description": "This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`."
         },
         {
           "name": "--root-folder",

@@ -8,7 +8,6 @@ description: >
   standards, writing App Store descriptions, push notification copy,
   onboarding copy, error message writing, brand colours, logo usage,
   visual identity consistency.
-version: 1.0.0
 allowed-tools: Read, Glob, Grep
 ---
 

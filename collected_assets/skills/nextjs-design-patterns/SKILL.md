@@ -1,6 +1,6 @@
 ---
 name: nextjs-design-patterns
-description: Enterprise-grade Next.js architecture and design patterns. Used to design, refactor, and standardize scalable, performant, and maintainable Next.js applications.
+description: Design, refactor, or standardize scalable and maintainable Next.js App Router applications. Use for project structure, server and client boundaries, data fetching, routing, state, performance, and shared frontend conventions; verify current Next.js behavior before version-sensitive changes.
 ---
 
 # Next.js Design Patterns Skill

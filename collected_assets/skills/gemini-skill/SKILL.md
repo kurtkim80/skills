@@ -1,123 +1,46 @@
 ---
 name: gemini-skill
-description: Execute Google Gemini models via CLI or API for complex reasoning, code analysis, and AI-powered tasks. Use when needing Gemini's capabilities alongside or as alternative to Anthropic Claude, especially for multimodal or large context tasks.
+description: Integrate or use Google Gemini models through an official Google SDK or an explicitly selected compatible provider. Use when the user requests Gemini for text, code, image, audio, video, structured output, tool use, or large-context workflows; verify current models and SDK APIs before implementation.
 ---
 
-# Gemini Skill
+# Gemini
 
-Google Gemini modellerine CLI veya API üzerinden erişim rehberi.
+Use Gemini through the provider and SDK already chosen by the project. Model names, capabilities, pricing, limits, and API shapes change, so consult current official documentation for implementation-critical facts.
 
-## When to use this skill
+## Establish the Integration
 
-- Anthropic Claude'a alternatif AI perspektifi gerektiğinde
-- Çok büyük context window gerektiren görevlerde (Gemini 1M token)
-- Multimodal görevlerde (görsel + metin)
-- Gemini CLI yüklüyse ve API key konfigüre edilmişse
+Determine:
 
----
+- runtime and language;
+- official Google API, Vertex AI, or an explicitly selected third-party gateway;
+- required modalities and output format;
+- latency, quality, region, privacy, and cost constraints;
+- existing provider abstraction, retry policy, observability, and secret handling.
 
-## 1. Gemini CLI (Yüklüyse)
+Do not route traffic through a third party or replace an existing provider solely because Gemini is available.
 
-```bash
-# Temel kullanım
-gemini "prompt buraya"
+## Model Selection
 
-# Dosya analizi
-gemini "Bu kodu incele: $(cat app.py)"
+Choose from the models currently available to the user's account and provider. Match the model to modality, context, quality, latency, tool-use, structured-output, and budget needs. Avoid hard-coding a model based on a remembered alias; centralize configuration and record why the choice fits.
 
-# Belirli model
-GEMINI_MODEL=gemini-2.5-flash gemini "hızlı soru"
-```
+## Implementation Principles
 
-**Varsayılan model**: `gemini-2.5-pro` (en güçlü)
-**Hızlı model**: `gemini-2.5-flash` (daha ucuz/hızlı)
+- Keep credentials in the server or trusted runtime.
+- Validate input size, type, and provenance before upload.
+- Use provider-supported structured output when downstream code requires a schema, and validate the result locally.
+- Bound retries and timeouts; handle throttling and safety refusals explicitly.
+- Stream only when the product can render partial output safely.
+- Preserve provider request identifiers and useful latency or token metrics without logging sensitive prompts.
+- Treat model output as untrusted data before execution, persistence, or display.
 
----
+## Multimodal Work
 
-## 2. Gemini API (OpenAI-Uyumlu SDK)
+Optimize media before transmission when quality permits. Preserve MIME type, ordering, and user intent. For large files, follow the current provider's upload and lifecycle mechanism. When analyzing images, audio, or video, distinguish observable content from inference.
 
-### Python
+## Evaluation
 
-```python
-import google.generativeai as genai
+Create representative examples and edge cases for the actual task. Measure task success, schema validity, groundedness where relevant, latency, cost, and safety behavior. Compare candidate models using the same evaluation set rather than anecdotal prompts.
 
-genai.configure(api_key="GEMINI_API_KEY")
+## Verification
 
-model = genai.GenerativeModel('gemini-2.5-pro')
-response = model.generate_content("Prompt buraya")
-print(response.text)
-```
-
-### JavaScript/TypeScript
-
-```typescript
-import { GoogleGenerativeAI } from '@google/generative-ai'
-
-const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-const model = genai.getGenerativeModel({ model: 'gemini-2.5-pro' })
-
-const result = await model.generateContent('Prompt buraya')
-console.log(result.response.text())
-```
-
-### OpenRouter Üzerinden (Talent Architect'te Tercih Edilen)
-
-Talent Architect'te Gemini'ye OpenRouter üzerinden erişilebilir:
-
-```typescript
-import OpenAI from 'openai'
-
-const client = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1 ',
-  apiKey: process.env.OPENROUTER_API_KEY,
-})
-
-const completion = await client.chat.completions.create({
-  model: 'google/gemini-2.5-flash',
-  messages: [{ role: 'user', content: prompt }],
-})
-```
-
----
-
-## 3. Model Karşılaştırması
-
-| Model                       | Kullanım          | Context  | Hız   |
-| --------------------------- | ----------------- | -------- | ----- |
-| `gemini-2.5-pro`            | Karmaşık görevler | 1M token | Yavaş |
-| `gemini-2.5-flash`          | Hızlı görevler    | 1M token | Hızlı |
-| `gemini-2.0-flash-exp:free` | Test/prototip     | Sınırlı  | Hızlı |
-
----
-
-## 4. Multimodal Kullanım
-
-```python
-import google.generativeai as genai
-from PIL import Image
-
-genai.configure(api_key="GEMINI_API_KEY")
-model = genai.GenerativeModel('gemini-2.5-pro')
-
-img = Image.open('screenshot.png')
-response = model.generate_content(["Bu UI screenshot'ını analiz et:", img])
-print(response.text)
-```
-
----
-
-## 5. Talent Architect Entegrasyon Notu
-
-Proje halihazırda `OPENROUTER_API_KEY` ile Gemini'ye erişebilir. Yeni AI feature için:
-
-1. `lib/server/ai/` altındaki mevcut provider wrapper'larına bak
-2. OpenRouter üzerinden Gemini eklemek için mevcut pattern'ı kullan
-3. Direkt Gemini SDK kullanma — transport değişirse tüm kod güncellenmeli
-
----
-
-## 6. Kaynaklar
-
-- Gemini API: https://ai.google.dev/
-- Gemini Models: https://ai.google.dev/gemini-api/docs/models/gemini
-- OpenRouter (Gemini): https://openrouter.ai/models?q=google
+Run the integration with the installed SDK and configured provider. Test invalid credentials, unsupported media, large input, timeout, rate limit, malformed structured output, refusal, and provider outage behavior. Cite the official model or SDK documentation used for drift-prone choices.

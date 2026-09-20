@@ -5,31 +5,31 @@ description: Generate realistic test data and database seed scripts using Faker 
 
 # Database Seed Skill
 
-Faker kütüphaneleri ile gerçekçi test verisi ve veritabanı seed script'leri oluşturma rehberi.
+A guide to creating realistic test data and database seed scripts with Faker libraries.
 
 ## When to use this skill
 
-- Geliştirme veritabanını gerçekçi veriyle doldurmak için
-- Otomatik test fixture'ları oluşturmak için
-- Demo uygulaması için örnek veri hazırlamak için
-- CI/CD pipeline'ında database setup otomasyonu için
+- To populate a development database with realistic data
+- To create automated test fixtures
+- To prepare sample data for a demo application
+- To automate database setup in a CI/CD pipeline
 
 ---
 
 ## 1. JavaScript/TypeScript — @faker-js/faker
 
-### Kurulum
+### Installation
 
 ```bash
 npm install --save-dev @faker-js/faker
 ```
 
-### Temel Kullanım
+### Basic Usage
 
 ```typescript
 import { faker } from '@faker-js/faker'
 
-// Tekil kayıt üret
+// Generate a single record
 const user = {
   id: faker.string.uuid(),
   name: faker.person.fullName(),
@@ -38,7 +38,7 @@ const user = {
   createdAt: faker.date.past({ years: 2 }),
 }
 
-// Çoklu kayıt (50 kullanıcı)
+// Multiple records (50 users)
 const users = Array.from({ length: 50 }, () => ({
   id: faker.string.uuid(),
   name: faker.person.fullName(),
@@ -49,7 +49,7 @@ const users = Array.from({ length: 50 }, () => ({
 }))
 ```
 
-### Türkçe Veri
+### Turkish Data
 
 ```typescript
 import { faker, fakerTR } from '@faker-js/faker'
@@ -63,29 +63,29 @@ const turkishUser = {
 
 ---
 
-## 2. Relational Integrity (İlişkisel Bütünlük)
+## 2. Relational Integrity
 
 ```typescript
 import { faker } from '@faker-js/faker'
 
-// Önce parent kayıtları oluştur
+// Create parent records first
 const users = Array.from({ length: 20 }, () => ({
   id: faker.string.uuid(),
   name: faker.person.fullName(),
   email: faker.internet.email(),
 }))
 
-// Sonra child kayıtları parent'a bağla
+// Then link child records to parents
 const departments = ['Engineering', 'Design', 'Marketing', 'Sales']
 const employees = Array.from({ length: 100 }, () => ({
   id: faker.string.uuid(),
-  userId: faker.helpers.arrayElement(users).id, // Mevcut user'a bağla
+  userId: faker.helpers.arrayElement(users).id, // Link to an existing user
   department: faker.helpers.arrayElement(departments),
   salary: faker.number.int({ min: 50000, max: 200000 }),
   startDate: faker.date.past({ years: 5 }),
 }))
 
-// Orders → Users + Products ilişkisi
+// Orders → Users + Products relationship
 const orders = Array.from({ length: 200 }, () => {
   const user = faker.helpers.arrayElement(users)
   const itemCount = faker.number.int({ min: 1, max: 5 })
@@ -153,7 +153,7 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('Seeding database...')
 
-  // Kullanıcıları temizle ve yeniden oluştur
+  // Clear and recreate users
   await prisma.user.deleteMany()
 
   const users = await Promise.all(
@@ -168,7 +168,7 @@ async function main() {
     ),
   )
 
-  // Her kullanıcı için 1-5 post oluştur
+  // Create 1–5 posts for each user
   for (const user of users) {
     const postCount = faker.number.int({ min: 1, max: 5 })
     await Promise.all(
@@ -208,17 +208,17 @@ npx prisma db seed
 
 ---
 
-## 5. Firestore Seed (Talent Architect İçin)
+## 5. Firestore Seed Example
 
 ```typescript
-// scripts/seed-firestore.ts
+// Example location: scripts/seed-firestore.ts
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc, writeBatch, doc } from 'firebase/firestore'
 import { faker } from '@faker-js/faker'
 
 const app = initializeApp({
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  // diğer config...
+  // other configuration...
 })
 const db = getFirestore(app)
 
@@ -244,7 +244,7 @@ async function seedCvs(userId: string, count: number = 5) {
   console.log(`✅ Seeded ${count} CVs for user ${userId}`)
 }
 
-// Çalıştır
+// Run
 seedCvs('test-user-id', 10)
 ```
 
@@ -253,11 +253,11 @@ seedCvs('test-user-id', 10)
 ## 6. Best Practices
 
 ```typescript
-// 1. Seed verilerini deterministik yap (aynı seed = aynı veri)
+// 1. Make seed data deterministic (same seed = same data)
 faker.seed(12345)
-const user = { name: faker.person.fullName() } // Her çalıştırmada aynı
+const user = { name: faker.person.fullName() } // Same on every run
 
-// 2. Idempotent seed — birden fazla çalıştırılabilir
+// 2. Idempotent seed — can be run multiple times
 await prisma.user.upsert({
   where: { email: 'admin@example.com' },
   update: {},
@@ -266,10 +266,10 @@ await prisma.user.upsert({
 
 // 3. Environment check
 if (process.env.NODE_ENV === 'production') {
-  throw new Error('Seed script production ortamında çalışamaz!')
+  throw new Error('The seed script cannot run in production!')
 }
 
-// 4. Batch işlem (büyük veri setleri için)
+// 4. Batch processing (for large datasets)
 const BATCH_SIZE = 100
 for (let i = 0; i < 1000; i += BATCH_SIZE) {
   const batch = Array.from({ length: BATCH_SIZE }, () => createUser())
@@ -280,9 +280,9 @@ for (let i = 0; i < 1000; i += BATCH_SIZE) {
 
 ---
 
-## 7. Yaygın Faker Kategorileri
+## 7. Common Faker Categories
 
-| Kategori     | Örnekler                                         |
+| Category     | Examples                                         |
 | ------------ | ------------------------------------------------ |
 | **person**   | `fullName()`, `firstName()`, `jobTitle()`        |
 | **internet** | `email()`, `url()`, `password()`, `userAgent()`  |

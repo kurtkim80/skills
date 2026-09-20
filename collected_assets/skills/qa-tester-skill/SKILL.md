@@ -5,109 +5,109 @@ description: Systematically test web applications for functionality, security, a
 
 # QA Tester Skill — Browser Automation
 
-Web uygulamalarını sistematik olarak test etme ve bulguları önem derecesine göre raporlama rehberi.
+A guide to systematically testing web applications and reporting findings by severity.
 
 ## When to use this skill
 
-- Web uygulamaları fonksiyonel test edilirken
-- Pre-deployment security audit yapılırken
-- Kullanıcı akışları doğrulanırken
-- Accessibility veya responsive tasarım kontrol edilirken
+- When functionally testing web applications
+- When performing a pre-deployment security audit
+- When validating user flows
+- When checking accessibility or responsive design
 
 ---
 
-## 1. KRİTİK HATA PROTOKOLÜ
+## 1. CRITICAL ERROR PROTOCOL
 
-**Aşağılardan birini bulursan TÜM TESTİ HEMEN DURDUR:**
+**If you find any of the following, STOP THE ENTIRE TEST IMMEDIATELY:**
 
-- Server çöktü veya tamamen başarısız
-- Veritabanı bağlantı hataları
-- API key, token, şifre HTML/JS'te görünür
-- Authentication bypass — girişsiz korunan alanlara erişim
-- Veri bozulması veya kayıp
+- The server crashed or failed completely
+- Database connection errors
+- An API key, token, or password is visible in HTML/JS
+- Authentication bypass — access to protected areas without signing in
+- Data corruption or loss
 
-**Kritik hata formatı:**
+**Critical error format:**
 
 ```
-🚨 KRİTİK HATA BULUNDU — TEST DURDURULDU
+🚨 CRITICAL ERROR FOUND — TEST STOPPED
 
-Başlık: [Kısa açıklama]
-Önem: KRİTİK
-Bileşen: [Hangi bölüm]
+Title: [Brief description]
+Severity: CRITICAL
+Component: [Which section]
 
-NE OLDU:
-[Hatayı açıkla]
+WHAT HAPPENED:
+[Explain the error]
 
-YENİDEN OLUŞTURMA ADIMLARI:
-1. [Adım 1]
-2. [Adım 2]
-3. [Hata oluştu]
+STEPS TO REPRODUCE:
+1. [Step 1]
+2. [Step 2]
+3. [Error occurs]
 
-KONSOL LOGLARI:
-[Tüm console error'ları yapıştır]
+CONSOLE LOGS:
+[Paste all console errors]
 
-HİPOTEZ VE ANALİZ:
-- Olası neden: [Teori 1]
-- Nereye bakılmalı: [Spesifik dosya/alan]
-- Hızlı çözüm önerisi: [Varsa]
+HYPOTHESIS AND ANALYSIS:
+- Possible cause: [Theory 1]
+- Where to look: [Specific file/area]
+- Suggested quick fix: [If any]
 
-SONRAKİ ADIMLAR:
-- Bu sorun düzeltilmeden test devam edemez
+NEXT STEPS:
+- Testing cannot continue until this issue is fixed
 ```
 
 ---
 
-## 2. Test Fazları
+## 2. Test Phases
 
-| Faz       | Durum               | Süre     | Odak                           |
+| Phase     | Stage               | Duration | Focus                          |
 | --------- | ------------------- | -------- | ------------------------------ |
-| **Faz 1** | MVP / Yeni uygulama | 30-60 dk | Temel çalışıyor mu?            |
-| **Faz 2** | Beta / Pre-launch   | 2-4 saat | Kapsamlı fonksiyon + güvenlik  |
-| **Faz 3** | Production hazır    | 4-8 saat | Edge case, stress, final audit |
+| **Phase 1** | MVP / New app     | 30–60 min | Does the core work?          |
+| **Phase 2** | Beta / Pre-launch | 2–4 hours | Comprehensive functionality + security |
+| **Phase 3** | Production-ready  | 4–8 hours | Edge cases, stress, final audit |
 
 ---
 
-## 3. Faz 1 — Erken Aşama Test Listesi (30-60 dk)
+## 3. Phase 1 — Early-Stage Test Checklist (30–60 min)
 
-### A. İlk Yükleme (5 dk)
+### A. Initial Load (5 min)
 
 ```typescript
 await page.goto(url)
-// Console error kontrol
+// Check console errors
 page.on('console', (msg) => {
   if (msg.type() === 'error') console.log('ERROR:', msg.text())
 })
 ```
 
-Kontrol et:
+Check:
 
-- [ ] Sayfa yükleniyor mu?
-- [ ] Console'da kırmızı hata var mı? (Kritikse DURDUR)
-- [ ] Metin görünür ve okunabilir mi?
+- [ ] Does the page load?
+- [ ] Are there red errors in the console? (STOP if critical)
+- [ ] Is the text visible and readable?
 
-### B. Navigasyon (10 dk)
+### B. Navigation (10 min)
 
 ```typescript
-const buttons = await stagehand.observe('tüm navigasyon butonlarını ve linkleri bul')
+const buttons = await stagehand.observe('find all navigation buttons and links')
 for (const button of buttons) {
   await stagehand.act(button)
 }
 ```
 
-- [ ] Tüm nav butonları/linkleri çalışıyor
-- [ ] Her link bir şey yapıyor (kırmızı hata → KRİTİK)
+- [ ] All navigation buttons and links work
+- [ ] Every link performs an action (red error → CRITICAL)
 
-### C. Core Fonksiyon (20 dk)
+### C. Core Function (20 min)
 
 ```typescript
-await stagehand.act('ana özelliği kullan')
+await stagehand.act('use the main feature')
 ```
 
-- [ ] Birincil kullanıcı aksiyonu çalışıyor
-- [ ] Tüm görünür butonlar bir şey yapıyor
-- [ ] Form input'ları validate ediliyor
+- [ ] The primary user action works
+- [ ] All visible buttons perform an action
+- [ ] Form inputs are validated
 
-### D. Güvenlik Hızlı Kontrol (10 dk)
+### D. Quick Security Check (10 min)
 
 ```typescript
 const html = await page.content()
@@ -120,52 +120,52 @@ const secretPatterns = [
 for (const pattern of secretPatterns) {
   const matches = html.match(pattern)
   if (matches) {
-    console.log('🚨 KRİTİK: HTML'de secret bulundu!', matches)
+    console.log('🚨 CRITICAL: Secret found in HTML!', matches)
   }
 }
 ```
 
-- [ ] HTML'de secret yok (API key, token, şifre)
-- [ ] localStorage'da sensitive veri yok
-- [ ] Cookie'ler güvenli
+- [ ] No secrets in HTML (API key, token, password)
+- [ ] No sensitive data in localStorage
+- [ ] Cookies are secure
 
-### E. Responsive Kontrol (5 dk)
+### E. Responsive Check (5 min)
 
 ```typescript
 await page.setViewportSize({ width: 375, height: 667 })
 await page.screenshot({ path: '/tmp/mobile.png' })
 ```
 
-- [ ] Mobil görünümde içerik görünür
-- [ ] Yatay scroll yok
+- [ ] Content is visible in the mobile view
+- [ ] No horizontal scrolling
 
 ---
 
-## 4. Faz 2 — Kapsamlı Test Ek Listesi
+## 4. Phase 2 — Additional Comprehensive Test Checklist
 
-### Authentication ve Authorization
+### Authentication and Authorization
 
 ```typescript
-// Korunan sayfaya girişsiz erişim dene
+// Attempt to access a protected page without signing in
 await page.goto(`${url}/dashboard`)
 const redirected = page.url().includes('/login')
-if (!redirected) console.log('⚠️ Auth bypass: /dashboard girişsiz erişilebilir!')
+if (!redirected) console.log('⚠️ Auth bypass: /dashboard is accessible without signing in!')
 ```
 
-- [ ] Korunan sayfalara girişsiz erişim engelleniyor
-- [ ] Admin sayfaları normal kullanıcıdan erişilemiyor
-- [ ] Session logout'ta temizleniyor
+- [ ] Access to protected pages without signing in is blocked
+- [ ] Admin pages are inaccessible to regular users
+- [ ] The session is cleared on logout
 
 ### XSS Testi
 
 ```typescript
 const xssPayloads = ['<script>alert("XSS")</script>', '<img src=x onerror=alert("XSS")>', 'javascript:alert("XSS")']
 for (const payload of xssPayloads) {
-  await stagehand.act(`input alanına '${payload}' yaz`)
+  await stagehand.act(`enter '${payload}' into the input field`)
 }
 ```
 
-- [ ] Script execute edilmiyor (HIGH → KRİTİK eğer user-facing)
+- [ ] The script is not executed (HIGH → CRITICAL if user-facing)
 
 ### SQL Injection Testi
 
@@ -173,7 +173,7 @@ for (const payload of xssPayloads) {
 const sqlPayloads = ["' OR '1'='1", "'; DROP TABLE users--", "1' UNION SELECT NULL--"]
 ```
 
-- [ ] SQL injection çalışmıyor (KRİTİK)
+- [ ] SQL injection does not work (CRITICAL)
 
 ### Performans
 
@@ -181,177 +181,177 @@ const sqlPayloads = ["' OR '1'='1", "'; DROP TABLE users--", "1' UNION SELECT NU
 const start = Date.now()
 await page.goto(url, { waitUntil: 'networkidle' })
 const loadTime = Date.now() - start
-if (loadTime > 3000) console.log(`⚡ MEDIUM: Yükleme süresi ${loadTime}ms (>3s)`)
-if (loadTime > 10000) console.log(`⚠️ HIGH: Yükleme süresi ${loadTime}ms (>10s)`)
+if (loadTime > 3000) console.log(`⚡ MEDIUM: Load time ${loadTime}ms (>3s)`)
+if (loadTime > 10000) console.log(`⚠️ HIGH: Load time ${loadTime}ms (>10s)`)
 ```
 
-### Security Header'ları
+### Security Headers
 
 ```typescript
 const response = await page.goto(url)
 const headers = response.headers()
 const required = ['content-security-policy', 'x-frame-options', 'strict-transport-security']
 for (const header of required) {
-  if (!headers[header]) console.log(`⚡ MEDIUM: Eksik header: ${header}`)
+  if (!headers[header]) console.log(`⚡ MEDIUM: Missing header: ${header}`)
 }
 ```
 
 ### Accessibility
 
 ```typescript
-// Alt text kontrol
+// Check alt text
 const images = await page.evaluate(() => Array.from(document.images).map((img) => ({ src: img.src, alt: img.alt })))
 const missingAlt = images.filter((img) => !img.alt)
-if (missingAlt.length) console.log('ℹ️ LOW: Alt text eksik görseller:', missingAlt)
+if (missingAlt.length) console.log('ℹ️ LOW: Images missing alt text:', missingAlt)
 ```
 
 ---
 
-## 5. Önem Derecesi Kılavuzu
+## 5. Severity Guide
 
-### 🚨 KRİTİK — Testi Hemen Durdur
+### 🚨 CRITICAL — Stop Testing Immediately
 
-- Server çöktü / başlamıyor
-- Database bağlantı hatası
+- Server crashed / does not start
+- Database connection error
 - Authentication bypass
-- API key/secret HTML'de görünür
-- SQL injection açığı var
-- Veri kaybı veya bozulması
+- API key/secret visible in HTML
+- SQL injection vulnerability
+- Data loss or corruption
 
-### ⚠️ YÜKSEK — Acil Raporla, Testi Sürdür
+### ⚠️ HIGH — Report Urgently, Continue Testing
 
-- Core feature tamamen çalışmıyor
-- XSS, CSRF güvenlik açığı
-- Login bozuk bazı kullanıcılar için
-- Admin yetkisizken erişilebilir
-- HTTPS zorunlu değil
+- Core feature does not work at all
+- XSS or CSRF vulnerability
+- Login is broken for some users
+- Admin area is accessible without authorization
+- HTTPS is not enforced
 
-### ⚡ ORTA — Belgele, Sürdür
+### ⚡ MEDIUM — Document and Continue
 
-- Kritik olmayan feature bozuk
-- Kötü error mesajları
-- Performans >3 saniye
-- Büyük UI hizalama sorunu
-- Eksik input validation
+- Non-critical feature is broken
+- Poor error messages
+- Performance over 3 seconds
+- Major UI alignment issue
+- Missing input validation
 
-### ℹ️ DÜŞÜK — Raporda Not Et
+### ℹ️ LOW — Note in the Report
 
-- Yazım hataları
-- Küçük renk kontrast sorunları
-- Eksik tooltip
-- Minor responsive sorun
-- Non-blocking console uyarıları
+- Typos
+- Minor color contrast issues
+- Missing tooltip
+- Minor responsive issue
+- Non-blocking console warnings
 
 ---
 
-## 6. Rapor Şablonu
+## 6. Report Template
 
-### Tekil Bulgu Formatı
+### Individual Finding Format
 
 ```markdown
-## Bulgu #[N]: [Kısa Başlık]
+## Finding #[N]: [Short Title]
 
-**Önem**: [KRİTİK/YÜKSEK/ORTA/DÜŞÜK]
-**Bileşen**: [Login, Checkout, Navigation...]
-**Kategori**: [Güvenlik/Fonksiyon/UX/Performans/Erişilebilirlik]
+**Severity**: [CRITICAL/HIGH/MEDIUM/LOW]
+**Component**: [Login, Checkout, Navigation...]
+**Category**: [Security/Functionality/UX/Performance/Accessibility]
 
-### Açıklama
+### Description
 
-[Net açıklama]
+[Clear description]
 
-### Yeniden Oluşturma
+### Reproduction
 
-1. [Adım 1]
-2. [Adım 2]
-3. [Sorun oluşur]
+1. [Step 1]
+2. [Step 2]
+3. [Issue occurs]
 
-### Beklenen Davranış
+### Expected Behavior
 
-[Ne olmalıydı]
+[What should have happened]
 
-### Gerçekleşen Davranış
+### Actual Behavior
 
-[Ne oldu]
+[What happened]
 
-### Analiz ve Hipotez
+### Analysis and Hypothesis
 
-- Olası neden: [Teori]
-- Nereye bakılmalı: [Dosya/bileşen]
+- Possible cause: [Theory]
+- Where to look: [File/component]
 
-### Öneri
+### Recommendation
 
-[Nasıl düzeltilir — spesifik olun]
+[How to fix it — be specific]
 ```
 
-### Final Rapor Formatı
+### Final Report Format
 
 ```markdown
-# QA Test Raporu — [Uygulama Adı]
+# QA Test Report — [Application Name]
 
-**Tarih**: [Tarih]
-**Faz**: [1/2/3]
+**Date**: [Date]
+**Phase**: [1/2/3]
 **URL**: [Test URL]
 
-## Özet
+## Summary
 
-- Toplam Bulgu: [N]
-- Kritik: [N] 🚨
-- Yüksek: [N] ⚠️
-- Orta: [N] ⚡
-- Düşük: [N] ℹ️
+- Total Findings: [N]
+- Critical: [N] 🚨
+- High: [N] ⚠️
+- Medium: [N] ⚡
+- Low: [N] ℹ️
 
-**Öneri**: [DEVAM / HAYIR / KOŞULLU DEVAM]
+**Recommendation**: [GO / NO-GO / CONDITIONAL GO]
 
-## Kritik Bulgular 🚨
+## Critical Findings 🚨
 
-[Varsa listele]
+[List if any]
 
-## Yüksek Öncelikli Bulgular ⚠️
+## High-Priority Findings ⚠️
 
-[Varsa listele]
+[List if any]
 
-## Orta Öncelikli Bulgular ⚡
+## Medium-Priority Findings ⚡
 
-[Varsa listele]
+[List if any]
 
-## Düşük Öncelikli Bulgular ℹ️
+## Low-Priority Findings ℹ️
 
-[Varsa listele]
+[List if any]
 
-## Test Kapsamı
+## Test Scope
 
-### ✅ Test Edilen Alanlar
+### ✅ Tested Areas
 
-- [Alan 1]
+- [Area 1]
 
-### ❌ Test Edilmeyen Alanlar
+### ❌ Untested Areas
 
-- [Alan 1]
+- [Area 1]
 
-## Öneriler
+## Recommendations
 
-### Acil (Launch Öncesi)
+### Immediate (Before Launch)
 
 1. ...
 
-### Kısa Vadeli (1 ay)
+### Short-Term (1 month)
 
 1. ...
 ```
 
 ---
 
-## 7. Hızlı Başvuru
+## 7. Quick Reference
 
 ```
-Karar ağacı:
-- Uygulama çöktü?    → KRİTİK, DURDUR
-- Secret açık?        → KRİTİK, DURDUR
-- Core feature bozuk? → YÜKSEK
-- Güvenlik açığı?    → YÜKSEK
-- Feature kısmen çalışıyor? → ORTA
-- UI sorunu?          → DÜŞÜK/ORTA
-- Yazım hatası?       → DÜŞÜK
+Decision tree:
+- Application crashed?       → CRITICAL, STOP
+- Secret exposed?            → CRITICAL, STOP
+- Core feature broken?       → HIGH
+- Security vulnerability?    → HIGH
+- Feature partially working? → MEDIUM
+- UI issue?                  → LOW/MEDIUM
+- Typo?                      → LOW
 
-KRİTİK HATA = TÜM TEST DURUR
+CRITICAL ERROR = ALL TESTING STOPS
 ```

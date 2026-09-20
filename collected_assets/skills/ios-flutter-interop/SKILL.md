@@ -8,7 +8,6 @@ description: >
   code, integrating native features, platform channel, Swift-Dart bridge,
   iOS notifications, deep link, Universal Link, app extension, TestFlight,
   App Store review, iOS permissions.
-version: 1.0.0
 allowed-tools: Read, Glob, Grep
 ---
 

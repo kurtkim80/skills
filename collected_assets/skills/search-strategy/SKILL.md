@@ -1,11 +1,11 @@
 ---
 name: search-strategy
-description: Query decomposition and multi-source search orchestration. Breaks natural language questions into targeted searches per source, translates queries into source-specific syntax, ranks results by relevance, and handles ambiguity and fallback strategies.
+description: Decompose questions and orchestrate searches across multiple connected sources, then rank, deduplicate, and synthesize the evidence. Use when a request requires finding related information across several repositories, knowledge bases, trackers, chats, or other available systems.
 ---
 
 # Search Strategy
 
-> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
+First inspect which search tools and connected sources are actually available. Treat the source syntax examples below as patterns, not as guaranteed tool names.
 
 The core intelligence behind enterprise search. Transforms a single natural language question into parallel, source-specific searches and produces ranked, deduplicated results.
 

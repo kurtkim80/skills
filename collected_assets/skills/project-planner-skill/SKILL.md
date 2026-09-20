@@ -5,260 +5,257 @@ description: Generate comprehensive project planning documents — requirements,
 
 # Project Planner Skill
 
-Yazılım projelerini yapılandırılmış requirements, design ve implementation plan dokümanlarına dönüştürme rehberi.
+A guide to turning software projects into structured requirements, design, and implementation plan documents.
 
 ## When to use this skill
 
-- Yeni feature veya proje başlatılırken
-- Teknik spesifikasyon dokümantasyonu gerektiğinde
-- Karmaşık implementasyonlar görevlere ayrılacakken
-- PR'dan önce teknik tasarım netleştirilecekken
+- When starting a new feature or project
+- When technical specification documentation is needed
+- When complex implementations need to be broken into tasks
+- When clarifying a technical design before a PR
 
 ---
 
-## 1. Üç Temel Doküman
+## 1. Three Core Documents
 
-| Doküman      | Amaç                                         | Dosya             |
+| Document     | Purpose                                      | File              |
 | ------------ | -------------------------------------------- | ----------------- |
-| Requirements | Kullanıcı hikayeleri + kabul kriterleri      | `requirements.md` |
-| Design       | Mimari + component + veri akışı              | `design.md`       |
-| Tasks        | Görev kırılımı + requirement izlenebilirliği | `tasks.md`        |
+| Requirements | User stories + acceptance criteria           | `requirements.md` |
+| Design       | Architecture + components + data flow        | `design.md`       |
+| Tasks        | Task breakdown + requirement traceability    | `tasks.md`        |
 
 ---
 
-## 2. Requirements Dokümanı Şablonu
+## 2. Requirements Document Template
 
 ```markdown
-# Requirements — [Feature Adı]
+# Requirements — [Feature Name]
 
-## Giriş
+## Introduction
 
-[Sistem açıklaması 2-3 cümle. Hedef kullanıcı ve kapsam.]
+[System description in 2–3 sentences. Target user and scope.]
 
-## Sözlük
+## Glossary
 
-- **Terim**: Bu sisteme özgü tanım
+- **Term**: Definition specific to this system
 
-## Gereksinimler
+## Requirements
 
-### Gereksinim 1
+### Requirement 1
 
-**Kullanıcı Hikayesi**: Bir [kullanıcı tipi] olarak, [yetenek] istiyorum, böylece [fayda] sağlayayım.
+**User Story**: As a [user type], I want [capability], so that I can [benefit].
 
-#### Kabul Kriterleri
+#### Acceptance Criteria
 
-1. BİR [tetikleyici/koşul] OLDUĞUNDA, [bileşen] [eylem/davranış] OLMALI
-2. [bağlam/mod]'DA, [bileşen] [eylem] OLMALI
-3. [koşul] İSE, [bileşen] [eylem] OLMALI
-4. [bileşen] [ölçülebilir hedef ile yetenek] OLMALI
+1. WHEN [trigger/condition], [component] MUST [action/behavior]
+2. WHILE IN [context/mode], [component] MUST [action]
+3. IF [condition], [component] MUST [action]
+4. [component] MUST [capability with measurable target]
 ```
 
-### Kabul Kriteri Kalıpları
+### Acceptance-Criteria Patterns
 
 ```
-Davranış:
-- BİR [olay gerçekleştiğinde], sistem [yanıt vermeli]
-- Sistem [kural/limit] UYGULAMALI
+Behavior:
+- WHEN [event occurs], the system MUST [respond]
+- The system MUST ENFORCE [rule/limit]
 
-Koşullu:
-- [koşul] İSE, sistem [eylem] ETMELI
-- [mod aktifken], sistem [davranış] SERGILEMELI
+Conditional:
+- IF [condition], the system MUST [action]
+- WHILE [mode is active], the system MUST [behavior]
 
-Performans:
-- Sistem [işlemi] [süre içinde] TAMAMLAMALI
-- Sistem [N] eş zamanlı [işlemi] DESTEKLEMELİ
+Performance:
+- The system MUST COMPLETE [operation] WITHIN [duration]
+- The system MUST SUPPORT [N] concurrent [operations]
 ```
 
 ---
 
-## 3. Design Dokümanı Şablonu
+## 3. Design Document Template
 
 ```markdown
-# Design — [Feature Adı]
+# Design — [Feature Name]
 
-## Genel Bakış
+## Overview
 
-[Mimari özeti 3-4 cümle.]
+[Architecture summary in 3–4 sentences.]
 
-## Sistem Mimarisi
+## System Architecture
 
-### Component Haritası
+### Component Map
 
-| Component ID | Ad           | Tip     | Sorumluluk        | Etkileştiği |
+| Component ID | Name         | Type    | Responsibility    | Interacts With |
 | ------------ | ------------ | ------- | ----------------- | ----------- |
-| COMP-1       | Web Frontend | UI      | Kullanıcı arayüzü | COMP-2      |
-| COMP-2       | API Routes   | Service | İstek yönlendirme | COMP-3      |
+| COMP-1       | Web Frontend | UI      | User interface    | COMP-2         |
+| COMP-2       | API Routes   | Service | Request routing   | COMP-3         |
 
-### Yüksek Seviye Mimari Diyagramı
+### High-Level Architecture Diagram
 
-[ASCII diyagram — tüm component'ler ve ilişkileri]
+[ASCII diagram — all components and their relationships]
 
-## Veri Akışı
+## Data Flow
 
-### Akış 1: [Akış Adı]
+### Flow 1: [Flow Name]
 ```
 
-1. [Kaynak] → [Bileşen]: [Veri açıklaması]
-2. [Bileşen] → [Bileşen]: [Dönüşüm]
-3. [Bileşen] → [Hedef]: [Son format]
+1. [Source] → [Component]: [Data description]
+2. [Component] → [Component]: [Transformation]
+3. [Component] → [Destination]: [Final format]
 
 ```
 
-## Entegrasyon Noktaları
+## Integration Points
 
-| Kaynak | Hedef | Protokol | Format | Amaç |
+| Source | Destination | Protocol | Format | Purpose |
 |--------|-------|----------|--------|------|
-| Frontend | API | HTTPS/REST | JSON | API çağrıları |
+| Frontend | API | HTTPS/REST | JSON | API calls |
 
-## Veri Modelleri
+## Data Models
 
-[Entity tanımları ve ilişkileri]
+[Entity definitions and relationships]
 
-## Hata Yönetimi
+## Error Handling
 
-[Hata kategorileri ve strateji]
+[Error categories and strategy]
 
-## Test Stratejisi
+## Test Strategy
 
-- Unit: [Ne test edilecek]
-- Integration: [Hangi akış]
-- E2E: [Kritik user journey]
+- Unit: [What will be tested]
+- Integration: [Which flow]
+- E2E: [Critical user journey]
 ```
 
 ---
 
-## 4. Task Breakdown Şablonu
+## 4. Task Breakdown Template
 
 ```markdown
-# Implementation Plan — [Feature Adı]
+# Implementation Plan — [Feature Name]
 
-## Proje Sınırları
+## Project Boundaries
 
-**Must-have**: Core özellikler
-**Nice-to-have**: İyileştirmeler
-**Kapsam dışı**: Açıkça dışlananlar
+**Must-have**: Core features
+**Nice-to-have**: Improvements
+**Out of scope**: Explicit exclusions
 
 ---
 
-- [ ] 1. Altyapı Kurulumu
-  - [ ] 1.1 Proje yapısı
-    - Dizin oluştur
-    - Type tanımları
-    - _Gereksinimler: REQ-1.1_
-  - [ ] 1.2 Veri katmanı
+- [ ] 1. Infrastructure Setup
+  - [ ] 1.1 Project structure
+    - Create directories
+    - Type definitions
+    - _Requirements: REQ-1.1_
+  - [ ] 1.2 Data layer
     - Firestore schema
-    - _Gereksinimler: REQ-2.1_
-    - _Bağımlılıklar: 1.1_
+    - _Requirements: REQ-2.1_
+    - _Dependencies: 1.1_
 
-- [ ] 2. İş Mantığı
+- [ ] 2. Business Logic
   - [ ] 2.1 [Core feature]
-    - Implementasyon adımları
-    - _Gereksinimler: REQ-3.1, REQ-3.2_
-    - _Bağımlılıklar: Faz 1_
+    - Implementation steps
+    - _Requirements: REQ-3.1, REQ-3.2_
+    - _Dependencies: Phase 1_
 
-- [ ] 3. API Katmanı
-  - [ ] 3.1 Route handler'lar
-    - _Gereksinimler: REQ-4.1_
+- [ ] 3. API Layer
+  - [ ] 3.1 Route handlers
+    - _Requirements: REQ-4.1_
 
 - [ ] 4. Frontend
-  - [ ] 4.1 Component'ler
-    - _Gereksinimler: REQ-5.1_
+  - [ ] 4.1 Components
+    - _Requirements: REQ-5.1_
 
 - [ ] 5. Test
-  - [ ] 5.1 Unit testler
-  - [ ] 5.2 Integration testler
+  - [ ] 5.1 Unit tests
+  - [ ] 5.2 Integration tests
 ```
 
 ---
 
-## 5. Talent Architect Feature Planning
+## 5. Feature Planning
 
-Talent Architect'e yeni feature eklerken şu soruları yanıtla:
+Answer these questions when adding a new feature to an existing product:
 
-### Mimari Sorular
+### Architecture Questions
 
 ```
-1. Bu feature hangi domain'e ait?
-   → features/{domain}/server/ altına mı gidecek?
+1. Which domain does this feature belong to?
+   → Where are the existing module boundary and ownership?
 
-2. Firebase'de ne depolanacak?
-   → Firestore collection adı ve document yapısı?
+2. What data will be stored?
+   → Who owns the data, and what are its schema, lifecycle, and migration needs?
 
-3. AI kullanıyor mu?
-   → Anthropic SDK mi, OpenRouter mi?
-   → Rate limit gerekiyor mu?
+3. Does it use AI or an external service?
+   → Provider selection, data boundary, cost, and rate limits?
 
-4. Subscription gerektirir mi?
-   → Free tier limiti nedir?
-   → Monitoring'e event yazılacak mı?
+4. Does it require a subscription?
+   → What is the free-tier limit?
+   → Will an event be written to monitoring?
 
-5. i18n gerekiyor mu?
-   → TR + EN key'leri eklenecek mi?
+5. Is i18n required?
+   → Will TR + EN keys be added?
 ```
 
 ### Feature Checklist
 
-- [ ] `features/{feature}/` dizini oluşturuldu
-- [ ] `features/{feature}/server/` servis dosyası oluşturuldu
-- [ ] `features/{feature}/types.ts` type'ları tanımlandı
-- [ ] Firestore şema tasarlandı
-- [ ] API route handler yazıldı (`src/app/api/`)
-- [ ] Auth kontrolü eklenecek route'lar belirlendi
-- [ ] i18n key'leri TR + EN eklendi
-- [ ] `npm run locales:check` geçiyor
-- [ ] Monitoring event'leri tanımlandı
-- [ ] Subscription kontrolü eklendi (gerekiyorsa)
+- [ ] Files matching the project's existing module structure are identified
+- [ ] Data contracts and migration needs are defined
+- [ ] API or integration contracts are defined
+- [ ] Routes that require auth checks are identified
+- [ ] Localization scope is defined for supported languages
+- [ ] The project's localization validation passes
+- [ ] Monitoring events are defined
+- [ ] Subscription checks are added when needed
 
 ---
 
-## 6. Yaygın Uygulama Fazları
+## 6. Common Implementation Phases
 
 ```
-Faz 1: Altyapı
-  - Proje yapısı, type tanımları, Firestore şema
+Phase 1: Infrastructure
+  - Project structure, type definitions, Firestore schema
 
-Faz 2: Veri Katmanı
-  - Firestore CRUD operasyonları, validation
+Phase 2: Data Layer
+  - Firestore CRUD operations, validation
 
-Faz 3: İş Mantığı
-  - Core algoritmalar, servis sınıfları, AI entegrasyon
+Phase 3: Business Logic
+  - Core algorithms, service classes, AI integration
 
-Faz 4: API Katmanı
-  - Route handler'lar, auth, rate limiting
+Phase 4: API Layer
+  - Route handlers, auth, rate limiting
 
-Faz 5: Frontend
-  - Component'ler, state management, form validation
+Phase 5: Frontend
+  - Components, state management, form validation
 
-Faz 6: Test
+Phase 6: Testing
   - Unit, integration, E2E
 
-Faz 7: Monitoring
+Phase 7: Monitoring
   - Event logging, error tracking
 ```
 
 ---
 
-## 7. Kalite Kontrol Listesi
+## 7. Quality Checklist
 
-### Requirements Dokümanı
+### Requirements Document
 
-- [ ] Her gereksinim için kullanıcı hikayesi var
-- [ ] Tüm kabul kriterleri ölçülebilir/test edilebilir
-- [ ] Non-functional gereksinimler belirtildi (performans, güvenlik)
-- [ ] Sözlük domain terimlerini kapsıyor
-- [ ] Gereksinimler trace için numaralandırıldı
+- [ ] Every requirement has a user story
+- [ ] All acceptance criteria are measurable and testable
+- [ ] Non-functional requirements are specified (performance, security)
+- [ ] The glossary covers domain terms
+- [ ] Requirements are numbered for traceability
 
-### Design Dokümanı
+### Design Document
 
-- [ ] Tüm component'lerin sorumlulukları net
-- [ ] Veri akışı diyagramları mevcut
-- [ ] Hata yönetimi stratejisi belgelenmiş
-- [ ] Performans hedefleri belirtilmiş
+- [ ] Responsibilities of all components are clear
+- [ ] Data-flow diagrams are present
+- [ ] The error-handling strategy is documented
+- [ ] Performance targets are specified
 
 ### Task Breakdown
 
-- [ ] Görevler mantıklı fazlara gruplandı
-- [ ] Bağımlılıklar belirtildi
-- [ ] Her göreve requirement izlenebilirliği eklendi
-- [ ] Görevler bağımsız tamamlanabilir
-- [ ] Checkbox formatı kullanıldı
+- [ ] Tasks are grouped into logical phases
+- [ ] Dependencies are specified
+- [ ] Requirement traceability is added to every task
+- [ ] Tasks can be completed independently
+- [ ] Checkbox format is used
