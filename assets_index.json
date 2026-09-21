@@ -10362,11 +10362,10 @@
     "codebase-onboarding": {
       "name": "codebase-onboarding",
       "type": "skill",
-      "description": "Analyze a codebase and generate onboarding documentation for engineers, tech leads, and contractors. Fast fact-gathering and repeatable onboarding outputs. Use when onboarding a new engineer, writing architecture-overview docs for a new project, or producing tech-lead briefings for unfamiliar repos.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/codebase-onboarding",
-      "description_ko": "코드베이스를 분석하고 엔지니어, 기술 책임자 및 계약자를 위한 온보딩 문서를 생성합니다. 빠른 사실 수집 및 반복 가능한 온보딩 결과. 새로운 엔지니어를 온보딩하거나, 새 프로젝트에 대한 아키텍처 개요 문서를 작성하거나, 익숙하지 않은 저장소에 대한 기술 책임자 브리핑을 생성할 때 사용하세요."
+      "description": "Onboard a developer to a repository using Ontoly graph summaries. Use",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/codebase-onboarding"
     },
     "docker-development": {
       "name": "docker-development",
@@ -20221,6 +20220,14 @@
       "path": "collected_assets/skills/receiving-code-review",
       "description_ko": "코드 리뷰에는 감정적인 성과가 아닌 기술적인 평가가 필요합니다."
     },
+    "eas-workflows": {
+      "name": "eas-workflows",
+      "type": "skill",
+      "description": "Curated upstream guidance for Eas Workflows; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/eas-workflows"
+    },
     "agent-qa-authoring": {
       "name": "agent-qa-authoring",
       "type": "skill",
@@ -21531,6 +21538,14 @@
       "path": "collected_assets/skills/linkedin-post-writer",
       "description_ko": "게시하기 전에 2026 알고리즘 형식 규칙 및 AI-tell 스크럽 패스를 사용하여 참여 목표(댓글, 재게시, 좋아요, 저장)에 매핑된 16개의 테스트된 후크 공식에서 LinkedIn 게시물 초안을 작성하세요."
     },
+    "api-integration-architect": {
+      "name": "api-integration-architect",
+      "type": "skill",
+      "description": "Design, implement, debug, and optimize API integrations with expert-level",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/api-integration-architect"
+    },
     "nerdzao-elite-gemini-high": {
       "name": "nerdzao-elite-gemini-high",
       "type": "skill",
@@ -21724,6 +21739,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/error-debugging-multi-agent-review",
       "description_ko": "오류 디버깅 다중 에이전트 검토 작업 시 사용"
+    },
+    "makepad-2-0-events": {
+      "name": "makepad-2-0-events",
+      "type": "skill",
+      "description": "Makepad 2.0 guidance for events; use when building or debugging Makepad UI code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/makepad-2-0-events"
     },
     "usage-based-pricing": {
       "name": "usage-based-pricing",
@@ -22057,6 +22080,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ai-inference-service-mesh"
     },
+    "writing-guidelines": {
+      "name": "writing-guidelines",
+      "type": "skill",
+      "description": "Curated upstream guidance for Writing Guidelines; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/writing-guidelines"
+    },
     "dotnet-reverse": {
       "name": "dotnet-reverse",
       "type": "skill",
@@ -22328,6 +22359,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/sbom-supply-chain"
     },
+    "eas-app-stores": {
+      "name": "eas-app-stores",
+      "type": "skill",
+      "description": "Curated upstream guidance for Eas App Stores; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/eas-app-stores"
+    },
     "gcp-cloud-run": {
       "name": "gcp-cloud-run",
       "type": "skill",
@@ -22471,6 +22510,14 @@
       "path": "collected_assets/skills/graphql",
       "description_ko": "GraphQL은 클라이언트에게 필요한 정확한 데이터를 제공합니다."
     },
+    "jev-social": {
+      "name": "jev-social",
+      "type": "skill",
+      "description": "Run read-only, browser-grounded Instagram, TikTok, or LinkedIn research through Jev routing and socai CLI, returning source-linked evidence and reports.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/jev-social"
+    },
     "azure-cosmos-db-py": {
       "name": "azure-cosmos-db-py",
       "type": "skill",
@@ -22569,6 +22616,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/newman-cicd-integration",
       "description_ko": "자동화된 API 테스트를 위해 Newman을 설치하고 실행하는 즉시 사용 가능한 CI/CD 파이프라인 구성을 생성합니다."
+    },
+    "fact-check-x-unified": {
+      "name": "fact-check-x-unified",
+      "type": "skill",
+      "description": "Fact-Check-X 流程编排能力，依次组织各方答案汇总、各方答案聚合（未核验）、权威核验后的最终答案和各方答案测评，生成可打开、可审计、可迁移的阶段产物与完整报告包。",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/fact-check-x-unified"
     },
     "skill-suggester": {
       "name": "skill-suggester",
@@ -23303,6 +23358,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agent-orchestration-improve-agent",
       "description_ko": "성능 분석, 신속한 엔지니어링, 지속적인 반복을 통해 기존 에이전트를 체계적으로 개선합니다."
+    },
+    "longbridge-quant": {
+      "name": "longbridge-quant",
+      "type": "skill",
+      "description": "Curated upstream guidance for Longbridge Quant; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/longbridge-quant"
     },
     "hunt-websocket": {
       "name": "hunt-websocket",
@@ -24362,11 +24425,10 @@
     "monte-carlo-asset-health": {
       "name": "monte-carlo-asset-health",
       "type": "skill",
-      "description": "Check the health of a data table/asset using Monte Carlo. Activates on \"how is table X\", \"check health of X\", \"is X healthy\", \"status of X\", \"check on X table\", or any health/status question about a data asset.",
+      "description": "Curated upstream guidance for Monte Carlo Asset Health; use when the workflow matches the user goal.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/monte-carlo-asset-health",
-      "description_ko": "Monte Carlo를 사용하여 데이터 테이블/자산의 상태를 확인합니다. \"테이블 X 상태 확인\", \"X 상태 확인\", \"X 상태 확인\", \"X 상태\", \"X 테이블 확인\" 또는 데이터 자산에 대한 상태/상태 질문에 대해 활성화됩니다."
+      "path": "collected_assets/skills/monte-carlo-asset-health"
     },
     "sre-dashboards": {
       "name": "sre-dashboards",
@@ -24703,6 +24765,14 @@
       "path": "collected_assets/skills/hig-components-search",
       "description_ko": "검색 필드, 페이지 컨트롤, 경로 컨트롤 등 탐색 관련 구성 요소에 대한 Apple HIG 지침입니다."
     },
+    "apify-integration-development": {
+      "name": "apify-integration-development",
+      "type": "skill",
+      "description": "Curated upstream guidance for Apify Integration Development; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-integration-development"
+    },
     "upstash-redis": {
       "name": "upstash-redis",
       "type": "skill",
@@ -24782,6 +24852,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/not-a-vibe-coder",
       "description_ko": "모호한 메시지를 새로운 프로젝트를 위한 8개의 구조화된 계획 파일로 변환합니다. 기존 코드베이스에는 사용하지 마세요."
+    },
+    "longbridge-derivatives": {
+      "name": "longbridge-derivatives",
+      "type": "skill",
+      "description": "Curated upstream guidance for Longbridge Derivatives; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/longbridge-derivatives"
     },
     "code-documentation-doc-generate": {
       "name": "code-documentation-doc-generate",
@@ -25761,6 +25839,14 @@
       "path": "collected_assets/skills/crossframe-critical",
       "description_ko": "사용자가 중국 구조 비평 서류, 기사 계획 또는 긴 형식의 비평 에세이에 대해 crossframe-tical을 명시적으로 명명한 경우에만 사용하십시오."
     },
+    "dependency-analysis": {
+      "name": "dependency-analysis",
+      "type": "skill",
+      "description": "Analyze internal and package dependencies using Ontoly graph traversal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/dependency-analysis"
+    },
     "threejs-animation": {
       "name": "threejs-animation",
       "type": "skill",
@@ -25874,6 +25960,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/frontend-ui-engineering",
       "description_ko": "프로덕션 품질의 UI를 구축합니다. 사용자 지향 인터페이스를 구축하거나 수정할 때 사용합니다. 구성 요소 생성, 레이아웃 구현, 상태 관리 또는 출력이 AI 생성이 아닌 프로덕션 품질로 보이고 느껴져야 할 때 사용합니다."
+    },
+    "devops-pipeline-builder": {
+      "name": "devops-pipeline-builder",
+      "type": "skill",
+      "description": "Design and implement CI/CD pipelines, Docker configurations, deployment",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/devops-pipeline-builder"
     },
     "chrome-extension-developer": {
       "name": "chrome-extension-developer",
@@ -27327,6 +27421,14 @@
       "path": "collected_assets/skills/search-specialist",
       "description_ko": "고급 검색 기술을 활용한 전문 웹 연구원과"
     },
+    "score-eval": {
+      "name": "score-eval",
+      "type": "skill",
+      "description": "Imported skill `score-eval` from upstream source.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/score-eval"
+    },
     "cucumber-skill": {
       "name": "cucumber-skill",
       "type": "skill",
@@ -27542,6 +27644,14 @@
       "path": "collected_assets/skills/ui-tokens",
       "description_ko": "StyleSeed 디자인 시스템에서 디자인 토큰 보기, 추가 또는 수정"
     },
+    "saas-pricing-strategist": {
+      "name": "saas-pricing-strategist",
+      "type": "skill",
+      "description": "Design, optimize, and test pricing strategies for SaaS products using",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/saas-pricing-strategist"
+    },
     "recursive-context-pruning-token-budgeting": {
       "name": "recursive-context-pruning-token-budgeting",
       "type": "skill",
@@ -27739,6 +27849,14 @@
       "path": "collected_assets/skills/helm-charts",
       "description_ko": "차트 구조, 값 디자인 및 환경 재정의, 릴리스 및 개정, 업그레이드/롤백 의미 체계, 템플릿 무분별한 확장 방지, Helm 대 Kustomize 선택 등 Helm을 사용한 Kubernetes 매니페스트의 패키징 및 템플릿 작성을 다룹니다. 사용자가 Helm 차트를 작성하거나, value.yaml 계층 구조를 설계하거나, 실패한 'helm 업그레이드'를 디버깅하거나, Helm과 Kustomize 중에서 결정할 때마다 이를 사용하세요. 클러스터의 롤아웃 메커니즘의 경우 `kubernetes-Operations`를 사용하세요. GitOps에서 차트를 전달하려면 'gitops'를 사용하세요."
     },
+    "meeting-distiller-pro": {
+      "name": "meeting-distiller-pro",
+      "type": "skill",
+      "description": "Transform messy meeting notes and transcripts into structured action",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meeting-distiller-pro"
+    },
     "obsidian-clipper-template-creator": {
       "name": "obsidian-clipper-template-creator",
       "type": "skill",
@@ -27809,6 +27927,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ghidra-reverse",
       "description_ko": "Ghidra(헤드리스 또는 GUI)를 사용한 무료/개방형 리버스 엔지니어링: IDA를 사용할 수 없는 경우 디컴파일, 상호 참조, 스크립팅 및 선택적 Ghidra MCP 워크플로."
+    },
+    "makepad-2-0-dsl": {
+      "name": "makepad-2-0-dsl",
+      "type": "skill",
+      "description": "Makepad 2.0 guidance for dsl; use when building or debugging Makepad UI code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/makepad-2-0-dsl"
     },
     "read-all-adrs": {
       "name": "read-all-adrs",
@@ -28373,6 +28499,14 @@
       "path": "collected_assets/skills/cc-skill-backend-patterns",
       "description_ko": "Node.js, Express 및 Next.js API 경로에 대한 백엔드 아키텍처 패턴, API 디자인, 데이터베이스 최적화 및 서버 측 모범 사례입니다."
     },
+    "remotion-render": {
+      "name": "remotion-render",
+      "type": "skill",
+      "description": "Export a Remotion video",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-render"
+    },
     "fp-pragmatic": {
       "name": "fp-pragmatic",
       "type": "skill",
@@ -28470,6 +28604,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/obsidian-markdown",
       "description_ko": "위키링크, 포함, 콜아웃, 속성 및 기타 Obsidian 관련 구문을 사용하여 Obsidian Flavored Markdown을 만들고 편집하세요. Obsidian에서 .md 파일로 작업할 때 또는 사용자가 위키링크, 콜아웃, 본문, 태그, 포함 또는 Obsidian 메모를 언급할 때 사용합니다."
+    },
+    "hf-cli": {
+      "name": "hf-cli",
+      "type": "skill",
+      "description": "Curated upstream guidance for Hf Cli; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/hf-cli"
     },
     "azure-search-documents-dotnet": {
       "name": "azure-search-documents-dotnet",
@@ -28867,6 +29009,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/x-article-publisher-skill",
       "description_ko": "X/Twitter에 기사 게시"
+    },
+    "makepad-2-0-layout": {
+      "name": "makepad-2-0-layout",
+      "type": "skill",
+      "description": "Makepad 2.0 guidance for layout; use when building or debugging Makepad UI code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/makepad-2-0-layout"
     },
     "context-guardian": {
       "name": "context-guardian",
@@ -30232,6 +30382,14 @@
       "path": "collected_assets/skills/social-post-writer-seo",
       "description_ko": "소셜 미디어 전략가이자 콘텐츠 작가입니다. Instagram, LinkedIn, Facebook을 위한 명확하고 매력적인 소셜 미디어 게시물을 만듭니다."
     },
+    "remotion-interactivity": {
+      "name": "remotion-interactivity",
+      "type": "skill",
+      "description": "Structure Remotion markup for interactivity",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-interactivity"
+    },
     "rich-elicitation": {
       "name": "rich-elicitation",
       "type": "skill",
@@ -30275,6 +30433,14 @@
       "source_name": "zzafergok/skills",
       "path": "collected_assets/skills/prompt-caching",
       "description_ko": "Anthropic 프롬프트 캐싱, 응답 캐싱 및 CAG(캐시 증강 생성)를 포함한 LLM 프롬프트에 대한 캐싱 전략 사용 시기: 프롬프트 캐싱, 캐시 프롬프트, 응답 캐시, cag, 캐시 증가."
+    },
+    "remotion-captions": {
+      "name": "remotion-captions",
+      "type": "skill",
+      "description": "Transcribing, displaying and animating captions",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-captions"
     },
     "azure-keyvault-certificates-rust": {
       "name": "azure-keyvault-certificates-rust",
@@ -30497,6 +30663,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/wordpress",
       "description_ko": "테마 개발, 플러그인 생성, WooCommerce 통합, 성능 최적화 및 보안 강화를 다루는 완벽한 WordPress 개발 워크플로입니다. WordPress 7.0 기능 포함: 실시간 공동 작업, AI 커넥터, Abilities API, DataViews 및 PHP 전용 블록."
+    },
+    "longbridge-research": {
+      "name": "longbridge-research",
+      "type": "skill",
+      "description": "Curated upstream guidance for Longbridge Research; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/longbridge-research"
     },
     "product-marketing-context": {
       "name": "product-marketing-context",
@@ -31021,6 +31195,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/unsloth-finetuning",
       "description_ko": "단일 소비자 GPU에서 Unsloth Core를 사용하여 LLM을 미세 조정하고 사후 훈련합니다: VRAM 크기 조정, LoRA/QLoRA, GRPO/DPO, 채팅 템플릿 정확성 및 GGUF 내보내기."
+    },
+    "huggingface-community-evals": {
+      "name": "huggingface-community-evals",
+      "type": "skill",
+      "description": "Curated upstream guidance for Huggingface Community Evals; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/huggingface-community-evals"
     },
     "azure-keyvault-secrets-rust": {
       "name": "azure-keyvault-secrets-rust",
@@ -32146,6 +32328,14 @@
       "path": "collected_assets/skills/electron-development",
       "description_ko": "보안 IPC, contextIsolation, 사전 로드 스크립트, 다중 프로세스 아키텍처, 전자 빌더 패키징, 코드 서명 및 자동 업데이트를 갖춘 Master Electron 데스크탑 앱 개발."
     },
+    "expo-animation": {
+      "name": "expo-animation",
+      "type": "skill",
+      "description": "Curated upstream guidance for Expo Animation; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/expo-animation"
+    },
     "sankhya-dashboard-html-jsp-custom-best-pratices": {
       "name": "sankhya-dashboard-html-jsp-custom-best-pratices",
       "type": "skill",
@@ -32641,6 +32831,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/postmark-automation",
       "description_ko": "Rube MCP(Composio)를 통해 소인 이메일 전달 작업 자동화: 템플릿 이메일 보내기, 템플릿 관리, 배달 통계 및 반송 모니터링. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
+    },
+    "remotion-docs": {
+      "name": "remotion-docs",
+      "type": "skill",
+      "description": "Search Remotion documentation",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-docs"
     },
     "diagnose-android-overheating": {
       "name": "diagnose-android-overheating",
@@ -33373,6 +33571,14 @@
       "path": "collected_assets/skills/github-actions-advanced",
       "description_ko": ">"
     },
+    "apify-generate-output-schema": {
+      "name": "apify-generate-output-schema",
+      "type": "skill",
+      "description": "Generate output schemas (dataset_schema.json, output_schema.json, key_value_store_schema.json)",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-generate-output-schema"
+    },
     "phase-gated-debugging": {
       "name": "phase-gated-debugging",
       "type": "skill",
@@ -33542,14 +33748,21 @@
       "path": "collected_assets/skills/multi-platform-apps-multi-platform",
       "description_ko": "API 우선 아키텍처와 병렬 구현 전략을 사용하여 웹, 모바일, 데스크톱 플랫폼 전반에 걸쳐 동일한 기능을 일관되게 구축하고 배포합니다."
     },
+    "eas-hosting": {
+      "name": "eas-hosting",
+      "type": "skill",
+      "description": "Curated upstream guidance for Eas Hosting; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/eas-hosting"
+    },
     "monte-carlo-analyze-root-cause": {
       "name": "monte-carlo-analyze-root-cause",
       "type": "skill",
-      "description": "Investigate data incidents and find root causes using Monte Carlo's observability data. Guides the agent through systematic investigation: alert lookup, lineage tracing, ETL checks, query analysis, and data profiling.",
+      "description": "Curated upstream guidance for Monte Carlo Analyze Root Cause; use when the workflow matches the user goal.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/monte-carlo-analyze-root-cause",
-      "description_ko": "Monte Carlo의 관측 가능성 데이터를 사용하여 데이터 사고를 조사하고 근본 원인을 찾아보세요. 경고 조회, 계보 추적, ETL 확인, 쿼리 분석, 데이터 프로파일링 등 체계적인 조사를 통해 에이전트를 안내합니다."
+      "path": "collected_assets/skills/monte-carlo-analyze-root-cause"
     },
     "loopy": {
       "name": "loopy",
@@ -33638,6 +33851,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/podman"
+    },
+    "code-review-sensei": {
+      "name": "code-review-sensei",
+      "type": "skill",
+      "description": "Expert code reviewer that catches bugs, security issues, performance",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/code-review-sensei"
     },
     "cloud-k8s": {
       "name": "cloud-k8s",
@@ -34065,6 +34286,14 @@
       "path": "collected_assets/skills/html-injection-testing",
       "description_ko": "공격자가 웹 애플리케이션에 악성 HTML 콘텐츠를 삽입할 수 있도록 하는 HTML 삽입 취약점을 식별하고 악용합니다. 이 취약점을 통해 공격자는 페이지 모양을 수정하고, 피싱 페이지를 생성하고, 삽입된 양식을 통해 사용자 자격 증명을 훔칠 수 있습니다."
     },
+    "architecture-review": {
+      "name": "architecture-review",
+      "type": "skill",
+      "description": "Review repository architecture using Ontoly Software Graph and MCP capabilities.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/architecture-review"
+    },
     "vector-database-ops": {
       "name": "vector-database-ops",
       "type": "skill",
@@ -34196,6 +34425,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/binary-diff",
       "description_ko": "버전 간 바이너리 기호 마이그레이션: 업데이트된 바이너리 비교, PDB 없이 함수 이름 복구, BinDiff 스타일 도구를 사용하여 소프트웨어 업데이트 후 주석 전파."
+    },
+    "remotion-create": {
+      "name": "remotion-create",
+      "type": "skill",
+      "description": "Create a new Remotion video",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-create"
     },
     "technical-tutorials": {
       "name": "technical-tutorials",
@@ -35177,6 +35414,14 @@
       "path": "collected_assets/skills/react-ui-patterns",
       "description_ko": "상태 로드, 오류 처리 및 데이터 가져오기를 위한 최신 React UI 패턴입니다. UI 구성 요소를 빌드하거나, 비동기 데이터를 처리하거나, UI 상태를 관리할 때 사용합니다."
     },
+    "monte-carlo-context-detection": {
+      "name": "monte-carlo-context-detection",
+      "type": "skill",
+      "description": "Route data-related requests to the right Monte Carlo skill or workflow.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/monte-carlo-context-detection"
+    },
     "skyvern-browser-automation": {
       "name": "skyvern-browser-automation",
       "type": "skill",
@@ -35495,6 +35740,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/openapi-spec-generator",
       "description_ko": "자연어 설명, 코드 또는 부분 사양에서 프로덕션에 바로 사용 가능한 완전한 OpenAPI 3.x 및 Swagger 2.0 사양을 생성합니다."
+    },
+    "connection-auth-rules": {
+      "name": "connection-auth-rules",
+      "type": "skill",
+      "description": "Build a Connection Auth Rules for a Monte Carlo connection type. Fetches",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/connection-auth-rules"
     },
     "web-media-getter": {
       "name": "web-media-getter",
@@ -35905,6 +36158,14 @@
       "path": "collected_assets/skills/moyu",
       "description_ko": ">"
     },
+    "makepad-2-0-widgets": {
+      "name": "makepad-2-0-widgets",
+      "type": "skill",
+      "description": "Makepad 2.0 guidance for widgets; use when building or debugging Makepad UI code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/makepad-2-0-widgets"
+    },
     "yann-lecun-debate": {
       "name": "yann-lecun-debate",
       "type": "skill",
@@ -36163,6 +36424,14 @@
       "path": "collected_assets/skills/ui-setup",
       "description_ko": "대화형 설정 마법사 - 프로젝트에 대한 디자인 시스템 구성을 단계별로 안내합니다."
     },
+    "makepad-2-0-animation": {
+      "name": "makepad-2-0-animation",
+      "type": "skill",
+      "description": "Makepad 2.0 guidance for animation; use when building or debugging Makepad UI code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/makepad-2-0-animation"
+    },
     "neon-ai-gateway": {
       "name": "neon-ai-gateway",
       "type": "skill",
@@ -36180,6 +36449,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/loss-aversion-designer",
       "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+    },
+    "eas-simulator": {
+      "name": "eas-simulator",
+      "type": "skill",
+      "description": "Curated upstream guidance for Eas Simulator; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/eas-simulator"
     },
     "odoo-inventory-optimizer": {
       "name": "odoo-inventory-optimizer",
@@ -36367,6 +36644,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/docs-as-marketing",
       "description_ko": "문서를 개발자의 관심을 끌고, 전환하고, 유지하는 강력한 마케팅 채널로 전환하세요."
+    },
+    "eas-observe": {
+      "name": "eas-observe",
+      "type": "skill",
+      "description": "Curated upstream guidance for Eas Observe; use when the workflow matches the user goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/eas-observe"
     },
     "scarcity-urgency-psychologist": {
       "name": "scarcity-urgency-psychologist",
@@ -37918,6 +38203,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/molykit",
       "description_ko": "|"
+    },
+    "huggingface-datasets": {
+      "name": "huggingface-datasets",
+      "type": "skill",
+      "description": "Use this skill for Hugging Face Dataset Viewer API workflows that fetch",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/huggingface-datasets"
     },
     "polis-protocol": {
       "name": "polis-protocol",
@@ -41111,6 +41404,14 @@
       "path": "collected_assets/skills/webmcpify",
       "description_ko": "웹 앱 에이전트를 준비합니다. WebMCP 도구 매니페스트를 제안하고, 통합하고, 실제 브라우저에서 확인하고, 복구합니다. 관련 없는 코드는 그대로 유지됩니다. \"webmcpify\", \"WebMCP 추가\" 또는 \"AI 에이전트에 앱 작업 ​​노출\"에 사용합니다."
     },
+    "macos-golden-gate-design": {
+      "name": "macos-golden-gate-design",
+      "type": "skill",
+      "description": "Design, implement, review, or refactor native macOS 27 Golden Gate interfaces in SwiftUI or AppKit. Use when a Mac app must match Apple''s current macOS 27 UI kit and restrained Liquid Glass language: integrated windows, full-height sidebars, native toolbars, flat lists, tables, and forms, clear pane boundaries, accessible materials, and removal of unnecessary nested cards, framed panels, or glassmorphism. Also use for Figma macOS 27 design-to-code work and audits of interfaces that feel too boxed.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/macos-golden-gate-design"
+    },
     "mcp-create-declarative-agent": {
       "name": "mcp-create-declarative-agent",
       "type": "skill",
@@ -42614,6 +42915,14 @@
       "path": "collected_assets/skills/power-platform-mcp-connector-suite",
       "description_ko": "Copilot Studio용 MCP 통합을 통해 완전한 Power Platform 사용자 정의 커넥터 생성 - 스키마 생성, 문제 해결 및 검증 포함"
     },
+    "agent-architecture": {
+      "name": "agent-architecture",
+      "type": "skill",
+      "description": "Design AI agent architectures through requirements discovery, or audit and diagnose architectural flaws in existing agents. Architecture only; excludes implementation and general code review.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/agent-architecture"
+    },
     "python-pypi-package-builder": {
       "name": "python-pypi-package-builder",
       "type": "skill",
@@ -42856,6 +43165,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/codebase-memory-mcp",
       "description_ko": "익숙하지 않은 코드 탐색, 아키텍처 매핑, 기호 또는 관계 찾기, 호출자, 피호출자, 데이터 흐름 또는 종속성 추적, 영향 평가, 데드 코드 또는 복잡한 코드 감사 또는 명시적 코드베이스 메모리 요청 처리 시 사용합니다. 그렇지 않으면 제공된 알려진 파일, 작은 단일 파일 검사, 정확한 리터럴, 구성 값, 오류 문자열 또는 비코드 텍스트로 제한된 작업을 건너뜁니다."
+    },
+    "protobuf-grpc-api-review": {
+      "name": "protobuf-grpc-api-review",
+      "type": "skill",
+      "description": "Review Protocol Buffer (.proto) and gRPC API changes for wire and JSON compatibility, safe schema evolution, rollout hazards, and RPC contract quality. Use when reviewing proto diffs, adding or changing messages and services, planning migrations, or diagnosing cross-version failures.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/protobuf-grpc-api-review"
     },
     "swift-mcp-server-generator": {
       "name": "swift-mcp-server-generator",

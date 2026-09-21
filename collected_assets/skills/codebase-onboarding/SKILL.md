@@ -1,84 +1,77 @@
 ---
-name: "codebase-onboarding"
-description: "Analyze a codebase and generate onboarding documentation for engineers, tech leads, and contractors. Fast fact-gathering and repeatable onboarding outputs. Use when onboarding a new engineer, writing architecture-overview docs for a new project, or producing tech-lead briefings for unfamiliar repos."
+name: codebase-onboarding
+description: Onboard a developer to a repository using Ontoly graph summaries. Use
+  when asked to explain a new codebase, identify entrypoints, map packages, or suggest
+  first files to inspect.
+license: AGPL-3.0-only
+compatibility: Portable Agent Skills format; requires Ontoly CLI and MCP-capable or
+  CLI-capable coding agent.
+metadata:
+  ontoly.skill.version: 1.3.3
+  ontoly.min.version: 1.3.3
+  ontoly.capabilities: ExplainArchitecture, FindEntrypoints, GraphStatistics, FindFeatureOwner,
+    EvidencePack
+  ontoly.category: onboarding
+  ontoly.enhancement: LLM Enhancement
+  ontoly.deprecated: 'false'
+source_repo: 0xsarwagya/ontoly
+source_type: community
+source: community
+date_added: '2026-09-21'
+risk: unknown
 ---
+## When to Use
+- Use when this upstream workflow matches the user's stated goal.
+- Use when the task requires the procedures documented in this skill.
 
 # Codebase Onboarding
 
-**Tier:** POWERFUL  
-**Category:** Engineering  
-**Domain:** Documentation / Developer Experience
+Use this skill when the user asks for codebase onboarding using Ontoly evidence.
 
----
+## Required Workflow
 
-## Overview
+Follow [the shared Ontoly workflow. Also read [graph evidence rules, [MCP usage, [best practices, and [fallback rules when the task requires detail.
 
-Analyze a codebase and generate onboarding documentation for engineers, tech leads, and contractors. This skill is optimized for fast fact-gathering and repeatable onboarding outputs.
+## Ontoly Capabilities
 
-## Core Capabilities
+Use these capabilities first: `ExplainArchitecture`, `FindEntrypoints`, `GraphStatistics`, `FindFeatureOwner`, `EvidencePack`.
 
-- Architecture and stack discovery from repository signals
-- Key file and config inventory for new contributors
-- Local setup and common-task guidance generation
-- Audience-aware documentation framing
-- Debugging and contribution checklist scaffolding
+## Output Contract
 
----
+Return:
 
-## When to Use
+- answer or plan
+- capabilities invoked
+- graph evidence with node ids, edge types, source spans, and graph hash when available
+- confidence: high, medium, or low
+- fallback reason if repository files were inspected
 
-- Onboarding a new team member or contractor
-- Rebuilding stale project docs after large refactors
-- Preparing internal handoff documentation
-- Creating a standardized onboarding packet for services
+## Boundaries
 
----
+Do not implement compiler, query, MCP, SDK, or business logic in the skill. Do not search repository files until Ontoly cannot answer or evidence must be confirmed.
 
-## Quick Start
+## Resources
 
-```bash
-# 1) Gather codebase facts
-python3 scripts/codebase_analyzer.py /path/to/repo
+- [Examples
+- [Prompt template
+- [Capability notes
 
-# 2) Export machine-readable output
-python3 scripts/codebase_analyzer.py /path/to/repo --json
+## Learn more
 
-# 3) Use the template to draft onboarding docs
-# See references/onboarding-template.md
+- Documentation: https://ontoly.xyz/docs
+- This skill on the web: https://ontoly.xyz/skills#codebase-onboarding
+- All Ontoly Agent Skills: https://ontoly.xyz/skills
+- Install via skills.sh: https://www.skills.sh/?q=0xsarwagya/ontoly
+
+
+## Examples
+
+```text
+User: Apply this skill to my current task.
+Assistant: Follow the workflow in this skill, cite limitations, and ask before risky steps.
 ```
 
----
+## Limitations
 
-## Recommended Workflow
-
-1. Run `scripts/codebase_analyzer.py` against the target repository.
-2. Capture key signals: file counts, detected languages, config files, top-level structure.
-3. Fill the onboarding template in `references/onboarding-template.md`.
-4. Tailor output depth by audience:
-   - Junior: setup + guardrails
-   - Senior: architecture + operational concerns
-   - Contractor: scoped ownership + integration boundaries
-
----
-
-## Onboarding Document Template
-
-Detailed template and section examples live in:
-- `references/onboarding-template.md`
-- `references/output-format-templates.md`
-
----
-
-## Common Pitfalls
-
-- Writing docs without validating setup commands on a clean environment
-- Mixing architecture deep-dives into contractor-oriented docs
-- Omitting troubleshooting and verification steps
-- Letting onboarding docs drift from current repo state
-
-## Best Practices
-
-1. Keep setup instructions executable and time-bounded.
-2. Document the "why" for key architectural decisions.
-3. Update docs in the same PR as behavior changes.
-4. Treat onboarding docs as living operational assets, not one-time deliverables.
+- Imported upstream skill; verify credentials, permissions, and safety boundaries before execution.
+- Does not replace environment-specific validation, testing, or maintainer review.
