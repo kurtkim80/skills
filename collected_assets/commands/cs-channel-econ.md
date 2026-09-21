@@ -1,9 +1,15 @@
 ---
-description: Direct vs partner-led channel economics — fully-loaded cost-to-serve, channel ROI, optimal channel mix. NOT partnership structure (sibling partnerships-architect). Direct invocation of the channel-economics skill.
-argument-hint: "<channels with deal count + ARR + costs, or path to channel JSON>"
+title: "/cs-channel-econ — Slash Command for AI Coding Agents"
+description: "Direct vs partner-led channel economics — fully-loaded cost-to-serve, channel ROI, optimal channel mix. NOT partnership structure (sibling. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:channel-econ — Direct vs partner economics
+# /cs-channel-econ
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-channel-econ.md">Source</a></span>
+</div>
+
 
 Run the `channel-economics` skill on this input:
 

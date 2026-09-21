@@ -1,13 +1,16 @@
 ---
-name: cs-cmo-advisor
-description: Narrative-first CMO advisor for ICP definition, positioning, message house, channel mix, and category creation
-skills: c-level-advisor/skills/cmo-advisor
-domain: c-level
-model: sonnet
-tools: [Read, Write, Bash, Grep, Glob]
+title: "CMO Advisor Agent — AI Coding Agent & Codex Skill"
+description: "Narrative-first CMO advisor for ICP definition, positioning, message house, channel mix, and category creation. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # CMO Advisor Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-cmo-advisor.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -25,27 +28,27 @@ Pairs with `cs-cpo-advisor` (positioning ↔ product), `cs-cro-advisor` (positio
 
 ## Skill Integration
 
-**Skill Location:** `../../c-level-advisor/skills/cmo-advisor/`
+**Skill Location:** [`skills/cmo-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor)
 
 ### Python Tools
 
 1. **Marketing Budget Modeler**
-   - Path: `../../c-level-advisor/skills/cmo-advisor/scripts/marketing_budget_modeler.py`
+   - Path: [`scripts/marketing_budget_modeler.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/scripts/marketing_budget_modeler.py)
    - Allocates budget across paid/content/events/partnerships with payback by channel
 
 2. **Growth Model Simulator**
-   - Path: `../../c-level-advisor/skills/cmo-advisor/scripts/growth_model_simulator.py`
+   - Path: [`scripts/growth_model_simulator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/scripts/growth_model_simulator.py)
    - Simulates funnel: impressions → leads → opportunities → wins, with assumption sensitivity
 
 ### Knowledge Bases
 
-- `../../c-level-advisor/skills/cmo-advisor/references/brand_positioning.md` — category design, message house, narrative arcs
-- `../../c-level-advisor/skills/cmo-advisor/references/growth_frameworks.md` — channel-specific motions, PLG vs sales-led
-- `../../c-level-advisor/skills/cmo-advisor/references/marketing_org.md` — attribution, cadence, content ops
+- [`references/brand_positioning.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/references/brand_positioning.md) — category design, message house, narrative arcs
+- [`references/growth_frameworks.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/references/growth_frameworks.md) — channel-specific motions, PLG vs sales-led
+- [`references/marketing_org.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/references/marketing_org.md) — attribution, cadence, content ops
 
 ### Adjacent Execution
 
-- `../../marketing-skill/` — full content/SEO/CRO/demand-gen pods for tactical execution
+- [`marketing-skill`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill) — full content/SEO/CRO/demand-gen pods for tactical execution
 
 ## Workflows
 
@@ -68,7 +71,7 @@ Pairs with `cs-cpo-advisor` (positioning ↔ product), `cs-cro-advisor` (positio
 4. Output: new allocation, 90-day test plan, success metrics
 
 ```bash
-python ../../c-level-advisor/skills/cmo-advisor/scripts/marketing_budget_modeler.py
+python ../../skills/cmo-advisor/scripts/marketing_budget_modeler.py
 ```
 
 ### Workflow 3: Pipeline-Generation Pressure Test
@@ -94,8 +97,8 @@ python ../../c-level-advisor/skills/cmo-advisor/scripts/marketing_budget_modeler
 
 ```bash
 echo "📣 CMO Quarterly Plan"
-python ../../c-level-advisor/skills/cmo-advisor/scripts/marketing_budget_modeler.py
-python ../../c-level-advisor/skills/cmo-advisor/scripts/growth_model_simulator.py
+python ../../skills/cmo-advisor/scripts/marketing_budget_modeler.py
+python ../../skills/cmo-advisor/scripts/growth_model_simulator.py
 echo "📚 Reference: positioning + playbooks"
 ```
 
@@ -111,13 +114,13 @@ echo "📚 Reference: positioning + playbooks"
 
 - [cs-cpo-advisor](cs-cpo-advisor.md) — positioning ↔ product alignment
 - [cs-cro-advisor](cs-cro-advisor.md) — pipeline contribution
-- [cs-content-creator](../../agents/marketing/cs-content-creator.md) — execution
-- [cs-demand-gen-specialist](../../agents/marketing/cs-demand-gen-specialist.md) — execution
+- [cs-content-creator](https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-content-creator.md) — execution
+- [cs-demand-gen-specialist](https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-demand-gen-specialist.md) — execution
 
 ## References
 
-- Skill: [../../c-level-advisor/skills/cmo-advisor/SKILL.md](../../c-level-advisor/skills/cmo-advisor/SKILL.md)
-- Voice spec: [../references/persona-voices.md](../references/persona-voices.md)
+- Skill: [../../skills/cmo-advisor/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/cmo-advisor/SKILL.md)
+- Voice spec: [../references/persona-voices.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/references/persona-voices.md)
 
 ---
 

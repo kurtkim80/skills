@@ -1,9 +1,15 @@
 ---
-name: "cs-book-to-skill"
-description: "/cs:book-to-skill <path|folder|glob>... [skill-name] — convert a book, documentation folder, or source collection into a structured agent skill (core frameworks + on-demand chapters + glossary + patterns + cheatsheet). Use when the user wants to study a document with an agent, apply an author's frameworks while working, or turn internal docs into a reusable knowledge base."
+title: "/cs-book-to-skill — Slash Command for AI Coding Agents"
+description: "/cs:book-to-skill <path|folder|glob>... [skill-name] — convert a book, documentation folder, or source collection into a structured agent skill (core. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:book-to-skill — Compile a Source into an Agent Skill
+# /cs-book-to-skill
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/book-to-skill/commands/cs-book-to-skill.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:book-to-skill <path|folder|glob>... [skill-name-slug]`
 

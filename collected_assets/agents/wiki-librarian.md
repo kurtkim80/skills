@@ -1,14 +1,16 @@
 ---
-name: wiki-librarian
-description: Dispatched sub-agent that answers queries against an LLM Wiki vault. Reads index.md first, drills into 3-10 relevant pages across categories, synthesizes an answer with inline [[wikilink]] citations, and offers to file the answer back into the wiki as a new comparison or synthesis page. Spawn when the user asks a substantive question the wiki might answer, says "what does the wiki say about X", "compare A and B across my sources", or wants to explore a topic.
-skills: engineering/llm-wiki
-domain: engineering
-model: sonnet
-tools: [Read, Write, Edit, Bash, Grep, Glob]
-context: fork
+title: "wiki-librarian — AI Coding Agent & Codex Skill"
+description: "Dispatched sub-agent that answers queries against an LLM Wiki vault. Reads index.md first, drills into 3-10 relevant pages across categories. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # wiki-librarian
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/llm-wiki/agents/wiki-librarian.md">Source</a></span>
+</div>
+
 
 ## Role
 

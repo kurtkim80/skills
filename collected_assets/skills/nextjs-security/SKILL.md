@@ -1,6 +1,6 @@
 ---
 name: nextjs-security
-description: Comprehensive security and privacy patterns for Next.js applications. Used to design, implement, and audit secure full-stack features including authentication, API routes, input handling, and GDPR compliance.
+description: Design, implement, or audit security and privacy controls in Next.js applications, including authentication, authorization, route handlers, input, uploads, secrets, and personal data. Use for Next.js security work, while verifying current framework behavior and applicable legal requirements rather than treating this skill as compliance certification.
 ---
 
 # Next.js Security & Privacy Skill

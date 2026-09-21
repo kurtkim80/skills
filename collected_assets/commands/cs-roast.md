@@ -1,10 +1,15 @@
 ---
-name: "cs-roast"
-description: "/cs:roast — Convene a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on an idea, then a Judge delivers one GO / RESHAPE / KILL verdict with the cheapest 48-hour test to de-risk it. Pressure-test before you build."
-argument-hint: "[the idea to roast]"
+title: "/cs-roast — Slash Command for AI Coding Agents"
+description: "/cs:roast — Convene a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on an idea, then a Judge delivers one GO /. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:roast — 5-Angle Idea Panel → One Verdict
+# /cs-roast
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/roast/commands/cs-roast.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:roast [the idea]`
 
@@ -76,8 +81,8 @@ python ../skills/roast/scripts/cheapest_test_designer.py --risk price --price 99
 
 ## Related
 
-- Agent: [`cs-roast-judge`](../agents/cs-roast-judge.md)
-- Skill: [`roast`](../skills/roast/SKILL.md)
+- Agent: [`cs-roast-judge`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/roast/agents/cs-roast-judge.md)
+- Skill: [`roast`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/roast/skills/roast/SKILL.md)
 - Siblings: `/cs:andreessen` (single market-first lens), `/cs:boardroom` (enterprise C-suite)
 
 ---

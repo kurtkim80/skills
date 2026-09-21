@@ -73,10 +73,13 @@ Domain verbs are first-class and encouraged where CRUD does not fit:
 `rotate`, `trigger`, `justify`, `generate`, `reprocess`, `read_pii`,
 `request_read`, `request_write`, `receive`. Keep them; do not force them into CRUD.
 
-**This is ENFORCED, not just advised.** `post`/`get`/`put`/`patch` are rejected by
-the lib-auth manifest validator at boot AND by the `check-manifest-actions` CI
-guard (Step 9). Only `delete` among HTTP methods is allowed — it is also a valid
-semantic action. Never emit `post`/`get`/`put`/`patch` as an `action`.
+**This is REQUIRED — and nothing downstream will hold it for you.** The HTTP-verb
+reject was removed from BOTH lib-auth and identity (lib-auth#145 /
+plugin-access-manager#310), so a manifest with `action: get` validates, boots and
+publishes without complaint — several in production do exactly that. What holds the
+standard is review plus the `check-manifest-actions` Makefile guard you add in
+Step 9. Only `delete` among HTTP methods is allowed — it is also a valid semantic
+action. Never emit `post`/`get`/`put`/`patch` as an `action`.
 
 ## Manifest schema (author against THIS)
 
@@ -90,15 +93,48 @@ composes the prefix — never pre-prefix.**
 | `version` | REQUIRED int >= 1. ADVISORY — excluded from content hash; bumping alone is a no-op publish. |
 | `permissions[].resource` | REQUIRED, **BARE** (server composes `{service}/`). |
 | `permissions[].action` | REQUIRED, **SEMANTIC** — never an HTTP verb. |
-| `permissions[].effect` | `allow` or `deny` ONLY. |
+| `permissions[].effect` | `allow` ONLY. A `deny` is REJECTED — see below. |
 | `permissions[].roles` | >= 1 BARE role name, each MUST be declared in `roles:`. |
 | `roles[].name` | REQUIRED, BARE. `/` allowed as hierarchy separator (`fees/editor`). |
 | `roles[].granted_to` | list of `{ group: <bare-name> }`. **GROUP-ONLY** — there is no `user` grantee. Server composes the `{owner}/` prefix. |
 | `m2m.exposed` | bool — this plugin is callable as an M2M target. |
 | `m2m.needs` | list of target service slugs this plugin CALLS via M2M (e.g. `midaz`). |
 
+**Why `deny` is refused and not merely discouraged.** The manifest used to accept
+it and the reconciler wrote it to Casdoor as a real permission, but no decision
+point ever applied it: every evaluator reads an effect other than `allow` as "did
+not match" and carries on, authorizing on the first `allow` that does match. There
+is no deny-wins pass. So a `deny` was a refusal you could read in the manifest, in
+review, and in the stored permission — while the runtime granted. Validation now
+refuses it at boot (fail-closed, lib-auth#183) and the declaration PUT answers 422
+(plugin-access-manager#448).
+
+Only the `effect` field is constrained. `deny` is still a fine ACTION name:
+`br-sfn/services/spb` declares `{ resource: str-emission-approvals, action: deny,
+effect: allow }`, because approving or denying an STR emission is that domain's
+verb.
+
 Composed names the server builds: permission `{service}/{resource}:{action}`,
 role `{service}/{name}`, group `{owner}/{group}`.
+
+### House style: write `permissions:` in FLOW style
+
+The schema is indifferent to YAML style, the org is not. Write each permission as
+a single flow-mapping line and align the columns:
+
+```yaml
+permissions:
+  - { resource: account-types, action: read,   effect: allow, roles: [editor, contributor, viewer] }
+  - { resource: account-types, action: create, effect: allow, roles: [editor, contributor] }
+  - { resource: account-types, action: delete, effect: allow, roles: [editor] }
+```
+
+not the five-line block form. This is what the existing manifests do — `midaz`,
+`tracer`, `plugin-access-manager`, `streaming-hub`, `reporter`, `lender`,
+`br-sisbajud`, `billing-worker` and every `br-sfn/services/*` — and a real
+manifest is 20-100 pairs, where flow gives one readable line and one clean diff
+hunk per permission instead of five. Keep `roles:` and `m2m:` in block style, as
+those same manifests do.
 
 See `template.permissions.yaml` in this folder for a compact, valid, commented example.
 
@@ -158,7 +194,8 @@ Ask:
 ### Step 6 — Emit `permissions.yaml`
 `Write` the manifest to the plugin's declaration dir (mirror `br-sisbajud`:
 `internal/auth/declaration/permissions.yaml`). Bare resources/groups/roles,
-semantic actions, valid effects, >= 1 role per permission. Then show the wiring the
+semantic actions, valid effects, >= 1 role per permission, `permissions:` entries
+in FLOW style (see "House style" above). Then show the wiring the
 plugin adds (manifest authoring is the focus; this is the glue):
 
 ```go
@@ -201,9 +238,12 @@ zero network) with a tiny throwaway program:
 Or a YAML lint + this checklist. **Validation rules (all aggregated at boot):**
 - `service` non-empty and not `.`/`..`.
 - `version` >= 1.
-- each `action` is SEMANTIC: `post`/`get`/`put`/`patch` are REJECTED at boot
-  (`delete` is allowed — also a valid semantic action).
-- each permission: non-empty `resource` and `action`; `effect` in {allow, deny};
+- each `action` is non-empty. The SEMANTIC standard above is a CONVENTION, not
+  a boot check: the HTTP-verb reject was removed from both lib-auth and identity
+  (lib-auth#145 / plugin-access-manager#310), so a manifest with `action: get`
+  publishes without complaint. Hold the standard in review and with the Makefile
+  guard below — nothing downstream will hold it for you.
+- each permission: non-empty `resource` and `action`; `effect` is `allow`;
   >= 1 role; every role reference is a DECLARED role.
 - no duplicate composed permission `{service}/{resource}:{action}`.
 - no duplicate composed role `{service}/{name}`.
@@ -223,13 +263,19 @@ Do not consider the manifest done while any mismatch remains.
 
 ### Step 9 — Scaffold the durable CI guard (Makefile)
 The alignment gate above is a one-time check. Lock the semantic standard in so a
-future edit that reintroduces an HTTP verb FAILS the build — two layers:
+future edit that reintroduces an HTTP verb FAILS the build. For the MANIFEST's
+action names there is exactly ONE automated layer, and it is the one you add
+here. Guard alignment is NOT automated at all: the target below reads
+`$(MANIFEST)` and nothing else, so a guard still passing `get` against a manifest
+declaring `read` is caught by Steps 3 and 8 and by review — nowhere else.
 
-- **Boot-time (lib-auth):** the manifest validator rejects `post`/`get`/`put`/`patch`
-  actions at boot — a plugin with an HTTP-verb action won't start. `delete` stays
-  valid. Automatic once the plugin is on the lib-auth release carrying the rule;
-  nothing to add.
-- **CI (Makefile):** add an earlier, cheaper guard that fails in CI before boot.
+- **Boot-time (lib-auth): none.** The validator used to reject
+  `post`/`get`/`put`/`patch`, and that reject was removed from lib-auth and
+  identity (lib-auth#145 / plugin-access-manager#310). A manifest with a verb
+  action starts and publishes fine — nothing catches the regression at runtime.
+- **CI (Makefile):** the `check-manifest-actions` guard below. Cheap, lives in the
+  plugin's own repo, and is the only thing that fails a build on a verb
+  reintroduced in the manifest.
 
 Check the plugin's Makefile for the existing `check-*` convention (most Lerian
 plugins wire `check-tests`, `check-migrations`, … into a `ci:`/`check` aggregate —
@@ -241,13 +287,18 @@ MANIFEST ?= internal/auth/declaration/permissions.yaml
 
 .PHONY: check-manifest-actions
 # Fail if the manifest is missing/unreadable, or if it uses HTTP-verb actions.
-# 'delete' is allowed (also a valid semantic action). Mirrors the boot-time
-# lib-auth rule. (Pattern assumes block-style `action:` entries — adapt it if
-# your manifest uses flow-style, e.g. `- {resource: x, action: post}`.)
+# 'delete' is allowed (also a valid semantic action). This is the ONLY automated
+# check for the semantic standard — lib-auth no longer rejects verbs at boot. It
+# reads the manifest only: a mismatched Authorize() guard is Step 8's job.
+# The pattern matches BOTH styles: flow `- { ..., action: post, ... }` (the house
+# style) and block `action: post` on its own line, with or without quotes and with
+# or without a trailing `# comment`. It deliberately does NOT match a `#` comment
+# line that merely mentions an action, and does not fire on a resource or a longer
+# action that starts with a verb (`repost`, `getaway`, `read_pii`).
 check-manifest-actions:
 	@test -r "$(MANIFEST)" || { echo "ERROR: manifest not found or unreadable: $(MANIFEST)"; exit 1; }
 	@echo "Checking manifest actions are semantic (not HTTP verbs)..."
-	@if grep -inE '^[[:space:]]*action:[[:space:]]*["'\'']?(post|get|put|patch)["'\'']?[[:space:]]*$$' "$(MANIFEST)"; then \
+	@if grep -inE '^([[:space:]]*-[[:space:]]*\{(.*[{,])?)?[[:space:]]*action:[[:space:]]*["'\'']?(post|get|put|patch)["'\'']?[[:space:]]*([,}#]|$$)' "$(MANIFEST)"; then \
 		echo "ERROR: HTTP-verb action in $(MANIFEST) — use a SEMANTIC action (create/read/update/delete or a domain verb). 'delete' is allowed."; \
 		exit 1; \
 	fi
@@ -256,8 +307,8 @@ check-manifest-actions:
 
 Add `check-manifest-actions` to the `ci:`/`check:` prerequisite list (and `.PHONY`).
 If the plugin has no `check-*`/`ci` idiom, still add the target and call it where
-tests run. Confirm it FAILS on a seeded `action: post` and PASSES on the real
-manifest before finishing.
+tests run. Confirm it FAILS on a seeded `action: post` — seeded in the SAME style
+the manifest uses — and PASSES on the real manifest before finishing.
 
 ### Step 10 — Bump the shared-workflows CI pin
 The org shared CI (`LerianStudio/github-actions-shared-workflows`, reusable

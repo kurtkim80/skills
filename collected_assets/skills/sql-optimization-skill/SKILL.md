@@ -5,28 +5,28 @@ description: Master SQL query optimization, indexing strategies, and EXPLAIN ana
 
 # SQL Optimization Skill
 
-Yavaş sorguları sistematik optimizasyon, doğru indexleme ve query plan analizi ile hızlı operasyonlara dönüştürme rehberi.
+A guide to turning slow queries into fast operations through systematic optimization, correct indexing, and query plan analysis.
 
 ## When to use this skill
 
-- Yavaş çalışan sorgular debug edilirken
-- Veritabanı şeması tasarlanırken
-- Uygulama response süresi optimize edilirken
-- N+1 query sorunu çözülürken
+- When debugging slow queries
+- When designing a database schema
+- When optimizing application response time
+- When solving an N+1 query problem
 
 ---
 
-## 1. EXPLAIN ile Query Plan Analizi (PostgreSQL)
+## 1. Query Plan Analysis with EXPLAIN (PostgreSQL)
 
 ```sql
--- Temel explain
+-- Basic explain
 EXPLAIN SELECT * FROM users WHERE email = 'user@example.com';
 
--- Gerçek istatistiklerle
+-- With actual statistics
 EXPLAIN ANALYZE
 SELECT * FROM users WHERE email = 'user@example.com';
 
--- Detaylı çıktı
+-- Detailed output
 EXPLAIN (ANALYZE, BUFFERS, VERBOSE)
 SELECT u.*, o.order_total
 FROM users u
@@ -34,36 +34,36 @@ JOIN orders o ON u.id = o.user_id
 WHERE u.created_at > NOW() - INTERVAL '30 days';
 ```
 
-### İzlenecek Metrikler
+### Metrics to Monitor
 
-| Metrik            | Açıklama                | Durum                 |
+| Metric            | Description             | Status                |
 | ----------------- | ----------------------- | --------------------- |
-| `Seq Scan`        | Tüm tablo taranıyor     | Büyük tablolarda kötü |
-| `Index Scan`      | Index kullanıyor        | İyi                   |
-| `Index Only Scan` | Sadece index, tablo yok | En iyi                |
-| `Hash Join`       | Büyük veri seti join    | İyi                   |
-| `Nested Loop`     | Küçük veri seti join    | İyi, büyükte kötü     |
-| Cost              | Tahmini maliyet         | Düşük = iyi           |
+| `Seq Scan`        | Scans the entire table  | Bad on large tables   |
+| `Index Scan`      | Uses an index           | Good                  |
+| `Index Only Scan` | Index only, no table    | Best                  |
+| `Hash Join`       | Joins large datasets    | Good                  |
+| `Nested Loop`     | Joins small datasets    | Good; bad at scale    |
+| Cost              | Estimated cost          | Lower is better       |
 
 ---
 
-## 2. Index Stratejileri
+## 2. Index Strategies
 
 ```sql
 -- Standart B-Tree index
 CREATE INDEX idx_users_email ON users(email);
 
--- Composite index (sıralama önemli!)
+-- Composite index (column order matters!)
 CREATE INDEX idx_orders_user_status ON orders(user_id, status);
 
--- Partial index (subset indexleme — çok verimli)
+-- Partial index (indexes a subset — highly efficient)
 CREATE INDEX idx_active_users ON users(email)
 WHERE status = 'active';
 
 -- Expression index
 CREATE INDEX idx_users_lower_email ON users(LOWER(email));
 
--- Covering index (ek kolonlar dahil)
+-- Covering index (includes additional columns)
 CREATE INDEX idx_users_email_covering ON users(email)
 INCLUDE (name, created_at);
 
@@ -77,21 +77,21 @@ CREATE INDEX idx_metadata ON events USING GIN(metadata);
 
 ---
 
-## 3. N+1 Query Sorunu
+## 3. N+1 Query Problem
 
 ```python
-# ❌ N+1 — Her kullanıcı için ayrı sorgu
+# ❌ N+1 — a separate query for each user
 users = db.query("SELECT * FROM users LIMIT 10")
 for user in users:
     orders = db.query("SELECT * FROM orders WHERE user_id = ?", user.id)
 
-# ✅ JOIN ile tek sorgu
+# ✅ One query with JOIN
 SELECT u.id, u.name, o.id as order_id, o.total
 FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
 WHERE u.id IN (1, 2, 3, 4, 5);
 
-# ✅ Batch yükleme
+# ✅ Batch loading
 user_ids = [u.id for u in users]
 orders = db.query("SELECT * FROM orders WHERE user_id IN (?)", user_ids)
 orders_by_user = {}
@@ -104,64 +104,64 @@ for order in orders:
 ## 4. Cursor-Based Pagination
 
 ```sql
--- ❌ OFFSET büyük tablolarda yavaş
+-- ❌ OFFSET is slow on large tables
 SELECT * FROM users
 ORDER BY created_at DESC
-LIMIT 20 OFFSET 100000;  -- ÇOK YAVAŞ!
+LIMIT 20 OFFSET 100000;  -- VERY SLOW!
 
--- ✅ Cursor-based — her zaman hızlı
+-- ✅ Cursor-based — always fast
 SELECT * FROM users
-WHERE created_at < '2024-01-15 10:30:00'  -- Son cursor
+WHERE created_at < '2024-01-15 10:30:00'  -- Last cursor
 ORDER BY created_at DESC
 LIMIT 20;
 
--- Composite sorting için
+-- For composite sorting
 SELECT * FROM users
 WHERE (created_at, id) < ('2024-01-15 10:30:00', 12345)
 ORDER BY created_at DESC, id DESC
 LIMIT 20;
 
--- Gerekli index
+-- Required index
 CREATE INDEX idx_users_cursor ON users(created_at DESC, id DESC);
 ```
 
 ---
 
-## 5. Temel Optimizasyon Kuralları
+## 5. Core Optimization Rules
 
-### SELECT \* Kullanma
+### Do Not Use SELECT \*
 
 ```sql
--- ❌ Gereksiz kolon çekiyor
+-- ❌ Fetches unnecessary columns
 SELECT * FROM users WHERE id = 123;
 
--- ✅ Sadece gerekli kolonlar
+-- ✅ Only the required columns
 SELECT id, email, name FROM users WHERE id = 123;
 ```
 
-### WHERE Clause Optimizasyonu
+### WHERE Clause Optimization
 
 ```sql
--- ❌ Fonksiyon index kullanımını engeller
+-- ❌ The function prevents index usage
 SELECT * FROM users WHERE LOWER(email) = 'user@example.com';
 
--- ✅ Expression index + aynı sorgu
+-- ✅ Expression index + the same query
 CREATE INDEX idx_users_email_lower ON users(LOWER(email));
 SELECT * FROM users WHERE LOWER(email) = 'user@example.com';
 
--- ✅ Normalize edilmiş veri ile direkt arama
+-- ✅ Direct lookup with normalized data
 SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
-### JOIN Optimizasyonu
+### JOIN Optimization
 
 ```sql
--- ❌ Filter sonra join
+-- ❌ Filter after joining
 SELECT u.name, o.total
 FROM users u, orders o
 WHERE u.id = o.user_id AND u.created_at > '2024-01-01';
 
--- ✅ Filter önce, sonra join
+-- ✅ Filter first, then join
 SELECT u.name, o.total
 FROM users u
 JOIN orders o ON u.id = o.user_id
@@ -170,18 +170,18 @@ WHERE u.created_at > '2024-01-01';
 
 ---
 
-## 6. Aggregate Optimizasyonu
+## 6. Aggregate Optimization
 
 ```sql
--- ❌ Büyük tablolarda yavaş
+-- ❌ Slow on large tables
 SELECT COUNT(*) FROM orders;
 
--- ✅ Tahmini değer (istatistikler)
+-- ✅ Estimated value (statistics)
 SELECT reltuples::bigint AS estimate
 FROM pg_class
 WHERE relname = 'orders';
 
--- ✅ Filtrelenmiş sayım + index
+-- ✅ Filtered count + index
 CREATE INDEX idx_orders_created ON orders(created_at);
 SELECT COUNT(*) FROM orders
 WHERE created_at > NOW() - INTERVAL '7 days';
@@ -189,23 +189,23 @@ WHERE created_at > NOW() - INTERVAL '7 days';
 
 ---
 
-## 7. Batch Operasyonlar
+## 7. Batch Operations
 
 ```sql
--- ❌ Tek tek insert
+-- ❌ Individual inserts
 INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com');
 INSERT INTO users (name, email) VALUES ('Bob', 'bob@example.com');
 
--- ✅ Toplu insert
+-- ✅ Bulk insert
 INSERT INTO users (name, email) VALUES
   ('Alice', 'alice@example.com'),
   ('Bob', 'bob@example.com'),
   ('Carol', 'carol@example.com');
 
--- ✅ Çok büyük veri için COPY (PostgreSQL)
+-- ✅ COPY for very large datasets (PostgreSQL)
 COPY users (name, email) FROM '/tmp/users.csv' CSV HEADER;
 
--- ✅ Toplu güncelleme
+-- ✅ Bulk update
 UPDATE users
 SET status = 'active'
 WHERE id IN (1, 2, 3, 4, 5);
@@ -216,7 +216,7 @@ WHERE id IN (1, 2, 3, 4, 5);
 ## 8. Materialized View
 
 ```sql
--- Pahalı sorguyu önceden hesapla
+-- Precompute the expensive query
 CREATE MATERIALIZED VIEW user_order_summary AS
 SELECT
   u.id,
@@ -227,35 +227,35 @@ FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
 GROUP BY u.id, u.name;
 
--- Index ekle
+-- Add an index
 CREATE INDEX idx_user_summary ON user_order_summary(total_spent DESC);
 
--- Yenile
+-- Refresh
 REFRESH MATERIALIZED VIEW CONCURRENTLY user_order_summary;
 
--- Çok hızlı sorgula
+-- Query very quickly
 SELECT * FROM user_order_summary WHERE total_spent > 1000;
 ```
 
 ---
 
-## 9. Yavaş Sorguları Bul
+## 9. Find Slow Queries
 
 ```sql
--- En yavaş sorgular (pg_stat_statements gerekli)
+-- Slowest queries (requires pg_stat_statements)
 SELECT query, calls, total_time, mean_time
 FROM pg_stat_statements
 ORDER BY mean_time DESC
 LIMIT 10;
 
--- Seq Scan yapan tablolar (index eksik?)
+-- Tables with sequential scans (missing an index?)
 SELECT tablename, seq_scan, seq_tup_read, idx_scan
 FROM pg_stat_user_tables
 WHERE seq_scan > 0
 ORDER BY seq_tup_read DESC
 LIMIT 10;
 
--- Kullanılmayan indexler (sil bunları!)
+-- Unused indexes (remove them!)
 SELECT schemaname, tablename, indexname, idx_scan
 FROM pg_stat_user_indexes
 WHERE idx_scan = 0
@@ -264,31 +264,31 @@ ORDER BY pg_relation_size(indexrelid) DESC;
 
 ---
 
-## 10. Firestore Optimizasyon Notları (Talent Architect)
+## 10. Firestore Optimization Notes
 
-Firestore, SQL veritabanı değil ama benzer prensipler geçerli:
+Firestore is not a SQL database, but similar principles apply:
 
 ```typescript
-// ❌ Tüm dökümanları çek, client'ta filtrele
+// ❌ Fetch all documents and filter on the client
 const all = await db.collection('cvs').get()
 const filtered = all.docs.filter((d) => d.data().userId === userId)
 
-// ✅ Server-side filtrele
+// ✅ Filter server-side
 const filtered = await db.collection('cvs').where('userId', '==', userId).orderBy('createdAt', 'desc').limit(20).get()
 ```
 
 ```typescript
-// Composite index gerektiren sorgular
-// Firestore Console'da index oluştur
+// Queries that require a composite index
+// Create the index in the Firestore Console
 await db
   .collection('cvs')
   .where('userId', '==', userId)
-  .where('status', '==', 'active') // Composite index gerekli
+  .where('status', '==', 'active') // Composite index required
   .orderBy('createdAt', 'desc')
   .get()
 ```
 
-**Firestore'da cursor-based pagination:**
+**Cursor-based pagination in Firestore:**
 
 ```typescript
 const first = await db.collection('cvs').where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10).get()
@@ -306,10 +306,10 @@ const next = await db
 
 ---
 
-## 11. Yaygın Hatalar
+## 11. Common Mistakes
 
-- **Aşırı indexleme**: Her index INSERT/UPDATE/DELETE'i yavaşlatır
-- **Index kullanılmıyor**: Sütunda fonksiyon çağrısı varsa (LOWER, UPPER)
-- **OR koşulları**: Index kullanımını zorlaştırır — UNION kullan
-- **Leading wildcard LIKE**: `LIKE '%abc'` index kullanamaz
-- **Implicit type conversion**: `WHERE id = '123'` (string vs int) index bypass
+- **Over-indexing**: Every index slows INSERT/UPDATE/DELETE operations
+- **Index not used**: This happens when a function is called on the column (LOWER, UPPER)
+- **OR conditions**: They make index usage harder — use UNION
+- **Leading wildcard LIKE**: `LIKE '%abc'` cannot use an index
+- **Implicit type conversion**: `WHERE id = '123'` (string vs. integer) bypasses the index

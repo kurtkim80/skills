@@ -1,10 +1,15 @@
 ---
-name: "cs-time-block"
-description: "/cs:time-block — Build today's time-block plan from a task list, fast: deep blocks of at least 90 minutes in the earliest hours under a hard 4-hour ceiling, shallow work batched into at most two windows, 10-minute buffers, fixed lunch, immovable hard stop. The quick variant of /cs:deep-work — schedule only, no audit, no ledger."
-argument-hint: "[task list with minutes, plus start/end times]"
+title: "/cs-time-block — Slash Command for AI Coding Agents"
+description: "/cs:time-block — Build today's time-block plan from a task list, fast: deep blocks of at least 90 minutes in the earliest hours under a hard 4-hour. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:time-block — Just Build Today's Blocks
+# /cs-time-block
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/deep-work/commands/cs-time-block.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:time-block [task list + start/end]`
 
@@ -72,8 +77,8 @@ python ../skills/deep-work/scripts/time_block_planner.py --start 13:00 --end 17:
 ## Related
 
 - Full workflow: [`/cs:deep-work`](cs-deep-work.md) — audit + plan + ledger + shutdown
-- Agent: [`cs-deep-work`](../agents/cs-deep-work.md)
-- Skill: [`deep-work`](../skills/deep-work/SKILL.md)
+- Agent: [`cs-deep-work`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/agents/cs-deep-work.md)
+- Skill: [`deep-work`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/skills/deep-work/SKILL.md)
 
 ---
 

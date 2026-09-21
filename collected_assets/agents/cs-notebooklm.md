@@ -1,13 +1,16 @@
 ---
-name: cs-notebooklm
-description: "NotebookLM browser-automation persona. Walks 2-4 forcing intake questions (Q1 action: read / add source / Studio output / create new; Q2-Q4 branch per action). Refuses to start without action commitment. Refuses to handle login flows automatically. Refuses to wait synchronously for Studio generations (fire-and-notify). Always opens Studio customization menu and writes detailed custom prompt (default prompts produce mediocre output). Screenshot-first discipline. find()-before-click. Fails fast when browser automation unavailable."
-skills: research/notebooklm/skills/notebooklm
-domain: research
-model: opus
-tools: [Read, Write, Bash]
+title: "NotebookLM Agent — AI Coding Agent & Codex Skill"
+description: "NotebookLM browser-automation persona. Walks 2-4 forcing intake questions (Q1 action: read / add source / Studio output / create new; Q2-Q4 branch. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # NotebookLM Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Research</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/notebooklm/agents/cs-notebooklm.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -57,7 +60,7 @@ The cs-notebooklm agent orchestrates the `notebooklm` skill across NotebookLM br
 
 ## Skill Integration
 
-**Skill Location:** `../skills/notebooklm/`
+**Skill Location:** [`skills/notebooklm`](https://github.com/alirezarezvani/claude-skills/tree/main/research/notebooklm/skills/notebooklm)
 
 ### Python Tools (Stdlib)
 
@@ -73,8 +76,8 @@ The cs-notebooklm agent orchestrates the `notebooklm` skill across NotebookLM br
 
 ## Related Agents
 
-- [cs-pulse](../../pulse/agents/cs-pulse.md) — research domain, different shape (multi-source web)
-- [cs-litreview](../../litreview/agents/cs-litreview.md) — research domain, Consensus-based
+- [cs-pulse](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md) — research domain, different shape (multi-source web)
+- [cs-litreview](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md) — research domain, Consensus-based
 - Future: cs-research orchestrator (Slice 7)
 
 ---

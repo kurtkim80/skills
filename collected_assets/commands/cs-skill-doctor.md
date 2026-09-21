@@ -1,9 +1,15 @@
 ---
-description: Grade the agent setup from real local session history — rubric-scored, evidence-gated, rendered as one local shareable report.
-argument-hint: "[optional: --repo PATH | --days N | --harness claude|codex | a question about the setup]"
+title: "/cs-skill-doctor — Slash Command for AI Coding Agents"
+description: "Grade the agent setup from real local session history — rubric-scored, evidence-gated, rendered as one local shareable report.. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:skill-doctor
+# /cs-skill-doctor
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/skill-doctor/commands/cs-skill-doctor.md">Source</a></span>
+</div>
+
 
 Run the skill-doctor pass with `$ARGUMENTS` (pass any `--repo`, `--days`,
 `--harness`, `--include-subagents` flags through to the collector).

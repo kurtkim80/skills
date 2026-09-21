@@ -1,155 +1,62 @@
 ---
 name: implementation-plan-generator
-description: >
-  Generate phased implementation plans from requirements and UI wireframes.
-  Use when the user provides requirements documents and/or UI wireframes and
-  wants to create a detailed, phased implementation plan. Triggers on requests
-  like "create implementation plan", "plan the implementation", or when asked
-  to design an implementation approach for a project with existing requirements.
-  Produces description-only plans (no code) with clear phases, dependencies,
-  and testing checklists.
+description: Produce an evidence-based, phased implementation plan from requirements, designs, or an existing codebase. Use when the user asks for a technical implementation plan before coding; use project-planner-skill when requirements and system design must also be created from an early-stage idea.
 ---
 
 # Implementation Plan Generator
 
-## Overview
+Create a plan another engineer can execute without rediscovering the system, while avoiding speculative detail that is not supported by the repository or requirements.
 
-This skill generates structured, phased implementation plans from requirements documents and UI wireframes. Plans include an index file with phase summary and dependency graph, plus individual phase files with detailed specifications.
+## Inspect First
 
-**Inputs:**
+Read the requirements and trace the relevant implementation paths: entry points, data flow, types, APIs, state, UI, persistence, tests, deployment, and observability. Cite concrete files and symbols where they exist. Mark proposed paths as proposed rather than presenting them as existing.
 
-- Requirements document (features, business rules, user roles)
-- UI wireframes/specifications (pages, components, interactions) - optional but recommended
+Identify unresolved product or architecture decisions. Ask only when a missing choice would materially change the plan; otherwise record a reasonable assumption.
 
-**Outputs:**
+## Shape the Plan
 
-- `index.md` - Overview, phase table, dependency graph, key files
-- `phase-XX-name.md` - Individual phase files with specifications
+Define the objective, scope, non-goals, current behavior, target behavior, constraints, and acceptance criteria. Break work into phases that leave the repository in a coherent state.
 
-## Workflow
+For each phase include:
 
-### Step 1: Analyze Requirements
+- goal and rationale;
+- dependencies and whether work can proceed in parallel;
+- files or components to create or modify;
+- behavior, contracts, states, and migration details;
+- tests and observable verification;
+- rollout, compatibility, and rollback needs where relevant.
 
-Read the requirements document and extract:
+Order phases by dependency, risk reduction, and ability to verify progress. Data or contract changes generally precede their consumers; cross-cutting integration and cleanup generally follow working vertical slices.
 
-- Core features and functionality
-- Business rules and constraints
-- User roles and permissions
-- Data entities and relationships
-- Integration points with external systems
+## Planning Rules
 
-### Step 2: Analyze UI Wireframes
+- Match the project's language, framework, architecture, and testing conventions.
+- Preserve user choices and existing behavior unless change is in scope.
+- Cover failure, empty, loading, permission, accessibility, localization, and operational states when relevant.
+- Separate required work from optional improvements.
+- Do not require TDD, frequent commits, a fixed directory, or a specific document template unless the project or user does.
+- Do not write implementation code inside the plan unless a small contract or schema example prevents ambiguity.
+- Avoid fake line numbers, commands, files, estimates, or dependencies.
 
-If UI wireframes are provided, identify:
+## Output
 
-- Pages and routes
-- Components and their interactions
-- Data displayed on each page
-- User flows and navigation
-- State management needs
+Use one document for a modest change. For a genuinely large program, use an index plus phase documents:
 
-### Step 3: Identify Phases
+```markdown
+# Implementation plan: <outcome>
 
-Group work into logical phases following this order:
+## Context
+## Scope and non-goals
+## Decisions and assumptions
+## Dependency overview
+## Phases
+### Phase 1: <verifiable milestone>
+- Goal
+- Changes
+- Verification
+- Dependencies and risks
+## Rollout and rollback
+## Open decisions
+```
 
-1. **Foundation phases** (always first)
-   - Data models and schema
-   - Core infrastructure (auth, API structure)
-
-2. **Domain logic phases**
-   - Business logic libraries
-   - Calculation and validation functions
-
-3. **API/Backend phases**
-   - API routes for CRUD operations
-   - Integration endpoints
-
-4. **UI/Frontend phases**
-   - Pages and layouts
-   - Interactive components
-
-5. **Integration phases** (always last)
-   - Audit logging
-   - Reporting
-   - Dashboard aggregations
-
-### Step 4: Map Dependencies
-
-For each phase, determine:
-
-- Which phases must complete first
-- Which phases can run in parallel
-- The critical path through the phases
-
-### Step 5: Generate Index
-
-Create `index.md` following [index-template.md](references/index-template.md):
-
-- Write overview matching project context
-- Build phase summary table
-- Draw ASCII dependency graph
-- List key files by category
-- Summarize critical business rules
-
-### Step 6: Generate Phase Files
-
-For each phase, create `phase-XX-name.md` following [phase-template.md](references/phase-template.md):
-
-- Write clear goal (1-2 sentences)
-- Provide background context
-- Use appropriate content sections for phase type
-- Add testing checklist
-- Link dependencies and next phase
-
-## Phase Type Guidelines
-
-### Database/Model Phases
-
-- List each model with field tables
-- Define enums with value descriptions
-- Document relations and constraints
-- Include migration notes
-
-### API/Backend Phases
-
-- Specify route paths and HTTP methods
-- Define request/response as TypeScript interfaces
-- List validation rules
-- Note authorization requirements
-
-### UI/Frontend Phases
-
-- Define page routes and purposes
-- Include ASCII wireframes for complex layouts
-- List components with props and features
-- Describe client-side state and logic
-
-### Integration Phases
-
-- Document data flows between systems
-- Specify event triggers and handlers
-- Define error handling strategies
-
-## Output Guidelines
-
-1. **Description-only** - No implementation code, only specifications
-2. **TypeScript interfaces** - Use interface syntax for API contracts
-3. **Props and features** - Describe components by their interface
-4. **Testing checklists** - Verification items for each phase
-5. **File paths** - Specify exact paths for files to create/modify
-6. **ASCII wireframes** - Use for complex UI layouts (optional)
-
-## Example Phase Naming
-
-Use consistent naming: `phase-XX-short-name.md`
-
-- `phase-01-data-models.md`
-- `phase-02-auth-integration.md`
-- `phase-03-api-routes.md`
-- `phase-04-user-dashboard.md`
-- `phase-05-reporting.md`
-
-## References
-
-- [Index Template](references/index-template.md) - Structure for implementation plan index
-- [Phase Template](references/phase-template.md) - Structure for individual phase files
+Finish with end-to-end verification criteria that demonstrate user-visible behavior, not merely task completion.

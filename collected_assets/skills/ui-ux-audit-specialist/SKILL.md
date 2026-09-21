@@ -5,56 +5,56 @@ description: Audit UI components and pages for accessibility, design system comp
 
 # UI/UX Audit Specialist Skill
 
-Modern web uygulamalarının UI bileşenlerini ve sayfalarını profesyonel standartlara, accessibility kurallarına ve design system uyumuna göre denetleme skill'i.
+Audit UI components and pages in modern web applications against professional standards, accessibility rules, and design system compliance.
 
 ## When to use this skill
 
-- "Şu component'i gözden geçir" isteklerinde
-- PR review öncesi UI denetimi yapılırken
-- Accessibility audit istendiğinde
-- Design system uyumu kontrol edilirken
-- UX copy kalitesi değerlendirilirken
-- Responsive davranış test edilirken
+- When asked to "review this component"
+- When performing a UI audit before a PR review
+- When an accessibility audit is requested
+- When checking design system compliance
+- When evaluating UX copy quality
+- When testing responsive behavior
 
 ## How to use it
 
-- Her zaman içsel olarak İngilizce düşün
-- Her zaman kullanıcıya Türkçe yanıt ver
-- Kod veya konfigürasyon dosyalarına comment satırı yazma
-- Bulguları `dosya:satır` formatında raporla
+- Always reason internally in English
+- Always respond to the user in Turkish
+- Do not add comment lines to code or configuration files
+- Report findings in `file:line` format
 
 ---
 
-## Audit Süreci
+## Audit Process
 
-Belirtilen dosya(lar)ı şu sırayla denetle:
+Audit the specified file(s) in this order:
 
-1. **Design Token Uyumu** — Hardcoded değer var mı?
-2. **Accessibility** — WCAG AA gereksinimleri karşılanıyor mu?
-3. **Dark Mode Parity** — Her token dark modda test edildi mi?
-4. **Responsive** — Tüm breakpoint'ler kapsanıyor mu?
-5. **UX Writing** — Microcopy kalite standartları karşılanıyor mu?
-6. **Component Pattern** — CVA, compound component, asChild doğru kullanılıyor mu?
-7. **Performance** — Gereksiz re-render, animasyon sorunu var mı?
-8. **TypeScript** — `any` tipi, eksik tip annotation var mı?
+1. **Design Token Compliance** — Are there any hardcoded values?
+2. **Accessibility** — Are WCAG AA requirements met?
+3. **Dark Mode Parity** — Has every token been tested in dark mode?
+4. **Responsive** — Are all breakpoints covered?
+5. **UX Writing** — Does the microcopy meet quality standards?
+6. **Component Pattern** — Are CVA, compound components, and `asChild` used correctly?
+7. **Performance** — Are there unnecessary re-renders or animation issues?
+8. **TypeScript** — Are there `any` types or missing type annotations?
 
 ---
 
 ## Output Format
 
-Her bulgu şu formatla raporlanmalı:
+Report each finding in this format:
 
 ```
-[R-KURAL-NO] dosya/yolu:satır_no
-  SORUN: Kısa açıklama
-  MEVCUT: Sorunlu kod snippet'i
-  BEKLENEN: Düzeltilmiş hali
-  ÖNCELİK: Kritik | Yüksek | Orta | Düşük
+[R-RULE-NO] path/to/file:line_number
+  ISSUE: Brief description
+  CURRENT: Problematic code snippet
+  EXPECTED: Corrected version
+  PRIORITY: Critical | High | Medium | Low
 ```
 
-**Öncelik Tanımları**:
+**Priority Definitions**:
 
-- **Kritik**: Accessibility kırık, dark mode tamamen bozuk, console error
-- **Yüksek**: WCAG AA uyumsuzluk, hardcoded renk, generic error mesajı
-- **Orta**: Responsive eksiklik, UX copy kalitesi, loading state eksik
-- **Düşük**: Minor token tutarsızlığı, stil iyileştirmesi
+- **Critical**: Broken accessibility, completely broken dark mode, console error
+- **High**: WCAG AA noncompliance, hardcoded color, generic error message
+- **Medium**: Responsive gaps, UX copy quality, missing loading state
+- **Low**: Minor token inconsistency, style improvement

@@ -1,9 +1,15 @@
 ---
-name: "cs-grants"
-description: "/cs:grants <research-idea> — NIH funding intelligence. 6-Q grill-me intake (idea + career stage + prelim + environment + posture + institutes) → 5-facet Consensus positioning + RePORTER POST institute mapping + NOSI fetches → 9-section .docx with mandatory program officer recommendation."
+title: "/cs-grants — Slash Command for AI Coding Agents"
+description: "/cs:grants <research-idea> — NIH funding intelligence. 6-Q grill-me intake (idea + career stage + prelim + environment + posture + institutes) →. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:grants — NIH Funding Intelligence
+# /cs-grants
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/grants/commands/cs-grants.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:grants <research-idea>`
 
@@ -117,8 +123,8 @@ grants_<topic-slug>_<YYYY-MM-DD>.docx
 
 ## Related
 
-- Agent: [`cs-grants`](../agents/cs-grants.md)
-- Skill: [`grants`](../skills/grants/SKILL.md)
+- Agent: [`cs-grants`](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/agents/cs-grants.md)
+- Skill: [`grants`](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/skills/grants/SKILL.md)
 - Source spec: `megaprompts/08-grants-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling: `/cs:litreview` (academic literature, no RePORTER)
 

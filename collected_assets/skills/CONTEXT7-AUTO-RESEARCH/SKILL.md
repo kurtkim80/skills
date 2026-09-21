@@ -1,9 +1,6 @@
 ---
 name: context7-auto-research
-description: "Automatically fetch latest library/framework documentation for Claude Code via Context7 API. Use when you need up-to-date documentation for libraries and frameworks or asking about React, Next.js, Prisma, or any other popular library."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Automatically fetch latest library/framework documentation for Claude Code via Context7 API
 ---
 
 # context7-auto-research
@@ -37,8 +34,3 @@ See the GitHub repository for troubleshooting guides.
 
 ## Related Skills
 - tavily-web, exa-search, firecrawl-scraper, codex-review
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

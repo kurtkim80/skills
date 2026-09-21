@@ -9,7 +9,6 @@ description: >
   a new feature, breaking down a complex task before implementation, creating
   a roadmap from requirements or wireframes, or writing a structured plan
   to hand off to another developer or agent.
-version: 1.0.0
 ---
 
 # Flutter Implementation Planner

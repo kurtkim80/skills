@@ -7,7 +7,6 @@ description: >
   Use when: system documentation, architecture visualisation, technical
   onboarding, investor or stakeholder presentation, defining service boundaries,
   C4 context diagram, container diagram, component diagram, deployment diagram.
-version: 1.0.0
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -63,7 +62,7 @@ C4Container
   Person(admin, "Administrator")
 
   Container_Boundary(mobile, "Mobile Application") {
-    Container(flutterApp, "Flutter App", "Flutter 3.x / Dart",
+    Container(flutterApp, "Flutter App", "Flutter / Dart",
               "User interface, state management, offline cache")
     ContainerDb(localDb, "Local Storage", "Hive / SQLite",
                 "Offline data, user preferences")
@@ -149,8 +148,8 @@ C4Component
 C4Deployment
   title Deployment Diagram — Production
 
-  Deployment_Node(userDevice, "User Device", "iOS 15+ / Android 10+") {
-    Container(flutterApp, "Flutter App", "Flutter 3.x",
+  Deployment_Node(userDevice, "User Device", "Supported iOS / Android versions") {
+    Container(flutterApp, "Flutter App", "Flutter / Dart",
               "Installed from the app store")
   }
 

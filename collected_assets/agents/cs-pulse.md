@@ -1,13 +1,16 @@
 ---
-name: cs-pulse
-description: Multi-source recency research persona. Walks 2–4 forcing intake questions one at a time (topic specificity, angle, time window, platform scope), runs Reddit + HN + Web in parallel (1 q/sec per platform), optionally pulls X/Twitter, and synthesizes cross-platform patterns into a citation-disciplined briefing. Refuses vague topics. Refuses to bundle intake questions. Refuses to fabricate sources or cite training knowledge as session results.
-skills: research/pulse/skills/pulse
-domain: research
-model: opus
-tools: [Read, Write, Bash, WebFetch, WebSearch]
+title: "Pulse Agent — AI Coding Agent & Codex Skill"
+description: "Multi-source recency research persona. Walks 2–4 forcing intake questions one at a time (topic specificity, angle, time window, platform scope), runs. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Pulse Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Research</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -35,7 +38,7 @@ The cs-pulse agent orchestrates the `pulse` skill across multi-source recency br
 1. **Grill-me intake (Q1 → Q4, dependency-ordered)** — topic, angle, window, scope. One at a time. Refuse vague answers.
 2. **Pre-flight** — compute window timestamps with `skills/pulse/scripts/time_window_calculator.py`, generate output slug with `skills/pulse/scripts/topic_slug_generator.py`, start three-count audit with `skills/pulse/scripts/citation_tracker.py`.
 3. **Phases 1–3 in parallel** — Reddit (top + new), HN (Algolia stories + comments), Web (2–3 targeted queries). 1 q/sec per platform; sequential within.
-4. **Phase 4 (optional)** — normalize a supplied X export first. Try a live interface only when needed.
+4. **Phase 4 (optional)** — X/Twitter if available; skip with note otherwise.
 5. **Synthesis** — cross-platform pattern detection (consensus, controversy, pain, excitement, gaps).
 6. **Output** — save file + paste full briefing in chat.
 
@@ -58,30 +61,30 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/pulse/`
+**Skill Location:** [`skills/pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse)
 
 ### Python Tools (Stdlib)
 
 1. **Time Window Calculator**
-   - Path: `../skills/pulse/scripts/time_window_calculator.py`
+   - Path: [`scripts/time_window_calculator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/scripts/time_window_calculator.py)
    - Usage: `python time_window_calculator.py --window 30d`
    - Computes Unix timestamps for HN's `created_at_i>` filter and Reddit's `t=` parameter (`hour|day|week|month|year|all`). Deterministic from `datetime.now()`.
 
 2. **Citation Tracker**
-   - Path: `../skills/pulse/scripts/citation_tracker.py`
-   - Usage: `python citation_tracker.py --action {start,record_sent,record_received,record_cited,import_sources,status,close} --session NAME`
-   - Tracks the three counts. `import_sources` normalizes local Xquik, X API v2, or generic JSON and deduplicates Tweet IDs.
+   - Path: [`scripts/citation_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/scripts/citation_tracker.py)
+   - Usage: `python citation_tracker.py --action {start,record_sent,record_received,record_cited,status,close} --session NAME`
+   - JSON-backed audit log at `~/.pulse_sessions/<session>.json`. Each call increments the three counts. Output the audit summary block for the synthesis section.
 
 3. **Topic Slug Generator**
-   - Path: `../skills/pulse/scripts/topic_slug_generator.py`
+   - Path: [`scripts/topic_slug_generator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/scripts/topic_slug_generator.py)
    - Usage: `python topic_slug_generator.py --topic "Self-Hosted LLM Deployment" --date 2026-05-15`
    - Produces filesystem-safe slug (`self-hosted-llm-deployment`) and flags if `${RESEARCH_DIR}/pulse/<slug>-<date>.md` already exists.
 
 ### Knowledge Bases
 
-- `../skills/pulse/references/research_pack_conventions.md` — Agent Integrity Rules canon (7+ sources)
-- `../skills/pulse/references/cross_platform_synthesis.md` — consensus/controversy/pain detection across platforms (7+ sources)
-- `../skills/pulse/references/parallel_execution_discipline.md` — 1 q/sec rationale + plan-tier signals (7+ sources)
+- [`references/research_pack_conventions.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/references/research_pack_conventions.md) — Agent Integrity Rules canon (7+ sources)
+- [`references/cross_platform_synthesis.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/references/cross_platform_synthesis.md) — consensus/controversy/pain detection across platforms (7+ sources)
+- [`references/parallel_execution_discipline.md`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/references/parallel_execution_discipline.md) — 1 q/sec rationale + plan-tier signals (7+ sources)
 
 ## Workflows
 
@@ -101,9 +104,7 @@ python ../skills/pulse/scripts/citation_tracker.py --action start --session "pul
 python ../skills/pulse/scripts/citation_tracker.py --action record_sent --session NAME --query "..."
 python ../skills/pulse/scripts/citation_tracker.py --action record_received --session NAME --count N
 
-# C. Phase 4 (optional): import a supplied export before using a live interface.
-python ../skills/pulse/scripts/citation_tracker.py --action import_sources \
-  --session NAME --input /path/to/x-search.json --platform x
+# C. Phase 4 (optional): X/Twitter via Grok / X API / browser automation. Skip with note if unavailable.
 
 # D. Synthesis — cross-platform pattern detection. For each cited source:
 python ../skills/pulse/scripts/citation_tracker.py --action record_cited --session NAME --url "https://..."
@@ -125,10 +126,9 @@ python ../skills/pulse/scripts/citation_tracker.py --action close --session NAME
 
 | Context | Phase 4 behavior |
 |---|---|
-| Supplied local X export | Normalize, filter, deduplicate, and analyze it without network access |
-| Claude Code CLI with browser automation | Use a live interface only when no export was supplied |
-| Claude Code CLI without browser automation | Skip Phase 4 when no export was supplied |
-| Claude.ai web | Analyze an attached export. Otherwise skip Phase 4. |
+| Claude Code CLI with browser automation | Run X/Twitter via Grok or available interface |
+| Claude Code CLI without browser automation | Skip Phase 4 with documented note in output |
+| Claude.ai web | Skip Phase 4 (browser automation unavailable); note in output |
 | Any context | Phases 1–3 always run |
 
 ## Output Standards
@@ -187,15 +187,15 @@ python ../skills/pulse/scripts/citation_tracker.py --action close --session NAME
 
 ## Related Agents
 
-- [cs-grill-master](../../../engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
-- [cs-grill-with-docs](../../../engineering/grill-with-docs/agents/cs-grill-with-docs.md) — docs-anchored grill (different scope)
-- [cs-capture](../../../productivity/capture/agents/cs-capture.md) — brain-dump organizer (different mode)
+- [cs-grill-master](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
+- [cs-grill-with-docs](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/agents/cs-grill-with-docs.md) — docs-anchored grill (different scope)
+- [cs-capture](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/agents/cs-capture.md) — brain-dump organizer (different mode)
 
 ## References
 
-- Skill: [../skills/pulse/SKILL.md](../skills/pulse/SKILL.md)
+- Skill: [../skills/pulse/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/SKILL.md)
 - Source spec: `megaprompts/01-pulse-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
-- Sibling command: [`/cs:pulse`](../commands/cs-pulse.md)
+- Sibling command: [`/cs:pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/commands/cs-pulse.md)
 
 ---
 

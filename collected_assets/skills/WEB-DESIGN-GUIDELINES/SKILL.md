@@ -1,12 +1,7 @@
 ---
 name: web-design-guidelines
-description: >-
-  Review UI code for Web Interface Guidelines compliance (Vercel Labs guidelines via
-  WebFetch or curl). Use when asked to "review my UI", "check accessibility", "audit
-  design", "review UX", or "check my site against best practices".
-slug: web-design-guidelines
-version: 1.0.0
-displayName: web-design-guidelines
+description: Review UI code for Web Interface Guidelines compliance. Use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices".
+argument-hint: <file-or-pattern>
 ---
 
 # Web Interface Guidelines
@@ -29,17 +24,6 @@ https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/comm
 ```
 
 Use WebFetch to retrieve the latest rules. The fetched content contains all the rules and output format instructions.
-
-If the environment has no WebFetch tool, fall back to curl against the same URL and review with the same rules:
-
-```bash
-# 直连优先
-curl -sL "https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md"
-# 直连失败/过慢时走代理（代理地址按本机环境配置，替换为实际代理地址）
-curl -sL -x "http://<proxy-host>:<proxy-port>" "https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md"
-```
-
-直连与代理**取速度优先**（可先各测一次延迟再选；代理端口不固定，按本机实际配置）。
 
 ## Usage
 

@@ -1,9 +1,11 @@
 ---
 name: competitive-landscape
-description: "Comprehensive frameworks for analyzing competition, identifying differentiation opportunities, and developing winning market positioning strategies."
-risk: safe
-source: community
-date_added: '2026-02-27'
+description: This skill should be used when the user asks to "analyze
+  competitors", "assess competitive landscape", "identify differentiation",
+  "evaluate market positioning", "apply Porter's Five Forces", or requests
+  competitive strategy analysis.
+metadata:
+  version: 1.0.0
 ---
 
 # Competitive Landscape Analysis
@@ -30,8 +32,3 @@ Comprehensive frameworks for analyzing competition, identifying differentiation 
 ## Resources
 
 - `resources/implementation-playbook.md` for detailed patterns and examples.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

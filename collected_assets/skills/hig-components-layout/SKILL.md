@@ -1,10 +1,9 @@
 ---
 name: hig-components-layout
 description: Apple Human Interface Guidelines for layout and navigation components.
-metadata:
-  aas-risk: none
-  aas-source: community
-  aas-date-added: '2026-02-27'
+risk: none
+source: community
+date_added: '2026-02-27'
 ---
 
 # Apple HIG: Layout and Navigation Components

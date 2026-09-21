@@ -1,192 +1,192 @@
 ---
 name: brainstorming-skill
-description: Turn ideas into fully formed designs and specifications through structured collaborative dialogue. Use BEFORE any creative or implementation work — when exploring feature ideas, designing user flows, evaluating approaches, or planning architecture. Prevents scope creep and ensures alignment before coding.
+description: Explore an idea through structured collaborative dialogue, alternatives, tradeoffs, and decision framing. Use when the user explicitly asks to brainstorm, compare approaches, shape a concept, or reduce uncertainty before design or implementation; do not delay a clear execution request with mandatory ideation.
 ---
 
 # Brainstorming Skill
 
-Fikirleri doğal diyalog yoluyla tam gelişmiş tasarım ve spesifikasyonlara dönüştürme metodolojisi. Herhangi bir implementasyondan önce kullanılmalı.
+A methodology for turning ideas into fully developed designs and specifications through natural dialogue. It should be used before any implementation.
 
 ## When to use this skill
 
-- Yeni feature veya component geliştirilmeden önce
-- Mimari karar verilirken alternatifler değerlendirilecekken
-- Kullanıcı akışı veya UX tasarımı yapılırken
-- Karmaşık bir problemi çözüm uzayını keşfetmeden önce
-- Scope netleştirilmesi gerektiğinde
+- Before developing a new feature or component
+- When evaluating alternatives for an architectural decision
+- When designing a user flow or UX
+- Before solving a complex problem without first exploring the solution space
+- When the scope needs clarification
 
 ---
 
-## 1. Süreç
+## 1. Process
 
-### Faz 1 — Fikri Anlama
-
-```
-1. Mevcut proje durumunu kontrol et (dosyalar, son değişiklikler)
-2. Soru sor — bir seferde TEK soru
-3. Tercih et: çoktan seçmeli sorular > açık uçlu sorular
-4. Odaklan: amaç, kısıtlar, başarı kriterleri
-```
-
-**Sorulacak sorular:**
-
-- Bu ne için? Kim kullanacak?
-- Başarı nasıl ölçülecek?
-- Hard constraint var mı? (teknik, zaman, bütçe)
-- Mevcut sistemle nasıl entegre olacak?
-
-### Faz 2 — Alternatifleri Keşfet
+### Phase 1 — Understand the Idea
 
 ```
-2-3 farklı yaklaşım öner:
-- Her birinin trade-off'larını açıkla
-- Önerileni ve nedenini belirt
-- Önce önerilen yaklaşımı sun
+1. Check the current project state (files, recent changes)
+2. Ask questions — ONE question at a time
+3. Prefer multiple-choice questions over open-ended questions
+4. Focus on the goal, constraints, and success criteria
 ```
 
-### Faz 3 — Tasarımı Sun (Bölümler Halinde)
+**Questions to ask:**
+
+- What is this for? Who will use it?
+- How will success be measured?
+- Are there hard constraints? (technical, time, budget)
+- How will it integrate with the existing system?
+
+### Phase 2 — Explore Alternatives
 
 ```
-Anlaşılınca tasarımı sun:
-- 200-300 kelimelik bölümler halinde
-- Her bölümden sonra kontrol et: "Bu doğru mu?"
-- Geri al ve netleştir — esnek ol
+Propose 2–3 different approaches:
+- Explain the tradeoffs of each
+- State the recommendation and why
+- Present the recommended approach first
 ```
 
-**Kapsanacak alanlar:**
+### Phase 3 — Present the Design (in Sections)
 
-- Mimari / Veri akışı
-- Component'ler ve sorumluluklar
-- Hata durumları
-- Test stratejisi
+```
+Once understood, present the design:
+- In sections of 200–300 words
+- Check after each section: "Is this correct?"
+- Revisit and clarify — stay flexible
+```
+
+**Areas to cover:**
+
+- Architecture / Data flow
+- Components and responsibilities
+- Error cases
+- Test strategy
 
 ---
 
-## 2. Temel Prensipler
+## 2. Core Principles
 
-### Bir Seferde Bir Soru
+### One Question at a Time
 
 ```
-❌ Kötü:
-"Kimler kullanacak? Hangi platformda? API mi yoksa local mi?
-Performance target nedir? Budget var mı?"
+❌ Bad:
+"Who will use it? On which platform? API or local?
+What is the performance target? Is there a budget?"
 
-✅ İyi:
-"Bu özelliği kim kullanacak — iş arayanlar mı, işverenler mi?"
-[Yanıt bekle]
-"Hangi platformda öncelikle çalışmalı — web mi, mobil mi?"
+✅ Good:
+"Who will use this feature — job seekers or employers?"
+[Wait for the answer]
+"Which platform should it support first — web or mobile?"
 ```
 
-### YAGNI — Gereksiz Feature Yok
+### YAGNI — No Unnecessary Features
 
-Her tasarım kararında sor: "Bu şu an gerçekten gerekli mi?"
+For every design decision, ask: "Is this truly necessary right now?"
 
-Tasarımdan çıkar:
+Remove from the design:
 
-- "İleride lazım olabilir" assumption'ları
-- Kullanıcının talep etmediği esneklikler
+- "It may be needed later" assumptions
+- Flexibility the user did not request
 - Over-engineering
 
-### 2-3 Alternatif Öneri
+### Propose 2–3 Alternatives
 
 ```
-Yaklaşım A — En Basit
-  Açıklama, avantajlar, dezavantajlar
+Approach A — Simplest
+  Description, advantages, disadvantages
 
-Yaklaşım B — Dengeli
-  Açıklama, avantajlar, dezavantajlar
+Approach B — Balanced
+  Description, advantages, disadvantages
 
-Yaklaşım C — En Güçlü
-  Açıklama, avantajlar, dezavantajlar
+Approach C — Most Powerful
+  Description, advantages, disadvantages
 
-→ Öneri: Yaklaşım B, çünkü [somut neden]
+→ Recommendation: Approach B, because [concrete reason]
 ```
 
 ---
 
-## 3. Talent Architect Bağlamı
+## 3. Project Context
 
-Brainstorming yaparken şu soruları yanıtla:
+Answer these questions while brainstorming:
 
 ```
-1. Hangi feature domain'i?
-   → features/{domain}/ altına mı gidecek?
+1. Which user problem and domain are affected?
+   → Where is the existing module or boundary?
 
-2. Kullanıcı yolculuğu nasıl?
-   → Mevcut UI flow'a nasıl entegre olacak?
+2. What is the user journey?
+   → How will it integrate with the existing UI flow?
 
-3. AI kullanıyor mu?
-   → Anthropic mı, OpenRouter mı?
-   → Prompt stratejisi ne olacak?
+3. Does it use an external service or AI?
+   → How will the provider and data flow be selected?
+   → What will the privacy, cost, and error behavior be?
 
-4. Subscription gerektiriyor mu?
-   → Free/Pro/Premium limitleri neler?
+4. Does it require authorization or plan restrictions?
+   → What are the access rules and limits?
 
-5. i18n?
-   → TR + EN key'leri planlanıyor mu?
+5. Is localization required?
+   → What are the supported languages and long-text behavior?
 
 6. Monitoring?
-   → Hangi event'ler loglanacak?
+   → Which events will be logged?
 ```
 
 ---
 
-## 4. Tasarım Sonrası
+## 4. After the Design
 
-### Dokümantasyon
+### Documentation
 
 ```bash
-# Tasarımı kaydet
-docs/plans/YYYY-MM-DD-{konu}-design.md
+# Save the design
+docs/plans/YYYY-MM-DD-{topic}-design.md
 
-# İçerik:
-# - Seçilen yaklaşım ve gerekçe
-# - Component listesi
-# - Veri akışı
+# Content:
+# - Selected approach and rationale
+# - Component list
+# - Data flow
 # - Open questions
 ```
 
-### Implementasyon Hazırlığı
+### Implementation Preparation
 
 ```
-Tasarım onaylandıktan sonra:
-1. project-planner-skill ile requirements.md oluştur
-2. Design.md oluştur
-3. Tasks.md (implementation plan) oluştur
-4. İlk PR'ı küçük tut — MVP önce
+After the design is approved:
+1. Create requirements.md with project-planner-skill
+2. Create Design.md
+3. Create Tasks.md (implementation plan)
+4. Keep the first PR small — MVP first
 ```
 
 ---
 
-## 5. Soru Bankası
+## 5. Question Bank
 
-### Fonksiyon Soruları
+### Functional Questions
 
-- "Bu özellik olmadan kullanıcı ne yapıyor şu an?"
-- "Minimum viable versiyon ne olur?"
-- "Edge case'ler neler? (boş state, hata, yavaş network)"
+- "What does the user do now without this feature?"
+- "What would the minimum viable version be?"
+- "What are the edge cases? (empty state, error, slow network)"
 
-### Teknik Soruları
+### Technical Questions
 
-- "Mevcut bir pattern var mı buna benzer?"
-- "Performance constraint var mı?"
-- "Ölçeklenme gerekeceği var mı?"
+- "Is there an existing pattern similar to this?"
+- "Is there a performance constraint?"
+- "Will it need to scale?"
 
-### Kullanıcı Deneyimi Soruları
+### User Experience Questions
 
-- "Kullanıcı bu akışta nerede takılabilir?"
-- "Loading, empty ve error state nasıl görünecek?"
-- "Mobile'da nasıl çalışacak?"
+- "Where might the user get stuck in this flow?"
+- "What will the loading, empty, and error states look like?"
+- "How will it work on mobile?"
 
 ---
 
-## 6. Anti-Pattern'lar
+## 6. Anti-Patterns
 
 ```
-❌ Soru listesi vermek (overwhelming)
-❌ Implementasyona detaya girmek (design aşamasında)
-❌ Tek çözüm önermek (alternatifler göster)
-❌ Kullanıcının talep etmediği özellikler eklemek
-❌ "Belki ileride lazım olur" ile scope genişletmek
-❌ Tasarımı tek seferde sunmak (bölümler halinde sun)
+❌ Presenting a list of questions (overwhelming)
+❌ Going into implementation detail during the design phase
+❌ Proposing only one solution (show alternatives)
+❌ Adding features the user did not request
+❌ Expanding scope with "it may be needed later"
+❌ Presenting the entire design at once (present it in sections)
 ```

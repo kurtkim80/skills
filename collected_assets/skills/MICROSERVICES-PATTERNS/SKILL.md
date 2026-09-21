@@ -1,9 +1,6 @@
 ---
 name: microservices-patterns
-description: "Master microservices architecture patterns including service boundaries, inter-service communication, data management, and resilience patterns for building distributed systems."
-risk: none
-source: community
-date_added: "2026-02-27"
+description: Design microservices architectures with service boundaries, event-driven communication, and resilience patterns. Use when building distributed systems, decomposing monoliths, or implementing microservices.
 ---
 
 # Microservices Patterns
@@ -36,8 +33,3 @@ Master microservices architecture patterns including service boundaries, inter-s
 ## Resources
 
 - `resources/implementation-playbook.md` for detailed patterns and examples.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

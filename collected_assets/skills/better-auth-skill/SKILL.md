@@ -1,21 +1,19 @@
 ---
 name: better-auth-skill
-description: Integrate Better Auth — the comprehensive TypeScript-first authentication framework. Use when implementing authentication with Better Auth library, setting up OAuth, email/password, 2FA, passkeys, organizations, or migrating from other auth solutions. Note: Talent Architect uses Firebase Auth; this skill is for projects using Better Auth.
+description: "Integrate Better Auth in TypeScript applications, including email and password, OAuth, two-factor authentication, passkeys, organizations, sessions, adapters, and migrations. Use only for projects that have selected or are evaluating Better Auth."
 ---
 
 # Better Auth Skill
 
-TypeScript-first, framework-agnostic authentication framework entegrasyon rehberi.
+A guide to integrating the TypeScript-first, framework-agnostic authentication framework. First verify that the current project actually uses or is evaluating Better Auth; do not replace a different authentication solution on your own.
 
-**Önemli**: Talent Architect Firebase Auth kullanıyor. Bu skill Better Auth kullanan **ayrı projeler** içindir.
-
-Resmi dokümantasyon: https://better-auth.com/docs
+Official documentation: https://better-auth.com/docs
 
 ---
 
-## 1. Hızlı Başlangıç
+## 1. Quick Start
 
-### Kurulum
+### Installation
 
 ```bash
 npm install better-auth
@@ -24,24 +22,24 @@ npm install better-auth
 ### Environment Variables
 
 ```bash
-BETTER_AUTH_SECRET=min-32-karakter-secret  # openssl rand -base64 32
+BETTER_AUTH_SECRET=min-32-character-secret  # openssl rand -base64 32
 BETTER_AUTH_URL=https://example.com
 ```
 
-Config'de yalnızca env var set edilmemişse `baseURL`/`secret` tanımla.
+Define `baseURL` and `secret` in the configuration only when the environment variables are not set.
 
-### CLI Komutları
+### CLI Commands
 
 ```bash
-npx @better-auth/cli@latest generate      # Prisma/Drizzle için schema üret
-npx @better-auth/cli@latest migrate       # Schema uygula (built-in adapter)
+npx @better-auth/cli@latest generate      # Generate a schema for Prisma/Drizzle
+npx @better-auth/cli@latest migrate       # Apply the schema (built-in adapter)
 ```
 
-**Plugin ekledikten sonra CLI'ı yeniden çalıştır.**
+**Run the CLI again after adding a plugin.**
 
 ---
 
-## 2. Temel Konfigürasyon
+## 2. Basic Configuration
 
 ```typescript
 // lib/auth.ts
@@ -55,7 +53,7 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
     sendResetPassword: async ({ user, url }) => {
-      await sendEmail({ to: user.email, subject: 'Şifre Sıfırlama', body: url })
+      await sendEmail({ to: user.email, subject: 'Password Reset', body: url })
     },
   },
 
@@ -71,11 +69,11 @@ export const auth = betterAuth({
   },
 
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 gün
-    updateAge: 60 * 60 * 24, // 1 günde bir refresh
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // Refresh once a day
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 5, // 5 dakika
+      maxAge: 60 * 5, // 5 minutes
     },
   },
 
@@ -87,18 +85,18 @@ export const auth = betterAuth({
 
 ## 3. Feature Selection Matrix
 
-| Özellik                | Plugin Gerekli   | Kullanım               |
+| Feature                | Plugin Required  | Usage                  |
 | ---------------------- | ---------------- | ---------------------- |
-| Email/Password         | Hayır (built-in) | Temel auth             |
-| OAuth (GitHub, Google) | Hayır (built-in) | Social login           |
-| Email Verification     | Hayır (built-in) | Email doğrulama        |
-| Password Reset         | Hayır (built-in) | Şifre sıfırlama        |
-| Two-Factor Auth (TOTP) | `twoFactor`      | Gelişmiş güvenlik      |
+| Email/Password         | No (built-in)    | Basic auth             |
+| OAuth (GitHub, Google) | No (built-in)    | Social login           |
+| Email Verification     | No (built-in)    | Email verification     |
+| Password Reset         | No (built-in)    | Password reset         |
+| Two-Factor Auth (TOTP) | `twoFactor`      | Advanced security      |
 | Passkeys/WebAuthn      | `passkey`        | Passwordless           |
 | Magic Link             | `magicLink`      | Email-based login      |
-| Username Auth          | `username`       | Kullanıcı adı girişi   |
+| Username Auth          | `username`       | Username login         |
 | Organizations          | `organization`   | Multi-tenant           |
-| Rate Limiting          | Hayır (built-in) | Kötüye kullanım önleme |
+| Rate Limiting          | No (built-in)    | Abuse prevention       |
 
 ---
 
@@ -114,7 +112,7 @@ export const { GET, POST } = toNextJsHandler(auth)
 
 ---
 
-## 5. Client Kullanımı
+## 5. Client Usage
 
 ```typescript
 // lib/auth-client.ts
@@ -139,7 +137,7 @@ export function LoginButton() {
     return (
       <div>
         <span>{session.user.name}</span>
-        <button onClick={() => authClient.signOut()}>Çıkış</button>
+        <button onClick={() => authClient.signOut()}>Sign Out</button>
       </div>
     )
   }
@@ -147,10 +145,10 @@ export function LoginButton() {
   return (
     <div>
       <button onClick={() => authClient.signIn.social({ provider: 'google' })}>
-        Google ile Giriş
+        Sign In with Google
       </button>
       <button onClick={() => authClient.signIn.social({ provider: 'github' })}>
-        GitHub ile Giriş
+        Sign In with GitHub
       </button>
     </div>
   )
@@ -159,28 +157,28 @@ export function LoginButton() {
 
 ---
 
-## 6. Session Yönetimi
+## 6. Session Management
 
-### Storage Önceliği
+### Storage Priority
 
-1. `secondaryStorage` tanımlanmışsa → session oraya gider (DB değil)
-2. `session.storeSessionInDatabase: true` → DB'ye de kaydet
-3. DB yok + `cookieCache` → tamamen stateless
+1. If `secondaryStorage` is defined → the session goes there (not to the database)
+2. `session.storeSessionInDatabase: true` → also save it to the database
+3. No database + `cookieCache` → completely stateless
 
-### Cookie Cache Stratejileri
+### Cookie Cache Strategies
 
-| Strateji               | Açıklama         | Boyut        |
+| Strategy               | Description      | Size         |
 | ---------------------- | ---------------- | ------------ |
-| `compact` (varsayılan) | Base64url + HMAC | En küçük     |
-| `jwt`                  | Standard JWT     | Okunabilir   |
-| `jwe`                  | Encrypted        | Max güvenlik |
+| `compact` (default)    | Base64url + HMAC | Smallest     |
+| `jwt`                  | Standard JWT     | Readable     |
+| `jwe`                  | Encrypted        | Maximum security |
 
 ---
 
-## 7. Plugin Örnekleri
+## 7. Plugin Examples
 
 ```typescript
-// ✅ Tree-shaking için plugin-name yolu kullan
+// ✅ Use the plugin-name path for tree shaking
 import { twoFactor } from 'better-auth/plugins/two-factor'
 import { organization } from 'better-auth/plugins/organization'
 import { admin } from 'better-auth/plugins/admin'
@@ -193,7 +191,7 @@ export const auth = betterAuth({
 
 ---
 
-## 8. Database Hook'ları
+## 8. Database Hooks
 
 ```typescript
 export const auth = betterAuth({
@@ -241,11 +239,11 @@ export const config = {
 ## 10. Type Safety
 
 ```typescript
-// Server tarafında session tipi
+// Server-side session type
 type Session = typeof auth.$Infer.Session
 type User = typeof auth.$Infer.Session.user
 
-// Ayrı client/server projesi varsa
+// If the project has separate client and server applications
 import { createAuthClient } from 'better-auth/react'
 import type { auth } from './server/auth'
 
@@ -256,35 +254,35 @@ const authClient = createAuthClient<typeof auth>()
 
 ## 11. Implementation Checklist
 
-- [ ] `better-auth` paketi kuruldu
-- [ ] `BETTER_AUTH_SECRET` ve `BETTER_AUTH_URL` env var set edildi
-- [ ] Auth server instance oluşturuldu (database config ile)
-- [ ] Schema migration çalıştırıldı (`npx @better-auth/cli generate`)
-- [ ] API handler mount edildi
-- [ ] Client instance oluşturuldu
-- [ ] Sign-up/sign-in UI implement edildi
-- [ ] Session management component'lere eklendi
-- [ ] Protected routes / middleware kuruldu
-- [ ] Plugin'ler eklendi (ekleme sonrası schema yeniden üret)
-- [ ] Email gönderimi yapılandırıldı (verification/reset)
-- [ ] Rate limiting production için aktif
+- [ ] The `better-auth` package is installed
+- [ ] The `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` environment variables are set
+- [ ] The auth server instance is created (with database configuration)
+- [ ] The schema migration is run (`npx @better-auth/cli generate`)
+- [ ] The API handler is mounted
+- [ ] The client instance is created
+- [ ] The sign-up/sign-in UI is implemented
+- [ ] Session management is added to components
+- [ ] Protected routes / middleware are configured
+- [ ] Plugins are added (regenerate the schema after adding them)
+- [ ] Email delivery is configured (verification/reset)
+- [ ] Rate limiting is enabled for production
 
 ---
 
-## 12. Yaygın Hatalar
+## 12. Common Errors
 
-1. **Model vs tablo adı**: Config ORM model adını kullanır, DB tablo adını değil
-2. **Plugin schema**: Plugin eklendikten sonra CLI tekrar çalıştır
-3. **Secondary storage**: Session varsayılan olarak oraya gider, DB'ye değil
-4. **Cookie cache**: Custom session field'ları cache'lenmez, her zaman yeniden fetch
-5. **Email doğrulama**: `sendVerificationEmail` tanımlanmadan çalışmaz
-6. **Import path**: `better-auth/plugins` değil `better-auth/plugins/plugin-name` kullan
+1. **Model vs. table name**: The configuration uses the ORM model name, not the database table name
+2. **Plugin schema**: Run the CLI again after adding a plugin
+3. **Secondary storage**: The session goes there by default, not to the database
+4. **Cookie cache**: Custom session fields are not cached and are always fetched again
+5. **Email verification**: It does not work unless `sendVerificationEmail` is defined
+6. **Import path**: Use `better-auth/plugins/plugin-name`, not `better-auth/plugins`
 
 ---
 
-## 13. Kaynaklar
+## 13. Resources
 
-- Resmi Docs: https://better-auth.com/docs
+- Official Docs: https://better-auth.com/docs
 - Options Reference: https://better-auth.com/docs/reference/options
 - Plugins: https://better-auth.com/docs/plugins
 - GitHub: https://github.com/better-auth/better-auth

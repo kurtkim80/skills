@@ -1,234 +1,52 @@
 ---
 name: senior-data-engineer
-description: World-class data engineering skill for building scalable data pipelines, ETL/ELT systems, and data infrastructure. Expertise in Python, SQL, Spark, Airflow, dbt, Kafka, and modern data stack. Includes data modeling, pipeline orchestration, data quality, and DataOps. Use when designing data architectures, building data pipelines, optimizing data workflows, or implementing data governance.
+description: Design, implement, review, or evolve reliable data pipelines, analytical data models, streaming or batch systems, and data-platform operations. Use for cross-cutting data engineering work involving correctness, lineage, quality, scale, or production reliability.
 ---
 
 # Senior Data Engineer
 
-World-class senior data engineer skill for production-grade AI/ML/Data systems.
+Build data systems whose meaning, correctness, and operational behavior remain inspectable over time.
 
-## Quick Start
+## Establish the Data Contract
 
-### Main Capabilities
+Identify producers, consumers, business meaning, grain, keys, event time, update semantics, retention, privacy classification, freshness needs, volume, and service expectations. Confirm which system owns each field and how schema changes are communicated.
 
-```bash
-# Core Tool 1
-python scripts/pipeline_orchestrator.py --input data/ --output results/
+Do not choose batch, streaming, warehouse, lakehouse, or orchestration technologies before the latency, scale, team, and operational constraints are understood.
 
+## Pipeline Design
 
-# Core Tool 2
-python scripts/data_quality_validator.py --target project/ --analyze
+- Make ingestion idempotent or define duplicate handling explicitly.
+- Preserve raw source fidelity when audit or replay is required.
+- Separate extraction, normalization, business transformation, and serving concerns where it improves ownership and recovery.
+- Define watermarking, late-arrival, deletion, correction, and backfill behavior.
+- Partition and cluster according to verified access patterns.
+- Bound retries and quarantine poison records without silently losing data.
+- Design replay and backfill so they do not corrupt current results or overload downstream systems.
 
+## Modeling
 
-# Core Tool 3
-python scripts/etl_performance_optimizer.py --config config.yaml --deploy
-```
+State the grain of every analytical model. Define dimensions, facts, slowly changing attributes, derived metrics, and aggregation rules. Centralize business definitions used across consumers and avoid ambiguous names that conceal different calculations.
 
-## Core Expertise
+## Data Quality
 
-This skill covers world-class capabilities in:
+Validate the risks that matter for each dataset:
 
-- Advanced production patterns and architectures
-- Scalable system design and implementation
-- Performance optimization at scale
-- MLOps and DataOps best practices
-- Real-time processing and inference
-- Distributed computing frameworks
-- Model deployment and monitoring
-- Security and compliance
-- Cost optimization
-- Team leadership and mentoring
+- schema and type conformance;
+- uniqueness and key stability;
+- completeness and accepted null behavior;
+- referential integrity;
+- value ranges and business invariants;
+- freshness and volume anomalies;
+- reconciliation with authoritative sources.
 
-## Tech Stack
+Assign owners and response behavior to checks. A failing check must have an actionable severity, not merely create noise.
 
-**Languages:** Python, SQL, R, Scala, Go
-**ML Frameworks:** PyTorch, TensorFlow, Scikit-learn, XGBoost
-**Data Tools:** Spark, Airflow, dbt, Kafka, Databricks
-**LLM Frameworks:** LangChain, LlamaIndex, DSPy
-**Deployment:** Docker, Kubernetes, AWS/GCP/Azure
-**Monitoring:** MLflow, Weights & Biases, Prometheus
-**Databases:** PostgreSQL, BigQuery, Snowflake, Pinecone
+## Operations and Evolution
 
-## Reference Documentation
+Instrument throughput, latency, freshness, error rate, retries, backlog, cost, and quality outcomes. Include lineage and enough metadata to identify affected downstream consumers. Plan compatible schema evolution, staged deployment, backfill validation, rollback, and deprecation.
 
-### 1. Data Pipeline Architecture
+Protect sensitive data through minimization, access control, encryption, masking, retention enforcement, and auditable access appropriate to the environment.
 
-Comprehensive guide available in `references/data_pipeline_architecture.md` covering:
+## Deliverable
 
-- Advanced patterns and best practices
-- Production implementation strategies
-- Performance optimization techniques
-- Scalability considerations
-- Security and compliance
-- Real-world case studies
-
-### 2. Data Modeling Patterns
-
-Complete workflow documentation in `references/data_modeling_patterns.md` including:
-
-- Step-by-step processes
-- Architecture design patterns
-- Tool integration guides
-- Performance tuning strategies
-- Troubleshooting procedures
-
-### 3. Dataops Best Practices
-
-Technical reference guide in `references/dataops_best_practices.md` with:
-
-- System design principles
-- Implementation examples
-- Configuration best practices
-- Deployment strategies
-- Monitoring and observability
-
-## Production Patterns
-
-### Pattern 1: Scalable Data Processing
-
-Enterprise-scale data processing with distributed computing:
-
-- Horizontal scaling architecture
-- Fault-tolerant design
-- Real-time and batch processing
-- Data quality validation
-- Performance monitoring
-
-### Pattern 2: ML Model Deployment
-
-Production ML system with high availability:
-
-- Model serving with low latency
-- A/B testing infrastructure
-- Feature store integration
-- Model monitoring and drift detection
-- Automated retraining pipelines
-
-### Pattern 3: Real-Time Inference
-
-High-throughput inference system:
-
-- Batching and caching strategies
-- Load balancing
-- Auto-scaling
-- Latency optimization
-- Cost optimization
-
-## Best Practices
-
-### Development
-
-- Test-driven development
-- Code reviews and pair programming
-- Documentation as code
-- Version control everything
-- Continuous integration
-
-### Production
-
-- Monitor everything critical
-- Automate deployments
-- Feature flags for releases
-- Canary deployments
-- Comprehensive logging
-
-### Team Leadership
-
-- Mentor junior engineers
-- Drive technical decisions
-- Establish coding standards
-- Foster learning culture
-- Cross-functional collaboration
-
-## Performance Targets
-
-**Latency:**
-
-- P50: < 50ms
-- P95: < 100ms
-- P99: < 200ms
-
-**Throughput:**
-
-- Requests/second: > 1000
-- Concurrent users: > 10,000
-
-**Availability:**
-
-- Uptime: 99.9%
-- Error rate: < 0.1%
-
-## Security & Compliance
-
-- Authentication & authorization
-- Data encryption (at rest & in transit)
-- PII handling and anonymization
-- GDPR/CCPA compliance
-- Regular security audits
-- Vulnerability management
-
-## Common Commands
-
-```bash
-# Development
-python -m pytest tests/ -v --cov
-python -m black src/
-python -m pylint src/
-
-
-# Training
-python scripts/train.py --config prod.yaml
-python scripts/evaluate.py --model best.pth
-
-
-# Deployment
-docker build -t service:v1 .
-kubectl apply -f k8s/
-helm upgrade service ./charts/
-
-
-# Monitoring
-kubectl logs -f deployment/service
-python scripts/health_check.py
-```
-
-## Resources
-
-- Advanced Patterns: `references/data_pipeline_architecture.md`
-- Implementation Guide: `references/data_modeling_patterns.md`
-- Technical Reference: `references/dataops_best_practices.md`
-- Automation Scripts: `scripts/` directory
-
-## Senior-Level Responsibilities
-
-As a world-class senior professional:
-
-1. **Technical Leadership**
-   - Drive architectural decisions
-   - Mentor team members
-   - Establish best practices
-   - Ensure code quality
-
-2. **Strategic Thinking**
-   - Align with business goals
-   - Evaluate trade-offs
-   - Plan for scale
-   - Manage technical debt
-
-3. **Collaboration**
-   - Work across teams
-   - Communicate effectively
-   - Build consensus
-   - Share knowledge
-
-4. **Innovation**
-   - Stay current with research
-   - Experiment with new approaches
-   - Contribute to community
-   - Drive continuous improvement
-
-5. **Production Excellence**
-   - Ensure high availability
-   - Monitor proactively
-   - Optimize performance
-   - Respond to incidents
+Implement or recommend the smallest reliable design that satisfies the data contract. Document assumptions, ownership, failure behavior, quality controls, operational signals, migration steps, and verification using the project's actual tools rather than imaginary helper scripts.

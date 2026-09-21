@@ -1,9 +1,15 @@
 ---
-description: Run the one-time markdown-html design-system onboarding wizard. Captures brand primary/accent (HEX) + heading/body Google Fonts + design style (editorial/technical/minimal/playful) + default output directory + syntax theme + TOC behavior + optional logo/company. WCAG-AA validates body-text contrast; refuses if it fails. Stores at ~/.config/markdown-html/design-system.json (or project-scoped with --scope project). Every converter reads this config via config_loader.py before rendering.
-argument-hint: "[--defaults | --show | --reset | --set key=value | --scope global|project]"
+title: "/cs-design-system — Slash Command for AI Coding Agents"
+description: "Run the one-time markdown-html design-system onboarding wizard. Captures brand primary/accent (HEX) + heading/body Google Fonts + design style. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:design-system — Markdown-HTML design-system onboarding
+# /cs-design-system
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-design-system.md">Source</a></span>
+</div>
+
 
 Run the design-system wizard:
 

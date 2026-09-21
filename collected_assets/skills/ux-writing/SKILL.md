@@ -8,7 +8,6 @@ description: >
   empty screen copy, modal headings, form placeholders, loading state text,
   success messages, App Store descriptions, tooltips, in-app messages,
   or dialog box copy.
-version: 1.0.0
 allowed-tools: Read, Glob, Grep
 ---
 

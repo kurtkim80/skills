@@ -1,10 +1,15 @@
 ---
-name: "cs-deep-work"
-description: "/cs:deep-work — Plan a deep work day the Cal Newport way: audit the task list deep vs shallow against a budget, build an energy-first time-blocked schedule with a hard 4-hour deep ceiling and an immovable hard stop, then log focus sessions and close with the shutdown ritual."
-argument-hint: "[today's task list, with rough minutes per task]"
+title: "/cs-deep-work — Slash Command for AI Coding Agents"
+description: "/cs:deep-work — Plan a deep work day the Cal Newport way: audit the task list deep vs shallow against a budget, build an energy-first time-blocked. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:deep-work — Audit the Shallow, Block the Day, Bank the Hours
+# /cs-deep-work
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/deep-work/commands/cs-deep-work.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:deep-work [today's task list]`
 
@@ -84,8 +89,8 @@ python ../skills/deep-work/scripts/focus_session_logger.py streak
 
 ## Related
 
-- Agent: [`cs-deep-work`](../agents/cs-deep-work.md)
-- Skill: [`deep-work`](../skills/deep-work/SKILL.md)
+- Agent: [`cs-deep-work`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/agents/cs-deep-work.md)
+- Skill: [`deep-work`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/skills/deep-work/SKILL.md)
 - Quick variant: [`/cs:time-block`](cs-time-block.md) — schedule only, no audit
 - Siblings: `/cs:andreessen` (picks WHAT today; run before this), `/cs:reflect` (weekly reflection)
 

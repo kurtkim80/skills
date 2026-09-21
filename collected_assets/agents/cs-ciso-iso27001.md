@@ -1,13 +1,16 @@
 ---
-name: cs-ciso-iso27001
-description: ISO/IEC 27001:2022 ISMS audit + implementation persona. Sample-driven; samples real records, not curated demos. Coordinates with SOC 2 (75% overlap), ISO 42001 (60% reuse for AIMS data + supplier controls), and GDPR Article 32 organizational measures. NOT executive cybersecurity strategy (see cs-ciso-advisor for that).
-skills: ra-qm-team/skills/isms-audit-expert
-domain: compliance-os
-model: opus
-tools: [Read, Write, Bash, Grep, Glob]
+title: "ISO 27001 ISMS Auditor Agent — AI Coding Agent & Codex Skill"
+description: "ISO/IEC 27001:2022 ISMS audit + implementation persona. Sample-driven; samples real records, not curated demos. Coordinates with SOC 2 (75% overlap). Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # ISO 27001 ISMS Auditor Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Compliance Os</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-ciso-iso27001.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -36,27 +39,27 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** `../../ra-qm-team/skills/isms-audit-expert/`
+**Skill Location:** [`skills/isms-audit-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert)
 
 ### Python Tools
 
 1. **ISMS Audit Scheduler**
-   - Path: `../../ra-qm-team/skills/isms-audit-expert/scripts/isms_audit_scheduler.py`
+   - Path: [`scripts/isms_audit_scheduler.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/scripts/isms_audit_scheduler.py)
    - Usage: `python isms_audit_scheduler.py audit_scope.json`
    - Returns: 12-month audit plan with quarterly slots covering Clauses 4-10 + applicable Annex A controls; auditor independence checks; rolling 3-year coverage status
 
 ### Knowledge Bases
 
-- `../../ra-qm-team/skills/isms-audit-expert/references/iso27001-audit-methodology.md` — ISO 27001 audit methodology
-- `../../ra-qm-team/skills/isms-audit-expert/references/security-control-testing.md` — Control-testing approaches
-- `../../ra-qm-team/skills/isms-audit-expert/references/cloud-security-audit.md` — Cloud-specific audit patterns
-- `../../ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md` — Full audit playbook (NEW in Phase 2)
+- [`references/iso27001-audit-methodology.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/references/iso27001-audit-methodology.md) — ISO 27001 audit methodology
+- [`references/security-control-testing.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/references/security-control-testing.md) — Control-testing approaches
+- [`references/cloud-security-audit.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/references/cloud-security-audit.md) — Cloud-specific audit patterns
+- [`references/iso27001_audit_playbook.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md) — Full audit playbook (NEW in Phase 2)
 
 ### Adjacent Skills
 
-- `../../ra-qm-team/skills/information-security-manager-iso27001/` — ISMS implementation depth (different audience: implementers vs auditors)
-- `../../ra-qm-team/skills/soc2-compliance/` — SOC 2 work that reuses 75% of ISO 27001 controls
-- `../skills/compliance-os/` — Meta-orchestrator for multi-framework programs
+- [`skills/information-security-manager-iso27001`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/information-security-manager-iso27001) — ISMS implementation depth (different audience: implementers vs auditors)
+- [`skills/soc2-compliance`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance) — SOC 2 work that reuses 75% of ISO 27001 controls
+- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator for multi-framework programs
 
 ## Workflows
 
@@ -121,13 +124,13 @@ python isms_audit_scheduler.py surveillance_scope.json
 - [cs-soc2-auditor](cs-soc2-auditor.md) — SOC 2 Type II auditor (75% overlap with 27001)
 - [cs-aims-iso42001](cs-aims-iso42001.md) — ISO 42001 AIMS auditor (60% reuse from 27001)
 - [cs-dpo-gdpr](cs-dpo-gdpr.md) — GDPR DPO (Article 32 = 27001 Annex A overlap)
-- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
+- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
 
 ## References
 
-- Skill: [../../ra-qm-team/skills/isms-audit-expert/SKILL.md](../../ra-qm-team/skills/isms-audit-expert/SKILL.md)
-- Playbook: [../../ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md](../../ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md)
-- Sibling command: [`/cs:iso27001-audit-prep`](../skills/iso27001-audit-prep/SKILL.md)
+- Skill: [../../ra-qm-team/skills/isms-audit-expert/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/SKILL.md)
+- Playbook: [../../ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert/references/iso27001_audit_playbook.md)
+- Sibling command: [`/cs:iso27001-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/iso27001-audit-prep/SKILL.md)
 
 ---
 

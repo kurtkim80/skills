@@ -9,7 +9,6 @@ description: >
   offline-first strategy, API design, push notification architecture, feature flags,
   A/B test infrastructure, writing architecture documentation, or producing system
   diagrams for stakeholders.
-version: 2.0.0
 ---
 
 # Mobile System Design
@@ -231,7 +230,7 @@ C4Container
   Person(user, "End User")
 
   Container_Boundary(mobile, "Mobile Application") {
-    Container(flutterApp, "Flutter App", "Flutter 3.x / Dart",
+    Container(flutterApp, "Flutter App", "Flutter / Dart",
               "UI, state management, offline cache")
     ContainerDb(localDb, "Local Storage", "Hive / SQLite",
                 "Offline data, user preferences")

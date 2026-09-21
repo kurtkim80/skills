@@ -5,90 +5,90 @@ description: SQL database migration strategies with zero-downtime deployment, ro
 
 # Database Migrations Skill
 
-Zero-downtime SQL database migration stratejileri — PostgreSQL, MySQL ve SQL Server için.
+Zero-downtime SQL database migration strategies for PostgreSQL, MySQL, and SQL Server.
 
 ---
 
-## 1. Temel İlkeler
+## 1. Core Principles
 
-Her production migration için şu dört soruyu yanıtla:
+Answer these four questions for every production migration:
 
-1. **Backward compatible mi?** — Eski kod yeni schema ile çalışabilir mi?
-2. **Rollback planı var mı?** — Sorun çıkınca geri alınabilir mi?
-3. **Büyük tablo mu?** — Lock süresi kaç saniye?
-4. **Veri kaybı riski var mı?** — Hangi data validation yapılmalı?
+1. **Is it backward compatible?** — Can the old code work with the new schema?
+2. **Is there a rollback plan?** — Can it be reverted if a problem occurs?
+3. **Is it a large table?** — How many seconds will the lock last?
+4. **Is there a risk of data loss?** — What data validation should be performed?
 
 ---
 
-## 2. Expand-Contract Pattern (Sıfır Downtime)
+## 2. Expand-Contract Pattern (Zero Downtime)
 
-Büyük schema değişikliklerinin standart yaklaşımı üç aşamadan oluşur.
+The standard approach for large schema changes consists of three phases.
 
-### Aşama 1 — Expand (Genişlet)
+### Phase 1 — Expand
 
-Yeni yapıyı ekle, eskisini koru:
+Add the new structure and preserve the old one:
 
 ```sql
--- Yeni kolonu NULL olarak ekle (lock minimal)
+-- Add the new column as NULL (minimal lock)
 ALTER TABLE users ADD COLUMN display_name VARCHAR(255);
 
--- Mevcut veriyi backfill et (batch ile)
+-- Backfill existing data in batches
 UPDATE users
 SET display_name = full_name
 WHERE display_name IS NULL
   AND id BETWEEN :start AND :end;
 ```
 
-### Aşama 2 — Migrate (Uygulama Geçişi)
+### Phase 2 — Migrate (Application Transition)
 
-Uygulama kodunu yeni kolonu okuyup yazacak şekilde güncelle, eski kolonu da yazmaya devam et.
+Update the application code to read and write the new column while continuing to write the old column.
 
-### Aşama 3 — Contract (Daralt)
+### Phase 3 — Contract
 
-Eski kolonu kaldır:
+Remove the old column:
 
 ```sql
--- Önce constraint ekle
+-- Add the constraint first
 ALTER TABLE users ALTER COLUMN display_name SET NOT NULL;
 
--- Sonra eski kolonu kaldır
+-- Then remove the old column
 ALTER TABLE users DROP COLUMN full_name;
 ```
 
 ---
 
-## 3. Yaygın Migration Pattern'ları
+## 3. Common Migration Patterns
 
-### Kolona DEFAULT Ekleme (PostgreSQL)
+### Adding a DEFAULT to a Column (PostgreSQL)
 
 ```sql
--- ❌ Tüm tabloyu kilitler (büyük tablolarda tehlikeli)
+-- ❌ Locks the entire table (dangerous on large tables)
 ALTER TABLE orders ADD COLUMN status VARCHAR(50) DEFAULT 'pending' NOT NULL;
 
--- ✅ Güvenli: önce nullable ekle, sonra backfill, sonra constraint
+-- ✅ Safe: add it as nullable, then backfill, then add the constraint
 ALTER TABLE orders ADD COLUMN status VARCHAR(50);
 UPDATE orders SET status = 'pending' WHERE status IS NULL;
 ALTER TABLE orders ALTER COLUMN status SET DEFAULT 'pending';
 ALTER TABLE orders ALTER COLUMN status SET NOT NULL;
 ```
 
-### Index Oluşturma (Lock Olmadan)
+### Creating an Index (Without Locking)
 
 ```sql
--- ❌ Tabloyu kilitler
+-- ❌ Locks the table
 CREATE INDEX idx_users_email ON users(email);
 
--- ✅ CONCURRENTLY — lock olmadan (daha yavaş ama güvenli)
+-- ✅ CONCURRENTLY — without locking (slower but safe)
 CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
 ```
 
-### Tablo Yeniden Adlandırma
+### Renaming a Table
 
 ```sql
--- Aşama 1: Yeni tabloyu oluştur
+-- Phase 1: Create the new table
 CREATE TABLE user_profiles AS SELECT * FROM users WHERE 1=0;
 
--- Aşama 2: Trigger ile senkron tut
+-- Phase 2: Keep it synchronized with a trigger
 CREATE OR REPLACE FUNCTION sync_user_profiles()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -101,33 +101,33 @@ CREATE TRIGGER sync_on_user_change
 AFTER INSERT OR UPDATE ON users
 FOR EACH ROW EXECUTE FUNCTION sync_user_profiles();
 
--- Aşama 3: Backfill
+-- Phase 3: Backfill
 INSERT INTO user_profiles SELECT * FROM users;
 
--- Aşama 4: Uygulama geçişi + trigger kaldır + eski tabloyu sil
+-- Phase 4: Transition the application, remove the trigger, and delete the old table
 ```
 
-### Foreign Key Ekleme
+### Adding a Foreign Key
 
 ```sql
--- ❌ Validation lock yaratır
+-- ❌ Validation creates a lock
 ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id);
 
--- ✅ NOT VALID ile ekle, sonra validate et
+-- ✅ Add with NOT VALID, then validate
 ALTER TABLE orders
   ADD CONSTRAINT fk_user
   FOREIGN KEY (user_id) REFERENCES users(id)
   NOT VALID;
 
--- Ayrı transaction'da validate (AccessShareLock — daha hafif)
+-- Validate in a separate transaction (AccessShareLock — lighter)
 ALTER TABLE orders VALIDATE CONSTRAINT fk_user;
 ```
 
 ---
 
-## 4. Rollback Stratejileri
+## 4. Rollback Strategies
 
-### Her Migration Dosyasına `down` Ekle
+### Add `down` to Every Migration File
 
 ```sql
 -- V1__add_display_name.sql (up)
@@ -139,27 +139,27 @@ DROP INDEX CONCURRENTLY IF EXISTS idx_users_display_name;
 ALTER TABLE users DROP COLUMN IF EXISTS display_name;
 ```
 
-### Veri Kaybı Riski Olan Migration'larda Backup
+### Back Up Migrations That Risk Data Loss
 
 ```sql
--- Migration öncesi snapshot tablo oluştur
+-- Create a snapshot table before the migration
 CREATE TABLE users_backup_20240315 AS SELECT * FROM users;
 
--- Migration sonrası doğrula
+-- Validate after the migration
 SELECT COUNT(*) FROM users;
 SELECT COUNT(*) FROM users_backup_20240315;
--- Sayılar eşleşmeli
+-- The counts must match
 
--- Onay sonrası backup'ı sil (belirli süre sonra)
+-- Delete the backup after approval (after a defined period)
 DROP TABLE users_backup_20240315;
 ```
 
 ---
 
-## 5. Büyük Tablo Migration'ları
+## 5. Large-Table Migrations
 
 ```sql
--- Batch update — lock süresini minimize et
+-- Batch update — minimize lock duration
 DO $$
 DECLARE
   batch_size INT := 1000;
@@ -176,7 +176,7 @@ BEGIN
       AND display_name IS NULL;
 
     last_id := last_id + batch_size;
-    PERFORM pg_sleep(0.1);  -- Replication lag'ı önle
+    PERFORM pg_sleep(0.1);  -- Prevent replication lag
   END LOOP;
 END $$;
 ```
@@ -186,7 +186,7 @@ END $$;
 ## 6. Pre/Post Migration Validation
 
 ```sql
--- Pre-migration: Mevcut durumu kaydet
+-- Pre-migration: Record the current state
 SELECT
   COUNT(*) AS total_rows,
   COUNT(email) AS email_count,
@@ -194,7 +194,7 @@ SELECT
 FROM orders
 INTO migration_baseline;
 
--- Post-migration: Karşılaştır
+-- Post-migration: Compare
 SELECT
   (SELECT COUNT(*) FROM orders) = baseline.total_rows AS row_count_ok,
   (SELECT COUNT(DISTINCT user_id) FROM orders) = baseline.unique_users AS users_ok
@@ -203,48 +203,48 @@ FROM migration_baseline baseline;
 
 ---
 
-## 7. Migration Araçları
+## 7. Migration Tools
 
-| Araç              | Stack              | Özellik                             |
+| Tool              | Stack              | Feature                             |
 | ----------------- | ------------------ | ----------------------------------- |
 | Flyway            | Java/Kotlin/Node   | Versioned migrations, SQL-first     |
-| Liquibase         | Java               | XML/YAML/JSON/SQL, rollback desteği |
-| Prisma Migrate    | Node.js/TypeScript | ORM entegrasyonu                    |
+| Liquibase         | Java               | XML/YAML/JSON/SQL, rollback support |
+| Prisma Migrate    | Node.js/TypeScript | ORM integration                     |
 | Drizzle Kit       | Node.js/TypeScript | TypeScript-first                    |
-| `node-pg-migrate` | Node.js            | Minimal, PostgreSQL odaklı          |
+| `node-pg-migrate` | Node.js            | Minimal, PostgreSQL-focused         |
 
 ---
 
 ## 8. Production Deployment Checklist
 
-Canlıya almadan önce kontrol listesi:
+Checklist before production deployment:
 
-- [ ] Migration dry-run staging ortamında çalıştırıldı
-- [ ] Estimated lock time hesaplandı (büyük tablolar için CONCURRENTLY kullanıldı)
-- [ ] Rollback script'i hazır ve test edildi
-- [ ] Pre-migration backup alındı veya snapshot oluşturuldu
-- [ ] Maintenance window (gerekiyorsa) planlandı
-- [ ] Post-migration validation sorguları hazır
-- [ ] Monitoring/alerting aktif
-- [ ] Uygulama yeni ve eski schema ile backward compatible
+- [ ] A migration dry run was performed in the staging environment
+- [ ] Estimated lock time was calculated (CONCURRENTLY was used for large tables)
+- [ ] The rollback script is ready and tested
+- [ ] A pre-migration backup or snapshot was created
+- [ ] A maintenance window was planned, if needed
+- [ ] Post-migration validation queries are ready
+- [ ] Monitoring and alerting are active
+- [ ] The application is backward compatible with the new and old schemas
 
 ---
 
-## 9. Dikkat Edilecekler
+## 9. Cautions
 
-**Asla yapma:**
+**Never:**
 
-- Production'da `DROP TABLE` veya `DROP COLUMN` direkt çalıştırma (önce expand-contract)
-- Büyük tabloda `NOT NULL` constraint olmadan veri backfill etme
-- Migration sırasında uzun transaction açık tutma
-- Lock timeout ayarı yapmadan DDL çalıştırma
+- Run `DROP TABLE` or `DROP COLUMN` directly in production (use expand-contract first)
+- Backfill data in a large table without a `NOT NULL` constraint plan
+- Keep a long-running transaction open during a migration
+- Run DDL without configuring a lock timeout
 
-**PostgreSQL için özel:**
+**PostgreSQL-specific:**
 
 ```sql
--- Lock timeout set et — uzun bekleme yerine hata al
+-- Set a lock timeout — fail instead of waiting a long time
 SET lock_timeout = '5s';
 
--- Statement timeout — uzun sorguları durdur
+-- Statement timeout — stop long-running queries
 SET statement_timeout = '30s';
 ```

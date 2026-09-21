@@ -1,9 +1,15 @@
 ---
-description: Convert a markdown PR writeup or code review (with ```diff blocks and > [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] severity callouts) into a single-file 2-column HTML review. Top jump-nav lists every finding by severity. Diff on the left, severity-tagged annotation cards on the right, mandatory named reviewer footer. Refuses without --reviewer (a code review must name a human) or if no diff hunks present.
-argument-hint: "<path to markdown> --reviewer \"<name>\" [--title \"<PR title>\"] [--severity-convention \"<a,b,c,d>\"]"
+title: "/cs-md-review — Slash Command for AI Coding Agents"
+description: "Convert a markdown PR writeup or code review (with ```diff blocks and > [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] severity callouts) into a single-file. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:md-review — Code-review markdown → 2-column HTML
+# /cs-md-review
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-md-review.md">Source</a></span>
+</div>
+
 
 Convert the review markdown at **$ARGUMENTS** into a single-file 2-column HTML review.
 

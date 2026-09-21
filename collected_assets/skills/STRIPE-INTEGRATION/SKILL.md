@@ -1,15 +1,11 @@
 ---
 name: stripe-integration
-description: Implement and verify Stripe checkout, subscriptions, webhooks and refunds with explicit server-side authorization and retry boundaries.
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: Implement Stripe payment processing for robust, PCI-compliant payment flows including checkout, subscriptions, and webhooks. Use when integrating Stripe payments, building subscription systems, or implementing secure checkout flows.
 ---
 
 # Stripe Integration
 
-Implement and verify Stripe checkout, subscriptions, webhooks and refunds with explicit server-side authorization and retry boundaries.
+Master Stripe payment processing integration for robust, PCI-compliant payment flows including checkout, subscriptions, webhooks, and refunds.
 
 ## Do not use this skill when
 
@@ -21,7 +17,7 @@ Implement and verify Stripe checkout, subscriptions, webhooks and refunds with e
 - Clarify goals, constraints, and required inputs.
 - Apply relevant best practices and validate outcomes.
 - Provide actionable steps and verification.
-- Inspect the installed Stripe SDK and pinned API/webhook version. This single-file skill has no bundled playbook or production wrapper.
+- If detailed examples are required, open `resources/implementation-playbook.md`.
 
 ## Use this skill when
 
@@ -38,13 +34,13 @@ Implement and verify Stripe checkout, subscriptions, webhooks and refunds with e
 ### 1. Payment Flows
 **Checkout Session (Hosted)**
 - Stripe-hosted payment page
-- Reduced direct card-data handling
+- Minimal PCI compliance burden
 - Fastest implementation
 - Supports one-time and recurring payments
 
 **Payment Intents (Custom UI)**
 - Full control over payment UI
-- Uses Stripe.js/Elements to avoid handling raw card data directly
+- Requires Stripe.js for PCI compliance
 - More complex implementation
 - Better customization options
 
@@ -75,19 +71,12 @@ Implement and verify Stripe checkout, subscriptions, webhooks and refunds with e
 - Track customer metadata
 - Manage billing details
 
-## Inputs and safety boundary
-
-Use an explicitly authorized Stripe test account/sandbox, server-owned order and customer records, the installed SDK/API version and expected webhook types. Amounts, currencies, price/customer IDs and refund permissions must come from authenticated server policy, not arbitrary client parameters. Checkout/Elements can reduce card-data exposure; they do not establish PCI compliance by themselves.
-
-The snippets are integration sketches. Test secret keys and webhook signing secrets are different; load them from the project secret mechanism and never print them. No live payment, refund, customer update or account configuration is authorized merely by reading this skill.
-
 ## Quick Start
 
 ```python
-import os
 import stripe
 
-stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
+stripe.api_key = "sk_test_..."
 
 # Create a checkout session
 session = stripe.checkout.Session.create(
@@ -118,7 +107,7 @@ print(session.url)
 
 ### Pattern 1: One-Time Payment (Hosted Checkout)
 ```python
-def create_checkout_session(amount, order_attempt_id, currency='usd'):
+def create_checkout_session(amount, currency='usd'):
     """Create a one-time payment checkout session."""
     try:
         session = stripe.checkout.Session.create(
@@ -140,8 +129,7 @@ def create_checkout_session(amount, order_attempt_id, currency='usd'):
             metadata={
                 'order_id': 'order_123',
                 'user_id': 'user_456'
-            },
-            idempotency_key=order_attempt_id
+            }
         )
         return session
     except stripe.error.StripeError as e:
@@ -152,7 +140,7 @@ def create_checkout_session(amount, order_attempt_id, currency='usd'):
 
 ### Pattern 2: Custom Payment Intent Flow
 ```python
-def create_payment_intent(amount, order_attempt_id, currency='usd', customer_id=None):
+def create_payment_intent(amount, currency='usd', customer_id=None):
     """Create a payment intent for custom checkout UI."""
     intent = stripe.PaymentIntent.create(
         amount=amount,
@@ -163,10 +151,9 @@ def create_payment_intent(amount, order_attempt_id, currency='usd', customer_id=
         },
         metadata={
             'integration_check': 'accept_a_payment'
-        },
-        idempotency_key=order_attempt_id
+        }
     )
-    return intent.client_secret  # Only to the authenticated client for this order; never log it
+    return intent.client_secret  # Send to frontend
 
 # Frontend (JavaScript)
 """
@@ -190,16 +177,32 @@ const {error, paymentIntent} = await stripe.confirmCardPayment(
 if (error) {
     // Handle error
 } else if (paymentIntent.status === 'succeeded') {
-    // Update display only; server fulfillment still verifies payment state
+    // Payment successful
 }
 """
 ```
 
-### Pattern 3: Subscription creation contract
+### Pattern 3: Subscription Creation
+```python
+def create_subscription(customer_id, price_id):
+    """Create a subscription for a customer."""
+    try:
+        subscription = stripe.Subscription.create(
+            customer=customer_id,
+            items=[{'price': price_id}],
+            payment_behavior='default_incomplete',
+            payment_settings={'save_default_payment_method': 'on_subscription'},
+            expand=['latest_invoice.payment_intent'],
+        )
 
-Use the flow documented for the account’s pinned API version. Do not assume `latest_invoice.payment_intent` exists in every version or that every invoice has an immediately confirmable payment. Resolve an authorized customer and allowed price, create the incomplete subscription with an idempotency key, and handle the returned confirmation state through that version’s API. Grant access from verified subscription/invoice state; test trials, zero-amount invoices, delayed payments, cancellation and retries.
-
-See [Stripe subscription integration](https://docs.stripe.com/billing/subscriptions/build-subscriptions). The customer portal below also requires ownership checks before accepting a customer ID.
+        return {
+            'subscription_id': subscription.id,
+            'client_secret': subscription.latest_invoice.payment_intent.client_secret
+        }
+    except stripe.error.StripeError as e:
+        print(f"Subscription creation failed: {e}")
+        raise
+```
 
 ### Pattern 4: Customer Portal
 ```python
@@ -216,20 +219,17 @@ def create_customer_portal_session(customer_id):
 
 ### Secure Webhook Endpoint
 ```python
-import os
 from flask import Flask, request
 import stripe
 
 app = Flask(__name__)
 
-endpoint_secret = os.environ["STRIPE_WEBHOOK_SECRET"]
+endpoint_secret = 'whsec_...'
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    payload = request.get_data(cache=False)  # Exact raw bytes; enforce an ingress body-size limit
+    payload = request.data
     sig_header = request.headers.get('Stripe-Signature')
-    if not sig_header:
-        return 'Missing signature', 400
 
     try:
         event = stripe.Webhook.construct_event(
@@ -238,12 +238,10 @@ def webhook():
     except ValueError:
         # Invalid payload
         return 'Invalid payload', 400
-    except stripe.SignatureVerificationError:
+    except stripe.error.SignatureVerificationError:
         # Invalid signature
         return 'Invalid signature', 400
 
-    # Integration sketch: durable deduplication/queueing below must precede effects.
-    # Bind account, mode, order, amount/currency and expected current state first.
     # Handle the event
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
@@ -283,21 +281,36 @@ def handle_subscription_canceled(subscription):
     print(f"Subscription canceled: {subscription['id']}")
 ```
 
-### Signature, duplication and fulfillment
+### Webhook Best Practices
+```python
+import hashlib
+import hmac
 
-Use `stripe.Webhook.construct_event` with the raw bytes, full `Stripe-Signature` header and correct endpoint secret. A bare HMAC over the body does not implement Stripe’s timestamped header format or replay tolerance. Keep the SDK’s timestamp check and verify both invalid and stale signatures. See [Stripe webhook documentation](https://docs.stripe.com/webhooks).
+def verify_webhook_signature(payload, signature, secret):
+    """Manually verify webhook signature."""
+    expected_sig = hmac.new(
+        secret.encode('utf-8'),
+        payload,
+        hashlib.sha256
+    ).hexdigest()
 
-```text
-Verify signature and event/account/mode before accepting the event.
-Atomically insert event.id into a durable inbox with a unique constraint.
-Return 2xx only after durable acceptance; retryable storage failure remains a failure.
-A worker reconciles current payment/order state and applies a guarded transition.
-Use a unique order/fulfillment key as well: different events can describe the same payment.
-Commit the state change and an outbox entry together; downstream effects are idempotent.
-Duplicate/concurrent delivery returns the recorded result without fulfilling twice.
+    return hmac.compare_digest(signature, expected_sig)
+
+def handle_webhook_idempotently(event_id, handler):
+    """Ensure webhook is processed exactly once."""
+    # Check if event already processed
+    if is_event_processed(event_id):
+        return
+
+    # Process event
+    try:
+        handler()
+        mark_event_processed(event_id)
+    except Exception as e:
+        log_error(e)
+        # Stripe will retry failed webhooks
+        raise
 ```
-
-A check-then-handle-then-mark sequence is not atomic and does not provide exactly-once effects. Events can arrive out of order. The sample Flask handlers above are placeholders, not a complete durable processor; do not deploy them as fulfillment. Checkout success redirects are UI signals, not proof of payment. Consult [fulfillment guidance](https://docs.stripe.com/checkout/fulfillment) and [request idempotency](https://docs.stripe.com/api/idempotent_requests).
 
 ## Customer Management
 
@@ -344,27 +357,25 @@ def list_customer_payment_methods(customer_id):
 ## Refund Handling
 
 ```python
-def create_refund(payment_intent_id, refund_attempt_id, amount=None, reason=None):
+def create_refund(payment_intent_id, amount=None, reason=None):
     """Create a refund."""
     refund_params = {
         'payment_intent': payment_intent_id
     }
 
-    if amount is not None:
-        if type(amount) is not int or amount <= 0:
-            raise ValueError("Refund amount must be a positive minor-unit integer")
+    if amount:
         refund_params['amount'] = amount  # Partial refund
 
     if reason:
         refund_params['reason'] = reason  # 'duplicate', 'fraudulent', 'requested_by_customer'
 
-    refund = stripe.Refund.create(**refund_params, idempotency_key=refund_attempt_id)
+    refund = stripe.Refund.create(**refund_params)
     return refund
 
-def handle_dispute(dispute_id, evidence):
+def handle_dispute(charge_id, evidence):
     """Update dispute with evidence."""
     stripe.Dispute.modify(
-        dispute_id,
+        charge_id,
         evidence={
             'customer_name': evidence.get('customer_name'),
             'customer_email_address': evidence.get('customer_email'),
@@ -378,9 +389,7 @@ def handle_dispute(dispute_id, evidence):
 
 ```python
 # Use test mode keys
-import os
-
-stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
+stripe.api_key = "sk_test_..."
 
 # Test card numbers
 TEST_CARDS = {
@@ -414,11 +423,16 @@ def test_payment_flow():
     assert confirmed.status == 'succeeded'
 ```
 
-## Worked verification case
+## Resources
 
-For an authorized test order, deliver the same valid payment event twice and concurrently, then a stale/invalid signature and an older out-of-order state event. Expected: one durable fulfillment, rejected invalid signatures, and no rollback of a newer state. Simulate a storage failure before inbox commit; it must not return a success that loses the event. Assert a zero-amount refund is rejected rather than silently becoming a full refund.
-
-These are acceptance checks to implement in the project. This skill records no live transaction result and includes no hidden client wrapper or extra reference files.
+- **references/checkout-flows.md**: Detailed checkout implementation
+- **references/webhook-handling.md**: Webhook security and processing
+- **references/subscription-management.md**: Subscription lifecycle
+- **references/customer-management.md**: Customer and payment method handling
+- **references/invoice-generation.md**: Invoicing and billing
+- **assets/stripe-client.py**: Production-ready Stripe client wrapper
+- **assets/webhook-handler.py**: Complete webhook processor
+- **assets/checkout-config.json**: Checkout configuration templates
 
 ## Best Practices
 
@@ -438,11 +452,3 @@ These are acceptance checks to implement in the project. This skill records no l
 - **Hardcoded Amounts**: Use cents/smallest currency unit
 - **No Retry Logic**: Implement retries for API calls
 - **Ignoring Test Mode**: Test all edge cases with test cards
-
-## Limitations
-
-- API versions, event payloads and SDK exception namespaces differ; verify the installed version rather than combining examples from different releases.
-- Request idempotency keys must stay bound to the same logical operation and parameters; a new key on every retry can duplicate a charge or refund.
-- Webhook deduplication alone does not prevent duplicate business effects from different events.
-- Client success, test-card success and a signature check do not establish full fulfillment, tax, compliance or subscription correctness.
-- Customer, payment-method, dispute and refund mutations require server-side ownership/role checks and explicit task authorization.

@@ -1,9 +1,15 @@
 ---
-description: Pricing model selection (subscription / usage / value / hybrid), Van Westendorp WTP analysis, packaging design. Recommends a model + range, never a specific number. Direct invocation of the pricing-strategist skill.
-argument-hint: "<pricing context: industry, deal size, customer count, value drivers>"
+title: "/cs-pricing-strategy — Slash Command for AI Coding Agents"
+description: "Pricing model selection (subscription / usage / value / hybrid), Van Westendorp WTP analysis, packaging design. Recommends a model + range, never a. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:pricing-strategy — Pricing model + WTP + packaging
+# /cs-pricing-strategy
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-pricing-strategy.md">Source</a></span>
+</div>
+
 
 Run the `pricing-strategist` skill on this input:
 

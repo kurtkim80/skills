@@ -1,9 +1,15 @@
 ---
-description: Compile a goal into a verified agent-harness loop for a domain and drive it to close — /cs:harness <domain> <goal>
-argument-hint: <domain> <goal text>
+title: "/cs-harness — Slash Command for AI Coding Agents"
+description: "Compile a goal into a verified agent-harness loop for a domain and drive it to close — /cs:harness <domain> <goal>. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:harness — run a goal through a domain's agent harness
+# /cs-harness
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-harness/commands/cs-harness.md">Source</a></span>
+</div>
+
 
 Parse `$ARGUMENTS`: the first token is the domain (one of the 18 manifest names under
 `engineering/agent-harness/skills/agent-harness/assets/harnesses/`); the rest is the goal.

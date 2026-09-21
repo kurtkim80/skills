@@ -1,9 +1,15 @@
 ---
-description: Run the continuous-discovery loop — score the weekly cadence (Torres), act on the named gap, lint the Opportunity Solution Tree as the machine gate, and keep the streak alive with explicit stop states. The product-domain recurring loop; graduates validated assumptions to experiments or PRDs.
-argument-hint: "[path to discovery_log.json] [path to ost.json]"
+title: "/cs-product-loop — Slash Command for AI Coding Agents"
+description: "Run the continuous-discovery loop — score the weekly cadence (Torres), act on the named gap, lint the Opportunity Solution Tree as the machine gate. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:product-loop — the continuous-discovery loop
+# /cs-product-loop
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/product-team/commands/cs-product-loop.md">Source</a></span>
+</div>
+
 
 Inputs (defaults: `discovery_log.json` and `ost.json` in the workspace; shapes in
 `product-team/skills/product-skills/assets/`):

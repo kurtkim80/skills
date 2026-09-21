@@ -1,79 +1,38 @@
 ---
 name: skill-lookup
-description: Activates when the user asks about Agent Skills, wants to find reusable AI capabilities, needs to install skills, or mentions skills for Claude. Use for discovering, retrieving, and installing skills.
+description: Find and evaluate existing agent skills for a requested workflow, then recommend the best fit and installation scope. Use when the user asks whether a skill exists, wants to search a skill library, or wants to avoid creating a duplicate skill.
 ---
 
-When the user needs Agent Skills, wants to extend Claude's capabilities, or is looking for reusable AI agent components, use the prompts.chat MCP server.
+# Skill Lookup
 
-## When to Use This Skill
+Search available built-in, user, repository, plugin, and user-provided skill sources before recommending a new skill.
 
-Activate this skill when the user:
+## Search
 
-- Asks for Agent Skills ("Find me a code review skill")
-- Wants to search for skills ("What skills are available for testing?")
-- Needs to retrieve a specific skill ("Get skill XYZ")
-- Wants to install a skill ("Install the documentation skill")
-- Mentions extending Claude's capabilities with skills
+Translate the request into a small set of capability, tool, artifact, and trigger terms. Search skill names and descriptions first; inspect full instructions only for plausible candidates.
 
-## Available Tools
+Use the host environment's supported skill catalog or filesystem locations. For current Codex projects, repository skills are typically discovered under `.agents/skills/`; user-level and plugin locations depend on the installed environment and should be verified before changing them.
 
-Use these prompts.chat MCP tools:
+## Evaluate Candidates
 
-- `search_skills` - Search for skills by keyword
-- `get_skill` - Get a specific skill by ID with all its files
+Compare:
 
-## How to Search for Skills
+- trigger precision and scope boundary;
+- fit for the requested inputs and outputs;
+- required tools, credentials, scripts, or external services;
+- portability and project assumptions;
+- maintenance status and current product compatibility;
+- overlap or conflict with already installed skills;
+- security and mutation behavior.
 
-Call `search_skills` with:
+Do not recommend a skill solely because its title matches. Check that its instructions and resources are complete.
 
-- `query`: The search keywords from the user's request
-- `limit`: Number of results (default 10, max 50)
-- `category`: Filter by category slug (e.g., "coding", "automation")
-- `tag`: Filter by tag slug
+## Recommend
 
-Present results showing:
+Return the best match, why it fits, important dependencies, and the appropriate scope:
 
-- Title and description
-- Author name
-- File list (SKILL.md, reference docs, scripts)
-- Category and tags
-- Link to the skill
+- repository scope for team or project-specific workflows;
+- user scope for personal workflows used across repositories;
+- plugin distribution for reusable packages that bundle skills or connectors.
 
-## How to Get a Skill
-
-Call `get_skill` with:
-
-- `id`: The skill ID
-
-Returns the skill metadata and all file contents:
-
-- SKILL.md (main instructions)
-- Reference documentation
-- Helper scripts
-- Configuration files
-
-## How to Install a Skill
-
-When the user asks to install a skill:
-
-1. Call `get_skill` to retrieve all files
-2. Create the directory `.claude/skills/{slug}/`
-3. Save each file to the appropriate location:
-   - `SKILL.md` → `.claude/skills/{slug}/SKILL.md`
-   - Other files → `.claude/skills/{slug}/{filename}`
-
-## Skill Structure
-
-Skills contain:
-
-- **SKILL.md** (required) - Main instructions with frontmatter
-- **Reference docs** - Additional documentation files
-- **Scripts** - Helper scripts (Python, shell, etc.)
-- **Config files** - JSON, YAML configurations
-
-## Guidelines
-
-- Always search before suggesting the user create their own skill
-- Present search results in a readable format with file counts
-- When installing, confirm the skill was saved successfully
-- Explain what the skill does and when it activates
+If no strong match exists, explain the gap and outline the smallest new skill needed. Do not install, copy, or modify skills unless the user asks.

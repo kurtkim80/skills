@@ -5,27 +5,27 @@ description: Engineering excellence through continuous improvement, error-proofi
 
 # Kaizen Engineering Principles
 
-Küçük, sürekli iyileştirmeler büyük değişimlerden daha etkilidir. Hataları önce tasarımda engelle, kanıtlanmış pattern'ları takip et ve yalnızca şu an gerekeni yap.
+Small, continuous improvements are more effective than large changes. Prevent errors in the design first, follow proven patterns, and build only what is needed now.
 
 ---
 
-## 1. Sürekli İyileştirme (Kaizen)
+## 1. Continuous Improvement (Kaizen)
 
-### Temel Prensip
+### Core Principle
 
-Büyük değişiklikler yerine küçük, sık iyileştirmeler yapılır. Her adım test edilir, onaylanır ve bir sonrakine geçilir.
+Make small, frequent improvements instead of large changes. Test and approve each step before moving to the next.
 
 ```
-İterasyon 1: Çalışır hale getir
-İterasyon 2: Anlaşılır hale getir
-İterasyon 3: Verimli hale getir
-← Üçünü aynı anda yapmaya çalışma
+Iteration 1: Make it work
+Iteration 2: Make it clear
+Iteration 3: Make it efficient
+← Do not try to do all three at once
 ```
 
-### Uygulamada
+### In Practice
 
 ```typescript
-// İterasyon 1: Çalışan basit versiyon
+// Iteration 1: A simple working version
 const calculateTotal = (items: Item[]) => {
   let total = 0
   for (const item of items) {
@@ -34,181 +34,181 @@ const calculateTotal = (items: Item[]) => {
   return total
 }
 
-// İterasyon 2: Anlaşılır hale getir
+// Iteration 2: Make it clear
 const calculateTotal = (items: Item[]): number => items.reduce((total, item) => total + item.price * item.quantity, 0)
 
-// İterasyon 3: Sağlamlaştır (gerektiğinde)
+// Iteration 3: Make it robust (when needed)
 const calculateTotal = (items: Item[]): number => {
   if (!items.length) return 0
   return items.reduce((total, item) => {
     if (item.price < 0 || item.quantity < 0) {
-      throw new Error('Fiyat ve miktar negatif olamaz')
+      throw new Error('Price and quantity cannot be negative')
     }
     return total + item.price * item.quantity
   }, 0)
 }
 ```
 
-### Kod İncelerken
+### During Code Review
 
-Her incelemede en yüksek etkili değişikliklerden başla. "Şu an yeterliden iyi" olan değişiklikleri kabul et — ilerleyen PR'larda iyileştirme yapılabilir.
+Start each review with the highest-impact changes. Accept changes that are "good enough for now" — they can be improved in later PRs.
 
-Öncelik sırası: Kritik → Önemli → Güzel-olurdu
+Priority order: Critical → Important → Nice to have
 
 ---
 
-## 2. Poka-Yoke (Hata Önleme Tasarımı)
+## 2. Poka-Yoke (Error-Proof Design)
 
-### Temel Prensip
+### Core Principle
 
-Hataları runtime'da yakalamak yerine compile-time veya tasarım aşamasında imkânsız hale getir.
+Make errors impossible at compile time or during design instead of catching them at runtime.
 
-### Tip Sistemi ile Hata Önleme
+### Error Prevention with the Type System
 
 ```typescript
-// ❌ String status — her değer geçerli
+// ❌ String status — every value is valid
 type OrderBad = { status: string }
 
-// ✅ Yalnızca geçerli durumlar mümkün
+// ✅ Only valid states are possible
 type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered'
 type Order = { status: OrderStatus }
 
-// ✅ En iyi: Durumla ilişkili veri
+// ✅ Best: Data associated with the state
 type Order =
   | { status: 'pending'; createdAt: Date }
   | { status: 'shipped'; trackingNumber: string; shippedAt: Date }
   | { status: 'delivered'; deliveredAt: Date }
-// trackingNumber olmadan shipped durumu artık imkânsız
+// The shipped state is now impossible without a trackingNumber
 ```
 
-### Erken Validation (Sınırda Doğrulama)
+### Early Validation (Validate at the Boundary)
 
 ```typescript
-// ❌ Kullanımdan sonra doğrulama — geç kalındı
+// ❌ Validate after use — too late
 const processPayment = (amount: number) => {
-  const fee = amount * 0.03 // Henüz validate edilmedi!
-  if (amount <= 0) throw new Error('Geçersiz miktar')
+  const fee = amount * 0.03 // Not validated yet!
+  if (amount <= 0) throw new Error('Invalid amount')
 }
 
-// ✅ Sınırda doğrula, her yerde güvende kullan
+// ✅ Validate at the boundary and use safely everywhere
 type PositiveNumber = number & { readonly __brand: 'PositiveNumber' }
 
 const validatePositive = (n: number): PositiveNumber => {
-  if (n <= 0) throw new Error('Pozitif olmalı')
+  if (n <= 0) throw new Error('Must be positive')
   return n as PositiveNumber
 }
 
 const processPayment = (amount: PositiveNumber) => {
-  const fee = amount * 0.03 // Güvenli — tip garantisi var
+  const fee = amount * 0.03 // Safe — guaranteed by the type
 }
 
-// API sınırında bir kez doğrula
+// Validate once at the API boundary
 const handleRequest = (req: Request) => {
   const amount = validatePositive(req.body.amount)
-  processPayment(amount) // Her yerde güvenle kullan
+  processPayment(amount) // Use safely everywhere
 }
 ```
 
-### Guard Clause ile Erken Dönüş
+### Early Return with Guard Clauses
 
 ```typescript
-// ❌ Derin iç içe geçmiş if — okunması zor
+// ❌ Deeply nested conditions — hard to read
 const processUser = (user: User | null) => {
   if (user) {
     if (user.email) {
       if (user.isActive) {
-        sendEmail(user.email, 'Hoş geldin!')
+        sendEmail(user.email, 'Welcome!')
       }
     }
   }
 }
 
-// ✅ Guard clause — erken dön, ana mantık temiz kalır
+// ✅ Guard clauses — return early and keep the main logic clean
 const processUser = (user: User | null) => {
   if (!user) return
   if (!user.email) return
   if (!user.isActive) return
-  sendEmail(user.email, 'Hoş geldin!')
+  sendEmail(user.email, 'Welcome!')
 }
 ```
 
-### Konfigürasyonu Başlangıçta Doğrula
+### Validate Configuration at Startup
 
 ```typescript
-// ❌ Eksik config request sırasında fark edilir
+// ❌ Missing configuration is discovered during a request
 const handler = async () => {
-  const key = process.env.API_KEY // Eksikse burada hata
+  const key = process.env.API_KEY // Fails here if missing
 }
 
-// ✅ Uygulama başlarken doğrula — geç teslim yok
+// ✅ Validate at application startup — fail early
 const loadConfig = () => {
   const apiKey = process.env.API_KEY
-  if (!apiKey) throw new Error('API_KEY zorunlu environment variable')
+  if (!apiKey) throw new Error('API_KEY is a required environment variable')
   return { apiKey }
 }
 
-const config = loadConfig() // Deploy sırasında hata → production'a geçemez
+const config = loadConfig() // Failure during deployment → cannot reach production
 ```
 
 ---
 
-## 3. Standart İş (Standardized Work)
+## 3. Standardized Work
 
-### Temel Prensip
+### Core Principle
 
-Mevcut codebase pattern'larını takip et. Yeni pattern yalnızca anlamlı bir iyileştirme sunuyorsa ve ekip onayıyla benimsenir.
+Follow the existing codebase patterns. Adopt a new pattern only when it provides a meaningful improvement and has team approval.
 
-### Mevcut Pattern'ları Takip Et
+### Follow Existing Patterns
 
 ```typescript
-// Codebase'deki mevcut pattern
+// Existing pattern in the codebase
 class UserAPIClient {
   async getUser(id: string): Promise<User> {
     return this.fetch(`/users/${id}`)
   }
 }
 
-// ✅ Yeni kod aynı pattern'ı takip eder
+// ✅ New code follows the same pattern
 class OrderAPIClient {
   async getOrder(id: string): Promise<Order> {
     return this.fetch(`/orders/${id}`)
   }
 }
 
-// ❌ "Ben function tercih ederim" gerekçesiyle farklı pattern
+// ❌ A different pattern because "I prefer functions"
 const getOrder = async (id: string): Promise<Order> => { ... }
-// → Tutarsızlık kafa karıştırır
+// → Inconsistency creates confusion
 ```
 
-### Hata Yönetimi Standardı
+### Error-Handling Standard
 
 ```typescript
-// Proje standardı: Result type — tüm servisler bunu kullanır
+// Project standard: Result type — all services use it
 type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E }
 
 const fetchCv = async (id: string): Promise<Result<CvDocument>> => {
   try {
     const cv = await db.cvs.findById(id)
-    if (!cv) return { ok: false, error: new Error('CV bulunamadı') }
+    if (!cv) return { ok: false, error: new Error('CV not found') }
     return { ok: true, value: cv }
   } catch (err) {
     return { ok: false, error: err as Error }
   }
 }
 
-// Caller tutarlı pattern kullanır
+// The caller uses the consistent pattern
 const result = await fetchCv('123')
 if (!result.ok) {
-  logger.error('CV alınamadı', result.error)
+  logger.error('Could not retrieve CV', result.error)
   return
 }
 const cv = result.value // Type-safe!
 ```
 
-### Import Organizasyonu (Standard)
+### Import Organization (Standard)
 
 ```typescript
-// Sıralama: external → internal → relative
+// Order: external → internal → relative
 import { z } from 'zod' // external
 import { NextResponse } from 'next/server' // external framework
 import { requireAuth } from '@/lib/server/auth' // internal absolute
@@ -216,67 +216,67 @@ import { CvDocument } from '../types' // relative
 import type { Metadata } from 'next' // type-only
 ```
 
-### Otomasyon ile Standardı Zorla
+### Enforce the Standard with Automation
 
 ```bash
-# Stil — otomatik uygulama
+# Style — apply automatically
 prettier --write .
 
-# Tip kontrolü — CI'da zorunlu
+# Type checking — required in CI
 tsc --noEmit
 
-# Lint — standard ihlallerini yakala
+# Lint — catch standard violations
 eslint src --ext .ts,.tsx
 ```
 
 ---
 
-## 4. Just-In-Time (JIT) — Sadece Gereken Kadar
+## 4. Just-In-Time (JIT) — Only What Is Needed
 
-### YAGNI Prensibi
+### YAGNI Principle
 
-"You Aren't Gonna Need It" — şu anki gereksinimler dışında kod yazma. "Belki ileride lazım olur" gerekçesiyle yapılan eklentiler teknik borç yaratır.
+"You Aren't Gonna Need It" — do not write code beyond current requirements. Additions justified by "we may need it later" create technical debt.
 
 ```typescript
-// ❌ Spekülatif karmaşıklık
+// ❌ Speculative complexity
 class Logger {
   private transports: LogTransport[] = []
   private queue: LogEntry[] = []
   private rateLimiter: RateLimiter
-  // 200 satır — "belki ileride farklı transport gerekir" için
+  // 200 lines for "we may need a different transport later"
 }
 
-// ✅ Şu anki ihtiyacı karşıla
+// ✅ Meet the current need
 const logError = (error: Error) => {
   console.error(error.message)
 }
-// İhtiyaç ortaya çıktığında genişlet
+// Extend when the need arises
 ```
 
-### Rule of Three — Soyutlama Zamanı
+### Rule of Three — When to Abstract
 
 ```typescript
-// 1. kullanım — direkt yaz
+// 1st use — write it directly
 const filterActiveCvs = (cvs: CvDocument[]) => cvs.filter((cv) => cv.status === 'active')
 
-// 2. kullanım — tekrar yaz (henüz soyutlama zamanı değil)
+// 2nd use — repeat it (not yet time to abstract)
 const filterActiveJobs = (jobs: Job[]) => jobs.filter((job) => job.status === 'active')
 
-// 3. kullanım — pattern kanıtlandı, soyutla
+// 3rd use — the pattern is proven; abstract it
 const filterActive = <T extends { status: string }>(items: T[]) => items.filter((item) => item.status === 'active')
 ```
 
-### Ölç, Sonra Optimize Et
+### Measure, Then Optimize
 
 ```typescript
-// Önce: Basit ve okunabilir
+// First: Simple and readable
 const getMatchingCvs = (cvs: CvDocument[], query: string) =>
   cvs.filter((cv) => cv.title.toLowerCase().includes(query.toLowerCase()))
 
-// Benchmark: 10.000 CV için 12ms — kabul edilebilir
-// → Ship et, optimizasyon yapma
+// Benchmark: 12 ms for 10,000 CVs — acceptable
+// → Ship it; do not optimize
 
-// Sonra: Profiling ile darboğaz kanıtlandıktan sonra
+// Later: After profiling proves a bottleneck
 const cvSearchIndex = new Map(cvs.map((cv) => [cv.id, cv.title.toLowerCase()]))
 const getMatchingCvs = (query: string) => {
   const q = query.toLowerCase()
@@ -284,44 +284,44 @@ const getMatchingCvs = (query: string) => {
 }
 ```
 
-### Erken Soyutlamadan Kaçın
+### Avoid Premature Abstraction
 
 ```typescript
-// ❌ Tek kullanım için generic framework
+// ❌ A generic framework for a single use
 abstract class BaseCRUDService<T> {
   abstract getAll(): Promise<T[]>
   abstract getById(id: string): Promise<T>
-  // 300 satır — tek tablo için
+  // 300 lines for one table
 }
 
-// ✅ Spesifik fonksiyonlar — pattern çıktığında soyutla
+// ✅ Specific functions — abstract when a pattern emerges
 const getCvs = async (userId: string): Promise<CvDocument[]> => db.collection('cvs').where('userId', '==', userId).get()
 ```
 
 ---
 
-## Kırmızı Bayraklar
+## Red Flags
 
-### Sürekli İyileştirme İhlalleri
+### Continuous Improvement Violations
 
-"Sonra düzeltirim" (genellikle gerçekleşmez), bulduğunuzdan daha kötü bırakmak, artımlı yerine büyük yeniden yazma tercih etmek.
+"I will fix it later" (which usually does not happen), leaving code worse than you found it, or preferring a large rewrite over incremental changes.
 
-### Poka-Yoke İhlalleri
+### Poka-Yoke Violations
 
-"Kullanıcılar dikkatli olmalı" yaklaşımı, kullanımdan sonra validation, başlangıçta doğrulanmayan konfigürasyon.
+The "users should be careful" approach, validation after use, or configuration that is not validated at startup.
 
-### Standart İş İhlalleri
+### Standardized Work Violations
 
-"Ben böyle yapmayı tercih ederim" gerekçesiyle mevcut pattern'lardan ayrılmak, proje konvansiyonlarını görmezden gelmek.
+Departing from existing patterns because "I prefer to do it this way," or ignoring project conventions.
 
-### JIT İhlalleri
+### JIT Violations
 
-"Belki ileride lazım olur", ölçülmeden optimizasyon, 3+ kullanım kanıtlanmadan soyutlama.
+"We may need it later," optimization without measurement, or abstraction before three or more uses prove the pattern.
 
 ---
 
-## Özet
+## Summary
 
-**Kaizen şunu söyler**: Mükemmellik bir seferlik değil, sürekli küçük adımlarla gelir. Bugün yeterince iyi, yarın daha iyi.
+**Kaizen says**: Excellence is not a one-time event; it comes through continuous small steps. Good enough today, better tomorrow.
 
-**Pratikte**: Her PR'da kodu bulduğunuzdan biraz daha iyi bırakın. Hataları yakalamadan önce imkânsız hale getirin. Kanıtlanmış pattern'ları takip edin. Yalnızca gerçekten gereken şeyi inşa edin.
+**In practice**: In every PR, leave the code a little better than you found it. Make errors impossible before they need to be caught. Follow proven patterns. Build only what is truly needed.

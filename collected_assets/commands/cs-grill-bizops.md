@@ -1,9 +1,15 @@
 ---
-description: Matt Pocock-style docs-anchored grilling for a BizOps plan or design. Walks the user's plan against the BizOps canon (Lean, Theory of Constraints, Gartner TPRM, DORA) one question at a time, recommends an answer per question, and refuses to invoke any sub-skill until the lane-defining decisions are locked. Use before running /cs:bizops on a fuzzy plan.
-argument-hint: "<plan, design, or fuzzy problem statement>"
+title: "/cs-grill-bizops — Slash Command for AI Coding Agents"
+description: "Matt Pocock-style docs-anchored grilling for a BizOps plan or design. Walks the user's plan against the BizOps canon (Lean, Theory of Constraints. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:grill-bizops — BizOps grill against the canon
+# /cs-grill-bizops
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-grill-bizops.md">Source</a></span>
+</div>
+
 
 Apply Matt Pocock's `grill-with-docs` discipline to this BizOps plan / problem:
 

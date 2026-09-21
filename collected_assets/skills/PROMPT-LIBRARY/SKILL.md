@@ -1,9 +1,6 @@
 ---
 name: prompt-library
-description: "A comprehensive collection of battle-tested prompts inspired by [awesome-chatgpt-prompts](https://github.com/f/awesome-chatgpt-prompts) and community best practices."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: "Curated collection of high-quality prompts for various use cases. Includes role-based prompts, task-specific templates, and prompt refinement techniques. Use when user needs prompt templates, role-play prompts, or ready-to-use prompt examples for coding, writing, analysis, or creative tasks."
 ---
 
 # 📝 Prompt Library
@@ -323,8 +320,3 @@ When crafting prompts, ensure:
 ---
 
 > 💡 **Tip**: The best prompts are specific, provide context, and include examples of desired output.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

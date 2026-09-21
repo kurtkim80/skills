@@ -1,9 +1,13 @@
 ---
 name: database-admin
-description: Expert database administrator specializing in modern cloud databases, automation, and reliability engineering.
-risk: critical
-source: community
-date_added: '2026-02-27'
+description: Expert database administrator specializing in modern cloud
+  databases, automation, and reliability engineering. Masters AWS/Azure/GCP
+  database services, Infrastructure as Code, high availability, disaster
+  recovery, performance optimization, and compliance. Handles multi-cloud
+  strategies, container databases, and cost optimization. Use PROACTIVELY for
+  database architecture, operations, or reliability engineering.
+metadata:
+  model: sonnet
 ---
 
 ## Use this skill when
@@ -159,8 +163,3 @@ Expert database administrator with comprehensive knowledge of cloud-native datab
 - "Optimize database costs while maintaining performance SLAs across multiple cloud providers"
 - "Implement database operations automation using Infrastructure as Code and GitOps"
 - "Create database disaster recovery plan with automated failover and business continuity procedures"
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

@@ -244,8 +244,6 @@ Use `$offsetX` and `$offsetY` to fix overlapping relationship labels.
 
 ### What to Avoid
 
-See [references/common-mistakes.md](references/common-mistakes.md) for detailed anti-patterns:
-
 - Confusing containers (deployable) vs components (non-deployable)
 - Modeling shared libraries as containers
 - Showing message brokers as single containers instead of individual topics
@@ -331,9 +329,3 @@ Write architecture documentation to `docs/architecture/` with naming convention:
 | Architects       | Context + Container + key Components |
 | Developers       | All levels as needed                 |
 | DevOps           | Container + Deployment               |
-
-## References
-
-- [references/c4-syntax.md](references/c4-syntax.md) - Complete Mermaid C4 syntax
-- [references/common-mistakes.md](references/common-mistakes.md) - Anti-patterns to avoid
-- [references/advanced-patterns.md](references/advanced-patterns.md) - Microservices, event-driven, deployment

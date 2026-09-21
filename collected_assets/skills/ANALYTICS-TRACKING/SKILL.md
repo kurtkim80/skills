@@ -1,10 +1,11 @@
 ---
 name: analytics-tracking
-description: Design, audit, and improve analytics tracking systems that produce reliable, decision-ready data.
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: >
+  Design, audit, and improve analytics tracking systems that produce reliable,
+  decision-ready data. Use when the user wants to set up, fix, or evaluate
+  analytics tracking (GA4, GTM, product analytics, events, conversions, UTMs).
+  This skill focuses on measurement strategy, signal quality, and validation—
+  not just firing events.
 ---
 
 # Analytics Tracking & Measurement Strategy
@@ -18,9 +19,9 @@ You do **not** treat GA4 numbers as truth unless validated.
 
 ---
 
-## Phase 0: Measurement Evidence and Optional Review Rubric
+## Phase 0: Measurement Readiness & Signal Quality Index (Required)
 
-Before changing tracking, inspect actual event definitions and sample events. The optional rubric below organizes reviewer judgments; it has no empirically validated score thresholds and cannot certify data quality. Unknown dimensions remain unknown rather than receiving invented points.
+Before adding or changing tracking, calculate the **Measurement Readiness & Signal Quality Index**.
 
 ### Purpose
 
@@ -28,7 +29,7 @@ This index answers:
 
 > **Can this analytics setup produce reliable, decision-grade insights?**
 
-Use it to identify possible:
+It prevents:
 
 * event sprawl
 * vanity tracking
@@ -110,22 +111,22 @@ This is a **diagnostic score**, not a performance KPI.
 
 ---
 
-### Illustrative planning bands (not validation gates)
+### Readiness Bands (Required)
 
 | Score  | Verdict               | Interpretation                    |
 | ------ | --------------------- | --------------------------------- |
-| 85–100 | **Measurement-Ready** | Review whether observed evidence supports the intended decision   |
+| 85–100 | **Measurement-Ready** | Safe to optimize and experiment   |
 | 70–84  | **Usable with Gaps**  | Fix issues before major decisions |
 | 55–69  | **Unreliable**        | Data cannot be trusted yet        |
 | <55    | **Broken**            | Do not act on this data           |
 
-Prioritize concrete defects such as duplicate purchases, missing exposures or consent violations regardless of the total score. A high score must never override a failed reconciliation.
+If verdict is **Broken**, stop and recommend remediation first.
 
 ---
 
 ## Phase 1: Context & Decision Definition
 
-(Start from the product decision and available evidence)
+(Proceed only after scoring)
 
 ### 1. Business Context
 
@@ -355,7 +356,7 @@ Analytics that violate trust undermine optimization.
 
 ### Measurement Strategy Summary
 
-* Observed reconciliation results, unknowns and optional subjective rubric
+* Measurement Readiness Index score + verdict
 * Key risks and gaps
 * Recommended remediation order
 
@@ -401,20 +402,3 @@ Analytics that violate trust undermine optimization.
 * **programmatic-seo** – Scale requires reliable signals
 
 ---
-
-## When to Use
-
-Use when adding a decision-relevant event, investigating discrepant conversion counts, or auditing consent, attribution and duplicate firing. Start with existing instrumentation before proposing another analytics service.
-
-## Worked example
-
-Input: the UI fires `purchase_completed` on both redirect and reload. Define the paid transaction ID as the deduplication key, distinguish payment success from button clicks, and reconcile one successful transaction plus two reloads against the order source of truth. Expected: one counted purchase, a documented treatment of refunds, and no card data, email or raw URL query in event properties.
-
-Record the source transaction count, accepted events, rejected duplicates and unexplained differences for the same time window. Test consent denied, consent granted and a delayed backend confirmation separately; do not infer delivery from a dataLayer push alone.
-
-## Limitations
-
-- Browser blockers, consent and offline clients create missing data; analytics totals need not equal all users or transactions.
-- Attribution models describe assigned credit, not causal impact.
-- Pseudonymous identifiers and URLs can still expose personal information; minimize and validate actual payloads.
-- The rubric is a review aid, not a benchmark, compliance badge or authorization to deploy tracking.

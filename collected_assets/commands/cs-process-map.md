@@ -1,9 +1,15 @@
 ---
-description: Map an internal business process (BPMN-style swim lanes), measure cycle time, and detect bottlenecks where work spends most of its time waiting. Direct invocation of the process-mapper skill.
-argument-hint: "<process description or path to process JSON>"
+title: "/cs-process-map — Slash Command for AI Coding Agents"
+description: "Map an internal business process (BPMN-style swim lanes), measure cycle time, and detect bottlenecks where work spends most of its time waiting. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:process-map — BPMN-style process mapping + bottleneck detection
+# /cs-process-map
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-process-map.md">Source</a></span>
+</div>
+
 
 Run the `process-mapper` skill on this input:
 

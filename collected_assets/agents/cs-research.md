@@ -1,13 +1,16 @@
 ---
-name: cs-research
-description: Hybrid research router + fallback persona. Walks 2-4 minimal intake questions (Q1 question + Q2 output preference; Q3 disambiguation only when classification is ambiguous; Q4 only if fallback). Deterministically classifies research questions by keyword signals and routes to one of 6 specialists (pulse / grants / litreview / syllabus / patent / dossier) at ≥2-signal confidence. Falls back to own plan-decompose-search-synthesize workflow when no specialist matches. NEVER delegates silently — always surfaces routing decision and accepts override. Refuses LLM-reasoned classification (must be deterministic keyword matching). Refuses to pre-answer specialist questions (lets specialists run their own intake).
-skills: research/research/skills/research
-domain: research
-model: opus
-tools: [Read, Write, Bash, WebSearch, WebFetch]
+title: "Research Agent — AI Coding Agent & Codex Skill"
+description: "Hybrid research router + fallback persona. Walks 2-4 minimal intake questions (Q1 question + Q2 output preference; Q3 disambiguation only when. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Research Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Research</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/research/agents/cs-research.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -65,7 +68,7 @@ Differentiates from siblings:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/research/`
+**Skill Location:** [`skills/research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/research/skills/research)
 
 ### Python Tools (Stdlib)
 
@@ -82,7 +85,7 @@ Differentiates from siblings:
 ## Related Agents
 
 - All 6 routing targets (research/): cs-pulse, cs-litreview, cs-grants, cs-dossier, cs-patent, cs-syllabus
-- [cs-notebooklm](../../notebooklm/agents/cs-notebooklm.md) — research-domain sibling, browser-automation shape (NOT a routing target — different mode)
+- [cs-notebooklm](https://github.com/alirezarezvani/claude-skills/tree/main/research/notebooklm/agents/cs-notebooklm.md) — research-domain sibling, browser-automation shape (NOT a routing target — different mode)
 - DIFFERENT use case: `engineering/autoresearch-agent` (Karpathy's file-optimization experiment loop)
 
 ---

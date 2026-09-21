@@ -1,9 +1,15 @@
 ---
-description: Partner tier classification (Referral / Reseller / OEM / SI / Strategic) + joint GTM plan + revshare model. NOT technical sale and NOT channel economics math. Direct invocation of the partnerships-architect skill.
-argument-hint: "<partner intake: type, evidence of independent demand, commitments>"
+title: "/cs-partner-tier — Slash Command for AI Coding Agents"
+description: "Partner tier classification (Referral / Reseller / OEM / SI / Strategic) + joint GTM plan + revshare model. NOT technical sale and NOT channel. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:partner-tier — Partner tier + joint GTM + revshare
+# /cs-partner-tier
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-partner-tier.md">Source</a></span>
+</div>
+
 
 Run the `partnerships-architect` skill on this input:
 

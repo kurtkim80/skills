@@ -98,7 +98,7 @@ Add to your MCP config file (`.cursor/mcp.json`, `.vscode/mcp.json`, etc.):
 }
 ```
 
-For complete setup details, see `references/SETUP.md`.
+Verify the current package documentation before installation because commands, providers, and configuration fields may change.
 
 ## Basic Workflow
 
@@ -252,13 +252,6 @@ Task Master supports full SDD workflow:
 - Complexity analysis
 - Implementation tracking
 - Progress documentation
-
-## Resources
-
-- `references/SETUP.md` - Complete installation and configuration
-- `references/WORKFLOW.md` - Detailed development workflows
-- `references/COMMANDS.md` - Comprehensive command reference
-- `references/BEST_PRACTICES.md` - Tips and patterns
 
 ## References
 

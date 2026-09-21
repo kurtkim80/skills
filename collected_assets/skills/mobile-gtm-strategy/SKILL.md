@@ -7,11 +7,12 @@ description: >
   Use when: planning an app launch, ASO, user acquisition, pricing strategy,
   competitor analysis, app marketing, App Store / Play Store optimisation,
   influencer campaigns, paid UA, CPI, ROAS, LTV:CAC ratio.
-version: 1.0.0
 allowed-tools: Read, Glob, Grep
 ---
 
 # Mobile GTM Strategy
+
+Store metadata limits, platform policies, attribution behavior, advertising rules, and channel benchmarks change over time. Verify current official platform guidance before making launch or spend decisions.
 
 > From app launch to scaled growth: ICP definition, positioning, ASO,
 > user acquisition, and a sustainable growth framework.

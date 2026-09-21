@@ -9,10 +9,6 @@ description: >
   optimistic). Use when: building investor financial models, projecting MRR/ARR,
   calculating burn rate and runway, evaluating pricing tiers, planning headcount
   budgets, auditing subscription costs, or preparing for a funding round.
-version: 1.0.0
-merged-from:
-  - startup-financial-modeling v1.0.0
-  - budget-optimizer v1.0.0
 ---
 
 # Mobile App Financial Planning

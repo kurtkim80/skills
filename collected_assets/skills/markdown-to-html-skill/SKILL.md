@@ -5,38 +5,38 @@ description: Convert Markdown files to HTML using marked.js, pandoc, gomarkdown,
 
 # Markdown to HTML Skill
 
-Markdown dokümanlarını HTML'e dönüştürme — marked.js, pandoc, gomarkdown, Jekyll ve Hugo için kapsamlı rehber.
+A comprehensive guide to converting Markdown documents to HTML with marked.js, pandoc, gomarkdown, Jekyll, and Hugo.
 
 ## When to use this skill
 
-- `.md` dosyasını HTML'e dönüştürmek için
-- Static site (Jekyll, Hugo) kurulumu veya template geliştirmek için
-- Blog, dokümantasyon veya içerik sitesi oluştururken
-- Custom markdown → HTML dönüştürme scripti yazarken
+- To convert a `.md` file to HTML
+- To set up a static site (Jekyll, Hugo) or develop a template
+- When creating a blog, documentation site, or content site
+- When writing a custom Markdown-to-HTML conversion script
 
 ---
 
-## 1. Temel Dönüşüm Referansı
+## 1. Basic Conversion Reference
 
 ```markdown
-# Başlık 1 → <h1>Başlık 1</h1>
+# Heading 1 → <h1>Heading 1</h1>
 
-## Başlık 2 → <h2>Başlık 2</h2>
+## Heading 2 → <h2>Heading 2</h2>
 
 [link](https://x.com) → <a href="https://x.com ">link</a>
-`kod` → <code>kod</code>
-**kalın** → <strong>kalın</strong>
-_italik_ → <em>italik</em>
+`code` → <code>code</code>
+**bold** → <strong>bold</strong>
+_italic_ → <em>italic</em>
 
-- madde 1 → <ul><li>madde 1</li></ul>
+- item 1 → <ul><li>item 1</li></ul>
 
-1. madde 1 → <ol><li>madde 1</li></ol>
+1. item 1 → <ol><li>item 1</li></ol>
 ```
 
-### Tablo
+### Table
 
 ```markdown
-| Ad  | Değer |
+| Name | Value |
 | --- | ----- |
 | A   | 1     |
 ```
@@ -45,8 +45,8 @@ _italik_ → <em>italik</em>
 <table>
   <thead>
     <tr>
-      <th>Ad</th>
-      <th>Değer</th>
+      <th>Name</th>
+      <th>Value</th>
     </tr>
   </thead>
   <tbody>
@@ -58,7 +58,7 @@ _italik_ → <em>italik</em>
 </table>
 ```
 
-### Kod Bloğu
+### Code Block
 
 ````markdown
 ```js
@@ -78,49 +78,49 @@ console.log("hello");
 
 ## 2. marked.js (Node.js)
 
-### Kurulum
+### Installation
 
 ```bash
 npm install -g marked      # CLI
 npm install marked         # Programmatic
 ```
 
-### CLI Kullanımı
+### CLI Usage
 
 ```bash
-# Dosya dönüştür
+# Convert a file
 marked -i input.md -o output.html
 
-# Standalone HTML (head/body dahil)
+# Standalone HTML (includes head/body)
 marked -i input.md -o output.html --gfm
 
-# Config dosyasıyla
+# With a configuration file
 marked -i input.md -o output.html -c config.json
 ```
 
-### CLI Seçenekleri
+### CLI Options
 
-| Seçenek    | Açıklama                 |
+| Option     | Description              |
 | ---------- | ------------------------ |
-| `-i`       | Input dosyası            |
-| `-o`       | Output dosyası           |
+| `-i`       | Input file               |
+| `-o`       | Output file              |
 | `--gfm`    | GitHub Flavored Markdown |
 | `--breaks` | Newline → `<br>`         |
 
-### Programmatic Kullanım
+### Programmatic Usage
 
 ```javascript
 const { marked } = require('marked')
 
-const markdown = '# Merhaba\nBu **markdown**.'
+const markdown = '# Hello\nThis is **markdown**.'
 const html = marked.parse(markdown)
 console.log(html)
-// <h1>Merhaba</h1><p>Bu <strong>markdown</strong>.</p>
+// <h1>Hello</h1><p>This is <strong>markdown</strong>.</p>
 ```
 
-### Güvenlik (Önemli)
+### Security (Important)
 
-marked.js HTML'i sanitize **etmez**. Güvenilmeyen input için:
+marked.js does **not** sanitize HTML. For untrusted input:
 
 ```javascript
 import { marked } from 'marked'
@@ -134,48 +134,48 @@ const safeHtml = DOMPurify.sanitize(unsafeHtml)
 
 ## 3. Pandoc
 
-### Kurulum
+### Installation
 
-https://pandoc.org/installing.html — OS'a göre indir
+https://pandoc.org/installing.html — download for your operating system
 
-### Temel Kullanım
+### Basic Usage
 
 ```bash
 # Markdown → HTML
 pandoc input.md -o output.html
 
-# Standalone (head/body dahil)
+# Standalone (includes head/body)
 pandoc input.md -s -o output.html
 
-# Format belirterek
+# With an explicit format
 pandoc input.md -f markdown -t html -s -o output.html
 
 # HTML → Markdown
 pandoc -f html -t markdown input.html -o output.md
 
-# Markdown → PDF (LaTeX gerekli)
+# Markdown → PDF (requires LaTeX)
 pandoc input.md -s -o output.pdf
 
 # Markdown → Word
 pandoc input.md -s -o output.docx
 ```
 
-### Pandoc Seçenekleri
+### Pandoc Options
 
-| Seçenek     | Açıklama                            |
+| Option      | Description                         |
 | ----------- | ----------------------------------- |
 | `-f`        | Input format                        |
 | `-t`        | Output format                       |
 | `-s`        | Standalone (head/body)              |
 | `--mathml`  | Math → MathML                       |
-| `--toc`     | İçindekiler tablosu                 |
-| `--sandbox` | Güvenli mod (dış dosya erişimi yok) |
+| `--toc`     | Table of contents                   |
+| `--sandbox` | Safe mode (no external file access) |
 
 ---
 
 ## 4. Jekyll (Ruby Static Site)
 
-### Kurulum
+### Installation
 
 ```bash
 gem install jekyll bundler
@@ -185,40 +185,40 @@ bundle exec jekyll serve
 # http://localhost:4000
 ```
 
-### Markdown Yapısı
+### Markdown Structure
 
 ```
 _posts/
-  2025-03-22-baslik.md     ← YYYY-MM-DD-slug.md formatı
+  2025-03-22-title.md      ← YYYY-MM-DD-slug.md format
 
 _layouts/
-  default.html             ← Ana layout
+  default.html             ← Main layout
 
 _includes/
   header.html
 
-index.md                   ← Ana sayfa
+index.md                   ← Home page
 ```
 
-### Post Yapısı
+### Post Structure
 
 ```markdown
 ---
 layout: default
-title: 'Yazı Başlığı'
+title: 'Post Title'
 date: 2025-03-22
 tags: [react, nextjs]
 ---
 
-# İçerik buraya
+# Content goes here
 ```
 
-### Build ve Deploy
+### Build and Deploy
 
 ```bash
-bundle exec jekyll build              # _site/ klasörü oluşturur
+bundle exec jekyll build              # Creates the _site/ directory
 JEKYLL_ENV=production bundle exec jekyll build
-bundle exec jekyll serve --livereload # Live reload ile geliştirme
+bundle exec jekyll serve --livereload # Development with live reload
 ```
 
 ### Config (\_config.yml)
@@ -238,7 +238,7 @@ exclude:
 
 ## 5. Hugo (Go Static Site)
 
-### Kurulum
+### Installation
 
 https://gohugo.io/installation/
 
@@ -249,16 +249,16 @@ git init
 git submodule add https://github.com/theNewDynamic/gohugo-theme-ananke  themes/ananke
 echo "theme = 'ananke'" >> hugo.toml
 
-hugo new content posts/ilk-yazi.md
-hugo server -D   # Draft dahil
+hugo new content posts/first-post.md
+hugo server -D   # Includes drafts
 ```
 
-### İçerik Yapısı
+### Content Structure
 
 ```
 content/
   posts/
-    ilk-yazi.md
+    first-post.md
 
 layouts/
   _default/
@@ -266,25 +266,25 @@ layouts/
     list.html
 ```
 
-### Post Yapısı
+### Post Structure
 
 ```markdown
 ---
-title: 'İlk Yazım'
+title: 'My First Post'
 date: 2025-03-22T10:00:00+03:00
 draft: false
 tags: ['react', 'nextjs']
 ---
 
-İçerik buraya.
+Content goes here.
 ```
 
-### Build Komutları
+### Build Commands
 
 ```bash
-hugo                  # public/ klasörü oluşturur
+hugo                  # Creates the public/ directory
 hugo --minify         # Minified output
-hugo server -D        # Draft dahil geliştirme sunucusu
+hugo server -D        # Development server including drafts
 ```
 
 ### Hugo Config (hugo.toml)
@@ -293,7 +293,7 @@ hugo server -D        # Draft dahil geliştirme sunucusu
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
-      unsafe = false  # Raw HTML için true yap
+      unsafe = false  # Set to true for raw HTML
     [markup.goldmark.extensions]
       table = true
       strikethrough = true
@@ -302,30 +302,30 @@ hugo server -D        # Draft dahil geliştirme sunucusu
 
 ---
 
-## 6. Karşılaştırma
+## 6. Comparison
 
-| Araç       | Dil    | Hız       | Kullanım Kolaylığı |
+| Tool       | Language | Speed     | Ease of Use        |
 | ---------- | ------ | --------- | ------------------ |
-| marked.js  | JS     | Hızlı     | ⭐⭐⭐⭐⭐         |
-| pandoc     | Binary | Orta      | ⭐⭐⭐⭐           |
-| Jekyll     | Ruby   | Orta      | ⭐⭐⭐             |
-| Hugo       | Go     | Çok hızlı | ⭐⭐⭐⭐           |
-| gomarkdown | Go     | Çok hızlı | ⭐⭐⭐             |
+| marked.js  | JS     | Fast      | ⭐⭐⭐⭐⭐         |
+| pandoc     | Binary | Medium    | ⭐⭐⭐⭐           |
+| Jekyll     | Ruby   | Medium    | ⭐⭐⭐             |
+| Hugo       | Go     | Very fast | ⭐⭐⭐⭐           |
+| gomarkdown | Go     | Very fast | ⭐⭐⭐             |
 
-**Öneri:**
+**Recommendation:**
 
-- Hızlı dönüşüm scripti → marked.js
-- Çok format desteği → pandoc
-- Blog/içerik sitesi → Hugo (hız) veya Jekyll (ekosistem)
+- Fast conversion script → marked.js
+- Broad format support → pandoc
+- Blog/content site → Hugo (speed) or Jekyll (ecosystem)
 
 ---
 
-## 7. Sorun Giderme
+## 7. Troubleshooting
 
-| Sorun                   | Çözüm                                          |
+| Problem                 | Solution                                       |
 | ----------------------- | ---------------------------------------------- |
-| Tablo render olmuyor    | `gfm: true` / `table` extension aktif et       |
-| Line break yok          | `breaks: true` seçeneği ekle                   |
-| Raw HTML render olmuyor | Hugo: `unsafe = true`, marked: varsayılan açık |
-| XSS riski               | DOMPurify ile sanitize et                      |
-| Türkçe karakter sorunu  | UTF-8 encoding, `chcp 65001` (Windows)         |
+| Table does not render   | Enable `gfm: true` / the `table` extension     |
+| No line breaks          | Add the `breaks: true` option                  |
+| Raw HTML does not render | Hugo: `unsafe = true`; marked: enabled by default |
+| XSS risk                | Sanitize with DOMPurify                        |
+| Non-ASCII character issue | UTF-8 encoding, `chcp 65001` (Windows)       |

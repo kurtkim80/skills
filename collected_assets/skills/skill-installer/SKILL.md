@@ -1,304 +1,290 @@
 ---
 name: skill-installer
-description: Instala, valida, registra e verifica novas skills no ecossistema. 10 checks de seguranca, copia, registro no orchestrator e verificacao pos-instalacao.
-risk: safe
-source: community
-date_added: '2026-03-06'
-author: renat
-tags:
-- skill-management
-- deployment
-- validation
-- installation
-tools:
-- claude-code
-- antigravity
-- cursor
-- gemini-cli
-- codex-cli
+description: "Bootstrap, install, and reconcile Agent Skills in a consuming repository from its adoption declaration. Use when establishing a new managed installation or reconciling installed skills to approved adoption intent."
+license: MIT
+metadata:
+  skill-type: deliverable
+  prose-setting: instruction
 ---
 
-# Skill Installer v3.0
+# Skill installer
 
-## Overview
+`skill-installer` establishes and reconciles Agent Skills in a consuming
+repository.
 
-Instala, valida, registra e verifica novas skills no ecossistema. 10 checks de seguranca, copia, registro no orchestrator e verificacao pos-instalacao.
+Installation state and project authority are separate. Installing a skill does
+not assign a profile, authorize work, widen scope, or grant mutation authority.
 
-## When to Use This Skill
+## Lifecycle
 
-- When the user mentions "instalar skill" or related topics
-- When the user mentions "install skill" or related topics
-- When the user mentions "registrar skill" or related topics
-- When the user mentions "nova skill" or related topics
-- When the user mentions "new skill" or related topics
-- When the user mentions "adicionar skill ao ecossistema" or related topics
+The installer lifecycle is:
 
-## Do Not Use This Skill When
+1. Start with no managed installation.
+2. Bootstrap durable consumer state.
+3. Establish a managed installation.
+4. Reconcile approved adoption intent.
 
-- The task is unrelated to skill installer
-- A simpler, more specific tool can handle the request
-- The user needs general-purpose assistance without domain expertise
+Bootstrap establishes durable consumer files and any explicitly selected client
+integration. A missing durable file may be created from its bundled template.
 
-## How It Works
+A managed installation reads `.agents/adoption.yml`, acquires the declared
+pinned repositories, resolves installation closure, materializes installed
+skills under `.agents/skills/`, and records generated installation state in the
+installation manifest.
 
-Agente instalador enterprise-grade que garante que toda skill criada (via skill-creator
-ou manualmente) seja corretamente instalada, registrada e verificada no ecossistema.
-Inclui auto-repair, rollback, dry-run, dashboard, e diagnostico avancado.
+Reconciliation uses the same installation implementation. The adoption
+declaration, not generated installation state, remains the durable statement of
+intended installation.
 
-## Principio: Redundancia Maxima
+## Consumer-owned durable files
 
-Seis camadas de validacao garantem que nenhuma skill fique mal-instalada:
+The installer bootstraps three durable consumer files:
 
-| Camada | Script | O que valida |
-|--------|--------|-------------|
-| 1 | detect_skills.py | SKILL.md existe + tem frontmatter |
-| 2 | validate_skill.py | 10 checks profundos |
-| 3 | install_skill.py (pre) | Conflitos, permissoes, espaco, versao |
-| 4 | install_skill.py (pos) | Arquivos copiados corretamente |
-| 5 | scan_registry.py | Skill aparece no registry (com deduplicacao) |
-| 6 | package_skill.py | ZIP valido sem backslashes, nao-vazio, integrity check |
+* `.agents/adoption.yml` from
+  [`assets/adoption-template.yml`](assets/adoption-template.yml);
+* root `PROJECT.md` from
+  [`assets/PROJECT-template.md`](assets/PROJECT-template.md);
+* the installer-owned marked section of root `AGENTS.md` from
+  [`assets/AGENTS-template.md`](assets/AGENTS-template.md).
 
----
+An existing adoption declaration is never overwritten.
 
-## Localizacao
+An existing `PROJECT.md` is never overwritten.
 
-```
-C:\Users\renat\skills\skill-installer\
-├── SKILL.md              <- este arquivo
-├── scripts/
-│   ├── install_skill.py  <- instalador principal (11 passos) + todos os comandos
-│   ├── detect_skills.py  <- scanner de skills nao-instaladas
-│   ├── validate_skill.py <- validacao profunda (10 checks)
-│   ├── package_skill.py  <- empacotador ZIP + verificador de integridade
-│   └── requirements.txt
-├── references/
-│   └── known-locations.md
-└── data/
-    ├── install_log.json  <- log de operacoes (auto-gerado, com rotacao)
-    ├── backups/          <- backups antes de sobrescrever
-    └── staging/          <- area temporaria para copias seguras
+The installer-owned section of `AGENTS.md` exists only between its installer markers.
+Content outside those markers belongs to the consuming repository.
+
+## Generated installation state
+
+Generated installation state is reconstructable from durable configuration.
+
+Repository acquisition uses:
+
+```text
+.agents/vendor/<owner>/<repository>/
 ```
 
----
+Runtime materialization uses:
 
-## Workflow Principal
-
-Quando esta skill for ativada, siga estes passos na ordem:
-
-## Cenario 1: Apos Skill-Creator Finalizar
-
-O skill-creator acabou de criar uma skill em algum diretorio. Execute:
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --source "<caminho-da-skill-criada>" --force
+```text
+.agents/skills/<skill-name>/
 ```
 
-Substitua `<caminho-da-skill-criada>` pelo diretorio onde o skill-creator salvou a skill.
+Source skill paths are symlink-free. For every selected root-library or external skill, every path component from the acquired checkout root to the selected bundle and every entry inside that bundle must be a real directory or regular file. Any symbolic link — file, directory, dangling, internal, or escaping — is a stop condition. The installer never follows, preserves, dereferences, or materializes a source symlink.
 
-## Cenario 2: Usuario Pede Para Instalar Uma Skill Especifica
+Installer-owned client exposure links are separate generated integration state and remain governed by the client-integration contract below.
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --source "<caminho>" [--name "nome-override"] [--force]
+The installation manifest records the last successfully installed generated
+state. It is not an authority source and does not replace the adoption
+declaration.
+
+Client-specific discovery surfaces are separate from runtime materialization.
+They do not determine installation state.
+
+## Entry points
+
+Platform entry points are:
+
+* [`scripts/install.sh`](scripts/install.sh) for POSIX environments;
+* [`scripts/install.ps1`](scripts/install.ps1) for PowerShell environments.
+
+Non-mutating checker entry points are:
+
+* [`scripts/check-skills.py`](scripts/check-skills.py) for installed-skill and
+  generated-state integrity;
+* [`scripts/check-bindings.py`](scripts/check-bindings.py) for applicable
+  `PROJECT.md` binding integrity;
+* [`scripts/check-update.py`](scripts/check-update.py) for remote update
+  discovery and candidate comparison.
+
+Shared internal implementation:
+
+* [`scripts/git_ops.py`](scripts/git_ops.py) provides Git checkout
+  inspection, repository acquisition, and remote-reference retrieval. It is
+  not a command-line entry point.
+
+`install.py` invokes these checker surfaces. It does not maintain separate
+copies of their checks.
+
+Each wrapper performs its own runtime preflight — a supported Python
+interpreter, Git availability, and Git-working-tree-root identity for the
+supplied consumer root — before delegating installation to
+[`scripts/install.py`](scripts/install.py) unchanged. A preflight failure
+stops before any installation mutation; it does not verify installation
+integrity.
+
+Direct Python invocation remains supported:
+
+```text
+python scripts/install.py --root <consumer-root>
 ```
 
-## Cenario 3: Simular Instalacao Sem Fazer Nada (Dry-Run)
+The consumer root is explicit. The installer's physical location and the
+caller's working directory do not determine installation authority or target.
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --source "<caminho>" --dry-run
+## Runtime dependencies
+
+`skill-installer` requires Python 3.12 or later, Git, and the Python packages
+pinned in [`scripts/requirements.txt`](scripts/requirements.txt).
+
+Provision the dependencies in an existing authorized Bazel environment or an
+isolated virtual environment before invoking the installer. Use that
+environment's Python interpreter to install the bundled requirements and
+execute the installer. Do not install packages into system Python.
+
+The platform wrappers select a supported interpreter and invoke
+`install.py`. They do not install Python packages automatically. A missing
+runtime dependency is a preflight failure with a diagnostic identifying
+`scripts/requirements.txt`.
+
+## Installation and reconciliation
+
+`install.py` is the human-facing transaction coordinator.
+
+Its primary modes are:
+
+* default — bootstrap, initial installation, or reconciliation to adoption
+  intent that the consumer has already changed;
+* `--verify` — run installed-skill and project-binding checks without mutation;
+* `--update` — inspect and install an explicitly selected source revision;
+* `--repair` — reconstruct installer-owned generated state without changing
+  adoption intent.
+
+`--verify`, `--update`, and `--repair` are mutually exclusive.
+
+`--target-version <ref>` is valid only with `--update`.
+
+`--bindings <file>` supplies project-binding decisions for default, update, or
+repair operation. The file is transient installer input. `PROJECT.md` remains
+the durable binding authority.
+
+`--force` suppresses the final mutation confirmation. It does not bypass
+validation, ownership, provenance, collisions, drift, malformed durable state,
+or binding conflicts.
+
+Client selection remains explicit through repeatable `--client <client-name>`.
+
+Mutating modes may acquire a candidate into transaction-owned disposable
+staging before final confirmation solely for inspection, validation, and
+construction of the complete persistent mutation plan. Disposable staging is
+not installed state and grants no approval to promote or otherwise mutate
+durable consumer state.
+
+Before promotion or any other persistent mutation, the installer presents the
+complete persistent mutation set. Unless `--force` is present, persistent
+mutation requires:
+
+```text
+Continue? [Y/n]
 ```
 
-Mostra exatamente o que seria feito em cada um dos 11 passos, sem alterar nenhum arquivo.
+`--verify` remains offline and does not create inspection staging or mutate
+consumer state.
 
-## Cenario 4: Detectar E Instalar Skills Pendentes
+The transaction coordinator owns and cleans its transaction staging.
+`check-update.py`, when invoked independently for comparison, owns and cleans
+its own temporary checkout.
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --detect
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --detect --auto
+`--update` may change only the adopted `commit` and `release`. It does not
+silently change `source` or the directly adopted `skills` list.
+
+`--repair` never changes adoption intent.
+
+There is no separate uninstall mode. A skill that is no longer desired appears
+in the proposed removal set and is removed only after the same confirmation.
+
+The installation manifest records the last successfully verified generated
+installation state. A candidate manifest is verified by `check-skills.py`
+before it replaces the prior manifest.
+
+Project-binding findings do not redefine installation integrity. A successfully
+verified installation may record its manifest even when an applicable project
+binding remains unresolved; the installer reports that binding finding and
+returns a failing verification result.
+
+## Bootstrap assets
+
+If `.agents/adoption.yml` does not exist, copy the bundled adoption template and
+stop before repository acquisition or skill materialization. The consumer must
+complete the adoption declaration before installation continues.
+
+If `PROJECT.md` does not exist, copy the bundled project template. Never
+overwrite an existing `PROJECT.md`.
+
+If `AGENTS.md` does not exist, create it from the bundled marked
+installer-owned section.
+
+If `AGENTS.md` exists without installer markers, append the marked
+installer-owned section.
+
+If exactly one valid installer marker pair exists, replace that complete marked
+section with the bundled template.
+
+Malformed, unmatched, nested, or duplicate installer markers are a stop
+condition. Do not guess ownership.
+
+## Client integration
+
+Client integration is explicit.
+
+Use:
+
+```text
+--client <client-name>
 ```
 
-Escaneia locais conhecidos (Desktop, Downloads, Temp, workspaces) e apresenta
-candidatos com timestamps e tamanho. Com --auto instala todos automaticamente.
+to request a supported client's discovery and governance wiring.
 
-## Cenario 5: Desinstalar Uma Skill
+Do not infer a client from repository contents, installed applications,
+environment variables, or current execution context.
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --uninstall "nome-da-skill"
-```
+A client discovery surface does not establish installation state or authority.
 
-Remove de `skills/`, `.claude/skills/`, atualiza o registry e remove ZIP do Desktop.
-Backup automatico e feito antes da remocao.
+Every materialized skill under `.agents/skills/<skill-name>/` is the complete,
+self-contained installed Agent Skill. A client wraps that canonical surface;
+it does not rebuild, copy, or reinterpret it.
 
-## Cenario 6: Health Check + Auto-Repair
+A selected client supplies only its own facts:
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --health
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --health --repair
-```
+* a client identifier;
+* a skill root under which it discovers installed skills;
+* any client-specific governance integration.
 
-`--health` verifica TODAS as skills: frontmatter, registro, registry, duplicatas.
-`--health --repair` encontra problemas E os corrige automaticamente:
-- Skills nao registradas -> registra
-- Skills faltando no registry -> atualiza
-- Duplicatas -> remove
+One reconciliation implementation, shared by every client, then derives the
+desired exposure set directly from `.agents/skills/*` and reconciles the
+client's skill root to it: creating missing exposure, correcting an owned
+exposure whose materialized target changed, removing an owned exposure for a
+skill no longer installed, and preserving every unrelated entry already
+there. A desired name that collides with content it does not own is a stop
+condition, not an overwrite. The current mechanism is one directory symlink
+per installed skill.
 
-## Cenario 7: Rollback (Restaurar De Backup)
+## Claude
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --rollback "nome-da-skill"
-```
+[`references/CLAUDE.md`](references/CLAUDE.md) is the single home for
+Claude-specific client facts. Nothing there redefines the shared
+reconciliation above.
 
-Encontra o backup mais recente da skill e restaura para o estado anterior.
-Re-registra e atualiza o registry automaticamente.
+## Stop conditions
 
-## Cenario 8: Reinstalar Todas As Skills
+Stop without inferring a repair when:
 
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --reinstall-all
-```
+* required durable configuration is malformed;
+* an existing consumer-owned durable file would need to be overwritten outside
+  an explicitly installer-owned section;
+* installer markers in `AGENTS.md` are malformed or ambiguous;
+* the adoption declaration is incomplete or invalid;
+* a declared source or immutable revision cannot be resolved;
+* installation closure cannot be resolved;
+* existing generated installation state cannot be reconciled safely under the
+  declared adoption intent;
+* a selected client integration collides with unrelated consumer content;
+* a selected client requires an unavailable runtime capability;
+* continuing would require deciding profile assignment, project bindings,
+  permission policy, or other consumer-owned values.
 
-Re-registra TODAS as skills em `.claude/skills/`, re-empacota todos os ZIPs,
-e atualiza o registry. Util apos mudancas em massa ou migracao.
+## Final rule
 
-## Cenario 9: Dashboard De Status
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --status
-```
-
-Exibe dashboard rico com: nome, versao, saude, registro, backups de cada skill,
-estatisticas de operacoes (installs, uninstalls, rollbacks).
-
-## Cenario 10: Ver Historico De Operacoes
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --log
-python C:\Users\renat\skills\skill-installer\scripts\install_skill.py --log 50
-```
-
-Mostra as ultimas N operacoes com timestamp, tipo, skill e resultado.
-
----
-
-## Validar Uma Skill
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\validate_skill.py "C:\caminho\para\skill"
-python C:\Users\renat\skills\skill-installer\scripts\validate_skill.py "C:\caminho\para\skill" --strict
-```
-
-Retorna JSON com `valid` (bool), `checks`, `warnings`, `errors`.
-
-## Detectar Skills Nao-Instaladas
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\detect_skills.py
-python C:\Users\renat\skills\skill-installer\scripts\detect_skills.py --path "C:\diretorio\especifico"
-python C:\Users\renat\skills\skill-installer\scripts\detect_skills.py --all
-```
-
-Retorna JSON com candidatos incluindo: `name`, `source_path`, `already_installed`,
-`valid_frontmatter`, `last_modified`, `size_kb`, `file_count`.
-
-## Empacotar Zip Para Claude.Ai
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\package_skill.py --source "C:\caminho"
-python C:\Users\renat\skills\skill-installer\scripts\package_skill.py --all
-python C:\Users\renat\skills\skill-installer\scripts\package_skill.py --all --output "C:\Users\renat\Desktop"
-```
-
-## Verificar Integridade De Zips Existentes
-
-```bash
-python C:\Users\renat\skills\skill-installer\scripts\package_skill.py --verify
-python C:\Users\renat\skills\skill-installer\scripts\package_skill.py --verify --output "C:\Users\renat\Desktop"
-```
-
----
-
-## Install_Skill.Py
-
-| Comando | Descricao |
-|---------|-----------|
-| `--source <path>` | Instalar skill de caminho |
-| `--source <path> --force` | Sobrescrever se existir |
-| `--source <path> --name <nome>` | Nome customizado |
-| `--source <path> --dry-run` | Simular sem alterar |
-| `--detect` | Auto-detectar skills pendentes |
-| `--detect --auto` | Detectar e instalar automaticamente |
-| `--uninstall <nome>` | Desinstalar (com backup) |
-| `--rollback <nome>` | Restaurar do ultimo backup |
-| `--reinstall-all` | Re-registrar + re-empacotar todas |
-| `--health` | Health check de todas as skills |
-| `--health --repair` | Health check + auto-correcao |
-| `--status` | Dashboard rico com versoes, saude, backups |
-| `--log [N]` | Ultimas N operacoes (padrao: 20) |
-| `--json` | Saida JSON em vez de texto formatado |
-
----
-
-## O Que O Instalador Faz (11 Passos)
-
-1. **Resolver fonte** - identifica o diretorio da skill
-2. **Validar** - roda 10 checks no SKILL.md e estrutura
-3. **Determinar nome** - extrai do frontmatter ou usa --name, compara versoes
-4. **Verificar conflitos** - checa se ja existe no destino
-5. **Backup** - se sobrescrevendo, faz backup timestamped (exclui backups/ e staging/)
-6. **Copiar via staging** - copia para area temp, valida hash, depois move
-7. **Registrar no Claude Code CLI** - copia SKILL.md para .claude/skills/<nome>/
-8. **Atualizar registry** - roda scan_registry.py --force (com deduplicacao por nome)
-9. **Verificar instalacao** - confirma arquivos, registry, registro (5 checks)
-10. **Empacotar ZIP** - cria ZIP para upload no Claude.ai web/desktop (validado)
-11. **Logar operacao** - append em install_log.json (com rotacao automatica)
-
-**IMPORTANTE**: Skills no Claude Code (CLI) e Claude.ai (web/desktop) sao SEPARADAS.
-O instalador cobre ambas superficies automaticamente.
-
----
-
-## Seguranca
-
-- **Backups automaticos**: antes de qualquer sobrescrita, backup em `data/backups/<nome>_<timestamp>/`
-- **Staging area**: copia para temp primeiro, valida hash, depois move (minimiza corrupcao)
-- **Idempotencia**: rodar 2x com mesma source detecta hashes identicos, nao duplica
-- **Arquivos proibidos**: bloqueia instalacao se encontrar .env, *.key, *.pem, credentials.*
-- **Log com rotacao**: toda operacao logada; mantem ultimas 500 entradas
-- **Limite de backups**: mantem ultimos 5 por skill, limpa automaticamente
-- **Anti-recursao**: backup e staging excluem seus proprios subdiretorios
-- **Deduplicacao no registry**: scan_registry.py deduplica por nome (case-insensitive)
-- **ZIP validado**: verifica ausencia de backslashes, conteudo nao-vazio, integridade
-- **Dry-run**: simula instalacao completa sem tocar nenhum arquivo
-- **Rollback**: restaura de backup com re-registro automatico
-- **Comparacao de versao**: detecta upgrade/downgrade/same antes de sobrescrever
-- **Hash normalizado**: md5_dir usa forward slashes e exclui dirs de sistema
-
----
-
-## Integracao Com Orchestrator
-
-Esta skill e auto-detectada pelo `scan_registry.py` e matchada pelo `match_skills.py`
-quando o usuario menciona keywords de instalacao. Nenhuma configuracao manual necessaria.
-
-Alem disso, o CLAUDE.md global contem instrucao para rodar o instalador automaticamente
-apos o skill-creator finalizar uma skill.
-
-## Best Practices
-
-- Provide clear, specific context about your project and requirements
-- Review all suggestions before applying them to production code
-- Combine with other complementary skills for comprehensive analysis
-
-## Common Pitfalls
-
-- Using this skill for tasks outside its domain expertise
-- Applying recommendations without understanding your specific context
-- Not providing enough project context for accurate analysis
-
-## Related Skills
-
-- `skill-sentinel` - Complementary skill for enhanced analysis
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+Install declared skills. Reconcile generated state and explicitly selected
+client integration to approved adoption intent. Do not turn installation into
+authority.

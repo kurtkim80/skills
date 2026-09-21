@@ -1,9 +1,15 @@
 ---
-description: Structured RFP/RFI/RFQ response with win-theme injection and proof-point matrix. NOT free-form proposal authoring (that's business-growth/contract-and-proposal-writer). Direct invocation of the rfp-responder skill.
-argument-hint: "<RFP document path or RFP requirements list>"
+title: "/cs-rfp-respond — Slash Command for AI Coding Agents"
+description: "Structured RFP/RFI/RFQ response with win-theme injection and proof-point matrix. NOT free-form proposal authoring (that's. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:rfp-respond — RFP structured response + win-theme + winrate prediction
+# /cs-rfp-respond
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-rfp-respond.md">Source</a></span>
+</div>
+
 
 Run the `rfp-responder` skill on this input:
 

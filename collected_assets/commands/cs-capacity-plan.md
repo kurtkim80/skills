@@ -1,9 +1,15 @@
 ---
-description: Model headcount + tooling capacity for ops teams (CX/Support/CS/BizOps/IT ops/Finance ops) using Erlang-C queueing math. Sizes the team around the bottleneck process-mapper found. NOT engineering capacity. Direct invocation of the capacity-planner skill.
-argument-hint: "<team + demand intake or path to capacity JSON>"
+title: "/cs-capacity-plan — Slash Command for AI Coding Agents"
+description: "Model headcount + tooling capacity for ops teams (CX/Support/CS/BizOps/IT ops/Finance ops) using Erlang-C queueing math. Sizes the team around the. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:capacity-plan — Ops capacity sizing + utilization risk + hiring sequence
+# /cs-capacity-plan
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-capacity-plan.md">Source</a></span>
+</div>
+
 
 Run the `capacity-planner` skill on this input:
 

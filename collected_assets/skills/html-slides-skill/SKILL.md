@@ -5,18 +5,18 @@ description: Create interactive HTML presentations using reveal.js. Use when bui
 
 # HTML Slides Skill (reveal.js)
 
-reveal.js ile interaktif, web tabanlı sunumlar oluşturma rehberi.
+A guide to creating interactive, web-based presentations with reveal.js.
 
 ## When to use this skill
 
-- Teknik sunum, konferans konuşması veya ürün lansmanı için slayt hazırlanırken
-- Kod walthrough içeren sunum gerektiğinde
-- Speaker notes ve zamanlayıcılı sunum istendiğinde
-- Self-contained HTML sunum dosyası oluşturulacağında
+- When preparing slides for a technical presentation, conference talk, or product launch
+- When a presentation with a code walkthrough is needed
+- When speaker notes and a timed presentation are requested
+- When creating a self-contained HTML presentation file
 
 ---
 
-## 1. Temel Yapı
+## 1. Basic Structure
 
 ```html
 <!doctype html>
@@ -29,8 +29,8 @@ reveal.js ile interaktif, web tabanlı sunumlar oluşturma rehberi.
   <body>
     <div class="reveal">
       <div class="slides">
-        <section>Slayt 1</section>
-        <section>Slayt 2</section>
+        <section>Slide 1</section>
+        <section>Slide 2</section>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js "></script>
@@ -48,32 +48,32 @@ reveal.js ile interaktif, web tabanlı sunumlar oluşturma rehberi.
 
 ---
 
-## 2. Slayt Yapıları
+## 2. Slide Structures
 
-### Yatay ve Dikey Slaytlar
+### Horizontal and Vertical Slides
 
 ```html
-<!-- Yatay slaytlar -->
-<section>Slayt 1</section>
-<section>Slayt 2</section>
+<!-- Horizontal slides -->
+<section>Slide 1</section>
+<section>Slide 2</section>
 
-<!-- Dikey slaytlar (nested) -->
+<!-- Vertical slides (nested) -->
 <section>
-  <section>Dikey 1</section>
-  <section>Dikey 2</section>
+  <section>Vertical 1</section>
+  <section>Vertical 2</section>
 </section>
 
-<!-- Markdown slayt -->
+<!-- Markdown slide -->
 <section data-markdown>
   <textarea data-template>
-    ## Başlık
-    - Madde 1
-    - Madde 2
+    ## Title
+    - Item 1
+    - Item 2
   </textarea>
 </section>
 ```
 
-### Tema Seçenekleri
+### Theme Options
 
 `black`, `white`, `league`, `beige`, `sky`, `night`, `serif`, `simple`, `solarized`, `blood`, `moon`
 
@@ -83,31 +83,31 @@ reveal.js ile interaktif, web tabanlı sunumlar oluşturma rehberi.
 
 ---
 
-## 3. Animasyonlar (Fragments)
+## 3. Animations (Fragments)
 
 ```html
 <section>
-  <p class="fragment">İlk görünen</p>
-  <p class="fragment fade-in">Sonra bu</p>
-  <p class="fragment fade-up">Sonra bu</p>
-  <p class="fragment highlight-red">Vurgulanan</p>
+  <p class="fragment">Appears first</p>
+  <p class="fragment fade-in">Then this</p>
+  <p class="fragment fade-up">Then this</p>
+  <p class="fragment highlight-red">Highlighted</p>
 </section>
 ```
 
-Fragment stilleri: `fade-in`, `fade-out`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `highlight-red`, `highlight-blue`, `highlight-green`, `strike`
+Fragment styles: `fade-in`, `fade-out`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `highlight-red`, `highlight-blue`, `highlight-green`, `strike`
 
 ---
 
-## 4. Kod Bloğu
+## 4. Code Block
 
 ```html
 <section>
   <pre><code data-trim data-line-numbers="1|3-4">
-const kullanici = {
-  ad: 'Zafer',
-  meslek: 'Geliştirici'
+const user = {
+  name: 'Zafer',
+  occupation: 'Developer'
 };
-console.log(kullanici.ad);
+console.log(user.name);
   </code></pre>
 </section>
 ```
@@ -118,24 +118,24 @@ console.log(kullanici.ad);
 
 ```html
 <section>
-  <h2>Başlık</h2>
-  <p>İçerik</p>
-  <aside class="notes">Konuşmacı notları. 'S' tuşuyla görmek için.</aside>
+  <h2>Title</h2>
+  <p>Content</p>
+  <aside class="notes">Speaker notes. Press 'S' to view them.</aside>
 </section>
 ```
 
 ---
 
-## 6. Arka Plan Seçenekleri
+## 6. Background Options
 
 ```html
-<!-- Renk arka planı -->
+<!-- Color background -->
 <section data-background-color="#4d7e65">
-  <!-- Gradient arka planı -->
+  <!-- Gradient background -->
   <section data-background-gradient="linear-gradient(to bottom, #283b95, #17b2c3)">
-    <!-- Görsel arka planı -->
-    <section data-background-image="resim.jpg" data-background-size="cover">
-      <!-- Video arka planı -->
+    <!-- Image background -->
+    <section data-background-image="image.jpg" data-background-size="cover">
+      <!-- Video background -->
       <section data-background-video="video.mp4"></section>
     </section>
   </section>
@@ -144,7 +144,7 @@ console.log(kullanici.ad);
 
 ---
 
-## 7. Konfigürasyon
+## 7. Configuration
 
 ```javascript
 Reveal.initialize({
@@ -159,7 +159,7 @@ Reveal.initialize({
   touch: true,
   transition: 'slide', // none, fade, slide, convex, concave, zoom
   transitionSpeed: 'default', // default, fast, slow
-  autoSlide: 0, // 0 = devre dışı
+  autoSlide: 0, // 0 = disabled
   width: 960,
   height: 700,
   margin: 0.04,
@@ -169,14 +169,14 @@ Reveal.initialize({
 
 ---
 
-## 8. Hazır Örnek — Teknik Sunum
+## 8. Ready-to-Use Example — Technical Presentation
 
 ```html
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>API Tasarımı</title>
+    <title>API Design</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css " />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/night.css " />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/monokai.css " />
@@ -185,41 +185,41 @@ Reveal.initialize({
     <div class="reveal">
       <div class="slides">
         <section data-background-gradient="linear-gradient(to bottom right, #1a1a2e, #16213e)">
-          <h1>API Tasarımı</h1>
-          <h3>2025 En İyi Pratikler</h3>
-          <p><small>Geliştirici Ekibi</small></p>
+          <h1>API Design</h1>
+          <h3>2025 Best Practices</h3>
+          <p><small>Development Team</small></p>
         </section>
 
         <section>
-          <h2>Gündem</h2>
+          <h2>Agenda</h2>
           <ol>
-            <li class="fragment">RESTful Prensipler</li>
-            <li class="fragment">Kimlik Doğrulama</li>
-            <li class="fragment">Hata Yönetimi</li>
-            <li class="fragment">Dokümantasyon</li>
+            <li class="fragment">RESTful Principles</li>
+            <li class="fragment">Authentication</li>
+            <li class="fragment">Error Handling</li>
+            <li class="fragment">Documentation</li>
           </ol>
         </section>
 
         <section>
           <section>
-            <h2>RESTful Prensipler</h2>
+            <h2>RESTful Principles</h2>
           </section>
           <section>
             <h3>Resource Naming</h3>
             <pre><code data-trim class="language-http">
-GET    /users           # Koleksiyon
-GET    /users/123       # Tek kaynak
-POST   /users          # Oluştur
-PUT    /users/123       # Güncelle
-DELETE /users/123      # Sil
+GET    /users           # Collection
+GET    /users/123       # Single resource
+POST   /users           # Create
+PUT    /users/123       # Update
+DELETE /users/123       # Delete
           </code></pre>
           </section>
         </section>
 
         <section>
-          <h2>Sorular?</h2>
-          <p>api-ekibi@sirket.com</p>
-          <aside class="notes">Sorular için 10 dakika ayırıldı.</aside>
+          <h2>Questions?</h2>
+          <p>api-team@company.com</p>
+          <aside class="notes">Ten minutes are reserved for questions.</aside>
         </section>
       </div>
     </div>
@@ -240,23 +240,23 @@ DELETE /users/123      # Sil
 
 ```html
 <section data-auto-animate>
-  <h2>Çözümümüz</h2>
-  <div data-id="box" style="background: #3182ce; padding: 20px;">AI Destekli Otomasyon</div>
+  <h2>Our Solution</h2>
+  <div data-id="box" style="background: #3182ce; padding: 20px;">AI-Powered Automation</div>
 </section>
 
 <section data-auto-animate>
-  <h2>Çözümümüz</h2>
+  <h2>Our Solution</h2>
   <div data-id="box" style="background: #38a169; padding: 40px; width: 400px;">
-    <p>AI Destekli Otomasyon</p>
-    <p>%90 daha hızlı</p>
+    <p>AI-Powered Automation</p>
+    <p>90% faster</p>
   </div>
 </section>
 ```
 
 ---
 
-## 10. Kaynaklar
+## 10. Resources
 
-- Resmi Dokümantasyon: https://revealjs.com/
+- Official Documentation: https://revealjs.com/
 - Demo: https://revealjs.com/demo/
 - GitHub: https://github.com/hakimel/reveal.js

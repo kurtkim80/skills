@@ -1,9 +1,15 @@
 ---
-name: "cs-grill-with-docs"
-description: "/cs:grill-with-docs <path-to-plan> — Start a docs-anchored grilling session. Pre-flights CONTEXT.md + docs/adr/ linters, then interrogates the plan one decision at a time, updating glossary + writing ADRs inline as they crystallise."
+title: "/cs-grill-with-docs — Slash Command for AI Coding Agents"
+description: "/cs:grill-with-docs <path-to-plan> — Start a docs-anchored grilling session. Pre-flights CONTEXT.md + docs/adr/ linters, then interrogates the plan. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:grill-with-docs — Docs-Anchored Plan Interrogation
+# /cs-grill-with-docs
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/grill-with-docs/commands/cs-grill-with-docs.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:grill-with-docs <path-to-plan>`
 
@@ -88,9 +94,9 @@ Recommended: [position] because [rationale grounded in the anchor]
 
 ## Related
 
-- Agent: [`cs-grill-with-docs`](../agents/cs-grill-with-docs.md)
-- Skill: [`grill-with-docs`](../skills/grill-with-docs/SKILL.md)
-- Format specs: [ADR-FORMAT](../skills/grill-with-docs/ADR-FORMAT.md), [CONTEXT-FORMAT](../skills/grill-with-docs/CONTEXT-FORMAT.md)
+- Agent: [`cs-grill-with-docs`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/agents/cs-grill-with-docs.md)
+- Skill: [`grill-with-docs`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/SKILL.md)
+- Format specs: [ADR-FORMAT](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/ADR-FORMAT.md), [CONTEXT-FORMAT](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-with-docs/skills/grill-with-docs/CONTEXT-FORMAT.md)
 - Sibling skill: `/cs:grill-me` (plan-only grill)
 - Adjacent: `/cs:caveman`, `/cs:handoff`, `/cs:write-a-skill`
 
