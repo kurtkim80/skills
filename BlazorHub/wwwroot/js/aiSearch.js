@@ -67,3 +67,22 @@ window.getSavedTheme = function () {
   return localStorage.getItem('theme') ||
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 };
+
+window.saveCustomSkills = function (jsonStr) {
+  try {
+    localStorage.setItem('opencode_custom_skills', jsonStr);
+    return true;
+  } catch (e) {
+    console.error('Failed to save custom skills to localStorage:', e);
+    return false;
+  }
+};
+
+window.getCustomSkills = function () {
+  try {
+    return localStorage.getItem('opencode_custom_skills') || '[]';
+  } catch (e) {
+    console.error('Failed to read custom skills from localStorage:', e);
+    return '[]';
+  }
+};

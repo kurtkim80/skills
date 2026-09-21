@@ -10,6 +10,9 @@
   - 검색창에 질문 입력 후 **Enter** 키 또는 버튼을 누를 때만 초고속 동작 (글자 입력 렉 제로)
   - 브라우저 내 경량 AI 모델(`all-MiniLM-L6-v2`)을 통해 자연어 쿼리를 384차원 벡터로 변환
   - **C# .NET SIMD 가속 (`System.Numerics.Tensors.TensorPrimitives.CosineSimilarity`)**으로 6,186개 에셋 전체를 밀리초(ms) 단위로 실시간 비교 및 유사도 랭킹 산출
+- **🌐 GitHub 실시간 탐색 & DB 추가**:
+  - 웹 화면 상단의 **[🌐 GitHub 탐색 & 추가]** 버튼을 통해 GitHub API로 전 세계의 최신 AI 에이전트 스킬 및 저장소를 실시간 검색
+  - 검색된 저장소를 클릭 한 번(**➕ DB에 추가**)으로 내 카탈로그 DB에 즉시 등록 (브라우저 `localStorage`에 자동 영구 보관되어 메인 화면에서 바로 검색/설치 가능)
 - **100% Client-Side**: 별도의 유료 API 서버 없이 브라우저 단독으로 완전히 구동되며, GitHub Pages에 정적 호스팅됩니다.
 
 ## 🤖 GitHub Actions 무인 자동 수집 파이프라인

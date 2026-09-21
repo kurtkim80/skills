@@ -26,6 +26,9 @@
     </div>
 
     <div class="header-actions">
+        <button @onclick="OpenGithubModal" class="btn-apple" title="GitHub에서 신규 에셋 검색 및 DB 추가" style="color: var(--apple-blue); border-color: var(--apple-blue-border); background: var(--apple-blue-dim);">
+            🌐 GitHub 탐색 &amp; 추가
+        </button>
         <a href="https://github.com/kurtkim80/skills" target="_blank" rel="noopener noreferrer" class="btn-apple btn-github" title="GitHub 저장소 바로가기" style="text-decoration: none;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -61,6 +64,11 @@
     <div class="hero-eyebrow">Next-Generation AI Agent Toolkit</div>
     <h1>OpenCode &amp; OpenWork Hub</h1>
     <p>인터넷과 GitHub의 최고 성능 AI 코딩 에이전트 스킬, 커맨드, 페르소나를 한 곳에서 탐색하고 원클릭으로 설치하세요.</p>
+    <div>
+        <button @onclick="OpenGithubModal" class="btn-apple" style="border-color: var(--apple-blue-border); color: var(--apple-blue); font-size: 13px; padding: 7px 20px; box-shadow: 0 4px 14px rgba(0, 113, 227, 0.15);">
+            🌐 찾으시는 스킬이 없나요? GitHub에서 실시간 검색 &amp; DB 추가하기 →
+        </button>
+    </div>
 </section>
 
 <!-- Segmented Tabs Navigation -->
@@ -95,7 +103,10 @@
         <div class="empty" style="display: block;">
             <div class="empty-icon">🔍</div>
             <h3>검색 결과가 없습니다</h3>
-            <p>다른 검색어나 카테고리를 선택해 보세요.</p>
+            <p>다른 검색어나 카테고리를 선택하시거나, 상단의 <strong>[🌐 GitHub 탐색 &amp; 추가]</strong> 버튼으로 신규 에셋을 검색해 보세요.</p>
+            <div style="margin-top: 18px;">
+                <button @onclick="OpenGithubModal" class="btn-primary">🌐 GitHub에서 찾아보기</button>
+            </div>
         </div>
     }
     else
@@ -159,7 +170,7 @@
     </div>
 </footer>
 
-<!-- Modal (iOS Sheet) -->
+<!-- Modal 1: Detail Modal (iOS Sheet) -->
 @if (_selectedModalItem != null)
 {
     var modal = _selectedModalItem;
@@ -219,6 +230,121 @@
     </div>
 }
 
+<!-- Modal 2: GitHub Search & Add to DB Modal -->
+@if (_isGithubModalOpen)
+{
+    <div class="modal-overlay open" @onclick="CloseGithubModal">
+        <div class="modal" style="max-width: 840px;" @onclick:stopPropagation="true">
+            <div class="modal-head">
+                <div class="modal-head-info">
+                    <div class="modal-badges">
+                        <span class="badge badge-skill" style="background: var(--apple-blue-dim); color: var(--apple-blue);">🌐 GITHUB SEARCH &amp; ADD</span>
+                    </div>
+                    <div class="modal-name">GitHub 에셋 실시간 검색 및 DB 추가</div>
+                    <div class="modal-desc">GitHub에서 AI 코딩 에이전트 스킬, 커맨드, MCP 저장소를 검색하여 내 카탈로그 DB에 즉시 등록합니다.</div>
+                </div>
+                <button class="btn-close" @onclick="CloseGithubModal">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="github-search-input-wrap">
+                    <input class="github-search-input"
+                           type="text"
+                           placeholder="GitHub 저장소/스킬 검색 (예: kubernetes, langchain, drawio, agentic, mcp)"
+                           value="@_githubQuery"
+                           @oninput='(e) => _githubQuery = e.Value?.ToString() ?? ""'
+                           @onkeydown="OnGithubSearchKeyDown" />
+                    <button class="btn-primary" @onclick="() => ExecuteGithubSearch(_githubQuery)" disabled="@_isSearchingGithub" style="flex-shrink: 0;">
+                        @(_isSearchingGithub ? "⏳ 검색 중..." : "🔍 GitHub 검색")
+                    </button>
+                </div>
+
+                <div class="github-pill-suggestions">
+                    <span style="font-size: 11px; color: var(--text-muted); align-self: center;">추천 검색어:</span>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("kubernetes skills")'>#kubernetes</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("drawio-skill")'>#drawio-skill</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("langchain agent skills")'>#langchain</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("rag skills")'>#rag</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("mcp server")'>#mcp</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("opencode skills")'>#opencode</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude skills")'>#claude</button>
+                </div>
+
+                @if (_isSearchingGithub)
+                {
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <span class="ai-spinner" style="width: 28px; height: 28px; border-width: 3px; margin-bottom: 12px;"></span>
+                        <p style="font-size: 13px; color: var(--text-muted);">GitHub API에서 최신 저장소를 검색하는 중입니다...</p>
+                    </div>
+                }
+                else if (_githubResults.Count > 0)
+                {
+                    <div class="github-results-list">
+                        @foreach (var repo in _githubResults)
+                        {
+                            var alreadyAdded = SearchService.IsItemInCatalog(repo.FullName) || repo.IsAdded;
+                            var (catId, catLabel) = VectorSearchService.ClassifyCategory(repo.Name, repo.Description);
+
+                            <div class="github-repo-card">
+                                <div class="github-repo-header">
+                                    <div>
+                                        <a href="@repo.HtmlUrl" target="_blank" rel="noopener noreferrer" class="github-repo-title">
+                                            🐙 @repo.FullName ↗
+                                        </a>
+                                        <span class="badge" style="margin-left: 8px; font-size: 10px; background: var(--segment-bg); color: var(--text-secondary);">
+                                            @catLabel
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="font-size: 12px; font-weight: 600; color: #ffd60a;">
+                                            ⭐ @repo.StargazersCount.ToString("N0")
+                                        </span>
+                                        @if (alreadyAdded)
+                                        {
+                                            <button class="btn-apple" disabled style="color: var(--green); border-color: rgba(48, 209, 88, 0.3); background: var(--green-dim); font-size: 11px; padding: 4px 10px;">
+                                                ✅ DB에 등록됨
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn-primary" @onclick="() => AddRepoToDb(repo)" disabled="@repo.IsAdding" style="font-size: 11px; padding: 4px 12px;">
+                                                @(repo.IsAdding ? "⏳ 추가 중..." : "➕ DB에 추가")
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="github-repo-desc">
+                                    @(string.IsNullOrWhiteSpace(repo.Description) ? "저장소 설명이 없습니다." : repo.Description)
+                                </div>
+
+                                <div class="github-repo-meta">
+                                    <span>🍴 포크: @repo.ForksCount.ToString("N0")개</span>
+                                    @if (!string.IsNullOrEmpty(repo.UpdatedAt))
+                                    {
+                                        <span>업데이트: @(repo.UpdatedAt.Length >= 10 ? repo.UpdatedAt.Substring(0, 10) : repo.UpdatedAt)</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(_githubStatusMessage))
+                {
+                    <div style="text-align: center; padding: 30px 20px;">
+                        <p style="font-size: 13px; color: var(--text-muted);">@_githubStatusMessage</p>
+                    </div>
+                }
+            </div>
+
+            <div class="modal-foot">
+                <small>추가된 에셋은 즉시 메인 카탈로그 DB에 반영되며 브라우저에 저장됩니다.</small>
+                <button class="btn-apple" @onclick="CloseGithubModal">닫기</button>
+            </div>
+        </div>
+    </div>
+}
+
 <!-- Toast -->
 @if (_showToast)
 {
@@ -243,6 +369,13 @@
     private bool _showToast = false;
     private DotNetObjectReference<Home>? _dotNetRef;
 
+    // GitHub 실시간 검색 관련 상태
+    private bool _isGithubModalOpen = false;
+    private string _githubQuery = "";
+    private bool _isSearchingGithub = false;
+    private string _githubStatusMessage = "";
+    private List<GitHubRepoItem> _githubResults = new();
+
     private readonly record struct CategoryInfo(string Id, string Label);
     private readonly List<CategoryInfo> _categories = new()
     {
@@ -266,11 +399,24 @@
     {
         _dotNetRef = DotNetObjectReference.Create(this);
 
-        // 1단계: 초경량 4.5MB 카탈로그 먼저 로드하여 즉시 화면 렌더링
+        // 1단계: 초경량 4.8MB 카탈로그 먼저 로드하여 즉시 화면 렌더링
         await SearchService.LoadCatalogAsync();
+
+        // 2단계: 로컬 스토리지에 저장된 사용자 추가 커스텀 스킬 로드
+        try
+        {
+            var customJson = await JS.InvokeAsync<string>("getCustomSkills");
+            if (!string.IsNullOrWhiteSpace(customJson) && customJson != "[]")
+            {
+                var customItems = System.Text.Json.JsonSerializer.Deserialize<List<SkillItem>>(customJson);
+                SearchService.MergeCustomItems(customItems);
+            }
+        }
+        catch { }
+
         _displayItems = SearchService.GetCategoryItems(_selectedCategory);
 
-        // 2단계: 9.5MB AI 벡터 DB는 백그라운드에서 비동기로 조용히 로드 (화면 블로킹 없음)
+        // 3단계: 9.5MB AI 벡터 DB는 백그라운드에서 비동기로 조용히 로드 (화면 블로킹 없음)
         _ = Task.Run(async () =>
         {
             await SearchService.EnsureVectorsLoadedAsync();
@@ -313,7 +459,6 @@
     private void OnSearchInput(ChangeEventArgs e)
     {
         _searchQuery = e.Value?.ToString() ?? "";
-        // 사용자가 검색어를 완전히 지웠을 때만 즉시 전체 목록으로 복원 (글자 입력 중에는 검색 안 함)
         if (string.IsNullOrWhiteSpace(_searchQuery))
         {
             _isSearchActive = false;
@@ -351,18 +496,16 @@
         try
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            // 1. 브라우저 내 Transformers.js로 384차원 쿼리 벡터 추출
             var qVec = await JS.InvokeAsync<float[]>("vectorizeQuery", _searchQuery, _dotNetRef);
             sw.Stop();
 
             if (qVec != null && qVec.Length == 384)
             {
                 var simdSw = System.Diagnostics.Stopwatch.StartNew();
-                // 2. C# SIMD 가속 TensorPrimitives.CosineSimilarity 로 6,186개 항목 코사인 유사도 랭킹 산출
                 _displayItems = await SearchService.SearchAsync(qVec, _selectedCategory, limit: 80);
                 simdSw.Stop();
 
-                _statusText = $"⚡ 6,186개 에셋 C# SIMD 시맨틱 비교 완료 (C# SIMD: {simdSw.Elapsed.TotalMilliseconds:F1}ms, 임베딩: {sw.ElapsedMilliseconds}ms)";
+                _statusText = $"⚡ {SearchService.AllItems.Count:N0}개 에셋 C# SIMD 시맨틱 비교 완료 (C# SIMD: {simdSw.Elapsed.TotalMilliseconds:F1}ms, 임베딩: {sw.ElapsedMilliseconds}ms)";
             }
             else
             {
@@ -387,6 +530,134 @@
         StateHasChanged();
     }
 
+    // ── GitHub Search & Add Modal Logic ──
+    private void OpenGithubModal()
+    {
+        _isGithubModalOpen = true;
+        if (_githubResults.Count == 0 && string.IsNullOrWhiteSpace(_githubQuery))
+        {
+            _ = SetQueryAndSearch("kubernetes skills");
+        }
+    }
+
+    private void CloseGithubModal()
+    {
+        _isGithubModalOpen = false;
+    }
+
+    private async Task OnGithubSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await ExecuteGithubSearch(_githubQuery);
+        }
+    }
+
+    private async Task SetQueryAndSearch(string q)
+    {
+        _githubQuery = q;
+        await ExecuteGithubSearch(q);
+    }
+
+    private async Task ExecuteGithubSearch(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query)) return;
+
+        _isSearchingGithub = true;
+        _githubStatusMessage = "";
+        StateHasChanged();
+
+        try
+        {
+            var encoded = Uri.EscapeDataString(query.Trim());
+            var apiUrl = $"https://api.github.com/search/repositories?q={encoded}&sort=stars&order=desc&per_page=15";
+
+            var response = await Http.GetFromJsonAsync<GitHubSearchResult>(apiUrl);
+            if (response != null && response.Items.Count > 0)
+            {
+                _githubResults = response.Items;
+                _githubStatusMessage = $"'{query}' 검색 결과: 총 {response.TotalCount:N0}개 중 상위 {_githubResults.Count}개 표시";
+            }
+            else
+            {
+                _githubResults.Clear();
+                _githubStatusMessage = "검색 결과가 없습니다. 다른 검색어를 입력해 보세요.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _githubResults.Clear();
+            _githubStatusMessage = $"GitHub 검색 중 오류가 발생했습니다: {ex.Message}";
+        }
+        finally
+        {
+            _isSearchingGithub = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task AddRepoToDb(GitHubRepoItem repo)
+    {
+        repo.IsAdding = true;
+        StateHasChanged();
+
+        try
+        {
+            var (catId, catLabel) = VectorSearchService.ClassifyCategory(repo.Name, repo.Description);
+            var newItem = new SkillItem
+            {
+                Id = repo.Name,
+                Name = repo.Name,
+                Type = "skill",
+                CatId = catId,
+                CatLabel = catLabel,
+                Desc = string.IsNullOrEmpty(repo.Description) ? $"GitHub에서 추가된 스킬 저장소: {repo.FullName}" : repo.Description,
+                Source = repo.FullName,
+                RepoUrl = repo.HtmlUrl,
+                Install = $"mkdir -p ~/.config/opencode/skills/{repo.Name} && curl -fsSL https://raw.githubusercontent.com/{repo.FullName}/main/SKILL.md -o ~/.config/opencode/skills/{repo.Name}/SKILL.md",
+                Doc = $"https://raw.githubusercontent.com/{repo.FullName}/main/SKILL.md"
+            };
+
+            // 1. 메모리 카탈로그 DB에 추가
+            SearchService.AddItem(newItem);
+            repo.IsAdded = true;
+
+            // 2. 브라우저 localStorage에 영구 저장
+            var json = System.Text.Json.JsonSerializer.Serialize(SearchService.CustomItems);
+            await JS.InvokeVoidAsync("saveCustomSkills", json);
+
+            // 3. 로컬 서버(server.py) 모드일 경우 sources.json 동기화 API 호출 시도
+            try
+            {
+                var addSourcePayload = new { repo = repo.CloneUrl, name = repo.Name };
+                await Http.PostAsJsonAsync("/api/add-source", addSourcePayload);
+            }
+            catch { }
+
+            // 4. 메인 화면 뷰 갱신
+            if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
+            {
+                _displayItems = SearchService.GetFilteredSearchResults(_selectedCategory);
+            }
+            else
+            {
+                _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+            }
+
+            await ShowToast($"'{repo.FullName}'이(가) 내 카탈로그 DB에 추가되었습니다!");
+        }
+        catch (Exception ex)
+        {
+            await ShowToast($"추가 실패: {ex.Message}");
+        }
+        finally
+        {
+            repo.IsAdding = false;
+            StateHasChanged();
+        }
+    }
+
+    // ── Item Modal Logic ──
     private async Task OpenModal(SkillItem item)
     {
         _selectedModalItem = item;
@@ -395,7 +666,6 @@
         _modalContent = "⏳ 상세 사양 불러오는 중...";
         StateHasChanged();
 
-        // 3단계: 모달을 열었을 때만 온디맨드로 상세 마크다운 파일(1~3KB) 비동기 로드
         _modalContent = await SearchService.GetContentAsync(item);
         StateHasChanged();
     }
