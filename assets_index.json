@@ -31855,11 +31855,10 @@
     "postgresql-cli": {
       "name": "postgresql-cli",
       "type": "skill",
-      "description": "PostgreSQL interactive terminal (psql) reference and usage guide.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/postgresql-cli",
-      "description_ko": "PostgreSQL 대화형 터미널(psql) 참조 및 사용 가이드입니다."
+      "description": "Perform PostgreSQL operations using the psql CLI. Use for inspecting schemas, running read-only queries, and troubleshooting databases across environments.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/postgresql-cli"
     },
     "aws-ecs-fargate": {
       "name": "aws-ecs-fargate",
@@ -44311,6 +44310,62 @@
       "path": "collected_assets/skills/developer-experience",
       "description_ko": "빠른 로컬 피드백 루프, 손쉬운 환경 설정, 실제 시간이 어디로 가는지 알려주는 DORA 플러스 지표 등을 통해 아이디어 구상과 실제 실행 사이의 마찰을 줄입니다. 사용자가 로컬 개발이 느리거나 취약하다고 불평하거나, 개발자 생산성을 측정하는 방법을 묻거나, 신규 채용에 대한 첫 번째 커밋 시간을 줄이고 싶거나, 다음에 자동화할 수고를 결정할 때마다 이 기능을 사용하세요. 이러한 워크플로를 호스팅하는 플랫폼의 경우 'internal-developer-platform'을 사용하세요. 설정 마찰을 제거하는 템플릿의 경우 `golden-paths`를 사용하세요. 식별된 수고를 자동화하려면 '수고 감소'를 사용하세요."
     },
+    "mysql-cli": {
+      "name": "mysql-cli",
+      "type": "skill",
+      "description": "Perform MySQL operations using the mysql CLI. Use for inspecting schemas, running read-only queries, and troubleshooting databases across environments.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/mysql-cli"
+    },
+    "appdynamics-cli": {
+      "name": "appdynamics-cli",
+      "type": "skill",
+      "description": "Perform AppDynamics operations using the AppDynamics HTTP API via curl. Use for querying applications, metrics, health rules, and events.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/appdynamics-cli"
+    },
+    "chef-cli": {
+      "name": "chef-cli",
+      "type": "skill",
+      "description": "Perform Chef configuration management operations using the knife and chef CLI tools. Use for inspecting nodes, cookbooks, roles, and environments on a Chef server.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/chef-cli"
+    },
+    "bitbucket-cli": {
+      "name": "bitbucket-cli",
+      "type": "skill",
+      "description": "Perform Bitbucket operations using the Bitbucket REST API via curl. Use for repositories, pull requests, pipelines, and issues. ALSO use this skill when asked to review a Bitbucket PR — when a Bitbucket PR URL or PR ID is provided, fetch and review the diff instead of the code-review skill.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/bitbucket-cli"
+    },
+    "ms-teams-cli": {
+      "name": "ms-teams-cli",
+      "type": "skill",
+      "description": "Perform Microsoft Teams operations using the Microsoft Graph API via curl. Use for posting channel messages, listing teams/channels, and looking up users.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/ms-teams-cli"
+    },
+    "kubernetes-cli": {
+      "name": "kubernetes-cli",
+      "type": "skill",
+      "description": "Perform Kubernetes operations using the kubectl CLI. Use for inspecting, managing, and troubleshooting workloads, nodes, and cluster resources across contexts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/kubernetes-cli"
+    },
+    "graylog-cli": {
+      "name": "graylog-cli",
+      "type": "skill",
+      "description": "Perform Graylog operations using the Graylog HTTP API via curl. Use for searching logs, and inspecting streams, dashboards, and alerts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/graylog-cli"
+    },
     "jira-and-confluence-cli": {
       "name": "jira-and-confluence-cli",
       "type": "skill",
@@ -44319,6 +44374,14 @@
       "source_name": "abdullahkhawer/devops-skills",
       "path": "collected_assets/skills/jira-and-confluence-cli",
       "description_ko": "Atlassian CLI(acli)를 사용하여 Jira 및 Confluence 작업을 수행합니다. 이슈, 스프린트, 보드, 페이지, 공간 및 프로젝트 관리에 사용합니다."
+    },
+    "helm-cli": {
+      "name": "helm-cli",
+      "type": "skill",
+      "description": "Perform Helm operations using the helm CLI. Use for inspecting, templating, and managing chart releases across Kubernetes contexts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/helm-cli"
     },
     "aws-cli": {
       "name": "aws-cli",
@@ -44329,6 +44392,14 @@
       "path": "collected_assets/skills/aws-cli",
       "description_ko": "AWS CLI 작업"
     },
+    "splunk-cli": {
+      "name": "splunk-cli",
+      "type": "skill",
+      "description": "Perform Splunk operations using the Splunk REST API via curl. Use for running search queries, and inspecting saved searches, indexes, and alerts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/splunk-cli"
+    },
     "jenkins-cli": {
       "name": "jenkins-cli",
       "type": "skill",
@@ -44338,6 +44409,14 @@
       "path": "collected_assets/skills/jenkins-cli",
       "description_ko": "jenkins-cli를 사용하여 Jenkins 작업을 수행합니다."
     },
+    "betterstack-cli": {
+      "name": "betterstack-cli",
+      "type": "skill",
+      "description": "Perform Better Stack (Logs, Uptime, Incidents) operations using the Better Stack HTTP API via curl. Use for querying logs, monitors, and incidents.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/betterstack-cli"
+    },
     "create-dockerfile": {
       "name": "create-dockerfile",
       "type": "skill",
@@ -44346,6 +44425,70 @@
       "source_name": "abdullahkhawer/devops-skills",
       "path": "collected_assets/skills/create-dockerfile",
       "description_ko": "사용자 요구 사항 및 애플리케이션 컨텍스트를 기반으로 최적화되고 안전하며 프로덕션에 즉시 사용 가능한 Dockerfile을 만듭니다."
+    },
+    "oci-cli": {
+      "name": "oci-cli",
+      "type": "skill",
+      "description": "Use the correct Oracle Cloud Infrastructure CLI (oci) profile and region when running OCI commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/oci-cli"
+    },
+    "terraform-cli": {
+      "name": "terraform-cli",
+      "type": "skill",
+      "description": "Perform Terraform operations using the terraform CLI. Use for planning, validating, and inspecting infrastructure-as-code state and workspaces.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/terraform-cli"
+    },
+    "dockerfile-linting": {
+      "name": "dockerfile-linting",
+      "type": "skill",
+      "description": "Lint Dockerfiles using hadolint according to standard best practices. Use when asked to lint or check style/security issues in Dockerfiles.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/dockerfile-linting"
+    },
+    "dynatrace-cli": {
+      "name": "dynatrace-cli",
+      "type": "skill",
+      "description": "Perform Dynatrace operations using the Dynatrace HTTP API via curl. Use for querying entities, metrics, problems, and events.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/dynatrace-cli"
+    },
+    "newrelic-cli": {
+      "name": "newrelic-cli",
+      "type": "skill",
+      "description": "Perform New Relic operations using the newrelic CLI and NerdGraph API. Use for querying entities, applications, alerts, and NRQL data.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/newrelic-cli"
+    },
+    "alibabacloud-cli": {
+      "name": "alibabacloud-cli",
+      "type": "skill",
+      "description": "Use the correct Alibaba Cloud CLI (aliyun) profile and region when running Alibaba Cloud commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/alibabacloud-cli"
+    },
+    "sentry-cli": {
+      "name": "sentry-cli",
+      "type": "skill",
+      "description": "Perform Sentry error tracking operations using the sentry-cli tool and Sentry HTTP API. Use for querying issues, events, releases, and organizations.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/sentry-cli"
+    },
+    "kibana-cli": {
+      "name": "kibana-cli",
+      "type": "skill",
+      "description": "Perform Kibana operations using the Kibana HTTP API via curl. Use for querying saved objects, dashboards, index patterns, and alerts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/kibana-cli"
     },
     "commit-code": {
       "name": "commit-code",
@@ -44365,6 +44508,86 @@
       "path": "collected_assets/skills/github-cli",
       "description_ko": "gh CLI를 사용하여 GitHub에서 GitHub 작업을 수행합니다. 문제, 끌어오기 요청, 파이프라인, 저장소 및 프로젝트 관리에 사용합니다. 또한 GitHub PR을 검토하라는 요청을 받을 때 이 기술을 사용하세요. GitHub PR URL 또는 PR ID가 제공되면 코드 검토 기술 대신 gh를 사용하여 차이점을 가져와 검토하세요."
     },
+    "aws-cloudwatch-cli": {
+      "name": "aws-cloudwatch-cli",
+      "type": "skill",
+      "description": "Perform AWS CloudWatch operations using the AWS CLI. Use for querying metrics, logs, alarms, and dashboards. Requires the aws-cli skill's profile/region configuration.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/aws-cloudwatch-cli"
+    },
+    "grafana-loki-cli": {
+      "name": "grafana-loki-cli",
+      "type": "skill",
+      "description": "Query Grafana Loki logs using the Loki HTTP API via curl or logcli. Use for LogQL queries, label exploration, and tailing log streams.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/grafana-loki-cli"
+    },
+    "packer-cli": {
+      "name": "packer-cli",
+      "type": "skill",
+      "description": "Perform HashiCorp Packer operations using the packer CLI. Use for validating, formatting, and building machine images from templates.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/packer-cli"
+    },
+    "datadog-cli": {
+      "name": "datadog-cli",
+      "type": "skill",
+      "description": "Perform Datadog operations using the Datadog HTTP API via curl. Use for querying metrics, logs, monitors, dashboards, and events.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/datadog-cli"
+    },
+    "loggly-cli": {
+      "name": "loggly-cli",
+      "type": "skill",
+      "description": "Perform Loggly log management operations using the Loggly HTTP API via curl. Use for searching logs and inspecting saved searches and source groups.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/loggly-cli"
+    },
+    "python-linting": {
+      "name": "python-linting",
+      "type": "skill",
+      "description": "Lint and format Python code using ruff, flake8, black, and mypy according to standard conventions. Use when asked to lint, format, or check style/type issues in Python files.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/python-linting"
+    },
+    "argocd-cli": {
+      "name": "argocd-cli",
+      "type": "skill",
+      "description": "Perform ArgoCD GitOps operations using the argocd CLI. Use for inspecting applications, sync status, and deployment history across Kubernetes clusters.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/argocd-cli"
+    },
+    "jaeger-cli": {
+      "name": "jaeger-cli",
+      "type": "skill",
+      "description": "Query Jaeger distributed tracing data using the Jaeger HTTP API via curl. Use for finding traces, services, operations, and dependency graphs.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/jaeger-cli"
+    },
+    "gcp-cli": {
+      "name": "gcp-cli",
+      "type": "skill",
+      "description": "Use the correct GCP CLI (gcloud) project, account, and region when running Google Cloud commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/gcp-cli"
+    },
+    "go-linting": {
+      "name": "go-linting",
+      "type": "skill",
+      "description": "Lint and format Go code using golangci-lint, gofmt, and go vet according to standard conventions. Use when asked to lint, format, or check style issues in Go files.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/go-linting"
+    },
     "gitlab-cli": {
       "name": "gitlab-cli",
       "type": "skill",
@@ -44373,6 +44596,22 @@
       "source_name": "abdullahkhawer/devops-skills",
       "path": "collected_assets/skills/gitlab-cli",
       "description_ko": "glab CLI를 사용하여 GitLab 작업을 수행합니다. 문제, 병합 요청, 파이프라인, 저장소 및 프로젝트 관리에 사용합니다. 또한 GitLab MR 또는 PR을 검토하라는 요청을 받을 때 이 기술을 사용하십시오. GitLab MR URL 또는 MR ID가 제공되면 코드 검토 기술 대신 glab을 사용하여 diff를 가져와 검토하십시오."
+    },
+    "elasticsearch-cli": {
+      "name": "elasticsearch-cli",
+      "type": "skill",
+      "description": "Perform Elasticsearch operations using the Elasticsearch HTTP API via curl. Use for querying indices, documents, mappings, and cluster health.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/elasticsearch-cli"
+    },
+    "terraform-linting": {
+      "name": "terraform-linting",
+      "type": "skill",
+      "description": "Lint and format Terraform code using tflint and terraform fmt/validate according to standard conventions. Use when asked to lint, format, or check style issues in Terraform files.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/terraform-linting"
     },
     "prometheus-cli": {
       "name": "prometheus-cli",
@@ -44392,6 +44631,38 @@
       "path": "collected_assets/skills/grafana-cli",
       "description_ko": "컬을 통해 Grafana HTTP API를 사용하여 Grafana 작업을 수행합니다. 대시보드, 데이터 소스, 경고 및 주석을 쿼리하는 데 사용됩니다."
     },
+    "papertrail-cli": {
+      "name": "papertrail-cli",
+      "type": "skill",
+      "description": "Perform Papertrail log management operations using the Papertrail HTTP API via curl. Use for searching logs and inspecting saved searches and systems.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/papertrail-cli"
+    },
+    "rollbar-cli": {
+      "name": "rollbar-cli",
+      "type": "skill",
+      "description": "Perform Rollbar error monitoring operations using the Rollbar HTTP API via curl. Use for querying items, occurrences, and deploys.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/rollbar-cli"
+    },
+    "bash-linting": {
+      "name": "bash-linting",
+      "type": "skill",
+      "description": "Lint and format Bash/shell scripts using shellcheck and shfmt according to standard conventions. Use when asked to lint, format, or check style issues in shell scripts.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/bash-linting"
+    },
+    "vault-cli": {
+      "name": "vault-cli",
+      "type": "skill",
+      "description": "Perform HashiCorp Vault operations using the vault CLI. Use for reading secret metadata, checking policies, and inspecting auth methods across environments.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/vault-cli"
+    },
     "create-terraform-helm-upgrade-plan": {
       "name": "create-terraform-helm-upgrade-plan",
       "type": "skill",
@@ -44401,6 +44672,14 @@
       "path": "collected_assets/skills/create-terraform-helm-upgrade-plan",
       "description_ko": "주요 변경 사항 및 필수 코드 변경 사항을 포함하여 현재 및 원하는 차트 버전을 비교하여 Terraform에서 관리하는 Helm 릴리스에 대한 자세한 업그레이드 계획을 만듭니다."
     },
+    "ansible-cli": {
+      "name": "ansible-cli",
+      "type": "skill",
+      "description": "Perform Ansible operations using ansible and ansible-playbook. Use for running playbooks, checking inventory, and validating configuration against target environments.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/ansible-cli"
+    },
     "maintenance-create-ticket-on-jira": {
       "name": "maintenance-create-ticket-on-jira",
       "type": "skill",
@@ -44409,6 +44688,14 @@
       "source_name": "abdullahkhawer/devops-skills",
       "path": "collected_assets/skills/maintenance-create-ticket-on-jira",
       "description_ko": "유지 관리 업그레이드 확인 파일을 기반으로 워크로드 유지 관리 업그레이드를 위한 Jira 티켓을 생성하거나 업데이트합니다."
+    },
+    "hetzner-cli": {
+      "name": "hetzner-cli",
+      "type": "skill",
+      "description": "Use the correct Hetzner Cloud CLI (hcloud) context when running Hetzner Cloud commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/hetzner-cli"
     },
     "maintenance-check-aws-eks": {
       "name": "maintenance-check-aws-eks",
@@ -44427,6 +44714,39 @@
       "source_name": "abdullahkhawer/devops-skills",
       "path": "collected_assets/skills/slack-cli",
       "description_ko": "앱 관리를 위한 Slack CLI와 메시징, 채널 및 사용자 작업을 위한 Slack Web API(curl)를 사용하여 Slack 작업을 수행합니다."
+    },
+    "azure-cli": {
+      "name": "azure-cli",
+      "type": "skill",
+      "description": "Azure CLI 操作",
+      "source_repo": "https://github.com/stevenke1981/linux-agent-skills.git",
+      "source_name": "stevenke1981/linux-agent-skills",
+      "path": "collected_assets/skills/azure-cli",
+      "description_ko": "Azure CLI 작업"
+    },
+    "digitalocean-cli": {
+      "name": "digitalocean-cli",
+      "type": "skill",
+      "description": "Use the correct DigitalOcean CLI (doctl) context and region when running DigitalOcean commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/digitalocean-cli"
+    },
+    "salesforce-cli": {
+      "name": "salesforce-cli",
+      "type": "skill",
+      "description": "Perform Salesforce operations using the Salesforce CLI (sf). Use for querying orgs, records, metadata, and deployments.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/salesforce-cli"
+    },
+    "huaweicloud-cli": {
+      "name": "huaweicloud-cli",
+      "type": "skill",
+      "description": "Use the correct Huawei Cloud CLI (hcloud) profile and region when running Huawei Cloud commands based on the target environment.",
+      "source_repo": "https://github.com/abdullahkhawer/devops-skills.git",
+      "source_name": "abdullahkhawer/devops-skills",
+      "path": "collected_assets/skills/huaweicloud-cli"
     },
     "skills": {
       "name": "linux-agent-skills",
@@ -44616,15 +44936,6 @@
       "source_name": "stevenke1981/linux-agent-skills",
       "path": "collected_assets/skills/gcloud",
       "description_ko": "Google Cloud CLI 작업"
-    },
-    "azure-cli": {
-      "name": "azure-cli",
-      "type": "skill",
-      "description": "Azure CLI 操作",
-      "source_repo": "https://github.com/stevenke1981/linux-agent-skills.git",
-      "source_name": "stevenke1981/linux-agent-skills",
-      "path": "collected_assets/skills/azure-cli",
-      "description_ko": "Azure CLI 작업"
     },
     "nginx": {
       "name": "nginx",
@@ -46961,11 +47272,11 @@
     "ddd-discover": {
       "name": "ddd-discover",
       "type": "skill",
-      "description": "Collaborative domain discovery via event storming or domain storytelling, producing event streams, command/event candidates, hotspots, and ambiguity lists. Use when doing domain discovery (identifying events/commands/aggregates).",
+      "description": ">-",
       "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
       "source_name": "NinjaSln-labs/agent-skills",
       "path": "collected_assets/skills/ddd-discover",
-      "description_ko": "이벤트 스토밍 또는 도메인 스토리텔링을 통한 협업 도메인 검색, 이벤트 스트림, 명령/이벤트 후보, 핫스팟 및 모호성 목록 생성. 도메인 검색(이벤트/명령/집계 식별)을 수행할 때 사용합니다."
+      "description_ko": ">-"
     },
     "voice-of-customer-miner": {
       "name": "voice-of-customer-miner",
@@ -47156,15 +47467,6 @@
       "path": "collected_assets/skills/test-data-generation",
       "description_ko": ">-"
     },
-    "project-intake": {
-      "name": "project-intake",
-      "type": "skill",
-      "description": ">-",
-      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
-      "source_name": "NinjaSln-labs/agent-skills",
-      "path": "collected_assets/skills/project-intake",
-      "description_ko": ">-"
-    },
     "jobs-to-be-done": {
       "name": "jobs-to-be-done",
       "type": "skill",
@@ -47249,11 +47551,10 @@
     "ddd-subdomains": {
       "name": "ddd-subdomains",
       "type": "skill",
-      "description": "Identify business capabilities and classify subdomains (Core/Supporting/Generic), producing core-domain declarations and ownership recommendations. Use when partitioning core/supporting/generic subdomains.",
+      "description": "Identify business capabilities and classify subdomains (Core/Supporting/Generic), producing core-domain declarations, ownership recommendations, and bounded-context boundary candidates. Use when partitioning core/supporting/generic subdomains, or re-partitioning when god-context or circular-dependency signals suggest a subdomain misfire.",
       "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
       "source_name": "NinjaSln-labs/agent-skills",
-      "path": "collected_assets/skills/ddd-subdomains",
-      "description_ko": "비즈니스 역량을 식별하고 하위 도메인(핵심/지원/일반)을 분류하여 핵심 도메인 선언 및 소유권 권장 사항을 생성합니다. 코어/지원/일반 하위 도메인을 분할할 때 사용합니다."
+      "path": "collected_assets/skills/ddd-subdomains"
     },
     "ui-animation": {
       "name": "ui-animation",
