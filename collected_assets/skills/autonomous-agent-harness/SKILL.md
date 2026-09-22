@@ -1,271 +1,279 @@
 ---
 name: autonomous-agent-harness
-description: Transform Claude Code into a fully autonomous agent system with persistent memory, scheduled operations, computer use, and task queuing. Replaces standalone agent frameworks (Hermes, AutoGPT) by leveraging Claude Code's native crons, dispatch, MCP tools, and memory. Use when the user wants continuous autonomous operation, scheduled tasks, or a self-directing agent loop.
-metadata:
-  origin: ECC
+description: 将 Claude Code 转变为具有持久记忆、定时操作、计算机使用和任务队列的完全自主代理系统。通过利用 Claude Code 的原生定时任务、调度、MCP 工具和记忆，取代独立的代理框架（Hermes、AutoGPT）。当用户需要持续自主操作、定时任务或自我导向的代理循环时使用。
+origin: ECC
 ---
 
-# Autonomous Agent Harness
+# 自主代理框架
 
-Combine Claude Code's session tools with separately configured scheduling, memory, and computer-use integrations. This is a setup pattern, not a bundled always-on runtime.
+仅使用原生功能和 MCP 服务器，将 Claude Code 转变为持久化、自我导向的代理系统。
 
-## Consent and Safety Boundaries
+## 同意与安全边界
 
-Autonomous operation must be explicitly requested and scoped by the user. Do not create schedules, dispatch remote agents, write persistent memory, use computer control, post externally, modify third-party resources, or act on private communications unless the user has approved that capability and the target workspace for the current setup.
+自主操作必须由用户明确请求并划定范围。除非用户已批准该能力以及当前设置的目标工作空间，否则不得创建计划、调度远程代理、写入持久化内存、使用计算机控制、发布外部内容、修改第三方资源或处理私人通信。
 
-Prefer dry-run plans and local queue files before enabling recurring or event-driven actions. Keep credentials, private workspace exports, personal datasets, and account-specific automations out of reusable ECC artifacts.
+在启用定期或事件驱动操作之前，优先使用预演计划和本地队列文件。将凭据、私有工作空间导出、个人数据集和账户特定自动化排除在可复用的 ECC 工件之外。
 
-## When to Activate
+## 何时激活
 
-- User wants an agent that runs continuously or on a schedule
-- Setting up automated workflows that trigger periodically
-- Building a personal AI assistant that remembers context across sessions
-- User says "run this every day", "check on this regularly", "keep monitoring"
-- Wants to replicate functionality from Hermes, AutoGPT, or similar autonomous agent frameworks
-- Needs computer use combined with scheduled execution
+* 用户需要一个持续运行或按计划运行的代理
+* 设置定期触发的自动化工作流
+* 构建一个跨会话记住上下文的个人 AI 助手
+* 用户说“每天运行这个”、“定期检查这个”、“持续监控”
+* 希望复制 Hermes、AutoGPT 或类似自主代理框架的功能
+* 需要计算机使用与计划执行相结合
 
-## Architecture
+## 架构
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    Claude Code Runtime                        │
+│                    Claude Code 运行时                         │
 │                                                              │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────────────┐ │
-│  │  Crons   │  │ Dispatch │  │ Memory   │  │ Computer    │ │
-│  │ Schedule │  │ Remote   │  │ Store    │  │ Use         │ │
-│  │ Tasks    │  │ Agents   │  │          │  │             │ │
+│  │  定时任务 │  │  远程调度 │  │  记忆存储 │  │  计算机使用  │ │
+│  │  调度器   │  │  代理    │  │          │  │             │ │
 │  └────┬─────┘  └────┬─────┘  └────┬─────┘  └──────┬──────┘ │
 │       │              │             │                │        │
 │       ▼              ▼             ▼                ▼        │
 │  ┌──────────────────────────────────────────────────────┐    │
-│  │              ECC Skill + Agent Layer                  │    │
+│  │              ECC 技能 + 代理层                        │    │
 │  │                                                      │    │
 │  │  skills/     agents/     commands/     hooks/        │    │
 │  └──────────────────────────────────────────────────────┘    │
 │       │              │             │                │        │
 │       ▼              ▼             ▼                ▼        │
 │  ┌──────────────────────────────────────────────────────┐    │
-│  │              MCP Server Layer                        │    │
+│  │              MCP 服务器层                             │    │
 │  │                                                      │    │
 │  │  memory    github    exa    supabase    browser-use  │    │
 │  └──────────────────────────────────────────────────────┘    │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-## Core Components
+## 核心组件
 
-### 1. Persistent Memory
+### 1. 持久化内存
 
-Use Claude Code's built-in memory system enhanced with MCP memory server for structured data.
+使用 Claude Code 的内置内存系统，并通过 MCP 内存服务器增强以处理结构化数据。
 
-**Built-in memory** (`~/.claude/projects/*/memory/`):
-- User preferences, feedback, project context
-- Stored as markdown files with frontmatter
-- Automatically loaded at session start
+**内置内存**（`~/.claude/projects/*/memory/`）：
 
-**MCP memory server** (structured knowledge graph):
-- Entities, relations, observations
-- Queryable graph structure
-- Cross-session persistence
+* 用户偏好、反馈、项目上下文
+* 存储为带有前置元数据的 Markdown 文件
+* 在会话启动时自动加载
 
-**Memory patterns:**
+**MCP 内存服务器**（结构化知识图谱）：
 
-```
-# Short-term: current session context
-Use TodoWrite for in-session task tracking
+* 实体、关系、观察
+* 可查询的图结构
+* 跨会话持久化
 
-# Medium-term: project memory files
-Write to ~/.claude/projects/*/memory/ for cross-session recall
-
-# Long-term: MCP knowledge graph
-Use mcp__memory__create_entities for permanent structured data
-Use mcp__memory__create_relations for relationship mapping
-Use mcp__memory__add_observations for new facts about known entities
-```
-
-### 2. Scheduled Operations (Crons)
-
-Use Claude Code's native [scheduled tasks](https://code.claude.com/docs/en/scheduled-tasks) for recurring prompts within an interactive session. These tasks are session-scoped; an external scheduler is required for work that must run independently of an open session. No scheduling MCP server is required for `/loop`.
-
-**Setting up a cron:**
+**内存模式：**
 
 ```
-# In an interactive Claude Code session
-/loop 30m Review open PRs in this repository and summarize CI failures.
+# 短期：当前会话上下文
+使用 TodoWrite 进行会话内任务追踪
+
+# 中期：项目记忆文件
+写入 ~/.claude/projects/*/memory/ 以实现跨会话回忆
+
+# 长期：MCP 知识图谱
+使用 mcp__memory__create_entities 创建永久结构化数据
+使用 mcp__memory__create_relations 进行关系映射
+使用 mcp__memory__add_observations 添加关于已知实体的新事实
 ```
 
-For a one-shot run from a shell, set the working directory before invoking the CLI:
+### 2. 计划操作（定时任务）
 
-```bash
-cd "/path/to/repo" && claude -p "Review open PRs and summarize"
+使用 Claude Code 的计划任务创建定期代理操作。
+
+**设置定时任务：**
+
+```
+# Via MCP tool
+mcp__scheduled-tasks__create_scheduled_task({
+  name: "daily-pr-review",
+  schedule: "0 9 * * 1-5",  # 工作日上午9点
+  prompt: "Review all open PRs in affaan-m/everything-claude-code. For each: check CI status, review changes, flag issues. Post summary to memory.",
+  project_dir: "/path/to/repo"
+})
+
+# Via claude -p (程序化模式)
+echo "Review open PRs and summarize" | claude -p --project /path/to/repo
 ```
 
-Use an OS scheduler or CI schedule to invoke that command repeatedly when no interactive session is running. Configure the runner's authentication and tool permissions separately.
+**有用的定时任务模式：**
 
-**Useful cron patterns:**
-
-| Pattern | Schedule | Use Case |
+| 模式 | 计划 | 用例 |
 |---------|----------|----------|
-| Daily standup | `0 9 * * 1-5` | Review PRs, issues, deploy status |
-| Weekly review | `0 10 * * 1` | Code quality metrics, test coverage |
-| Hourly monitor | `0 * * * *` | Production health, error rate checks |
-| Nightly build | `0 2 * * *` | Run full test suite, security scan |
-| Pre-meeting | `*/30 * * * *` | Prepare context for upcoming meetings |
+| 每日站会 | `0 9 * * 1-5` | 审查 PR、问题、部署状态 |
+| 每周回顾 | `0 10 * * 1` | 代码质量指标、测试覆盖率 |
+| 每小时监控 | `0 * * * *` | 生产健康、错误率检查 |
+| 夜间构建 | `0 2 * * *` | 运行完整测试套件、安全扫描 |
+| 会前准备 | `*/30 * * * *` | 为即将到来的会议准备上下文 |
 
-### 3. Dispatch / Remote Agents
+### 3. 调度 / 远程代理
 
-Have an authenticated CI job or webhook receiver invoke Claude Code in a workspace it owns. The supported entrypoint is [programmatic CLI mode](https://code.claude.com/docs/en/headless), not a public Anthropic dispatch endpoint.
+远程触发 Claude Code 代理以进行事件驱动的工作流。
 
-**Dispatch patterns:**
+**调度模式：**
 
 ```bash
-# Run inside the CI workspace
-cd "/path/to/repo" && claude -p "Build failed on main. Diagnose the failure."
+# Trigger from CI/CD
+curl -X POST "https://api.anthropic.com/dispatch" \
+  -H "Authorization: Bearer $ANTHROPIC_API_KEY" \
+  -d '{"prompt": "Build failed on main. Diagnose and fix.", "project": "/repo"}'
 
 # Trigger from webhook
-# GitHub webhook -> authenticated CI runner -> claude -p -> reviewable result
+# GitHub webhook → dispatch → Claude agent → fix → PR
 
 # Trigger from another agent
 claude -p "Analyze the output of the security scan and create issues for findings"
 ```
 
-### 4. Computer Use
+### 4. 计算机使用
 
-Computer control needs a separately configured integration. Anthropic's [computer-use tool and reference environment](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool) require an application to execute tool calls in an isolated desktop environment. Adding an MCP package name does not supply that environment.
+利用 Claude 的计算机使用 MCP 进行物理世界交互。
 
-**Capabilities:**
-- Browser automation (navigate, click, fill forms, screenshot)
-- Desktop control (open apps, type, mouse control)
-- File system operations beyond CLI
+**能力：**
 
-**Use cases within the harness:**
-- Automated testing of web UIs
-- Form filling and data entry
-- Screenshot-based monitoring
-- Multi-app workflows
+* 浏览器自动化（导航、点击、填写表单、截图）
+* 桌面控制（打开应用、输入、鼠标控制）
+* 超越 CLI 的文件系统操作
 
-### 5. Task Queue
+**在框架内的用例：**
 
-Manage a persistent queue of tasks that survive session boundaries.
+* Web UI 的自动化测试
+* 表单填写和数据录入
+* 基于截图的监控
+* 多应用工作流
 
-**Implementation:**
+### 5. 任务队列
+
+管理一个跨会话边界的持久化任务队列。
+
+**实现：**
 
 ```
-# Task persistence via memory
-Write task queue to ~/.claude/projects/*/memory/task-queue.md
+# 通过记忆实现任务持久化
+将任务队列写入 ~/.claude/projects/*/memory/task-queue.md
 
-# Task format
+# 任务格式
 ---
 name: task-queue
 type: project
-description: Persistent task queue for autonomous operation
+description: 用于自主操作的持久化任务队列
 ---
 
-## Active Tasks
-- [ ] PR #123: Review and approve if CI green
-- [ ] Monitor deploy: check /health every 30 min for 2 hours
-- [ ] Research: Find 5 leads in AI tooling space
+## 活跃任务
+- [ ] PR #123: 审查并在CI通过后批准
+- [ ] 监控部署：每30分钟检查一次 /health，持续2小时
+- [ ] 调研：在AI工具领域寻找5个潜在客户
 
-## Completed
-- [x] Daily standup: reviewed 3 PRs, 2 issues
+## 已完成
+- [x] 每日站会：审查了3个PR，2个问题
 ```
 
-## Replacing Hermes
+## 替换 Hermes
 
-| Hermes Component | ECC Equivalent | How |
+| Hermes 组件 | ECC 等效组件 | 如何实现 |
 |------------------|---------------|-----|
-| Gateway/Router | CLI + external scheduler | An authenticated runner starts agent sessions |
-| Memory System | Claude memory + MCP memory server | Built-in persistence + knowledge graph |
-| Tool Registry | MCP servers | Dynamically loaded tool providers |
-| Orchestration | ECC skills + agents | Skill definitions direct agent behavior |
-| Computer Use | Separately configured integration | Browser or desktop control in an isolated environment |
-| Context Manager | Session management + memory | ECC 2.0 session lifecycle |
-| Task Queue | Memory-persisted task list | TodoWrite + memory files |
+| 网关/路由器 | Claude Code 调度 + 定时任务 | 计划任务触发代理会话 |
+| 内存系统 | Claude 内存 + MCP 内存服务器 | 内置持久化 + 知识图谱 |
+| 工具注册表 | MCP 服务器 | 动态加载的工具提供者 |
+| 编排 | ECC 技能 + 代理 | 技能定义指导代理行为 |
+| 计算机使用 | 计算机使用 MCP | 原生浏览器和桌面控制 |
+| 上下文管理器 | 会话管理 + 内存 | ECC 2.0 会话生命周期 |
+| 任务队列 | 内存持久化任务列表 | TodoWrite + 内存文件 |
 
-## Setup Guide
+## 设置指南
 
-### Step 1: Configure MCP Servers
+### 步骤 1：配置 MCP 服务器
 
-Memory MCP is optional. The [MCP reference memory server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) is published as `@modelcontextprotocol/server-memory`; version `2026.8.31` was verified on the public npm registry on 2026-09-07. It is a reference implementation, not an ECC-bundled service.
-
-After reviewing that package and approving its use, merge this entry into the user-scoped MCP configuration in `~/.claude.json`, preserving existing settings. Replace `MEMORY_FILE_PATH` with an absolute path in a private directory you own. See [Claude Code MCP configuration](https://code.claude.com/docs/en/mcp) for CLI registration and Windows `cmd /c npx` configuration.
+确保这些在 `~/.claude.json` 中：
 
 ```json
 {
   "mcpServers": {
     "memory": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory@2026.8.31"],
-      "env": {
-        "MEMORY_FILE_PATH": "/absolute/path/to/private/memory.jsonl"
-      }
+      "args": ["-y", "@anthropic/memory-mcp-server"]
+    },
+    "scheduled-tasks": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/scheduled-tasks-mcp-server"]
+    },
+    "computer-use": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/computer-use-mcp-server"]
     }
   }
 }
 ```
 
-Do not register guessed or unpublished npm packages: `npx -y` would execute whatever is later published under that name. Verify the exact package, publisher, and version before adding another server. Scheduling and computer use do not require the three unpublished package names previously listed here.
+### 步骤 2：创建基础定时任务
 
-### Step 2: Create Base Crons
+```bash
+# Daily morning briefing
+claude -p "Create a scheduled task: every weekday at 9am, review my GitHub notifications, open PRs, and calendar. Write a morning briefing to memory."
 
-For polling during an interactive session, enter:
-
-```text
-/loop 30m Review open PRs in this repository and summarize CI failures.
+# Continuous learning
+claude -p "Create a scheduled task: every Sunday at 8pm, extract patterns from this week's sessions and update the learned skills."
 ```
 
-For daily or weekly work that must survive a closed session, configure an external scheduler, such as an OS cron job or GitHub Actions, to run the one-shot command from Step 2 of Core Components. Calling `claude -p` to request a schedule does not provision an always-on scheduler. Choose the schedule, workspace, and allowed actions explicitly before enabling it.
-
-### Step 3: Initialize Memory Graph
+### 步骤 3：初始化内存图谱
 
 ```bash
 # Bootstrap your identity and context
 claude -p "Create memory entities for: me (user profile), my projects, my key contacts. Add observations about current priorities."
 ```
 
-### Step 4: Enable Computer Use (Optional)
+### 步骤 4：启用计算机使用（可选）
 
-Follow the computer-use reference environment linked above, or the documentation for a specific browser integration you have reviewed. Grant only the required permissions and verify a harmless action in the isolated environment before adding it to scheduled workflows.
+授予计算机使用 MCP 浏览器和桌面控制所需的权限。
 
-## Example Workflows
+## 示例工作流
 
-### Autonomous PR Reviewer
+### 自主 PR 审查员
+
 ```
-Cron: every 30 min during work hours
-1. Check for new PRs on watched repos
-2. For each new PR:
-   - Pull branch locally
-   - Run tests
-   - Review changes with code-reviewer agent
-   - Post review comments via GitHub MCP
-3. Update memory with review status
-```
-
-### Personal Research Agent
-```
-Cron: daily at 6 AM
-1. Check saved search queries in memory
-2. Run Exa searches for each query
-3. Summarize new findings
-4. Compare against yesterday's results
-5. Write digest to memory
-6. Flag high-priority items for morning review
+Cron: 工作时间内每30分钟执行一次
+1. 检查关注仓库的新PR
+2. 对每个新PR：
+   - 在本地拉取分支
+   - 运行测试
+   - 使用代码审查代理审查变更
+   - 通过GitHub MCP发布审查评论
+3. 更新审查状态到记忆库
 ```
 
-### Meeting Prep Agent
+### 个人研究代理
+
 ```
-Trigger: 30 min before each calendar event
-1. Read calendar event details
-2. Search memory for context on attendees
-3. Pull recent email/Slack threads with attendees
-4. Prepare talking points and agenda suggestions
-5. Write prep doc to memory
+Cron: 每天上午6点执行
+1. 检查内存中保存的搜索查询
+2. 对每个查询运行Exa搜索
+3. 总结新发现
+4. 与昨日结果进行对比
+5. 将摘要写入内存
+6. 标记高优先级项目供晨间审阅
 ```
 
-## Constraints
+### 会议准备代理
 
-- Native scheduled prompts share their interactive session. External scheduler invocations start separate sessions unless explicitly resumed.
-- Computer use requires explicit permission grants. Don't assume access.
-- CLI automation still consumes model usage and is subject to the configured provider's limits. Choose appropriate scheduler intervals.
-- Memory files should be kept concise. Archive old data rather than letting files grow unbounded.
-- Always verify that scheduled tasks completed successfully. Add error handling to cron prompts.
+```
+触发条件：每个日历事件前30分钟
+1. 读取日历事件详情
+2. 搜索记忆中关于参会者的背景信息
+3. 提取与参会者近期的邮件/Slack讨论记录
+4. 准备谈话要点和议程建议
+5. 将准备文档写入记忆
+```
+
+## 约束
+
+* 定时任务在隔离的会话中运行——除非通过内存，否则它们不与交互式会话共享上下文。
+* 计算机使用需要明确的权限授予。不要假设可以访问。
+* 远程调度可能有速率限制。设计定时任务时使用适当的间隔。
+* 内存文件应保持简洁。归档旧数据，而不是让文件无限增长。
+* 始终验证计划任务是否成功完成。在定时任务提示中添加错误处理。

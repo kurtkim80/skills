@@ -301,7 +301,13 @@ else
   if [ "$len" -le 250 ]; then
     r16=PASS; n16="$len characters$degraded_note"
   elif [ "$len" -le 400 ]; then
-    r16=WARN; n16="$len characters (251-400 band, needs a justifying comment)$degraded_note"
+    # Justifying comment per checks.md's "Justifying comment" rubric; scoped
+    # to `#` comment lines so a `description:` value can't match by accident.
+    if printf '%s\n' "$fm" | grep -qiE '^[[:space:]]*#.*check[ -]?16([^0-9]|$)'; then
+      r16=PASS; n16="$len characters (251-400 band, justified by comment)$degraded_note"
+    else
+      r16=WARN; n16="$len characters (251-400 band, needs a justifying comment)$degraded_note"
+    fi
   else
     r16=FAIL; n16="$len characters (over 400)$degraded_note"
   fi

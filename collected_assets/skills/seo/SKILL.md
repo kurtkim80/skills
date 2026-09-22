@@ -1,143 +1,155 @@
 ---
 name: seo
-description: "Run a broad SEO audit across technical SEO, on-page SEO, schema, sitemaps, content quality, AI search readiness, and GEO. Use as the umbrella skill when the user asks for a full SEO analysis or strategy."
-risk: critical
-source: "https://github.com/AgriciDaniel/claude-seo"
-date_added: "2026-03-21"
-user-invokable: true
-argument-hint: "[command] [url]"
+description: 审计、规划并实施SEO改进，涵盖技术SEO、页面优化、结构化数据、核心网页指标和内容策略。当用户希望提升搜索可见性、进行SEO修复、使用架构标记、处理站点地图/robots文件或进行关键词映射时使用。
+origin: ECC
 ---
 
-# SEO: Universal SEO Analysis Skill
+# SEO
 
-Comprehensive SEO analysis across all industries (SaaS, local services,
-e-commerce, publishers, agencies). Orchestrates 12 specialized sub-skills and 7 subagents
-(+ optional extension sub-skills like seo-dataforseo).
+通过技术正确性、性能和内容相关性提升搜索可见性，而非依赖花哨手段。
 
-## When to Use
-- Use when the user asks for a full SEO audit or broad SEO strategy.
-- Use as the umbrella entry point when multiple SEO dimensions are in scope.
-- Use when the task spans technical SEO, content, schema, sitemaps, and AI search readiness together.
+## 使用场景
 
-## Quick Reference
+在以下情况使用此技能：
 
-| Command | What it does |
-|---------|-------------|
-| `/seo audit <url>` | Full website audit with parallel subagent delegation |
-| `/seo page <url>` | Deep single-page analysis |
-| `/seo sitemap <url or generate>` | Analyze or generate XML sitemaps |
-| `/seo schema <url>` | Detect, validate, and generate Schema.org markup |
-| `/seo images <url>` | Image optimization analysis |
-| `/seo technical <url>` | Technical SEO audit (9 categories) |
-| `/seo content <url>` | E-E-A-T and content quality analysis |
-| `/seo geo <url>` | AI Overviews / Generative Engine Optimization |
-| `/seo plan <business-type>` | Strategic SEO planning |
-| `/seo programmatic [url\|plan]` | Programmatic SEO analysis and planning |
-| `/seo competitor-pages [url\|generate]` | Competitor comparison page generation |
-| `/seo hreflang [url]` | Hreflang/i18n SEO audit and generation |
-| `/seo dataforseo [command]` | Live SEO data via DataForSEO (extension) |
-| `/seo image-gen [use-case] <description>` | AI image generation for SEO assets (extension) |
+* 审计爬取能力、可索引性、规范标签或重定向时
+* 优化标题标签、元描述和标题结构时
+* 添加或验证结构化数据时
+* 优化核心网页指标时
+* 进行关键词研究并将关键词映射到URL时
+* 规划内部链接或站点地图/robots文件变更时
 
-## Orchestration Logic
+## 工作原理
 
-When the user invokes `/seo audit`, delegate to subagents in parallel:
-1. Detect business type (SaaS, local, ecommerce, publisher, agency, other)
-2. Spawn subagents: seo-technical, seo-content, seo-schema, seo-sitemap, seo-performance, seo-visual, seo-geo
-3. Collect results and generate unified report with SEO Health Score (0-100)
-4. Create prioritized action plan (Critical -> High -> Medium -> Low)
+### 原则
 
-For individual commands, load the relevant sub-skill directly.
+1. 先修复技术障碍，再进行内容优化。
+2. 每个页面应有一个明确的主要搜索意图。
+3. 优先采用长期质量信号，而非操纵性模式。
+4. 移动优先假设至关重要，因为索引基于移动端。
+5. 建议应针对具体页面且可执行。
 
-## Industry Detection
+### 技术SEO检查清单
 
-Detect business type from homepage signals:
-- **SaaS**: pricing page, /features, /integrations, /docs, "free trial", "sign up"
-- **Local Service**: phone number, address, service area, "serving [city]", Google Maps embed
-- **E-commerce**: /products, /collections, /cart, "add to cart", product schema
-- **Publisher**: /blog, /articles, /topics, article schema, author pages, publication dates
-- **Agency**: /case-studies, /portfolio, /industries, "our work", client logos
+#### 爬取能力
 
-## Quality Gates
+* `robots.txt` 应允许重要页面并屏蔽低价值内容
+* 无重要页面被意外设置为 `noindex`
+* 重要页面应在浅层点击深度内可达
+* 避免超过两次跳转的重定向链
+* 规范标签应自洽且无循环
 
-Read `references/quality-gates.md` for thin content thresholds per page type.
-Hard rules:
-- WARNING at 30+ location pages (enforce 60%+ unique content)
-- HARD STOP at 50+ location pages (require user justification)
-- Never recommend HowTo schema (deprecated Sept 2023)
-- FAQ schema for Google rich results: only government and healthcare sites (Aug 2023 restriction); existing FAQPage on commercial sites -> flag Info priority (not Critical), noting AI/LLM citation benefit; adding new FAQPage -> not recommended for Google benefit
-- All Core Web Vitals references use INP, never FID
+#### 可索引性
 
-## Reference Files
+* 首选URL格式应保持一致
+* 多语言页面需正确使用hreflang（如适用）
+* 站点地图应反映预期的公开页面
+* 无重复URL在缺乏规范控制的情况下竞争
 
-Load these on-demand as needed (do NOT load all at startup):
-- `references/cwv-thresholds.md`: Current Core Web Vitals thresholds and measurement details
-- `references/schema-types.md`: All supported schema types with deprecation status
-- `references/eeat-framework.md`: E-E-A-T evaluation criteria (Sept 2025 QRG update)
-- `references/quality-gates.md`: Content length minimums, uniqueness thresholds
+#### 性能
 
-## Scoring Methodology
+* LCP < 2.5秒
+* INP < 200毫秒
+* CLS < 0.1
+* 常见修复：预加载首屏资源、减少渲染阻塞工作、预留布局空间、精简重型JS
 
-### SEO Health Score (0-100)
-Weighted aggregate of all categories:
+#### 结构化数据
 
-| Category | Weight |
-|----------|--------|
-| Technical SEO | 22% |
-| Content Quality | 23% |
-| On-Page SEO | 20% |
-| Schema / Structured Data | 10% |
-| Performance (CWV) | 10% |
-| AI Search Readiness | 10% |
-| Images | 5% |
+* 首页：适当时使用组织或企业架构
+* 编辑页面：`Article` / `BlogPosting`
+* 产品页面：`Product` 和 `Offer`
+* 内部页面：`BreadcrumbList`
+* 问答部分：仅当内容完全匹配时使用 `FAQPage`
 
-### Priority Levels
-- **Critical**: Blocks indexing or causes penalties (immediate fix required)
-- **High**: Significantly impacts rankings (fix within 1 week)
-- **Medium**: Optimization opportunity (fix within 1 month)
-- **Low**: Nice to have (backlog)
+### 页面规则
 
-## Sub-Skills
+#### 标题标签
 
-This skill orchestrates 12 specialized sub-skills (+ 2 extensions):
+* 目标长度约50-60个字符
+* 将主要关键词或概念置于靠前位置
+* 标题应易于人类阅读，而非为搜索引擎堆砌
 
-1. **seo-audit** -- Full website audit with parallel delegation
-2. **seo-page** -- Deep single-page analysis
-3. **seo-technical** -- Technical SEO (9 categories)
-4. **seo-content** -- E-E-A-T and content quality
-5. **seo-schema** -- Schema markup detection and generation
-6. **seo-images** -- Image optimization
-7. **seo-sitemap** -- Sitemap analysis and generation
-8. **seo-geo** -- AI Overviews / GEO optimization
-9. **seo-plan** -- Strategic planning with templates
-10. **seo-programmatic** -- Programmatic SEO analysis and planning
-11. **seo-competitor-pages** -- Competitor comparison page generation
-12. **seo-hreflang** -- Hreflang/i18n SEO audit and generation
-13. **seo-dataforseo** -- Live SEO data via DataForSEO MCP (extension)
-14. **seo-image-gen** -- AI image generation for SEO assets via Gemini (extension)
+#### 元描述
 
-## Subagents
+* 目标长度约120-160个字符
+* 如实描述页面内容
+* 自然包含主要主题
 
-For parallel analysis during audits:
-- `seo-technical` -- Crawlability, indexability, security, CWV
-- `seo-content` -- E-E-A-T, readability, thin content
-- `seo-schema` -- Detection, validation, generation
-- `seo-sitemap` -- Structure, coverage, quality gates
-- `seo-performance` -- Core Web Vitals measurement
-- `seo-visual` -- Screenshots, mobile testing, above-fold
-- `seo-geo` -- AI crawler access, llms.txt, citability, brand mention signals
-- `seo-dataforseo` -- Live SERP, keyword, backlink, local SEO data (extension, optional)
-- `seo-image-gen` -- SEO image audit and generation plan (extension, optional)
+#### 标题结构
 
-## Error Handling
+* 一个清晰的 `H1`
+* `H2` 和 `H3` 应反映实际内容层级
+* 不要仅为视觉样式跳过结构层级
 
-| Scenario | Action |
-|----------|--------|
-| Unrecognized command | List available commands from the Quick Reference table. Suggest the closest matching command. |
-| URL unreachable | Report the error and suggest the user verify the URL. Do not attempt to guess site content. |
-| Sub-skill fails during audit | Report partial results from successful sub-skills. Clearly note which sub-skill failed and why. Suggest re-running the failed sub-skill individually. |
-| Ambiguous business type detection | Present the top two detected types with supporting signals. Ask the user to confirm before proceeding with industry-specific recommendations. |
+### 关键词映射
 
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
+1. 定义搜索意图
+2. 收集实际的关键词变体
+3. 按意图匹配度、潜在价值和竞争程度排序
+4. 将主要关键词/主题映射到单个URL
+5. 检测并避免关键词自相残杀
+
+### 内部链接
+
+* 从权重高的页面链接到希望排名的页面
+* 使用描述性锚文本
+* 避免在可能使用更具体锚文本时使用通用锚文本
+* 从新页面补充链接到相关现有页面
+
+## 示例
+
+### 标题公式
+
+```text
+主要主题 - 特定修饰词 | 品牌
+```
+
+### 元描述公式
+
+```text
+行动 + 主题 + 价值主张 + 一个支撑细节
+```
+
+### JSON-LD示例
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Page Title Here",
+  "author": {
+    "@type": "Person",
+    "name": "Author Name"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Brand Name"
+  }
+}
+```
+
+### 审计输出格式
+
+```text
+[HIGH] 产品页面上的重复标题标签
+位置：src/routes/products/[slug].tsx
+问题：动态标题会折叠为相同的默认字符串，这会削弱相关性并产生重复信号。
+修复：使用产品名称和主要类别为每个产品生成唯一的标题。
+```
+
+## 反模式
+
+| 反模式 | 修复方法 |
+| --- | --- |
+| 关键词堆砌 | 优先为用户写作 |
+| 内容单薄的近似重复页面 | 合并或差异化处理 |
+| 为不存在的内容添加架构 | 使架构与实际内容匹配 |
+| 未检查实际页面就提供内容建议 | 先阅读真实页面 |
+| 泛泛的“改进SEO”输出 | 将每条建议与具体页面或资源关联 |
+
+## 相关技能
+
+* `seo-specialist`
+* `frontend-patterns`
+* `brand-voice`
+* `market-research`

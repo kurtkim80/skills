@@ -151,16 +151,64 @@ d=$(sh "$here/skill_check.sh" "$decoy" $j10)
 eq "decoy: 15 decoy field does not satisfy declaration" "$(row "$d" 15)" WARN
 
 # ---------- Check 16: description length bands ----------
+# Shared 300-char filler for the 251-400 WARN band, reused by all three
+# fixtures below instead of regenerating it per block.
+mid300=$(printf 'x%.0s' $(seq 1 300))
+
 warn="$work/warn/authoring/mid/SKILL.md"
 {
   echo "---"
   echo "name: mid"
   printf 'description: >-\n'
-  printf '  %s\n' "$(printf 'x%.0s' $(seq 1 300))"
+  printf '  %s\n' "$mid300"
   echo "---"
 } | mkskill "$warn"
 w=$(sh "$here/skill_check.sh" "$warn" $j10)
-eq "warn: 16 in the 251-400 WARN band" "$(row "$w" 16)" WARN
+eq "warn: 16 in the 251-400 WARN band, no justifying comment" "$(row "$w" 16)" WARN
+
+# Same band, but with a justifying comment above description: -- must clear
+# the WARN even though the length is unchanged (issue #28).
+justified="$work/justified/authoring/mid2/SKILL.md"
+{
+  echo "---"
+  echo "name: mid2"
+  echo "# Description is 300 chars, over check 16's 250-char band, on purpose."
+  printf 'description: >-\n'
+  printf '  %s\n' "$mid300"
+  echo "---"
+} | mkskill "$justified"
+j=$(sh "$here/skill_check.sh" "$justified" $j10)
+eq "justified: 16 PASSes in the 251-400 band with a Check 16 comment" "$(row "$j" 16)" PASS
+
+# A comment that merely contains the word "check" (no "16") must NOT satisfy
+# it -- the match is scoped to "check 16"/"check-16", not any mention of
+# "check", so a decoy comment must not silence a real WARN.
+decoy16="$work/decoy16/authoring/mid3/SKILL.md"
+{
+  echo "---"
+  echo "name: mid3"
+  echo "# Check this description carefully before editing."
+  printf 'description: >-\n'
+  printf '  %s\n' "$mid300"
+  echo "---"
+} | mkskill "$decoy16"
+d16=$(sh "$here/skill_check.sh" "$decoy16" $j10)
+eq "decoy16: a bare 'check' comment does not satisfy Check 16" "$(row "$d16" 16)" WARN
+
+# A trailing digit after "16" must not false-match (agy review, PR #29
+# FOLLOW-UP) -- a workflow-run ID like "check-1601" or a heading like
+# "Check 160 lines" is not a Check 16 justification.
+decoytrail="$work/decoytrail/authoring/mid4/SKILL.md"
+{
+  echo "---"
+  echo "name: mid4"
+  echo "# See workflow run check-1601 for why this failed once."
+  printf 'description: >-\n'
+  printf '  %s\n' "$mid300"
+  echo "---"
+} | mkskill "$decoytrail"
+dt=$(sh "$here/skill_check.sh" "$decoytrail" $j10)
+eq "decoytrail: 'check-1601' (trailing digit) does not satisfy Check 16" "$(row "$dt" 16)" WARN
 
 # ---------- mechanical-only mode: no score row without all ten judgments ----------
 solo=$(sh "$here/skill_check.sh" "$good")

@@ -1,124 +1,175 @@
 ---
 name: incident-response
-description: Runs a live incident from first alert to resolution — assigning clear roles, mitigating before diagnosing, setting severity, and communicating in a structured cadence so a system under stress does not also become a communication failure. Use this whenever the user says production is down, an alert just fired, customers are affected, they need an incident commander, or they ask how to run or structure an active incident. For the after-the-fact writeup use `root-cause-analysis`, for the step-by-step fix procedures use `runbooks`, and for the on-call rotation that catches the page use `on-call-management`.
-license: MIT
+description: >-
+  Incident response and analysis via Harness MCP. Correlate incidents with recent deployments,
+  assess blast radius and downstream service impact, and generate comprehensive postmortem
+  documents. Use when asked to investigate an incident, determine if a deployment caused an
+  issue, assess blast radius, or create a postmortem. Do NOT use for pipeline debugging
+  (use debug-pipeline instead) or SLO management (use manage-slos instead). Trigger phrases:
+  incident, deployment correlation, blast radius, postmortem, root cause, service impact,
+  outage analysis, rollback decision, incident timeline, deployment caused, which deploy.
+metadata:
+  author: Harness
+  version: 1.0.0
+  mcp-server: harness-mcp-v2
+license: Apache-2.0
+compatibility: Requires Harness MCP v2 server (harness-mcp-v2)
 ---
 
 # Incident Response
 
-An incident is not a debugging session with an audience — it is a distinct mode with its own
-goals. The instinct of a good engineer is to understand the problem before acting; the
-discipline of incident response is to reduce customer harm before you understand anything at
-all. Those two goals conflict, and the second one wins until stated otherwise.
+Correlate incidents with deployments, assess blast radius, and generate postmortem documents using Harness MCP.
 
-The single biggest failure mode in live incidents is not technical, it is organizational:
-nobody is in charge, three people fix the same thing three different ways, and no one can say
-what changed. Fixing that costs nothing and saves the most time.
+## Instructions
 
-**Mitigate first, understand second, and let one person own the decisions.**
+### Step 1: Establish Scope
 
-For role definitions, a severity matrix, and copy-paste status-update templates, read
-`references/incident-roles.md`.
+Confirm the affected service, environment, and incident details.
 
-## 1. Name an incident commander in the first five minutes
+```
+Call MCP tool: harness_list
+Parameters:
+  resource_type: "service"
+  org_id: "<organization>"
+  project_id: "<project>"
+```
 
-The IC does not fix anything. Their job is to hold the shared model of what is happening, make
-the call on what to try next, and stop responders from working at cross purposes. Without a
-named IC, every responder is independently trying to be the hero, which means duplicated
-effort and nobody watching the whole board.
+### Step 2: Identify the Incident Response Task
 
-- **One IC per incident**, full stop — if it feels like it needs two, split into two
-  incidents.
-- **Ops does the hands-on-keyboard work**, comms talks to stakeholders, IC decides — do not
-  let one person try to be all three on anything above the lowest severity.
-- **The IC can be reassigned** mid-incident if someone more senior joins or the first IC needs
-  to become hands-on; say so out loud when it happens.
+Determine which workflow the user needs:
 
-**Done when:** everyone in the incident channel can name the current IC without asking.
+1. **Deployment-to-Incident Correlation** -- Determine if a recent deployment caused the incident
+2. **Blast Radius Assessment** -- Map affected services and downstream impact
+3. **Postmortem Generation** -- Create a structured postmortem document
 
-## 2. Mitigate before you diagnose
+### Step 3: Correlate Deployment to Incident
 
-Rolling back a bad deploy, failing over to a healthy region, or shedding load buys time and
-stops the bleeding, even if you don't yet know why the system broke. Root-causing while the
-customer is still down is optimizing for the wrong thing. The fix does not need to be
-permanent — it needs to be now.
+Gather from the user:
+- Affected service name and environment
+- Alert or incident name and start time
+- Observed symptoms (error rate spike, latency, outage)
 
-- **Ask "what changed?" before "why did it break?"** — most incidents trace to a recent
-  deploy, config change, or scaling event, and reverting it is faster than understanding it.
-- **Prefer reversible mitigations** — a rollback or a traffic shift you can undo beats a
-  targeted code fix you're improvising under pressure.
-- **A mitigated incident is not a closed incident** — it moves to lower urgency, not to done.
+Pull recent deployments:
 
-**Done when:** customer-facing impact has stopped or measurably reduced, independent of
-whether the cause is understood.
+```
+Call MCP tool: harness_list
+Parameters:
+  resource_type: "execution"
+  org_id: "<organization>"
+  project_id: "<project>"
+  status: "Success"
+```
 
-## 3. Set severity and let it drive everything else
+For each recent deployment, check:
+- **Timing:** Was the deployment within the incident correlation window (e.g., 2 hours before)?
+- **Service match:** Does the deployed service match or depend on the affected service?
+- **Change content:** What changed in the deployment (config, code, infrastructure)?
 
-Severity determines who gets paged, how often you communicate, and whether you wake up a VP.
-Getting it wrong in either direction has a cost: too high burns out responders on
-non-incidents, too low leaves a real outage under-resourced. Set it early, and revise it as
-facts come in — severity is a snapshot of current customer impact, not a prediction.
+Build a deployment timeline:
+1. List all deployments to the affected environment in the last N hours
+2. Mark the incident start time on the timeline
+3. Identify the most likely causal deployment (closest before incident start)
+4. Check if a rollback was performed and whether it resolved the issue
 
-| Severity | Signal | Cadence |
-|---|---|---|
-| SEV1 | Widespread outage or data loss risk | Updates every 15–30 min, exec visibility |
-| SEV2 | Degraded for a subset of users/features | Updates hourly |
-| SEV3 | Minor or internal-only impact | Updates at milestones |
+Present findings with confidence level: HIGH (deployment matches timing + service), MEDIUM (timing matches but different service), LOW (no deployment correlation found).
 
-**Done when:** the incident has a stated severity that matches current, not worst-case,
-customer impact.
+### Step 4: Assess Blast Radius
 
-## 4. Communicate on a fixed cadence, not when you feel like it
+Gather from the user:
+- Failing service and failure type (outage, elevated error rate, high latency)
+- Current error rate or severity
+- Environment
 
-Silence during an incident is read as "nobody is working on it," even when three engineers are
-heads-down. A predictable update cadence — even a boring "still investigating, next update in
-30 minutes" — is what keeps stakeholders off the responders' backs and prevents the same
-question being asked in five channels at once.
+Map the impact:
 
-- **One channel of record** — status page, incident channel, whatever it is, say it once and
-  point everyone there.
-- **State impact, current action, and next update time** — every update, not just the first
-  one.
-- **Comms lead drafts, IC approves** — keep the IC out of wordsmithing under pressure.
+```
+Call MCP tool: harness_status
+Parameters:
+  org_id: "<organization>"
+  project_id: "<project>"
+```
 
-**Done when:** a stakeholder who wasn't in the room can read the channel and know current
-status without asking.
+Assess:
+- **Direct impact:** The failing service's error rate, latency, and availability
+- **Upstream callers:** Services that call the failing service -- are they degrading?
+- **Downstream dependencies:** Services the failing service depends on -- are they healthy?
+- **User impact:** Estimate affected users based on traffic volume
+- **Data integrity:** Any risk of data corruption or inconsistency?
 
-## 5. Protect the responders' attention
+Classify severity:
+- **Critical:** User-facing outage, data loss risk, or multiple services affected
+- **Major:** Degraded performance affecting users, single service impacted
+- **Minor:** Internal service degraded, no user-facing impact
 
-An incident channel that fills with speculation, side debugging, and "have you tried"
-suggestions from well-meaning bystanders slows the people actually holding context. The IC's
-job includes triage of *people*, not just systems.
+Recommend immediate actions based on blast radius:
+- If deployment-correlated: recommend rollback with expected resolution time
+- If infrastructure-related: recommend failover or scaling
+- If dependency-related: recommend circuit breaker activation or graceful degradation
 
-- **Move deep-dive debugging to a thread or side channel**, keep the main channel for status
-  and decisions.
-- **Limit who can push changes** during the incident — uncoordinated fixes are how a SEV2
-  becomes a SEV1.
-- **Call a break** on long incidents — a swapped-in fresh responder catches things a
-  six-hour-deep one won't.
+### Step 5: Generate Postmortem
 
-**Done when:** the main incident channel is readable as a decision log, not a debugging
-transcript.
+Gather from the user:
+- Service name and incident summary
+- Incident duration and environment
+- Resolution steps taken
 
-## 6. Close the loop before closing the incident
+Structure the postmortem:
 
-An incident isn't over when the graph looks normal — it's over when you've confirmed the
-mitigation holds and handed off what's left. Declaring victory too early is how the same page
-fires again an hour later.
+**1. Executive Summary** -- What happened, customer impact, duration (2-3 sentences)
 
-- **Watch the metric through at least one full cycle** (a full traffic period, a full batch
-  run) before declaring resolved.
-- **Capture the timeline while it's fresh** — timestamps, who did what, get lost fast once
-  people move on.
-- **Schedule the postmortem before people scatter** — see `root-cause-analysis`.
+**2. Timeline** -- Build from Harness pipeline events and alert timestamps:
+- When was the issue first detected?
+- When did the on-call team engage?
+- What deployment or change triggered the regression?
+- When was mitigation applied and service restored?
 
-**Done when:** the incident is marked resolved with a confirmed-stable window and a postmortem
-is on the calendar.
+Pull timeline data:
+```
+Call MCP tool: harness_list
+Parameters:
+  resource_type: "execution"
+  org_id: "<organization>"
+  project_id: "<project>"
+```
 
-## Report
+**3. Root Cause Analysis** -- Which deployment or change triggered the incident and why
 
-State the final severity, who was IC, what mitigated the impact and when, and how long
-customers were affected. Name explicitly what is still not understood about root cause — an
-incident report that claims full understanding under time pressure is usually wrong, and
-saying "mitigated, cause not yet confirmed" is more honest and more useful than a guess
-dressed up as a conclusion.
+**4. Impact Assessment** -- Affected services, environments, and approximate user impact
+
+**5. Action Items** -- Categorized as:
+- Immediate fixes (address the root cause)
+- Process improvements (prevent recurrence)
+- Monitoring improvements (detect faster)
+
+**6. Lessons Learned** -- What went well, what didn't, and what was lucky
+
+## Examples
+
+- "Our payment service is down -- was it a deployment?" -- Correlate incident with recent deployments and provide confidence level
+- "What is the blast radius of the checkout outage?" -- Map upstream/downstream services and estimate user impact
+- "Generate a postmortem for yesterday's auth-service incident" -- Create structured postmortem with timeline, RCA, and action items
+- "A Sev-1 just fired -- which deployment caused it?" -- Pull recent deployments and correlate with alert timing
+
+## Performance Notes
+
+- Deployment correlation is most accurate within a 2-hour window -- beyond that, other factors become more likely.
+- Blast radius assessment requires an up-to-date service dependency map -- stale maps miss connections.
+- Postmortems should be generated within 48 hours while the incident is fresh in the team's memory.
+- Always include what went well in the postmortem -- blameless culture requires acknowledging good responses.
+
+## Troubleshooting
+
+### No Deployment Found in Correlation Window
+- Expand the search window to 4-6 hours -- some failures have delayed onset
+- Check for infrastructure changes (not just code deployments)
+- Look for config changes, feature flag toggles, or certificate expirations
+
+### Blast Radius Assessment Missing Services
+- The service dependency map may be incomplete -- check for undocumented dependencies
+- Look for shared infrastructure (databases, message queues) that multiple services use
+- Check for external dependencies (third-party APIs, DNS, CDN)
+
+### Postmortem Missing Timeline Events
+- Pull from multiple sources: pipeline executions, alert history, and chat transcripts
+- Check if automated rollbacks occurred that may not be in the deployment history
+- Include infrastructure events (auto-scaling, node failures) alongside deployment events

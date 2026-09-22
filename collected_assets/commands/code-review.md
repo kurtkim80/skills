@@ -1,53 +1,68 @@
 ---
-description: 방금 작성한 코드를 보안+품질 검사합니다.
+description: Review code for quality, security, and maintainability
+agent: code-reviewer
+subtask: true
 ---
 
-# Code Review
+# Code Review Command
 
-Comprehensive security and quality review of uncommitted changes:
+Review code changes for quality, security, and maintainability: $ARGUMENTS
 
-1. Get changed files: git diff --name-only HEAD
+## Your Task
 
-2. For each changed file, check for:
+1. **Get changed files**: Run `git diff --name-only HEAD`
+2. **Analyze each file** for issues
+3. **Generate structured report**
+4. **Provide actionable recommendations**
 
-**Security Issues (CRITICAL):**
-- Hardcoded credentials, API keys, tokens
-- SQL injection vulnerabilities
-- XSS vulnerabilities  
-- Missing input validation
-- Insecure dependencies
-- Path traversal risks
+## Check Categories
 
-**Code Quality (HIGH):**
-- Functions > 50 lines
-- Files > 800 lines
-- Nesting depth > 4 levels
-- Missing error handling
-- console.log statements
-- TODO/FIXME comments
-- Missing JSDoc for public APIs
+### Security Issues (CRITICAL)
+- [ ] Hardcoded credentials, API keys, tokens
+- [ ] SQL injection vulnerabilities
+- [ ] XSS vulnerabilities
+- [ ] Missing input validation
+- [ ] Insecure dependencies
+- [ ] Path traversal risks
+- [ ] Authentication/authorization flaws
 
-**Best Practices (MEDIUM):**
-- Mutation patterns (use immutable instead)
-- Emoji usage in code/comments
-- Missing tests for new code
-- Accessibility issues (a11y)
+### Code Quality (HIGH)
+- [ ] Functions > 50 lines
+- [ ] Files > 800 lines
+- [ ] Nesting depth > 4 levels
+- [ ] Missing error handling
+- [ ] console.log statements
+- [ ] TODO/FIXME comments
+- [ ] Missing JSDoc for public APIs
 
-3. Generate report with:
-   - Severity: CRITICAL, HIGH, MEDIUM, LOW
-   - File location and line numbers
-   - Issue description
-   - Suggested fix
+### Best Practices (MEDIUM)
+- [ ] Mutation patterns (use immutable instead)
+- [ ] Unnecessary complexity
+- [ ] Missing tests for new code
+- [ ] Accessibility issues (a11y)
+- [ ] Performance concerns
 
-4. Block commit if CRITICAL or HIGH issues found
+### Style (LOW)
+- [ ] Inconsistent naming
+- [ ] Missing type annotations
+- [ ] Formatting issues
 
-Never approve code with security vulnerabilities!
+## Report Format
+
+For each issue found:
+
+```
+**[SEVERITY]** file.ts:123
+Issue: [Description]
+Fix: [How to fix]
+```
+
+## Decision
+
+- **CRITICAL or HIGH issues**: Block commit, require fixes
+- **MEDIUM issues**: Recommend fixes before merge
+- **LOW issues**: Optional improvements
 
 ---
 
-## 다음 단계
-
-| 리뷰 후 | 커맨드 |
-|:--------|:-------|
-| 빌드/테스트 검증 | `/handoff-verify` |
-| 바로 커밋 | `/commit-push-pr` |
+**IMPORTANT**: Never approve code with security vulnerabilities!

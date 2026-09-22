@@ -1,16 +1,16 @@
-# Timeline Editing Guide
+# 时间线编辑指南
 
-VideoDB provides a non-destructive timeline editor for composing videos from multiple assets, adding text and image overlays, mixing audio tracks, and trimming clips — all server-side without re-encoding or local tools. Use this for trimming, combining clips, overlaying audio/music on video, adding subtitles, and layering text or images.
+VideoDB 提供了一个非破坏性的时间线编辑器，用于从多个素材合成视频、添加文本和图像叠加、混合音轨以及修剪片段——所有这些都在服务器端完成，无需重新编码或本地工具。可用于修剪、合并片段、在视频上叠加音频/音乐、添加字幕以及叠加文本或图像。
 
-## Prerequisites
+## 前提条件
 
-Videos, audio, and images **must be uploaded** to a collection before they can be used as timeline assets. For caption overlays, the video must also be **indexed for spoken words**.
+视频、音频和图像**必须上传**到集合中，才能用作时间线素材。对于字幕叠加，视频还必须**为口语单词建立索引**。
 
-## Core Concepts
+## 核心概念
 
-### Timeline
+### 时间线
 
-A `Timeline` is a virtual composition layer. Assets are placed on it either **inline** (sequentially on the main track) or as **overlays** (layered at a specific timestamp). Nothing modifies the original media; the final stream is compiled on demand.
+`Timeline` 是一个虚拟合成层。素材可以**内联**（在主轨道上顺序放置）或作为**叠加层**（在特定时间戳分层放置）放置在时间线上。不会修改原始媒体；最终流是按需编译的。
 
 ```python
 from videodb.timeline import Timeline
@@ -18,23 +18,23 @@ from videodb.timeline import Timeline
 timeline = Timeline(conn)
 ```
 
-### Assets
+### 素材
 
-Every element on a timeline is an **asset**. VideoDB provides five asset types:
+时间线上的每个元素都是一个**素材**。VideoDB 提供五种素材类型：
 
-| Asset | Import | Primary Use |
+| 素材 | 导入 | 主要用途 |
 |-------|--------|-------------|
-| `VideoAsset` | `from videodb.asset import VideoAsset` | Video clips (trim, sequencing) |
-| `AudioAsset` | `from videodb.asset import AudioAsset` | Music, SFX, narration |
-| `ImageAsset` | `from videodb.asset import ImageAsset` | Logos, thumbnails, overlays |
-| `TextAsset` | `from videodb.asset import TextAsset, TextStyle` | Titles, captions, lower-thirds |
-| `CaptionAsset` | `from videodb.editor import CaptionAsset` | Auto-rendered subtitles (Editor API) |
+| `VideoAsset` | `from videodb.asset import VideoAsset` | 视频片段（修剪、排序） |
+| `AudioAsset` | `from videodb.asset import AudioAsset` | 音乐、音效、旁白 |
+| `ImageAsset` | `from videodb.asset import ImageAsset` | 徽标、缩略图、叠加层 |
+| `TextAsset` | `from videodb.asset import TextAsset, TextStyle` | 标题、字幕、下三分之一字幕 |
+| `CaptionAsset` | `from videodb.editor import CaptionAsset` | 自动渲染的字幕（编辑器 API） |
 
-## Building a Timeline
+## 构建时间线
 
-### Add Video Clips Inline
+### 内联添加视频片段
 
-Inline assets play one after another on the main video track. The `add_inline` method only accepts `VideoAsset`:
+内联素材在主视频轨道上一个接一个播放。`add_inline` 方法只接受 `VideoAsset`：
 
 ```python
 from videodb.asset import VideoAsset
@@ -49,9 +49,9 @@ timeline.add_inline(VideoAsset(asset_id=video_b.id))
 stream_url = timeline.generate_stream()
 ```
 
-### Trim / Sub-clip
+### 修剪 / 子片段
 
-Use `start` and `end` on a `VideoAsset` to extract a portion:
+在 `VideoAsset` 上使用 `start` 和 `end` 来提取一部分：
 
 ```python
 # Take only seconds 10–30 from the source video
@@ -59,19 +59,19 @@ clip = VideoAsset(asset_id=video.id, start=10, end=30)
 timeline.add_inline(clip)
 ```
 
-### VideoAsset Parameters
+### VideoAsset 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | required | Video media ID |
-| `start` | `float` | `0` | Trim start (seconds) |
-| `end` | `float\|None` | `None` | Trim end (`None` = full) |
+| `asset_id` | `str` | 必填 | 视频媒体 ID |
+| `start` | `float` | `0` | 修剪开始时间（秒） |
+| `end` | `float\|None` | `None` | 修剪结束时间（`None` = 完整视频） |
 
-> **Warning:** The SDK does not validate negative timestamps. Passing `start=-5` is silently accepted but produces broken or unexpected output. Always ensure `start >= 0`, `start < end`, and `end <= video.length` before creating a `VideoAsset`.
+> **警告：** SDK 不会验证负时间戳。传递 `start=-5` 会被静默接受，但会产生损坏或意外的输出。在创建 `VideoAsset` 之前，请始终确保 `start >= 0`、`start < end` 和 `end <= video.length`。
 
-## Text Overlays
+## 文本叠加
 
-Add titles, lower-thirds, or captions at any point on the timeline:
+在时间线的任意点添加标题、下三分之一字幕或说明文字：
 
 ```python
 from videodb.asset import TextAsset, TextStyle
@@ -92,39 +92,39 @@ title = TextAsset(
 timeline.add_overlay(0, title)
 ```
 
-### TextStyle Parameters
+### TextStyle 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `fontsize` | `int` | `24` | Font size in pixels |
-| `fontcolor` | `str` | `"black"` | CSS colour name or hex |
-| `fontcolor_expr` | `str` | `""` | Dynamic font colour expression |
-| `alpha` | `float` | `1.0` | Text opacity (0.0–1.0) |
-| `font` | `str` | `"Sans"` | Font family |
-| `box` | `bool` | `True` | Enable background box |
-| `boxcolor` | `str` | `"white"` | Background box colour |
-| `boxborderw` | `str` | `"10"` | Box border width |
-| `boxw` | `int` | `0` | Box width override |
-| `boxh` | `int` | `0` | Box height override |
-| `line_spacing` | `int` | `0` | Line spacing |
-| `text_align` | `str` | `"T"` | Text alignment within the box |
-| `y_align` | `str` | `"text"` | Vertical alignment reference |
-| `borderw` | `int` | `0` | Text border width |
-| `bordercolor` | `str` | `"black"` | Text border colour |
-| `expansion` | `str` | `"normal"` | Text expansion mode |
-| `basetime` | `int` | `0` | Base time for time-based expressions |
-| `fix_bounds` | `bool` | `False` | Fix text bounds |
-| `text_shaping` | `bool` | `True` | Enable text shaping |
-| `shadowcolor` | `str` | `"black"` | Shadow colour |
-| `shadowx` | `int` | `0` | Shadow X offset |
-| `shadowy` | `int` | `0` | Shadow Y offset |
-| `tabsize` | `int` | `4` | Tab size in spaces |
-| `x` | `str` | `"(main_w-text_w)/2"` | Horizontal position expression |
-| `y` | `str` | `"(main_h-text_h)/2"` | Vertical position expression |
+| `fontsize` | `int` | `24` | 字体大小（像素） |
+| `fontcolor` | `str` | `"black"` | CSS 颜色名称或十六进制值 |
+| `fontcolor_expr` | `str` | `""` | 动态字体颜色表达式 |
+| `alpha` | `float` | `1.0` | 文本不透明度（0.0–1.0） |
+| `font` | `str` | `"Sans"` | 字体系列 |
+| `box` | `bool` | `True` | 启用背景框 |
+| `boxcolor` | `str` | `"white"` | 背景框颜色 |
+| `boxborderw` | `str` | `"10"` | 框边框宽度 |
+| `boxw` | `int` | `0` | 框宽度覆盖 |
+| `boxh` | `int` | `0` | 框高度覆盖 |
+| `line_spacing` | `int` | `0` | 行间距 |
+| `text_align` | `str` | `"T"` | 框内文本对齐方式 |
+| `y_align` | `str` | `"text"` | 垂直对齐参考 |
+| `borderw` | `int` | `0` | 文本边框宽度 |
+| `bordercolor` | `str` | `"black"` | 文本边框颜色 |
+| `expansion` | `str` | `"normal"` | 文本扩展模式 |
+| `basetime` | `int` | `0` | 基于时间的表达式的基础时间 |
+| `fix_bounds` | `bool` | `False` | 固定文本边界 |
+| `text_shaping` | `bool` | `True` | 启用文本整形 |
+| `shadowcolor` | `str` | `"black"` | 阴影颜色 |
+| `shadowx` | `int` | `0` | 阴影 X 偏移 |
+| `shadowy` | `int` | `0` | 阴影 Y 偏移 |
+| `tabsize` | `int` | `4` | 制表符大小（空格数） |
+| `x` | `str` | `"(main_w-text_w)/2"` | 水平位置表达式 |
+| `y` | `str` | `"(main_h-text_h)/2"` | 垂直位置表达式 |
 
-## Audio Overlays
+## 音频叠加
 
-Layer background music, sound effects, or voiceover on top of the video track:
+在主视频轨道上叠加背景音乐、音效或旁白：
 
 ```python
 from videodb.asset import AudioAsset
@@ -142,20 +142,20 @@ audio_layer = AudioAsset(
 timeline.add_overlay(0, audio_layer)
 ```
 
-### AudioAsset Parameters
+### AudioAsset 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | required | Audio media ID |
-| `start` | `float` | `0` | Trim start (seconds) |
-| `end` | `float\|None` | `None` | Trim end (`None` = full) |
-| `disable_other_tracks` | `bool` | `True` | When True, mutes other audio tracks |
-| `fade_in_duration` | `float` | `0` | Fade-in seconds (max 5) |
-| `fade_out_duration` | `float` | `0` | Fade-out seconds (max 5) |
+| `asset_id` | `str` | 必填 | 音频媒体 ID |
+| `start` | `float` | `0` | 修剪开始时间（秒） |
+| `end` | `float\|None` | `None` | 修剪结束时间（`None` = 完整音频） |
+| `disable_other_tracks` | `bool` | `True` | 为 True 时，静音其他音轨 |
+| `fade_in_duration` | `float` | `0` | 淡入秒数（最大 5） |
+| `fade_out_duration` | `float` | `0` | 淡出秒数（最大 5） |
 
-## Image Overlays
+## 图像叠加
 
-Add logos, watermarks, or generated images as overlays:
+添加徽标、水印或生成的图像作为叠加层：
 
 ```python
 from videodb.asset import ImageAsset
@@ -174,24 +174,24 @@ logo_overlay = ImageAsset(
 timeline.add_overlay(0, logo_overlay)
 ```
 
-### ImageAsset Parameters
+### ImageAsset 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | required | Image media ID |
-| `width` | `int\|str` | `100` | Display width |
-| `height` | `int\|str` | `100` | Display height |
-| `x` | `int` | `80` | Horizontal position (px from left) |
-| `y` | `int` | `20` | Vertical position (px from top) |
-| `duration` | `float\|None` | `None` | Display duration (seconds) |
+| `asset_id` | `str` | 必填 | 图像媒体 ID |
+| `width` | `int\|str` | `100` | 显示宽度 |
+| `height` | `int\|str` | `100` | 显示高度 |
+| `x` | `int` | `80` | 水平位置（距离左侧的像素） |
+| `y` | `int` | `20` | 垂直位置（距离顶部的像素） |
+| `duration` | `float\|None` | `None` | 显示时长（秒） |
 
-## Caption Overlays
+## 字幕叠加
 
-There are two ways to add captions to video.
+有两种方式可以为视频添加字幕。
 
-### Method 1: Subtitle Workflow (simplest)
+### 方法 1：字幕工作流（最简单）
 
-Use `video.add_subtitle()` to burn subtitles directly onto a video stream. This uses the `videodb.timeline.Timeline` internally:
+使用 `video.add_subtitle()` 将字幕直接烧录到视频流中。这在内部使用 `videodb.timeline.Timeline`：
 
 ```python
 from videodb import SubtitleStyle
@@ -211,9 +211,9 @@ stream_url = video.add_subtitle(style=SubtitleStyle(
 ))
 ```
 
-### Method 2: Editor API (advanced)
+### 方法 2：编辑器 API（高级）
 
-The Editor API (`videodb.editor`) provides a track-based composition system with `CaptionAsset`, `Clip`, `Track`, and its own `Timeline`. This is a separate API from the `videodb.timeline.Timeline` used above.
+编辑器 API（`videodb.editor`）提供了一个基于轨道的合成系统，包含 `CaptionAsset`、`Clip`、`Track` 及其自身的 `Timeline`。这是一个与上述使用的 `videodb.timeline.Timeline` 独立的 API。
 
 ```python
 from videodb.editor import (
@@ -249,37 +249,38 @@ editor_tl.add_track(track)
 stream_url = editor_tl.generate_stream()
 ```
 
-### CaptionAsset Parameters
+### CaptionAsset 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `src` | `str` | `"auto"` | Caption source (`"auto"` or base64 ASS string) |
-| `font` | `FontStyling\|None` | `FontStyling()` | Font styling (name, size, bold, italic, etc.) |
-| `primary_color` | `str` | `"&H00FFFFFF"` | Primary text colour (ASS format) |
-| `secondary_color` | `str` | `"&H000000FF"` | Secondary text colour (ASS format) |
-| `back_color` | `str` | `"&H00000000"` | Background colour (ASS format) |
-| `border` | `BorderAndShadow\|None` | `BorderAndShadow()` | Border and shadow styling |
-| `position` | `Positioning\|None` | `Positioning()` | Caption alignment and margins |
-| `animation` | `CaptionAnimation\|None` | `None` | Animation effect (e.g., `box_highlight`, `reveal`, `karaoke`) |
+| `src` | `str` | `"auto"` | 字幕来源（`"auto"` 或 base64 ASS 字符串） |
+| `font` | `FontStyling\|None` | `FontStyling()` | 字体样式（名称、大小、粗体、斜体等） |
+| `primary_color` | `str` | `"&H00FFFFFF"` | 主文本颜色（ASS 格式） |
+| `secondary_color` | `str` | `"&H000000FF"` | 次文本颜色（ASS 格式） |
+| `back_color` | `str` | `"&H00000000"` | 背景颜色（ASS 格式） |
+| `border` | `BorderAndShadow\|None` | `BorderAndShadow()` | 边框和阴影样式 |
+| `position` | `Positioning\|None` | `Positioning()` | 字幕对齐方式和边距 |
+| `animation` | `CaptionAnimation\|None` | `None` | 动画效果（例如，`box_highlight`、`reveal`、`karaoke`） |
 
-## Compiling & Streaming
+## 编译与流式传输
 
-After assembling a timeline, compile it into a streamable URL. Streams are generated instantly - no render wait times.
+组装好时间线后，将其编译成可流式传输的 URL。流是即时生成的——无需渲染等待时间。
 
 ```python
 stream_url = timeline.generate_stream()
 print(f"Stream: {stream_url}")
 ```
 
-For more streaming options (segment streams, search-to-stream, audio playback), see [streaming.md](streaming.md).
+有关更多流式传输选项（分段流、搜索到流、音频播放），请参阅 [streaming.md](streaming.md)。
 
-## Complete Workflow Examples
+## 完整工作流示例
 
-### Highlight Reel with Title Card
+### 带标题卡的高光集锦
 
 ```python
 import videodb
 from videodb import SearchType
+from videodb.exceptions import InvalidRequestError
 from videodb.timeline import Timeline
 from videodb.asset import VideoAsset, TextAsset, TextStyle
 
@@ -289,8 +290,14 @@ video = coll.get_video("your-video-id")
 
 # 1. Search for key moments
 video.index_spoken_words(force=True)
-results = video.search("product announcement", search_type=SearchType.semantic)
-shots = results.get_shots()  # may be empty if no results
+try:
+    results = video.search("product announcement", search_type=SearchType.semantic)
+    shots = results.get_shots()
+except InvalidRequestError as exc:
+    if "No results found" in str(exc):
+        shots = []
+    else:
+        raise
 
 # 2. Build timeline
 timeline = Timeline(conn)
@@ -313,7 +320,7 @@ stream_url = timeline.generate_stream()
 print(f"Highlight reel: {stream_url}")
 ```
 
-### Picture-in-Picture with Background Music
+### 带背景音乐的徽标叠加
 
 ```python
 import videodb
@@ -348,7 +355,7 @@ stream_url = timeline.generate_stream()
 print(f"Final video: {stream_url}")
 ```
 
-### Multi-Clip Montage from Multiple Videos
+### 来自多个视频的多片段蒙太奇
 
 ```python
 import videodb
@@ -365,6 +372,7 @@ clips = [
 ]
 
 timeline = Timeline(conn)
+timeline_offset = 0.0
 
 for clip in clips:
     # Add a label as an overlay on each clip
@@ -376,59 +384,60 @@ for clip in clips:
     timeline.add_inline(
         VideoAsset(asset_id=clip["video_id"], start=clip["start"], end=clip["end"])
     )
-    timeline.add_overlay(0, label)
+    timeline.add_overlay(timeline_offset, label)
+    timeline_offset += clip["end"] - clip["start"]
 
 stream_url = timeline.generate_stream()
 print(f"Montage: {stream_url}")
 ```
 
-## Two Timeline APIs
+## 两个时间线 API
 
-VideoDB has two separate timeline systems. They are **not interchangeable**:
+VideoDB 有两个独立的时间线系统。它们**不可互换**：
 
-| | `videodb.timeline.Timeline` | `videodb.editor.Timeline` (Editor API) |
+| | `videodb.timeline.Timeline` | `videodb.editor.Timeline`（编辑器 API） |
 |---|---|---|
-| **Import** | `from videodb.timeline import Timeline` | `from videodb.editor import Timeline as EditorTimeline` |
-| **Assets** | `VideoAsset`, `AudioAsset`, `ImageAsset`, `TextAsset` | `CaptionAsset`, `Clip`, `Track` |
-| **Methods** | `add_inline()`, `add_overlay()` | `add_track()` with `Track` / `Clip` |
-| **Best for** | Video composition, overlays, multi-clip editing | Caption/subtitle styling with animations |
+| **导入** | `from videodb.timeline import Timeline` | `from videodb.editor import Timeline as EditorTimeline` |
+| **素材** | `VideoAsset`、`AudioAsset`、`ImageAsset`、`TextAsset` | `CaptionAsset`、`Clip`、`Track` |
+| **方法** | `add_inline()`、`add_overlay()` | `add_track()` 配合 `Track` / `Clip` |
+| **最适合** | 视频合成、叠加、多片段编辑 | 带动画的字幕/字幕样式设计 |
 
-Do not mix assets from one API into the other. `CaptionAsset` only works with the Editor API. `VideoAsset` / `AudioAsset` / `ImageAsset` / `TextAsset` only work with `videodb.timeline.Timeline`.
+不要将一个 API 的素材混入另一个 API。`CaptionAsset` 仅适用于编辑器 API。`VideoAsset` / `AudioAsset` / `ImageAsset` / `TextAsset` 仅适用于 `videodb.timeline.Timeline`。
 
-## Limitations & Constraints
+## 限制与约束
 
-The timeline editor is designed for **non-destructive linear composition**. The following operations are **not supported**:
+时间线编辑器专为**非破坏性线性合成**而设计。**不支持**以下操作：
 
-### Not Possible
+### 不支持的操作
 
-| Limitation | Detail |
+| 限制 | 详情 |
 |---|---|
-| **No transitions or effects** | No crossfades, wipes, dissolves, or transitions between clips. All cuts are hard cuts. |
-| **No video-on-video (picture-in-picture)** | `add_inline()` only accepts `VideoAsset`. You cannot overlay one video stream on top of another. Image overlays can approximate static PiP but not live video. |
-| **No speed or playback control** | No slow-motion, fast-forward, reverse playback, or time remapping. `VideoAsset` has no `speed` parameter. |
-| **No crop, zoom, or pan** | Cannot crop a region of a video frame, apply zoom effects, or pan across a frame. `video.reframe()` is for aspect-ratio conversion only. |
-| **No video filters or color grading** | No brightness, contrast, saturation, hue, or color correction adjustments. |
-| **No animated text** | `TextAsset` is static for its full duration. No fade-in/out, movement, or animation. For animated captions, use `CaptionAsset` with the Editor API. |
-| **No mixed text styling** | A single `TextAsset` has one `TextStyle`. Cannot mix bold, italic, or colors within a single text block. |
-| **No blank or solid-color clips** | Cannot create a solid color frame, black screen, or standalone title card. Text and image overlays require a `VideoAsset` beneath them on the inline track. |
-| **No audio volume control** | `AudioAsset` has no `volume` parameter. Audio is either full volume or muted via `disable_other_tracks`. Cannot mix at a reduced level. |
-| **No keyframe animation** | Cannot change overlay properties over time (e.g., move an image from position A to B). |
+| **无过渡或效果** | 片段之间没有交叉淡入淡出、划像、溶解或过渡。所有剪辑都是硬切。 |
+| **无视频叠加视频（画中画）** | `add_inline()` 只接受 `VideoAsset`。无法将一个视频流叠加在另一个之上。图像叠加可以近似静态画中画，但不能是实时视频。 |
+| **无速度或播放控制** | 没有慢动作、快进、倒放或时间重映射。`VideoAsset` 没有 `speed` 参数。 |
+| **无裁剪、缩放或平移** | 无法裁剪视频帧的区域、应用缩放效果或在帧上平移。`video.reframe()` 仅用于宽高比转换。 |
+| **无视频滤镜或色彩分级** | 没有亮度、对比度、饱和度、色调或色彩校正调整。 |
+| **无动画文本** | `TextAsset` 在其整个持续时间内是静态的。没有淡入/淡出、移动或动画。对于动画字幕，请使用带有编辑器 API 的 `CaptionAsset`。 |
+| **无混合文本样式** | 单个 `TextAsset` 只有一个 `TextStyle`。无法在单个文本块内混合粗体、斜体或颜色。 |
+| **无空白或纯色片段** | 无法创建纯色帧、黑屏或独立的标题卡。文本和图像叠加需要在内联轨道上有 `VideoAsset` 作为底层。 |
+| **无音频音量控制** | `AudioAsset` 没有 `volume` 参数。音频要么是全音量，要么通过 `disable_other_tracks` 静音。无法以降低的音量混合。 |
+| **无关键帧动画** | 无法随时间改变叠加属性（例如，将图像从位置 A 移动到 B）。 |
 
-### Constraints
+### 约束
 
-| Constraint | Detail |
+| 约束 | 详情 |
 |---|---|
-| **Audio fade max 5 seconds** | `fade_in_duration` and `fade_out_duration` are capped at 5 seconds each. |
-| **Overlay positioning is absolute** | Overlays use absolute timestamps from the timeline start. Rearranging inline clips does not move their overlays. |
-| **Inline track is video only** | `add_inline()` only accepts `VideoAsset`. Audio, image, and text must use `add_overlay()`. |
-| **No overlay-to-clip binding** | Overlays are placed at a fixed timeline timestamp. There is no way to attach an overlay to a specific inline clip so it moves with it. |
+| **音频淡入淡出最长 5 秒** | `fade_in_duration` 和 `fade_out_duration` 各自上限为 5 秒。 |
+| **叠加层定位为绝对定位** | 叠加层使用时间轴起始点的绝对时间戳。重新排列内联片段不会移动其叠加层。 |
+| **内联轨道仅支持视频** | `add_inline()` 仅接受 `VideoAsset`。音频、图像和文本必须使用 `add_overlay()`。 |
+| **叠加层与片段无绑定关系** | 叠加层被放置在固定的时间轴时间戳上。无法将叠加层附加到特定的内联片段以使其随之移动。 |
 
-## Tips
+## 提示
 
-- **Non-destructive**: Timelines never modify source media. You can create multiple timelines from the same assets.
-- **Overlay stacking**: Multiple overlays can start at the same timestamp. Audio overlays mix together; image/text overlays layer in add-order.
-- **Inline is VideoAsset only**: `add_inline()` only accepts `VideoAsset`. Use `add_overlay()` for `AudioAsset`, `ImageAsset`, and `TextAsset`.
-- **Trim precision**: `start`/`end` on `VideoAsset` and `AudioAsset` are in seconds.
-- **Muting video audio**: Set `disable_other_tracks=True` on `AudioAsset` to mute the original video audio when overlaying music or narration.
-- **Fade limits**: `fade_in_duration` and `fade_out_duration` on `AudioAsset` have a maximum of 5 seconds.
-- **Generated media**: Use `coll.generate_music()`, `coll.generate_sound_effect()`, `coll.generate_voice()`, and `coll.generate_image()` to create media that can be used as timeline assets immediately.
+* **非破坏性**：时间轴从不修改源媒体。您可以使用相同的素材创建多个时间轴。
+* **叠加层堆叠**：多个叠加层可以在同一时间戳开始。音频叠加层会混合在一起；图像/文本叠加层按添加顺序分层叠加。
+* **内联轨道仅支持 VideoAsset**：`add_inline()` 仅接受 `VideoAsset`。对于 `AudioAsset`、`ImageAsset` 和 `TextAsset`，请使用 `add_overlay()`。
+* **裁剪精度**：`start`/`end` 在 `VideoAsset` 和 `AudioAsset` 上以秒为单位。
+* **静音视频音频**：在 `AudioAsset` 上设置 `disable_other_tracks=True`，以便在叠加音乐或旁白时静音原始视频音频。
+* **淡入淡出限制**：`fade_in_duration` 和 `fade_out_duration` 在 `AudioAsset` 上最长不超过 5 秒。
+* **生成媒体**：使用 `coll.generate_music()`、`coll.generate_sound_effect()`、`coll.generate_voice()` 和 `coll.generate_image()` 创建可立即用作时间轴素材的媒体。

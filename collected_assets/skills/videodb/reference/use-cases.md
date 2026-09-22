@@ -1,118 +1,142 @@
-# Use Cases
+# 使用场景
 
-Common workflows and what VideoDB enables. For code details, see [api-reference.md](api-reference.md), [capture.md](capture.md), [editor.md](editor.md), and [search.md](search.md).
+常见工作流及 VideoDB 所实现的功能。代码详情请参阅 [api-reference.md](api-reference.md)、[capture.md](capture.md)、[editor.md](editor.md) 和 [search.md](search.md)。
 
----
+***
 
-## Video Search & Highlights
+## 视频搜索与精彩片段
 
-### Create Highlight Reels
-Upload a long video (conference talk, lecture, meeting recording), search for key moments by topic ("product announcement", "Q&A session", "demo"), and automatically compile matching segments into a shareable highlight reel.
+### 创建精彩集锦
 
-### Build Searchable Video Libraries
-Batch upload videos to a collection, index them for spoken word search, then query across the entire library. Find specific topics across hundreds of hours of content instantly.
+上传长视频（会议演讲、讲座、会议录音），按主题（"产品发布"、"问答环节"、"演示"）搜索关键片段，并自动将匹配的片段汇编成可分享的精彩集锦。
 
-### Extract Specific Clips
-Search for moments matching a query ("budget discussion", "action items") and extract each matching segment as an individual clip with its own stream URL.
+### 构建可搜索视频库
 
----
+批量上传视频到集合中，为语音内容建立索引以便搜索，然后在整个库中进行查询。即时在数百小时的内容中找到特定主题。
 
-## Video Enhancement
+### 提取特定片段
 
-### Add Professional Polish
-Take raw footage and enhance it with:
-- Auto-generated subtitles from speech
-- Custom thumbnails at specific timestamps
-- Background music overlays
-- Intro/outro sequences with generated images
+搜索与查询匹配的片段（"预算讨论"、"行动项"），并将每个匹配的片段提取为独立的剪辑，拥有自己的流媒体 URL。
 
-### AI-Enhanced Content
-Combine existing video with generative AI:
-- Generate text summaries from transcript
-- Create background music matching video duration
-- Generate title cards and overlay images
-- Mix all elements into a polished final output
+***
 
----
+## 视频增强
 
-## Real-Time Capture (Desktop/Meeting)
+### 增添专业质感
 
-### Screen + Audio Recording with AI
-Capture screen, microphone, and system audio simultaneously. Get real-time:
-- **Live transcription** - Speech to text as it happens
-- **Audio summaries** - Periodic AI-generated summaries of discussions
-- **Visual indexing** - AI descriptions of screen activity
+获取原始素材并进行增强：
 
-### Meeting Capture with Summarization
-Record meetings with live transcription of all participants. Get periodic summaries with key discussion points, decisions, and action items delivered in real-time.
+* 根据语音自动生成字幕
+* 在特定时间戳添加自定义缩略图
+* 背景音乐叠加
+* 带有生成图像的开场/结尾序列
 
-### Screen Activity Tracking
-Track what's happening on screen with AI-generated descriptions:
-- "User is browsing a spreadsheet in Google Sheets"
-- "User switched to a code editor with a Python file"
-- "Video call with screen sharing enabled"
+### AI 增强内容
 
-### Post-Session Processing
-After capture ends, the recording is exported as a permanent video. Then:
-- Generate searchable transcript
-- Search for specific topics within the recording
-- Extract clips of important moments
-- Share via stream URL or player link
+将现有视频与生成式 AI 结合：
 
----
+* 根据转录内容生成文本摘要
+* 创建与视频时长匹配的背景音乐
+* 生成标题卡和叠加图像
+* 将所有元素混合成精美的最终输出
 
-## Live Stream Intelligence (RTSP/RTMP)
+***
 
-### Connect External Streams
-Ingest live video from RTSP/RTMP sources (security cameras, encoders, broadcasts). Process and index content in real-time.
+## 实时录制（桌面/会议）
 
-### Real-Time Event Detection
-Define events to detect in live streams:
-- "Person entering restricted area"
-- "Traffic violation at intersection"
-- "Product visible on shelf"
+### 带 AI 的屏幕 + 音频录制
 
-Get alerts via WebSocket or webhook when events occur.
+同时捕获屏幕、麦克风和系统音频。实时获取：
 
-### Live Stream Search
-Search across recorded live stream content. Find specific moments and generate clips from hours of continuous footage.
+* **实时转录** - 语音即时转文本
+* **音频摘要** - 定期生成的 AI 讨论摘要
+* **视觉索引** - AI 对屏幕活动的描述
 
----
+### 带摘要功能的会议录制
 
-## Content Moderation & Safety
+录制会议并实时转录所有参与者的发言。获取包含关键讨论点、决策和行动项的定期摘要，实时交付。
 
-### Automated Content Review
-Index video scenes with AI and search for problematic content. Flag videos containing violence, inappropriate content, or policy violations.
+### 屏幕活动追踪
 
-### Profanity Detection
-Detect and locate profanity in audio. Optionally overlay beep sounds at detected timestamps.
+通过 AI 生成的描述追踪屏幕活动：
 
----
+* "用户正在 Google Sheets 中浏览电子表格"
+* "用户切换到了包含 Python 文件的代码编辑器"
+* "正在进行屏幕共享的视频通话"
 
-## Platform Integration
+### 会话后处理
 
-### Social Media Formatting
-Reframe videos for different platforms:
-- Vertical (9:16) for TikTok, Reels, Shorts
-- Square (1:1) for Instagram feed
-- Landscape (16:9) for YouTube
+录制结束后，录音将导出为永久视频。然后：
 
-### Transcode for Delivery
-Change resolution, bitrate, or quality for different delivery targets. Output optimized streams for web, mobile, or broadcast.
+* 生成可搜索的转录稿
+* 在录制内容中搜索特定主题
+* 提取重要时刻的片段
+* 通过流媒体 URL 或播放器链接分享
 
-### Generate Shareable Links
-Every operation produces playable stream URLs. Embed in web players, share directly, or integrate with existing platforms.
+***
 
----
+## 直播流智能处理（RTSP/RTMP）
 
-## Workflow Summary
+### 连接外部流
 
-| Goal | VideoDB Approach |
+从 RTSP/RTMP 源（安全摄像头、编码器、广播）摄取实时视频。实时处理和索引内容。
+
+### 实时事件检测
+
+定义要在直播流中检测的事件：
+
+* "人员进入限制区域"
+* "十字路口交通违规"
+* "货架上可见产品"
+
+当事件发生时，通过 WebSocket 或 webhook 获取警报。
+
+### 直播流搜索
+
+在已录制的直播流内容中搜索。从数小时的连续素材中找到特定时刻并生成剪辑。
+
+***
+
+## 内容审核与安全
+
+### 自动化内容审查
+
+使用 AI 索引视频场景并搜索有问题内容。标记包含暴力、不当内容或违反政策的视频。
+
+### 脏话检测
+
+检测并定位音频中的脏话。可选择在检测到的时间戳叠加哔声。
+
+***
+
+## 平台集成
+
+### 社交媒体格式调整
+
+为不同平台调整视频格式：
+
+* 垂直（9:16）用于 TikTok、Reels、Shorts
+* 方形（1:1）用于 Instagram 动态
+* 横屏（16:9）用于 YouTube
+
+### 为分发转码
+
+针对不同的分发目标更改分辨率、比特率或质量。为网页、移动端或广播输出优化的流。
+
+### 生成可分享链接
+
+每次操作都会生成可播放的流媒体 URL。可嵌入网页播放器、直接分享或与现有平台集成。
+
+***
+
+## 工作流摘要
+
+| 目标 | VideoDB 方法 |
 |------|------------------|
-| Find moments in video | Index spoken words/scenes → Search → Compile clips |
-| Create highlights | Search multiple topics → Build timeline → Generate stream |
-| Add subtitles | Index spoken words → Add subtitle overlay |
-| Record screen + AI | Start capture → Run AI pipelines → Export video |
-| Monitor live streams | Connect RTSP → Index scenes → Create alerts |
-| Reformat for social | Reframe to target aspect ratio |
-| Combine clips | Build timeline with multiple assets → Generate stream |
+| 在视频中查找片段 | 索引语音/场景 → 搜索 → 汇编剪辑 |
+| 创建精彩集锦 | 搜索多个主题 → 构建时间线 → 生成流 |
+| 添加字幕 | 索引语音 → 添加字幕叠加层 |
+| 录制屏幕 + AI | 开始录制 → 运行 AI 流水线 → 导出视频 |
+| 监控直播流 | 连接 RTSP → 索引场景 → 创建警报 |
+| 为社交媒体调整格式 | 调整为目标宽高比 |
+| 合并剪辑 | 使用多个素材构建时间线 → 生成流 |

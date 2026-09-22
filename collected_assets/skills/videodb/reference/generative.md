@@ -1,10 +1,10 @@
-# Generative Media Guide
+# 生成式媒体指南
 
-VideoDB provides AI-powered generation of images, videos, music, sound effects, voice, and text content. All generation methods are on the **Collection** object.
+VideoDB 提供 AI 驱动的图像、视频、音乐、音效、语音和文本内容生成。所有生成方法均在 **Collection** 对象上。
 
-## Prerequisites
+## 先决条件
 
-You need a connection and a collection reference before calling any generation method:
+在调用任何生成方法之前，您需要一个连接和一个集合引用：
 
 ```python
 import videodb
@@ -13,9 +13,9 @@ conn = videodb.connect()
 coll = conn.get_collection()
 ```
 
-## Image Generation
+## 图像生成
 
-Generate images from text prompts:
+根据文本提示生成图像：
 
 ```python
 image = coll.generate_image(
@@ -28,21 +28,21 @@ print(image.id)
 print(image.generate_url())  # returns a signed download URL
 ```
 
-### generate_image Parameters
+### generate\_image 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the image to generate |
-| `aspect_ratio` | `str` | `"1:1"` | Aspect ratio: `"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, or `"3:4"` |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必需 | 要生成的图像的文本描述 |
+| `aspect_ratio` | `str` | `"1:1"` | 宽高比：`"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, 或 `"3:4"` |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-Returns an `Image` object with `.id`, `.name`, and `.collection_id`. The `.url` property may be `None` for generated images — always use `image.generate_url()` to get a reliable signed download URL.
+返回一个 `Image` 对象，包含 `.id`、`.name` 和 `.collection_id`。`.url` 属性对于生成的图像可能为 `None` —— 始终使用 `image.generate_url()` 来获取可靠的签名下载 URL。
 
-> **Note:** Unlike `Video` objects (which use `.generate_stream()`), `Image` objects use `.generate_url()` to retrieve the image URL. The `.url` property is only populated for some image types (e.g. thumbnails).
+> **注意：** 与 `Video` 对象（使用 `.generate_stream()`）不同，`Image` 对象使用 `.generate_url()` 来检索图像 URL。`.url` 属性仅针对某些图像类型（例如缩略图）填充。
 
-## Video Generation
+## 视频生成
 
-Generate short video clips from text prompts:
+根据文本提示生成短视频片段：
 
 ```python
 video = coll.generate_video(
@@ -54,23 +54,23 @@ stream_url = video.generate_stream()
 video.play()
 ```
 
-### generate_video Parameters
+### generate\_video 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the video to generate |
-| `duration` | `float` | `5` | Duration in seconds (must be integer value, 5-8) |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必需 | 要生成的视频的文本描述 |
+| `duration` | `int` | `5` | 持续时间（秒）（必须是整数值，5-8） |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-Returns a `Video` object. Generated videos are automatically added to the collection and can be used in timelines, searches, and compilations like any uploaded video.
+返回一个 `Video` 对象。生成的视频会自动添加到集合中，并且可以像任何上传的视频一样在时间线、搜索和编译中使用。
 
-## Audio Generation
+## 音频生成
 
-VideoDB provides three separate methods for different audio types.
+VideoDB 为不同的音频类型提供了三种独立的方法。
 
-### Music
+### 音乐
 
-Generate background music from text descriptions:
+根据文本描述生成背景音乐：
 
 ```python
 music = coll.generate_music(
@@ -81,15 +81,15 @@ music = coll.generate_music(
 print(music.id)
 ```
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the music |
-| `duration` | `int` | `5` | Duration in seconds |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必需 | 音乐的文本描述 |
+| `duration` | `int` | `5` | 持续时间（秒） |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-### Sound Effects
+### 音效
 
-Generate specific sound effects:
+生成特定的音效：
 
 ```python
 sfx = coll.generate_sound_effect(
@@ -98,16 +98,16 @@ sfx = coll.generate_sound_effect(
 )
 ```
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the sound effect |
-| `duration` | `int` | `2` | Duration in seconds |
-| `config` | `dict` | `{}` | Additional configuration |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必需 | 音效的文本描述 |
+| `duration` | `int` | `2` | 持续时间（秒） |
+| `config` | `dict` | `{}` | 附加配置 |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-### Voice (Text-to-Speech)
+### 语音（文本转语音）
 
-Generate speech from text:
+从文本生成语音：
 
 ```python
 voice = coll.generate_voice(
@@ -116,18 +116,18 @@ voice = coll.generate_voice(
 )
 ```
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `text` | `str` | required | Text to convert to speech |
-| `voice_name` | `str` | `"Default"` | Voice to use |
-| `config` | `dict` | `{}` | Additional configuration |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `text` | `str` | 必需 | 要转换为语音的文本 |
+| `voice_name` | `str` | `"Default"` | 要使用的声音 |
+| `config` | `dict` | `{}` | 附加配置 |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-All three audio methods return an `Audio` object with `.id`, `.name`, `.length`, and `.collection_id`.
+所有三种音频方法都返回一个 `Audio` 对象，包含 `.id`、`.name`、`.length` 和 `.collection_id`。
 
-## Text Generation (LLM Integration)
+## 文本生成（LLM 集成）
 
-Use `coll.generate_text()` to run LLM analysis. This is a **Collection-level** method -- pass any context (transcripts, descriptions) directly in the prompt string.
+使用 `coll.generate_text()` 来运行 LLM 分析。这是一个 **集合级** 方法 —— 直接在提示字符串中传递任何上下文（转录、描述）。
 
 ```python
 # Get transcript from a video first
@@ -142,30 +142,30 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-### generate_text Parameters
+### generate\_text 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Prompt with context for the LLM |
-| `model_name` | `str` | `"basic"` | Model tier: `"basic"`, `"pro"`, or `"ultra"` |
-| `response_type` | `str` | `"text"` | Response format: `"text"` or `"json"` |
+| `prompt` | `str` | 必需 | 包含 LLM 上下文的提示 |
+| `model_name` | `str` | `"basic"` | 模型层级：`"basic"`、`"pro"` 或 `"ultra"` |
+| `response_type` | `str` | `"text"` | 响应格式：`"text"` 或 `"json"` |
 
-Returns a `dict` with an `output` key. When `response_type="text"`, `output` is a `str`. When `response_type="json"`, `output` is a `dict`.
+返回一个 `dict`，带有一个 `output` 键。当 `response_type="text"` 时，`output` 是一个 `str`。当 `response_type="json"` 时，`output` 是一个 `dict`。
 
 ```python
 result = coll.generate_text(prompt="Summarize this", model_name="pro")
 print(result["output"])  # access the actual text/dict
 ```
 
-### Analyze Scenes with LLM
+### 使用 LLM 分析场景
 
-Combine scene extraction with text generation:
+将场景提取与文本生成相结合：
 
 ```python
 from videodb import SceneExtractionType
 
 # First index scenes
-video.index_scenes(
+scenes = video.index_scenes(
     extraction_type=SceneExtractionType.time_based,
     extraction_config={"time": 10},
     prompt="Describe the visual content in this scene.",
@@ -173,11 +173,21 @@ video.index_scenes(
 
 # Get transcript for spoken context
 transcript_text = video.get_transcript_text()
+scene_descriptions = []
+for scene in scenes:
+    if isinstance(scene, dict):
+        description = scene.get("description") or scene.get("summary")
+    else:
+        description = getattr(scene, "description", None) or getattr(scene, "summary", None)
+    scene_descriptions.append(description or str(scene))
+
+scenes_text = "\n".join(scene_descriptions)
 
 # Analyze with collection LLM
 result = coll.generate_text(
     prompt=(
         f"Given this video transcript:\n{transcript_text}\n\n"
+        f"And these visual scene descriptions:\n{scenes_text}\n\n"
         "Based on the spoken and visual content, describe the main topics covered."
     ),
     model_name="pro",
@@ -185,11 +195,11 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-## Dubbing and Translation
+## 配音和翻译
 
-### Dub a Video
+### 为视频配音
 
-Dub a video into another language using the collection method:
+使用集合方法将视频配音为另一种语言：
 
 ```python
 dubbed_video = coll.dub_video(
@@ -200,19 +210,19 @@ dubbed_video = coll.dub_video(
 dubbed_video.play()
 ```
 
-### dub_video Parameters
+### dub\_video 参数
 
-| Parameter | Type | Default | Description |
+| 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `video_id` | `str` | required | ID of the video to dub |
-| `language_code` | `str` | required | Target language code (e.g., `"es"`, `"fr"`, `"de"`) |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `video_id` | `str` | 必需 | 要配音的视频 ID |
+| `language_code` | `str` | 必需 | 目标语言代码（例如，`"es"`、`"fr"`、`"de"`） |
+| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
 
-Returns a `Video` object with the dubbed content.
+返回一个 `Video` 对象，其中包含配音内容。
 
-### Translate Transcript
+### 翻译转录
 
-Translate a video's transcript without dubbing:
+翻译视频的转录文本，无需配音：
 
 ```python
 translated = video.translate_transcript(
@@ -224,11 +234,11 @@ for entry in translated:
     print(entry)
 ```
 
-**Supported languages** include: `en`, `es`, `fr`, `de`, `it`, `pt`, `ja`, `ko`, `zh`, `hi`, `ar`, and more.
+**支持的语言** 包括：`en`、`es`、`fr`、`de`、`it`、`pt`、`ja`、`ko`、`zh`、`hi`、`ar` 等。
 
-## Complete Workflow Examples
+## 完整工作流示例
 
-### Generate Narration for a Video
+### 为视频生成旁白
 
 ```python
 import videodb
@@ -255,7 +265,7 @@ narration = coll.generate_voice(text=script)
 print(f"Narration audio: {narration.id}")
 ```
 
-### Generate Thumbnail from Prompt
+### 根据提示生成缩略图
 
 ```python
 thumbnail = coll.generate_image(
@@ -265,7 +275,7 @@ thumbnail = coll.generate_image(
 print(f"Thumbnail URL: {thumbnail.generate_url()}")
 ```
 
-### Add Generated Music to Video
+### 为视频添加生成的音乐
 
 ```python
 import videodb
@@ -291,7 +301,7 @@ stream_url = timeline.generate_stream()
 print(f"Video with music: {stream_url}")
 ```
 
-### Structured JSON Output
+### 结构化 JSON 输出
 
 ```python
 transcript_text = video.get_transcript_text()
@@ -310,12 +320,12 @@ print(result["output"]["summary"])
 print(result["output"]["topics"])
 ```
 
-## Tips
+## 提示
 
-- **Generated media is persistent**: All generated content is stored in your collection and can be reused.
-- **Three audio methods**: Use `generate_music()` for background music, `generate_sound_effect()` for SFX, and `generate_voice()` for text-to-speech. There is no unified `generate_audio()` method.
-- **Text generation is collection-level**: `coll.generate_text()` does not have access to video content automatically. Fetch the transcript with `video.get_transcript_text()` and pass it in the prompt.
-- **Model tiers**: `"basic"` is fastest, `"pro"` is balanced, `"ultra"` is highest quality. Use `"pro"` for most analysis tasks.
-- **Combine generation types**: Generate images for overlays, music for backgrounds, and voice for narration, then compose using timelines (see [editor.md](editor.md)).
-- **Prompt quality matters**: Descriptive, specific prompts produce better results across all generation types.
-- **Aspect ratios for images**: Choose from `"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, or `"3:4"`.
+* **生成的媒体是持久性的**：所有生成的内容都存储在您的集合中，并且可以重复使用。
+* **三种音频方法**：使用 `generate_music()` 生成背景音乐，`generate_sound_effect()` 生成音效，`generate_voice()` 进行文本转语音。没有统一的 `generate_audio()` 方法。
+* **文本生成是集合级的**：`coll.generate_text()` 不会自动访问视频内容。使用 `video.get_transcript_text()` 获取转录文本，并将其传递到提示中。
+* **模型层级**：`"basic"` 速度最快，`"pro"` 是平衡选项，`"ultra"` 质量最高。对于大多数分析任务，使用 `"pro"`。
+* **组合生成类型**：生成图像用于叠加、生成音乐用于背景、生成语音用于旁白，然后使用时间线进行组合（参见 [editor.md](editor.md)）。
+* **提示质量很重要**：描述性、具体的提示在所有生成类型中都能产生更好的结果。
+* **图像的宽高比**：从 `"1:1"`、`"9:16"`、`"16:9"`、`"4:3"` 或 `"3:4"` 中选择。

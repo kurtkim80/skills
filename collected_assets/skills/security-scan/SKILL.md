@@ -1,343 +1,172 @@
 ---
 name: security-scan
-description: >-
-  Security scan: scan code for security vulnerabilities including OWASP Top 10, secrets,
-  and misconfigurations, with severity thresholds. Use when you need comprehensive
-  security analysis of a codebase.
-slug: security-scan
-version: 1.0.0
-displayName: security-scan
+description: 使用AgentShield扫描您的Claude代码配置（.claude/目录），以发现安全漏洞、配置错误和注入风险。检查CLAUDE.md、settings.json、MCP服务器、钩子和代理定义。
+origin: ECC
 ---
 
-# Security Scan
+# 安全扫描技能
 
-Comprehensive security vulnerability detection for codebases.
+使用 [AgentShield](https://github.com/affaan-m/agentshield) 审计您的 Claude Code 配置中的安全问题。
 
-## Quick Start
+## 何时激活
 
-```
-/security-scan                    # Full scan of current directory
-/security-scan --scope src/       # Scan specific directory
-/security-scan --quick            # Fast scan (critical issues only)
-/security-scan --focus injection  # Focus on specific category
-```
+* 设置新的 Claude Code 项目时
+* 修改 `.claude/settings.json`、`CLAUDE.md` 或 MCP 配置后
+* 提交配置更改前
+* 加入具有现有 Claude Code 配置的新代码库时
+* 定期进行安全卫生检查时
 
-## What This Skill Does
+## 扫描内容
 
-Analyzes code for security vulnerabilities across multiple categories:
+| 文件 | 检查项 |
+|------|--------|
+| `CLAUDE.md` | 硬编码的密钥、自动运行指令、提示词注入模式 |
+| `settings.json` | 过于宽松的允许列表、缺失的拒绝列表、危险的绕过标志 |
+| `mcp.json` | 有风险的 MCP 服务器、硬编码的环境变量密钥、npx 供应链风险 |
+| `hooks/` | 通过 `${file}` 插值导致的命令注入、数据泄露、静默错误抑制 |
+| `agents/*.md` | 无限制的工具访问、提示词注入攻击面、缺失的模型规格 |
 
-1. **OWASP Top 10** - Industry-standard web vulnerability categories
-2. **Secrets Detection** - Hardcoded credentials, API keys, tokens
-3. **Injection Flaws** - SQL, XSS, command injection patterns
-4. **Cryptographic Issues** - Weak algorithms, insecure implementations
-5. **Configuration Problems** - Insecure defaults, misconfigurations
+## 先决条件
 
-## Scan Modes
+必须安装 AgentShield。检查并在需要时安装：
 
-### Full Scan (Default)
-Comprehensive analysis of all security categories.
+```bash
+# Check if installed
+npx ecc-agentshield --version
 
-```
-/security-scan
-```
+# Install globally (recommended)
+npm install -g ecc-agentshield
 
-**Checks performed:**
-- All OWASP Top 10 categories
-- Secrets and credential detection
-- Dependency vulnerabilities (if package files exist)
-- Configuration file review
-
-**Duration:** 2-5 minutes depending on codebase size
-
-### Quick Scan
-Fast check for critical and high-severity issues only.
-
-```
-/security-scan --quick
+# Or run directly via npx (no install needed)
+npx ecc-agentshield scan .
 ```
 
-**Checks performed:**
-- Critical injection patterns
-- Exposed secrets
-- Known dangerous functions
+## 使用方法
 
-**Duration:** Under 1 minute
+### 基础扫描
 
-### Focused Scan
-Target specific vulnerability category.
+针对当前项目的 `.claude/` 目录运行：
 
-```
-/security-scan --focus <category>
-```
+```bash
+# Scan current project
+npx ecc-agentshield scan
 
-**Categories:**
-- `injection` - SQL, XSS, command injection
-- `secrets` - Credentials, API keys, tokens
-- `crypto` - Cryptographic weaknesses
-- `auth` - Authentication/authorization issues
-- `config` - Configuration security
+# Scan a specific path
+npx ecc-agentshield scan --path /path/to/.claude
 
-## Output Format
-
-### Severity Levels
-
-| Level | Icon | Meaning | Action Required |
-|-------|------|---------|-----------------|
-| CRITICAL | `[!]` | Exploitable vulnerability | Immediate fix |
-| HIGH | `[H]` | Serious security risk | Fix before deploy |
-| MEDIUM | `[M]` | Potential vulnerability | Plan to address |
-| LOW | `[L]` | Minor issue or hardening | Consider fixing |
-| INFO | `[i]` | Informational finding | Awareness only |
-
-### Finding Format
-
-```
-[SEVERITY] CATEGORY: Brief description
-  File: path/to/file.ext:line
-  Pattern: What was detected
-  Risk: Why this is dangerous
-  Fix: How to remediate
+# Scan with minimum severity filter
+npx ecc-agentshield scan --min-severity medium
 ```
 
-### Summary Report
+### 输出格式
 
-```
-SECURITY SCAN RESULTS
-=====================
+```bash
+# Terminal output (default) — colored report with grade
+npx ecc-agentshield scan
 
-Scope: src/
-Files scanned: 127
-Duration: 45 seconds
+# JSON — for CI/CD integration
+npx ecc-agentshield scan --format json
 
-FINDINGS BY SEVERITY
-  Critical: 2
-  High: 5
-  Medium: 12
-  Low: 8
+# Markdown — for documentation
+npx ecc-agentshield scan --format markdown
 
-TOP ISSUES
-1. [!] SQL Injection in src/api/users.ts:45
-2. [!] Hardcoded AWS key in src/config.ts:12
-3. [H] XSS vulnerability in src/components/Comment.tsx:89
-...
-
-Run `/security-scan --details` for full report.
+# HTML — self-contained dark-theme report
+npx ecc-agentshield scan --format html > security-report.html
 ```
 
-## OWASP Top 10 Coverage
+### 自动修复
 
-| # | Category | Detection Approach |
-|---|----------|-------------------|
-| A01 | Broken Access Control | Authorization pattern analysis |
-| A02 | Cryptographic Failures | Weak crypto detection |
-| A03 | Injection | Pattern matching + data flow |
-| A04 | Insecure Design | Security control gaps |
-| A05 | Security Misconfiguration | Config file analysis |
-| A06 | Vulnerable Components | Dependency scanning |
-| A07 | Auth Failures | Auth pattern review |
-| A08 | Data Integrity Failures | Deserialization checks |
-| A09 | Logging Failures | Audit log analysis |
-| A10 | SSRF | Request pattern detection |
+自动应用安全的修复（仅修复标记为可自动修复的问题）：
 
-See `references/owasp/` for detailed detection rules per category.
-
-## Detection Patterns
-
-### Injection Detection
-
-**SQL Injection:**
-```
-- String concatenation in queries
-- Unsanitized user input in database calls
-- Dynamic query construction
+```bash
+npx ecc-agentshield scan --fix
 ```
 
-**Cross-Site Scripting (XSS):**
-```
-- innerHTML assignments with user data
-- document.write() with dynamic content
-- Unescaped template interpolation
+这将：
+
+* 用环境变量引用替换硬编码的密钥
+* 将通配符权限收紧为作用域明确的替代方案
+* 绝不修改仅限手动修复的建议
+
+### Opus 4.6 深度分析
+
+运行对抗性的三智能体流程以进行更深入的分析：
+
+```bash
+# Requires ANTHROPIC_API_KEY
+export ANTHROPIC_API_KEY=your-key
+npx ecc-agentshield scan --opus --stream
 ```
 
-**Command Injection:**
-```
-- exec(), system(), popen() with user input
-- Shell command string construction
-- Unsanitized subprocess arguments
+这将运行：
+
+1. **攻击者（红队）** — 寻找攻击向量
+2. **防御者（蓝队）** — 建议加固措施
+3. **审计员（最终裁决）** — 综合双方观点
+
+### 初始化安全配置
+
+从头开始搭建一个新的安全 `.claude/` 配置：
+
+```bash
+npx ecc-agentshield init
 ```
 
-See `references/patterns/` for language-specific patterns.
+创建：
 
-### Secrets Detection
+* 具有作用域权限和拒绝列表的 `settings.json`
+* 遵循安全最佳实践的 `CLAUDE.md`
+* `mcp.json` 占位符
 
-**High-Confidence Patterns:**
-```
-AWS Access Key:     AKIA[0-9A-Z]{16}
-AWS Secret Key:     [A-Za-z0-9/+=]{40}
-GitHub Token:       gh[pousr]_[A-Za-z0-9]{36,}
-Stripe Key:         sk_live_[A-Za-z0-9]{24,}
-Private Key:        -----BEGIN (RSA |EC )?PRIVATE KEY-----
-```
+### GitHub Action
 
-**Medium-Confidence Patterns:**
-```
-Generic API Key:    api[_-]?key.*[=:]\s*['"][a-zA-Z0-9]{16,}
-Password in Code:   password\s*[=:]\s*['"][^'"]+['"]
-Connection String:  (mysql|postgres|mongodb)://[^:]+:[^@]+@
-```
-
-### Cryptographic Weaknesses
-
-**Weak Algorithms:**
-```
-- MD5 for password hashing
-- SHA1 for security purposes
-- DES/3DES encryption
-- RC4 stream cipher
-```
-
-**Implementation Issues:**
-```
-- Hardcoded encryption keys
-- Weak random number generation
-- Missing salt in password hashing
-- ECB mode encryption
-```
-
-## Integration with Other Skills
-
-### With `/secrets-scan`
-Focused deep-dive on credential detection:
-```
-/secrets-scan              # Dedicated secrets analysis
-/secrets-scan --entropy    # High-entropy string detection
-```
-
-### With `/dependency-scan`
-Package vulnerability analysis:
-```
-/dependency-scan           # Check all dependencies
-/dependency-scan --fix     # Auto-fix where possible
-```
-
-### With `/config-scan`
-Infrastructure and configuration review:
-```
-/config-scan               # All config files
-/config-scan --docker      # Container security
-/config-scan --iac         # Infrastructure as Code
-```
-
-## Scan Execution Protocol
-
-### Phase 1: Discovery
-```
-1. Identify project type (languages, frameworks)
-2. Locate relevant files (source, config, dependencies)
-3. Determine applicable security rules
-```
-
-### Phase 2: Static Analysis
-```
-1. Pattern matching for known vulnerabilities
-2. Data flow analysis for injection paths
-3. Configuration review
-```
-
-### Phase 3: Secrets Scanning
-```
-1. High-confidence pattern matching
-2. Entropy analysis for potential secrets
-3. Git history check (optional)
-```
-
-### Phase 4: Dependency Analysis
-```
-1. Parse package manifests
-2. Check against vulnerability databases
-3. Identify outdated packages
-```
-
-### Phase 5: Reporting
-```
-1. Deduplicate findings
-2. Assign severity scores
-3. Generate actionable report
-4. Provide remediation guidance
-```
-
-## Configuration
-
-### Project-Level Config
-
-Create `.security-scan.yaml` in project root:
+添加到您的 CI 流水线中：
 
 ```yaml
-# Scan configuration
-scan:
-  exclude:
-    - "node_modules/**"
-    - "vendor/**"
-    - "**/*.test.ts"
-    - "**/__mocks__/**"
-
-# Severity thresholds
-thresholds:
-  fail_on: critical    # critical, high, medium, low
-  warn_on: medium
-
-# Category toggles
-categories:
-  injection: true
-  secrets: true
-  crypto: true
-  auth: true
-  config: true
-  dependencies: true
-
-# Custom patterns
-patterns:
-  secrets:
-    - name: "Internal API Key"
-      pattern: "INTERNAL_[A-Z]{3}_KEY_[a-zA-Z0-9]{32}"
-      severity: high
+- uses: affaan-m/agentshield@v1
+  with:
+    path: '.'
+    min-severity: 'medium'
+    fail-on-findings: true
 ```
 
-### Ignore Patterns
+## 严重性等级
 
-Create `.security-scan-ignore` for false positives:
+| 等级 | 分数 | 含义 |
+|-------|-------|---------|
+| A | 90-100 | 安全配置 |
+| B | 75-89 | 轻微问题 |
+| C | 60-74 | 需要注意 |
+| D | 40-59 | 显著风险 |
+| F | 0-39 | 严重漏洞 |
 
-```
-# Ignore specific files
-src/test/fixtures/mock-credentials.ts
+## 结果解读
 
-# Ignore specific lines (use inline comment)
-# security-scan-ignore: test fixture
-const mockApiKey = "sk_test_fake123";
-```
+### 关键发现（立即修复）
 
-## Command Reference
+* 配置文件中硬编码的 API 密钥或令牌
+* 允许列表中存在 `Bash(*)`（无限制的 shell 访问）
+* 钩子中通过 `${file}` 插值导致的命令注入
+* 运行 shell 的 MCP 服务器
 
-| Command | Description |
-|---------|-------------|
-| `/security-scan` | Full security scan |
-| `/security-scan --quick` | Critical issues only |
-| `/security-scan --scope <path>` | Scan specific path |
-| `/security-scan --focus <cat>` | Single category |
-| `/security-scan --details` | Verbose output |
-| `/security-scan --json` | JSON output |
-| `/security-scan --fix` | Auto-fix where possible |
+### 高优先级发现（生产前修复）
 
-## Related Skills
+* CLAUDE.md 中的自动运行指令（提示词注入向量）
+* 权限配置中缺少拒绝列表
+* 具有不必要 Bash 访问权限的代理
 
-- `/secrets-scan` - Deep secrets detection
-- `/dependency-scan` - Package vulnerability analysis
-- `/config-scan` - Configuration security review
-- `/review-code` - General code review (includes security)
+### 中优先级发现（建议修复）
 
-## References
+* 钩子中的静默错误抑制（`2>/dev/null`、`|| true`）
+* 缺少 PreToolUse 安全钩子
+* MCP 服务器配置中的 `npx -y` 自动安装
 
-- `references/owasp/` - OWASP Top 10 detection details
-- `references/patterns/` - Language-specific vulnerability patterns
-- `references/remediation/` - Fix guidance by vulnerability type
-- `assets/severity-matrix.md` - Severity scoring criteria
+### 信息性发现（了解情况）
+
+* MCP 服务器缺少描述信息
+* 正确标记为良好实践的限制性指令
+
+## 链接
+
+* **GitHub**: [github.com/affaan-m/agentshield](https://github.com/affaan-m/agentshield)
+* **npm**: [npmjs.com/package/ecc-agentshield](https://www.npmjs.com/package/ecc-agentshield)

@@ -1,154 +1,161 @@
 ---
 name: agent-introspection-debugging
-description: Structured self-debugging workflow for AI agent failures using capture, diagnosis, contained recovery, and introspection reports. Use when an agent run fails and you need a reproducible diagnosis instead of a retry.
-metadata:
-  origin: ECC
+description: 针对AI代理故障的结构化自调试工作流程，包括捕获、诊断、受限恢复和内省报告。
+origin: ECC
 ---
 
-# Agent Introspection Debugging
+# 智能体内省调试
 
-Use this skill when an agent run is failing repeatedly, consuming tokens without progress, looping on the same tools, or drifting away from the intended task.
+当智能体运行反复失败、消耗令牌却无进展、在相同工具上循环或偏离预期任务时，使用此技能。
 
-This is a workflow skill, not a hidden runtime. It teaches the agent to debug itself systematically before escalating to a human.
+这是一个工作流技能，而非隐藏运行时。它教会智能体在升级给人类之前，系统性地自我调试。
 
-## When to Activate
+## 何时激活
 
-- Maximum tool call / loop-limit failures
-- Repeated retries with no forward progress
-- Context growth or prompt drift that starts degrading output quality
-- File-system or environment state mismatch between expectation and reality
-- Tool failures that are likely recoverable with diagnosis and a smaller corrective action
+* 达到最大工具调用/循环限制失败
+* 重复重试但无任何进展
+* 上下文增长或提示漂移导致输出质量下降
+* 文件系统或环境状态与预期不匹配
+* 可通过诊断和较小纠正措施恢复的工具故障
 
-## Scope Boundaries
+## 范围边界
 
-Activate this skill for:
-- capturing failure state before retrying blindly
-- diagnosing common agent-specific failure patterns
-- applying contained recovery actions
-- producing a structured human-readable debug report
+激活此技能用于：
 
-Do not use this skill as the primary source for:
-- feature verification after code changes; use `verification-loop`
-- framework-specific debugging when a narrower ECC skill already exists
-- runtime promises the current harness cannot enforce automatically
+* 在盲目重试前捕获失败状态
+* 诊断常见的智能体特定失败模式
+* 应用受限的恢复操作
+* 生成结构化的人类可读调试报告
 
-## Four-Phase Loop
+请勿将此技能作为以下情况的主要来源：
 
-### Phase 1: Failure Capture
+* 代码变更后的功能验证；请使用 `verification-loop`
+* 当已有更窄的 ECC 技能时的框架特定调试
+* 当前框架无法自动强制执行的运行时承诺
 
-Before trying to recover, record the failure precisely.
+## 四阶段循环
 
-Capture:
-- error type, message, and stack trace when available
-- last meaningful tool call sequence
-- what the agent was trying to do
-- current context pressure: repeated prompts, oversized pasted logs, duplicated plans, or runaway notes
-- current environment assumptions: cwd, branch, relevant service state, expected files
+### 阶段 1：失败捕获
 
-Minimum capture template:
+在尝试恢复之前，精确记录失败信息。
+
+捕获内容：
+
+* 错误类型、消息和堆栈跟踪（如可用）
+* 最后有意义的工具调用序列
+* 智能体当时试图完成的任务
+* 当前上下文压力：重复提示、过大的粘贴日志、重复的计划或失控的笔记
+* 当前环境假设：工作目录、分支、相关服务状态、预期文件
+
+最小捕获模板：
 
 ```markdown
-## Failure Capture
-- Session / task:
-- Goal in progress:
-- Error:
-- Last successful step:
-- Last failed tool / command:
-- Repeated pattern seen:
-- Environment assumptions to verify:
+## 失败捕获
+- 会话/任务：
+- 进行中的目标：
+- 错误：
+- 最后成功的步骤：
+- 最后失败的工具/命令：
+- 观察到的重复模式：
+- 需验证的环境假设：
 ```
 
-### Phase 2: Root-Cause Diagnosis
+### 阶段 2：根因诊断
 
-Match the failure to a known pattern before changing anything.
+在更改任何内容之前，将失败与已知模式匹配。
 
-| Pattern | Likely Cause | Check |
+| 模式 | 可能原因 | 检查 |
 | --- | --- | --- |
-| Maximum tool calls / repeated same command | loop or no-exit observer path | inspect the last N tool calls for repetition |
-| Context overflow / degraded reasoning | unbounded notes, repeated plans, oversized logs | inspect recent context for duplication and low-signal bulk |
-| `ECONNREFUSED` / timeout | service unavailable or wrong port | verify service health, URL, and port assumptions |
-| `429` / quota exhaustion | retry storm or missing backoff | count repeated calls and inspect retry spacing |
-| file missing after write / stale diff | race, wrong cwd, or branch drift | re-check path, cwd, git status, and actual file existence |
-| tests still failing after “fix” | wrong hypothesis | isolate the exact failing test and re-derive the bug |
+| 最大工具调用/重复相同命令 | 循环或无退出观察路径 | 检查最后 N 次工具调用是否存在重复 |
+| 上下文溢出/推理能力下降 | 无界笔记、重复计划、过大日志 | 检查近期上下文是否存在重复和低信号批量内容 |
+| `ECONNREFUSED` / 超时 | 服务不可用或端口错误 | 验证服务健康状态、URL 和端口假设 |
+| `429` / 配额耗尽 | 重试风暴或缺少退避 | 统计重复调用次数并检查重试间隔 |
+| 写入后文件缺失/差异过时 | 竞态、工作目录错误或分支漂移 | 重新检查路径、工作目录、git 状态和实际文件是否存在 |
+| “修复”后测试仍然失败 | 假设错误 | 隔离确切失败的测试并重新推导错误 |
 
-Diagnosis questions:
-- is this a logic failure, state failure, environment failure, or policy failure?
-- did the agent lose the real objective and start optimizing the wrong subtask?
-- is the failure deterministic or transient?
-- what is the smallest reversible action that would validate the diagnosis?
+诊断问题：
 
-### Phase 3: Contained Recovery
+* 这是逻辑失败、状态失败、环境失败还是策略失败？
+* 智能体是否丢失了真实目标并开始优化错误的子任务？
+* 失败是确定性的还是瞬态的？
+* 能够验证诊断的最小可逆操作是什么？
 
-Recover with the smallest action that changes the diagnosis surface.
+### 阶段 3：受限恢复
 
-Safe recovery actions:
-- stop repeated retries and restate the hypothesis
-- trim low-signal context and keep only the active goal, blockers, and evidence
-- re-check the actual filesystem / branch / process state
-- narrow the task to one failing command, one file, or one test
-- switch from speculative reasoning to direct observation
-- escalate to a human when the failure is high-risk or externally blocked
+使用改变诊断面的最小操作进行恢复。
 
-Do not claim unsupported auto-healing actions like “reset agent state” or “update harness config” unless you are actually doing them through real tools in the current environment.
+安全恢复操作：
 
-Contained recovery checklist:
+* 停止重复重试并重新陈述假设
+* 修剪低信号上下文，仅保留活跃目标、阻碍因素和证据
+* 重新检查实际文件系统/分支/进程状态
+* 将任务缩小到一个失败的命令、一个文件或一个测试
+* 从推测性推理切换到直接观察
+* 当失败风险高或受外部阻碍时升级给人类
 
-```markdown
-## Recovery Action
-- Diagnosis chosen:
-- Smallest action taken:
-- Why this is safe:
-- What evidence would prove the fix worked:
-```
+不要声称不支持的自动修复操作，如“重置智能体状态”或“更新框架配置”，除非你正在当前环境中通过真实工具实际执行这些操作。
 
-### Phase 4: Introspection Report
-
-End with a report that makes the recovery legible to the next agent or human.
+受限恢复检查清单：
 
 ```markdown
-## Agent Self-Debug Report
-- Session / task:
-- Failure:
-- Root cause:
-- Recovery action:
-- Result: success | partial | blocked
-- Token / time burn risk:
-- Follow-up needed:
-- Preventive change to encode later:
+## 恢复操作
+- 选择的诊断方式：
+- 采取的最小操作：
+- 为何此操作安全：
+- 哪些证据能证明修复生效：
 ```
 
-## Recovery Heuristics
+### 阶段 4：内省报告
 
-Prefer these interventions in order:
+以一份使恢复过程对下一个智能体或人类清晰可读的报告结束。
 
-1. Restate the real objective in one sentence.
-2. Verify the world state instead of trusting memory.
-3. Shrink the failing scope.
-4. Run one discriminating check.
-5. Only then retry.
+```markdown
+## 代理自调试报告
+- 会话/任务：
+- 失败原因：
+- 根本原因：
+- 恢复措施：
+- 结果：成功 | 部分成功 | 受阻
+- Token/时间消耗风险：
+- 是否需要后续跟进：
+- 后续需编码的预防性变更：
+```
 
-Bad pattern:
-- retrying the same action three times with slightly different wording
+## 恢复启发式方法
 
-Good pattern:
-- capture failure
-- classify the pattern
-- run one direct check
-- change the plan only if the check supports it
+按顺序优先选择以下干预措施：
 
-## Integration with ECC
+1. 用一句话重新陈述真实目标。
+2. 验证世界状态，而非依赖记忆。
+3. 缩小失败范围。
+4. 运行一次判别性检查。
+5. 然后才重试。
 
-- Use `verification-loop` after recovery if code was changed.
-- Use `continuous-learning-v2` when the failure pattern is worth turning into an instinct or later skill.
-- Use `council` when the issue is not technical failure but decision ambiguity.
-- Use `workspace-surface-audit` if the failure came from conflicting local state or repo drift.
+错误模式：
 
-## Output Standard
+* 用略微不同的措辞重复相同操作三次
 
-When this skill is active, do not end with “I fixed it” alone.
+正确模式：
 
-Always provide:
-- the failure pattern
-- the root-cause hypothesis
-- the recovery action
-- the evidence that the situation is now better or still blocked
+* 捕获失败
+* 分类模式
+* 运行一次直接检查
+* 仅当检查支持时才更改计划
+
+## 与 ECC 集成
+
+* 如果代码已更改，在恢复后使用 `verification-loop`。
+* 当失败模式值得转化为本能或后续技能时，使用 `continuous-learning-v2`。
+* 当问题不是技术失败而是决策模糊时，使用 `council`。
+* 如果失败源于冲突的本地状态或仓库漂移，使用 `workspace-surface-audit`。
+
+## 输出标准
+
+当此技能激活时，不要仅以“我已修复”结束。
+
+始终提供：
+
+* 失败模式
+* 根因假设
+* 恢复操作
+* 证明情况已改善或仍受阻的证据

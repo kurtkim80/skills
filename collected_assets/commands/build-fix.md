@@ -1,36 +1,56 @@
 ---
-description: 빌드 에러를 자동으로 분석하고 수정합니다.
-allowed-tools: Read, Edit, Glob, Grep, Bash(npm:*), Bash(pnpm:*), Bash(npx:*)
+description: Fix build and TypeScript errors with minimal changes
+agent: build-error-resolver
+subtask: true
 ---
 
-> 참고: 이 스킬은 build-error-resolver 에이전트를 호출하지 않고 인라인 실행됩니다. 에이전트의 memory 학습이 필요하면 Agent 도구로 build-error-resolver를 직접 호출하세요.
+# Build Fix Command
 
-# Build and Fix
+Fix build and TypeScript errors with minimal changes: $ARGUMENTS
 
-Incrementally fix TypeScript and build errors:
+## Your Task
 
-1. Run build: npm run build or pnpm build
+1. **Run type check**: `npx tsc --noEmit`
+2. **Collect all errors**
+3. **Fix errors one by one** with minimal changes
+4. **Verify each fix** doesn't introduce new errors
+5. **Run final check** to confirm all errors resolved
 
-2. Parse error output:
-   - Group by file
-   - Sort by severity
+## Approach
 
-3. For each error:
-   - Show error context (5 lines before/after)
-   - Explain the issue
-   - Propose fix
-   - Apply fix
-   - Re-run build
-   - Verify error resolved
+### DO:
+- PASS: Fix type errors with correct types
+- PASS: Add missing imports
+- PASS: Fix syntax errors
+- PASS: Make minimal changes
+- PASS: Preserve existing behavior
+- PASS: Run `tsc --noEmit` after each change
 
-4. Stop if:
-   - Fix introduces new errors
-   - Same error persists after 3 attempts
-   - User requests pause
+### DON'T:
+- FAIL: Refactor code
+- FAIL: Add new features
+- FAIL: Change architecture
+- FAIL: Use `any` type (unless absolutely necessary)
+- FAIL: Add `@ts-ignore` comments
+- FAIL: Change business logic
 
-5. Show summary:
-   - Errors fixed
-   - Errors remaining
-   - New errors introduced
+## Common Error Fixes
 
-Fix one error at a time for safety!
+| Error | Fix |
+|-------|-----|
+| Type 'X' is not assignable to type 'Y' | Add correct type annotation |
+| Property 'X' does not exist | Add property to interface or fix property name |
+| Cannot find module 'X' | Install package or fix import path |
+| Argument of type 'X' is not assignable | Cast or fix function signature |
+| Object is possibly 'undefined' | Add null check or optional chaining |
+
+## Verification Steps
+
+After fixes:
+1. `npx tsc --noEmit` - should show 0 errors
+2. `npm run build` - should succeed
+3. `npm test` - tests should still pass
+
+---
+
+**IMPORTANT**: Focus on fixing errors only. No refactoring, no improvements, no architectural changes. Get the build green with minimal diff.

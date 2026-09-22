@@ -1,89 +1,97 @@
 ---
 name: blueprint
-description: "Turn a one-line objective into a step-by-step construction plan any coding agent can execute cold. Each step has a self-contained context brief — a fresh agent in a new session can pick up any step without reading prior steps."
-category: planning
-risk: critical
-source: community
-date_added: "2026-03-10"
+description: 将单行目标转化为多会话、多代理工程项目的分步构建计划。每个步骤包含独立的上下文简介，以便新代理能直接执行。包括对抗性审查门、依赖图、并行步骤检测、反模式目录和计划突变协议。触发条件：当用户请求复杂多PR任务的计划、蓝图或路线图，或描述需要多个会话的工作时。不触发条件：任务可在单个PR或少于3个工具调用中完成，或用户说“直接执行”时。
+origin: community
 ---
 
-# Blueprint — Construction Plan Generator
+# Blueprint — 施工计划生成器
 
-Turn a one-line objective into a step-by-step plan any coding agent can execute cold.
+将单行目标转化为分步施工计划，任何编码代理都能冷启动执行。
 
-## Overview
+## 何时使用
 
-Blueprint is for multi-session, multi-agent engineering projects where each step must be independently executable by a fresh agent that has never seen the conversation history. Install it once, invoke it with `/blueprint <project> <objective>`.
+* 将大型功能拆分为多个具有明确依赖顺序的 PR
+* 规划跨多个会话的重构或迁移
+* 协调子代理间的并行工作流
+* 任何因会话间上下文丢失而导致返工的任务
 
-## When to Use This Skill
+**请勿用于** 可在单个 PR 内完成、少于 3 次工具调用，或用户明确表示“直接做”的任务。
 
-- Use when the task requires multiple PRs or sessions
-- Use when multiple agents or team members need to share execution
-- Use when you want adversarial review of the plan before execution
-- Use when parallel step detection and dependency graphs matter
+## 工作原理
 
-## How It Works
+Blueprint 运行一个 5 阶段流水线：
 
-1. **Research** — Scans the codebase, reads project memory, runs pre-flight checks
-2. **Design** — Breaks the objective into one-PR-sized steps, identifies parallelism, assigns model tiers
-3. **Draft** — Generates the plan from a structured template with branch workflow rules, CI policy, and rollback strategies inline
-4. **Review** — Delegates adversarial review to a strongest-model sub-agent (falls back to default model if unavailable)
-5. **Register** — Saves the plan and updates project memory
+1. **研究** — 预检（git、gh auth、远程仓库、默认分支），然后读取项目结构、现有计划和记忆文件以收集上下文。
+2. **设计** — 将目标分解为适合单次 PR 的步骤（通常 3–12 步）。为每个步骤分配依赖边、并行/串行顺序、模型层级（最强 vs 默认）和回滚策略。
+3. **草拟** — 将自包含的 Markdown 计划文件写入 `plans/`。每个步骤都包含上下文摘要、任务列表、验证命令和退出标准 — 这样新的代理无需阅读先前步骤即可执行任何步骤。
+4. **审查** — 委托最强模型子代理（例如 Opus）根据清单和反模式目录进行对抗性审查。在最终确定前修复所有关键发现。
+5. **注册** — 保存计划、更新内存索引，并向用户展示步骤计数和并行性摘要。
 
-## Examples
+Blueprint 自动检测 git/gh 可用性。如果具备 git + GitHub CLI，它会生成完整的分支/PR/CI 工作流计划。如果没有，则切换到直接模式（原地编辑，无分支）。
 
-### Example 1: Database migration
+## 示例
+
+### 基本用法
+
 ```
-/blueprint myapp "migrate database to PostgreSQL"
-```
-
-### Example 2: Plugin extraction
-```
-/blueprint antbot "extract providers into plugins"
+/blueprint myapp "将数据库迁移到PostgreSQL"
 ```
 
-## Best Practices
+生成 `plans/myapp-migrate-database-to-postgresql.md`，包含类似以下的步骤：
 
-- ✅ Use for tasks requiring 3+ PRs or multiple sessions
-- ✅ Let Blueprint auto-detect git/gh availability — it degrades gracefully
-- ❌ Don't invoke for tasks completable in a single PR
-- ❌ Don't invoke when the user says "just do it"
+* 步骤 1：添加 PostgreSQL 驱动程序和连接配置
+* 步骤 2：为每个表创建迁移脚本
+* 步骤 3：更新仓库层以使用新驱动程序
+* 步骤 4：添加针对 PostgreSQL 的集成测试
+* 步骤 5：移除旧数据库代码和配置
 
-## Key Differentiators
+### 多代理项目
 
-- **Cold-start execution**: Every step has a self-contained context brief
-- **Adversarial review gate**: Strongest-model review before execution
-- **Markdown-first distribution**: The reviewed revision is primarily instructions and templates, but installing or following it can still cause an agent to run commands. Treat the repository as untrusted until inspected.
-- **Plan mutation protocol**: Steps can be split, inserted, skipped with audit trail
+```
+/blueprint chatbot "将LLM提供商提取到插件系统中"
+```
 
-## Installation
+生成一个尽可能包含并行步骤的计划（例如，在插件接口步骤完成后，“实现 Anthropic 插件”和“实现 OpenAI 插件”可以并行运行），分配模型层级（接口设计步骤使用最强模型，实现步骤使用默认模型），并在每个步骤后验证不变量（例如“所有现有测试通过”、“核心模块无提供商导入”）。
 
-Do not clone a moving branch directly into an active skills directory. First ask
-the user to approve network access to the named repository. Then inspect the
-reviewed revision and ask separately before activating it:
+## 主要特性
+
+* **冷启动执行** — 每个步骤都包含自包含的上下文摘要。无需先前上下文。
+* **对抗性审查门控** — 每个计划都由最强模型子代理根据清单进行审查，涵盖完整性、依赖关系正确性和反模式检测。
+* **分支/PR/CI 工作流** — 内置于每个步骤中。当 git/gh 缺失时，优雅降级为直接模式。
+* **并行步骤检测** — 依赖图识别出没有共享文件或输出依赖的步骤。
+* **计划变更协议** — 步骤可以按照正式协议和审计追踪进行拆分、插入、跳过、重新排序或放弃。
+* **零运行时风险** — 纯 Markdown 技能。整个仓库仅包含 `.md` 文件 — 无钩子、无 shell 脚本、无可执行代码、无 `package.json`、无构建步骤。安装或调用时，除了 Claude Code 的原生 Markdown 技能加载器外，不运行任何内容。
+
+## 安装
+
+此技能随 Everything Claude Code 附带。安装 ECC 时无需单独安装。
+
+### 完整 ECC 安装
+
+如果您从 ECC 仓库检出中工作，请验证技能是否存在：
 
 ```bash
-review_dir="$(mktemp -d)"
-git clone --filter=blob:none https://github.com/antbotlab/blueprint.git "$review_dir/blueprint"
-git -C "$review_dir/blueprint" checkout --detach 07c5b305cf2d95d584a0d0398c390e839fec5954
-git -C "$review_dir/blueprint" ls-files
-git -C "$review_dir/blueprint" status --short
+test -f skills/blueprint/SKILL.md
 ```
 
-Read `SKILL.md` and every bundled file at that exact commit. Check for scripts,
-hooks, symlinks, network calls, credential access, and instructions that request
-commands or elevated permissions. Only after explicit user approval, copy the
-reviewed files into the selected host's skills directory. Re-review a newer
-revision instead of silently updating this pin.
+后续更新时，请在更新前查看 ECC 的差异：
 
-## Additional Resources
+```bash
+cd /path/to/everything-claude-code
+git fetch origin main
+git log --oneline HEAD..origin/main       # review new commits before updating
+git checkout <reviewed-full-sha>          # pin to a specific reviewed commit
+```
 
-- [GitHub Repository](https://github.com/antbotlab/blueprint)
-- [Examples: small plan](https://github.com/antbotlab/blueprint/blob/main/examples/small-plan.md)
-- [Examples: large plan](https://github.com/antbotlab/blueprint/blob/main/examples/large-plan.md)
+### 独立安装（内嵌副本）
 
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
-- A pinned revision is reproducible, not automatically trustworthy; its contents still require review.
+如果您在完整 ECC 安装之外仅内嵌此技能，请将 ECC 仓库中已审查的文件复制到 `~/.claude/skills/blueprint/SKILL.md`。内嵌副本没有 git 远程仓库，因此应通过从已审查的 ECC 提交中重新复制文件来更新，而不是运行 `git pull`。
+
+## 要求
+
+* Claude Code（用于 `/blueprint` 斜杠命令）
+* Git + GitHub CLI（可选 — 启用完整的分支/PR/CI 工作流；Blueprint 检测到缺失时会自动切换到直接模式）
+
+## 来源
+
+灵感来源于 antbotlab/blueprint — 上游项目和参考设计。

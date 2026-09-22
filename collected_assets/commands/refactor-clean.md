@@ -1,44 +1,102 @@
 ---
-description: Safely identify and remove dead code with test verification
+description: Remove dead code and consolidate duplicates
+agent: refactor-cleaner
+subtask: true
 ---
 
-# Refactor Clean
+# Refactor Clean Command
 
-> **참고**: 대규모 리팩토링(3파일 이상 변경 예상)은 `/plan`을 먼저 실행하세요 (Golden Principle #9: HARD-GATE).
+Analyze and clean up the codebase: $ARGUMENTS
 
-Safely identify and remove dead code with test verification:
+## Your Task
 
-1. Run dead code analysis tools:
-   - knip: Find unused exports and files
-   - depcheck: Find unused dependencies
-   - ts-prune: Find unused TypeScript exports
+1. **Detect dead code** using analysis tools
+2. **Identify duplicates** and consolidation opportunities
+3. **Safely remove** unused code with documentation
+4. **Verify** no functionality broken
 
-2. Generate comprehensive report in .reports/dead-code-analysis.md
+## Detection Phase
 
-3. Categorize findings by severity:
-   - SAFE: Test files, unused utilities
-   - CAUTION: API routes, components
-   - DANGER: Config files, main entry points
+### Run Analysis Tools
 
-4. Propose safe deletions only
+```bash
+# Find unused exports
+npx knip
 
-5. Before each deletion:
-   - Run full test suite
-   - Verify tests pass
-   - Apply change
-   - Re-run tests
-   - Rollback if tests fail
+# Find unused dependencies
+npx depcheck
 
-6. Show summary of cleaned items
+# Find unused TypeScript exports
+npx ts-prune
+```
 
-Never delete code without running tests first!
+### Manual Checks
+
+- Unused functions (no callers)
+- Unused variables
+- Unused imports
+- Commented-out code
+- Unreachable code
+- Unused CSS classes
+
+## Removal Phase
+
+### Before Removing
+
+1. **Search for usage** - grep, find references
+2. **Check exports** - might be used externally
+3. **Verify tests** - no test depends on it
+4. **Document removal** - git commit message
+
+### Safe Removal Order
+
+1. Remove unused imports first
+2. Remove unused private functions
+3. Remove unused exported functions
+4. Remove unused types/interfaces
+5. Remove unused files
+
+## Consolidation Phase
+
+### Identify Duplicates
+
+- Similar functions with minor differences
+- Copy-pasted code blocks
+- Repeated patterns
+
+### Consolidation Strategies
+
+1. **Extract utility function** - for repeated logic
+2. **Create base class** - for similar classes
+3. **Use higher-order functions** - for repeated patterns
+4. **Create shared constants** - for magic values
+
+## Verification
+
+After cleanup:
+
+1. `npm run build` - builds successfully
+2. `npm test` - all tests pass
+3. `npm run lint` - no new lint errors
+4. Manual smoke test - features work
+
+## Report Format
+
+```
+Dead Code Analysis
+==================
+
+Removed:
+- file.ts: functionName (unused export)
+- utils.ts: helperFunction (no callers)
+
+Consolidated:
+- formatDate() and formatDateTime() → dateUtils.format()
+
+Remaining (manual review needed):
+- oldComponent.tsx: potentially unused, verify with team
+```
 
 ---
 
-## 다음 단계
-
-| 리팩토링이 끝나면 | 커맨드 |
-|:----------------|:-------|
-| 코드 검사 | `/code-review` |
-| 빌드/테스트 검증 | `/handoff-verify` |
-| 문서 동기화 | `/sync` |
+**CAUTION**: Always verify before removing. When in doubt, ask or add `// TODO: verify usage` comment.

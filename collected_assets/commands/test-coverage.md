@@ -1,32 +1,80 @@
 ---
-description: Analyze test coverage and generate missing tests to reach 80%+ coverage
-allowed-tools: Bash, Read, Write, Glob, Grep
+description: Analyze and improve test coverage
+agent: tdd-guide
+subtask: true
 ---
 
-# Test Coverage
+# Test Coverage Command
 
-Analyze test coverage and generate missing tests:
+Analyze test coverage and identify gaps: $ARGUMENTS
 
-1. Run tests with coverage: npm test --coverage or pnpm test --coverage
+## Your Task
 
-2. Analyze coverage report (coverage/coverage-summary.json)
+1. **Run coverage report**: `npm test -- --coverage`
+2. **Analyze results** - Identify low coverage areas
+3. **Prioritize gaps** - Critical code first
+4. **Generate missing tests** - For uncovered code
 
-3. Identify files below 80% coverage threshold
+## Coverage Targets
 
-4. For each under-covered file:
-   - Analyze untested code paths
-   - Generate unit tests for functions
-   - Generate integration tests for APIs
-   - Generate E2E tests for critical flows
+| Code Type | Target |
+|-----------|--------|
+| Standard code | 80% |
+| Financial logic | 100% |
+| Auth/security | 100% |
+| Utilities | 90% |
+| UI components | 70% |
 
-5. Verify new tests pass
+## Coverage Report Analysis
 
-6. Show before/after coverage metrics
+### Summary
+```
+File           | % Stmts | % Branch | % Funcs | % Lines
+---------------|---------|----------|---------|--------
+All files      |   XX    |    XX    |   XX    |   XX
+```
 
-7. Ensure project reaches 80%+ overall coverage
+### Low Coverage Files
+[Files below target, prioritized by criticality]
 
-Focus on:
-- Happy path scenarios
-- Error handling
-- Edge cases (null, undefined, empty)
-- Boundary conditions
+### Uncovered Lines
+[Specific lines that need tests]
+
+## Test Generation
+
+For each uncovered area:
+
+### [Function/Component Name]
+
+**Location**: `src/path/file.ts:123`
+
+**Coverage Gap**: [description]
+
+**Suggested Tests**:
+```typescript
+describe('functionName', () => {
+  it('should [expected behavior]', () => {
+    // Test code
+  })
+
+  it('should handle [edge case]', () => {
+    // Edge case test
+  })
+})
+```
+
+## Coverage Improvement Plan
+
+1. **Critical** (add immediately)
+   - [ ] file1.ts - Auth logic
+   - [ ] file2.ts - Payment handling
+
+2. **High** (add this sprint)
+   - [ ] file3.ts - Core business logic
+
+3. **Medium** (add when touching file)
+   - [ ] file4.ts - Utilities
+
+---
+
+**IMPORTANT**: Coverage is a metric, not a goal. Focus on meaningful tests, not just hitting numbers.

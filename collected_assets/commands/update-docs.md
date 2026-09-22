@@ -1,36 +1,67 @@
 ---
-description: Sync documentation from source-of-truth (package.json, .env.example)
-allowed-tools: Read, Write, Glob, Bash
+description: Update documentation for recent changes
+agent: doc-updater
+subtask: true
 ---
 
-# Update Documentation
+# Update Docs Command
 
-Sync documentation from source-of-truth:
+Update documentation to reflect recent changes: $ARGUMENTS
 
-1. Read package.json scripts section
-   - Generate scripts reference table
-   - Include descriptions from comments
+## Your Task
 
-2. Read .env.example
-   - Extract all environment variables
-   - Document purpose and format
+1. **Identify changed code** - `git diff --name-only`
+2. **Find related docs** - README, API docs, guides
+3. **Update documentation** - Keep in sync with code
+4. **Verify accuracy** - Docs match implementation
 
-3. Generate docs/CONTRIB.md with:
-   - Development workflow
-   - Available scripts
-   - Environment setup
-   - Testing procedures
+## Documentation Types
 
-4. Generate docs/RUNBOOK.md with:
-   - Deployment procedures
-   - Monitoring and alerts
-   - Common issues and fixes
-   - Rollback procedures
+### README.md
+- Installation instructions
+- Quick start guide
+- Feature overview
+- Configuration options
 
-5. Identify obsolete documentation:
-   - Find docs not modified in 90+ days
-   - List for manual review
+### API Documentation
+- Endpoint descriptions
+- Request/response formats
+- Authentication details
+- Error codes
 
-6. Show diff summary
+### Code Comments
+- JSDoc for public APIs
+- Complex logic explanations
+- TODO/FIXME cleanup
 
-Single source of truth: package.json and .env.example
+### Guides
+- How-to tutorials
+- Architecture decisions (ADRs)
+- Troubleshooting guides
+
+## Update Checklist
+
+- [ ] README reflects current features
+- [ ] API docs match endpoints
+- [ ] JSDoc updated for changed functions
+- [ ] Examples are working
+- [ ] Links are valid
+- [ ] Version numbers updated
+
+## Documentation Quality
+
+### Good Documentation
+- Accurate and up-to-date
+- Clear and concise
+- Has working examples
+- Covers edge cases
+
+### Avoid
+- Outdated information
+- Missing parameters
+- Broken examples
+- Ambiguous language
+
+---
+
+**IMPORTANT**: Documentation should be updated alongside code changes, not as an afterthought.

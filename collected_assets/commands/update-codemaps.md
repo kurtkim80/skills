@@ -1,22 +1,81 @@
 ---
-description: Analyze codebase structure and update architecture documentation in codemaps/
-allowed-tools: Read, Write, Glob, Bash
+description: Update codemaps for codebase navigation
+agent: doc-updater
+subtask: true
 ---
 
-# Update Codemaps
+# Update Codemaps Command
 
-Analyze the codebase structure and update architecture documentation:
+Update codemaps to reflect current codebase structure: $ARGUMENTS
 
-1. Scan all source files for imports, exports, and dependencies
-2. Generate token-lean codemaps in the following format:
-   - codemaps/architecture.md - Overall architecture
-   - codemaps/backend.md - Backend structure  
-   - codemaps/frontend.md - Frontend structure
-   - codemaps/data.md - Data models and schemas
+## Your Task
 
-3. Calculate diff percentage from previous version
-4. If changes > 30%, request user approval before updating
-5. Add freshness timestamp to each codemap
-6. Save reports to .reports/codemap-diff.txt
+Generate or update codemaps in `docs/CODEMAPS/` directory:
 
-Use TypeScript/Node.js for analysis. Focus on high-level structure, not implementation details.
+1. **Analyze codebase structure**
+2. **Generate component maps**
+3. **Document relationships**
+4. **Update navigation guides**
+
+## Codemap Types
+
+### Architecture Map
+```
+docs/CODEMAPS/ARCHITECTURE.md
+```
+- High-level system overview
+- Component relationships
+- Data flow diagrams
+
+### Module Map
+```
+docs/CODEMAPS/MODULES.md
+```
+- Module descriptions
+- Public APIs
+- Dependencies
+
+### File Map
+```
+docs/CODEMAPS/FILES.md
+```
+- Directory structure
+- File purposes
+- Key files
+
+## Codemap Format
+
+### [Module Name]
+
+**Purpose**: [Brief description]
+
+**Location**: `src/[path]/`
+
+**Key Files**:
+- `file1.ts` - [purpose]
+- `file2.ts` - [purpose]
+
+**Dependencies**:
+- [Module A]
+- [Module B]
+
+**Exports**:
+- `functionName()` - [description]
+- `ClassName` - [description]
+
+**Usage Example**:
+```typescript
+import { functionName } from '@/module'
+```
+
+## Generation Process
+
+1. Scan directory structure
+2. Parse imports/exports
+3. Build dependency graph
+4. Generate markdown maps
+5. Validate links
+
+---
+
+**TIP**: Keep codemaps updated when adding new modules or significant refactoring.

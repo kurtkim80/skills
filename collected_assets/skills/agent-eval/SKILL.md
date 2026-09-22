@@ -1,32 +1,33 @@
 ---
 name: agent-eval
-description: Head-to-head comparison of coding agents (Claude Code, Aider, Codex, etc.) on custom tasks with pass rate, cost, time, and consistency metrics. Use when choosing between coding agents, or when a change to an agent setup needs measured pass rate, cost, and time rather than an impression.
-license: MIT
-metadata:
-  origin: ECC
+description: 编码代理（Claude Code、Aider、Codex等）在自定义任务上的直接比较，包含通过率、成本、时间和一致性指标
+origin: ECC
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
-# Agent Eval Skill
+# Agent Eval 技能
 
-A lightweight CLI tool for comparing coding agents head-to-head on reproducible tasks. Every "which coding agent is best?" comparison runs on vibes — this tool systematizes it.
+一个轻量级 CLI 工具，用于在可复现的任务上对编码代理进行头对头比较。每个“哪个编码代理最好？”的比较都基于感觉——本工具将其系统化。
 
-## When to Activate
+## 何时使用
 
-- Comparing coding agents (Claude Code, Aider, Codex, etc.) on your own codebase
-- Measuring agent performance before adopting a new tool or model
-- Running regression checks when an agent updates its model or tooling
-- Producing data-backed agent selection decisions for a team
+* 在你自己的代码库上比较编码代理（Claude Code、Aider、Codex 等）
+* 在采用新工具或模型之前衡量代理性能
+* 当代理更新其模型或工具时运行回归检查
+* 为团队做出数据支持的代理选择决策
 
-## Installation
+## 安装
 
-> **Note:** Install agent-eval from its repository after reviewing the source.
+```bash
+# pinned to v0.1.0 — latest stable commit
+pip install git+https://github.com/joaquinhuigomez/agent-eval.git@6d062a2f5cda6ea443bf5d458d361892c04e749b
+```
 
-## Core Concepts
+## 核心概念
 
-### YAML Task Definitions
+### YAML 任务定义
 
-Define tasks declaratively. Each task specifies what to do, which files to touch, and how to judge success:
+以声明方式定义任务。每个任务指定要做什么、要修改哪些文件以及如何判断成功：
 
 ```yaml
 name: add-retry-logic
@@ -46,47 +47,48 @@ judge:
 commit: "abc1234"  # pin to specific commit for reproducibility
 ```
 
-### Git Worktree Isolation
+### Git 工作树隔离
 
-Each agent run gets its own git worktree — no Docker required. This provides reproducibility isolation so agents cannot interfere with each other or corrupt the base repo.
+每个代理运行都获得自己的 git 工作树——无需 Docker。这提供了可复现的隔离，使得代理之间不会相互干扰或损坏基础仓库。
 
-### Metrics Collected
+### 收集的指标
 
-| Metric | What It Measures |
+| 指标 | 衡量内容 |
 |--------|-----------------|
-| Pass rate | Did the agent produce code that passes the judge? |
-| Cost | API spend per task (when available) |
-| Time | Wall-clock seconds to completion |
-| Consistency | Pass rate across repeated runs (e.g., 3/3 = 100%) |
+| 通过率 | 代理生成的代码是否通过了判断？ |
+| 成本 | 每个任务的 API 花费（如果可用） |
+| 时间 | 完成所需的挂钟秒数 |
+| 一致性 | 跨重复运行的通过率（例如，3/3 = 100%） |
 
-## Workflow
+## 工作流程
 
-### 1. Define Tasks
+### 1. 定义任务
 
-Create a `tasks/` directory with YAML files, one per task:
+创建一个 `tasks/` 目录，其中包含 YAML 文件，每个任务一个文件：
 
 ```bash
 mkdir tasks
 # Write task definitions (see template above)
 ```
 
-### 2. Run Agents
+### 2. 运行代理
 
-Execute agents against your tasks:
+针对你的任务执行代理：
 
 ```bash
 agent-eval run --task tasks/add-retry-logic.yaml --agent claude-code --agent aider --runs 3
 ```
 
-Each run:
-1. Creates a fresh git worktree from the specified commit
-2. Hands the prompt to the agent
-3. Runs the judge criteria
-4. Records pass/fail, cost, and time
+每次运行：
 
-### 3. Compare Results
+1. 从指定的提交创建一个新的 git 工作树
+2. 将提示交给代理
+3. 运行判断标准
+4. 记录通过/失败、成本和时间
 
-Generate a comparison report:
+### 3. 比较结果
+
+生成比较报告：
 
 ```bash
 agent-eval report --format table
@@ -102,9 +104,9 @@ Task: add-retry-logic (3 runs each)
 └──────────────┴───────────┴────────┴────────┴─────────────┘
 ```
 
-## Judge Types
+## 判断类型
 
-### Code-Based (deterministic)
+### 基于代码（确定性）
 
 ```yaml
 judge:
@@ -114,7 +116,7 @@ judge:
     command: npm run build
 ```
 
-### Pattern-Based
+### 基于模式
 
 ```yaml
 judge:
@@ -123,7 +125,7 @@ judge:
     files: src/**/*.py
 ```
 
-### Model-Based (LLM-as-judge)
+### 基于模型（LLM 作为判断器）
 
 ```yaml
 judge:
@@ -133,15 +135,15 @@ judge:
       Check for: max retries, increasing delays, jitter.
 ```
 
-## Best Practices
+## 最佳实践
 
-- **Start with 3-5 tasks** that represent your real workload, not toy examples
-- **Run at least 3 trials** per agent to capture variance — agents are non-deterministic
-- **Pin the commit** in your task YAML so results are reproducible across days/weeks
-- **Include at least one deterministic judge** (tests, build) per task — LLM judges add noise
-- **Track cost alongside pass rate** — a 95% agent at 10x the cost may not be the right choice
-- **Version your task definitions** — they are test fixtures, treat them as code
+* **从 3-5 个任务开始**，这些任务代表你的真实工作负载，而非玩具示例
+* **每个代理至少运行 3 次试验**以捕捉方差——代理是非确定性的
+* **在你的任务 YAML 中固定提交**，以便结果在数天/数周内可复现
+* **每个任务至少包含一个确定性判断器**（测试、构建）——LLM 判断器会增加噪音
+* **跟踪成本与通过率**——一个通过率 95% 但成本高出 10 倍的代理可能不是正确的选择
+* **对你的任务定义进行版本控制**——它们是测试夹具，应将其视为代码
 
-## Links
+## 链接
 
-- Repository: [github.com/joaquinhuigomez/agent-eval](https://github.com/joaquinhuigomez/agent-eval)
+* 仓库：[github.com/joaquinhuigomez/agent-eval](https://github.com/joaquinhuigomez/agent-eval)
