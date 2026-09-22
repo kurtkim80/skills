@@ -385,5 +385,19 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "Technical design doc conventions, schema design, API standards, and workflow modeling skills"
+  },
+  {
+    "name": "harness/harness-skills",
+    "repo": "https://github.com/harness/harness-skills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Official Harness.io CI/CD skills — 56+ specialized skills for pipelines, debug, chaos experiments, feature flags, cost analysis, and GitOps (⭐ 1.2k)"
+  },
+  {
+    "name": "affaan-m/ECC",
+    "repo": "https://github.com/affaan-m/ECC.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "The Agent Harness Performance Optimization System — Skills, instincts, memory, harness evaluation, verification (⭐ 264k)"
   }
 ]
