@@ -1,46 +1,45 @@
 ---
 name: continuous-agent-loop
-description: 具有质量门、评估和恢复控制的连续自主代理循环模式。
+description: 品質ゲート、評価、リカバリーコントロールを備えた継続的な自律エージェントループのパターン。
 origin: ECC
 ---
 
-# 持续代理循环
+# 継続的エージェントループ
 
-这是 v1.8+ 的规范循环技能名称。它在保持一个发布版本的兼容性的同时，取代了 `autonomous-loops`。
+これはv1.8+の標準ループスキル名です。1リリースの間、`autonomous-loops`との互換性を保ちながら置き換えます。
 
-## 循环选择流程
+## ループ選択フロー
 
 ```text
 Start
   |
-  +-- 需要严格的 CI/PR 控制？ -- yes --> continuous-pr
+  +-- Need strict CI/PR control? -- yes --> continuous-pr
   |
-  +-- 需要 RFC 分解？ -- yes --> rfc-dag
+  +-- Need RFC decomposition? -- yes --> rfc-dag
   |
-  +-- 需要探索性并行生成？ -- yes --> infinite
+  +-- Need exploratory parallel generation? -- yes --> infinite
   |
   +-- default --> sequential
 ```
 
-## 组合模式
+## 組み合わせパターン
 
-推荐的生产栈：
+推奨される本番スタック：
+1. RFC分解（`ralphinho-rfc-pipeline`）
+2. 品質ゲート（`plankton-code-quality` + `/quality-gate`）
+3. 評価ループ（`eval-harness`）
+4. セッション永続化（`nanoclaw-repl`）
 
-1. RFC 分解 (`ralphinho-rfc-pipeline`)
-2. 质量门 (`plankton-code-quality` + `/quality-gate`)
-3. 评估循环 (`eval-harness`)
-4. 会话持久化 (`nanoclaw-repl`)
+## 失敗モード
 
-## 故障模式
+- 測定可能な進捗なしのループチャーン
+- 同じ根本原因での繰り返しリトライ
+- マージキューの停止
+- 無制限のエスカレーションによるコストドリフト
 
-* 循环空转，没有可衡量的进展
-* 因相同根本原因而重复重试
-* 合并队列停滞
-* 无限制升级导致的成本漂移
+## リカバリー
 
-## 恢复
-
-* 冻结循环
-* 运行 `/harness-audit`
-* 将范围缩小到失败单元
-* 使用明确的验收标准重放
+- ループを凍結する
+- `/harness-audit`を実行する
+- スコープを失敗ユニットに縮小する
+- 明示的な受け入れ基準でリプレイする

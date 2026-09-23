@@ -1,35 +1,35 @@
 ---
 name: healthcare-phi-compliance
-description: 医疗应用中受保护健康信息（PHI）和个人身份信息（PII）的合规模式。涵盖数据分类、访问控制、审计追踪、加密及常见泄露途径。
+description: 保護医療情報（PHI）コンプライアンス、HIPAA準拠、およびデータセキュリティ。
 origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
 version: "1.0.0"
 ---
 
-# 医疗 PHI/PII 合规模式
+# Healthcare PHI/PII Compliance Patterns
 
-用于保护医疗应用中患者数据、临床医生数据和财务数据的模式。适用于 HIPAA（美国）、DISHA（印度）、GDPR（欧盟）以及通用医疗数据保护。
+Patterns for protecting patient data, clinician data, and financial data in healthcare applications. Applicable to HIPAA (US), DISHA (India), GDPR (EU), and general healthcare data protection.
 
-## 何时使用
+## When to Use
 
-* 构建任何涉及患者记录的功能
-* 为临床系统实施访问控制或身份验证
-* 设计医疗数据的数据库模式
-* 构建返回患者或临床医生数据的 API
-* 实施审计追踪或日志记录
-* 审查代码中的数据泄露漏洞
-* 为多租户医疗系统设置行级安全（RLS）
+- Building any feature that touches patient records
+- Implementing access control or authentication for clinical systems
+- Designing database schemas for healthcare data
+- Building APIs that return patient or clinician data
+- Implementing audit trails or logging
+- Reviewing code for data exposure vulnerabilities
+- Setting up Row-Level Security (RLS) for multi-tenant healthcare systems
 
-## 工作原理
+## How It Works
 
-医疗数据保护在三个层面运作：**分类**（什么是敏感数据）、**访问控制**（谁能查看）和**审计**（谁查看了数据）。
+Healthcare data protection operates on three layers: **classification** (what is sensitive), **access control** (who can see it), and **audit** (who did see it).
 
-### 数据分类
+### Data Classification
 
-**PHI（受保护健康信息）** — 任何能够识别患者身份且与其健康相关的数据：患者姓名、出生日期、地址、电话、电子邮件、国家身份证号码（SSN、Aadhaar、NHS 号码）、病历号、诊断、药物、化验结果、影像资料、保险单和理赔详情、预约和入院记录，或上述任意组合。
+**PHI (Protected Health Information)** — any data that can identify a patient AND relates to their health: patient name, date of birth, address, phone, email, national ID numbers (SSN, Aadhaar, NHS number), medical record numbers, diagnoses, medications, lab results, imaging, insurance policy and claim details, appointment and admission records, or any combination of the above.
 
-**医疗系统中的 PII（非患者敏感数据）**：临床医生/员工个人详细信息、医生收费结构和支付金额、员工薪资和银行信息、供应商付款信息。
+**PII (Non-patient-sensitive data)** in healthcare systems: clinician/staff personal details, doctor fee structures and payout amounts, employee salary and bank details, vendor payment information.
 
-### 访问控制：行级安全
+### Access Control: Row-Level Security
 
 ```sql
 ALTER TABLE patients ENABLE ROW LEVEL SECURITY;
@@ -49,9 +49,9 @@ CREATE POLICY "audit_no_modify" ON audit_log FOR UPDATE USING (false);
 CREATE POLICY "audit_no_delete" ON audit_log FOR DELETE USING (false);
 ```
 
-### 审计追踪
+### Audit Trail
 
-每次 PHI 访问或修改都必须记录：
+Every PHI access or modification must be logged:
 
 ```typescript
 interface AuditEntry {
@@ -67,23 +67,23 @@ interface AuditEntry {
 }
 ```
 
-### 常见泄露途径
+### Common Leak Vectors
 
-**错误消息：** 切勿在发送给客户端的错误消息中包含患者身份识别数据。仅在服务器端记录详细信息。
+**Error messages:** Never include patient-identifying data in error messages thrown to the client. Log details server-side only.
 
-**控制台输出：** 切勿记录完整的患者对象。使用不透明的内部记录 ID（UUID）——而不是病历号、国家身份证号或姓名。
+**Console output:** Never log full patient objects. Use opaque internal record IDs (UUIDs) — not medical record numbers, national IDs, or names.
 
-**URL 参数：** 切勿在可能出现在日志或浏览器历史记录中的查询字符串或路径段中包含患者身份识别数据。仅使用不透明的 UUID。
+**URL parameters:** Never put patient-identifying data in query strings or path segments that could appear in logs or browser history. Use opaque UUIDs only.
 
-**浏览器存储：** 切勿在 localStorage 或 sessionStorage 中存储 PHI。仅在内存中保留 PHI，按需获取。
+**Browser storage:** Never store PHI in localStorage or sessionStorage. Keep PHI in memory only, fetch on demand.
 
-**服务角色密钥：** 切勿在客户端代码中使用 service\_role 密钥。始终使用匿名/可发布密钥，并让 RLS 强制执行访问控制。
+**Service role keys:** Never use the service_role key in client-side code. Always use the anon/publishable key and let RLS enforce access.
 
-**日志和监控：** 切勿记录完整的患者记录。仅使用不透明的记录 ID（而不是病历号）。在发送到错误跟踪服务之前，清理堆栈跟踪。
+**Logs and monitoring:** Never log full patient records. Use opaque record IDs only (not medical record numbers). Sanitize stack traces before sending to error tracking services.
 
-### 数据库模式标记
+### Database Schema Tagging
 
-在模式级别标记 PHI/PII 列：
+Mark PHI/PII columns at the schema level:
 
 ```sql
 COMMENT ON COLUMN patients.name IS 'PHI: patient_name';
@@ -92,24 +92,23 @@ COMMENT ON COLUMN patients.aadhaar IS 'PHI: national_id';
 COMMENT ON COLUMN doctor_payouts.amount IS 'PII: financial';
 ```
 
-### 部署检查清单
+### Deployment Checklist
 
-每次部署前：
+Before every deployment:
+- No PHI in error messages or stack traces
+- No PHI in console.log/console.error
+- No PHI in URL parameters
+- No PHI in browser storage
+- No service_role key in client code
+- RLS enabled on all PHI/PII tables
+- Audit trail for all data modifications
+- Session timeout configured
+- API authentication on all PHI endpoints
+- Cross-facility data isolation verified
 
-* 错误消息或堆栈跟踪中无 PHI
-* console.log/console.error 中无 PHI
-* URL 参数中无 PHI
-* 浏览器存储中无 PHI
-* 客户端代码中无 service\_role 密钥
-* 所有 PHI/PII 表已启用 RLS
-* 所有数据修改均有审计追踪
-* 已配置会话超时
-* 所有 PHI 端点均需 API 身份验证
-* 已验证跨机构数据隔离
+## Examples
 
-## 示例
-
-### 示例 1：安全与不安全的错误处理
+### Example 1: Safe vs Unsafe Error Handling
 
 ```typescript
 // BAD — leaks PHI in error
@@ -120,7 +119,7 @@ logger.error('Patient lookup failed', { recordId: patient.id, facilityId });
 throw new Error('Record not found');
 ```
 
-### 示例 2：多机构隔离的 RLS 策略
+### Example 2: RLS Policy for Multi-Facility Isolation
 
 ```sql
 -- Doctor at Facility A cannot see Facility B patients
@@ -134,7 +133,7 @@ CREATE POLICY "facility_isolation"
 -- Expected: 0 rows returned
 ```
 
-### 示例 3：安全日志记录
+### Example 3: Safe Logging
 
 ```typescript
 // BAD — logs identifiable patient data

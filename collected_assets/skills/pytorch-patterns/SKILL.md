@@ -1,26 +1,26 @@
 ---
 name: pytorch-patterns
-description: PyTorch深度学习模式与最佳实践，用于构建稳健、高效且可复现的训练流程、模型架构和数据加载。
+description: PyTorch deep learning patterns and best practices for building robust, efficient, and reproducible training pipelines, model architectures, and data loading.
 origin: ECC
 ---
 
-# PyTorch 开发模式
+# PyTorch Development Patterns
 
-构建稳健、高效和可复现深度学习应用的 PyTorch 惯用模式与最佳实践。
+Idiomatic PyTorch patterns and best practices for building robust, efficient, and reproducible deep learning applications.
 
-## 何时使用
+## When to Activate
 
-* 编写新的 PyTorch 模型或训练脚本时
-* 评审深度学习代码时
-* 调试训练循环或数据管道时
-* 优化 GPU 内存使用或训练速度时
-* 设置可复现实验时
+- Writing new PyTorch models or training scripts
+- Reviewing deep learning code
+- Debugging training loops or data pipelines
+- Optimizing GPU memory usage or training speed
+- Setting up reproducible experiments
 
-## 核心原则
+## Core Principles
 
-### 1. 设备无关代码
+### 1. Device-Agnostic Code
 
-始终编写能在 CPU 和 GPU 上运行且不硬编码设备的代码。
+Always write code that works on both CPU and GPU without hardcoding devices.
 
 ```python
 # Good: Device-agnostic
@@ -33,9 +33,9 @@ model = MyModel().cuda()  # Crashes if no GPU
 data = data.cuda()
 ```
 
-### 2. 可复现性优先
+### 2. Reproducibility First
 
-设置所有随机种子以获得可复现的结果。
+Set all random seeds for reproducible results.
 
 ```python
 # Good: Full reproducibility setup
@@ -51,9 +51,9 @@ def set_seed(seed: int = 42) -> None:
 model = MyModel()  # Different weights every run
 ```
 
-### 3. 显式形状管理
+### 3. Explicit Shape Management
 
-始终记录并验证张量形状。
+Always document and verify tensor shapes.
 
 ```python
 # Good: Shape-annotated forward pass
@@ -72,9 +72,9 @@ def forward(self, x):
     return self.fc(x)           # Will this even work?
 ```
 
-## 模型架构模式
+## Model Architecture Patterns
 
-### 清晰的 nn.Module 结构
+### Clean nn.Module Structure
 
 ```python
 # Good: Well-organized module
@@ -107,7 +107,7 @@ class ImageClassifier(nn.Module):
         return x
 ```
 
-### 正确的权重初始化
+### Proper Weight Initialization
 
 ```python
 # Good: Explicit initialization
@@ -126,9 +126,9 @@ model = MyModel()
 model.apply(model._init_weights)
 ```
 
-## 训练循环模式
+## Training Loop Patterns
 
-### 标准训练循环
+### Standard Training Loop
 
 ```python
 # Good: Complete training loop with best practices
@@ -169,7 +169,7 @@ def train_one_epoch(
     return total_loss / len(dataloader)
 ```
 
-### 验证循环
+### Validation Loop
 
 ```python
 # Good: Proper evaluation
@@ -195,9 +195,9 @@ def evaluate(
     return total_loss / len(dataloader), correct / total
 ```
 
-## 数据管道模式
+## Data Pipeline Patterns
 
-### 自定义数据集
+### Custom Dataset
 
 ```python
 # Good: Clean Dataset with type hints
@@ -225,7 +225,7 @@ class ImageDataset(Dataset):
         return img, label
 ```
 
-### 高效的数据加载器配置
+### Efficient DataLoader Configuration
 
 ```python
 # Good: Optimized DataLoader
@@ -243,7 +243,7 @@ dataloader = DataLoader(
 dataloader = DataLoader(dataset, batch_size=32)  # num_workers=0, no pin_memory
 ```
 
-### 针对变长数据的自定义整理函数
+### Custom Collate for Variable-Length Data
 
 ```python
 # Good: Pad sequences in collate_fn
@@ -256,9 +256,9 @@ def collate_fn(batch: list[tuple[torch.Tensor, int]]) -> tuple[torch.Tensor, tor
 dataloader = DataLoader(dataset, batch_size=32, collate_fn=collate_fn)
 ```
 
-## 检查点模式
+## Checkpointing Patterns
 
-### 保存和加载检查点
+### Save and Load Checkpoints
 
 ```python
 # Good: Complete checkpoint with all training state
@@ -291,9 +291,9 @@ def load_checkpoint(
 torch.save(model.state_dict(), "model.pt")
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 混合精度训练
+### Mixed Precision Training
 
 ```python
 # Good: AMP with GradScaler
@@ -308,7 +308,7 @@ for data, target in dataloader:
     optimizer.zero_grad(set_to_none=True)
 ```
 
-### 大模型的梯度检查点
+### Gradient Checkpointing for Large Models
 
 ```python
 # Good: Trade compute for memory
@@ -322,7 +322,7 @@ class LargeModel(nn.Module):
         return self.head(x)
 ```
 
-### 使用 torch.compile 加速
+### torch.compile for Speed
 
 ```python
 # Good: Compile the model for faster execution (PyTorch 2.0+)
@@ -332,22 +332,22 @@ model = torch.compile(model, mode="reduce-overhead")
 # Modes: "default" (safe), "reduce-overhead" (faster), "max-autotune" (fastest)
 ```
 
-## 快速参考：PyTorch 惯用法
+## Quick Reference: PyTorch Idioms
 
-| 惯用法 | 描述 |
+| Idiom | Description |
 |-------|-------------|
-| `model.train()` / `model.eval()` | 训练/评估前始终设置模式 |
-| `torch.no_grad()` | 推理时禁用梯度 |
-| `optimizer.zero_grad(set_to_none=True)` | 更高效的梯度清零 |
-| `.to(device)` | 设备无关的张量/模型放置 |
-| `torch.amp.autocast` | 混合精度以获得 2 倍速度 |
-| `pin_memory=True` | 更快的 CPU→GPU 数据传输 |
-| `torch.compile` | JIT 编译加速 (2.0+) |
-| `weights_only=True` | 安全的模型加载 |
-| `torch.manual_seed` | 可复现的实验 |
-| `gradient_checkpointing` | 以计算换取内存 |
+| `model.train()` / `model.eval()` | Always set mode before train/eval |
+| `torch.no_grad()` | Disable gradients for inference |
+| `optimizer.zero_grad(set_to_none=True)` | More efficient gradient clearing |
+| `.to(device)` | Device-agnostic tensor/model placement |
+| `torch.amp.autocast` | Mixed precision for 2x speed |
+| `pin_memory=True` | Faster CPU→GPU data transfer |
+| `torch.compile` | JIT compilation for speed (2.0+) |
+| `weights_only=True` | Secure model loading |
+| `torch.manual_seed` | Reproducible experiments |
+| `gradient_checkpointing` | Trade compute for memory |
 
-## 应避免的反模式
+## Anti-Patterns to Avoid
 
 ```python
 # Bad: Forgetting model.eval() during validation
@@ -393,4 +393,4 @@ torch.save(model, "model.pt")  # Saves entire model (fragile, not portable)
 torch.save(model.state_dict(), "model.pt")
 ```
 
-**请记住**：PyTorch 代码应做到设备无关、可复现且内存意识强。如有疑问，请使用 `torch.profiler` 进行分析，并使用 `torch.cuda.memory_summary()` 检查 GPU 内存。
+__Remember__: PyTorch code should be device-agnostic, reproducible, and memory-conscious. When in doubt, profile with `torch.profiler` and check GPU memory with `torch.cuda.memory_summary()`.

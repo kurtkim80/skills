@@ -1,115 +1,112 @@
 ---
-description: "使用自然语言文件定位快速提交 — 用简单的英语描述要提交的内容"
-argument-hint: "[target description] (blank = all changes)"
+description: "自然言語でファイルを指定するクイックコミット — 何をコミットするかを平易な言葉で記述"
+argument-hint: "[ターゲットの説明]（空欄 = すべての変更）"
 ---
 
-# 智能提交
+# スマートコミット
 
-> 改编自 Wirasm 的 PRPs-agentic-eng。属于 PRP 工作流系列。
+> PRPs-agentic-engのWirasmによる適応。PRPワークフローシリーズの一部。
 
-**输入**：$ARGUMENTS
+**入力**: $ARGUMENTS
 
-***
+---
 
-## 阶段 1 — 评估
+## フェーズ 1 — ASSESS
 
 ```bash
 git status --short
 ```
 
-如果输出为空 → 停止："没有可提交的内容。"
+出力が空の場合 → 停止: "コミットするものがありません。"
 
-向用户展示变更摘要（新增、修改、删除、未跟踪）。
+変更内容のサマリーをユーザーに表示（追加、変更、削除、未追跡）。
 
-***
+---
 
-## 阶段 2 — 解析与暂存
+## フェーズ 2 — INTERPRET & STAGE
 
-解析 `$ARGUMENTS` 以确定暂存内容：
+`$ARGUMENTS`を解釈してステージング対象を決定:
 
-| 输入 | 解析结果 | Git 命令 |
+| 入力 | 解釈 | Gitコマンド |
 |---|---|---|
-| *(空白/空)* | 暂存所有内容 | `git add -A` |
-| `staged` | 使用已暂存的内容 | *(不执行 git add)* |
-| `*.ts` 或 `*.py` 等 | 暂存匹配的 glob 模式 | `git add '*.ts'` |
-| `except tests` | 暂存所有内容，然后取消暂存测试文件 | `git add -A && git reset -- '**/*.test.*' '**/*.spec.*' '**/test_*' 2>/dev/null \|\| true` |
-| `only new files` | 仅暂存未跟踪文件 | `git ls-files --others --exclude-standard \| grep . && git ls-files --others --exclude-standard \| xargs git add` |
-| `the auth changes` | 从状态/差异中解析 — 查找与认证相关的文件 | `git add <matched files>` |
-| 具体文件名 | 暂存这些文件 | `git add <files>` |
+| *（空 / 未入力）* | すべてをステージ | `git add -A` |
+| `staged` | 既にステージ済みのものを使用 | *（git addなし）* |
+| `*.ts`や`*.py`など | マッチするglobをステージ | `git add '*.ts'` |
+| `except tests` | すべてステージ後、テストをアンステージ | `git add -A && git reset -- '**/*.test.*' '**/*.spec.*' '**/test_*' 2>/dev/null \|\| true` |
+| `only new files` | 未追跡ファイルのみステージ | `git ls-files --others --exclude-standard \| grep . && git ls-files --others --exclude-standard \| xargs git add` |
+| `the auth changes` | status/diffから解釈 — auth関連ファイルを検出 | `git add <matched files>` |
+| 特定のファイル名 | それらのファイルをステージ | `git add <files>` |
 
-对于自然语言输入（如"认证相关的变更"），交叉引用 `git status` 输出和 `git diff` 以识别相关文件。向用户展示你暂存了哪些文件及其原因。
+自然言語入力（"the auth changes"など）の場合、`git status`出力と`git diff`を相互参照して関連ファイルを特定。どのファイルをなぜステージングするかをユーザーに表示。
 
 ```bash
 git add <determined files>
 ```
 
-暂存后，验证：
-
+ステージング後、検証:
 ```bash
 git diff --cached --stat
 ```
 
-如果未暂存任何内容，停止："没有文件匹配你的描述。"
+ステージングされたものがなければ、停止: "説明に一致するファイルがありません。"
 
-***
+---
 
-## 阶段 3 — 提交
+## フェーズ 3 — COMMIT
 
-使用祈使语气编写单行提交信息：
+命令形で単一行のコミットメッセージを作成:
 
 ```
 {type}: {description}
 ```
 
-类型：
+タイプ:
+- `feat` — 新機能または能力
+- `fix` — バグ修正
+- `refactor` — 動作を変えないコード再構築
+- `docs` — ドキュメント変更
+- `test` — テストの追加または更新
+- `chore` — ビルド、設定、依存関係
+- `perf` — パフォーマンス改善
+- `ci` — CI/CD変更
 
-* `feat` — 新功能或能力
-* `fix` — 错误修复
-* `refactor` — 代码重构，行为不变
-* `docs` — 文档变更
-* `test` — 添加或更新测试
-* `chore` — 构建、配置、依赖项
-* `perf` — 性能改进
-* `ci` — CI/CD 变更
-
-规则：
-
-* 祈使语气（"添加功能"而非"已添加功能"）
-* 类型前缀后使用小写
-* 末尾不加句号
-* 不超过 72 个字符
-* 描述变更内容，而非方式
+ルール:
+- 命令形（"added feature"ではなく"add feature"）
+- タイププレフィックスの後は小文字
+- 末尾にピリオドなし
+- 72文字以内
+- HOWではなくWHATが変わったかを記述
 
 ```bash
 git commit -m "{type}: {description}"
 ```
 
-***
+---
 
-## 阶段 4 — 输出
+## フェーズ 4 — OUTPUT
 
-向用户报告：
+ユーザーへの報告:
 
 ```
 Committed: {hash_short}
 Message:   {type}: {description}
-Files:     {count} 个文件已更改
+Files:     {count} file(s) changed
 
-下一步：
-  - git push           → 推送到远程
-  - /prp-pr            → 创建拉取请求
-  - /code-review       → 推送前进行代码审查
+Next steps:
+  - git push           → リモートにプッシュ
+  - /prp-pr            → プルリクエストを作成
+  - /code-review       → プッシュ前にレビュー
 ```
 
-***
+---
 
-## 示例
+## 例
 
-| 你说 | 执行结果 |
+| 入力 | 動作 |
 |---|---|
-| `/prp-commit` | 暂存所有内容，自动生成信息 |
-| `/prp-commit staged` | 仅提交已暂存的内容 |
-| `/prp-commit *.ts` | 暂存所有 TypeScript 文件，然后提交 |
-| `/prp-commit except tests` | 暂存除测试文件外的所有内容 |
-| `/prp-commit the database migration` | 从状态中查找数据库迁移文件，暂存它们 |
-| `/prp-commit only new files` | 仅暂存未跟踪文件 |
+| `/prp-commit` | すべてステージ、メッセージを自動生成 |
+| `/prp-commit staged` | 既にステージ済みのもののみコミット |
+| `/prp-commit *.ts` | すべてのTypeScriptファイルをステージしてコミット |
+| `/prp-commit except tests` | テストファイル以外すべてをステージ |
+| `/prp-commit the database migration` | statusからDBマイグレーションファイルを検出してステージ |
+| `/prp-commit only new files` | 未追跡ファイルのみステージ |

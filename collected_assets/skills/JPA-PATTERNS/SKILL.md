@@ -1,13 +1,13 @@
 ---
 name: jpa-patterns
-description: JPA/Hibernate patterns for entity design, relationships, query optimization, transactions, auditing, indexing, pagination, and pooling in Spring Boot.
+description: Spring Boot中的JPA/Hibernate实体设计、关系、查询优化、事务、审计、索引、分页和连接池模式。
 ---
 
-# JPA/Hibernate パターン
+# JPA/Hibernate 模式
 
-Spring Bootでのデータモデリング、リポジトリ、パフォーマンスチューニングに使用します。
+用于 Spring Boot 中的数据建模、存储库和性能调优。
 
-## エンティティ設計
+## 实体设计
 
 ```java
 @Entity
@@ -33,29 +33,30 @@ public class MarketEntity {
 }
 ```
 
-監査を有効化:
+启用审计：
+
 ```java
 @Configuration
 @EnableJpaAuditing
 class JpaConfig {}
 ```
 
-## リレーションシップとN+1防止
+## 关联关系和 N+1 预防
 
 ```java
 @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = true)
 private List<PositionEntity> positions = new ArrayList<>();
 ```
 
-- デフォルトで遅延ロード。必要に応じてクエリで `JOIN FETCH` を使用
-- コレクションでは `EAGER` を避け、読み取りパスにはDTOプロジェクションを使用
+* 默认使用延迟加载；需要时在查询中使用 `JOIN FETCH`
+* 避免在集合上使用 `EAGER`；对于读取路径使用 DTO 投影
 
 ```java
 @Query("select m from MarketEntity m left join fetch m.positions where m.id = :id")
 Optional<MarketEntity> findWithPositions(@Param("id") Long id);
 ```
 
-## リポジトリパターン
+## 存储库模式
 
 ```java
 public interface MarketRepository extends JpaRepository<MarketEntity, Long> {
@@ -66,7 +67,8 @@ public interface MarketRepository extends JpaRepository<MarketEntity, Long> {
 }
 ```
 
-- 軽量クエリにはプロジェクションを使用:
+* 使用投影进行轻量级查询：
+
 ```java
 public interface MarketSummary {
   Long getId();
@@ -76,11 +78,11 @@ public interface MarketSummary {
 Page<MarketSummary> findAllBy(Pageable pageable);
 ```
 
-## トランザクション
+## 事务
 
-- サービスメソッドに `@Transactional` を付ける
-- 読み取りパスを最適化するために `@Transactional(readOnly = true)` を使用
-- 伝播を慎重に選択。長時間実行されるトランザクションを避ける
+* 使用 `@Transactional` 注解服务方法
+* 对读取路径使用 `@Transactional(readOnly = true)` 以进行优化
+* 谨慎选择传播行为；避免长时间运行的事务
 
 ```java
 @Transactional
@@ -92,25 +94,26 @@ public Market updateStatus(Long id, MarketStatus status) {
 }
 ```
 
-## ページネーション
+## 分页
 
 ```java
 PageRequest page = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
 Page<MarketEntity> markets = repo.findByStatus(MarketStatus.ACTIVE, page);
 ```
 
-カーソルライクなページネーションには、順序付けでJPQLに `id > :lastId` を含める。
+对于类似游标的分页，在 JPQL 中包含 `id > :lastId` 并配合排序。
 
-## インデックス作成とパフォーマンス
+## 索引和性能
 
-- 一般的なフィルタ（`status`、`slug`、外部キー）にインデックスを追加
-- クエリパターンに一致する複合インデックスを使用（`status, created_at`）
-- `select *` を避け、必要な列のみを投影
-- `saveAll` と `hibernate.jdbc.batch_size` でバッチ書き込み
+* 为常用过滤器添加索引（`status`、`slug`、外键）
+* 使用与查询模式匹配的复合索引（`status, created_at`）
+* 避免 `select *`；仅投影需要的列
+* 使用 `saveAll` 和 `hibernate.jdbc.batch_size` 进行批量写入
 
-## コネクションプーリング（HikariCP）
+## 连接池 (HikariCP)
 
-推奨プロパティ:
+推荐属性：
+
 ```
 spring.datasource.hikari.maximum-pool-size=20
 spring.datasource.hikari.minimum-idle=5
@@ -118,24 +121,25 @@ spring.datasource.hikari.connection-timeout=30000
 spring.datasource.hikari.validation-timeout=5000
 ```
 
-PostgreSQL LOB処理には、次を追加:
+对于 PostgreSQL LOB 处理，添加：
+
 ```
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 ```
 
-## キャッシング
+## 缓存
 
-- 1次キャッシュはEntityManagerごと。トランザクション間でエンティティを保持しない
-- 読み取り集約型エンティティには、2次キャッシュを慎重に検討。退避戦略を検証
+* 一级缓存是每个 EntityManager 的；避免在事务之间保持实体
+* 对于读取频繁的实体，谨慎考虑二级缓存；验证驱逐策略
 
-## マイグレーション
+## 迁移
 
-- FlywayまたはLiquibaseを使用。本番環境でHibernate自動DDLに依存しない
-- マイグレーションを冪等かつ追加的に保つ。計画なしに列を削除しない
+* 使用 Flyway 或 Liquibase；切勿在生产中依赖 Hibernate 自动 DDL
+* 保持迁移的幂等性和可添加性；避免无计划地删除列
 
-## データアクセステスト
+## 测试数据访问
 
-- 本番環境を反映するために、Testcontainersを使用した `@DataJpaTest` を優先
-- ログを使用してSQL効率をアサート: パラメータ値には `logging.level.org.hibernate.SQL=DEBUG` と `logging.level.org.hibernate.orm.jdbc.bind=TRACE` を設定
+* 首选使用 Testcontainers 的 `@DataJpaTest` 来镜像生产环境
+* 使用日志断言 SQL 效率：设置 `logging.level.org.hibernate.SQL=DEBUG` 和 `logging.level.org.hibernate.orm.jdbc.bind=TRACE` 以查看参数值
 
-**注意**: エンティティを軽量に保ち、クエリを意図的にし、トランザクションを短く保ちます。フェッチ戦略とプロジェクションでN+1を防ぎ、読み取り/書き込みパスにインデックスを作成します。
+**请记住**：保持实体精简，查询有针对性，事务简短。通过获取策略和投影来预防 N+1 问题，并根据读写路径建立索引。

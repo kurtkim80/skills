@@ -1,56 +1,68 @@
 ---
-description: Fix build and TypeScript errors with minimal changes
-agent: build-error-resolver
-subtask: true
+name: build-fix
+description: 최소한의 안전한 변경으로 build 및 타입 오류를 점진적으로 수정합니다.
 ---
 
-# Build Fix Command
+# Build 오류 수정
 
-Fix build and TypeScript errors with minimal changes: $ARGUMENTS
+최소한의 안전한 변경으로 build 및 타입 오류를 점진적으로 수정합니다.
 
-## Your Task
+## 1단계: Build 시스템 감지
 
-1. **Run type check**: `npx tsc --noEmit`
-2. **Collect all errors**
-3. **Fix errors one by one** with minimal changes
-4. **Verify each fix** doesn't introduce new errors
-5. **Run final check** to confirm all errors resolved
+프로젝트의 build 도구를 식별하고 build를 실행합니다:
 
-## Approach
+| 식별 기준 | Build 명령어 |
+|-----------|---------------|
+| `package.json`에 `build` 스크립트 포함 | `npm run build` 또는 `pnpm build` |
+| `tsconfig.json` (TypeScript 전용) | `npx tsc --noEmit` |
+| `Cargo.toml` | `cargo build 2>&1` |
+| `pom.xml` | `mvn compile` |
+| `build.gradle` | `./gradlew compileJava` |
+| `go.mod` | `go build ./...` |
+| `pyproject.toml` | `python -m compileall .` 또는 `mypy .` |
 
-### DO:
-- PASS: Fix type errors with correct types
-- PASS: Add missing imports
-- PASS: Fix syntax errors
-- PASS: Make minimal changes
-- PASS: Preserve existing behavior
-- PASS: Run `tsc --noEmit` after each change
+## 2단계: 오류 파싱 및 그룹화
 
-### DON'T:
-- FAIL: Refactor code
-- FAIL: Add new features
-- FAIL: Change architecture
-- FAIL: Use `any` type (unless absolutely necessary)
-- FAIL: Add `@ts-ignore` comments
-- FAIL: Change business logic
+1. Build 명령어를 실행하고 stderr를 캡처합니다
+2. 파일 경로별로 오류를 그룹화합니다
+3. 의존성 순서에 따라 정렬합니다 (import/타입 오류를 로직 오류보다 먼저 수정)
+4. 진행 상황 추적을 위해 전체 오류 수를 셉니다
 
-## Common Error Fixes
+## 3단계: 수정 루프 (한 번에 하나의 오류씩)
 
-| Error | Fix |
-|-------|-----|
-| Type 'X' is not assignable to type 'Y' | Add correct type annotation |
-| Property 'X' does not exist | Add property to interface or fix property name |
-| Cannot find module 'X' | Install package or fix import path |
-| Argument of type 'X' is not assignable | Cast or fix function signature |
-| Object is possibly 'undefined' | Add null check or optional chaining |
+각 오류에 대해:
 
-## Verification Steps
+1. **파일 읽기** — Read 도구를 사용하여 오류 전후 10줄의 컨텍스트를 확인합니다
+2. **진단** — 근본 원인을 식별합니다 (누락된 import, 잘못된 타입, 구문 오류)
+3. **최소한으로 수정** — Edit 도구를 사용하여 오류를 해결하는 최소한의 변경을 적용합니다
+4. **Build 재실행** — 오류가 해결되었고 새로운 오류가 발생하지 않았는지 확인합니다
+5. **다음으로 이동** — 남은 오류를 계속 처리합니다
 
-After fixes:
-1. `npx tsc --noEmit` - should show 0 errors
-2. `npm run build` - should succeed
-3. `npm test` - tests should still pass
+## 4단계: 안전장치
 
----
+다음 경우 사용자에게 확인을 요청합니다:
 
-**IMPORTANT**: Focus on fixing errors only. No refactoring, no improvements, no architectural changes. Get the build green with minimal diff.
+- 수정이 **해결하는 것보다 더 많은 오류를 발생**시키는 경우
+- **동일한 오류가 3번 시도 후에도 지속**되는 경우 (더 깊은 문제일 가능성)
+- 수정에 **아키텍처 변경이 필요**한 경우 (단순 build 수정이 아님)
+- Build 오류가 **누락된 의존성**에서 비롯된 경우 (`npm install`, `cargo add` 등이 필요)
+
+## 5단계: 요약
+
+결과를 표시합니다:
+- 수정된 오류 (파일 경로 포함)
+- 남아있는 오류 (있는 경우)
+- 새로 발생한 오류 (0이어야 함)
+- 미해결 문제에 대한 다음 단계 제안
+
+## 복구 전략
+
+| 상황 | 조치 |
+|-----------|--------|
+| 모듈/import 누락 | 패키지가 설치되어 있는지 확인하고 설치 명령어를 제안합니다 |
+| 타입 불일치 | 양쪽 타입 정의를 확인하고 더 좁은 타입을 수정합니다 |
+| 순환 의존성 | import 그래프로 순환을 식별하고 분리를 제안합니다 |
+| 버전 충돌 | `package.json` / `Cargo.toml`의 버전 제약 조건을 확인합니다 |
+| Build 도구 설정 오류 | 설정 파일을 확인하고 정상 동작하는 기본값과 비교합니다 |
+
+안전을 위해 한 번에 하나의 오류씩 수정하세요. 리팩토링보다 최소한의 diff를 선호합니다.

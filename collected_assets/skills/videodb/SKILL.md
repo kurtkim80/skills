@@ -1,66 +1,66 @@
 ---
 name: videodb
-description: 视频与音频的查看、理解与行动。查看：从本地文件、URL、RTSP/直播源或实时录制桌面获取内容；返回实时上下文和可播放流链接。理解：提取帧，构建视觉/语义/时间索引，并通过时间戳和自动剪辑搜索片段。行动：转码和标准化（编解码器、帧率、分辨率、宽高比），执行时间线编辑（字幕、文本/图像叠加、品牌化、音频叠加、配音、翻译），生成媒体资源（图像、音频、视频），并为直播流或桌面捕获的事件创建实时警报。
+description: ビデオとオーディオの表示、理解、アクション。表示：ローカルファイル、URL、RTSP/ライブストリーム、またはリアルタイムのデスクトップ録画からコンテンツを取得し、リアルタイムコンテキストと再生可能なストリームリンクを返す。理解：フレームを抽出し、ビジュアル/セマンティック/時間的インデックスを構築し、タイムスタンプと自動クリップでモーメントを検索する。アクション：トランスコードと正規化（コーデック、フレームレート、解像度、アスペクト比）、タイムライン編集（字幕、テキスト/画像オーバーレイ、ブランディング、オーディオオーバーレイ、吹き替え、翻訳）、メディアアセットの生成（画像、オーディオ、ビデオ）、ライブストリームまたはデスクトップキャプチャされたイベントのリアルタイムアラートを実行する。
 origin: ECC
 allowed-tools: Read Grep Glob Bash(python:*)
 argument-hint: "[task description]"
 ---
 
-# VideoDB 技能
+# VideoDBスキル
 
-**针对视频、直播流和桌面会话的感知 + 记忆 + 操作。**
+**ビデオ、ライブストリーム、デスクトップセッションのための知覚 + 記憶 + アクション。**
 
-## 使用场景
+## ユースケース
 
-### 桌面感知
+### デスクトップ知覚
 
-* 启动/停止**桌面会话**，捕获**屏幕、麦克风和系统音频**
-* 流式传输**实时上下文**并存储**片段式会话记忆**
-* 对所说的内容和屏幕上发生的事情运行**实时警报/触发器**
-* 生成**会话摘要**、可搜索的时间线和**可播放的证据链接**
+* **デスクトップセッション**を開始/停止し、**画面、マイク、システムオーディオ**をキャプチャする
+* **リアルタイムコンテキスト**をストリーミングし、**セグメント化されたセッション記憶**を保存する
+* 言われた内容と画面上で起きていることに対して**リアルタイムアラート/トリガー**を実行する
+* **セッションサマリー**、検索可能なタイムライン、**再生可能な証拠リンク**を生成する
 
-### 视频摄取 + 流
+### ビデオ取り込み + ストリーミング
 
-* 摄取**文件或URL**并返回**可播放的网络流链接**
-* 转码/标准化：**编解码器、比特率、帧率、分辨率、宽高比**
+* **ファイルまたはURL**を取り込み、**再生可能なウェブストリームリンク**を返す
+* トランスコード/正規化：**コーデック、ビットレート、フレームレート、解像度、アスペクト比**
 
-### 索引 + 搜索（时间戳 + 证据）
+### インデックス + 検索（タイムスタンプ + 証拠）
 
-* 构建**视觉**、**语音**和**关键词**索引
-* 搜索并返回带有**时间戳**和**可播放证据**的精确时刻
-* 从搜索结果自动创建**片段**
+* **ビジュアル**、**音声**、**キーワード**インデックスを構築する
+* **タイムスタンプ**と**再生可能な証拠**で正確なモーメントを検索して返す
+* 検索結果から自動的に**クリップ**を作成する
 
-### 时间线编辑 + 生成
+### タイムライン編集 + 生成
 
-* 字幕：**生成**、**翻译**、**烧录**
-* 叠加层：**文本/图片/品牌标识**，动态字幕
-* 音频：**背景音乐**、**画外音**、**配音**
-* 通过**时间线操作**进行程序化合成和导出
+* 字幕：**生成**、**翻訳**、**バーンイン**
+* オーバーレイ：**テキスト/画像/ブランドロゴ**、動的キャプション
+* オーディオ：**バックグラウンドミュージック**、**ナレーション**、**吹き替え**
+* **タイムライン操作**によるプログラマティックなコンポジションとエクスポート
 
-### 直播流（RTSP）+ 监控
+### ライブストリーム（RTSP）+ 監視
 
-* 连接**RTSP/实时流**
-* 运行**实时视觉和语音理解**，并为监控工作流发出**事件/警报**
+* **RTSP/ライブストリーム**に接続する
+* **リアルタイムのビジュアルと音声理解**を実行し、監視ワークフロー向けに**イベント/アラート**を発する
 
-## 工作原理
+## 仕組み
 
-### 常见输入
+### 一般的な入力
 
-* 本地**文件路径**、公共**URL**或**RTSP URL**
-* 桌面捕获请求：**启动 / 停止 / 总结会话**
-* 期望的操作：获取理解上下文、转码规格、索引规格、搜索查询、片段范围、时间线编辑、警报规则
+* ローカル**ファイルパス**、公開**URL**、または**RTSP URL**
+* デスクトップキャプチャリクエスト：**開始 / 停止 / セッションのサマリー作成**
+* 目的のアクション：理解コンテキストの取得、トランスコード仕様、インデックス仕様、検索クエリ、クリップ範囲、タイムライン編集、アラートルール
 
-### 常见输出
+### 一般的な出力
 
-* **流URL**
-* 带有**时间戳**和**证据链接**的搜索结果
-* 生成的资产：字幕、音频、图片、片段
-* 用于直播流的**事件/警报负载**
-* 桌面**会话摘要**和记忆条目
+* **ストリームURL**
+* **タイムスタンプ**と**証拠リンク**付きの検索結果
+* 生成されたアセット：字幕、オーディオ、画像、クリップ
+* ライブストリーム向け**イベント/アラートペイロード**
+* デスクトップ**セッションサマリー**と記憶エントリ
 
-### 运行 Python 代码
+### Pythonコードの実行
 
-在运行任何 VideoDB 代码之前，请切换到项目目录并加载环境变量：
+VideoDBコードを実行する前に、プロジェクトディレクトリに移動して環境変数をロードする：
 
 ```python
 from dotenv import load_dotenv
@@ -70,16 +70,16 @@ import videodb
 conn = videodb.connect()
 ```
 
-这会从以下位置读取 `VIDEO_DB_API_KEY`：
+これにより以下から `VIDEO_DB_API_KEY` が読み込まれる：
 
-1. 环境变量（如果已导出）
-2. 项目当前目录中的 `.env` 文件
+1. 環境変数（エクスポートされている場合）
+2. プロジェクトの現在のディレクトリにある `.env` ファイル
 
-如果密钥缺失，`videodb.connect()` 会自动引发 `AuthenticationError`。
+キーが欠けている場合、`videodb.connect()` は自動的に `AuthenticationError` を発生させる。
 
-当简短的內联命令有效时，不要编写脚本文件。
+短いインラインコマンドで十分な場合はスクリプトファイルを書かない。
 
-编写內联 Python (`python -c "..."`) 时，始终使用格式正确的代码——使用分号分隔语句并保持可读性。对于任何超过约3条语句的内容，请改用 heredoc：
+インラインPython (`python -c "..."`) を書く場合は、常に適切にフォーマットされたコードを使用する——セミコロンで文を区切り、読みやすくする。約3文以上の場合はheredocを使用する：
 
 ```bash
 python << 'EOF'
@@ -93,36 +93,36 @@ print(f"Videos: {len(coll.get_videos())}")
 EOF
 ```
 
-### 设置
+### セットアップ
 
-当用户要求“设置 videodb”或类似操作时：
+ユーザーが「videodbのセットアップ」などを要求した場合：
 
-### 1. 安装 SDK
+### 1. SDKのインストール
 
 ```bash
 pip install "videodb[capture]" python-dotenv
 ```
 
-如果在 Linux 上 `videodb[capture]` 失败，请安装不带捕获扩展的版本：
+Linuxで `videodb[capture]` が失敗する場合は、キャプチャ拡張なしでインストールする：
 
 ```bash
 pip install videodb python-dotenv
 ```
 
-### 2. 配置 API 密钥
+### 2. APIキーの設定
 
-用户必须使用**任一**方法设置 `VIDEO_DB_API_KEY`：
+ユーザーは**いずれかの**方法で `VIDEO_DB_API_KEY` を設定する必要がある：
 
-* **在终端中导出**（在启动 Claude 之前）：`export VIDEO_DB_API_KEY=your-key`
-* **项目 `.env` 文件**：将 `VIDEO_DB_API_KEY=your-key` 保存在项目的 `.env` 文件中
+* **ターミナルでエクスポート**（Claudeを起動する前に）：`export VIDEO_DB_API_KEY=your-key`
+* **プロジェクトの `.env` ファイル**：プロジェクトの `.env` ファイルに `VIDEO_DB_API_KEY=your-key` を保存する
 
-免费获取 API 密钥，请访问 [console.videodb.io](https://console.videodb.io)（50 次免费上传，无需信用卡）。
+APIキーを無料で取得するには [console.videodb.io](https://console.videodb.io)（クレジットカード不要で50回の無料アップロード）を訪問する。
 
-**请勿**自行读取、写入或处理 API 密钥。始终让用户设置。
+APIキーを自分で読み取り、書き込み、または処理**しない**。常にユーザーが設定するようにする。
 
-### 快速参考
+### クイックリファレンス
 
-### 上传媒体
+### メディアのアップロード
 
 ```python
 # URL
@@ -135,7 +135,7 @@ video = coll.upload(url="https://www.youtube.com/watch?v=VIDEO_ID")
 video = coll.upload(file_path="/path/to/video.mp4")
 ```
 
-### 转录 + 字幕
+### 転写 + 字幕
 
 ```python
 # force=True skips the error if the video is already indexed
@@ -144,7 +144,7 @@ text = video.get_transcript_text()
 stream_url = video.add_subtitle()
 ```
 
-### 在视频内搜索
+### ビデオ内検索
 
 ```python
 from videodb.exceptions import InvalidRequestError
@@ -164,7 +164,7 @@ except InvalidRequestError as e:
         raise
 ```
 
-### 场景搜索
+### シーン検索
 
 ```python
 import re
@@ -203,13 +203,13 @@ except InvalidRequestError as e:
         raise
 ```
 
-### 时间线编辑
+### タイムライン編集
 
-**重要提示：** 在构建时间线之前，请务必验证时间戳：
+**重要：** タイムラインを構築する前に必ずタイムスタンプを検証する：
 
-* `start` 必须 >= 0（负值会被静默接受，但会产生损坏的输出）
-* `start` 必须 < `end`
-* `end` 必须 <= `video.length`
+* `start` は >= 0 でなければならない（負の値は静かに受け入れられるが、破損した出力を生成する）
+* `start` は `end` より小さくなければならない
+* `end` は `video.length` 以下でなければならない
 
 ```python
 from videodb.timeline import Timeline
@@ -221,7 +221,7 @@ timeline.add_overlay(0, TextAsset(text="The End", duration=3, style=TextStyle(fo
 stream_url = timeline.generate_stream()
 ```
 
-### 转码视频（分辨率 / 质量更改）
+### ビデオのトランスコード（解像度/品質変更）
 
 ```python
 from videodb import TranscodeMode, VideoConfig, AudioConfig
@@ -236,13 +236,13 @@ job_id = conn.transcode(
 )
 ```
 
-### 调整宽高比（适用于社交平台）
+### アスペクト比の調整（ソーシャルプラットフォーム向け）
 
-**警告：** `reframe()` 是一项缓慢的服务器端操作。对于长视频，可能需要几分钟，并可能超时。最佳实践：
+**警告：** `reframe()` は低速なサーバーサイド操作。長いビデオでは数分かかる場合があり、タイムアウトする可能性がある。ベストプラクティス：
 
-* 尽可能使用 `start`/`end` 限制为短片段
-* 对于全长视频，使用 `callback_url` 进行异步处理
-* 先在 `Timeline` 上修剪视频，然后调整较短结果的宽高比
+* 可能な限り `start`/`end` を使用して短いセグメントに制限する
+* フルレングスビデオには非同期処理のために `callback_url` を使用する
+* まず `Timeline` でビデオをトリミングし、短い結果のアスペクト比を調整する
 
 ```python
 from videodb import ReframeMode
@@ -260,7 +260,7 @@ reframed = video.reframe(start=0, end=60, target="square")
 reframed = video.reframe(start=0, end=60, target={"width": 1280, "height": 720})
 ```
 
-### 生成式媒体
+### 生成メディア
 
 ```python
 image = coll.generate_image(
@@ -269,7 +269,7 @@ image = coll.generate_image(
 )
 ```
 
-## 错误处理
+## エラーハンドリング
 
 ```python
 from videodb.exceptions import AuthenticationError, InvalidRequestError
@@ -285,43 +285,43 @@ except InvalidRequestError as e:
     print(f"Upload failed: {e}")
 ```
 
-### 常见问题
+### よくある問題
 
-| 场景 | 错误信息 | 解决方案 |
+| シナリオ | エラーメッセージ | 解決策 |
 |----------|--------------|----------|
-| 为已索引的视频建立索引 | `Spoken word index for video already exists` | 使用 `video.index_spoken_words(force=True)` 跳过已索引的情况 |
-| 场景索引已存在 | `Scene index with id XXXX already exists` | 使用 `re.search(r"id\s+([a-f0-9]+)", str(e))` 从错误中提取现有的 `scene_index_id` |
-| 搜索无匹配项 | `InvalidRequestError: No results found` | 捕获异常并视为空结果 (`shots = []`) |
-| 调整宽高比超时 | 长视频上无限期阻塞 | 使用 `start`/`end` 限制片段，或传递 `callback_url` 进行异步处理 |
-| Timeline 上的负时间戳 | 静默产生损坏的流 | 在创建 `VideoAsset` 之前，始终验证 `start >= 0` |
-| `generate_video()` / `create_collection()` 失败 | `Operation not allowed` 或 `maximum limit` | 计划限制的功能——告知用户关于计划限制 |
+| 既にインデックスされたビデオのインデックス作成 | `Spoken word index for video already exists` | `video.index_spoken_words(force=True)` を使用してインデックス済みをスキップ |
+| シーンインデックスが既に存在 | `Scene index with id XXXX already exists` | `re.search(r"id\s+([a-f0-9]+)", str(e))` を使用してエラーから既存の `scene_index_id` を抽出 |
+| 検索結果なし | `InvalidRequestError: No results found` | 例外をキャッチして空の結果として扱う (`shots = []`) |
+| アスペクト比調整タイムアウト | 長いビデオで無期限にブロック | `start`/`end` でセグメントを制限するか、非同期処理のために `callback_url` を渡す |
+| タイムライン上の負のタイムスタンプ | 破損したストリームを静かに生成 | `VideoAsset` を作成する前に常に `start >= 0` を検証する |
+| `generate_video()` / `create_collection()` の失敗 | `Operation not allowed` または `maximum limit` | プラン制限された機能——ユーザーにプラン制限を通知する |
 
-## 示例
+## 例
 
-### 规范提示
+### 標準的なプロンプト
 
-* "开始桌面捕获，并在密码字段出现时发出警报。"
-* "记录我的会话并在结束时生成可操作的摘要。"
-* "摄取此文件并返回可播放的流链接。"
-* "为此文件夹建立索引，并找到每个有人的场景，返回时间戳。"
-* "生成字幕，将其烧录进去，并添加轻背景音乐。"
-* "连接此 RTSP URL，并在有人进入区域时发出警报。"
+* 「デスクトップキャプチャを開始し、パスワードフィールドが表示されたときにアラートを発する。」
+* 「セッションを記録して終了時に実行可能なサマリーを生成する。」
+* 「このファイルを取り込んで再生可能なストリームリンクを返す。」
+* 「このフォルダをインデックス化して、人物がいるすべてのシーンを見つけ、タイムスタンプを返す。」
+* 「字幕を生成してバーンインし、軽いバックグラウンドミュージックを追加する。」
+* 「このRTSP URLに接続して、誰かがエリアに入ったときにアラートを発する。」
 
-### 屏幕录制（桌面捕获）
+### スクリーンレコーディング（デスクトップキャプチャ）
 
-使用 `ws_listener.py` 在录制会话期间捕获 WebSocket 事件。桌面捕获仅支持 **macOS**。
+`ws_listener.py` を使用して録画セッション中にWebSocketイベントをキャプチャする。デスクトップキャプチャは**macOS**のみサポート。
 
-#### 快速开始
+#### クイックスタート
 
-1. **选择状态目录**：`STATE_DIR="${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}"`
-2. **启动监听器**：`VIDEODB_EVENTS_DIR="$STATE_DIR" python scripts/ws_listener.py --clear "$STATE_DIR" &`
-3. **获取 WebSocket ID**：`cat "$STATE_DIR/videodb_ws_id"`
-4. **运行捕获代码**（完整工作流程请参阅 reference/capture.md）
-5. **事件写入**：`$STATE_DIR/videodb_events.jsonl`
+1. **状態ディレクトリを選択**：`STATE_DIR="${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}"`
+2. **リスナーを起動**：`VIDEODB_EVENTS_DIR="$STATE_DIR" python scripts/ws_listener.py --clear "$STATE_DIR" &`
+3. **WebSocket IDを取得**：`cat "$STATE_DIR/videodb_ws_id"`
+4. **キャプチャコードを実行**（完全なワークフローはreference/capture.mdを参照）
+5. **イベントの書き込み先**：`$STATE_DIR/videodb_events.jsonl`
 
-每当开始新的捕获运行时，请使用 `--clear`，以免过时的转录和视觉事件泄露到新会话中。
+新しいキャプチャ実行を開始するときは常に `--clear` を使用して、古い転写とビジュアルイベントが新しいセッションに漏れないようにする。
 
-#### 查询事件
+#### イベントのクエリ
 
 ```python
 import json
@@ -349,38 +349,38 @@ recent_visual = [
 ]
 ```
 
-## 附加文档
+## 追加ドキュメント
 
-参考文档位于与此 SKILL.md 文件相邻的 `reference/` 目录中。如果需要，请使用 Glob 工具来定位。
+参考ドキュメントはこのSKILL.mdファイルと同じディレクトリの `reference/` ディレクトリにある。必要に応じてGlobツールを使用して見つける。
 
-* [reference/api-reference.md](reference/api-reference.md) - 完整的 VideoDB Python SDK API 参考
-* [reference/search.md](reference/search.md) - 视频搜索深入指南（口语词和基于场景的）
-* [reference/editor.md](reference/editor.md) - 时间线编辑、资产和合成
-* [reference/streaming.md](reference/streaming.md) - HLS 流和即时播放
-* [reference/generative.md](reference/generative.md) - AI 驱动的媒体生成（图像、视频、音频）
-* [reference/rtstream.md](reference/rtstream.md) - 直播流摄取工作流程（RTSP/RTMP）
-* [reference/rtstream-reference.md](reference/rtstream-reference.md) - RTStream SDK 方法和 AI 管道
-* [reference/capture.md](reference/capture.md) - 桌面捕获工作流程
-* [reference/capture-reference.md](reference/capture-reference.md) - Capture SDK 和 WebSocket 事件
-* [reference/use-cases.md](reference/use-cases.md) - 常见的视频处理模式和示例
+* [reference/api-reference.md](reference/api-reference.md) - 完全なVideoDB Python SDK APIリファレンス
+* [reference/search.md](reference/search.md) - ビデオ検索の詳細ガイド（音声とシーンベース）
+* [reference/editor.md](reference/editor.md) - タイムライン編集、アセット、コンポジション
+* [reference/streaming.md](reference/streaming.md) - HLSストリーミングと即時再生
+* [reference/generative.md](reference/generative.md) - AI駆動のメディア生成（画像、ビデオ、オーディオ）
+* [reference/rtstream.md](reference/rtstream.md) - ライブストリーム取り込みワークフロー（RTSP/RTMP）
+* [reference/rtstream-reference.md](reference/rtstream-reference.md) - RTStream SDKメソッドとAIパイプライン
+* [reference/capture.md](reference/capture.md) - デスクトップキャプチャワークフロー
+* [reference/capture-reference.md](reference/capture-reference.md) - Capture SDKとWebSocketイベント
+* [reference/use-cases.md](reference/use-cases.md) - 一般的なビデオ処理パターンと例
 
-**当 VideoDB 支持该操作时，不要使用 ffmpeg、moviepy 或本地编码工具。** 以下所有操作均由 VideoDB 在服务器端处理——修剪、合并片段、叠加音频或音乐、添加字幕、文本/图像叠加层、转码、分辨率更改、宽高比转换、为平台要求调整大小、转录和媒体生成。仅当 reference/editor.md 中“限制”部分列出的操作（转场、速度变化、裁剪/缩放、色彩分级、音量混合）时，才回退到本地工具。
+**VideoDBがその操作をサポートする場合、ffmpeg、moviepy、またはローカルエンコーディングツールを使用しない。** 以下のすべての操作はVideoDBによってサーバーサイドで処理される——トリミング、クリップのマージ、オーディオや音楽のオーバーレイ、字幕の追加、テキスト/画像オーバーレイ、トランスコード、解像度変更、アスペクト比変換、プラットフォーム要件へのリサイズ、転写、メディア生成。reference/editor.mdの「制限」セクションに記載されている操作（トランジション、速度変更、クロップ/ズーム、カラーグレーディング、音量ミキシング）の場合のみローカルツールにフォールバックする。
 
-### 何时使用什么
+### 何を使うべきか
 
-| 问题 | VideoDB 解决方案 |
+| 問題 | VideoDBソリューション |
 |---------|-----------------|
-| 平台拒绝视频宽高比或分辨率 | 使用 `VideoConfig` 的 `video.reframe()` 或 `conn.transcode()` |
-| 需要为 Twitter/Instagram/TikTok 调整视频大小 | `video.reframe(target="vertical")` 或 `target="square"` |
-| 需要更改分辨率（例如 1080p → 720p） | 使用 `VideoConfig(resolution=720)` 的 `conn.transcode()` |
-| 需要在视频上叠加音频/音乐 | 在 `Timeline` 上使用 `AudioAsset` |
-| 需要添加字幕 | `video.add_subtitle()` 或 `CaptionAsset` |
-| 需要合并/修剪片段 | 在 `Timeline` 上使用 `VideoAsset` |
-| 需要生成画外音、音乐或音效 | `coll.generate_voice()`、`generate_music()`、`generate_sound_effect()` |
+| プラットフォームがビデオのアスペクト比または解像度を拒否 | `VideoConfig` を使用した `video.reframe()` または `conn.transcode()` |
+| Twitter/Instagram/TikTok向けにビデオをリサイズする必要がある | `video.reframe(target="vertical")` または `target="square"` |
+| 解像度を変更する必要がある（例：1080p → 720p） | `VideoConfig(resolution=720)` を使用した `conn.transcode()` |
+| ビデオにオーディオ/音楽をオーバーレイする必要がある | `Timeline` で `AudioAsset` を使用 |
+| 字幕を追加する必要がある | `video.add_subtitle()` または `CaptionAsset` |
+| クリップをマージ/トリミングする必要がある | `Timeline` で `VideoAsset` を使用 |
+| ナレーション、音楽、効果音を生成する必要がある | `coll.generate_voice()`、`generate_music()`、`generate_sound_effect()` |
 
-## 来源
+## ソース
 
-此技能的参考材料在 `skills/videodb/reference/` 下本地提供。
-请使用上面的本地副本，而不是在运行时遵循外部存储库链接。
+このスキルの参考資料は `skills/videodb/reference/` の下でローカルに提供されている。
+実行時に外部リポジトリリンクをたどるのではなく、上記のローカルコピーを使用する。
 
-**维护者：** [VideoDB](https://www.videodb.io/)
+**メンテナー：** [VideoDB](https://www.videodb.io/)

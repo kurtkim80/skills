@@ -1,38 +1,38 @@
 ---
 name: swiftui-patterns
-description: SwiftUI 架构模式，使用 @Observable 进行状态管理，视图组合，导航，性能优化，以及现代 iOS/macOS UI 最佳实践。
+description: "@Observableを使用した状態管理、ビュー合成、ナビゲーション、パフォーマンス最適化、モダンなiOS/macOS UIのベストプラクティスを備えたSwiftUIアーキテクチャパターン。"
 ---
 
-# SwiftUI 模式
+# SwiftUI パターン
 
-适用于 Apple 平台的现代 SwiftUI 模式，用于构建声明式、高性能的用户界面。涵盖 Observation 框架、视图组合、类型安全导航和性能优化。
+Appleプラットフォーム向けのモダンなSwiftUIパターン。宣言的で高性能なユーザーインターフェースを構築するために使用する。Observationフレームワーク、ビュー合成、型安全なナビゲーション、パフォーマンス最適化をカバーする。
 
-## 何时激活
+## 起動条件
 
-* 构建 SwiftUI 视图和管理状态时（`@State`、`@Observable`、`@Binding`）
-* 使用 `NavigationStack` 设计导航流程时
-* 构建视图模型和数据流时
-* 优化列表和复杂布局的渲染性能时
-* 在 SwiftUI 中使用环境值和依赖注入时
+* SwiftUIビューを構築し、状態を管理する場合（`@State`、`@Observable`、`@Binding`）
+* `NavigationStack` を使用したナビゲーションフローを設計する場合
+* ビューモデルとデータフローを構築する場合
+* リストと複雑なレイアウトのレンダリングパフォーマンスを最適化する場合
+* SwiftUIで環境値と依存性注入を使用する場合
 
-## 状态管理
+## 状態管理
 
-### 属性包装器选择
+### プロパティラッパーの選択
 
-选择最适合的最简单包装器：
+最も適したシンプルなラッパーを選択する：
 
-| 包装器 | 使用场景 |
+| ラッパー | 使用場面 |
 |---------|----------|
-| `@State` | 视图本地的值类型（开关、表单字段、Sheet 展示） |
-| `@Binding` | 指向父视图 `@State` 的双向引用 |
-| `@Observable` 类 + `@State` | 拥有多个属性的自有模型 |
-| `@Observable` 类（无包装器） | 从父视图传递的只读引用 |
-| `@Bindable` | 指向 `@Observable` 属性的双向绑定 |
-| `@Environment` | 通过 `.environment()` 注入的共享依赖项 |
+| `@State` | ビューローカルな値型（トグル、フォームフィールド、シート表示） |
+| `@Binding` | 親ビューの `@State` への双方向参照 |
+| `@Observable` クラス + `@State` | 複数のプロパティを持つ所有モデル |
+| `@Observable` クラス（ラッパーなし） | 親ビューから渡される読み取り専用参照 |
+| `@Bindable` | `@Observable` プロパティへの双方向バインディング |
+| `@Environment` | `.environment()` で注入された共有依存関係 |
 
 ### @Observable ViewModel
 
-使用 `@Observable`（而非 `ObservableObject`）—— 它跟踪属性级别的变更，因此 SwiftUI 只会重新渲染读取了已变更属性的视图：
+`ObservableObject` ではなく `@Observable` を使用する——プロパティレベルの変更を追跡するため、SwiftUIは変更されたプロパティを読み取ったビューのみを再レンダリングする：
 
 ```swift
 @Observable
@@ -55,7 +55,7 @@ final class ItemListViewModel {
 }
 ```
 
-### 消费 ViewModel 的视图
+### ViewModelを使用するビュー
 
 ```swift
 struct ItemListView: View {
@@ -76,9 +76,9 @@ struct ItemListView: View {
 }
 ```
 
-### 环境注入
+### 環境への注入
 
-用 `@Environment` 替换 `@EnvironmentObject`：
+`@EnvironmentObject` の代わりに `@Environment` を使用する：
 
 ```swift
 // Inject
@@ -95,11 +95,11 @@ struct ProfileView: View {
 }
 ```
 
-## 视图组合
+## ビュー合成
 
-### 提取子视图以限制失效
+### 無効化を制限するためにサブビューを抽出する
 
-将视图拆分为小型、专注的结构体。当状态变更时，只有读取该状态的子视图会重新渲染：
+ビューを小さく焦点を絞った構造体に分割する。状態が変化した場合、その状態を読み取ったサブビューのみが再レンダリングされる：
 
 ```swift
 struct OrderView: View {
@@ -115,7 +115,7 @@ struct OrderView: View {
 }
 ```
 
-### 用于可复用样式的 ViewModifier
+### 再利用可能なスタイルのための ViewModifier
 
 ```swift
 struct CardModifier: ViewModifier {
@@ -134,11 +134,11 @@ extension View {
 }
 ```
 
-## 导航
+## ナビゲーション
 
-### 类型安全的 NavigationStack
+### 型安全な NavigationStack
 
-使用 `NavigationStack` 与 `NavigationPath` 来实现程序化、类型安全的路由：
+`NavigationStack` と `NavigationPath` を使用して、プログラム的で型安全なルーティングを実現する：
 
 ```swift
 @Observable
@@ -179,11 +179,11 @@ struct RootView: View {
 }
 ```
 
-## 性能
+## パフォーマンス
 
-### 为大型集合使用惰性容器
+### 大規模なコレクションにレイジーコンテナを使用する
 
-`LazyVStack` 和 `LazyHStack` 仅在视图可见时才创建它们：
+`LazyVStack` と `LazyHStack` はビューが表示される時のみ作成する：
 
 ```swift
 ScrollView {
@@ -195,9 +195,9 @@ ScrollView {
 }
 ```
 
-### 稳定的标识符
+### 安定した識別子
 
-在 `ForEach` 中始终使用稳定、唯一的 ID —— 避免使用数组索引：
+`ForEach` では常に安定した一意のIDを使用する——配列インデックスは避ける：
 
 ```swift
 // Use Identifiable conformance or explicit id
@@ -206,16 +206,16 @@ ForEach(items, id: \.stableID) { item in
 }
 ```
 
-### 避免在 body 中进行昂贵操作
+### body 内での高コストな操作を避ける
 
-* 切勿在 `body` 内执行 I/O、网络调用或繁重计算
-* 使用 `.task {}` 处理异步工作 —— 当视图消失时它会自动取消
-* 在滚动视图中谨慎使用 `.sensoryFeedback()` 和 `.geometryGroup()`
-* 在列表中最小化使用 `.shadow()`、`.blur()` 和 `.mask()` —— 它们会触发屏幕外渲染
+* `body` 内でI/O、ネットワーク呼び出し、重い計算を絶対に実行しない
+* 非同期処理には `.task {}` を使用する——ビューが消えると自動的にキャンセルされる
+* スクロールビューでは `.sensoryFeedback()` と `.geometryGroup()` を慎重に使用する
+* リストでは `.shadow()`、`.blur()`、`.mask()` の使用を最小化する——画面外レンダリングを引き起こす
 
-### 遵循 Equatable
+### Equatable に準拠する
 
-对于 body 计算昂贵的视图，遵循 `Equatable` 以跳过不必要的重新渲染：
+bodyの計算が高コストなビューには、不要な再レンダリングをスキップするために `Equatable` に準拠する：
 
 ```swift
 struct ExpensiveChartView: View, Equatable {
@@ -231,9 +231,9 @@ struct ExpensiveChartView: View, Equatable {
 }
 ```
 
-## 预览
+## プレビュー
 
-使用 `#Preview` 宏配合内联模拟数据以进行快速迭代：
+インラインのモックデータで `#Preview` マクロを使用して素早い反復を行う：
 
 ```swift
 #Preview("Empty state") {
@@ -245,15 +245,15 @@ struct ExpensiveChartView: View, Equatable {
 }
 ```
 
-## 应避免的反模式
+## 避けるべきアンチパターン
 
-* 在新代码中使用 `ObservableObject` / `@Published` / `@StateObject` / `@EnvironmentObject` —— 迁移到 `@Observable`
-* 将异步工作直接放在 `body` 或 `init` 中 —— 使用 `.task {}` 或显式的加载方法
-* 在不拥有数据的子视图中将视图模型创建为 `@State` —— 改为从父视图传递
-* 使用 `AnyView` 类型擦除 —— 对于条件视图，优先选择 `@ViewBuilder` 或 `Group`
-* 在向 Actor 传递数据或从 Actor 接收数据时忽略 `Sendable` 要求
+* 新しいコードで `ObservableObject` / `@Published` / `@StateObject` / `@EnvironmentObject` を使用する——`@Observable` に移行する
+* `body` や `init` 内に直接非同期処理を置く——`.task {}` または明示的なロードメソッドを使用する
+* データを所有しないサブビューでViewModelを `@State` として作成する——代わりに親ビューから渡す
+* `AnyView` による型消去を使用する——条件付きビューには `@ViewBuilder` または `Group` を優先する
+* ActorとのデータのやりとりにおいてSendable要件を無視する
 
-## 参考
+## 参照
 
-查看技能：`swift-actor-persistence` 以了解基于 Actor 的持久化模式。
-查看技能：`swift-protocol-di-testing` 以了解基于协议的 DI 和使用 Swift Testing 进行测试。
+Actorベースの永続化パターンについては、スキル `swift-actor-persistence` を参照。
+プロトコルベースのDIとSwift Testingを使用したテストについては、スキル `swift-protocol-di-testing` を参照。

@@ -1,16 +1,13 @@
 ---
-title: "Syllabus Agent — AI Coding Agent & Codex Skill"
-description: "Course supplementary reading list persona. Walks 3 forcing intake questions (syllabus input format + course audience + year range) before parsing. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-syllabus
+description: Course supplementary reading list persona. Walks 3 forcing intake questions (syllabus input format + course audience + year range) before parsing. Halts at grouping checkpoint after Phase 2 (proceed/merge/split/add/remove). Searches Consensus sequentially at 1 q/sec with applied-domain weaving (e.g., 'enzyme kinetics food processing' not just 'enzyme kinetics'). Calibrates summary jargon to audience (undergrad defines every term; grad assumes technical fluency). Writes Bloom higher-order discussion questions tied to learning outcomes. Generates .docx via bundled JS script.
+skills: research/syllabus/skills/syllabus
+domain: research
+model: opus
+tools: [Read, Write, Bash]
 ---
 
 # Syllabus Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Research</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/syllabus/agents/cs-syllabus.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -56,7 +53,7 @@ The cs-syllabus agent orchestrates the `syllabus` skill across course-reading-li
 
 ## Skill Integration
 
-**Skill Location:** [`skills/syllabus`](https://github.com/alirezarezvani/claude-skills/tree/main/research/syllabus/skills/syllabus)
+**Skill Location:** `../skills/syllabus/`
 
 ### Python Tools (Stdlib)
 
@@ -76,10 +73,10 @@ The cs-syllabus agent orchestrates the `syllabus` skill across course-reading-li
 
 ## Related Agents
 
-- [cs-litreview](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md) — sibling, academic literature
-- [cs-grants](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/agents/cs-grants.md) — sibling, NIH funding
-- [cs-patent](https://github.com/alirezarezvani/claude-skills/tree/main/research/patent/agents/cs-patent.md) — sibling, patent prior-art
-- [cs-dossier](https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/agents/cs-dossier.md) — sibling, entity research
+- [cs-litreview](../../litreview/agents/cs-litreview.md) — sibling, academic literature
+- [cs-grants](../../grants/agents/cs-grants.md) — sibling, NIH funding
+- [cs-patent](../../patent/agents/cs-patent.md) — sibling, patent prior-art
+- [cs-dossier](../../dossier/agents/cs-dossier.md) — sibling, entity research
 
 ---
 

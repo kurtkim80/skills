@@ -1,13 +1,13 @@
 ---
 name: springboot-patterns
-description: Spring Boot architecture patterns, REST API design, layered services, data access, caching, async processing, and logging. Use for Java Spring Boot backend work.
+description: Spring Boot 架构模式、REST API 设计、分层服务、数据访问、缓存、异步处理和日志记录。适用于 Java Spring Boot 后端工作。
 ---
 
-# Spring Boot 開発パターン
+# Spring Boot 开发模式
 
-スケーラブルで本番グレードのサービスのためのSpring BootアーキテクチャとAPIパターン。
+用于可扩展、生产级服务的 Spring Boot 架构和 API 模式。
 
-## REST API構造
+## REST API 结构
 
 ```java
 @RestController
@@ -31,12 +31,12 @@ class MarketController {
   @PostMapping
   ResponseEntity<MarketResponse> create(@Valid @RequestBody CreateMarketRequest request) {
     Market market = marketService.create(request);
-    return ResponseEntity.status(HttpStatus.CREATED).body(MarketResponse::from(market));
+    return ResponseEntity.status(HttpStatus.CREATED).body(MarketResponse.from(market));
   }
 }
 ```
 
-## リポジトリパターン（Spring Data JPA）
+## 仓库模式 (Spring Data JPA)
 
 ```java
 public interface MarketRepository extends JpaRepository<MarketEntity, Long> {
@@ -45,7 +45,7 @@ public interface MarketRepository extends JpaRepository<MarketEntity, Long> {
 }
 ```
 
-## トランザクション付きサービスレイヤー
+## 带事务的服务层
 
 ```java
 @Service
@@ -65,7 +65,7 @@ public class MarketService {
 }
 ```
 
-## DTOと検証
+## DTO 和验证
 
 ```java
 public record CreateMarketRequest(
@@ -81,7 +81,7 @@ public record MarketResponse(Long id, String name, MarketStatus status) {
 }
 ```
 
-## 例外ハンドリング
+## 异常处理
 
 ```java
 @ControllerAdvice
@@ -101,16 +101,16 @@ class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   ResponseEntity<ApiError> handleGeneric(Exception ex) {
-    // スタックトレース付きで予期しないエラーをログ
+    // Log unexpected errors with stack traces
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiError.of("Internal server error"));
   }
 }
 ```
 
-## キャッシング
+## 缓存
 
-構成クラスで`@EnableCaching`が必要です。
+需要在配置类上使用 `@EnableCaching`。
 
 ```java
 @Service
@@ -133,22 +133,22 @@ public class MarketCacheService {
 }
 ```
 
-## 非同期処理
+## 异步处理
 
-構成クラスで`@EnableAsync`が必要です。
+需要在配置类上使用 `@EnableAsync`。
 
 ```java
 @Service
 public class NotificationService {
   @Async
   public CompletableFuture<Void> sendAsync(Notification notification) {
-    // メール/SMS送信
+    // send email/SMS
     return CompletableFuture.completedFuture(null);
   }
 }
 ```
 
-## ロギング（SLF4J）
+## 日志记录 (SLF4J)
 
 ```java
 @Service
@@ -158,7 +158,7 @@ public class ReportService {
   public Report generate(Long marketId) {
     log.info("generate_report marketId={}", marketId);
     try {
-      // ロジック
+      // logic
     } catch (Exception ex) {
       log.error("generate_report_failed marketId={}", marketId, ex);
       throw ex;
@@ -168,7 +168,7 @@ public class ReportService {
 }
 ```
 
-## ミドルウェア / フィルター
+## 中间件 / 过滤器
 
 ```java
 @Component
@@ -190,14 +190,14 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 }
 ```
 
-## ページネーションとソート
+## 分页和排序
 
 ```java
 PageRequest page = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
 Page<Market> results = marketService.list(page);
 ```
 
-## エラー回復力のある外部呼び出し
+## 容错的外部调用
 
 ```java
 public <T> T withRetry(Supplier<T> supplier, int maxRetries) {
@@ -221,16 +221,18 @@ public <T> T withRetry(Supplier<T> supplier, int maxRetries) {
 }
 ```
 
-## レート制限（Filter + Bucket4j）
+## 速率限制 (过滤器 + Bucket4j)
 
-**セキュリティノート**: `X-Forwarded-For`ヘッダーはデフォルトでは信頼できません。クライアントがそれを偽装できるためです。
-転送ヘッダーは次の場合のみ使用してください:
-1. アプリが信頼できるリバースプロキシ（nginx、AWS ALBなど）の背後にある
-2. `ForwardedHeaderFilter`をBeanとして登録済み
-3. application propertiesで`server.forward-headers-strategy=NATIVE`または`FRAMEWORK`を設定済み
-4. プロキシが`X-Forwarded-For`ヘッダーを上書き（追加ではなく）するよう設定済み
+**安全须知**：默认情况下 `X-Forwarded-For` 头是不可信的，因为客户端可以伪造它。
+仅在以下情况下使用转发头：
 
-`ForwardedHeaderFilter`が適切に構成されている場合、`request.getRemoteAddr()`は転送ヘッダーから正しいクライアントIPを自動的に返します。この構成がない場合は、`request.getRemoteAddr()`を直接使用してください。これは直接接続IPを返し、唯一信頼できる値です。
+1. 您的应用程序位于可信的反向代理（nginx、AWS ALB 等）之后
+2. 您已将 `ForwardedHeaderFilter` 注册为 bean
+3. 您已在应用属性中配置了 `server.forward-headers-strategy=NATIVE` 或 `FRAMEWORK`
+4. 您的代理配置为覆盖（而非追加）`X-Forwarded-For` 头
+
+当 `ForwardedHeaderFilter` 被正确配置时，`request.getRemoteAddr()` 将自动从转发的头中返回正确的客户端 IP。
+没有此配置时，请直接使用 `request.getRemoteAddr()`——它返回的是直接连接的 IP，这是唯一可信的值。
 
 ```java
 @Component
@@ -238,35 +240,32 @@ public class RateLimitFilter extends OncePerRequestFilter {
   private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
   /*
-   * セキュリティ: このフィルターはレート制限のためにクライアントを識別するために
-   * request.getRemoteAddr()を使用します。
+   * SECURITY: This filter uses request.getRemoteAddr() to identify clients for rate limiting.
    *
-   * アプリケーションがリバースプロキシ（nginx、AWS ALBなど）の背後にある場合、
-   * 正確なクライアントIP検出のために転送ヘッダーを適切に処理するようSpringを
-   * 設定する必要があります:
+   * If your application is behind a reverse proxy (nginx, AWS ALB, etc.), you MUST configure
+   * Spring to handle forwarded headers properly for accurate client IP detection:
    *
-   * 1. application.properties/yamlで server.forward-headers-strategy=NATIVE
-   *    （クラウドプラットフォーム用）またはFRAMEWORKを設定
-   * 2. FRAMEWORK戦略を使用する場合、ForwardedHeaderFilterを登録:
+   * 1. Set server.forward-headers-strategy=NATIVE (for cloud platforms) or FRAMEWORK in
+   *    application.properties/yaml
+   * 2. If using FRAMEWORK strategy, register ForwardedHeaderFilter:
    *
    *    @Bean
    *    ForwardedHeaderFilter forwardedHeaderFilter() {
    *        return new ForwardedHeaderFilter();
    *    }
    *
-   * 3. プロキシが偽装を防ぐためにX-Forwarded-Forヘッダーを上書き（追加ではなく）
-   *    することを確認
-   * 4. コンテナに応じてserver.tomcat.remoteip.trusted-proxiesまたは同等を設定
+   * 3. Ensure your proxy overwrites (not appends) the X-Forwarded-For header to prevent spoofing
+   * 4. Configure server.tomcat.remoteip.trusted-proxies or equivalent for your container
    *
-   * この構成なしでは、request.getRemoteAddr()はクライアントIPではなくプロキシIPを返します。
-   * X-Forwarded-Forを直接読み取らないでください。信頼できるプロキシ処理なしでは簡単に偽装できます。
+   * Without this configuration, request.getRemoteAddr() returns the proxy IP, not the client IP.
+   * Do NOT read X-Forwarded-For directly—it is trivially spoofable without trusted proxy handling.
    */
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    // ForwardedHeaderFilterが構成されている場合は正しいクライアントIPを返す
-    // getRemoteAddr()を使用。そうでなければ直接接続IPを返す。
-    // X-Forwarded-Forヘッダーを適切なプロキシ構成なしで直接信頼しない。
+    // Use getRemoteAddr() which returns the correct client IP when ForwardedHeaderFilter
+    // is configured, or the direct connection IP otherwise. Never trust X-Forwarded-For
+    // headers directly without proper proxy configuration.
     String clientIp = request.getRemoteAddr();
 
     Bucket bucket = buckets.computeIfAbsent(clientIp,
@@ -283,22 +282,22 @@ public class RateLimitFilter extends OncePerRequestFilter {
 }
 ```
 
-## バックグラウンドジョブ
+## 后台作业
 
-Springの`@Scheduled`を使用するか、キュー（Kafka、SQS、RabbitMQなど）と統合します。ハンドラーをべき等かつ観測可能に保ちます。
+使用 Spring 的 `@Scheduled` 或与队列（如 Kafka、SQS、RabbitMQ）集成。保持处理程序是幂等的和可观察的。
 
-## 可観測性
+## 可观测性
 
-- 構造化ロギング（JSON）via Logbackエンコーダー
-- メトリクス: Micrometer + Prometheus/OTel
-- トレーシング: Micrometer TracingとOpenTelemetryまたはBraveバックエンド
+* 通过 Logback 编码器进行结构化日志记录 (JSON)
+* 指标：Micrometer + Prometheus/OTel
+* 追踪：带有 OpenTelemetry 或 Brave 后端的 Micrometer Tracing
 
-## 本番デフォルト
+## 生产环境默认设置
 
-- コンストラクタインジェクションを優先、フィールドインジェクションを避ける
-- RFC 7807エラーのために`spring.mvc.problemdetails.enabled=true`を有効化（Spring Boot 3+）
-- ワークロードに応じてHikariCPプールサイズを構成、タイムアウトを設定
-- クエリに`@Transactional(readOnly = true)`を使用
-- `@NonNull`と`Optional`で適切にnull安全性を強制
+* 优先使用构造函数注入，避免字段注入
+* 启用 `spring.mvc.problemdetails.enabled=true` 以获得 RFC 7807 错误 (Spring Boot 3+)
+* 根据工作负载配置 HikariCP 连接池大小，设置超时
+* 对查询使用 `@Transactional(readOnly = true)`
+* 在适当的地方通过 `@NonNull` 和 `Optional` 强制执行空值安全
 
-**覚えておいてください**: コントローラーは薄く、サービスは焦点を絞り、リポジトリはシンプルに、エラーは集中的に処理します。保守性とテスト可能性のために最適化してください。
+**记住**：保持控制器精简、服务专注、仓库简单，并集中处理错误。为可维护性和可测试性进行优化。

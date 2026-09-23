@@ -1,15 +1,9 @@
 ---
-title: "/cs-write-a-skill — Slash Command for AI Coding Agents"
-description: "/cs:write-a-skill <name-or-description> — Author a new agent skill with Matt Pocock's 3-phase workflow (Gather → Draft → Review). Runs 6. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-write-a-skill"
+description: "/cs:write-a-skill <name-or-description> — Author a new agent skill with Matt Pocock's 3-phase workflow (Gather → Draft → Review). Runs 6 review-checklist items + 3 validator tools as a gate. Use when starting a new skill in this repo."
 ---
 
-# /cs-write-a-skill
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/write-a-skill/commands/cs-write-a-skill.md">Source</a></span>
-</div>
-
+# /cs:write-a-skill — Skill-Author Forcing Questions
 
 **Command:** `/cs:write-a-skill <name-or-description>`
 
@@ -136,9 +130,9 @@ grep -r "derived_from\|original_author" path/to/skill-folder/
 
 ## Related
 
-- Agent: [`cs-skill-author`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/write-a-skill/agents/cs-skill-author.md)
-- Skill: [`write-a-skill`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/write-a-skill/skills/write-a-skill/SKILL.md)
-- Adjacent: [`engineering/karpathy-coder`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/karpathy-coder), [`engineering/autoresearch-agent`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/autoresearch-agent)
+- Agent: [`cs-skill-author`](../agents/cs-skill-author.md)
+- Skill: [`write-a-skill`](../skills/write-a-skill/SKILL.md)
+- Adjacent: `../../karpathy-coder/`, `../../autoresearch-agent/`
 
 ---
 

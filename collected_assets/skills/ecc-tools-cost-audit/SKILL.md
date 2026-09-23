@@ -1,160 +1,160 @@
 ---
 name: ecc-tools-cost-audit
-description: 证据优先的ECC工具燃烧和计费审计工作流。用于调查ECC工具仓库中的失控PR创建、配额绕过、高级模型泄漏、重复作业或GitHub App成本激增。
+description: ECC ツール、エージェント、スキル、および実装のコスト監査を実施します。プロンプト入力トークンを分析して、計算効率を定量化します。
 origin: ECC
 ---
 
-# ECC 工具成本审计
+# ECC Tools Cost Audit
 
-当用户怀疑 ECC Tools GitHub App 正在消耗成本、过度创建 PR、绕过使用限制，或将免费用户引导至付费分析路径时，使用此技能。
+Use this skill when the user suspects the ECC Tools GitHub App is burning cost, over-creating PRs, bypassing usage limits, or routing free users into premium analysis paths.
 
-这是一个针对兄弟仓库 [ECC-Tools](../../../../ECC-Tools) 的聚焦操作者工作流。它不是通用的计费技能，也不是仓库范围的代码审查。
+This is a focused operator workflow for the sibling [ECC-Tools](../../ECC-Tools) repo. It is not a generic billing skill and it is not a repo-wide code review pass.
 
-## 技能栈
+## Skill Stack
 
-在相关情况下，将这些 ECC 原生技能拉入工作流：
+Pull these ECC-native skills into the workflow when relevant:
 
-* `autonomous-loops` 用于跨 webhook、队列、计费和重试的有界多步骤审计
-* `agentic-engineering` 用于将请求路径追踪为离散的、可证明的单元
-* `customer-billing-ops` 当需要清晰分离仓库行为和客户影响计算时
-* `search-first` 在发明辅助函数或重新实现仓库本地工具之前
-* `security-review` 当涉及认证、使用限制、授权或密钥时
-* `verification-loop` 用于证明重试安全性和精确的修复后状态
-* `tdd-workflow` 当修复需要在 worker、路由器或计费路径中添加回归测试覆盖时
+- `autonomous-loops` for bounded multi-step audits that cross webhooks, queues, billing, and retries
+- `agentic-engineering` for tracing the request path into discrete, provable units
+- `customer-billing-ops` when repo behavior and customer-impact math must be separated cleanly
+- `search-first` before inventing helpers or re-implementing repo-local utilities
+- `security-review` when auth, usage gates, entitlements, or secrets are touched
+- `verification-loop` for proving rerun safety and exact post-fix state
+- `tdd-workflow` when the fix needs regression coverage in the worker, router, or billing paths
 
-## 使用时机
+## When To Use
 
-* 用户提及 ECC Tools 消耗率、PR 递归、过度创建的 PR、使用限制绕过或付费模型泄漏
-* 任务位于兄弟仓库 `ECC-Tools` 中，并依赖于 webhook 处理器、队列 worker、使用预留、PR 创建逻辑或付费网关强制执行
-* 客户报告称应用创建了过多 PR、计费错误，或分析了代码但未产生可用结果
+- user says ECC Tools burn rate, PR recursion, over-created PRs, usage-limit bypass, or premium-model leakage
+- the task is in the sibling `ECC-Tools` repo and depends on webhook handlers, queue workers, usage reservation, PR creation logic, or paid-gate enforcement
+- a customer report says the app created too many PRs, billed incorrectly, or analyzed code without producing a usable result
 
-## 范围约束
+## Scope Guardrails
 
-* 在兄弟仓库 `ECC-Tools` 中工作，而非 `everything-claude-code`
-* 除非用户明确要求修复，否则以只读方式开始
-* 在追踪分析消耗时，不要修改无关的计费、结账或 UI 流程
-* 将应用生成的分支和应用生成的 PR 视为红旗递归路径，除非被证明并非如此
-* 明确区分三件事：
-  * 仓库侧消耗的根本原因
-  * 面向客户的计费影响
-  * 需要纳入待办事项跟踪的产品或授权缺口
+- work in the sibling `ECC-Tools` repo, not in `everything-claude-code`
+- start read-only unless the user clearly asked for a fix
+- do not mutate unrelated billing, checkout, or UI flows while tracing analysis burn
+- treat app-generated branches and app-generated PRs as red-flag recursion paths until proved otherwise
+- separate three things explicitly:
+  - repo-side burn root cause
+  - customer-facing billing impact
+  - product or entitlement gaps that need backlog follow-up
 
-## 工作流
+## Workflow
 
-### 1. 冻结仓库范围
+### 1. Freeze repo scope
 
-* 切换到兄弟仓库 `ECC-Tools`
-* 首先检查分支和本地差异
-* 确定审计的具体范围：
-  * webhook 路由器
-  * 队列生产者
-  * 队列消费者
-  * PR 创建路径
-  * 使用预留 / 计费路径
-  * 模型路由路径
+- switch into the sibling `ECC-Tools` repo
+- check branch and local diff first
+- identify the exact surface under audit:
+  - webhook router
+  - queue producer
+  - queue consumer
+  - PR creation path
+  - usage reservation / billing path
+  - model routing path
 
-### 2. 在理论化之前追踪入口
+### 2. Trace ingress before theorizing
 
-* 首先检查 `src/index.*` 或主入口点
-* 在提出修复建议之前，映射每个入队路径
-* 确认哪些 GitHub 事件共享一个队列类型
-* 确认 push、pull\_request、synchronize、comment 或手动重新运行事件是否会汇聚到同一个昂贵的路径上
+- inspect `src/index.*` or the main entrypoint first
+- map every enqueue path before suggesting a fix
+- confirm which GitHub events share a queue type
+- confirm whether push, pull_request, synchronize, comment, or manual re-run events can converge on the same expensive path
 
-### 3. 追踪 Worker 和副作用
+### 3. Trace the worker and side effects
 
-* 检查处理分析的队列消费者或定时 worker
-* 确认排队的分析是否总是以以下方式结束：
-  * PR 创建
-  * 分支创建
-  * 文件更新
-  * 付费模型调用
-  * 使用量增加
-* 如果分析可能消耗令牌，然后在输出持久化之前失败，则将其归类为“消耗但输出中断”
+- inspect the queue consumer or scheduled worker that handles analysis
+- confirm whether a queued analysis always ends in:
+  - PR creation
+  - branch creation
+  - file updates
+  - premium model calls
+  - usage increments
+- if analysis can spend tokens and then fail before output is persisted, classify it as burn-with-broken-output
 
-### 4. 审计高信号消耗路径
+### 4. Audit the high-signal burn paths
 
-#### PR 倍增
+#### PR multiplication
 
-* 检查 PR 辅助函数和分支命名
-* 检查去重、synchronize 事件处理以及现有 PR 的复用
-* 如果应用生成的分支可以重新进入分析，则将其视为优先级为 0 的递归风险
+- inspect PR helpers and branch naming
+- check dedupe, synchronize-event handling, and existing-PR reuse
+- if app-generated branches can re-enter analysis, treat that as a priority-0 recursion risk
 
-#### 配额绕过
+#### Quota bypass
 
-* 检查配额检查的位置与使用量预留或增加的位置
-* 如果在入队前检查配额，但仅在 worker 内部计费使用量，则将并发的前门通过视为真正的竞态条件
+- inspect where quota is checked versus where usage is reserved or incremented
+- if quota is checked before enqueue but usage is charged only inside the worker, treat concurrent front-door passes as a real race
 
-#### 付费模型泄漏
+#### Premium-model leakage
 
-* 检查模型选择、层级分支和提供商路由
-* 验证当存在付费密钥时，免费或受限用户是否仍能访问付费分析器
+- inspect model selection, tier branching, and provider routing
+- verify whether free or capped users can still hit premium analyzers when premium keys are present
 
-#### 重试消耗
+#### Retry burn
 
-* 检查重试循环、重复的队列任务和确定性失败重试
-* 如果相同的非临时性错误可以反复消耗分析资源，则先修复此问题，再进行质量改进
+- inspect retry loops, duplicate queue jobs, and deterministic failure reruns
+- if the same non-transient error can spend analysis repeatedly, fix that before quality improvements
 
-### 5. 按消耗顺序修复
+### 5. Fix in burn order
 
-如果用户要求代码更改，请按以下顺序优先修复：
+If the user asked for code changes, prioritize fixes in this order:
 
-1. 阻止自动 PR 倍增
-2. 阻止配额绕过
-3. 阻止付费模型泄漏
-4. 阻止重复任务扇出和无意义的重试
-5. 弥补重试/更新安全缺口
+1. stop automatic PR multiplication
+2. stop quota bypass
+3. stop premium leakage
+4. stop duplicate-job fanout and pointless retries
+5. close rerun/update safety gaps
 
-除非同一根本原因明显跨越多个文件，否则将修复范围限制在一到三个直接修复。
+Keep the pass bounded to one to three direct fixes unless the same root cause clearly spans multiple files.
 
-### 6. 以最小的验证步骤进行验证
+### 6. Verify with the smallest proving steps
 
-* 仅重新运行覆盖已更改路径的目标测试或集成片段
-* 验证消耗路径现在是否：
-  * 被阻止
-  * 已去重
-  * 降级为更便宜的分析
-  * 或提前被拒绝
-* 准确说明最终状态：
-  * 本地已更改
-  * 本地已验证
-  * 已推送
-  * 已部署
-  * 仍被阻止
+- rerun only the targeted tests or integration slices that cover the changed path
+- verify whether the burn path is now:
+  - blocked
+  - deduped
+  - downgraded to cheaper analysis
+  - or rejected early
+- state the final status exactly:
+  - changed locally
+  - verified locally
+  - pushed
+  - deployed
+  - still blocked
 
-## 高信号故障模式
+## High-Signal Failure Patterns
 
-### 1. 所有触发器使用同一队列类型
+### 1. One queue type for all triggers
 
-如果推送、PR 同步和手动审计都入队相同的任务，并且 worker 总是创建 PR，那么分析就等于 PR 垃圾信息。
+If pushes, PR syncs, and manual audits all enqueue the same job and the worker always creates a PR, analysis equals PR spam.
 
-### 2. 入队后预留使用量
+### 2. Post-enqueue usage reservation
 
-如果在入口处检查使用量，但仅在 worker 中增加，则并发请求可能全部通过关卡并超出配额。
+If usage is checked at the front door but only incremented in the worker, concurrent requests can all pass the gate and exceed quota.
 
-### 3. 免费层级走付费路径
+### 3. Free tier on premium path
 
-如果存在密钥时，免费的排队任务仍能路由到 Anthropic 或其他付费提供商，即使客户从未看到付费结果，这也是真实的支出泄漏。
+If free queued jobs can still route into Anthropic or another premium provider when keys exist, that is real spend leakage even if the user never sees the premium result.
 
-### 4. 应用生成的分支重新进入 Webhook
+### 4. App-generated branches re-enter the webhook
 
-如果 `pull_request.synchronize`、分支推送或评论触发的运行在应用拥有的分支上触发，则应用可以递归分析自己的输出。
+If `pull_request.synchronize`, branch pushes, or comment-triggered runs fire on app-owned branches, the app can recursively analyze its own output.
 
-### 5. 在持久化安全之前执行昂贵操作
+### 5. Expensive work before persistence safety
 
-如果系统可能消耗令牌，然后在 PR 创建、文件更新或分支冲突时失败，则是在消耗成本而不产生价值。
+If the system can spend tokens and then fail on PR creation, file update, or branch collision, it is burning cost without shipping value.
 
-## 陷阱
+## Pitfalls
 
-* 不要一开始就广泛浏览仓库；先确定 webhook -> 队列 -> worker 的路径
-* 不要将客户计费推断与基于代码的产品事实混为一谈
-* 在最高消耗路径被控制之前，不要修复价值较低的质量问题
-* 在重新运行狭窄的验证步骤之前，不要声称消耗问题已修复
-* 除非用户要求，否则不要推送或部署
-* 如果无关的仓库本地更改正在进行中，不要触碰它们
+- do not begin with broad repo wandering; settle webhook -> queue -> worker first
+- do not mix customer billing inference with code-backed product truth
+- do not fix lower-value quality issues before the highest-burn path is contained
+- do not claim burn is fixed until the narrow proving step was rerun
+- do not push or deploy unless the user asked
+- do not touch unrelated repo-local changes if they are already in progress
 
-## 验证
+## Verification
 
-* 根本原因需引用确切的文件路径和代码区域
-* 修复按消耗影响排序，而非代码整洁度
-* 需指明验证命令的名称
-* 最终状态需区分本地更改、验证、推送和部署
+- root causes cite exact file paths and code areas
+- fixes are ordered by burn impact, not code neatness
+- proving commands are named
+- final status distinguishes local change, verification, push, and deployment

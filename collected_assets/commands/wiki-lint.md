@@ -1,16 +1,7 @@
 ---
-title: "/wiki-lint — Slash Command for AI Coding Agents"
-description: "Run a health check on the LLM Wiki vault — mechanical checks (orphans, broken links, stale pages, missing frontmatter, log gap, duplicates) plus. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: wiki-lint
+description: Run a health check on the LLM Wiki vault — mechanical checks (orphans, broken links, stale pages, missing frontmatter, log gap, duplicates) plus semantic checks (contradictions, cross-reference gaps, concepts missing their own page). Outputs a markdown report with suggested actions. Usage /wiki-lint [--stale-days N] [--log-gap-days N]
 ---
-
-# /wiki-lint
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/wiki-lint.md">Source</a></span>
-</div>
-
-<!-- canonical copy: engineering/llm-wiki/commands/wiki-lint.md — keep in sync (root copy uses repo-root-relative script paths) -->
 
 # /wiki-lint
 
@@ -30,8 +21,8 @@ Run this weekly, after batch ingests, and always before sharing the wiki.
 
 ### Pass 1 — Mechanical (scripts)
 
-- `engineering/llm-wiki/skills/llm-wiki/scripts/lint_wiki.py` — orphans, broken links, stale pages, missing frontmatter, duplicate titles, log gap
-- `engineering/llm-wiki/skills/llm-wiki/scripts/graph_analyzer.py` — hubs, sinks, connected components, graph stats
+- `skills/llm-wiki/scripts/lint_wiki.py` — orphans, broken links, stale pages, missing frontmatter, duplicate titles, log gap
+- `skills/llm-wiki/scripts/graph_analyzer.py` — hubs, sinks, connected components, graph stats
 
 ### Pass 2 — Semantic (LLM reads and thinks)
 

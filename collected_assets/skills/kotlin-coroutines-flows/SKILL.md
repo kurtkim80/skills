@@ -1,49 +1,49 @@
 ---
 name: kotlin-coroutines-flows
-description: Kotlin协程与Flow在Android和KMP中的模式——结构化并发、Flow操作符、StateFlow、错误处理和测试。
+description: Android および KMP 向けの Kotlin コルーチンと Flow パターン — 構造化並行性、Flow オペレーター、StateFlow、エラーハンドリング、テスト。
 origin: ECC
 ---
 
-# Kotlin 协程与 Flow
+# Kotlin コルーチン & Flow
 
-适用于 Android 和 Kotlin 多平台项目的结构化并发模式、基于 Flow 的响应式流以及协程测试。
+Android および Kotlin Multiplatform プロジェクトにおける構造化並行性、Flow ベースのリアクティブストリーム、コルーチンテストのパターン。
 
-## 何时启用
+## アクティベートするタイミング
 
-* 使用 Kotlin 协程编写异步代码
-* 使用 Flow、StateFlow 或 SharedFlow 实现响应式数据
-* 处理并发操作（并行加载、防抖、重试）
-* 测试协程和 Flow
-* 管理协程作用域与取消
+- Kotlin コルーチンで非同期コードを書く
+- リアクティブデータに Flow、StateFlow、または SharedFlow を使用する
+- 並行操作を処理する（並列読み込み、デバウンス、リトライ）
+- コルーチンと Flow をテストする
+- コルーチンスコープとキャンセルを管理する
 
-## 结构化并发
+## 構造化並行性
 
-### 作用域层级
+### スコープ階層
 
 ```
 Application
   └── viewModelScope (ViewModel)
-        └── coroutineScope { } (结构化子作用域)
-              ├── async { } (并发任务)
-              └── async { } (并发任务)
+        └── coroutineScope { } (構造化された子)
+              ├── async { } (並行タスク)
+              └── async { } (並行タスク)
 ```
 
-始终使用结构化并发——绝不使用 `GlobalScope`：
+常に構造化並行性を使用してください — `GlobalScope` は絶対に使わない:
 
 ```kotlin
-// BAD
+// NG
 GlobalScope.launch { fetchData() }
 
-// GOOD — scoped to ViewModel lifecycle
+// OK — ViewModel ライフサイクルにスコープ
 viewModelScope.launch { fetchData() }
 
-// GOOD — scoped to composable lifecycle
+// OK — コンポーザブルライフサイクルにスコープ
 LaunchedEffect(key) { fetchData() }
 ```
 
-### 并行分解
+### 並列分解
 
-使用 `coroutineScope` + `async` 处理并行工作：
+並列作業には `coroutineScope` + `async` を使用:
 
 ```kotlin
 suspend fun loadDashboard(): Dashboard = coroutineScope {
@@ -60,30 +60,30 @@ suspend fun loadDashboard(): Dashboard = coroutineScope {
 
 ### SupervisorScope
 
-当子协程失败不应取消同级协程时，使用 `supervisorScope`：
+子の失敗が兄弟をキャンセルしてはならない場合は `supervisorScope` を使用:
 
 ```kotlin
 suspend fun syncAll() = supervisorScope {
-    launch { syncItems() }       // failure here won't cancel syncStats
+    launch { syncItems() }       // ここでの失敗は syncStats をキャンセルしない
     launch { syncStats() }
     launch { syncSettings() }
 }
 ```
 
-## Flow 模式
+## Flow パターン
 
-### Cold Flow —— 一次性操作到流的转换
+### コールドフロー — ワンショットからストリームへの変換
 
 ```kotlin
 fun observeItems(): Flow<List<Item>> = flow {
-    // Re-emits whenever the database changes
+    // データベースが変更されるたびに再エミット
     itemDao.observeAll()
         .map { entities -> entities.map { it.toDomain() } }
         .collect { emit(it) }
 }
 ```
 
-### 用于 UI 状态的 StateFlow
+### UI 状態のための StateFlow
 
 ```kotlin
 class DashboardViewModel(
@@ -98,9 +98,9 @@ class DashboardViewModel(
 }
 ```
 
-`WhileSubscribed(5_000)` 会在最后一个订阅者离开后，保持上游活动 5 秒——可在配置更改时存活而无需重启。
+`WhileSubscribed(5_000)` は最後のサブスクライバーが離れてから 5 秒間アップストリームをアクティブに保ちます — 設定変更を再起動なしに生き延びます。
 
-### 组合多个 Flow
+### 複数の Flow の結合
 
 ```kotlin
 val uiState: StateFlow<HomeState> = combine(
@@ -112,10 +112,10 @@ val uiState: StateFlow<HomeState> = combine(
 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeState())
 ```
 
-### Flow 操作符
+### Flow オペレーター
 
 ```kotlin
-// Debounce search input
+// 検索入力のデバウンス
 searchQuery
     .debounce(300)
     .distinctUntilChanged()
@@ -123,7 +123,7 @@ searchQuery
     .catch { emit(emptyList()) }
     .collect { results -> _state.update { it.copy(results = results) } }
 
-// Retry with exponential backoff
+// 指数バックオフでリトライ
 fun fetchWithRetry(): Flow<Data> = flow { emit(api.fetch()) }
     .retryWhen { cause, attempt ->
         if (cause is IOException && attempt < 3) {
@@ -135,7 +135,7 @@ fun fetchWithRetry(): Flow<Data> = flow { emit(api.fetch()) }
     }
 ```
 
-### 用于一次性事件的 SharedFlow
+### ワンタイムイベント用の SharedFlow
 
 ```kotlin
 class ItemListViewModel : ViewModel() {
@@ -155,7 +155,7 @@ class ItemListViewModel : ViewModel() {
     }
 }
 
-// Collect in Composable
+// コンポーザブルでコレクト
 LaunchedEffect(Unit) {
     viewModel.effects.collect { effect ->
         when (effect) {
@@ -166,37 +166,37 @@ LaunchedEffect(Unit) {
 }
 ```
 
-## 调度器
+## ディスパッチャー
 
 ```kotlin
-// CPU-intensive work
+// CPU 集約型作業
 withContext(Dispatchers.Default) { parseJson(largePayload) }
 
-// IO-bound work
+// IO バウンド作業
 withContext(Dispatchers.IO) { database.query() }
 
-// Main thread (UI) — default in viewModelScope
+// メインスレッド（UI）— viewModelScope ではデフォルト
 withContext(Dispatchers.Main) { updateUi() }
 ```
 
-在 KMP 中，使用 `Dispatchers.Default` 和 `Dispatchers.Main`（在所有平台上可用）。`Dispatchers.IO` 仅适用于 JVM/Android——在其他平台上使用 `Dispatchers.Default` 或通过依赖注入提供。
+KMP では `Dispatchers.Default` と `Dispatchers.Main`（すべてのプラットフォームで利用可能）を使用してください。`Dispatchers.IO` は JVM/Android のみです — 他のプラットフォームでは `Dispatchers.Default` を使用するか DI で提供してください。
 
-## 取消
+## キャンセル
 
-### 协作式取消
+### 協調的キャンセル
 
-长时间运行的循环必须检查取消状态：
+長時間実行されるループはキャンセルを確認する必要があります:
 
 ```kotlin
 suspend fun processItems(items: List<Item>) = coroutineScope {
     for (item in items) {
-        ensureActive()  // throws CancellationException if cancelled
+        ensureActive()  // キャンセルされた場合は CancellationException をスロー
         process(item)
     }
 }
 ```
 
-### 使用 try/finally 进行清理
+### try/finally でのクリーンアップ
 
 ```kotlin
 viewModelScope.launch {
@@ -205,14 +205,14 @@ viewModelScope.launch {
         val data = repository.fetch()
         _state.update { it.copy(data = data) }
     } finally {
-        _state.update { it.copy(isLoading = false) }  // always runs, even on cancellation
+        _state.update { it.copy(isLoading = false) }  // キャンセル時でも常に実行
     }
 }
 ```
 
-## 测试
+## テスト
 
-### 使用 Turbine 测试 StateFlow
+### Turbine を使った StateFlow のテスト
 
 ```kotlin
 @Test
@@ -221,7 +221,7 @@ fun `search updates item list`() = runTest {
     val viewModel = ItemListViewModel(GetItemsUseCase(fakeRepository))
 
     viewModel.state.test {
-        assertEquals(ItemListState(), awaitItem())  // initial
+        assertEquals(ItemListState(), awaitItem())  // 初期値
 
         viewModel.onSearch("query")
         val loading = awaitItem()
@@ -234,7 +234,7 @@ fun `search updates item list`() = runTest {
 }
 ```
 
-### 使用 TestDispatcher 测试
+### TestDispatcher でのテスト
 
 ```kotlin
 @Test
@@ -253,7 +253,7 @@ fun `parallel load completes correctly`() = runTest {
 }
 ```
 
-### 模拟 Flow
+### Flow のフェイク
 
 ```kotlin
 class FakeItemRepository : ItemRepository {
@@ -269,16 +269,16 @@ class FakeItemRepository : ItemRepository {
 }
 ```
 
-## 应避免的反模式
+## 避けるべきアンチパターン
 
-* 使用 `GlobalScope`——会导致协程泄漏，且无法结构化取消
-* 在没有作用域的情况下于 `init {}` 中收集 Flow——应使用 `viewModelScope.launch`
-* 将 `MutableStateFlow` 与可变集合一起使用——始终使用不可变副本：`_state.update { it.copy(list = it.list + newItem) }`
-* 捕获 `CancellationException`——应让其传播以实现正确的取消
-* 使用 `flowOn(Dispatchers.Main)` 进行收集——收集调度器是调用方的调度器
-* 在 `@Composable` 中创建 `Flow` 而不使用 `remember`——每次重组都会重新创建 Flow
+- `GlobalScope` の使用 — コルーチンがリークし、構造化キャンセルがない
+- スコープなしで `init {}` 内で Flow をコレクトする — `viewModelScope.launch` を使用
+- ミュータブルコレクションで `MutableStateFlow` を使用する — 常にイミュータブルコピーを使用: `_state.update { it.copy(list = it.list + newItem) }`
+- `CancellationException` をキャッチする — 適切なキャンセルのために伝播させる
+- コレクトするために `flowOn(Dispatchers.Main)` を使用する — コレクションディスパッチャーは呼び出し元のディスパッチャー
+- `remember` なしで `@Composable` 内に `Flow` を作成する — 再コンポジションのたびにフローが再作成される
 
 ## 参考
 
-关于 Flow 在 UI 层的消费，请参阅技能：`compose-multiplatform-patterns`。
-关于协程在各层中的适用位置，请参阅技能：`android-clean-architecture`。
+スキル: `compose-multiplatform-patterns` で Flow の UI 消費を参照。
+スキル: `android-clean-architecture` でレイヤーにおけるコルーチンの役割を参照。

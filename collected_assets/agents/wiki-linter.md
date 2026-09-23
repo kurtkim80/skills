@@ -1,16 +1,14 @@
 ---
-title: "wiki-linter — AI Coding Agent & Codex Skill"
-description: "Dispatched sub-agent that runs a periodic health check on an LLM Wiki vault. Runs mechanical checks via scripts (orphans, broken links, stale pages. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: wiki-linter
+description: Dispatched sub-agent that runs a periodic health check on an LLM Wiki vault. Runs mechanical checks via scripts (orphans, broken links, stale pages, missing frontmatter, duplicate titles, log gaps), does semantic checks (contradictions, stale claims, cross-reference gaps, concepts missing their own page), and produces a markdown report with suggested actions. Spawn weekly, after batch ingests, or when the user says "check the wiki" / "lint my wiki" / "audit the vault".
+skills: engineering/llm-wiki
+domain: engineering
+model: opus
+tools: [Read, Write, Edit, Bash, Grep, Glob]
+context: fork
 ---
 
 # wiki-linter
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/llm-wiki/agents/wiki-linter.md">Source</a></span>
-</div>
-
 
 ## Role
 

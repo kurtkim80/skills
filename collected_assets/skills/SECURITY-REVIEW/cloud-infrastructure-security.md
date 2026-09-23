@@ -1,49 +1,49 @@
 | name | description |
 |------|-------------|
-| cloud-infrastructure-security | クラウドプラットフォームへのデプロイ、インフラストラクチャの設定、IAMポリシーの管理、ロギング/モニタリングの設定、CI/CDパイプラインの実装時にこのスキルを使用します。ベストプラクティスに沿ったクラウドセキュリティチェックリストを提供します。 |
+| cloud-infrastructure-security | Use this skill when deploying to cloud platforms, configuring infrastructure, managing IAM policies, setting up logging/monitoring, or implementing CI/CD pipelines. Provides cloud security checklist aligned with best practices. |
 
-# クラウドおよびインフラストラクチャセキュリティスキル
+# 雲端與基礎設施安全技能
 
-このスキルは、クラウドインフラストラクチャ、CI/CDパイプライン、デプロイメント設定がセキュリティのベストプラクティスに従い、業界標準に準拠することを保証します。
+此技能確保雲端基礎設施、CI/CD 管線和部署設定遵循安全最佳實務並符合業界標準。
 
-## 有効化するタイミング
+## 何時啟用
 
-- クラウドプラットフォーム（AWS、Vercel、Railway、Cloudflare）へのアプリケーションのデプロイ
-- IAMロールと権限の設定
-- CI/CDパイプラインの設定
-- インフラストラクチャをコードとして実装（Terraform、CloudFormation）
-- ロギングとモニタリングの設定
-- クラウド環境でのシークレット管理
-- CDNとエッジセキュリティの設定
-- 災害復旧とバックアップ戦略の実装
+- 部署應用程式到雲端平台（AWS、Vercel、Railway、Cloudflare）
+- 設定 IAM 角色和權限
+- 設置 CI/CD 管線
+- 實作基礎設施即程式碼（Terraform、CloudFormation）
+- 設定日誌和監控
+- 在雲端環境管理密鑰
+- 設置 CDN 和邊緣安全
+- 實作災難復原和備份策略
 
-## クラウドセキュリティチェックリスト
+## 雲端安全檢查清單
 
-### 1. IAMとアクセス制御
+### 1. IAM 與存取控制
 
-#### 最小権限の原則
+#### 最小權限原則
 
 ```yaml
-# ✅ 正解：最小限の権限
+# ✅ 正確：最小權限
 iam_role:
   permissions:
-    - s3:GetObject  # 読み取りアクセスのみ
+    - s3:GetObject  # 只有讀取存取
     - s3:ListBucket
   resources:
-    - arn:aws:s3:::my-bucket/*  # 特定のバケットのみ
+    - arn:aws:s3:::my-bucket/*  # 只有特定 bucket
 
-# ❌ 誤り：過度に広範な権限
+# ❌ 錯誤：過於廣泛的權限
 iam_role:
   permissions:
-    - s3:*  # すべてのS3アクション
+    - s3:*  # 所有 S3 動作
   resources:
-    - "*"  # すべてのリソース
+    - "*"  # 所有資源
 ```
 
-#### 多要素認証（MFA）
+#### 多因素認證（MFA）
 
 ```bash
-# 常にroot/adminアカウントでMFAを有効化
+# 總是為 root/admin 帳戶啟用 MFA
 aws iam enable-mfa-device \
   --user-name admin \
   --serial-number arn:aws:iam::123456789:mfa/admin \
@@ -51,55 +51,55 @@ aws iam enable-mfa-device \
   --authentication-code2 789012
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] 本番環境でrootアカウントを使用しない
-- [ ] すべての特権アカウントでMFAを有効化
-- [ ] サービスアカウントは長期資格情報ではなくロールを使用
-- [ ] IAMポリシーは最小権限に従う
-- [ ] 定期的なアクセスレビューを実施
-- [ ] 未使用の資格情報をローテーションまたは削除
+- [ ] 生產環境不使用 root 帳戶
+- [ ] 所有特權帳戶啟用 MFA
+- [ ] 服務帳戶使用角色，非長期憑證
+- [ ] IAM 政策遵循最小權限
+- [ ] 定期進行存取審查
+- [ ] 未使用憑證已輪換或移除
 
-### 2. シークレット管理
+### 2. 密鑰管理
 
-#### クラウドシークレットマネージャー
+#### 雲端密鑰管理器
 
 ```typescript
-// ✅ 正解：クラウドシークレットマネージャーを使用
+// ✅ 正確：使用雲端密鑰管理器
 import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 
 const client = new SecretsManager({ region: 'us-east-1' });
 const secret = await client.getSecretValue({ SecretId: 'prod/api-key' });
 const apiKey = JSON.parse(secret.SecretString).key;
 
-// ❌ 誤り：ハードコードまたは環境変数のみ
-const apiKey = process.env.API_KEY; // ローテーションされず、監査されない
+// ❌ 錯誤：寫死或只在環境變數
+const apiKey = process.env.API_KEY; // 未輪換、未稽核
 ```
 
-#### シークレットローテーション
+#### 密鑰輪換
 
 ```bash
-# データベース資格情報の自動ローテーションを設定
+# 為資料庫憑證設定自動輪換
 aws secretsmanager rotate-secret \
   --secret-id prod/db-password \
   --rotation-lambda-arn arn:aws:lambda:region:account:function:rotate \
   --rotation-rules AutomaticallyAfterDays=30
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] すべてのシークレットをクラウドシークレットマネージャーに保存（AWS Secrets Manager、Vercel Secrets）
-- [ ] データベース資格情報の自動ローテーションを有効化
-- [ ] APIキーを少なくとも四半期ごとにローテーション
-- [ ] コード、ログ、エラーメッセージにシークレットなし
-- [ ] シークレットアクセスの監査ログを有効化
+- [ ] 所有密鑰儲存在雲端密鑰管理器（AWS Secrets Manager、Vercel Secrets）
+- [ ] 資料庫憑證啟用自動輪換
+- [ ] API 金鑰至少每季輪換
+- [ ] 程式碼、日誌或錯誤訊息中無密鑰
+- [ ] 密鑰存取啟用稽核日誌
 
-### 3. ネットワークセキュリティ
+### 3. 網路安全
 
-#### VPCとファイアウォール設定
+#### VPC 和防火牆設定
 
 ```terraform
-# ✅ 正解：制限されたセキュリティグループ
+# ✅ 正確：限制的安全群組
 resource "aws_security_group" "app" {
   name = "app-sg"
 
@@ -107,42 +107,42 @@ resource "aws_security_group" "app" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]  # 内部VPCのみ
+    cidr_blocks = ["10.0.0.0/16"]  # 只有內部 VPC
   }
 
   egress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # HTTPS送信のみ
+    cidr_blocks = ["0.0.0.0/0"]  # 只有 HTTPS 輸出
   }
 }
 
-# ❌ 誤り：インターネットに公開
+# ❌ 錯誤：對網際網路開放
 resource "aws_security_group" "bad" {
   ingress {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # すべてのポート、すべてのIP！
+    cidr_blocks = ["0.0.0.0/0"]  # 所有埠、所有 IP！
   }
 }
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] データベースは公開アクセス不可
-- [ ] SSH/RDPポートはVPN/bastionのみに制限
-- [ ] セキュリティグループは最小権限に従う
-- [ ] ネットワークACLを設定
-- [ ] VPCフローログを有効化
+- [ ] 資料庫不可公開存取
+- [ ] SSH/RDP 埠限制為 VPN/堡壘機
+- [ ] 安全群組遵循最小權限
+- [ ] 網路 ACL 已設定
+- [ ] VPC 流量日誌已啟用
 
-### 4. ロギングとモニタリング
+### 4. 日誌與監控
 
-#### CloudWatch/ロギング設定
+#### CloudWatch/日誌設定
 
 ```typescript
-// ✅ 正解：包括的なロギング
+// ✅ 正確：全面日誌記錄
 import { CloudWatchLogsClient, CreateLogStreamCommand } from '@aws-sdk/client-cloudwatch-logs';
 
 const logSecurityEvent = async (event: SecurityEvent) => {
@@ -156,28 +156,28 @@ const logSecurityEvent = async (event: SecurityEvent) => {
         userId: event.userId,
         ip: event.ip,
         result: event.result,
-        // 機密データをログに記録しない
+        // 永遠不要記錄敏感資料
       })
     }]
   });
 };
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] すべてのサービスでCloudWatch/ロギングを有効化
-- [ ] 失敗した認証試行をログに記録
-- [ ] 管理者アクションを監査
-- [ ] ログ保持を設定（コンプライアンスのため90日以上）
-- [ ] 疑わしいアクティビティのアラートを設定
-- [ ] ログを一元化し、改ざん防止
+- [ ] 所有服務啟用 CloudWatch/日誌記錄
+- [ ] 失敗的認證嘗試被記錄
+- [ ] 管理員動作被稽核
+- [ ] 日誌保留已設定（合規需 90+ 天）
+- [ ] 可疑活動設定警報
+- [ ] 日誌集中化且防篡改
 
-### 5. CI/CDパイプラインセキュリティ
+### 5. CI/CD 管線安全
 
-#### 安全なパイプライン設定
+#### 安全管線設定
 
 ```yaml
-# ✅ 正解：安全なGitHub Actionsワークフロー
+# ✅ 正確：安全的 GitHub Actions 工作流程
 name: Deploy
 
 on:
@@ -188,20 +188,20 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read  # 最小限の権限
+      contents: read  # 最小權限
 
     steps:
       - uses: actions/checkout@v4
 
-      # シークレットをスキャン
+      # 掃描密鑰
       - name: Secret scanning
         uses: trufflesecurity/trufflehog@main
 
-      # 依存関係監査
+      # 依賴稽核
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
-      # 長期トークンではなくOIDCを使用
+      # 使用 OIDC，非長期 tokens
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -209,40 +209,40 @@ jobs:
           aws-region: us-east-1
 ```
 
-#### サプライチェーンセキュリティ
+#### 供應鏈安全
 
 ```json
-// package.json - ロックファイルと整合性チェックを使用
+// package.json - 使用 lock 檔案和完整性檢查
 {
   "scripts": {
-    "install": "npm ci",  // 再現可能なビルドにciを使用
+    "install": "npm ci",  // 使用 ci 以獲得可重現建置
     "audit": "npm audit --audit-level=moderate",
     "check": "npm outdated"
   }
 }
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] 長期資格情報ではなくOIDCを使用
-- [ ] パイプラインでシークレットスキャン
-- [ ] 依存関係の脆弱性スキャン
-- [ ] コンテナイメージスキャン（該当する場合）
-- [ ] ブランチ保護ルールを強制
-- [ ] マージ前にコードレビューが必要
-- [ ] 署名付きコミットを強制
+- [ ] 使用 OIDC 而非長期憑證
+- [ ] 管線中的密鑰掃描
+- [ ] 依賴漏洞掃描
+- [ ] 容器映像掃描（如適用）
+- [ ] 強制執行分支保護規則
+- [ ] 合併前需要程式碼審查
+- [ ] 強制執行簽署 commits
 
-### 6. CloudflareとCDNセキュリティ
+### 6. Cloudflare 與 CDN 安全
 
-#### Cloudflareセキュリティ設定
+#### Cloudflare 安全設定
 
 ```typescript
-// ✅ 正解：セキュリティヘッダー付きCloudflare Workers
+// ✅ 正確：帶安全標頭的 Cloudflare Workers
 export default {
   async fetch(request: Request): Promise<Response> {
     const response = await fetch(request);
 
-    // セキュリティヘッダーを追加
+    // 新增安全標頭
     const headers = new Headers(response.headers);
     headers.set('X-Frame-Options', 'DENY');
     headers.set('X-Content-Type-Options', 'nosniff');
@@ -257,100 +257,100 @@ export default {
 };
 ```
 
-#### WAFルール
+#### WAF 規則
 
 ```bash
-# Cloudflare WAF管理ルールを有効化
-# - OWASP Core Ruleset
-# - Cloudflare Managed Ruleset
-# - レート制限ルール
-# - ボット保護
+# 啟用 Cloudflare WAF 管理規則
+# - OWASP 核心規則集
+# - Cloudflare 管理規則集
+# - 速率限制規則
+# - Bot 保護
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] OWASPルール付きWAFを有効化
-- [ ] レート制限を設定
-- [ ] ボット保護を有効化
-- [ ] DDoS保護を有効化
-- [ ] セキュリティヘッダーを設定
-- [ ] SSL/TLS厳格モードを有効化
+- [ ] WAF 啟用 OWASP 規則
+- [ ] 速率限制已設定
+- [ ] Bot 保護啟用
+- [ ] DDoS 保護啟用
+- [ ] 安全標頭已設定
+- [ ] SSL/TLS 嚴格模式啟用
 
-### 7. バックアップと災害復旧
+### 7. 備份與災難復原
 
-#### 自動バックアップ
+#### 自動備份
 
 ```terraform
-# ✅ 正解：自動RDSバックアップ
+# ✅ 正確：自動 RDS 備份
 resource "aws_db_instance" "main" {
   allocated_storage     = 20
   engine               = "postgres"
 
-  backup_retention_period = 30  # 30日間保持
+  backup_retention_period = 30  # 30 天保留
   backup_window          = "03:00-04:00"
   maintenance_window     = "mon:04:00-mon:05:00"
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
-  deletion_protection = true  # 偶発的な削除を防止
+  deletion_protection = true  # 防止意外刪除
 }
 ```
 
-#### 検証ステップ
+#### 驗證步驟
 
-- [ ] 自動日次バックアップを設定
-- [ ] バックアップ保持がコンプライアンス要件を満たす
-- [ ] ポイントインタイムリカバリを有効化
-- [ ] 四半期ごとにバックアップテストを実施
-- [ ] 災害復旧計画を文書化
-- [ ] RPOとRTOを定義してテスト
+- [ ] 已設定自動每日備份
+- [ ] 備份保留符合合規要求
+- [ ] 已啟用時間點復原
+- [ ] 每季執行備份測試
+- [ ] 災難復原計畫已記錄
+- [ ] RPO 和 RTO 已定義並測試
 
-## デプロイ前クラウドセキュリティチェックリスト
+## 部署前雲端安全檢查清單
 
-すべての本番クラウドデプロイメントの前に：
+任何生產雲端部署前：
 
-- [ ] **IAM**：rootアカウントを使用しない、MFAを有効化、最小権限ポリシー
-- [ ] **シークレット**：すべてのシークレットをローテーション付きクラウドシークレットマネージャーに
-- [ ] **ネットワーク**：セキュリティグループを制限、公開データベースなし
-- [ ] **ロギング**：保持付きCloudWatch/ロギングを有効化
-- [ ] **モニタリング**：異常のアラートを設定
-- [ ] **CI/CD**：OIDC認証、シークレットスキャン、依存関係監査
-- [ ] **CDN/WAF**：OWASPルール付きCloudflare WAFを有効化
-- [ ] **暗号化**：静止時および転送中のデータを暗号化
-- [ ] **バックアップ**：テスト済みリカバリ付き自動バックアップ
-- [ ] **コンプライアンス**：GDPR/HIPAA要件を満たす（該当する場合）
-- [ ] **ドキュメント**：インフラストラクチャを文書化、ランブックを作成
-- [ ] **インシデント対応**：セキュリティインシデント計画を配置
+- [ ] **IAM**：不使用 root 帳戶、啟用 MFA、最小權限政策
+- [ ] **密鑰**：所有密鑰在雲端密鑰管理器並有輪換
+- [ ] **網路**：安全群組受限、無公開資料庫
+- [ ] **日誌**：CloudWatch/日誌啟用並有保留
+- [ ] **監控**：異常設定警報
+- [ ] **CI/CD**：OIDC 認證、密鑰掃描、依賴稽核
+- [ ] **CDN/WAF**：Cloudflare WAF 啟用 OWASP 規則
+- [ ] **加密**：資料靜態和傳輸中加密
+- [ ] **備份**：自動備份並測試復原
+- [ ] **合規**：符合 GDPR/HIPAA 要求（如適用）
+- [ ] **文件**：基礎設施已記錄、建立操作手冊
+- [ ] **事件回應**：安全事件計畫就位
 
-## 一般的なクラウドセキュリティ設定ミス
+## 常見雲端安全錯誤設定
 
-### S3バケットの露出
+### S3 Bucket 暴露
 
 ```bash
-# ❌ 誤り：公開バケット
+# ❌ 錯誤：公開 bucket
 aws s3api put-bucket-acl --bucket my-bucket --acl public-read
 
-# ✅ 正解：特定のアクセス付きプライベートバケット
+# ✅ 正確：私有 bucket 並有特定存取
 aws s3api put-bucket-acl --bucket my-bucket --acl private
 aws s3api put-bucket-policy --bucket my-bucket --policy file://policy.json
 ```
 
-### RDS公開アクセス
+### RDS 公開存取
 
 ```terraform
-# ❌ 誤り
+# ❌ 錯誤
 resource "aws_db_instance" "bad" {
-  publicly_accessible = true  # 絶対にこれをしない！
+  publicly_accessible = true  # 絕不這樣做！
 }
 
-# ✅ 正解
+# ✅ 正確
 resource "aws_db_instance" "good" {
   publicly_accessible = false
   vpc_security_group_ids = [aws_security_group.db.id]
 }
 ```
 
-## リソース
+## 資源
 
 - [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/)
 - [CIS AWS Foundations Benchmark](https://www.cisecurity.org/benchmark/amazon_web_services)
@@ -358,4 +358,4 @@ resource "aws_db_instance" "good" {
 - [OWASP Cloud Security](https://owasp.org/www-project-cloud-security/)
 - [Terraform Security Best Practices](https://www.terraform.io/docs/cloud/guides/recommended-practices/)
 
-**覚えておいてください**：クラウドの設定ミスはデータ侵害の主要な原因です。1つの露出したS3バケットまたは過度に許容されたIAMポリシーは、インフラストラクチャ全体を危険にさらす可能性があります。常に最小権限の原則と多層防御に従ってください。
+**記住**：雲端錯誤設定是資料外洩的主要原因。單一暴露的 S3 bucket 或過於寬鬆的 IAM 政策可能危及你的整個基礎設施。總是遵循最小權限原則和深度防禦。

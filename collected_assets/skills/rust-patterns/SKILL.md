@@ -1,29 +1,29 @@
 ---
 name: rust-patterns
-description: 地道的Rust模式、所有权、错误处理、特质、并发，以及构建安全、高性能应用程序的最佳实践。
+description: Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and best practices for building safe, performant applications.
 origin: ECC
 ---
 
-# Rust 开发模式
+# Rust Development Patterns
 
-构建安全、高性能且可维护应用程序的惯用 Rust 模式和最佳实践。
+Idiomatic Rust patterns and best practices for building safe, performant, and maintainable applications.
 
-## 何时使用
+## When to Use
 
-* 编写新的 Rust 代码时
-* 评审 Rust 代码时
-* 重构现有 Rust 代码时
-* 设计 crate 结构和模块布局时
+- Writing new Rust code
+- Reviewing Rust code
+- Refactoring existing Rust code
+- Designing crate structure and module layout
 
-## 工作原理
+## How It Works
 
-此技能在六个关键领域强制执行惯用的 Rust 约定：所有权和借用，用于在编译时防止数据竞争；`Result`/`?` 错误传播，库使用 `thiserror` 而应用程序使用 `anyhow`；枚举和穷尽模式匹配，使非法状态无法表示；用于零成本抽象的 trait 和泛型；通过 `Arc<Mutex<T>>`、通道和 async/await 实现的安全并发；以及按领域组织的最小化 `pub` 接口。
+This skill enforces idiomatic Rust conventions across six key areas: ownership and borrowing to prevent data races at compile time, `Result`/`?` error propagation with `thiserror` for libraries and `anyhow` for applications, enums and exhaustive pattern matching to make illegal states unrepresentable, traits and generics for zero-cost abstraction, safe concurrency via `Arc<Mutex<T>>`, channels, and async/await, and minimal `pub` surfaces organized by domain.
 
-## 核心原则
+## Core Principles
 
-### 1. 所有权和借用
+### 1. Ownership and Borrowing
 
-Rust 的所有权系统在编译时防止数据竞争和内存错误。
+Rust's ownership system prevents data races and memory bugs at compile time.
 
 ```rust
 // Good: Pass references when you don't need ownership
@@ -43,7 +43,7 @@ fn process_bad(data: &Vec<u8>) -> usize {
 }
 ```
 
-### 使用 `Cow` 实现灵活的所有权
+### Use `Cow` for Flexible Ownership
 
 ```rust
 use std::borrow::Cow;
@@ -57,9 +57,9 @@ fn normalize(input: &str) -> Cow<'_, str> {
 }
 ```
 
-## 错误处理
+## Error Handling
 
-### 使用 `Result` 和 `?` —— 切勿在生产环境中使用 `unwrap()`
+### Use `Result` and `?` — Never `unwrap()` in Production
 
 ```rust
 // Good: Propagate errors with context
@@ -80,7 +80,7 @@ fn load_config_bad(path: &str) -> Config {
 }
 ```
 
-### 库错误使用 `thiserror`，应用程序错误使用 `anyhow`
+### Library Errors with `thiserror`, Application Errors with `anyhow`
 
 ```rust
 // Library code: structured, typed errors
@@ -108,7 +108,7 @@ fn run() -> Result<()> {
 }
 ```
 
-### 优先使用 `Option` 组合子而非嵌套匹配
+### `Option` Combinators Over Nested Matching
 
 ```rust
 // Good: Combinator chain
@@ -129,9 +129,9 @@ fn find_user_email_bad(users: &[User], id: u64) -> Option<String> {
 }
 ```
 
-## 枚举和模式匹配
+## Enums and Pattern Matching
 
-### 将状态建模为枚举
+### Model States as Enums
 
 ```rust
 // Good: Impossible states are unrepresentable
@@ -154,7 +154,7 @@ fn handle(state: &ConnectionState) {
 }
 ```
 
-### 穷尽匹配 —— 业务逻辑中不使用通配符
+### Exhaustive Matching — No Catch-All for Business Logic
 
 ```rust
 // Good: Handle every variant explicitly
@@ -172,9 +172,9 @@ match command {
 }
 ```
 
-## Trait 和泛型
+## Traits and Generics
 
-### 接受泛型，返回具体类型
+### Accept Generics, Return Concrete Types
 
 ```rust
 // Good: Generic input, concrete output
@@ -190,7 +190,7 @@ fn process<T: Display + Send + 'static>(item: T) -> String {
 }
 ```
 
-### 使用 Trait 对象进行动态分发
+### Trait Objects for Dynamic Dispatch
 
 ```rust
 // Use when you need heterogeneous collections or plugin systems
@@ -208,7 +208,7 @@ fn fast_process<H: Handler>(handler: &H, request: &Request) -> Response {
 }
 ```
 
-### 使用 Newtype 模式确保类型安全
+### Newtype Pattern for Type Safety
 
 ```rust
 // Good: Distinct types prevent mixing up arguments
@@ -226,9 +226,9 @@ fn get_order_bad(user_id: u64, order_id: u64) -> Result<Order> {
 }
 ```
 
-## 结构体和数据建模
+## Structs and Data Modeling
 
-### 使用构建器模式进行复杂构造
+### Builder Pattern for Complex Construction
 
 ```rust
 struct ServerConfig {
@@ -255,9 +255,9 @@ impl ServerConfigBuilder {
 // Usage: ServerConfig::builder("localhost", 8080).max_connections(200).build()
 ```
 
-## 迭代器和闭包
+## Iterators and Closures
 
-### 优先使用迭代器链而非手动循环
+### Prefer Iterator Chains Over Manual Loops
 
 ```rust
 // Good: Declarative, lazy, composable
@@ -275,7 +275,7 @@ for user in &users {
 }
 ```
 
-### 使用带有类型注解的 `collect()`
+### Use `collect()` with Type Annotation
 
 ```rust
 // Collect into different types
@@ -287,9 +287,9 @@ let combined: String = parts.iter().copied().collect();
 let parsed: Result<Vec<i32>, _> = strings.iter().map(|s| s.parse()).collect();
 ```
 
-## 并发
+## Concurrency
 
-### 使用 `Arc<Mutex<T>>` 处理共享可变状态
+### `Arc<Mutex<T>>` for Shared Mutable State
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -308,7 +308,7 @@ for handle in handles {
 }
 ```
 
-### 使用通道进行消息传递
+### Channels for Message Passing
 
 ```rust
 use std::sync::mpsc;
@@ -328,7 +328,7 @@ for msg in rx {
 }
 ```
 
-### 使用 Tokio 进行异步编程
+### Async with Tokio
 
 ```rust
 use tokio::time::Duration;
@@ -361,12 +361,12 @@ async fn fetch_all(urls: Vec<String>) -> Vec<Result<String>> {
 }
 ```
 
-## 不安全代码
+## Unsafe Code
 
-### 何时可以使用 Unsafe
+### When Unsafe Is Acceptable
 
 ```rust
-// Acceptable: FFI boundary with documented invariants (Rust 2024+)
+// Acceptable: FFI boundary with documented invariants
 /// # Safety
 /// `ptr` must be a valid, aligned pointer to an initialized `Widget`.
 unsafe fn widget_from_raw<'a>(ptr: *const Widget) -> &'a Widget {
@@ -379,7 +379,7 @@ unsafe fn widget_from_raw<'a>(ptr: *const Widget) -> &'a Widget {
 unsafe { slice.get_unchecked(index) }
 ```
 
-### 何时不可以使用 Unsafe
+### When Unsafe Is NOT Acceptable
 
 ```rust
 // Bad: Using unsafe to bypass borrow checker
@@ -388,32 +388,32 @@ unsafe { slice.get_unchecked(index) }
 // Bad: Transmuting between unrelated types
 ```
 
-## 模块系统和 Crate 结构
+## Module System and Crate Structure
 
-### 按领域组织，而非按类型
+### Organize by Domain, Not by Type
 
 ```text
 my_app/
 ├── src/
 │   ├── main.rs
 │   ├── lib.rs
-│   ├── auth/          # 领域模块
+│   ├── auth/          # Domain module
 │   │   ├── mod.rs
 │   │   ├── token.rs
 │   │   └── middleware.rs
-│   ├── orders/        # 领域模块
+│   ├── orders/        # Domain module
 │   │   ├── mod.rs
 │   │   ├── model.rs
 │   │   └── service.rs
-│   └── db/            # 基础设施
+│   └── db/            # Infrastructure
 │       ├── mod.rs
 │       └── pool.rs
-├── tests/             # 集成测试
-├── benches/           # 基准测试
+├── tests/             # Integration tests
+├── benches/           # Benchmarks
 └── Cargo.toml
 ```
 
-### 可见性 —— 最小化暴露
+### Visibility — Expose Minimally
 
 ```rust
 // Good: pub(crate) for internal sharing
@@ -429,9 +429,9 @@ pub use auth::AuthMiddleware;
 pub fn internal_helper() {} // Should be pub(crate) or private
 ```
 
-## 工具集成
+## Tooling Integration
 
-### 基本命令
+### Essential Commands
 
 ```bash
 # Build and check
@@ -455,22 +455,22 @@ cargo update             # Update dependencies
 cargo bench              # Run benchmarks
 ```
 
-## 快速参考：Rust 惯用法
+## Quick Reference: Rust Idioms
 
-| 惯用法 | 描述 |
+| Idiom | Description |
 |-------|-------------|
-| 借用，而非克隆 | 传递 `&T`，除非需要所有权，否则不要克隆 |
-| 使非法状态无法表示 | 使用枚举仅对有效状态进行建模 |
-| `?` 优于 `unwrap()` | 传播错误，切勿在库/生产代码中恐慌 |
-| 解析，而非验证 | 在边界处将非结构化数据转换为类型化结构体 |
-| Newtype 用于类型安全 | 将基本类型包装在 newtype 中以防止参数错位 |
-| 优先使用迭代器而非循环 | 声明式链更清晰且通常更快 |
-| 对 Result 使用 `#[must_use]` | 确保调用者处理返回值 |
-| 使用 `Cow` 实现灵活的所有权 | 当借用足够时避免分配 |
-| 穷尽匹配 | 业务关键枚举不使用通配符 `_` |
-| 最小化 `pub` 接口 | 内部 API 使用 `pub(crate)` |
+| Borrow, don't clone | Pass `&T` instead of cloning unless ownership is needed |
+| Make illegal states unrepresentable | Use enums to model valid states only |
+| `?` over `unwrap()` | Propagate errors, never panic in library/production code |
+| Parse, don't validate | Convert unstructured data to typed structs at the boundary |
+| Newtype for type safety | Wrap primitives in newtypes to prevent argument swaps |
+| Prefer iterators over loops | Declarative chains are clearer and often faster |
+| `#[must_use]` on Results | Ensure callers handle return values |
+| `Cow` for flexible ownership | Avoid allocations when borrowing suffices |
+| Exhaustive matching | No wildcard `_` for business-critical enums |
+| Minimal `pub` surface | Use `pub(crate)` for internal APIs |
 
-## 应避免的反模式
+## Anti-Patterns to Avoid
 
 ```rust
 // Bad: .unwrap() in production code
@@ -496,4 +496,4 @@ async fn bad_async() {
 }
 ```
 
-**请记住**：如果它能编译，那它很可能是正确的 —— 但前提是你要避免 `unwrap()`，最小化 `unsafe`，并让类型系统为你工作。
+**Remember**: If it compiles, it's probably correct — but only if you avoid `unwrap()`, minimize `unsafe`, and let the type system work for you.

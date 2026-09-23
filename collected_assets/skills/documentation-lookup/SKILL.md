@@ -1,90 +1,77 @@
 ---
 name: documentation-lookup
-description: 通过 Context7 MCP 使用最新的库和框架文档，而非训练数据。当用户提出设置问题、API参考、代码示例或命名框架（例如 React、Next.js、Prisma）时激活。
+description: 訓練データの代わりにContext7 MCP経由で最新のライブラリとフレームワークドキュメント使用。セットアップの質問、APIリファレンス、コード例、またはユーザーがフレームワーク（例：React、Next.js、Prisma）に名前を付けるときにアクティベーション。
 origin: ECC
 ---
 
-# 文档查询 (Context7)
+# ドキュメント ルックアップ（Context7）
 
-当用户询问库、框架或 API 时，通过 Context7 MCP（工具 `resolve-library-id` 和 `query-docs`）获取最新文档，而非依赖训练数据。
+ユーザーがライブラリ、フレームワーク、またはAPIについて尋ねるときは、訓練データに依存する代わりにContext7 MCP（ツール`resolve-library-id`および`query-docs`）を通じて現在のドキュメントをフェッチします。
 
-## 核心概念
+## コア概念
 
-* **Context7**: 提供实时文档的 MCP 服务器；用于库和 API 的查询，替代训练数据。
-* **resolve-library-id**: 根据库名和查询返回 Context7 兼容的库 ID（例如 `/vercel/next.js`）。
-* **query-docs**: 根据给定的库 ID 和问题获取文档和代码片段。务必先调用 resolve-library-id 以获取有效的库 ID。
+- **Context7**：ライブドキュメントを公開するMCPサーバー；ライブラリとAPI用の訓練データの代わりに使用。
+- **resolve-library-id**：ライブラリ名とクエリからContext7互換のライブラリID（例：`/vercel/next.js`）を返す。
+- **query-docs**：指定されたライブラリIDと質問のドキュメントとコードスニペットをフェッチ。有効なライブラリIDを取得するため、最初にresolve-library-idを呼び出す必須。
 
-## 使用时机
+## 使用時期
 
-当用户出现以下情况时激活：
+ユーザーが以下の場合にアクティベーション：
 
-* 询问设置或配置问题（例如“如何配置 Next.js 中间件？”）
-* 请求依赖于某个库的代码（“编写一个 Prisma 查询用于...”）
-* 需要 API 或参考信息（“Supabase 的认证方法有哪些？”）
-* 提及特定的框架或库（React、Vue、Svelte、Express、Tailwind、Prisma、Supabase 等）
+- セットアップまたは構成の質問（例：「Next.jsミドルウェアを構成する方法は？」）
+- ライブラリに依存するコードをリクエスト（「Prismaクエリを書いて...」）
+- APIまたはリファレンス情報が必要（「Supabase認証方法は何ですか？」）
+- 特定のフレームワークまたはライブラリに言及（React、Vue、Svelte、Express、Tailwind、Prisma、Supabaseなど）
 
-当请求依赖于库、框架或 API 的准确、最新行为时，请使用此技能。适用于配置了 Context7 MCP 的所有环境（例如 Claude Code、Cursor、Codex）。
+リクエストがライブラリ、フレームワーク、またはAPIの正確で最新の動作に依存するときはいつでもこのスキルを使用。Context7 MCPが構成されたハーネス全体に適用されます（例：Claude Code、Cursor、Codex）。
 
-## 工作原理
+## 動作方法
 
-### 步骤 1：解析库 ID
+### ステップ1：ライブラリIDを解決
 
-调用 **resolve-library-id** MCP 工具，参数包括：
+**resolve-library-id** MCPツールを以下で呼び出す：
 
-* **libraryName**: 从用户问题中提取的库或产品名称（例如 `Next.js`、`Prisma`、`Supabase`）。
-* **query**: 用户的完整问题。这有助于提高结果的相关性排名。
+- **libraryName**：ユーザーの質問から取得したライブラリまたはプロダクト名（例：`Next.js`、`Prisma`、`Supabase`）。
+- **query**：ユーザーの完全な質問。これにより結果の関連性ランキングが改善。
 
-在查询文档之前，必须获取 Context7 兼容的库 ID（格式为 `/org/project` 或 `/org/project/version`）。如果没有从此步骤获得有效的库 ID，请勿调用 query-docs。
+クエリドキュメントを呼び出す前に、Context7互換のライブラリID（形式`/org/project`または`/org/project/version`）を取得する必要があります。このステップから有効なライブラリIDなしでquery-docsを呼び出さないでください。
 
-### 步骤 2：选择最佳匹配
+### ステップ2：最適なマッチを選択
 
-从解析结果中，根据以下原则选择一个结果：
+解決結果から、以下を使用して1つの結果を選択：
 
-* **名称匹配**: 优先选择与用户询问内容完全匹配或最接近的。
-* **基准分数**: 分数越高表示文档质量越好（最高为 100）。
-* **来源信誉**: 如果可用，优先选择信誉度为 High 或 Medium 的。
-* **版本**: 如果用户指定了版本（例如“React 19”、“Next.js 15”），优先选择列出的特定版本库 ID（例如 `/org/project/v1.2.0`）。
+- **名前マッチ**：ユーザーが尋ねたものに対する正確なまたは最も近いマッチを好む。
+- **ベンチマークスコア**：より高いスコアはより良いドキュメント品質を示す（100は最高）。
+- **ソース評判**：利用可能な場合はHigh またはMedium評判を好む。
+- **バージョン**：ユーザーがバージョンを指定した場合（例：「React 19」、「Next.js 15」）、バージョン固有のライブラリIDを好む（例：`/org/project/v1.2.0`）。
 
-### 步骤 3：获取文档
+### ステップ3：ドキュメントをフェッチ
 
-调用 **query-docs** MCP 工具，参数包括：
+**query-docs** MCPツールを以下で呼び出す：
 
-* **libraryId**: 从步骤 2 中选择的 Context7 库 ID（例如 `/vercel/next.js`）。
-* **query**: 用户的具体问题或任务。为获得相关片段，请具体描述。
+- **libraryId**：ステップ2から選択したContext7ライブラリID（例：`/vercel/next.js`）。
+- **query**：ユーザーの特定の質問またはタスク。関連スニペットを取得するために具体的にする。
 
-限制：每个问题调用 query-docs（或 resolve-library-id）的次数不要超过 3 次。如果 3 次调用后答案仍不明确，请说明不确定性并使用您掌握的最佳信息，而不是猜测。
+制限：質問ごとにquery-docs（またはresolve-library-id）を3回以上呼び出さない。3回の呼び出し後も答えが不明確の場合は、不確実性を述べ、推測するのではなく最良の情報を使用。
 
-### 步骤 4：使用文档
+### ステップ4：ドキュメントを使用
 
-* 使用获取的、最新的信息回答用户的问题。
-* 在有用时包含文档中的相关代码示例。
-* 在重要时引用库或版本（例如“在 Next.js 15 中...”）。
+- フェッチされた現在の情報を使用してユーザーの質問に答える。
+- 役立つ場合はドキュメントからの関連するコード例を含める。
+- 重要な場合はライブラリまたはバージョンを引用（例：「Next.js 15では...」）。
 
-## 示例
+## 例
 
-### 示例：Next.js 中间件
+### 例：Next.jsミドルウェア
 
-1. 使用 `libraryName: "Next.js"`、`query: "How do I set up Next.js middleware?"` 调用 **resolve-library-id**。
-2. 从结果中，根据名称和基准分数选择最佳匹配（例如 `/vercel/next.js`）。
-3. 使用 `libraryId: "/vercel/next.js"`、`query: "How do I set up Next.js middleware?"` 调用 **query-docs**。
-4. 使用返回的片段和文本来回答；如果相关，包含文档中的一个最小 `middleware.ts` 示例。
+1. `libraryName: "Next.js"`、`query: "Next.jsミドルウェアを設定する方法は？"`で**resolve-library-id**を呼び出す。
+2. 結果から、名前とベンチマークスコアで最良のマッチ（例：`/vercel/next.js`）を選択。
+3. `libraryId: "/vercel/next.js"`、`query: "Next.jsミドルウェアを設定する方法は？"`で**query-docs**を呼び出す。
+4. 返されたスニペットとテキストを使用して答え、関連する場合はドキュメントの最小`middleware.ts`例を含める。
 
-### 示例：Prisma 查询
+### 例：Prismaクエリ
 
-1. 使用 `libraryName: "Prisma"`、`query: "How do I query with relations?"` 调用 **resolve-library-id**。
-2. 选择官方的 Prisma 库 ID（例如 `/prisma/prisma`）。
-3. 使用该 `libraryId` 和查询调用 **query-docs**。
-4. 返回 Prisma Client 模式（例如 `include` 或 `select`）并附上文档中的简短代码片段。
-
-### 示例：Supabase 认证方法
-
-1. 使用 `libraryName: "Supabase"`、`query: "What are the auth methods?"` 调用 **resolve-library-id**。
-2. 选择 Supabase 文档库 ID。
-3. 调用 **query-docs**；总结认证方法并展示从获取的文档中得到的最小示例。
-
-## 最佳实践
-
-* **具体化**: 尽可能使用用户的完整问题作为查询，以获得更好的相关性。
-* **版本意识**: 当用户提及版本时，如果可用，在解析步骤中使用特定版本的库 ID。
-* **优先官方来源**: 当存在多个匹配项时，优先选择官方或主要包，而非社区分支。
-* **无敏感数据**: 从发送到 Context7 的任何查询中，删除 API 密钥、密码、令牌和其他机密信息。在将用户问题传递给 resolve-library-id 或 query-docs 之前，将其视为可能包含机密信息。
+1. `libraryName: "Prisma"`、`query: "関係を持つクエリ方法は？"`で**resolve-library-id**を呼び出す。
+2. 公式Prismaライブラリ ID（例：`/prisma/prisma`）を選択。
+3. その`libraryId`とクエリで**query-docs**を呼び出す。
+4. Prisma Clientパターン（例：`include`または`select`）とドキュメントの短いコードスニペットを返す。

@@ -1,15 +1,9 @@
 ---
-title: "/cs-memory — Slash Command for AI Coding Agents"
-description: "Inspect, trace, and adopt the tiered agent-memory store (status | why | contested | adopt | forget). Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Inspect, trace, and adopt the tiered agent-memory store (status | why | contested | adopt | forget)
+argument-hint: "status | why \"<claim>\" | contested | adopt | forget \"<claim>\""
 ---
 
-# /cs-memory
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-memory/commands/cs-memory.md">Source</a></span>
-</div>
-
+# /cs:memory — curate what the agent remembers
 
 Argument: `$ARGUMENTS` (default: `status`)
 

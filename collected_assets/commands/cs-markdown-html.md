@@ -1,15 +1,9 @@
 ---
-title: "/cs-markdown-html — Slash Command for AI Coding Agents"
-description: "Top-level markdown-to-HTML router. Classifies the input markdown (document / review / slides), checks the design-system onboarding gate + 100-line. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Top-level markdown-to-HTML router. Classifies the input markdown (document / review / slides), checks the design-system onboarding gate + 100-line threshold, then forks context to the right converter sub-skill via the markdown-html-orchestrator skill. Returns a ≤100-word digest with input lines, output path, design style, top features used, and one forcing question.
+argument-hint: "<path to markdown file>"
 ---
 
-# /cs-markdown-html
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-markdown-html.md">Source</a></span>
-</div>
-
+# /cs:markdown-html — Markdown-to-HTML router
 
 Route this conversion through the `markdown-html-orchestrator` skill:
 

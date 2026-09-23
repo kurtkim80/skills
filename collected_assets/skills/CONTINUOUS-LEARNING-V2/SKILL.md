@@ -1,27 +1,27 @@
 ---
 name: continuous-learning-v2
-description: フックを介してセッションを観察し、信頼度スコアリング付きのアトミックなインスティンクトを作成し、スキル/コマンド/エージェントに進化させるインスティンクトベースの学習システム。
+description: Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents.
 version: 2.0.0
 ---
 
-# Continuous Learning v2 - インスティンクトベースアーキテクチャ
+# 持續學習 v2 - 基於本能的架構
 
-Claude Codeセッションを信頼度スコアリング付きの小さな学習済み行動である「インスティンクト」を通じて再利用可能な知識に変える高度な学習システム。
+進階學習系統，透過原子「本能」（帶信心評分的小型學習行為）將你的 Claude Code 工作階段轉化為可重用知識。
 
-## v2の新機能
+## v2 的新功能
 
-| 機能 | v1 | v2 |
-|---------|----|----|
-| 観察 | Stopフック（セッション終了） | PreToolUse/PostToolUse（100%信頼性） |
-| 分析 | メインコンテキスト | バックグラウンドエージェント（Haiku） |
-| 粒度 | 完全なスキル | アトミック「インスティンクト」 |
-| 信頼度 | なし | 0.3-0.9重み付け |
-| 進化 | 直接スキルへ | インスティンクト → クラスター → スキル/コマンド/エージェント |
-| 共有 | なし | インスティンクトのエクスポート/インポート |
+| 功能 | v1 | v2 |
+|------|----|----|
+| 觀察 | Stop hook（工作階段結束） | PreToolUse/PostToolUse（100% 可靠） |
+| 分析 | 主要上下文 | 背景 agent（Haiku） |
+| 粒度 | 完整技能 | 原子「本能」 |
+| 信心 | 無 | 0.3-0.9 加權 |
+| 演化 | 直接到技能 | 本能 → 聚類 → 技能/指令/agent |
+| 分享 | 無 | 匯出/匯入本能 |
 
-## インスティンクトモデル
+## 本能模型
 
-インスティンクトは小さな学習済み行動です：
+本能是一個小型學習行為：
 
 ```yaml
 ---
@@ -32,44 +32,44 @@ domain: "code-style"
 source: "session-observation"
 ---
 
-# 関数型スタイルを優先
+# 偏好函式風格
 
-## Action
-適切な場合はクラスよりも関数型パターンを使用します。
+## 動作
+適當時使用函式模式而非類別。
 
-## Evidence
-- 関数型パターンの優先が5回観察されました
-- ユーザーが2025-01-15にクラスベースのアプローチを関数型に修正しました
+## 證據
+- 觀察到 5 次函式模式偏好
+- 使用者在 2025-01-15 將基於類別的方法修正為函式
 ```
 
-**プロパティ：**
-- **アトミック** — 1つのトリガー、1つのアクション
-- **信頼度重み付け** — 0.3 = 暫定的、0.9 = ほぼ確実
-- **ドメインタグ付き** — code-style、testing、git、debugging、workflowなど
-- **証拠に基づく** — それを作成した観察を追跡
+**屬性：**
+- **原子性** — 一個觸發器，一個動作
+- **信心加權** — 0.3 = 試探性，0.9 = 近乎確定
+- **領域標記** — code-style、testing、git、debugging、workflow 等
+- **證據支持** — 追蹤建立它的觀察
 
-## 仕組み
+## 運作方式
 
 ```
-Session Activity
+工作階段活動
       │
-      │ フックがプロンプト + ツール使用をキャプチャ（100%信頼性）
+      │ Hooks 捕獲提示 + 工具使用（100% 可靠）
       ▼
 ┌─────────────────────────────────────────┐
 │         observations.jsonl              │
-│   (prompts, tool calls, outcomes)       │
+│   （提示、工具呼叫、結果）               │
 └─────────────────────────────────────────┘
       │
-      │ Observerエージェントが読み取り（バックグラウンド、Haiku）
+      │ Observer agent 讀取（背景、Haiku）
       ▼
 ┌─────────────────────────────────────────┐
-│          パターン検出                    │
-│   • ユーザー修正 → インスティンクト      │
-│   • エラー解決 → インスティンクト        │
-│   • 繰り返しワークフロー → インスティンクト │
+│          模式偵測                        │
+│   • 使用者修正 → 本能                   │
+│   • 錯誤解決 → 本能                     │
+│   • 重複工作流程 → 本能                 │
 └─────────────────────────────────────────┘
       │
-      │ 作成/更新
+      │ 建立/更新
       ▼
 ┌─────────────────────────────────────────┐
 │         instincts/personal/             │
@@ -78,7 +78,7 @@ Session Activity
 │   • use-zod-validation.md (0.6)         │
 └─────────────────────────────────────────┘
       │
-      │ /evolveクラスター
+      │ /evolve 聚類
       ▼
 ┌─────────────────────────────────────────┐
 │              evolved/                   │
@@ -88,36 +88,11 @@ Session Activity
 └─────────────────────────────────────────┘
 ```
 
-## クイックスタート
+## 快速開始
 
-### 1. 観察フックを有効化
+### 1. 啟用觀察 Hooks
 
-`~/.claude/settings.json`に追加します。
-
-**プラグインとしてインストールした場合**（推奨）：
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre"
-      }]
-    }],
-    "PostToolUse": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post"
-      }]
-    }]
-  }
-}
-```
-
-**`~/.claude/skills`に手動でインストールした場合**：
+新增到你的 `~/.claude/settings.json`：
 
 ```json
 {
@@ -140,36 +115,34 @@ Session Activity
 }
 ```
 
-### 2. ディレクトリ構造を初期化
-
-Python CLIが自動的に作成しますが、手動で作成することもできます：
+### 2. 初始化目錄結構
 
 ```bash
 mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands}}
 touch ~/.claude/homunculus/observations.jsonl
 ```
 
-### 3. インスティンクトコマンドを使用
+### 3. 執行 Observer Agent（可選）
+
+觀察者可以在背景執行並分析觀察：
 
 ```bash
-/instinct-status     # 信頼度スコア付きの学習済みインスティンクトを表示
-/evolve              # 関連するインスティンクトをスキル/コマンドにクラスター化
-/instinct-export     # 共有のためにインスティンクトをエクスポート
-/instinct-import     # 他の人からインスティンクトをインポート
+# 啟動背景觀察者
+~/.claude/skills/continuous-learning-v2/agents/start-observer.sh
 ```
 
-## コマンド
+## 指令
 
-| コマンド | 説明 |
-|---------|-------------|
-| `/instinct-status` | すべての学習済みインスティンクトを信頼度と共に表示 |
-| `/evolve` | 関連するインスティンクトをスキル/コマンドにクラスター化 |
-| `/instinct-export` | 共有のためにインスティンクトをエクスポート |
-| `/instinct-import <file>` | 他の人からインスティンクトをインポート |
+| 指令 | 描述 |
+|------|------|
+| `/instinct-status` | 顯示所有學習本能及其信心 |
+| `/evolve` | 將相關本能聚類為技能/指令 |
+| `/instinct-export` | 匯出本能以分享 |
+| `/instinct-import <file>` | 從他人匯入本能 |
 
 ## 設定
 
-`config.json`を編集：
+編輯 `config.json`：
 
 ```json
 {
@@ -205,80 +178,80 @@ touch ~/.claude/homunculus/observations.jsonl
 }
 ```
 
-## ファイル構造
+## 檔案結構
 
 ```
 ~/.claude/homunculus/
-├── identity.json           # プロフィール、技術レベル
-├── observations.jsonl      # 現在のセッション観察
-├── observations.archive/   # 処理済み観察
+├── identity.json           # 你的個人資料、技術水平
+├── observations.jsonl      # 當前工作階段觀察
+├── observations.archive/   # 已處理觀察
 ├── instincts/
-│   ├── personal/           # 自動学習されたインスティンクト
-│   └── inherited/          # 他の人からインポート
+│   ├── personal/           # 自動學習本能
+│   └── inherited/          # 從他人匯入
 └── evolved/
-    ├── agents/             # 生成された専門エージェント
-    ├── skills/             # 生成されたスキル
-    └── commands/           # 生成されたコマンド
+    ├── agents/             # 產生的專業 agents
+    ├── skills/             # 產生的技能
+    └── commands/           # 產生的指令
 ```
 
-## Skill Creatorとの統合
+## 與 Skill Creator 整合
 
-[Skill Creator GitHub App](https://skill-creator.app)を使用すると、**両方**が生成されます：
-- 従来のSKILL.mdファイル（後方互換性のため）
-- インスティンクトコレクション（v2学習システム用）
+當你使用 [Skill Creator GitHub App](https://skill-creator.app) 時，它現在產生**兩者**：
+- 傳統 SKILL.md 檔案（用於向後相容）
+- 本能集合（用於 v2 學習系統）
 
-リポジトリ分析からのインスティンクトには`source: "repo-analysis"`があり、ソースリポジトリURLが含まれます。
+從倉庫分析的本能有 `source: "repo-analysis"` 並包含來源倉庫 URL。
 
-## 信頼度スコアリング
+## 信心評分
 
-信頼度は時間とともに進化します：
+信心隨時間演化：
 
-| スコア | 意味 | 動作 |
-|-------|---------|----------|
-| 0.3 | 暫定的 | 提案されるが強制されない |
-| 0.5 | 中程度 | 関連する場合に適用 |
-| 0.7 | 強い | 適用が自動承認される |
-| 0.9 | ほぼ確実 | コア動作 |
+| 分數 | 意義 | 行為 |
+|------|------|------|
+| 0.3 | 試探性 | 建議但不強制 |
+| 0.5 | 中等 | 相關時應用 |
+| 0.7 | 強烈 | 自動批准應用 |
+| 0.9 | 近乎確定 | 核心行為 |
 
-**信頼度が上がる**場合：
-- パターンが繰り返し観察される
-- ユーザーが提案された動作を修正しない
-- 他のソースからの類似インスティンクトが一致する
+**信心增加**當：
+- 重複觀察到模式
+- 使用者不修正建議行為
+- 來自其他來源的類似本能同意
 
-**信頼度が下がる**場合：
-- ユーザーが明示的に動作を修正する
-- パターンが長期間観察されない
-- 矛盾する証拠が現れる
+**信心減少**當：
+- 使用者明確修正行為
+- 長期未觀察到模式
+- 出現矛盾證據
 
-## 観察にスキルではなくフックを使用する理由は？
+## 為何 Hooks vs Skills 用於觀察？
 
-> 「v1はスキルに依存して観察していました。スキルは確率的で、Claudeの判断に基づいて約50-80%の確率で発火します。」
+> "v1 依賴技能進行觀察。技能是機率性的——它們根據 Claude 的判斷觸發約 50-80% 的時間。"
 
-フックは**100%の確率で**決定論的に発火します。これは次のことを意味します：
-- すべてのツール呼び出しが観察される
-- パターンが見逃されない
-- 学習が包括的
+Hooks **100% 的時間**確定性地觸發。這意味著：
+- 每個工具呼叫都被觀察
+- 無模式被遺漏
+- 學習是全面的
 
-## 後方互換性
+## 向後相容性
 
-v2はv1と完全に互換性があります：
-- 既存の`~/.claude/skills/learned/`スキルは引き続き機能
-- Stopフックは引き続き実行される（ただしv2にもフィードされる）
-- 段階的な移行パス：両方を並行して実行
+v2 完全相容 v1：
+- 現有 `~/.claude/skills/learned/` 技能仍可運作
+- Stop hook 仍執行（但現在也餵入 v2）
+- 漸進遷移路徑：兩者並行執行
 
-## プライバシー
+## 隱私
 
-- 観察はマシン上で**ローカル**に保持されます
-- **インスティンクト**（パターン）のみをエクスポート可能
-- 実際のコードや会話内容は共有されません
-- エクスポートする内容を制御できます
+- 觀察保持在你的機器**本機**
+- 只有**本能**（模式）可被匯出
+- 不會分享實際程式碼或對話內容
+- 你控制匯出內容
 
-## 関連
+## 相關
 
-- [Skill Creator](https://skill-creator.app) - リポジトリ履歴からインスティンクトを生成
-- [Homunculus](https://github.com/humanplane/homunculus) - v2アーキテクチャのインスピレーション
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 継続的学習セクション
+- [Skill Creator](https://skill-creator.app) - 從倉庫歷史產生本能
+- [Homunculus](https://github.com/humanplane/homunculus) - v2 架構靈感
+- [Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 持續學習章節
 
 ---
 
-*インスティンクトベースの学習：一度に1つの観察で、Claudeにあなたのパターンを教える。*
+*基於本能的學習：一次一個觀察，教導 Claude 你的模式。*

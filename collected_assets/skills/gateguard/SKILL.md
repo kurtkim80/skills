@@ -1,123 +1,125 @@
 ---
 name: gateguard
-description: 强制事实的门控，阻止编辑/写入/Bash（包括MultiEdit），并要求在允许操作之前进行具体调查（导入器、数据模式、用户指令）。与无门控代理相比，可测量地将输出质量提高2.25分。
+description: API、エージェント、およびLLMエンドポイントのアクセス制御と認可パターン。
 origin: community
 ---
 
-# GateGuard — 事实驱动的前置操作门控
+# GateGuard — Fact-Forcing Pre-Action Gate
 
-一个 PreToolUse 钩子，强制 Claude 在编辑前进行调查。不同于自我评估（"你确定吗？"），它要求具体的事实。调查行为本身创造了自我评估永远无法带来的认知。
+A PreToolUse hook that forces Claude to investigate before editing. Instead of self-evaluation ("are you sure?"), it demands concrete facts. The act of investigation creates awareness that self-evaluation never did.
 
-## 何时激活
+## When to Activate
 
-* 处理任何文件编辑会影响多个模块的代码库时
-* 项目包含具有特定模式或日期格式的数据文件时
-* 团队要求 AI 生成的代码必须匹配现有模式时
-* 任何 Claude 倾向于猜测而非调查的工作流程中
+- Working on any codebase where file edits affect multiple modules
+- Projects with data files that have specific schemas or date formats
+- Teams where AI-generated code must match existing patterns
+- Any workflow where Claude tends to guess instead of investigating
 
-## 核心概念
+## Core Concept
 
-LLM 的自我评估不起作用。问"你是否违反了任何策略？"答案永远是"没有"。这已通过实验验证。
+LLM self-evaluation doesn't work. Ask "did you violate any policies?" and the answer is always "no." This is verified experimentally.
 
-但问"列出所有导入此模块的文件"会迫使 LLM 运行 Grep 和 Read。调查本身创造了改变输出的上下文。
+But asking "list every file that imports this module" forces the LLM to run Grep and Read. The investigation itself creates context that changes the output.
 
-**三阶段门控：**
+**Three-stage gate:**
 
 ```
-1. DENY  — 阻止首次编辑/写入/Bash 尝试
-2. FORCE — 明确告知模型需要收集哪些事实
-3. ALLOW — 在事实呈现后允许重试
+1. DENY  — block the first Edit/Write/Bash attempt
+2. FORCE — tell the model exactly which facts to gather
+3. ALLOW — permit retry after facts are presented
 ```
 
-没有竞争对手能同时做到这三步。大多数止步于拒绝。
+No competitor does all three. Most stop at deny.
 
-## 证据
+## Evidence
 
-两个独立的 A/B 测试，相同的代理，相同的任务：
+Two independent A/B tests, identical agents, same task:
 
-| 任务 | 有门控 | 无门控 | 差距 |
+| Task | Gated | Ungated | Gap |
 | --- | --- | --- | --- |
-| 分析模块 | 8.0/10 | 6.5/10 | +1.5 |
-| Webhook 验证器 | 10.0/10 | 7.0/10 | +3.0 |
-| **平均** | **9.0** | **6.75** | **+2.25** |
+| Analytics module | 8.0/10 | 6.5/10 | +1.5 |
+| Webhook validator | 10.0/10 | 7.0/10 | +3.0 |
+| **Average** | **9.0** | **6.75** | **+2.25** |
 
-两个代理生成的代码都能运行并通过测试。区别在于设计深度。
+Both agents produce code that runs and passes tests. The difference is design depth.
 
-## 门控类型
+## Gate Types
 
-### 编辑/多编辑门控（每个文件的首次编辑）
+### Edit / MultiEdit Gate (first edit per file)
 
-多编辑的处理方式相同——批次中的每个文件都单独进行门控。
-
-```
-在编辑 {file_path} 之前，请先呈现以下事实：
-
-1. 列出所有导入/引用此文件的文件（在代码树中搜索——Glob/Grep，或通过 Bash 用 find/grep）
-2. 列出受此更改影响的公共函数/类
-3. 如果此文件读取/写入数据文件，请显示字段名称、结构以及日期格式（使用脱敏或合成值，而非原始生产数据）
-4. 逐字引用用户当前的指令
-```
-
-### 写入门控（首次创建新文件）
+MultiEdit is handled identically — each file in the batch is gated individually.
 
 ```
-在创建 {file_path} 之前，请先说明以下事实：
+Before editing {file_path}, present these facts:
 
-1. 命名将调用此新文件的文件及行号
-2. 确认没有现有文件具有相同功能（在代码树中搜索——Glob/Grep，或通过 Bash 用 find/grep）
-3. 如果此文件读取/写入数据文件，请展示字段名称、结构及日期格式（使用脱敏或合成值，而非原始生产数据）
-4. 逐字引用用户当前的指令
+1. List ALL files that import/require this file (search the tree — Glob/Grep, or find/grep via Bash)
+2. List the public functions/classes affected by this change
+3. If this file reads/writes data files, show field names, structure,
+   and date format (use redacted or synthetic values, not raw production data)
+4. Quote the user's current instruction verbatim
 ```
 
-### 破坏性 Bash 门控（每个破坏性命令）
-
-触发条件：`rm -rf`、`git reset --hard`、`git push --force`、`drop table` 等。
+### Write Gate (first new file creation)
 
 ```
-1. 列出此命令将修改或删除的所有文件/数据
-2. 编写一行回滚步骤
-3. 逐字引用用户当前的指令
+Before creating {file_path}, present these facts:
+
+1. Name the file(s) and line(s) that will call this new file
+2. Confirm no existing file serves the same purpose (search the tree — Glob/Grep, or find/grep via Bash)
+3. If this file reads/writes data files, show field names, structure,
+   and date format (use redacted or synthetic values, not raw production data)
+4. Quote the user's current instruction verbatim
 ```
 
-### 常规 Bash 门控（每个会话一次）
+### Destructive Bash Gate (every destructive command)
+
+Triggers on: `rm -rf`, `git reset --hard`, `git push --force`, `drop table`, etc.
 
 ```
-1. 当前用户请求的一句话概括
-2. 此特定命令验证或生成的内容
+1. List all files/data this command will modify or delete
+2. Write a one-line rollback procedure
+3. Quote the user's current instruction verbatim
 ```
 
-## 快速开始
+### Routine Bash Gate (once per session)
 
-### 选项 A：使用 ECC 钩子（零安装）
+```
+1. The current user request in one sentence
+2. What this specific command verifies or produces
+```
 
-`scripts/hooks/gateguard-fact-force.js` 处的钩子已包含在此插件中。通过 hooks.json 启用它。
+## Quick Start
 
-如果 GateGuard 阻止了设置或修复工作，请使用
-`ECC_GATEGUARD=off` 启动会话。如需钩子级别的控制，请继续使用
-`ECC_DISABLED_HOOKS` 配合 GateGuard 钩子 ID。
+### Option A: Use the ECC hook (zero install)
 
-### 选项 B：带配置的完整包
+The hook at `scripts/hooks/gateguard-fact-force.js` is included in this plugin. Enable it via hooks.json.
+
+If GateGuard blocks setup or repair work, start the session with
+`ECC_GATEGUARD=off`. For hook-level control, keep using
+`ECC_DISABLED_HOOKS` with the GateGuard hook ID.
+
+### Option B: Full package with config
 
 ```bash
 pip install gateguard-ai
 gateguard init
 ```
 
-这会添加 `.gateguard.yml` 用于按项目配置（自定义消息、忽略路径、门控开关）。
+This adds `.gateguard.yml` for per-project configuration (custom messages, ignore paths, gate toggles).
 
-## 反模式
+## Anti-Patterns
 
-* **不要使用自我评估替代。** "你确定吗？"总是得到"确定。"这已通过实验验证。
-* **不要跳过数据模式检查。** 两个 A/B 测试代理都假设了 ISO-8601 日期，而实际数据使用的是 `%Y/%m/%d %H:%M`。检查数据结构（使用脱敏值）可以防止这类错误。
-* **不要对每个 Bash 命令都进行门控。** 常规 bash 门控每个会话一次。破坏性 bash 门控每次执行。这种平衡避免了速度下降，同时捕获了真正的风险。
+- **Don't use self-evaluation instead.** "Are you sure?" always gets "yes." This is experimentally verified.
+- **Don't skip the data schema check.** Both A/B test agents assumed ISO-8601 dates when real data used `%Y/%m/%d %H:%M`. Checking data structure (with redacted values) prevents this entire class of bugs.
+- **Don't gate every single Bash command.** Routine bash gates once per session. Destructive bash gates every time. This balance avoids slowdown while catching real risks.
 
-## 最佳实践
+## Best Practices
 
-* 让门控自然触发。不要试图预先回答门控问题——调查本身才是提高质量的关键。
-* 为你的领域自定义门控消息。如果你的项目有特定约定，请将其添加到门控提示中。
-* 使用 `.gateguard.yml` 忽略 `.venv/`、`node_modules/`、`.git/` 等路径。
+- Let the gate fire naturally. Don't try to pre-answer the gate questions — the investigation itself is what improves quality.
+- Customize gate messages for your domain. If your project has specific conventions, add them to the gate prompts.
+- Use `.gateguard.yml` to ignore paths like `.venv/`, `node_modules/`, `.git/`.
 
-## 相关技能
+## Related Skills
 
-* `safety-guard` — 运行时安全检查（互补，不重叠）
-* `code-reviewer` — 编辑后审查（GateGuard 是编辑前调查）
+- `safety-guard` — Runtime safety checks (complementary, not overlapping)
+- `code-reviewer` — Post-edit review (GateGuard is pre-edit investigation)

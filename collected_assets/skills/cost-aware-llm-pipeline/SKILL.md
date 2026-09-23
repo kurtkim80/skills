@@ -1,49 +1,49 @@
 ---
 name: cost-aware-llm-pipeline
-description: LLM API 使用成本优化模式 —— 基于任务复杂度的模型路由、预算跟踪、重试逻辑和提示缓存。
+description: LLM APIの使用量のコスト最適化パターン — タスクの複雑さによるモデルルーティング、予算追跡、リトライロジック、プロンプトキャッシング。
 origin: ECC
 ---
 
-# 成本感知型 LLM 流水线
+# コスト認識LLMパイプライン
 
-在保持质量的同时控制 LLM API 成本的模式。将模型路由、预算跟踪、重试逻辑和提示词缓存组合成一个可组合的流水线。
+品質を維持しながらLLM APIのコストをコントロールするためのパターン。モデルルーティング、予算追跡、リトライロジック、プロンプトキャッシングを組み合わせた合成可能なパイプライン。
 
-## 何时激活
+## 起動条件
 
-* 构建调用 LLM API（Claude、GPT 等）的应用程序时
-* 处理具有不同复杂度的批量项目时
-* 需要将 API 支出控制在预算范围内时
-* 需要在复杂任务上优化成本而不牺牲质量时
+- LLM APIを呼び出すアプリケーションの構築（Claude、GPTなど）
+- 複雑さが異なるアイテムのバッチ処理
+- API支出の予算内に収める必要がある場合
+- 複雑なタスクの品質を犠牲にせずにコストを最適化する場合
 
-## 核心概念
+## コアコンセプト
 
-### 1. 根据任务复杂度进行模型路由
+### 1. タスクの複雑さによるモデルルーティング
 
-自动为简单任务选择更便宜的模型，为复杂任务保留昂贵的模型。
+シンプルなタスクには自動的に安価なモデルを選択し、複雑なタスクのために高価なモデルを予約します。
 
 ```python
 MODEL_SONNET = "claude-sonnet-5"
 MODEL_HAIKU = "claude-haiku-4-5-20251001"
 
-_SONNET_TEXT_THRESHOLD = 10_000  # chars
-_SONNET_ITEM_THRESHOLD = 30     # items
+_SONNET_TEXT_THRESHOLD = 10_000  # 文字数
+_SONNET_ITEM_THRESHOLD = 30     # アイテム数
 
 def select_model(
     text_length: int,
     item_count: int,
     force_model: str | None = None,
 ) -> str:
-    """Select model based on task complexity."""
+    """タスクの複雑さに基づいてモデルを選択。"""
     if force_model is not None:
         return force_model
     if text_length >= _SONNET_TEXT_THRESHOLD or item_count >= _SONNET_ITEM_THRESHOLD:
-        return MODEL_SONNET  # Complex task
-    return MODEL_HAIKU  # Simple task (3-4x cheaper)
+        return MODEL_SONNET  # 複雑なタスク
+    return MODEL_HAIKU  # シンプルなタスク（3〜4倍安価）
 ```
 
-### 2. 不可变的成本跟踪
+### 2. 不変のコスト追跡
 
-使用冻结的数据类跟踪累计支出。每个 API 调用都会返回一个新的跟踪器 —— 永不改变状态。
+凍結データクラスで累積支出を追跡します。各API呼び出しは新しいトラッカーを返します — 状態を変更しません。
 
 ```python
 from dataclasses import dataclass
@@ -61,7 +61,7 @@ class CostTracker:
     records: tuple[CostRecord, ...] = ()
 
     def add(self, record: CostRecord) -> "CostTracker":
-        """Return new tracker with added record (never mutates self)."""
+        """追加されたレコードで新しいトラッカーを返す（selfは変更しない）。"""
         return CostTracker(
             budget_limit=self.budget_limit,
             records=(*self.records, record),
@@ -76,9 +76,9 @@ class CostTracker:
         return self.total_cost > self.budget_limit
 ```
 
-### 3. 窄范围重试逻辑
+### 3. 狭いリトライロジック
 
-仅在暂时性错误时重试。对于认证或错误请求错误，快速失败。
+一時的なエラーのみリトライします。認証やリクエストエラーでは素早く失敗します。
 
 ```python
 from anthropic import (
@@ -91,20 +91,20 @@ _RETRYABLE_ERRORS = (APIConnectionError, RateLimitError, InternalServerError)
 _MAX_RETRIES = 3
 
 def call_with_retry(func, *, max_retries: int = _MAX_RETRIES):
-    """Retry only on transient errors, fail fast on others."""
+    """一時的なエラーのみリトライし、それ以外はすぐに失敗する。"""
     for attempt in range(max_retries):
         try:
             return func()
         except _RETRYABLE_ERRORS:
             if attempt == max_retries - 1:
                 raise
-            time.sleep(2 ** attempt)  # Exponential backoff
-    # AuthenticationError, BadRequestError etc. → raise immediately
+            time.sleep(2 ** attempt)  # 指数バックオフ
+    # AuthenticationError、BadRequestErrorなど → 即座に例外発生
 ```
 
-### 4. 提示词缓存
+### 4. プロンプトキャッシング
 
-缓存长的系统提示词，以避免在每个请求上重新发送它们。
+長いシステムプロンプトをキャッシュして、リクエストごとに再送信しないようにします。
 
 ```python
 messages = [
@@ -114,46 +114,46 @@ messages = [
             {
                 "type": "text",
                 "text": system_prompt,
-                "cache_control": {"type": "ephemeral"},  # Cache this
+                "cache_control": {"type": "ephemeral"},  # これをキャッシュ
             },
             {
                 "type": "text",
-                "text": user_input,  # Variable part
+                "text": user_input,  # 可変部分
             },
         ],
     }
 ]
 ```
 
-## 组合
+## 合成
 
-将所有四种技术组合到一个流水线函数中：
+4つのテクニックすべてを単一のパイプライン関数に組み合わせます：
 
 ```python
 def process(text: str, config: Config, tracker: CostTracker) -> tuple[Result, CostTracker]:
-    # 1. Route model
+    # 1. モデルをルーティング
     model = select_model(len(text), estimated_items, config.force_model)
 
-    # 2. Check budget
+    # 2. 予算を確認
     if tracker.over_budget:
         raise BudgetExceededError(tracker.total_cost, tracker.budget_limit)
 
-    # 3. Call with retry + caching
+    # 3. リトライ + キャッシングで呼び出し
     response = call_with_retry(lambda: client.messages.create(
         model=model,
         messages=build_cached_messages(system_prompt, text),
     ))
 
-    # 4. Track cost (immutable)
+    # 4. コストを追跡（不変）
     record = CostRecord(model=model, input_tokens=..., output_tokens=..., cost_usd=...)
     tracker = tracker.add(record)
 
     return parse_result(response), tracker
 ```
 
-## 价格参考（2026）
+## 価格リファレンス（2026年）
 
-| 模型 | 输入（美元/百万令牌） | 输出（美元/百万令牌） | 相对成本 |
+| モデル | 入力（$/1Mトークン） | 出力（$/1Mトークン） | 相対コスト |
 |-------|---------------------|----------------------|---------------|
 | Haiku 3.5 (legacy) | $0.80 | $4.00 | 0.8x |
 | Haiku 4.5 | $1.00 | $5.00 | 1x |
@@ -163,25 +163,25 @@ def process(text: str, config: Config, tracker: CostTracker) -> tuple[Result, Co
 | Fable 5 / Mythos 5 | $10.00 | $50.00 | 10x |
 | Opus 4.0 / 4.1 (legacy) | $15.00 | $75.00 | 15x |
 
-## 最佳实践
+## ベストプラクティス
 
-* **从最便宜的模型开始**，仅在达到复杂度阈值时才路由到昂贵的模型
-* **在处理批次之前设置明确的预算限制** —— 尽早失败而不是超支
-* **记录模型选择决策**，以便您可以根据实际数据调整阈值
-* **对于超过 1024 个令牌的系统提示词，使用提示词缓存** —— 既能节省成本，又能降低延迟
-* **切勿在认证或验证错误时重试** —— 仅针对暂时性故障（网络、速率限制、服务器错误）重试
+- **最も安価なモデルから始める**、複雑さの閾値が満たされた場合にのみ高価なモデルにルーティングする
+- **バッチ処理の前に明示的な予算制限を設定する** — 過剰支出より早期に失敗する
+- **モデル選択の決定をログに記録する**、実際のデータに基づいて閾値を調整できるように
+- **1024トークンを超えるシステムプロンプトにはプロンプトキャッシングを使用する** — コストとレイテンシーの両方を節約
+- **認証またはバリデーションエラーではリトライしない** — 一時的な失敗のみ（ネットワーク、レート制限、サーバーエラー）
 
-## 应避免的反模式
+## 避けるべきアンチパターン
 
-* 无论复杂度如何，对所有请求都使用最昂贵的模型
-* 对所有错误都进行重试（在永久性故障上浪费预算）
-* 改变成本跟踪状态（使调试和审计变得困难）
-* 在整个代码库中硬编码模型名称（使用常量或配置）
-* 对重复的系统提示词忽略提示词缓存
+- 複雑さに関わらずすべてのリクエストに最も高価なモデルを使用すること
+- すべてのエラーでリトライすること（永続的な失敗で予算を無駄にする）
+- コスト追跡の状態を変更すること（デバッグと監査が困難になる）
+- コードベース全体にモデル名をハードコードすること（定数または設定を使用する）
+- 繰り返しのシステムプロンプトでプロンプトキャッシングを無視すること
 
-## 适用场景
+## 使用すべき場合
 
-* 任何调用 Claude、OpenAI 或类似 LLM API 的应用程序
-* 成本快速累积的批处理流水线
-* 需要智能路由的多模型架构
-* 需要预算护栏的生产系统
+- Claude、OpenAI、または同様のLLM APIを呼び出すすべてのアプリケーション
+- コストが積み上がるバッチ処理パイプライン
+- インテリジェントルーティングが必要なマルチモデルアーキテクチャ
+- 予算ガードレールが必要な本番システム

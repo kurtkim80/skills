@@ -1,53 +1,53 @@
 ---
 name: bun-runtime
-description: Bun 作为运行时、包管理器、打包器和测试运行器。何时选择 Bun 而非 Node、迁移注意事项以及 Vercel 支持。
+description: ランタイムとしてのBun、パッケージマネージャー、バンドラー、テストランナー。Bun対Nodeを選択する場合、移行メモ、Vercelサポート。
 origin: ECC
 ---
 
-# Bun 运行时
+# Bunランタイム
 
-Bun 是一个快速的全能 JavaScript 运行时和工具集：运行时、包管理器、打包器和测试运行器。
+Bunは高速なオールインワンJavaScriptランタイムとツールキット：ランタイム、パッケージマネージャー、バンドラー、テストランナー。
 
-## 何时使用
+## 使用時期
 
-* **优先选择 Bun** 用于：新的 JS/TS 项目、安装/运行速度很重要的脚本、使用 Bun 运行时的 Vercel 部署，以及当您想要单一工具链（运行 + 安装 + 测试 + 构建）时。
-* **优先选择 Node** 用于：最大的生态系统兼容性、假定使用 Node 的遗留工具，或者当某个依赖项存在已知的 Bun 问题时。
+- **Bunを好む**：新しいJS/TSプロジェクト、インストール/実行速度が重要なスクリプト、Bunランタイムでのデプロイメント、単一のツールチェーン（実行+インストール+テスト+ビルド）が必要な場合。
+- **Nodeを好む**：最大のエコシステム互換性、ノードを仮定するレガシーツール、またはある依存関係が既知のBun問題がある場合。
 
-在以下情况下使用：采用 Bun、从 Node 迁移、编写或调试 Bun 脚本/测试，或在 Vercel 或其他平台上配置 Bun。
+使用時期：Bunを採用、Nodeから移行、Bunスクリプト/テストを書いたりデバッグしたり、Vercelまたは他のプラットフォームでBunを構成する場合。
 
-## 工作原理
+## 動作方法
 
-* **运行时**：开箱即用的 Node 兼容运行时（基于 JavaScriptCore，用 Zig 实现）。
-* **包管理器**：`bun install` 比 npm/yarn 快得多。在当前 Bun 中，锁文件默认为 `bun.lock`（文本）；旧版本使用 `bun.lockb`（二进制）。
-* **打包器**：用于应用程序和库的内置打包器和转译器。
-* **测试运行器**：内置的 `bun test`，具有类似 Jest 的 API。
+- **ランタイム**：ドロップイン互換のNodeランタイム（JavaScriptCoreで構築、Zigで実装）。
+- **パッケージマネージャー**：`bun install`はnpm/yarnよりも大幅に高速です。ロックファイルは`bun.lock`（テキスト）（デフォルト）。古いバージョンは`bun.lockb`（バイナリ）を使用しました。
+- **バンドラー**：アプリとライブラリ用の組み込みバンドラーとトランスパイラー。
+- **テストランナー**：Jest様のAPIを備えた組み込み`bun test`。
 
-**从 Node 迁移**：将 `node script.js` 替换为 `bun run script.js` 或 `bun script.js`。运行 `bun install` 代替 `npm install`；大多数包都能工作。使用 `bun run` 来执行 npm 脚本；使用 `bun x` 进行 npx 风格的临时运行。支持 Node 内置模块；在存在 Bun API 的地方优先使用它们以获得更好的性能。
+**Nodeからの移行**：`node script.js`を`bun run script.js`または`bun script.js`に置き換えます。`npm install`の代わりに`bun install`を実行します。ほとんどのパッケージは機能します。npm スクリプトには`bun run`を使用します。`bun x`をnpxスタイルの1回限りの実行に使用します。Nodeの組み込みはサポートされています。パフォーマンスの向上のため、Bunチャネルが存在する場合は優先。
 
-**Vercel**：在项目设置中将运行时设置为 Bun。构建命令：`bun run build` 或 `bun build ./src/index.ts --outdir=dist`。安装命令：`bun install --frozen-lockfile` 用于可重复的部署。
+**Vercel**：プロジェクト設定でBunに設定をランタイムに設定します。ビルド：`bun run build`または`bun build ./src/index.ts --outdir=dist`。インストール：再現可能なデプロイの場合は`bun install --frozen-lockfile`。
 
-## 示例
+## 例
 
-### 运行和安装
+### 実行とインストール
 
 ```bash
-# Install dependencies (creates/updates bun.lock or bun.lockb)
+# 依存関係をインストール（bun.lockまたはbun.lockbを作成/更新）
 bun install
 
-# Run a script or file
+# スクリプトまたはファイルを実行
 bun run dev
 bun run src/index.ts
 bun src/index.ts
 ```
 
-### 脚本和环境变量
+### スクリプトとenv
 
 ```bash
 bun run --env-file=.env dev
 FOO=bar bun run script.ts
 ```
 
-### 测试
+### テスト
 
 ```bash
 bun test
@@ -63,22 +63,8 @@ test("add", () => {
 });
 ```
 
-### 运行时 API
+## 常見の問題
 
-```typescript
-const file = Bun.file("package.json");
-const json = await file.json();
-
-Bun.serve({
-  port: 3000,
-  fetch(req) {
-    return new Response("Hello");
-  },
-});
-```
-
-## 最佳实践
-
-* 提交锁文件（`bun.lock` 或 `bun.lockb`）以实现可重复的安装。
-* 在脚本中优先使用 `bun run`。对于 TypeScript，Bun 原生运行 `.ts`。
-* 保持依赖项最新；Bun 和生态系统发展迅速。
+- `bun install`は`node_modules`を作成しますが、シンボリックリンクの多用により構造が異なります。
+- 古い依存関係にはBun互換性の問題がある可能性があります。Node にフォールバックする。
+- VercelでBun使用時は設定とビルドコマンドが必須。

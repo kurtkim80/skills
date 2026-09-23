@@ -1,61 +1,70 @@
----
-description: Extract patterns and learnings from current session
-agent: build
----
+# /learn - 재사용 가능한 패턴 추출
 
-# Learn Command
+현재 세션을 분석하고 스킬로 저장할 가치가 있는 패턴을 추출합니다.
 
-Extract patterns, learnings, and reusable insights from the current session: $ARGUMENTS
+## 트리거
 
-## Your Task
+세션 중 중요한 문제를 해결했을 때 `/learn`을 실행합니다.
 
-Analyze the conversation and code changes to extract:
+## 추출 대상
 
-1. **Patterns discovered** - Recurring solutions or approaches
-2. **Best practices applied** - Techniques that worked well
-3. **Mistakes to avoid** - Issues encountered and solutions
-4. **Reusable snippets** - Code patterns worth saving
+다음을 찾습니다:
 
-## Output Format
+1. **에러 해결 패턴**
+   - 어떤 에러가 발생했는가?
+   - 근본 원인은 무엇이었는가?
+   - 무엇이 해결했는가?
+   - 유사한 에러에 재사용 가능한가?
 
-### Patterns Discovered
+2. **디버깅 기법**
+   - 직관적이지 않은 디버깅 단계
+   - 효과적인 도구 조합
+   - 진단 패턴
 
-**Pattern: [Name]**
-- Context: When to use this pattern
-- Implementation: How to apply it
-- Example: Code snippet
+3. **우회 방법**
+   - 라이브러리 특이 사항
+   - API 제한 사항
+   - 버전별 수정 사항
 
-### Best Practices Applied
+4. **프로젝트 특화 패턴**
+   - 발견된 코드베이스 컨벤션
+   - 내려진 아키텍처 결정
+   - 통합 패턴
 
-1. [Practice name]
-   - Why it works
-   - When to apply
+## 출력 형식
 
-### Mistakes to Avoid
+`~/.claude/skills/learned/[pattern-name].md`에 스킬 파일을 생성합니다:
 
-1. [Mistake description]
-   - What went wrong
-   - How to prevent it
+```markdown
+# [설명적인 패턴 이름]
 
-### Suggested Skill Updates
+**추출일:** [날짜]
+**컨텍스트:** [이 패턴이 적용되는 상황에 대한 간략한 설명]
 
-If patterns are significant, suggest updates to:
-- `skills/coding-standards/SKILL.md`
-- `skills/[domain]/SKILL.md`
-- `rules/[category].md`
+## 문제
+[이 패턴이 해결하는 문제 - 구체적으로 작성]
 
-## Instinct Format (for continuous-learning-v2)
+## 해결 방법
+[패턴/기법/우회 방법]
 
-```json
-{
-  "trigger": "[situation that triggers this learning]",
-  "action": "[what to do]",
-  "confidence": 0.7,
-  "source": "session-extraction",
-  "timestamp": "[ISO timestamp]"
-}
+## 예시
+[해당하는 경우 코드 예시]
+
+## 사용 시점
+[트리거 조건 - 이 스킬이 활성화되어야 하는 상황]
 ```
 
----
+## 프로세스
 
-**TIP**: Run `/learn` periodically during long sessions to capture insights before context compaction.
+1. 세션에서 추출 가능한 패턴 검토
+2. 가장 가치 있고 재사용 가능한 인사이트 식별
+3. 스킬 파일 초안 작성
+4. 저장 전 사용자 확인 요청
+5. `~/.claude/skills/learned/`에 저장
+
+## 참고 사항
+
+- 사소한 수정은 추출하지 않기 (오타, 단순 구문 에러)
+- 일회성 이슈는 추출하지 않기 (특정 API 장애 등)
+- 향후 세션에서 시간을 절약할 수 있는 패턴에 집중
+- 스킬은 집중적으로 - 스킬당 하나의 패턴

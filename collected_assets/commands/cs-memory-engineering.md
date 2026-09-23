@@ -1,15 +1,9 @@
 ---
-title: "/cs-memory-engineering — Slash Command for AI Coding Agents"
-description: "Price, choose, audit and gate an agent memory system — the full four-lens memory-engineering pass.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Price, choose, audit and gate an agent memory system — the full four-lens memory-engineering pass.
+argument-hint: "[memory dir, design spec JSON, or a question about a memory system]"
 ---
 
-# /cs-memory-engineering
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/memory-engineering/commands/cs-memory-engineering.md">Source</a></span>
-</div>
-
+# /cs:memory-engineering
 
 Run the memory-engineering pass on `$ARGUMENTS`.
 

@@ -1,10 +1,10 @@
-# 生成式媒体指南
+# 生成メディアガイド
 
-VideoDB 提供 AI 驱动的图像、视频、音乐、音效、语音和文本内容生成。所有生成方法均在 **Collection** 对象上。
+VideoDBはAI駆動の画像、ビデオ、音楽、効果音、音声、テキストコンテンツ生成を提供する。すべての生成メソッドは**Collection**オブジェクト上にある。
 
-## 先决条件
+## 前提条件
 
-在调用任何生成方法之前，您需要一个连接和一个集合引用：
+生成メソッドを呼び出す前に、接続とコレクションの参照が必要：
 
 ```python
 import videodb
@@ -13,9 +13,9 @@ conn = videodb.connect()
 coll = conn.get_collection()
 ```
 
-## 图像生成
+## 画像生成
 
-根据文本提示生成图像：
+テキストプロンプトから画像を生成する：
 
 ```python
 image = coll.generate_image(
@@ -28,21 +28,21 @@ print(image.id)
 print(image.generate_url())  # returns a signed download URL
 ```
 
-### generate\_image 参数
+### generate\_imageのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | 必需 | 要生成的图像的文本描述 |
-| `aspect_ratio` | `str` | `"1:1"` | 宽高比：`"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, 或 `"3:4"` |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `prompt` | `str` | 必須 | 生成する画像のテキスト説明 |
+| `aspect_ratio` | `str` | `"1:1"` | アスペクト比：`"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, または `"3:4"` |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-返回一个 `Image` 对象，包含 `.id`、`.name` 和 `.collection_id`。`.url` 属性对于生成的图像可能为 `None` —— 始终使用 `image.generate_url()` 来获取可靠的签名下载 URL。
+`.id`、`.name`、`.collection_id` を含む `Image` オブジェクトを返す。生成された画像の `.url` 属性は `None` になる可能性がある——信頼できる署名付きダウンロードURLを取得するには常に `image.generate_url()` を使用すること。
 
-> **注意：** 与 `Video` 对象（使用 `.generate_stream()`）不同，`Image` 对象使用 `.generate_url()` 来检索图像 URL。`.url` 属性仅针对某些图像类型（例如缩略图）填充。
+> **注意：** `Video` オブジェクト（`.generate_stream()` を使用）と異なり、`Image` オブジェクトは画像URLを取得するために `.generate_url()` を使用する。`.url` 属性は特定の画像タイプ（例：サムネイル）に対してのみ設定される。
 
-## 视频生成
+## ビデオ生成
 
-根据文本提示生成短视频片段：
+テキストプロンプトから短いビデオクリップを生成する：
 
 ```python
 video = coll.generate_video(
@@ -54,23 +54,23 @@ stream_url = video.generate_stream()
 video.play()
 ```
 
-### generate\_video 参数
+### generate\_videoのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | 必需 | 要生成的视频的文本描述 |
-| `duration` | `int` | `5` | 持续时间（秒）（必须是整数值，5-8） |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `prompt` | `str` | 必須 | 生成するビデオのテキスト説明 |
+| `duration` | `int` | `5` | 長さ（秒）（整数値、5〜8でなければならない） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-返回一个 `Video` 对象。生成的视频会自动添加到集合中，并且可以像任何上传的视频一样在时间线、搜索和编译中使用。
+`Video` オブジェクトを返す。生成されたビデオは自動的にコレクションに追加され、アップロードされたビデオと同様にタイムライン、検索、コンパイルで使用できる。
 
-## 音频生成
+## オーディオ生成
 
-VideoDB 为不同的音频类型提供了三种独立的方法。
+VideoDBは異なるオーディオタイプのために3つの独立したメソッドを提供する。
 
-### 音乐
+### 音楽
 
-根据文本描述生成背景音乐：
+テキスト説明からバックグラウンドミュージックを生成する：
 
 ```python
 music = coll.generate_music(
@@ -81,15 +81,15 @@ music = coll.generate_music(
 print(music.id)
 ```
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | 必需 | 音乐的文本描述 |
-| `duration` | `int` | `5` | 持续时间（秒） |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `prompt` | `str` | 必須 | 音楽のテキスト説明 |
+| `duration` | `int` | `5` | 長さ（秒） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-### 音效
+### 効果音
 
-生成特定的音效：
+特定の効果音を生成する：
 
 ```python
 sfx = coll.generate_sound_effect(
@@ -98,16 +98,16 @@ sfx = coll.generate_sound_effect(
 )
 ```
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | 必需 | 音效的文本描述 |
-| `duration` | `int` | `2` | 持续时间（秒） |
-| `config` | `dict` | `{}` | 附加配置 |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `prompt` | `str` | 必須 | 効果音のテキスト説明 |
+| `duration` | `int` | `2` | 長さ（秒） |
+| `config` | `dict` | `{}` | 追加設定 |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-### 语音（文本转语音）
+### 音声（テキスト読み上げ）
 
-从文本生成语音：
+テキストから音声を生成する：
 
 ```python
 voice = coll.generate_voice(
@@ -116,18 +116,18 @@ voice = coll.generate_voice(
 )
 ```
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `text` | `str` | 必需 | 要转换为语音的文本 |
-| `voice_name` | `str` | `"Default"` | 要使用的声音 |
-| `config` | `dict` | `{}` | 附加配置 |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `text` | `str` | 必須 | 音声に変換するテキスト |
+| `voice_name` | `str` | `"Default"` | 使用する音声 |
+| `config` | `dict` | `{}` | 追加設定 |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-所有三种音频方法都返回一个 `Audio` 对象，包含 `.id`、`.name`、`.length` 和 `.collection_id`。
+3つのオーディオメソッドはすべて `.id`、`.name`、`.length`、`.collection_id` を含む `Audio` オブジェクトを返す。
 
-## 文本生成（LLM 集成）
+## テキスト生成（LLM統合）
 
-使用 `coll.generate_text()` 来运行 LLM 分析。这是一个 **集合级** 方法 —— 直接在提示字符串中传递任何上下文（转录、描述）。
+`coll.generate_text()` を使用してLLM分析を実行する。これは**コレクションレベル**のメソッド——プロンプト文字列に任意のコンテキスト（トランスクリプト、説明）を直接渡す。
 
 ```python
 # Get transcript from a video first
@@ -142,24 +142,24 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-### generate\_text 参数
+### generate\_textのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | 必需 | 包含 LLM 上下文的提示 |
-| `model_name` | `str` | `"basic"` | 模型层级：`"basic"`、`"pro"` 或 `"ultra"` |
-| `response_type` | `str` | `"text"` | 响应格式：`"text"` 或 `"json"` |
+| `prompt` | `str` | 必須 | LLMコンテキストを含むプロンプト |
+| `model_name` | `str` | `"basic"` | モデル層：`"basic"`、`"pro"`、または `"ultra"` |
+| `response_type` | `str` | `"text"` | レスポンスフォーマット：`"text"` または `"json"` |
 
-返回一个 `dict`，带有一个 `output` 键。当 `response_type="text"` 时，`output` 是一个 `str`。当 `response_type="json"` 时，`output` 是一个 `dict`。
+`output` キーを持つ `dict` を返す。`response_type="text"` の場合、`output` は `str`。`response_type="json"` の場合、`output` は `dict`。
 
 ```python
 result = coll.generate_text(prompt="Summarize this", model_name="pro")
 print(result["output"])  # access the actual text/dict
 ```
 
-### 使用 LLM 分析场景
+### LLMを使用したシーン分析
 
-将场景提取与文本生成相结合：
+シーン抽出とテキスト生成を組み合わせる：
 
 ```python
 from videodb import SceneExtractionType
@@ -195,11 +195,11 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-## 配音和翻译
+## 吹き替えと翻訳
 
-### 为视频配音
+### ビデオの吹き替え
 
-使用集合方法将视频配音为另一种语言：
+コレクションメソッドを使用してビデオを別の言語に吹き替える：
 
 ```python
 dubbed_video = coll.dub_video(
@@ -210,19 +210,19 @@ dubbed_video = coll.dub_video(
 dubbed_video.play()
 ```
 
-### dub\_video 参数
+### dub\_videoのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `video_id` | `str` | 必需 | 要配音的视频 ID |
-| `language_code` | `str` | 必需 | 目标语言代码（例如，`"es"`、`"fr"`、`"de"`） |
-| `callback_url` | `str\|None` | `None` | 接收异步回调的 URL |
+| `video_id` | `str` | 必須 | 吹き替えるビデオのID |
+| `language_code` | `str` | 必須 | ターゲット言語コード（例：`"es"`、`"fr"`、`"de"`） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-返回一个 `Video` 对象，其中包含配音内容。
+吹き替えられたコンテンツを含む `Video` オブジェクトを返す。
 
-### 翻译转录
+### トランスクリプトの翻訳
 
-翻译视频的转录文本，无需配音：
+吹き替えなしでビデオのトランスクリプトを翻訳する：
 
 ```python
 translated = video.translate_transcript(
@@ -234,11 +234,11 @@ for entry in translated:
     print(entry)
 ```
 
-**支持的语言** 包括：`en`、`es`、`fr`、`de`、`it`、`pt`、`ja`、`ko`、`zh`、`hi`、`ar` 等。
+**サポートされる言語**：`en`、`es`、`fr`、`de`、`it`、`pt`、`ja`、`ko`、`zh`、`hi`、`ar` など。
 
-## 完整工作流示例
+## 完全なワークフロー例
 
-### 为视频生成旁白
+### ビデオのナレーション生成
 
 ```python
 import videodb
@@ -265,7 +265,7 @@ narration = coll.generate_voice(text=script)
 print(f"Narration audio: {narration.id}")
 ```
 
-### 根据提示生成缩略图
+### プロンプトからサムネイルを生成する
 
 ```python
 thumbnail = coll.generate_image(
@@ -275,7 +275,7 @@ thumbnail = coll.generate_image(
 print(f"Thumbnail URL: {thumbnail.generate_url()}")
 ```
 
-### 为视频添加生成的音乐
+### ビデオに生成された音楽を追加する
 
 ```python
 import videodb
@@ -301,7 +301,7 @@ stream_url = timeline.generate_stream()
 print(f"Video with music: {stream_url}")
 ```
 
-### 结构化 JSON 输出
+### 構造化JSON出力
 
 ```python
 transcript_text = video.get_transcript_text()
@@ -320,12 +320,12 @@ print(result["output"]["summary"])
 print(result["output"]["topics"])
 ```
 
-## 提示
+## ヒント
 
-* **生成的媒体是持久性的**：所有生成的内容都存储在您的集合中，并且可以重复使用。
-* **三种音频方法**：使用 `generate_music()` 生成背景音乐，`generate_sound_effect()` 生成音效，`generate_voice()` 进行文本转语音。没有统一的 `generate_audio()` 方法。
-* **文本生成是集合级的**：`coll.generate_text()` 不会自动访问视频内容。使用 `video.get_transcript_text()` 获取转录文本，并将其传递到提示中。
-* **模型层级**：`"basic"` 速度最快，`"pro"` 是平衡选项，`"ultra"` 质量最高。对于大多数分析任务，使用 `"pro"`。
-* **组合生成类型**：生成图像用于叠加、生成音乐用于背景、生成语音用于旁白，然后使用时间线进行组合（参见 [editor.md](editor.md)）。
-* **提示质量很重要**：描述性、具体的提示在所有生成类型中都能产生更好的结果。
-* **图像的宽高比**：从 `"1:1"`、`"9:16"`、`"16:9"`、`"4:3"` 或 `"3:4"` 中选择。
+* **生成されたメディアは永続的**：すべての生成されたコンテンツはコレクションに保存され、再利用できる。
+* **3つのオーディオメソッド**：バックグラウンドミュージックには `generate_music()`、効果音には `generate_sound_effect()`、テキスト読み上げには `generate_voice()` を使用する。統一された `generate_audio()` メソッドはない。
+* **テキスト生成はコレクションレベル**：`coll.generate_text()` はビデオコンテンツに自動的にアクセスしない。`video.get_transcript_text()` でトランスクリプトを取得し、プロンプトに渡す。
+* **モデル層**：`"basic"` が最速、`"pro"` がバランスの取れたオプション、`"ultra"` が最高品質。ほとんどの分析タスクには `"pro"` を使用する。
+* **生成タイプを組み合わせる**：オーバーレイ用に画像を生成し、バックグラウンド用に音楽を生成し、ナレーション用に音声を生成し、タイムラインを使用してそれらを組み合わせる（[editor.md](editor.md) を参照）。
+* **プロンプトの品質が重要**：説明的で具体的なプロンプトはすべての生成タイプでより良い結果を生む。
+* **画像のアスペクト比**：`"1:1"`、`"9:16"`、`"16:9"`、`"4:3"`、または `"3:4"` から選択する。

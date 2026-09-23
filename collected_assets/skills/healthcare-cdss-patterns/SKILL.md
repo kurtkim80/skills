@@ -1,46 +1,46 @@
 ---
 name: healthcare-cdss-patterns
-description: 临床决策支持系统（CDSS）开发模式。药物相互作用检查、剂量验证、临床评分（NEWS2、qSOFA）、警报严重性分类以及集成到电子病历工作流程中。
+description: 臨床意思決定支援システム（CDSS）パターン、医学的推論、およびエビデンスベースの実装。
 origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
 version: "1.0.0"
 ---
 
-# 医疗CDSS开发模式
+# Healthcare CDSS Development Patterns
 
-构建可集成至EMR工作流的临床决策支持系统的模式。CDSS模块关乎患者安全——对假阴性零容忍。
+Patterns for building Clinical Decision Support Systems that integrate into EMR workflows. CDSS modules are patient safety critical — zero tolerance for false negatives.
 
-## 适用场景
+## When to Use
 
-* 实现药物相互作用检查
-* 构建剂量验证引擎
-* 实现临床评分系统（NEWS2、qSOFA、APACHE、GCS）
-* 设计异常临床值警报系统
-* 构建带安全校验的用药医嘱录入
-* 结合临床上下文解读检验结果
+- Implementing drug interaction checking
+- Building dose validation engines
+- Implementing clinical scoring systems (NEWS2, qSOFA, APACHE, GCS)
+- Designing alert systems for abnormal clinical values
+- Building medication order entry with safety checks
+- Integrating lab result interpretation with clinical context
 
-## 工作原理
+## How It Works
 
-CDSS引擎是一个**无副作用的纯函数库**。输入临床数据，输出警报。这使得它完全可测试。
+The CDSS engine is a **pure function library with zero side effects**. Input clinical data, output alerts. This makes it fully testable.
 
-三个核心模块：
+Three primary modules:
 
-1. **`checkInteractions(newDrug, currentMeds, allergies)`** — 检查新药物与现有用药及已知过敏的冲突。返回按严重程度排序的`InteractionAlert[]`。使用`DrugInteractionPair`数据模型。
-2. **`validateDose(drug, dose, route, weight, age, renalFunction)`** — 根据体重、年龄和肾功能调整规则验证处方剂量。返回`DoseValidationResult`。
-3. **`calculateNEWS2(vitals)`** — 基于`NEWS2Input`计算国家早期预警评分2。返回包含总分、风险等级和升级指导的`NEWS2Result`。
+1. **`checkInteractions(newDrug, currentMeds, allergies)`** — Checks a new drug against current medications and known allergies. Returns severity-sorted `InteractionAlert[]`. Uses `DrugInteractionPair` data model.
+2. **`validateDose(drug, dose, route, weight, age, renalFunction)`** — Validates a prescribed dose against weight-based, age-adjusted, and renal-adjusted rules. Returns `DoseValidationResult`.
+3. **`calculateNEWS2(vitals)`** — National Early Warning Score 2 from `NEWS2Input`. Returns `NEWS2Result` with total score, risk level, and escalation guidance.
 
 ```
 EMR UI
-  ↓ (用户输入数据)
-CDSS 引擎（纯函数，无副作用）
-  ├── 药物相互作用检查器
-  ├── 剂量验证器
-  ├── 临床评分（NEWS2、qSOFA 等）
-  └── 警报分类器
-  ↓ (返回警报)
-EMR UI（内联显示警报，严重时阻止操作）
+  ↓ (user enters data)
+CDSS Engine (pure functions, no side effects)
+  ├── Drug Interaction Checker
+  ├── Dose Validator
+  ├── Clinical Scoring (NEWS2, qSOFA, etc.)
+  └── Alert Classifier
+  ↓ (returns alerts)
+EMR UI (displays alerts inline, blocks if critical)
 ```
 
-### 药物相互作用检查
+### Drug Interaction Checking
 
 ```typescript
 interface DrugInteractionPair {
@@ -77,9 +77,9 @@ function checkInteractions(
 }
 ```
 
-相互作用对必须**双向**：若药物A与药物B相互作用，则药物B与药物A相互作用。
+Interaction pairs must be **bidirectional**: if Drug A interacts with Drug B, then Drug B interacts with Drug A.
 
-### 剂量验证
+### Dose Validation
 
 ```typescript
 interface DoseValidationResult {
@@ -146,7 +146,7 @@ function validateDose(
 }
 ```
 
-### 临床评分：NEWS2
+### Clinical Scoring: NEWS2
 
 ```typescript
 interface NEWS2Input {
@@ -162,19 +162,19 @@ interface NEWS2Result {
 }
 ```
 
-评分表必须严格符合皇家内科医师学会规范。
+Scoring tables must match the Royal College of Physicians specification exactly.
 
-### 警报严重程度与UI行为
+### Alert Severity and UI Behavior
 
-| 严重程度 | UI行为 | 临床医生操作要求 |
-|----------|--------|------------------|
-| 危急 | 阻止操作。不可关闭的模态框。红色。 | 必须记录覆盖原因才能继续 |
-| 主要 | 行内警告横幅。橙色。 | 必须确认后才能继续 |
-| 次要 | 行内信息提示。黄色。 | 仅需知晓，无需操作 |
+| Severity | UI Behavior | Clinician Action Required |
+|----------|-------------|--------------------------|
+| Critical | Block action. Non-dismissable modal. Red. | Must document override reason to proceed |
+| Major | Warning banner inline. Orange. | Must acknowledge before proceeding |
+| Minor | Info note inline. Yellow. | Awareness only, no action required |
 
-危急警报**绝不能**自动关闭或实现为Toast通知。覆盖原因必须存储在审计追踪中。
+Critical alerts must NEVER be auto-dismissed or implemented as toast notifications. Override reasons must be stored in the audit trail.
 
-### 测试CDSS（对假阴性零容忍）
+### Testing CDSS (Zero Tolerance for False Negatives)
 
 ```typescript
 describe('CDSS — Patient Safety', () => {
@@ -200,20 +200,20 @@ describe('CDSS — Patient Safety', () => {
 });
 ```
 
-通过标准：100%。一次遗漏的相互作用即构成患者安全事件。
+Pass criteria: 100%. A single missed interaction is a patient safety event.
 
-### 反模式
+### Anti-Patterns
 
-* 使CDSS检查变为可选或可跳过且无记录原因
-* 将相互作用检查实现为Toast通知
-* 使用`any`类型处理药物或临床数据
-* 硬编码相互作用对而非使用可维护的数据结构
-* 静默捕获CDSS引擎错误（必须大声暴露失败）
-* 在体重数据缺失时跳过基于体重的验证（必须阻止，而非通过）
+- Making CDSS checks optional or skippable without documented reason
+- Implementing interaction checks as toast notifications
+- Using `any` types for drug or clinical data
+- Hardcoding interaction pairs instead of using a maintainable data structure
+- Silently catching errors in CDSS engine (must surface failures loudly)
+- Skipping weight-based validation when weight is not available (must block, not pass)
 
-## 示例
+## Examples
 
-### 示例1：药物相互作用检查
+### Example 1: Drug Interaction Check
 
 ```typescript
 const alerts = checkInteractions('warfarin', ['aspirin', 'metformin'], ['penicillin']);
@@ -221,7 +221,7 @@ const alerts = checkInteractions('warfarin', ['aspirin', 'metformin'], ['penicil
 //    message: 'Increased bleeding risk', recommendation: 'Avoid combination' }]
 ```
 
-### 示例2：剂量验证
+### Example 2: Dose Validation
 
 ```typescript
 const ok = validateDose('paracetamol', 1000, 'oral', 70, 45);
@@ -234,7 +234,7 @@ const noWeight = validateDose('gentamicin', 300, 'iv');
 // { valid: false, factors: ['weight_missing'] }
 ```
 
-### 示例3：NEWS2评分
+### Example 3: NEWS2 Scoring
 
 ```typescript
 const result = calculateNEWS2({

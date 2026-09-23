@@ -1,24 +1,26 @@
 ---
 name: fal-ai-media
-description: 通过 fal.ai MCP 实现统一的媒体生成——图像、视频和音频。涵盖文本到图像（Nano Banana）、文本/图像到视频（Seedance、Kling、Veo 3）、文本到语音（CSM-1B），以及视频到音频（ThinkSound）。当用户想要使用 AI 生成图像、视频或音频时使用。
+description: fal.ai MCPによる統合メディア生成（画像、動画、音声）。テキストから画像（Nano Banana）、テキスト/画像から動画（Seedance、Kling、Veo 3）、テキストから音声（CSM-1B）、動画から音声（ThinkSound）をカバーします。ユーザーがAIで画像、動画、音声を生成したい場合に使用します。
 origin: ECC
 ---
 
-# fal.ai 媒体生成
+# fal.aiメディア生成
 
-通过 MCP 使用 fal.ai 模型生成图像、视频和音频。
+> **変化が早いスキル。** fal.aiのモデルID、価格、入力、MCPツール名は急速に変わります。特定のモデル、パラメーター、出力形式、またはコストを約束する前に、現在のモデルメタデータを検索または取得してください。
 
-## 何时激活
+MCPを通じてfal.aiモデルを使用して画像、動画、音声を生成します。
 
-* 用户希望根据文本提示生成图像
-* 根据文本或图像创建视频
-* 生成语音、音乐或音效
-* 任何媒体生成任务
-* 用户提及“生成图像”、“创建视频”、“文本转语音”、“制作缩略图”或类似表述
+## アクティベートするタイミング
 
-## MCP 要求
+- ユーザーがテキストプロンプトから画像を生成したい場合
+- テキストまたは画像から動画を作成する場合
+- 音声、音楽、または効果音を生成する場合
+- あらゆるメディア生成タスク
+- ユーザーが「generate image」「create video」「text to speech」「make a thumbnail」などと言う場合
 
-必须配置 fal.ai MCP 服务器。添加到 `~/.claude.json`：
+## MCP要件
+
+fal.ai MCPサーバーを設定する必要があります。`~/.claude.json`に追加してください:
 
 ```json
 "fal-ai": {
@@ -28,35 +30,33 @@ origin: ECC
 }
 ```
 
-在 [fal.ai](https://fal.ai) 获取 API 密钥。
+APIキーは[fal.ai](https://fal.ai)で取得してください。
 
-## MCP 工具
+## MCPツール
 
-fal.ai MCP 提供以下工具：
+fal.ai MCPは以下のツールを提供します:
+- `search` — キーワードで利用可能なモデルを検索
+- `find` — モデルの詳細とパラメーターを取得
+- `generate` — パラメーターでモデルを実行
+- `result` — 非同期生成のステータスを確認
+- `status` — ジョブステータスを確認
+- `cancel` — 実行中のジョブをキャンセル
+- `estimate_cost` — 生成コストを見積もる
+- `models` — 人気モデルの一覧表示
+- `upload` — 入力として使用するファイルをアップロード
 
-* `search` — 通过关键词查找可用模型
-* `find` — 获取模型详情和参数
-* `generate` — 使用参数运行模型
-* `result` — 检查异步生成状态
-* `status` — 检查作业状态
-* `cancel` — 取消正在运行的作业
-* `estimate_cost` — 估算生成成本
-* `models` — 列出热门模型
-* `upload` — 上传文件用作输入
+---
 
-***
+## 画像生成
 
-## 图像生成
-
-### Nano Banana 2（快速）
-
-最适合：快速迭代、草稿、文生图、图像编辑。
+### Nano Banana 2（高速）
+ベストユースケース: クイックイテレーション、ドラフト、テキストから画像、画像編集。
 
 ```
 generate(
   app_id: "fal-ai/nano-banana-2",
   input_data: {
-    "prompt": "未来主义日落城市景观，赛博朋克风格",
+    "prompt": "a futuristic cityscape at sunset, cyberpunk style",
     "image_size": "landscape_16_9",
     "num_images": 1,
     "seed": 42
@@ -64,15 +64,14 @@ generate(
 )
 ```
 
-### Nano Banana Pro（高保真）
-
-最适合：生产级图像、写实感、排版、详细提示。
+### Nano Banana Pro（高忠実度）
+ベストユースケース: 本番画像、リアリズム、タイポグラフィ、詳細なプロンプト。
 
 ```
 generate(
   app_id: "fal-ai/nano-banana-pro",
   input_data: {
-    "prompt": "专业产品照片，无线耳机置于大理石表面，影棚灯光",
+    "prompt": "professional product photo of wireless headphones on marble surface, studio lighting",
     "image_size": "square",
     "num_images": 1,
     "guidance_scale": 7.5
@@ -80,25 +79,24 @@ generate(
 )
 ```
 
-### 常见图像参数
+### 一般的な画像パラメーター
 
-| 参数 | 类型 | 选项 | 说明 |
+| パラメーター | 型 | オプション | 備考 |
 |-------|------|---------|-------|
-| `prompt` | 字符串 | 必需 | 描述您想要的内容 |
-| `image_size` | 字符串 | `square`、`portrait_4_3`、`landscape_16_9`、`portrait_16_9`、`landscape_4_3` | 宽高比 |
-| `num_images` | 数字 | 1-4 | 生成数量 |
-| `seed` | 数字 | 任意整数 | 可重现性 |
-| `guidance_scale` | 数字 | 1-20 | 遵循提示的紧密程度（值越高越贴近字面） |
+| `prompt` | string | 必須 | 生成したいものを説明する |
+| `image_size` | string | `square`、`portrait_4_3`、`landscape_16_9`、`portrait_16_9`、`landscape_4_3` | アスペクト比 |
+| `num_images` | number | 1-4 | 生成する数 |
+| `seed` | number | 任意の整数 | 再現性 |
+| `guidance_scale` | number | 1-20 | プロンプトへの追従度（高いほど文字通り） |
 
-### 图像编辑
-
-使用 Nano Banana 2 并输入图像进行修复、扩展或风格迁移：
+### 画像編集
+インペインティング、アウトペインティング、またはスタイル転送にNano Banana 2を入力画像と共に使用:
 
 ```
-# 首先上传源图像
+# まずソース画像をアップロード
 upload(file_path: "/path/to/image.png")
 
-# 然后使用图像输入进行生成
+# 次に画像入力で生成
 generate(
   app_id: "fal-ai/nano-banana-2",
   input_data: {
@@ -109,13 +107,12 @@ generate(
 )
 ```
 
-***
+---
 
-## 视频生成
+## 動画生成
 
-### Seedance 1.0 Pro（字节跳动）
-
-最适合：文生视频、图生视频，具有高运动质量。
+### Seedance 1.0 Pro（ByteDance）
+ベストユースケース: テキストから動画、高モーション品質の画像から動画。
 
 ```
 generate(
@@ -130,14 +127,13 @@ generate(
 ```
 
 ### Kling Video v3 Pro
-
-最适合：文生/图生视频，带原生音频生成。
+ベストユースケース: ネイティブ音声生成付きのテキスト/画像から動画。
 
 ```
 generate(
   app_id: "fal-ai/kling-video/v3/pro",
   input_data: {
-    "prompt": "海浪拍打着岩石海岸，乌云密布",
+    "prompt": "ocean waves crashing on a rocky coast, dramatic clouds",
     "duration": "5s",
     "aspect_ratio": "16:9"
   }
@@ -145,22 +141,20 @@ generate(
 ```
 
 ### Veo 3（Google DeepMind）
-
-最适合：带生成声音的视频，高视觉质量。
+ベストユースケース: 生成された音声付き、高視覚品質の動画。
 
 ```
 generate(
   app_id: "fal-ai/veo-3",
   input_data: {
-    "prompt": "夜晚熙熙攘攘的东京街头市场，霓虹灯招牌，人群喧嚣",
+    "prompt": "a bustling Tokyo street market at night, neon signs, crowd noise",
     "aspect_ratio": "16:9"
   }
 )
 ```
 
-### 图生视频
-
-从现有图像开始：
+### 画像から動画
+既存の画像から開始:
 
 ```
 generate(
@@ -173,23 +167,22 @@ generate(
 )
 ```
 
-### 视频参数
+### 動画パラメーター
 
-| 参数 | 类型 | 选项 | 说明 |
+| パラメーター | 型 | オプション | 備考 |
 |-------|------|---------|-------|
-| `prompt` | 字符串 | 必需 | 描述视频内容 |
-| `duration` | 字符串 | `"5s"`、`"10s"` | 视频长度 |
-| `aspect_ratio` | 字符串 | `"16:9"`、`"9:16"`、`"1:1"` | 帧比例 |
-| `seed` | 数字 | 任意整数 | 可重现性 |
-| `image_url` | 字符串 | URL | 用于图生视频的源图像 |
+| `prompt` | string | 必須 | 動画を説明する |
+| `duration` | string | `"5s"`、`"10s"` | 動画の長さ |
+| `aspect_ratio` | string | `"16:9"`、`"9:16"`、`"1:1"` | フレーム比率 |
+| `seed` | number | 任意の整数 | 再現性 |
+| `image_url` | string | URL | 画像から動画用のソース画像 |
 
-***
+---
 
-## 音频生成
+## 音声生成
 
-### CSM-1B（对话语音）
-
-文本转语音，具有自然、对话式的音质。
+### CSM-1B（会話的スピーチ）
+自然な会話品質のテキストから音声。
 
 ```
 generate(
@@ -201,9 +194,8 @@ generate(
 )
 ```
 
-### ThinkSound（视频转音频）
-
-根据视频内容生成匹配的音频。
+### ThinkSound（動画から音声）
+動画コンテンツからマッチする音声を生成。
 
 ```
 generate(
@@ -215,9 +207,8 @@ generate(
 )
 ```
 
-### ElevenLabs（通过 API，无 MCP）
-
-如需专业的语音合成，直接使用 ElevenLabs：
+### ElevenLabs（API経由、MCPなし）
+プロフェッショナルな音声合成には、ElevenLabsを直接使用:
 
 ```python
 import os
@@ -239,26 +230,25 @@ with open("output.mp3", "wb") as f:
     f.write(resp.content)
 ```
 
-### VideoDB 生成式音频
-
-如果配置了 VideoDB，使用其生成式音频：
+### VideoDB生成音声
+VideoDBが設定されている場合、その生成音声を使用:
 
 ```python
-# Voice generation
+# 音声生成
 audio = coll.generate_voice(text="Your narration here", voice="alloy")
 
-# Music generation
+# 音楽生成
 music = coll.generate_music(prompt="upbeat electronic background music", duration=30)
 
-# Sound effects
+# 効果音
 sfx = coll.generate_sound_effect(prompt="thunder crack followed by rain")
 ```
 
-***
+---
 
-## 成本估算
+## コスト見積もり
 
-生成前，检查估算成本：
+生成前に見積もりコストを確認:
 
 ```
 estimate_cost(
@@ -271,9 +261,9 @@ estimate_cost(
 )
 ```
 
-## 模型发现
+## モデル探索
 
-查找特定任务的模型：
+特定のタスクに対するモデルを検索:
 
 ```
 search(query: "text to video")
@@ -281,16 +271,16 @@ find(endpoint_ids: ["fal-ai/seedance-1-0-pro"])
 models()
 ```
 
-## 提示
+## ヒント
 
-* 在迭代提示时，使用 `seed` 以获得可重现的结果
-* 先用低成本模型（Nano Banana 2）进行提示迭代，然后切换到 Pro 版进行最终生成
-* 对于视频，保持提示描述性但简洁——聚焦于运动和场景
-* 图生视频比纯文生视频能产生更可控的结果
-* 在运行昂贵的视频生成前，检查 `estimate_cost`
+- プロンプトを繰り返す際の再現性のために`seed`を使用する
+- プロンプトのイテレーションには低コストのモデル（Nano Banana 2）から始め、最終版ではProに切り替える
+- 動画の場合、プロンプトはモーションとシーンに焦点を当てて説明的だが簡潔に
+- 画像から動画は純粋なテキストから動画よりも制御された結果を生成する
+- 高コストの動画生成を実行する前に`estimate_cost`を確認する
 
-## 相关技能
+## 関連スキル
 
-* `videodb` — 视频处理、编辑和流媒体
-* `video-editing` — AI 驱动的视频编辑工作流
-* `content-engine` — 社交媒体平台内容创作
+- `videodb` — 動画処理、編集、ストリーミング
+- `video-editing` — AI駆動の動画編集ワークフロー
+- `content-engine` — ソーシャルプラットフォーム向けコンテンツ作成

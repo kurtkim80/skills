@@ -1,181 +1,185 @@
 ---
 name: configure-ecc
-description: 在 Claude Code、Codex 或 Kimi 内引导 ECC 安装、更新或重新配置，同时严格遵守各家工具真实的插件、范围和 Hook 能力。
+description: Claude Code、Codex、Kimi 内で ECC のインストール、更新、再設定を案内し、各ハーネスが実際に備えるプラグイン、スコープ、フック機能を守ります。
 metadata:
   origin: ECC
 ---
 
-# 配置 Everything Claude Code
+# Everything Claude Code の設定
 
-在当前工具内运行对话式向导：先检查，只收集受支持的选项，预览，只确认
-一次，以非交互方式执行，验证，最后才显示欢迎信息。不要把 ECC 克隆到
-临时目录，也不要手动复制插件组件。
+現在のハーネス内で対話式ウィザードを実行します。最初にインベントリを調べ、対応する選択肢だけを
+収集し、プレビュー後に 1 回だけ確認し、非対話で適用・検証します。ウェルカム表示は成功後だけです。
+ECC を一時ディレクトリへ clone したり、プラグインを手作業でコピーしたりしないでください。
 
-在用户自己操作的终端中，规范入口是 `ecc setup` 和 `npx ecc-universal setup`。
-在工具内请改用下方参数完整的非交互命令。
+ユーザー自身が操作するターミナルの正規エントリは `ecc setup` と `npx ecc-universal setup` です。
+ハーネス内では、代わりに以下の明示的な非対話コマンドを使います。
 
-## 按当前工具分流
+## 現在のハーネスで分岐
 
-- Claude Code：使用下面完整的范围与 Hook 向导。
-- Codex：使用 Codex 原生插件生命周期；不要提供 Claude 范围，也不要映射
-  Claude 的四种 ECC Hook 配置。
-- Kimi：把项目表面安装到 `./.kimi-code`；Kimi 不支持 ECC 的 Claude 生命周期
-  Hook 配置。
-- 无法确定工具时，先说明检测依据，再询问要配置哪一个，不要直接修改。
+- Claude Code では、以下の完全なスコープ/フックウィザードを使います。
+- Codex では Codex ネイティブのプラグインライフサイクルを使います。Claude のスコープを提示したり、
+  Claude の ECC フック 4 段階を Codex に対応付けたりしません。
+- Kimi ではプロジェクトサーフェスを `./.kimi-code` に導入します。Kimi は ECC の Claude ライフサイクル
+  フックプロファイルに対応しません。
+- ハーネスを特定できない場合は、検出根拠を示し、変更コマンドの前に対象を質問します。
 
-此技能是安装后的重新配置路径，无法拦截或取代提供商内置的首次安装界面。
+このスキルは導入後の再設定経路です。プロバイダー組み込みの初回導入 UI を横取り、または代替できません。
 
-## Claude Code：运行完整对话式向导
+## Claude Code: 完全な対話式ウィザード
 
-### 1. 只读检查
+### 1. 変更せずにインベントリを確認
 
-运行以下两条命令，总结 ECC 的安装范围、启用状态和 marketplace 来源：
+両方のコマンドを実行し、ECC の導入スコープ、有効状態、marketplace ソースを要約します。
 
 ```bash
 claude plugin list --json
 claude plugin marketplace list --json
 ```
 
-只有一个现有 `ecc@ecc` 时，将本次视为重新配置。不要把 Claude 提供商所有的
-“Open home page”控件当作安装证据。若 setup 报告多个 ECC 范围、旧版或手动
-安装、配置损坏或 marketplace 冲突，请停止并原样报告恢复建议，不要猜测要删除哪个。
+`ecc@ecc` が 1 つのみ既存する場合は再設定として扱います。Claude が所有する
+"Open home page" コントロールをインストールの根拠にしません。setup が複数の ECC スコープ、
+旧式/手動導入、不正な設定、marketplace 衝突を報告したら停止し、返された復旧方法を示します。
+削除対象を推測しません。
 
-### 2. 只收集两个选择
+### 2. 2 つの選択だけを収集
 
-只询问一次安装范围，并要求且仅要求一个值：
+スコープについて 1 回だけ質問し、必ず 1 つの値を選びます。
 
 - `user | project | local`
-- `user` 对当前用户全局可用。
-- `project` 通过仓库设置共享。
-- `local` 仅当前项目私有。
+- `user` はこのユーザーの全プロジェクトで使えます。
+- `project` はリポジトリ設定で共有されます。
+- `local` は現在のプロジェクトのみに非公開です。
 
-界面中只能把选中的一个范围显示为已选或正在安装。如果用户从唯一现有范围
-切换到另一范围，说明这是范围迁移，并在下方命令中加入 `--move-scope`。
+選択済みまたはインストール中の表示は、実際に選んだ 1 スコープだけにします。唯一の既存スコープと異なる
+値を選んだら、スコープ移行であると説明し、以下のコマンドに `--move-scope` を含めます。
 
-只询问一次 Hook 模式，并要求且仅要求一个值：
+フックモードについて 1 回だけ質問し、必ず 1 つの値を選びます。
 
 - `off | minimal | standard | strict`
-- `off` 保留技能和命令，但关闭 ECC Hook 自动化。
-- `minimal` 只启用最轻量的生命周期和安全自动化。
-- `standard` 平衡质量和安全自动化。
-- `strict` 启用最严格的检查和提醒。
+- `off` はスキルとコマンドを残し、ECC フック自動化を無効にします。
+- `minimal` は最軽量のライフサイクルと安全自動化のみを有効にします。
+- `standard` は品質と安全のバランスを取ります。
+- `strict` は最も強いチェックとリマインダーを有効にします。
 
-Hook 偏好是个人 Claude 插件配置，不会跟随所选安装范围。
+フック設定は個人の Claude プラグイン設定であり、導入スコープには追従しません。
 
-### 3. 预览并只确认一次
+### 3. プレビューし、1 回だけ確認
 
-优先使用插件自带的 setup 脚本。替换两个已选值，只在范围迁移时加入
-`--move-scope`：
+プラグイン内蔵 setup スクリプトを優先します。2 つの選択値を代入し、スコープ移行の場合だけ
+`--move-scope` を含めます。
 
 ```bash
 node "$CLAUDE_PLUGIN_ROOT/scripts/setup.js" --mode claude-plugin \
   --scope <scope> --hooks <hooks> [--move-scope] --dry-run --json
 ```
 
-如果 `$CLAUDE_PLUGIN_ROOT` 不可用，使用已发布的 npm 包：
+`$CLAUDE_PLUGIN_ROOT` がない場合は公開 npm パッケージを使います。
 
 ```bash
 npx --yes --package ecc-universal ecc setup --mode claude-plugin \
   --scope <scope> --hooks <hooks> [--move-scope] --dry-run --json
 ```
 
-只显示一次确认摘要，内容包含计划操作、唯一范围、唯一 Hook 模式、marketplace 操作和
-任何从来源到目标的迁移。只问一个是/否问题。不要通过工具的 Shell 调用不带参数的
-交互式 `ecc setup`，因为该 Shell 通常不是 TTY。
+確認サマリーは 1 回だけ表示します。予定アクション、1 スコープ、1 フックモード、marketplace アクション、
+および移行元から移行先を含め、yes/no を 1 回だけ質問します。ハーネスの Shell は通常非 TTY のため、
+そこで bare な対話式 `ecc setup` を実行しません。
 
-### 4. 应用明确选择
+### 4. 明示した選択を適用
 
-确认后，使用同一路径但去掉 `--dry-run`。保留每个明确选择，并请求 JSON：
+確認後、同じ経路を `--dry-run` なしで再実行します。全選択を明示し、JSON で成功を判定します。
 
 ```bash
 node "$CLAUDE_PLUGIN_ROOT/scripts/setup.js" --mode claude-plugin \
   --scope <scope> --hooks <hooks> [--move-scope] --yes --json
 ```
 
-备用命令：
+フォールバック:
 
 ```bash
 npx --yes --package ecc-universal ecc setup --mode claude-plugin \
   --scope <scope> --hooks <hooks> [--move-scope] --yes --json
 ```
 
-### 5. 先验证，再显示欢迎信息
+### 5. 検証後にウェルカムを表示
 
-必须得到零退出状态，且 setup 结果中的 `scope` 和 `hooks` 必须等于所选值。然后独立运行：
+終了コードが 0 であり、setup 結果の `scope` と `hooks` が選択値と一致することを必須とします。
+その後、独立して実行します。
 
 ```bash
 claude plugin list --json
 ```
 
-只有在所选范围中恰好存在一个已启用的 `ecc@ecc` 条目时才继续。如果
-`$CLAUDE_PLUGIN_ROOT` 可用，把成功 setup 的 `action`（`installed`、`updated`、
-`migrated`、`resumed` 或 `already-migrated`）传给内置渲染器：
+選択スコープに有効な `ecc@ecc` が正確に 1 件ある場合のみ続行します。`$CLAUDE_PLUGIN_ROOT` があるときは、
+成功した setup の `action`（`installed`、`updated`、`migrated`、`resumed`、
+`already-migrated`）を内蔵レンダラーへ渡します。
 
-调用前必须确认提供方报告的版本匹配 `scripts/lib/terminal-welcome.js` 中的
-`ECC_VERSION_PATTERN`。异常版本文本应被拒绝，不得插入 shell 命令。
+呼び出し前に、プロバイダーが報告したバージョンが
+`scripts/lib/terminal-welcome.js` の `ECC_VERSION_PATTERN` に一致することを
+確認します。予期しない値は shell に補間せず拒否してください。
 
 ```bash
 node -e 'const { renderTerminalWelcome } = require(process.env.CLAUDE_PLUGIN_ROOT + "/scripts/lib/terminal-welcome"); process.stdout.write(renderTerminalWelcome({ action: process.argv[1], version: process.argv[2], color: process.stdout.isTTY }));' "<action>" "<installed-version>"
 ```
 
-欢迎信息只渲染一次。失败、预览、取消、范围或 Hook 不匹配、无法验证时都不显示；
-改为报告错误和恢复方法。验证完成后，提醒用户运行 `/reload-plugins` 或重启 Claude Code。
+ウェルカムは 1 回だけ表示します。失敗、dry-run、キャンセル、スコープ/フック不一致、検証不能の場合は
+表示せず、エラーと復旧手順を報告します。検証後は `/reload-plugins` または Claude Code の再起動を案内します。
 
-## Codex：使用原生插件生命周期
+## Codex: ネイティブプラグインライフサイクル
 
-使用 `codex plugin marketplace list --json` 和 `codex plugin list --available --json` 检查。
-Codex 的原生插件命令没有 Claude 式 `user | project | local` 选择器。不要询问 Claude 范围或
-Hook 四档模式。Codex 原生插件支持提供商专用 Hook，但 Codex 会要求用户明确信任。让 Codex
-显示该信任决定；不要声称 Claude 的四种配置可以映射到 Codex。
+`codex plugin marketplace list --json` と `codex plugin list --available --json` で確認します。
+Codex ネイティブのプラグインコマンドには Claude 式 `user | project | local` 選択はありません。
+Claude のスコープ/フック 4 段階は質問しません。Codex ネイティブプラグインはプロバイダー固有フックに対応しますが、
+Codex はその明示的な信頼を求めます。Codex にその信頼判断を表示させ、Claude の 4 プロファイルが Codex に対応すると表現しません。
 
-如果缺少 ECC marketplace，请添加；否则刷新快照：
+ECC marketplace がない場合は追加し、既存ならスナップショットを更新します。
 
 ```bash
 codex plugin marketplace add affaan-m/ECC
 codex plugin marketplace upgrade ecc --json
 ```
 
-只确认一次，然后安装或幂等刷新已安装缓存，并验证：
+1 回だけ確認し、インストールまたは導入済みキャッシュの再現可能な更新を行い、検証します。
 
 ```bash
 codex plugin add ecc@ecc --json
 codex plugin list --json
 ```
 
-只有 JSON 报告 ECC 已安装并提供 `installedPath` 时才继续，然后渲染已验证组合包的欢迎信息：
+JSON が ECC を導入済みと報告し、`installedPath` を提供した場合のみ続行し、検証済みバンドルからウェルカムを表示します。
 
-`installedPath` 只能使用 Codex JSON 返回的原始绝对路径，并拒绝控制字符。版本必须通过
-`ECC_VERSION_PATTERN` 验证。请使用下面的 argument array 直接调用 `node`；这是工具 API
-调用，不是 shell 命令：
+`installedPath` は Codex JSON が返した絶対パスそのものだけを使い、制御文字を
+拒否します。バージョンは `ECC_VERSION_PATTERN` で検証します。`node` を次の
+argument array で直接呼び出してください。これは shell コマンドではなく、ツール API 呼び出しです。
 
 ```text
 ["<installedPath>/scripts/welcome.js", "--action", "configured", "--version", "<installed-version>"]
 ```
 
-如果当前工具无法把可执行文件与 argument array 分开传递，请跳过欢迎信息。不得使用 Codex
-JSON 中的值构造 shell 命令。
+現在のハーネスが実行ファイルと argument array を分けて渡せない場合は、ウェルカム表示を
+スキップします。Codex JSON の値から shell コマンドを組み立ててはいけません。
 
-绝不要声称 Claude 的 `off | minimal | standard | strict` 配置已应用到 Codex。
+Claude の `off | minimal | standard | strict` が Codex に適用されたとは表現しません。
 
-## Kimi：安装项目表面
+## Kimi: プロジェクトサーフェス
 
-确认前说明能力摘要：目标为 `./.kimi-code`；ECC 生命周期 Hook 为 `hooks=unsupported`。
-不要询问 Claude 范围或 Hook 模式。先预览：
+確認前に機能サマリーを示します。導入先は `./.kimi-code`、ECC ライフサイクルフックは
+`hooks=unsupported` です。Claude のスコープ/フックモードを質問しません。まずプレビューします。
 
 ```bash
 npx --yes --package ecc-universal ecc install --profile core --target kimi --dry-run
 ```
 
-只针对该项目目标确认一次，然后执行去掉 `--dry-run` 的同一命令。使用以下命令验证：
+このプロジェクト導入先について 1 回だけ確認し、`--dry-run` を除いた同一コマンドを適用します。
+検証コマンド:
 
 ```bash
 npx --yes --package ecc-universal ecc doctor --target kimi
 ```
 
-只有 doctor 成功，且已安装的指令和技能仍位于 `./.kimi-code` 内时才运行：
+doctor が成功し、導入された指示とスキルが `./.kimi-code` 内に留まることを確認した後だけ実行します。
 
 ```bash
 npx --yes --package ecc-universal ecc welcome --action configured
 ```
 
-不要声称 Kimi 已安装或配置 ECC 生命周期 Hook。
+Kimi が ECC ライフサイクルフックを導入または設定したとは表現しません。

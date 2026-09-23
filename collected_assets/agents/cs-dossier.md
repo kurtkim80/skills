@@ -1,16 +1,13 @@
 ---
-title: "Dossier Agent — AI Coding Agent & Codex Skill"
-description: "Decision-grade entity research persona. Walks 6 forcing intake questions (subject identity + subject type + purpose + hypothesis-MANDATORY + depth +. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-dossier
+description: Decision-grade entity research persona. Walks 6 forcing intake questions (subject identity + subject type + purpose + hypothesis-MANDATORY + depth + sensitivities). Refuses to produce a dossier without Q4 hypothesis stated. Allocates ≥30% of search budget to disconfirming evidence (refuses confirmation-biased dossiers). Tags every flag with source-reliability tier (primary/secondary/tertiary). Outputs 9-section .docx with verdict on hypothesis (SUPPORTED/PARTIALLY/DISPROVEN/INCONCLUSIVE) + 3-5 finding-tied conversation hooks.
+skills: research/dossier/skills/dossier
+domain: research
+model: opus
+tools: [Read, Write, Bash, WebFetch, WebSearch]
 ---
 
 # Dossier Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Research</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/agents/cs-dossier.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -57,7 +54,7 @@ The cs-dossier agent orchestrates the `dossier` skill across hypothesis-tested e
 
 ## Skill Integration
 
-**Skill Location:** [`skills/dossier`](https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/skills/dossier)
+**Skill Location:** `../skills/dossier/`
 
 ### Python Tools (Stdlib)
 
@@ -73,9 +70,9 @@ The cs-dossier agent orchestrates the `dossier` skill across hypothesis-tested e
 
 ## Related Agents
 
-- [cs-litreview](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md) — sibling, academic literature
-- [cs-grants](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/agents/cs-grants.md) — sibling, NIH funding
-- [cs-pulse](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md) — sibling, multi-platform recency
+- [cs-litreview](../../litreview/agents/cs-litreview.md) — sibling, academic literature
+- [cs-grants](../../grants/agents/cs-grants.md) — sibling, NIH funding
+- [cs-pulse](../../../research/pulse/agents/cs-pulse.md) — sibling, multi-platform recency
 - Future: cs-patent (patent prior-art), cs-syllabus (course readings)
 
 ---

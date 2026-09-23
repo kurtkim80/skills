@@ -1,9 +1,15 @@
 ---
-description: Top-level project-management router. Classifies a PM inquiry across 8 lanes (sprint/flow, portfolio health, Jira, Confluence, admin, templates, meetings, comms) with a deterministic script and forks context to the right sub-skill via the pm-skills orchestrator, returning a ≤200-word digest with a named owner and one grill challenge.
-argument-hint: "<PM inquiry: sprint health, project status, JQL, permissions, retro, comms, etc.>"
+title: "/cs-pm — Slash Command for AI Coding Agents"
+description: "Top-level project-management router. Classifies a PM inquiry across 8 lanes (sprint/flow, portfolio health, Jira, Confluence, admin, templates. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:pm — Project Management router
+# /cs-pm
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/project-management/commands/cs-pm.md">Source</a></span>
+</div>
+
 
 Route this inquiry through the `pm-skills` orchestrator:
 

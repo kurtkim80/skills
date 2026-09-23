@@ -1,24 +1,24 @@
 ---
 name: laravel-plugin-discovery
-description: 通过LaraPlugins.io MCP发现和评估Laravel包。当用户想要查找插件、检查包的健康状况或评估Laravel/PHP兼容性时使用。
+description: Laravel プラグイン検出、パッケージ管理、依存関係解決、およびサービスプロバイダ統合。
 origin: ECC
 ---
 
-# Laravel 插件发现
+# Laravel Plugin Discovery
 
-使用 LaraPlugins.io MCP 服务器查找、评估并选择健康的 Laravel 包。
+Find, evaluate, and choose healthy Laravel packages using the LaraPlugins.io MCP server.
 
-## 使用时机
+## When to Use
 
-* 用户想为特定功能（如 "auth"、"permissions"、"admin panel"）寻找 Laravel 包
-* 用户询问"我应该用什么包来做..."或"有没有用于...的 Laravel 包"
-* 用户想检查某个包是否仍在积极维护
-* 用户需要验证 Laravel 版本兼容性
-* 用户在将包添加到项目前想评估其健康状况
+- User wants to find Laravel packages for a specific feature (e.g. "auth", "permissions", "admin panel")
+- User asks "what package should I use for..." or "is there a Laravel package for..."
+- User wants to check if a package is actively maintained
+- User needs to verify Laravel version compatibility
+- User wants to assess package health before adding to a project
 
-## MCP 要求
+## MCP Requirement
 
-必须配置 LaraPlugins MCP 服务器。将其添加到您的 `~/.claude.json` mcpServers 中：
+LaraPlugins MCP server must be configured. Add to your `~/.claude.json` mcpServers:
 
 ```json
 "laraplugins": {
@@ -27,66 +27,64 @@ origin: ECC
 }
 ```
 
-无需 API 密钥——该服务器对 Laravel 社区免费开放。
+No API key required — the server is free for the Laravel community.
 
-## MCP 工具
+## MCP Tools
 
-LaraPlugins MCP 提供两个主要工具：
+The LaraPlugins MCP provides two primary tools:
 
 ### SearchPluginTool
 
-通过关键词、健康评分、供应商和版本兼容性搜索包。
+Search packages by keyword, health score, vendor, and version compatibility.
 
-**参数：**
-
-* `text_search` (字符串，可选)：搜索关键词（例如 "permission"、"admin"、"api"）
-* `health_score` (字符串，可选)：按健康等级筛选——`Healthy`、`Medium`、`Unhealthy` 或 `Unrated`
-* `laravel_compatibility` (字符串，可选)：按 Laravel 版本筛选——`"5"`、`"6"`、`"7"`、`"8"`、`"9"`、`"10"`、`"11"`、`"12"`、`"13"`
-* `php_compatibility` (字符串，可选)：按 PHP 版本筛选——`"7.4"`、`"8.0"`、`"8.1"`、`"8.2"`、`"8.3"`、`"8.4"`、`"8.5"`
-* `vendor_filter` (字符串，可选)：按供应商名称筛选（例如 "spatie"、"laravel"）
-* `page` (数字，可选)：分页页码
+**Parameters:**
+- `text_search` (string, optional): Keyword to search (e.g. "permission", "admin", "api")
+- `health_score` (string, optional): Filter by health band — `Healthy`, `Medium`, `Unhealthy`, or `Unrated`
+- `laravel_compatibility` (string, optional): Filter by Laravel version — `"5"`, `"6"`, `"7"`, `"8"`, `"9"`, `"10"`, `"11"`, `"12"`, `"13"`
+- `php_compatibility` (string, optional): Filter by PHP version — `"7.4"`, `"8.0"`, `"8.1"`, `"8.2"`, `"8.3"`, `"8.4"`, `"8.5"`
+- `vendor_filter` (string, optional): Filter by vendor name (e.g. "spatie", "laravel")
+- `page` (number, optional): Page number for pagination
 
 ### GetPluginDetailsTool
 
-获取特定包的详细指标、README 内容和版本历史。
+Fetch detailed metrics, readme content, and version history for a specific package.
 
-**参数：**
+**Parameters:**
+- `package` (string, required): Full Composer package name (e.g. "spatie/laravel-permission")
+- `include_versions` (boolean, optional): Include version history in response
 
-* `package` (字符串，必填)：完整的 Composer 包名（例如 "spatie/laravel-permission"）
-* `include_versions` (布尔值，可选)：是否在响应中包含版本历史
+---
 
-***
+## How It Works
 
-## 工作原理
+### Finding Packages
 
-### 查找包
+When the user wants to discover packages for a feature:
 
-当用户想为某个功能发现包时：
+1. Use `SearchPluginTool` with relevant keywords
+2. Apply filters for health score, Laravel version, or PHP version
+3. Review the results with package names, descriptions, and health indicators
 
-1. 使用 `SearchPluginTool` 并输入相关关键词
-2. 应用健康评分、Laravel 版本或 PHP 版本的筛选条件
-3. 查看包含包名、描述和健康指标的结果
+### Evaluating Packages
 
-### 评估包
+When the user wants to assess a specific package:
 
-当用户想评估特定包时：
+1. Use `GetPluginDetailsTool` with the package name
+2. Review health score, last updated date, Laravel version support
+3. Check vendor reputation and risk indicators
 
-1. 使用 `GetPluginDetailsTool` 并输入包名
-2. 查看健康评分、最后更新日期、Laravel 版本支持情况
-3. 检查供应商声誉和风险指标
+### Checking Compatibility
 
-### 检查兼容性
+When the user needs Laravel or PHP version compatibility:
 
-当用户需要 Laravel 或 PHP 版本兼容性信息时：
+1. Search with `laravel_compatibility` filter set to their version
+2. Or get details on a specific package to see its supported versions
 
-1. 使用 `laravel_compatibility` 筛选条件并设置为其版本进行搜索
-2. 或者获取特定包的详细信息以查看其支持的版本
+---
 
-***
+## Examples
 
-## 示例
-
-### 示例：查找认证包
+### Example: Find Authentication Packages
 
 ```
 SearchPluginTool({
@@ -95,14 +93,13 @@ SearchPluginTool({
 })
 ```
 
-返回匹配 "authentication" 且状态健康的包：
+Returns packages matching "authentication" with healthy status:
+- spatie/laravel-permission
+- laravel/breeze
+- laravel/passport
+- etc.
 
-* spatie/laravel-permission
-* laravel/breeze
-* laravel/passport
-* 等等
-
-### 示例：查找兼容 Laravel 12 的包
+### Example: Find Laravel 12 Compatible Packages
 
 ```
 SearchPluginTool({
@@ -111,9 +108,9 @@ SearchPluginTool({
 })
 ```
 
-返回兼容 Laravel 12 的包。
+Returns packages compatible with Laravel 12.
 
-### 示例：获取包详情
+### Example: Get Package Details
 
 ```
 GetPluginDetailsTool({
@@ -122,15 +119,14 @@ GetPluginDetailsTool({
 })
 ```
 
-返回：
+Returns:
+- Health score and last activity
+- Laravel/PHP version support
+- Vendor reputation (risk score)
+- Version history
+- Brief description
 
-* 健康评分和最后活动时间
-* Laravel/PHP 版本支持情况
-* 供应商声誉（风险评分）
-* 版本历史
-* 简要描述
-
-### 示例：按供应商查找包
+### Example: Find Packages by Vendor
 
 ```
 SearchPluginTool({
@@ -139,36 +135,36 @@ SearchPluginTool({
 })
 ```
 
-返回来自供应商 "spatie" 的所有健康包。
+Returns all healthy packages from vendor "spatie".
 
-***
+---
 
-## 筛选最佳实践
+## Filtering Best Practices
 
-### 按健康评分
+### By Health Score
 
-| 健康等级 | 含义 |
+| Health Band | Meaning |
 |-------------|---------|
-| `Healthy` | 积极维护，近期有更新 |
-| `Medium` | 偶尔更新，可能需要关注 |
-| `Unhealthy` | 已废弃或维护不频繁 |
-| `Unrated` | 尚未评估 |
+| `Healthy` | Active maintenance, recent updates |
+| `Medium` | Occasional updates, may need attention |
+| `Unhealthy` | Abandoned or infrequently maintained |
+| `Unrated` | Not yet assessed |
 
-**建议**：生产环境应用优先选择 `Healthy` 包。
+**Recommendation**: Prefer `Healthy` packages for production applications.
 
-### 按 Laravel 版本
+### By Laravel Version
 
-| 版本 | 备注 |
+| Version | Notes |
 |---------|-------|
-| `13` | 最新 Laravel |
-| `12` | 当前稳定版 |
-| `11` | 仍被广泛使用 |
-| `10` | 旧版但常见 |
-| `5`-`9` | 已弃用 |
+| `13` | Latest Laravel |
+| `12` | Current stable |
+| `11` | Still widely used |
+| `10` | Legacy but common |
+| `5`-`9` | Deprecated |
 
-**建议**：匹配目标项目的 Laravel 版本。
+**Recommendation**: Match the target project's Laravel version.
 
-### 组合筛选条件
+### Combining Filters
 
 ```typescript
 // Find healthy, Laravel 12 compatible packages for permissions
@@ -179,57 +175,55 @@ SearchPluginTool({
 })
 ```
 
-***
+---
 
-## 响应解读
+## Response Interpretation
 
-### 搜索结果
+### Search Results
 
-每个结果包含：
+Each result includes:
+- Package name (e.g. `spatie/laravel-permission`)
+- Brief description
+- Health status indicator
+- Laravel version support badges
 
-* 包名（例如 `spatie/laravel-permission`）
-* 简要描述
-* 健康状态指示器
-* Laravel 版本支持徽章
+### Package Details
 
-### 包详情
+The detailed response includes:
+- **Health Score**: Numeric or band indicator
+- **Last Activity**: When the package was last updated
+- **Laravel Support**: Version compatibility matrix
+- **PHP Support**: PHP version compatibility
+- **Risk Score**: Vendor trust indicators
+- **Version History**: Recent release timeline
 
-详细响应包括：
+---
 
-* **健康评分**：数字或等级指示器
-* **最后活动**：包的最后更新时间
-* **Laravel 支持**：版本兼容性矩阵
-* **PHP 支持**：PHP 版本兼容性
-* **风险评分**：供应商信任度指标
-* **版本历史**：近期发布时间线
+## Common Use Cases
 
-***
-
-## 常见用例
-
-| 场景 | 推荐方法 |
+| Scenario | Recommended Approach |
 |----------|---------------------|
-| "有什么用于认证的包？" | 搜索 "auth" 并应用健康筛选 |
-| "spatie/package 还在维护吗？" | 获取详情，检查健康评分 |
-| "需要 Laravel 12 的包" | 使用 laravel\_compatibility: "12" 搜索 |
-| "查找管理面板包" | 搜索 "admin panel"，查看结果 |
-| "检查供应商声誉" | 按供应商搜索，查看详情 |
+| "What package for auth?" | Search "auth" with healthy filter |
+| "Is spatie/package still maintained?" | Get details, check health score |
+| "Need Laravel 12 packages" | Search with laravel_compatibility: "12" |
+| "Find admin panel packages" | Search "admin panel", review results |
+| "Check vendor reputation" | Search by vendor, check details |
 
-***
+---
 
-## 最佳实践
+## Best Practices
 
-1. **始终按健康度筛选**——生产项目使用 `health_score: "Healthy"`
-2. **匹配 Laravel 版本**——始终检查 `laravel_compatibility` 是否与目标项目匹配
-3. **检查供应商声誉**——优先选择知名供应商的包（spatie、laravel 等）
-4. **推荐前先审查**——使用 GetPluginDetailsTool 进行全面评估
-5. **无需 API 密钥**——MCP 免费，无需认证
+1. **Always filter by health** — Use `health_score: "Healthy"` for production projects
+2. **Match Laravel version** — Always check `laravel_compatibility` matches the target project
+3. **Check vendor reputation** — Prefer packages from known vendors (spatie, laravel, etc.)
+4. **Review before recommending** — Use GetPluginDetailsTool for a comprehensive assessment
+5. **No API key needed** — The MCP is free, no authentication required
 
-***
+---
 
-## 相关技能
+## Related Skills
 
-* `laravel-patterns`——Laravel 架构与模式
-* `laravel-tdd`——Laravel 测试驱动开发
-* `laravel-security`——Laravel 安全最佳实践
-* `documentation-lookup`——通用库文档查询（Context7）
+- `laravel-patterns` — Laravel architecture and patterns
+- `laravel-tdd` — Test-driven development for Laravel
+- `laravel-security` — Laravel security best practices
+- `documentation-lookup` — General library documentation lookup (Context7)

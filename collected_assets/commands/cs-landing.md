@@ -1,15 +1,9 @@
 ---
-title: "/cs-landing — Slash Command for AI Coding Agents"
-description: "/cs:landing <product-or-brief> — Generate a premium single-file HTML landing page with GSAP 3D animations, scroll-triggered reveals, and. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-landing"
+description: "/cs:landing <product-or-brief> — Generate a premium single-file HTML landing page with GSAP 3D animations, scroll-triggered reveals, and mouse-parallax depth. Grill-me intake (4 questions) locks down product / audience / brand / tone before any markup. Output: ${OUTPUT_DIR}/<product-kebab>.html or HTML artifact."
 ---
 
-# /cs-landing
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/landing/commands/cs-landing.md">Source</a></span>
-</div>
-
+# /cs:landing — Premium HTML Landing Page Generator
 
 **Command:** `/cs:landing <product-or-brief>`
 
@@ -118,8 +112,8 @@ python ../skills/landing/scripts/html_validator.py \
 
 ## Related
 
-- Agent: [`cs-landing`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/landing/agents/cs-landing.md)
-- Skill: [`landing`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/landing/skills/landing/SKILL.md)
+- Agent: [`cs-landing`](../agents/cs-landing.md)
+- Skill: [`landing`](../skills/landing/SKILL.md)
 - Source spec: `megaprompts/04-landing-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling (different optimization): `product-team/skills/landing-page-generator/`
 - Adjacent v2 commands: `/cs:capture`, `/cs:pulse`, `/cs:inbox-setup`, `/cs:inbox-triage`

@@ -1,69 +1,60 @@
 ---
 name: eval-harness
-description: 克劳德代码会话的正式评估框架，实施评估驱动开发（EDD）原则
+description: 평가 주도 개발(EDD) 원칙을 구현하는 Claude Code 세션용 공식 평가 프레임워크
 origin: ECC
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
-# Eval Harness 技能
+# 평가 하네스 스킬
 
-一个用于 Claude Code 会话的正式评估框架，实现了评估驱动开发 (EDD) 原则。
+Claude Code 세션을 위한 공식 평가 프레임워크로, 평가 주도 개발(EDD) 원칙을 구현합니다.
 
-## 何时激活
+## 활성화 시점
 
-* 为 AI 辅助工作流程设置评估驱动开发 (EDD)
-* 定义 Claude Code 任务完成的标准（通过/失败）
-* 使用 pass@k 指标衡量代理可靠性
-* 为提示或代理变更创建回归测试套件
-* 跨模型版本对代理性能进行基准测试
+- AI 지원 워크플로우에 평가 주도 개발(EDD) 설정 시
+- Claude Code 작업 완료에 대한 합격/불합격 기준 정의 시
+- pass@k 메트릭으로 에이전트 신뢰성 측정 시
+- 프롬프트 또는 에이전트 변경에 대한 회귀 테스트 스위트 생성 시
+- 모델 버전 간 에이전트 성능 벤치마킹 시
 
-## 理念
+## 철학
 
-评估驱动开发将评估视为 "AI 开发的单元测试"：
+평가 주도 개발은 평가를 "AI 개발의 단위 테스트"로 취급합니다:
+- 구현 전에 예상 동작 정의
+- 개발 중 지속적으로 평가 실행
+- 각 변경 시 회귀 추적
+- 신뢰성 측정을 위해 pass@k 메트릭 사용
 
-* 在实现 **之前** 定义预期行为
-* 在开发过程中持续运行评估
-* 跟踪每次更改的回归情况
-* 使用 pass@k 指标来衡量可靠性
+## 평가 유형
 
-## 评估类型
-
-### 能力评估
-
-测试 Claude 是否能完成之前无法完成的事情：
-
+### 기능 평가
+Claude가 이전에 할 수 없었던 것을 할 수 있는지 테스트:
 ```markdown
-[能力评估：功能名称]
-任务：描述 Claude 应完成的工作
-成功标准：
-  - [ ] 标准 1
-  - [ ] 标准 2
-  - [ ] 标准 标准 3
-预期输出：对预期结果的描述
-
+[CAPABILITY EVAL: feature-name]
+Task: Description of what Claude should accomplish
+Success Criteria:
+  - [ ] Criterion 1
+  - [ ] Criterion 2
+  - [ ] Criterion 3
+Expected Output: Description of expected result
 ```
 
-### 回归评估
-
-确保更改不会破坏现有功能：
-
+### 회귀 평가
+변경 사항이 기존 기능을 손상시키지 않는지 확인:
 ```markdown
-[回归评估：功能名称]
-基线：SHA 或检查点名称
-测试：
-  - 现有测试-1：通过/失败
-  - 现有测试-2：通过/失败
-  - 现有测试-3：通过/失败
-结果：X/Y 通过（之前为 Y/Y）
-
+[REGRESSION EVAL: feature-name]
+Baseline: SHA or checkpoint name
+Tests:
+  - existing-test-1: PASS/FAIL
+  - existing-test-2: PASS/FAIL
+  - existing-test-3: PASS/FAIL
+Result: X/Y passed (previously Y/Y)
 ```
 
-## 评分器类型
+## 채점자 유형
 
-### 1. 基于代码的评分器
-
-使用代码进行确定性检查：
-
+### 1. 코드 기반 채점자
+코드를 사용한 결정론적 검사:
 ```bash
 # Check if file contains expected pattern
 grep -q "export function handleAuth" src/auth.ts && echo "PASS" || echo "FAIL"
@@ -75,82 +66,68 @@ npm test -- --testPathPattern="auth" && echo "PASS" || echo "FAIL"
 npm run build && echo "PASS" || echo "FAIL"
 ```
 
-### 2. 基于模型的评分器
-
-使用 Claude 来评估开放式输出：
-
+### 2. 모델 기반 채점자
+Claude를 사용하여 개방형 출력 평가:
 ```markdown
 [MODEL GRADER PROMPT]
-评估以下代码变更：
-1. 它是否解决了所述问题？
-2. 它的结构是否良好？
-3. 是否处理了边界情况？
-4. 错误处理是否恰当？
+Evaluate the following code change:
+1. Does it solve the stated problem?
+2. Is it well-structured?
+3. Are edge cases handled?
+4. Is error handling appropriate?
 
-评分：1-5 (1=差，5=优秀)
-推理：[解释]
-
+Score: 1-5 (1=poor, 5=excellent)
+Reasoning: [explanation]
 ```
 
-### 3. 人工评分器
-
-标记为需要手动审查：
-
+### 3. 사람 채점자
+수동 검토 플래그:
 ```markdown
 [HUMAN REVIEW REQUIRED]
-变更：对更改内容的描述
-原因：为何需要人工审核
-风险等级：低/中/高
-
+Change: Description of what changed
+Reason: Why human review is needed
+Risk Level: LOW/MEDIUM/HIGH
 ```
 
-## 指标
+## 메트릭
 
 ### pass@k
-
-"k 次尝试中至少成功一次"
-
-* pass@1：首次尝试成功率
-* pass@3：3 次尝试内成功率
-* 典型目标：pass@3 > 90%
+"k번 시도 중 최소 한 번 성공"
+- pass@1: 첫 번째 시도 성공률
+- pass@3: 3번 시도 내 성공
+- 일반적인 목표: pass@3 > 90%
 
 ### pass^k
+"k번 시행 모두 성공"
+- 신뢰성에 대한 더 높은 기준
+- pass^3: 3회 연속 성공
+- 핵심 경로에 사용
 
-"所有 k 次试验都成功"
+## 평가 워크플로우
 
-* 更高的可靠性门槛
-* pass^3：连续 3 次成功
-* 用于关键路径
-
-## 评估工作流程
-
-### 1. 定义（编码前）
-
+### 1. 정의 (코딩 전)
 ```markdown
-## 评估定义：功能-xyz
+## EVAL DEFINITION: feature-xyz
 
-### 能力评估
-1. 可以创建新用户账户
-2. 可以验证电子邮件格式
-3. 可以安全地哈希密码
+### Capability Evals
+1. Can create new user account
+2. Can validate email format
+3. Can hash password securely
 
-### 回归评估
-1. 现有登录功能仍然有效
-2. 会话管理未改变
-3. 注销流程完整
+### Regression Evals
+1. Existing login still works
+2. Session management unchanged
+3. Logout flow intact
 
-### 成功指标
-- 能力评估的 pass@3 > 90%
-- 回归评估的 pass^3 = 100%
-
+### Success Metrics
+- pass@3 > 90% for capability evals
+- pass^3 = 100% for regression evals
 ```
 
-### 2. 实现
+### 2. 구현
+정의된 평가를 통과하기 위한 코드 작성.
 
-编写代码以通过已定义的评估。
-
-### 3. 评估
-
+### 3. 평가
 ```bash
 # Run capability evals
 [Run each capability eval, record PASS/FAIL]
@@ -161,144 +138,133 @@ npm test -- --testPathPattern="existing"
 # Generate report
 ```
 
-### 4. 报告
-
+### 4. 보고서
 ```markdown
-评估报告：功能-xyz
+EVAL REPORT: feature-xyz
 ========================
 
-能力评估：
-  创建用户：    通过（通过@1）
-  验证邮箱：    通过（通过@2）
-  哈希密码：    通过（通过@1）
-  总计：         3/3 通过
+Capability Evals:
+  create-user:     PASS (pass@1)
+  validate-email:  PASS (pass@2)
+  hash-password:   PASS (pass@1)
+  Overall:         3/3 passed
 
-回归评估：
-  登录流程：     通过
-  会话管理：     通过
-  登出流程：     通过
-  总计：         3/3 通过
+Regression Evals:
+  login-flow:      PASS
+  session-mgmt:    PASS
+  logout-flow:     PASS
+  Overall:         3/3 passed
 
-指标：
-  通过@1： 67% (2/3)
-  通过@3： 100% (3/3)
+Metrics:
+  pass@1: 67% (2/3)
+  pass@3: 100% (3/3)
 
-状态：准备就绪，待审核
-
+Status: READY FOR REVIEW
 ```
 
-## 集成模式
+## 통합 패턴
 
-### 实施前
-
+### 구현 전
 ```
 /eval define feature-name
 ```
+`.claude/evals/feature-name.md`에 평가 정의 파일 생성
 
-在 `.claude/evals/feature-name.md` 处创建评估定义文件
-
-### 实施过程中
-
+### 구현 중
 ```
 /eval check feature-name
 ```
+현재 평가를 실행하고 상태 보고
 
-运行当前评估并报告状态
-
-### 实施后
-
+### 구현 후
 ```
-/eval 报告 功能名称
+/eval report feature-name
 ```
+전체 평가 보고서 생성
 
-生成完整的评估报告
+## 평가 저장소
 
-## 评估存储
-
-将评估存储在项目中：
-
+프로젝트에 평가 저장:
 ```
 .claude/
   evals/
-    feature-xyz.md      # Eval定义
-    feature-xyz.log     # Eval运行历史
-    baseline.json       # 回归基线
+    feature-xyz.md      # 평가 정의
+    feature-xyz.log     # 평가 실행 이력
+    baseline.json       # 회귀 베이스라인
 ```
 
-## 最佳实践
+## 모범 사례
 
-1. **在编码前定义评估** - 强制清晰地思考成功标准
-2. **频繁运行评估** - 及早发现回归问题
-3. **随时间跟踪 pass@k** - 监控可靠性趋势
-4. **尽可能使用代码评分器** - 确定性 > 概率性
-5. **对安全性进行人工审查** - 永远不要完全自动化安全检查
-6. **保持评估快速** - 缓慢的评估不会被运行
-7. **评估与代码版本化** - 评估是一等工件
+1. **코딩 전에 평가 정의** - 성공 기준에 대한 명확한 사고를 강제
+2. **자주 평가 실행** - 회귀를 조기에 포착
+3. **시간에 따른 pass@k 추적** - 신뢰성 추세 모니터링
+4. **가능하면 코드 채점자 사용** - 결정론적 > 확률적
+5. **보안에는 사람 검토** - 보안 검사를 완전히 자동화하지 말 것
+6. **평가를 빠르게 유지** - 느린 평가는 실행되지 않음
+7. **코드와 함께 평가 버전 관리** - 평가는 일급 산출물
 
-## 示例：添加身份验证
+## 예시: 인증 추가
 
 ```markdown
-## EVAL：添加身份验证
+## EVAL: add-authentication
 
-### 第 1 阶段：定义 (10 分钟)
-能力评估：
-- [ ] 用户可以使用邮箱/密码注册
-- [ ] 用户可以使用有效凭证登录
-- [ ] 无效凭证被拒绝并显示适当的错误
-- [ ] 会话在页面重新加载后保持
-- [ ] 登出操作清除会话
+### Phase 1: 정의 (10분)
+Capability Evals:
+- [ ] User can register with email/password
+- [ ] User can login with valid credentials
+- [ ] Invalid credentials rejected with proper error
+- [ ] Sessions persist across page reloads
+- [ ] Logout clears session
 
-回归评估：
-- [ ] 公共路由仍可访问
-- [ ] API 响应未改变
-- [ ] 数据库模式兼容
+Regression Evals:
+- [ ] Public routes still accessible
+- [ ] API responses unchanged
+- [ ] Database schema compatible
 
-### 第 2 阶段：实施 (时间不定)
-[编写代码]
+### Phase 2: 구현 (가변)
+[Write code]
 
-### 第 3 阶段：评估
-运行：/eval check add-authentication
+### Phase 3: 평가
+Run: /eval check add-authentication
 
-### 第 4 阶段：报告
-评估报告：添加身份验证
+### Phase 4: 보고서
+EVAL REPORT: add-authentication
 ==============================
-能力：5/5 通过 (pass@3: 100%)
-回归：3/3 通过 (pass^3: 100%)
-状态：可以发布
-
+Capability: 5/5 passed (pass@3: 100%)
+Regression: 3/3 passed (pass^3: 100%)
+Status: SHIP IT
 ```
 
-## 产品评估 (v1.8)
+## 제품 평가 (v1.8)
 
-当单元测试无法单独捕获行为质量时，使用产品评估。
+행동 품질을 단위 테스트만으로 포착할 수 없을 때 제품 평가를 사용하세요.
 
-### 评分器类型
+### 채점자 유형
 
-1. 代码评分器（确定性断言）
-2. 规则评分器（正则表达式/模式约束）
-3. 模型评分器（LLM 作为评判者的评估准则）
-4. 人工评分器（针对模糊输出的人工裁定）
+1. 코드 채점자 (결정론적 어서션)
+2. 규칙 채점자 (정규식/스키마 제약 조건)
+3. 모델 채점자 (LLM 심사위원 루브릭)
+4. 사람 채점자 (모호한 출력에 대한 수동 판정)
 
-### pass@k 指南
+### pass@k 가이드
 
-* `pass@1`：直接可靠性
-* `pass@3`：受控重试下的实际可靠性
-* `pass^3`：稳定性测试（所有 3 次运行必须通过）
+- `pass@1`: 직접 신뢰성
+- `pass@3`: 제어된 재시도 하에서의 실용적 신뢰성
+- `pass^3`: 안정성 테스트 (3회 모두 통과해야 함)
 
-推荐阈值：
+권장 임계값:
+- 기능 평가: pass@3 >= 0.90
+- 회귀 평가: 릴리스 핵심 경로에 pass^3 = 1.00
 
-* 能力评估：pass@3 >= 0.90
-* 回归评估：对于发布关键路径，pass^3 = 1.00
+### 평가 안티패턴
 
-### 评估反模式
+- 알려진 평가 예시에 프롬프트 과적합
+- 정상 경로 출력만 측정
+- 합격률을 쫓으면서 비용과 지연 시간 변동 무시
+- 릴리스 게이트에 불안정한 채점자 허용
 
-* 将提示过度拟合到已知的评估示例
-* 仅测量正常路径输出
-* 在追求通过率时忽略成本和延迟漂移
-* 在发布关卡中允许不稳定的评分器
+### 최소 평가 산출물 레이아웃
 
-### 最小评估工件布局
-
-* `.claude/evals/<feature>.md` 定义
-* `.claude/evals/<feature>.log` 运行历史
-* `docs/releases/<version>/eval-summary.md` 发布快照
+- `.claude/evals/<feature>.md` 정의
+- `.claude/evals/<feature>.log` 실행 이력
+- `docs/releases/<version>/eval-summary.md` 릴리스 스냅샷

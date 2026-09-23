@@ -1,15 +1,10 @@
 ---
-title: "/cs-handoff — Slash Command for AI Coding Agents"
-description: "/cs:handoff <next-session-focus> — Compact the current conversation into a handoff document for a fresh agent. Tailored to next-session focus. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-handoff"
+description: "/cs:handoff <next-session-focus> — Compact the current conversation into a handoff document for a fresh agent. Tailored to next-session focus (deploy/review/debug/design/test). Replaces PRD/ADR/issue/commit content with references. Recommends specific skills for the next session."
+argument-hint: "What will the next session be used for?"
 ---
 
-# /cs-handoff
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/handoff/commands/cs-handoff.md">Source</a></span>
-</div>
-
+# /cs:handoff — Session Handoff
 
 **Command:** `/cs:handoff <next-session-focus>`
 
@@ -75,8 +70,8 @@ python ../skills/handoff/scripts/skill_recommender.py path/to/draft.md
 
 ## Related
 
-- Agent: [`cs-handoff-author`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/handoff/agents/cs-handoff-author.md)
-- Skill: [`handoff`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/handoff/skills/handoff/SKILL.md)
+- Agent: [`cs-handoff-author`](../agents/cs-handoff-author.md)
+- Skill: [`handoff`](../skills/handoff/SKILL.md)
 - Adjacent: `/cs:caveman`, `/cs:grill-me`, `/cs:write-a-skill`
 
 ---

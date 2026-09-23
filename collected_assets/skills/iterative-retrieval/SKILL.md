@@ -1,58 +1,56 @@
 ---
 name: iterative-retrieval
-description: 逐步优化上下文检索以解决子代理上下文问题的模式
+description: 서브에이전트 컨텍스트 문제를 해결하기 위한 점진적 컨텍스트 검색 개선 패턴
 origin: ECC
 ---
 
-# 迭代检索模式
+# 반복적 검색 패턴
 
-解决多智能体工作流中的“上下文问题”，即子智能体在开始工作前不知道需要哪些上下文。
+서브에이전트가 작업을 시작하기 전까지 필요한 컨텍스트를 알 수 없는 멀티 에이전트 워크플로우의 "컨텍스트 문제"를 해결합니다.
 
-## 何时激活
+## 활성화 시점
 
-* 当需要生成需要代码库上下文但无法预先预测的子代理时
-* 构建需要逐步完善上下文的多代理工作流时
-* 在代理任务中遇到"上下文过大"或"缺少上下文"的失败时
-* 为代码探索设计类似 RAG 的检索管道时
-* 在代理编排中优化令牌使用时
+- 사전에 예측할 수 없는 코드베이스 컨텍스트가 필요한 서브에이전트를 생성할 때
+- 컨텍스트가 점진적으로 개선되는 멀티 에이전트 워크플로우를 구축할 때
+- 에이전트 작업에서 "컨텍스트 초과" 또는 "컨텍스트 누락" 실패를 겪을 때
+- 코드 탐색을 위한 RAG 유사 검색 파이프라인을 설계할 때
+- 에이전트 오케스트레이션에서 토큰 사용량을 최적화할 때
 
-## 问题
+## 문제
 
-子智能体被生成时上下文有限。它们不知道：
+서브에이전트는 제한된 컨텍스트로 생성됩니다. 다음을 알 수 없습니다:
+- 관련 코드가 포함된 파일
+- 코드베이스에 존재하는 패턴
+- 프로젝트에서 사용하는 용어
 
-* 哪些文件包含相关代码
-* 代码库中存在哪些模式
-* 项目使用什么术语
+표준 접근법의 실패:
+- **모든 것을 전송**: 컨텍스트 제한 초과
+- **아무것도 전송하지 않음**: 에이전트가 중요한 정보를 갖지 못함
+- **필요한 것을 추측**: 종종 잘못됨
 
-标准方法会失败：
+## 해결책: 반복적 검색
 
-* **发送所有内容**：超出上下文限制
-* **不发送任何内容**：智能体缺乏关键信息
-* **猜测所需内容**：经常出错
-
-## 解决方案：迭代检索
-
-一个逐步优化上下文的 4 阶段循环：
+컨텍스트를 점진적으로 개선하는 4단계 루프:
 
 ```
 ┌─────────────────────────────────────────────┐
 │                                             │
 │   ┌──────────┐      ┌──────────┐            │
-│   │  调度    │─────│  评估    │            │
+│   │ DISPATCH │─────│ EVALUATE │            │
 │   └──────────┘      └──────────┘            │
 │        ▲                  │                 │
 │        │                  ▼                 │
 │   ┌──────────┐      ┌──────────┐            │
-│   │  循环    │─────│  优化    │            │
+│   │   LOOP   │─────│  REFINE  │            │
 │   └──────────┘      └──────────┘            │
 │                                             │
-│        最多3次循环，然后继续                 │
+│        Max 3 cycles, then proceed           │
 └─────────────────────────────────────────────┘
 ```
 
-### 阶段 1：调度
+### 1단계: DISPATCH
 
-初始的广泛查询以收集候选文件：
+후보 파일을 수집하기 위한 초기 광범위 쿼리:
 
 ```javascript
 // Start with high-level intent
@@ -66,9 +64,9 @@ const initialQuery = {
 const candidates = await retrieveFiles(initialQuery);
 ```
 
-### 阶段 2：评估
+### 2단계: EVALUATE
 
-评估检索到的内容的相关性：
+검색된 콘텐츠의 관련성 평가:
 
 ```javascript
 function evaluateRelevance(files, task) {
@@ -81,16 +79,15 @@ function evaluateRelevance(files, task) {
 }
 ```
 
-评分标准：
+점수 기준:
+- **높음 (0.8-1.0)**: 대상 기능을 직접 구현
+- **중간 (0.5-0.7)**: 관련 패턴이나 타입을 포함
+- **낮음 (0.2-0.4)**: 간접적으로 관련
+- **없음 (0-0.2)**: 관련 없음, 제외
 
-* **高 (0.8-1.0)**：直接实现目标功能
-* **中 (0.5-0.7)**：包含相关模式或类型
-* **低 (0.2-0.4)**：略微相关
-* **无 (0-0.2)**：不相关，排除
+### 3단계: REFINE
 
-### 阶段 3：优化
-
-根据评估结果更新搜索条件：
+평가를 기반으로 검색 기준 업데이트:
 
 ```javascript
 function refineQuery(evaluation, previousQuery) {
@@ -115,9 +112,9 @@ function refineQuery(evaluation, previousQuery) {
 }
 ```
 
-### 阶段 4：循环
+### 4단계: LOOP
 
-使用优化后的条件重复（最多 3 个周期）：
+개선된 기준으로 반복 (최대 3회):
 
 ```javascript
 async function iterativeRetrieve(task, maxCycles = 3) {
@@ -143,73 +140,72 @@ async function iterativeRetrieve(task, maxCycles = 3) {
 }
 ```
 
-## 实际示例
+## 실용적인 예시
 
-### 示例 1：错误修复上下文
-
-```
-任务："修复身份验证令牌过期错误"
-
-循环 1:
-  分发：在 src/** 中搜索 "token"、"auth"、"expiry"
-  评估：找到 auth.ts (0.9)、tokens.ts (0.8)、user.ts (0.3)
-  优化：添加 "refresh"、"jwt" 关键词；排除 user.ts
-
-循环 2:
-  分发：搜索优化后的关键词
-  评估：找到 session-manager.ts (0.95)、jwt-utils.ts (0.85)
-  优化：上下文已充分（2 个高相关文件）
-
-结果：auth.ts、tokens.ts、session-manager.ts、jwt-utils.ts
-```
-
-### 示例 2：功能实现
+### 예시 1: 버그 수정 컨텍스트
 
 ```
-任务："为API端点添加速率限制"
+Task: "Fix the authentication token expiry bug"
 
-周期 1：
-  分发：在 routes/** 中搜索 "rate"、"limit"、"api"
-  评估：无匹配项 - 代码库使用 "throttle" 术语
-  优化：添加 "throttle"、"middleware" 关键词
+Cycle 1:
+  DISPATCH: Search for "token", "auth", "expiry" in src/**
+  EVALUATE: Found auth.ts (0.9), tokens.ts (0.8), user.ts (0.3)
+  REFINE: Add "refresh", "jwt" keywords; exclude user.ts
 
-周期 2：
-  分发：搜索优化后的术语
-  评估：找到 throttle.ts (0.9)、middleware/index.ts (0.7)
-  优化：需要路由模式
+Cycle 2:
+  DISPATCH: Search refined terms
+  EVALUATE: Found session-manager.ts (0.95), jwt-utils.ts (0.85)
+  REFINE: Sufficient context (2 high-relevance files)
 
-周期 3：
-  分发：搜索 "router"、"express" 模式
-  评估：找到 router-setup.ts (0.8)
-  优化：上下文已足够
-
-结果：throttle.ts、middleware/index.ts、router-setup.ts
+Result: auth.ts, tokens.ts, session-manager.ts, jwt-utils.ts
 ```
 
-## 与智能体集成
+### 예시 2: 기능 구현
 
-在智能体提示中使用：
+```
+Task: "Add rate limiting to API endpoints"
+
+Cycle 1:
+  DISPATCH: Search "rate", "limit", "api" in routes/**
+  EVALUATE: No matches - codebase uses "throttle" terminology
+  REFINE: Add "throttle", "middleware" keywords
+
+Cycle 2:
+  DISPATCH: Search refined terms
+  EVALUATE: Found throttle.ts (0.9), middleware/index.ts (0.7)
+  REFINE: Need router patterns
+
+Cycle 3:
+  DISPATCH: Search "router", "express" patterns
+  EVALUATE: Found router-setup.ts (0.8)
+  REFINE: Sufficient context
+
+Result: throttle.ts, middleware/index.ts, router-setup.ts
+```
+
+## 에이전트와의 통합
+
+에이전트 프롬프트에서 사용:
 
 ```markdown
-在为该任务检索上下文时：
-1. 从广泛的关键词搜索开始
-2. 评估每个文件的相关性（0-1 分制）
-3. 识别仍缺失哪些上下文
-4. 优化搜索条件并重复（最多 3 个循环）
-5. 返回相关性 >= 0.7 的文件
-
+When retrieving context for this task:
+1. Start with broad keyword search
+2. Evaluate each file's relevance (0-1 scale)
+3. Identify what context is still missing
+4. Refine search criteria and repeat (max 3 cycles)
+5. Return files with relevance >= 0.7
 ```
 
-## 最佳实践
+## 모범 사례
 
-1. **先宽泛，后逐步细化** - 不要过度指定初始查询
-2. **学习代码库术语** - 第一轮循环通常能揭示命名约定
-3. **跟踪缺失内容** - 明确识别差距以驱动优化
-4. **在“足够好”时停止** - 3 个高相关性文件胜过 10 个中等相关性文件
-5. **自信地排除** - 低相关性文件不会变得相关
+1. **광범위하게 시작하여 점진적으로 좁히기** - 초기 쿼리를 과도하게 지정하지 않기
+2. **코드베이스 용어 학습** - 첫 번째 사이클에서 주로 네이밍 컨벤션이 드러남
+3. **누락된 것 추적** - 명시적 격차 식별이 개선을 주도
+4. **"충분히 좋은" 수준에서 중단** - 관련성 높은 파일 3개가 보통 수준의 파일 10개보다 나음
+5. **자신 있게 제외** - 관련성 낮은 파일은 관련성이 높아지지 않음
 
-## 相关
+## 관련 항목
 
-* [长篇指南](https://x.com/affaanmustafa/status/2014040193557471352) - 子代理编排章节
-* `continuous-learning` 技能 - 适用于随时间改进的模式
-* 与 ECC 捆绑的代理定义（手动安装路径：`agents/`）
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 서브에이전트 오케스트레이션 섹션
+- `continuous-learning` 스킬 - 시간이 지남에 따라 개선되는 패턴
+- `~/.claude/agents/`의 에이전트 정의

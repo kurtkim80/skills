@@ -1,26 +1,28 @@
 ---
 name: frontend-patterns
-description: React、Next.js、状态管理、性能优化和UI最佳实践的前端开发模式。
-origin: ECC
+description: >
+  Frontend development patterns for React, Next.js, state management, performance optimization, and UI best practices.
+metadata:
+  origin: ECC
 ---
 
-# 前端开发模式
+# Frontend Development Patterns
 
-适用于 React、Next.js 和高性能用户界面的现代前端模式。
+Modern frontend patterns for React, Next.js, and performant user interfaces.
 
-## 何时激活
+## When to Activate
 
-* 构建 React 组件（组合、属性、渲染）
-* 管理状态（useState、useReducer、Zustand、Context）
-* 实现数据获取（SWR、React Query、服务器组件）
-* 优化性能（记忆化、虚拟化、代码分割）
-* 处理表单（验证、受控输入、Zod 模式）
-* 处理客户端路由和导航
-* 构建可访问、响应式的 UI 模式
+- Building React components (composition, props, rendering)
+- Managing state (useState, useReducer, Zustand, Context)
+- Implementing data fetching (SWR, React Query, server components)
+- Optimizing performance (memoization, virtualization, code splitting)
+- Working with forms (validation, controlled inputs, Zod schemas)
+- Handling client-side routing and navigation
+- Building accessible, responsive UI patterns
 
-## 组件模式
+## Component Patterns
 
-### 组合优于继承
+### Composition Over Inheritance
 
 ```typescript
 // PASS: GOOD: Component composition
@@ -48,7 +50,7 @@ export function CardBody({ children }: { children: React.ReactNode }) {
 </Card>
 ```
 
-### 复合组件
+### Compound Components
 
 ```typescript
 interface TabsContextValue {
@@ -98,7 +100,7 @@ export function Tab({ id, children }: { id: string, children: React.ReactNode })
 </Tabs>
 ```
 
-### 渲染属性模式
+### Render Props Pattern
 
 ```typescript
 interface DataLoaderProps<T> {
@@ -132,9 +134,9 @@ export function DataLoader<T>({ url, children }: DataLoaderProps<T>) {
 </DataLoader>
 ```
 
-## 自定义 Hooks 模式
+## Custom Hooks Patterns
 
-### 状态管理 Hook
+### State Management Hook
 
 ```typescript
 export function useToggle(initialValue = false): [boolean, () => void] {
@@ -151,7 +153,7 @@ export function useToggle(initialValue = false): [boolean, () => void] {
 const [isOpen, toggleOpen] = useToggle()
 ```
 
-### 异步数据获取 Hook
+### Async Data Fetching Hook
 
 ```typescript
 interface UseQueryOptions<T> {
@@ -219,7 +221,7 @@ const { data: markets, loading, error, refetch } = useQuery(
 )
 ```
 
-### 防抖 Hook
+### Debounce Hook
 
 ```typescript
 export function useDebounce<T>(value: T, delay: number): T {
@@ -247,9 +249,9 @@ useEffect(() => {
 }, [debouncedQuery])
 ```
 
-## 状态管理模式
+## State Management Patterns
 
-### Context + Reducer 模式
+### Context + Reducer Pattern
 
 ```typescript
 interface State {
@@ -302,9 +304,9 @@ export function useMarkets() {
 }
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 记忆化
+### Memoization
 
 ```typescript
 // PASS: useMemo for expensive computations
@@ -329,7 +331,7 @@ export const MarketCard = React.memo<MarketCardProps>(({ market }) => {
 })
 ```
 
-### 代码分割与懒加载
+### Code Splitting & Lazy Loading
 
 ```typescript
 import { lazy, Suspense } from 'react'
@@ -353,7 +355,7 @@ export function Dashboard() {
 }
 ```
 
-### 长列表虚拟化
+### Virtualization for Long Lists
 
 ```typescript
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -397,9 +399,9 @@ export function VirtualMarketList({ markets }: { markets: Market[] }) {
 }
 ```
 
-## 表单处理模式
+## Form Handling Patterns
 
-### 带验证的受控表单
+### Controlled Form with Validation
 
 ```typescript
 interface FormData {
@@ -474,7 +476,7 @@ export function CreateMarketForm() {
 }
 ```
 
-## 错误边界模式
+## Error Boundary Pattern
 
 ```typescript
 interface ErrorBoundaryState {
@@ -522,9 +524,9 @@ export class ErrorBoundary extends React.Component<
 </ErrorBoundary>
 ```
 
-## 动画模式
+## Animation Patterns
 
-### Framer Motion 动画
+### Framer Motion Animations
 
 ```typescript
 import { motion, AnimatePresence } from 'framer-motion'
@@ -576,9 +578,9 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
 }
 ```
 
-## 无障碍模式
+## Accessibility Patterns
 
-### 键盘导航
+### Keyboard Navigation
 
 ```typescript
 export function Dropdown({ options, onSelect }: DropdownProps) {
@@ -619,7 +621,7 @@ export function Dropdown({ options, onSelect }: DropdownProps) {
 }
 ```
 
-### 焦点管理
+### Focus Management
 
 ```typescript
 export function Modal({ isOpen, onClose, children }: ModalProps) {
@@ -653,4 +655,4 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
 }
 ```
 
-**记住**：现代前端模式能实现可维护、高性能的用户界面。选择适合你项目复杂度的模式。
+**Remember**: Modern frontend patterns enable maintainable, performant user interfaces. Choose patterns that fit your project complexity.

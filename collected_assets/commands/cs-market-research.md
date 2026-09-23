@@ -1,15 +1,9 @@
 ---
-title: "/cs-market-research — Slash Command for AI Coding Agents"
-description: "Market research methodology. Size a market as TAM/SAM/SOM computed BOTH top-down and bottoms-up (never a single number), plan a survey sample size. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Market research methodology. Size a market as TAM/SAM/SOM computed BOTH top-down and bottoms-up (never a single number), plan a survey sample size with finite-population correction and per-segment minimums, and score candidate segments against Kotler's criteria. Outputs always show method + assumptions. Direct invocation of the market-research skill.
+argument-hint: "<market context: total market value, customer count, price, survey params, candidate segments>"
 ---
 
-# /cs-market-research
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research-ops/commands/cs-market-research.md">Source</a></span>
-</div>
-
+# /cs:market-research — TAM/SAM/SOM + survey sampling + segmentation
 
 Run the `market-research` skill on this input:
 

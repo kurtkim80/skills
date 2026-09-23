@@ -1,27 +1,27 @@
 ---
 name: x-api
-description: X/Twitter API集成，用于发布推文、线程、读取时间线、搜索和分析。涵盖OAuth认证模式、速率限制和平台原生内容发布。当用户希望以编程方式与X交互时使用。
+description: ツイートの投稿、スレッド、タイムラインの読み取り、検索、分析のためのX/Twitter API統合。OAuth認証パターン、レートリミット、プラットフォームネイティブなコンテンツ投稿をカバーする。ユーザーがプログラムでXと対話したい場合に使用する。
 origin: ECC
 ---
 
 # X API
 
-以编程方式与 X（Twitter）交互，用于发布、读取、搜索和分析。
+投稿、読み取り、検索、分析のためにX（Twitter）とプログラムで対話する。
 
-## 何时激活
+## 有効化する場面
 
-* 用户希望以编程方式发布推文或帖子串
-* 从 X 读取时间线、提及或用户数据
-* 在 X 上搜索内容、趋势或对话
-* 构建 X 集成或机器人
-* 分析和参与度跟踪
-* 用户提及"发布到 X"、"发推"、"X API"或"Twitter API"
+* ユーザーがプログラムでツイートやスレッドを投稿したい
+* Xのタイムライン、メンション、またはユーザーデータを読み取る
+* X上でコンテンツ、トレンド、または会話を検索する
+* X統合またはボットを構築する
+* 分析とエンゲージメント追跡
+* ユーザーが「Xに投稿する」「ツイートする」「X API」または「Twitter API」と言及している
 
-## 认证
+## 認証
 
-### OAuth 2.0 Bearer 令牌（仅应用）
+### OAuth 2.0 Bearerトークン（アプリのみ）
 
-最佳适用场景：读取密集型操作、搜索、公开数据。
+最適な用途：読み取り集中の操作、検索、公開データ。
 
 ```bash
 # Environment setup
@@ -44,9 +44,9 @@ resp = requests.get(
 tweets = resp.json()
 ```
 
-### OAuth 1.0a（用户上下文）
+### OAuth 1.0a（ユーザーコンテキスト）
 
-必需用于：发布推文、管理账户、私信。
+以下に必要：ツイートの投稿、アカウント管理、DM。
 
 ```bash
 # Environment setup — source before use
@@ -68,9 +68,9 @@ oauth = OAuth1Session(
 )
 ```
 
-## 核心操作
+## コア操作
 
-### 发布一条推文
+### ツイートを1件投稿する
 
 ```python
 resp = oauth.post(
@@ -81,7 +81,7 @@ resp.raise_for_status()
 tweet_id = resp.json()["data"]["id"]
 ```
 
-### 发布一个帖子串
+### スレッドを投稿する
 
 ```python
 def post_thread(oauth, tweets: list[str]) -> list[str]:
@@ -98,7 +98,7 @@ def post_thread(oauth, tweets: list[str]) -> list[str]:
     return ids
 ```
 
-### 读取用户时间线
+### ユーザーのタイムラインを読み取る
 
 ```python
 resp = requests.get(
@@ -111,7 +111,7 @@ resp = requests.get(
 )
 ```
 
-### 搜索推文
+### ツイートを検索する
 
 ```python
 resp = requests.get(
@@ -125,7 +125,7 @@ resp = requests.get(
 )
 ```
 
-### 通过用户名获取用户
+### ユーザー名でユーザーを取得する
 
 ```python
 resp = requests.get(
@@ -135,7 +135,7 @@ resp = requests.get(
 )
 ```
 
-### 上传媒体并发布
+### メディアをアップロードして投稿する
 
 ```python
 # Media upload uses v1.1 endpoint
@@ -154,13 +154,13 @@ resp = oauth.post(
 )
 ```
 
-## 速率限制
+## レートリミット
 
-X API 的速率限制因端点、认证方法和账户等级而异，并且会随时间变化。请始终：
+X APIのレートリミットはエンドポイント、認証方法、アカウントティアによって異なり、時間とともに変化する。常に：
 
-* 在硬编码假设之前，查看当前的 X 开发者文档
-* 在运行时读取 `x-rate-limit-remaining` 和 `x-rate-limit-reset` 头部信息
-* 自动退避，而不是依赖代码中的静态表格
+* ハードコードされた仮定を立てる前に現在のX開発者ドキュメントを確認する
+* 実行時に `x-rate-limit-remaining` と `x-rate-limit-reset` ヘッダーを読み取る
+* コード内の静的テーブルに頼らず、自動的にバックオフする
 
 ```python
 import time
@@ -172,7 +172,7 @@ if remaining < 5:
     print(f"Rate limit approaching. Resets in {wait}s")
 ```
 
-## 错误处理
+## エラーハンドリング
 
 ```python
 resp = oauth.post("https://api.x.com/2/tweets", json={"text": content})
@@ -187,24 +187,24 @@ else:
     raise Exception(f"X API error {resp.status_code}: {resp.text}")
 ```
 
-## 安全性
+## セキュリティ
 
-* **切勿硬编码令牌。** 使用环境变量或 `.env` 文件。
-* **切勿提交 `.env` 文件。** 将其添加到 `.gitignore`。
-* **如果令牌暴露，请轮换令牌。** 在 developer.x.com 重新生成。
-* **当不需要写权限时，使用只读令牌。**
-* **安全存储 OAuth 密钥** — 不要存储在源代码或日志中。
+* **トークンをハードコードしない。** 環境変数または `.env` ファイルを使用する。
+* **`.env` ファイルをコミットしない。** `.gitignore` に追加する。
+* **トークンが漏洩した場合はローテーションする。** developer.x.comで再生成する。
+* **書き込み権限が不要な場合は読み取り専用トークンを使用する。**
+* **OAuthシークレットを安全に保管する** — ソースコードやログに保存しない。
 
-## 与内容引擎集成
+## コンテンツエンジンとの統合
 
-使用 `content-engine` 技能生成平台原生内容，然后通过 X API 发布：
+`content-engine` スキルを使用してプラットフォームネイティブなコンテンツを生成し、X API経由で投稿する：
 
-1. 使用内容引擎生成内容（X 平台格式）
-2. 验证长度（单条推文 280 字符）
-3. 使用上述模式通过 X API 发布
-4. 通过 public\_metrics 跟踪参与度
+1. コンテンツエンジンを使用してコンテンツを生成する（Xプラットフォームフォーマット）
+2. 長さを検証する（ツイート1件あたり280文字）
+3. 上記のパターンを使用してX API経由で投稿する
+4. public\_metricsでエンゲージメントを追跡する
 
-## 相关技能
+## 関連スキル
 
-* `content-engine` — 为 X 生成平台原生内容
-* `crosspost` — 在 X、LinkedIn 和其他平台分发内容
+* `content-engine` — X向けのプラットフォームネイティブコンテンツを生成する
+* `crosspost` — X、LinkedIn、その他のプラットフォームでコンテンツを配信する

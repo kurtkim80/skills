@@ -1,15 +1,9 @@
 ---
-title: "/cs-grill-markdown-html — Slash Command for AI Coding Agents"
-description: "Matt-Pocock-style forcing-question grill for markdown-html conversions. Walks 5 cited-canon questions (purpose, line-count threshold, design-system. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Matt-Pocock-style forcing-question grill for markdown-html conversions. Walks 5 cited-canon questions (purpose, line-count threshold, design-system onboarding, output path, doctype confidence) one at a time with a recommended answer. Run before /cs:markdown-html when you want clarity about what the HTML is for, not just a route to the closest sub-skill.
+argument-hint: "<path to markdown file>"
 ---
 
-# /cs-grill-markdown-html
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-grill-markdown-html.md">Source</a></span>
-</div>
-
+# /cs:grill-markdown-html — Pre-conversion grill
 
 Walk the user through 5 forcing questions before routing to the converter. **One question per turn**, with a recommended answer and a canon citation. The user must answer Q1 before Q2 is asked. Never bundle.
 

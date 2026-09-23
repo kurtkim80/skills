@@ -1,49 +1,49 @@
 ---
 name: laravel-security
-description: Laravel 安全最佳实践，涵盖认证/授权、验证、CSRF、批量赋值、文件上传、密钥管理、速率限制和安全部署。
+description: Buenas prácticas de seguridad en Laravel para autenticación/autorización, validación, CSRF, asignación masiva, subida de archivos, secretos, limitación de velocidad y despliegue seguro.
 origin: ECC
 ---
 
-# Laravel 安全最佳实践
+# Buenas Prácticas de Seguridad en Laravel
 
-针对 Laravel 应用程序的全面安全指导，以防范常见漏洞。
+Guía completa de seguridad para aplicaciones Laravel que protege contra vulnerabilidades comunes.
 
-## 何时启用
+## Cuándo Activar
 
-* 添加身份验证或授权时
-* 处理用户输入和文件上传时
-* 构建新的 API 端点时
-* 管理密钥和环境设置时
-* 强化生产环境部署时
+- Agregar autenticación o autorización
+- Manejar entrada de usuarios y subida de archivos
+- Construir nuevos endpoints de API
+- Gestionar secretos y configuración de entornos
+- Reforzar despliegues en producción
 
-## 工作原理
+## Cómo Funciona
 
-* 中间件提供基础保护（通过 `VerifyCsrfToken` 实现 CSRF，通过 `SecurityHeaders` 实现安全标头）。
-* 守卫和策略强制执行访问控制（`auth:sanctum`、`$this->authorize`、策略中间件）。
-* 表单请求在输入到达服务之前进行验证和整形（`UploadInvoiceRequest`）。
-* 速率限制在身份验证控制之外增加滥用保护（`RateLimiter::for('login')`）。
-* 数据安全来自加密转换、批量赋值保护以及签名路由（`URL::temporarySignedRoute` + `signed` 中间件）。
+- El middleware proporciona protecciones de base (CSRF mediante `VerifyCsrfToken`, cabeceras de seguridad mediante `SecurityHeaders`).
+- Los guards y policies aplican el control de acceso (`auth:sanctum`, `$this->authorize`, middleware de policy).
+- Los Form Requests validan y dan forma a la entrada (`UploadInvoiceRequest`) antes de que llegue a los servicios.
+- La limitación de velocidad agrega protección contra abusos (`RateLimiter::for('login')`) junto con controles de autenticación.
+- La seguridad de datos proviene de casts encriptados, guards de asignación masiva y rutas firmadas (`URL::temporarySignedRoute` + middleware `signed`).
 
-## 核心安全设置
+## Configuración Principal de Seguridad
 
-* 生产环境中设置 `APP_DEBUG=false`
-* `APP_KEY` 必须设置，并在泄露时轮换
-* 设置 `SESSION_SECURE_COOKIE=true` 和 `SESSION_SAME_SITE=lax`（对于敏感应用，使用 `strict`）
-* 配置受信任的代理以正确检测 HTTPS
+- `APP_DEBUG=false` en producción
+- `APP_KEY` debe estar establecido y rotarse al comprometerse
+- Establecer `SESSION_SECURE_COOKIE=true` y `SESSION_SAME_SITE=lax` (o `strict` para apps sensibles)
+- Configurar proxies de confianza para la detección correcta de HTTPS
 
-## 会话和 Cookie 强化
+## Reforzamiento de Sesión y Cookies
 
-* 设置 `SESSION_HTTP_ONLY=true` 以防止 JavaScript 访问
-* 对高风险流程使用 `SESSION_SAME_SITE=strict`
-* 在登录和权限变更时重新生成会话
+- Establecer `SESSION_HTTP_ONLY=true` para prevenir acceso desde JavaScript
+- Usar `SESSION_SAME_SITE=strict` para flujos de alto riesgo
+- Regenerar sesiones al iniciar sesión y al cambiar privilegios
 
-## 身份验证与令牌
+## Autenticación y Tokens
 
-* 使用 Laravel Sanctum 或 Passport 进行 API 身份验证
-* 对于敏感数据，优先使用带有刷新流程的短期令牌
-* 在注销和账户泄露时撤销令牌
+- Usar Laravel Sanctum o Passport para autenticación de API
+- Preferir tokens de corta vida con flujos de actualización para datos sensibles
+- Revocar tokens al cerrar sesión y en cuentas comprometidas
 
-路由保护示例：
+Ejemplo de protección de rutas:
 
 ```php
 use Illuminate\Http\Request;
@@ -54,10 +54,10 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
 });
 ```
 
-## 密码安全
+## Seguridad de Contraseñas
 
-* 使用 `Hash::make()` 哈希密码，切勿存储明文
-* 使用 Laravel 的密码代理进行重置流程
+- Hashear contraseñas con `Hash::make()` y nunca almacenar texto plano
+- Usar el password broker de Laravel para los flujos de restablecimiento
 
 ```php
 use Illuminate\Support\Facades\Hash;
@@ -70,16 +70,16 @@ $validated = $request->validate([
 $user->update(['password' => Hash::make($validated['password'])]);
 ```
 
-## 授权：策略与门面
+## Autorización: Policies y Gates
 
-* 使用策略进行模型级授权
-* 在控制器和服务中强制执行授权
+- Usar policies para autorización a nivel de modelo
+- Aplicar autorización en controladores y servicios
 
 ```php
 $this->authorize('update', $project);
 ```
 
-使用策略中间件进行路由级强制执行：
+Usar middleware de policy para aplicación a nivel de ruta:
 
 ```php
 use Illuminate\Support\Facades\Route;
@@ -88,49 +88,49 @@ Route::put('/projects/{project}', [ProjectController::class, 'update'])
     ->middleware(['auth:sanctum', 'can:update,project']);
 ```
 
-## 验证与数据清理
+## Validación y Sanitización de Datos
 
-* 始终使用表单请求验证输入
-* 使用严格的验证规则和类型检查
-* 切勿信任请求负载中的派生字段
+- Siempre validar entradas con Form Requests
+- Usar reglas de validación estrictas y verificaciones de tipo
+- Nunca confiar en los payloads de la request para campos derivados
 
-## 批量赋值保护
+## Protección contra Asignación Masiva
 
-* 使用 `$fillable` 或 `$guarded`，避免使用 `Model::unguard()`
-* 优先使用 DTO 或显式的属性映射
+- Usar `$fillable` o `$guarded` y evitar `Model::unguard()`
+- Preferir DTOs o mapeo explícito de atributos
 
-## SQL 注入防范
+## Prevención de Inyección SQL
 
-* 使用 Eloquent 或查询构建器的参数绑定
-* 除非绝对必要，避免使用原生 SQL
+- Usar Eloquent o el query builder con binding de parámetros
+- Evitar SQL crudo a menos que sea estrictamente necesario
 
 ```php
 DB::select('select * from users where email = ?', [$email]);
 ```
 
-## XSS 防范
+## Prevención de XSS
 
-* Blade 默认转义输出（`{{ }}`）
-* 仅对可信的、已清理的 HTML 使用 `{!! !!}`
-* 使用专用库清理富文本
+- Blade escapa la salida por defecto (`{{ }}`)
+- Usar `{!! !!}` solo para HTML de confianza y sanitizado
+- Sanitizar texto enriquecido con una librería dedicada
 
-## CSRF 保护
+## Protección CSRF
 
-* 保持 `VerifyCsrfToken` 中间件启用
-* 在表单中包含 `@csrf`，并为 SPA 请求发送 XSRF 令牌
+- Mantener el middleware `VerifyCsrfToken` habilitado
+- Incluir `@csrf` en formularios y enviar tokens XSRF en requests de SPA
 
-对于使用 Sanctum 的 SPA 身份验证，确保配置了有状态请求：
+Para autenticación SPA con Sanctum, asegurarse de que las requests stateful estén configuradas:
 
 ```php
 // config/sanctum.php
 'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost')),
 ```
 
-## 文件上传安全
+## Seguridad en Subida de Archivos
 
-* 验证文件大小、MIME 类型和扩展名
-* 尽可能将上传文件存储在公开路径之外
-* 如果需要，扫描文件以查找恶意软件
+- Validar tamaño de archivo, tipo MIME y extensión
+- Almacenar subidas fuera del directorio público cuando sea posible
+- Escanear archivos en busca de malware si es necesario
 
 ```php
 final class UploadInvoiceRequest extends FormRequest
@@ -152,14 +152,14 @@ final class UploadInvoiceRequest extends FormRequest
 ```php
 $path = $request->file('invoice')->store(
     'invoices',
-    config('filesystems.private_disk', 'local') // set this to a non-public disk
+    config('filesystems.private_disk', 'local') // establecer a un disco no público
 );
 ```
 
-## 速率限制
+## Limitación de Velocidad
 
-* 在身份验证和写入端点应用 `throttle` 中间件
-* 对登录、密码重置和 OTP 使用更严格的限制
+- Aplicar middleware `throttle` en endpoints de autenticación y escritura
+- Usar límites más estrictos para login, restablecimiento de contraseña y OTP
 
 ```php
 use Illuminate\Cache\RateLimiting\Limit;
@@ -174,15 +174,15 @@ RateLimiter::for('login', function (Request $request) {
 });
 ```
 
-## 密钥与凭据
+## Secretos y Credenciales
 
-* 切勿将密钥提交到源代码管理
-* 使用环境变量和密钥管理器
-* 密钥暴露后及时轮换，并使会话失效
+- Nunca hacer commit de secretos al control de versiones
+- Usar variables de entorno y gestores de secretos
+- Rotar claves después de una exposición e invalidar sesiones
 
-## 加密属性
+## Atributos Encriptados
 
-对静态的敏感列使用加密转换。
+Usar casts encriptados para columnas sensibles en reposo.
 
 ```php
 protected $casts = [
@@ -190,12 +190,12 @@ protected $casts = [
 ];
 ```
 
-## 安全标头
+## Cabeceras de Seguridad
 
-* 在适当的地方添加 CSP、HSTS 和框架保护
-* 使用受信任的代理配置来强制执行 HTTPS 重定向
+- Agregar CSP, HSTS y protección de frames donde sea apropiado
+- Usar configuración de proxies de confianza para forzar redirecciones HTTPS
 
-设置标头的中间件示例：
+Ejemplo de middleware para establecer cabeceras:
 
 ```php
 use Illuminate\Http\Request;
@@ -209,7 +209,7 @@ final class SecurityHeaders
 
         $response->headers->add([
             'Content-Security-Policy' => "default-src 'self'",
-            'Strict-Transport-Security' => 'max-age=31536000', // add includeSubDomains/preload only when all subdomains are HTTPS
+            'Strict-Transport-Security' => 'max-age=31536000', // agregar includeSubDomains/preload solo cuando todos los subdominios sean HTTPS
             'X-Frame-Options' => 'DENY',
             'X-Content-Type-Options' => 'nosniff',
             'Referrer-Policy' => 'no-referrer',
@@ -220,10 +220,10 @@ final class SecurityHeaders
 }
 ```
 
-## CORS 与 API 暴露
+## CORS y Exposición de API
 
-* 在 `config/cors.php` 中限制来源
-* 对于经过身份验证的路由，避免使用通配符来源
+- Restringir orígenes en `config/cors.php`
+- Evitar orígenes wildcard para rutas autenticadas
 
 ```php
 // config/cors.php
@@ -242,10 +242,10 @@ return [
 ];
 ```
 
-## 日志记录与 PII
+## Logging y PII
 
-* 切勿记录密码、令牌或完整的卡片数据
-* 在结构化日志中编辑敏感字段
+- Nunca registrar contraseñas, tokens o datos completos de tarjetas
+- Redactar campos sensibles en logs estructurados
 
 ```php
 use Illuminate\Support\Facades\Log;
@@ -257,14 +257,14 @@ Log::info('User updated profile', [
 ]);
 ```
 
-## 依赖项安全
+## Seguridad de Dependencias
 
-* 定期运行 `composer audit`
-* 谨慎固定依赖项版本，并在出现 CVE 时及时更新
+- Ejecutar `composer audit` regularmente
+- Fijar dependencias con cuidado y actualizar rápidamente ante CVEs
 
-## 签名 URL
+## URLs Firmadas
 
-使用签名路由生成临时的、防篡改的链接。
+Usar rutas firmadas para enlaces temporales a prueba de manipulaciones.
 
 ```php
 use Illuminate\Support\Facades\URL;

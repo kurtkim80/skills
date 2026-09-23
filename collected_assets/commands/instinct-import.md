@@ -1,88 +1,114 @@
 ---
-description: Import instincts from external sources
-agent: build
+name: instinct-import
+description: Importar instintos desde archivo o URL al alcance del proyecto/global
+command: true
 ---
 
-# Instinct Import Command
+# Comando Instinct Import
 
-Import instincts from a file or URL: $ARGUMENTS
+## Implementación
 
-## Your Task
+Ejecutar la CLI de instintos usando la ruta raíz del plugin:
 
-Import instincts into the continuous-learning-v2 system.
-
-## Import Sources
-
-### File Import
-```
-/instinct-import path/to/instincts.json
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <archivo-o-url> [--dry-run] [--force] [--min-confidence 0.7] [--scope project|global]
 ```
 
-### URL Import
-```
-/instinct-import https://example.com/instincts.json
-```
+O si `CLAUDE_PLUGIN_ROOT` no está configurado (instalación manual):
 
-### Team Share Import
-```
-/instinct-import @teammate/instincts
+```bash
+python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <archivo-o-url>
 ```
 
-## Import Format
+Importar instintos desde rutas de archivos locales o URLs HTTP(S).
 
-Expected JSON structure:
-
-```json
-{
-  "instincts": [
-    {
-      "trigger": "[situation description]",
-      "action": "[recommended action]",
-      "confidence": 0.7,
-      "category": "coding",
-      "source": "imported"
-    }
-  ],
-  "metadata": {
-    "version": "1.0",
-    "exported": "2025-01-15T10:00:00Z",
-    "author": "username"
-  }
-}
-```
-
-## Import Process
-
-1. **Validate format** - Check JSON structure
-2. **Deduplicate** - Skip existing instincts
-3. **Adjust confidence** - Reduce confidence for imports (×0.8)
-4. **Merge** - Add to local instinct store
-5. **Report** - Show import summary
-
-## Import Report
+## Uso
 
 ```
-Import Summary
-==============
-Source: [path or URL]
-Total in file: X
-Imported: Y
-Skipped (duplicates): Z
-Errors: W
-
-Imported Instincts:
-- [trigger] (confidence: 0.XX)
-- [trigger] (confidence: 0.XX)
-...
+/instinct-import team-instincts.yaml
+/instinct-import https://github.com/org/repo/instincts.yaml
+/instinct-import team-instincts.yaml --dry-run
+/instinct-import team-instincts.yaml --scope global --force
 ```
 
-## Conflict Resolution
+## Qué Hacer
 
-When importing duplicates:
-- Keep higher confidence version
-- Merge application counts
-- Update timestamp
+1. Obtener el archivo de instintos (ruta local o URL)
+2. Parsear y validar el formato
+3. Verificar duplicados con instintos existentes
+4. Fusionar o añadir nuevos instintos
+5. Guardar en el directorio de instintos heredados:
+   - Alcance de proyecto: `~/.claude/homunculus/projects/<project-id>/instincts/inherited/`
+   - Alcance global: `~/.claude/homunculus/instincts/inherited/`
 
----
+## Proceso de Importación
 
-**TIP**: Review imported instincts with `/instinct-status` after import.
+```
+ Importando instintos desde: team-instincts.yaml
+================================================
+
+12 instintos encontrados para importar.
+
+Analizando conflictos...
+
+## Nuevos Instintos (8)
+Estos se añadirán:
+  ✓ use-zod-validation (confianza: 0.7)
+  ✓ prefer-named-exports (confianza: 0.65)
+  ✓ test-async-functions (confianza: 0.8)
+  ...
+
+## Instintos Duplicados (3)
+Ya existen instintos similares:
+  ADVERTENCIA: prefer-functional-style
+     Local: confianza 0.8, 12 observaciones
+     Importado: confianza 0.7
+     → Conservar local (mayor confianza)
+
+  ADVERTENCIA: test-first-workflow
+     Local: confianza 0.75
+     Importado: confianza 0.9
+     → Actualizar al importado (mayor confianza)
+
+¿Importar 8 nuevos, actualizar 1?
+```
+
+## Comportamiento de Fusión
+
+Al importar un instinto con un ID existente:
+- El importado con mayor confianza se convierte en candidato de actualización
+- El importado con igual/menor confianza se omite
+- El usuario confirma a menos que se use `--force`
+
+## Seguimiento de Fuente
+
+Los instintos importados se marcan con:
+```yaml
+source: inherited
+scope: project
+imported_from: "team-instincts.yaml"
+project_id: "a1b2c3d4e5f6"
+project_name: "my-project"
+```
+
+## Flags
+
+- `--dry-run`: Vista previa sin importar
+- `--force`: Omitir el prompt de confirmación
+- `--min-confidence <n>`: Solo importar instintos por encima del umbral
+- `--scope <project|global>`: Seleccionar el alcance destino (por defecto: `project`)
+
+## Salida
+
+Después de la importación:
+```
+¡Importación completada!
+
+Añadidos: 8 instintos
+Actualizados: 1 instinto
+Omitidos: 3 instintos (ya existe igual/mayor confianza)
+
+Nuevos instintos guardados en: ~/.claude/homunculus/instincts/inherited/
+
+Ejecutar /instinct-status para ver todos los instintos.
+```

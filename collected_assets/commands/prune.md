@@ -1,31 +1,31 @@
 ---
 name: prune
-description: 删除超过 30 天且从未被提升的待处理本能
+description: プロモートされなかった30日以上経過の保留中インスティンクトを削除
 command: true
 ---
 
-# 清理待处理本能
+# 保留中インスティンクトの整理
 
-删除那些由系统自动生成、但从未经过审查或提升的过期待处理本能。
+自動生成されたがレビューまたはプロモートされなかった期限切れの保留中インスティンクトを削除します。
 
-## 实现
+## 実装
 
-使用插件根目录路径运行本能 CLI：
+プラグインルートパスを使用してインスティンクトCLIを実行:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" prune
 ```
 
-或者如果 `CLAUDE_PLUGIN_ROOT` 未设置（手动安装）：
+または`CLAUDE_PLUGIN_ROOT`が設定されていない場合（手動インストール）:
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py prune
 ```
 
-## 用法
+## 使い方
 
 ```
-/prune                    # 删除超过 30 天的本能
-/prune --max-age 60       # 自定义年龄阈值（天）
-/prune --dry-run          # 仅预览，不实际删除
+/prune                    # 30日以上のインスティンクトを削除
+/prune --max-age 60      # カスタム経過閾値（日数）
+/prune --dry-run         # 削除せずにプレビュー
 ```

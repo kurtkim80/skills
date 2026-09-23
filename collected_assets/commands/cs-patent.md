@@ -1,15 +1,9 @@
 ---
-title: "/cs-patent — Slash Command for AI Coding Agents"
-description: "/cs:patent <invention> — Patent prior-art + landscape intelligence with mandatory sub-use-case commitment. 6-Q grill-me intake (Q2 picks one of. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-patent"
+description: "/cs:patent <invention> — Patent prior-art + landscape intelligence with mandatory sub-use-case commitment. 6-Q grill-me intake (Q2 picks one of: novelty / FTO / landscape / diligence / litigation). Multi-source search (Google Patents + Espacenet + USPTO + optional Lens.org BYOK). 8-section .docx with verdict + claim text + family-resolved hits + mandatory legal disclaimer (novelty + FTO)."
 ---
 
-# /cs-patent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/patent/commands/cs-patent.md">Source</a></span>
-</div>
-
+# /cs:patent — Patent Prior-Art + Landscape Intelligence
 
 **Command:** `/cs:patent <invention description>`
 
@@ -95,8 +89,8 @@ patent_<invention-slug>_<sub-use-case>_<YYYY-MM-DD>.docx
 
 ## Related
 
-- Agent: [`cs-patent`](https://github.com/alirezarezvani/claude-skills/tree/main/research/patent/agents/cs-patent.md)
-- Skill: [`patent`](https://github.com/alirezarezvani/claude-skills/tree/main/research/patent/skills/patent/SKILL.md)
+- Agent: [`cs-patent`](../agents/cs-patent.md)
+- Skill: [`patent`](../skills/patent/SKILL.md)
 - Source spec: `megaprompts/11-patent-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Siblings: `/cs:litreview`, `/cs:grants`, `/cs:dossier`, `/cs:pulse`
 - Future: `/cs:syllabus`

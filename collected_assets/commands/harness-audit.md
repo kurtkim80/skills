@@ -1,84 +1,77 @@
 ---
-description: Run a deterministic repository harness audit and return a prioritized scorecard.
+description: 決定論的なリポジトリハーネス監査を実行し、優先順位付きスコアカードを返します。
 ---
 
-# Harness Audit Command
+# ハーネス監査コマンド
 
-Run a deterministic repository harness audit and return a prioritized scorecard.
+決定論的なリポジトリハーネス監査を実行し、優先順位付きスコアカードを返します。
 
-## Usage
+## 使い方
 
 `/harness-audit [scope] [--format text|json] [--root path]`
 
-- `scope` (optional): `repo` (default), `hooks`, `skills`, `commands`, `agents`
-- `--format`: output style (`text` default, `json` for automation)
-- `--root`: audit a specific path instead of the current working directory
+- `scope`（オプション）: `repo`（デフォルト）、`hooks`、`skills`、`commands`、`agents`
+- `--format`: 出力スタイル（`text`がデフォルト、自動化には`json`）
+- `--root`: 現在の作業ディレクトリの代わりに特定のパスを監査
 
-## Deterministic Engine
+## 決定論的エンジン
 
-Always run:
+常に実行:
 
 ```bash
 node scripts/harness-audit.js <scope> --format <text|json> [--root <path>]
 ```
 
-This script is the source of truth for scoring and checks. Do not invent additional dimensions or ad-hoc points.
+このスクリプトがスコアリングとチェックの信頼できるソースです。追加のディメンションやアドホックなポイントを作り出さないでください。
 
-Rubric version: `2026-05-19`.
+ルーブリックバージョン: `2026-03-30`。
 
-The script computes up to 12 fixed categories (`0-10` normalized each). The first seven are always applicable; GitHub Integration is always applicable; deploy-target categories are applicable only when a matching marker is detected.
+スクリプトは7つの固定カテゴリ（各`0-10`正規化）を計算:
 
-1. Tool Coverage
-2. Context Efficiency
-3. Quality Gates
-4. Memory Persistence
-5. Eval Coverage
-6. Security Guardrails
-7. Cost Efficiency
-8. GitHub Integration
-9. Vercel Integration *(when `vercel.json` or `.vercel/` is present)*
-10. Netlify Integration *(when `netlify.toml` or `.netlify/` is present)*
-11. Cloudflare Integration *(when `wrangler.toml` or `wrangler.jsonc` is present)*
-12. Fly Integration *(when `fly.toml` is present)*
+1. ツールカバレッジ
+2. コンテキスト効率
+3. 品質ゲート
+4. メモリ永続性
+5. 評価カバレッジ
+6. セキュリティガードレール
+7. コスト効率
 
-Scores are derived from explicit file/rule checks and are reproducible for the same commit.
-The script audits the current working directory by default and auto-detects whether the target is the ECC repo itself or a consumer project using ECC.
+スコアは明示的なファイル/ルールチェックから導出され、同じコミットに対して再現可能です。
+スクリプトはデフォルトで現在の作業ディレクトリを監査し、対象がECCリポジトリ自体か、ECCを使用するコンシューマプロジェクトかを自動検出します。
 
-## Output Contract
+## 出力契約
 
-Return:
+返却内容:
 
-1. `overall_score` out of `max_score`. `max_score` depends on which categories are applicable to the target; never assume a fixed total.
-2. `applicable_categories[]` and `category_count` describing which categories contributed.
-3. Category scores and concrete findings.
-4. Failed checks with exact file paths.
-5. Top 3 actions from the deterministic output (`top_actions`).
-6. Suggested ECC skills to apply next.
+1. `overall_score` / `max_score`（`repo`の場合70、スコープ付き監査ではより小さい）
+2. カテゴリスコアと具体的な所見
+3. 正確なファイルパス付きの失敗チェック
+4. 決定論的出力からのトップ3アクション（`top_actions`）
+5. 次に適用すべき推奨ECCスキル
 
-## Checklist
+## チェックリスト
 
-- Use script output directly; do not rescore manually.
-- If `--format json` is requested, return the script JSON unchanged.
-- If text is requested, summarize failing checks and top actions.
-- Include exact file paths from `checks[]` and `top_actions[]`.
+- スクリプト出力を直接使用。手動で再スコアリングしない。
+- `--format json`が要求された場合、スクリプトJSONをそのまま返す。
+- テキストが要求された場合、失敗チェックとトップアクションをサマリー。
+- `checks[]`と`top_actions[]`からの正確なファイルパスを含める。
 
-## Example Result
+## 結果の例
 
 ```text
-Harness Audit (repo, repo): 71/80
+Harness Audit (repo): 66/70
 - Tool Coverage: 10/10 (10/10 pts)
 - Context Efficiency: 9/10 (9/10 pts)
 - Quality Gates: 10/10 (10/10 pts)
-- GitHub Integration: 2/10 (2/10 pts)
 
 Top 3 Actions:
-1) [GitHub Integration] Add at least one workflow under .github/workflows/. (.github/workflows/)
-2) [Security Guardrails] Add prompt/tool preflight security guards in hooks/hooks.json. (hooks/hooks.json)
-3) [Eval Coverage] Increase automated test coverage across scripts/hooks/lib. (tests/)
+1) [Security Guardrails] hooks/hooks.jsonにプロンプト/ツールプリフライトセキュリティガードを追加。(hooks/hooks.json)
+2) [Tool Coverage] commands/harness-audit.mdと.opencode/commands/harness-audit.mdを同期。(.opencode/commands/harness-audit.md)
+3) [Eval Coverage] scripts/hooks/lib全体の自動テストカバレッジを増加。(tests/)
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `repo|hooks|skills|commands|agents` (optional scope)
-- `--format text|json` (optional output format)
+- `repo|hooks|skills|commands|agents`（オプションのスコープ）
+- `--format text|json`（オプションの出力形式）

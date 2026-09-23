@@ -1,15 +1,10 @@
 ---
-title: "/cs-deep-research — Slash Command for AI Coding Agents"
-description: "/cs:deep-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-deep-research"
+description: "/cs:deep-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans out parallel search sub-agents, triangulates every thesis against >=3 independent sources, saves each source to its own file with verbatim quotes, runs an adversarial pass, and emits an auditable, reusable research folder with a refresh protocol. The heavyweight alternative to the fast research router."
+argument-hint: "[the question or decision to research]"
 ---
 
-# /cs-deep-research
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/deep-research/commands/cs-deep-research.md">Source</a></span>
-</div>
-
+# /cs:deep-research — Disciplined Meta-Research
 
 **Command:** `/cs:deep-research <question>`
 
@@ -58,8 +53,8 @@ The `cs-deep-research` persona turns "research this" into an auditable, reusable
 
 ## Related
 
-- Agent: [`cs-deep-research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/deep-research/agents/cs-deep-research.md)
-- Skill: [`deep-research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/deep-research/skills/deep-research/SKILL.md)
+- Agent: [`cs-deep-research`](../agents/cs-deep-research.md)
+- Skill: [`deep-research`](../skills/deep-research/SKILL.md)
 - Siblings: `/cs:pulse` (recency), the research router, `litreview` / `dossier` / `patent`
 
 ---

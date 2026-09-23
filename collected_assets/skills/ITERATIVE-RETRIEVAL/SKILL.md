@@ -1,27 +1,27 @@
 ---
 name: iterative-retrieval
-description: サブエージェントのコンテキスト問題を解決するために、コンテキスト取得を段階的に洗練するパターン
+description: Pattern for progressively refining context retrieval to solve the subagent context problem
 ---
 
-# 反復検索パターン
+# 迭代檢索模式
 
-マルチエージェントワークフローにおける「コンテキスト問題」を解決します。サブエージェントは作業を開始するまで、どのコンテキストが必要かわかりません。
+解決多 agent 工作流程中的「上下文問題」，其中子 agents 在開始工作之前不知道需要什麼上下文。
 
 ## 問題
 
-サブエージェントは限定的なコンテキストで起動されます。以下を知りません:
-- どのファイルに関連するコードが含まれているか
-- コードベースにどのようなパターンが存在するか
-- プロジェクトがどのような用語を使用しているか
+子 agents 以有限上下文產生。它們不知道：
+- 哪些檔案包含相關程式碼
+- 程式碼庫中存在什麼模式
+- 專案使用什麼術語
 
-標準的なアプローチは失敗します:
-- **すべてを送信**: コンテキスト制限を超える
-- **何も送信しない**: エージェントに重要な情報が不足
-- **必要なものを推測**: しばしば間違い
+標準方法失敗：
+- **傳送所有內容**：超過上下文限制
+- **不傳送內容**：Agent 缺乏關鍵資訊
+- **猜測需要什麼**：經常錯誤
 
-## 解決策: 反復検索
+## 解決方案：迭代檢索
 
-コンテキストを段階的に洗練する4フェーズのループ:
+一個漸進精煉上下文的 4 階段循環：
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -35,29 +35,29 @@ description: サブエージェントのコンテキスト問題を解決する�
 │   │   LOOP   │◀─────│  REFINE  │            │
 │   └──────────┘      └──────────┘            │
 │                                             │
-│        最大3サイクル、その後続行              │
+│        最多 3 個循環，然後繼續               │
 └─────────────────────────────────────────────┘
 ```
 
-### フェーズ1: DISPATCH
+### 階段 1：DISPATCH
 
-候補ファイルを収集する初期の広範なクエリ:
+初始廣泛查詢以收集候選檔案：
 
 ```javascript
-// 高レベルの意図から開始
+// 從高層意圖開始
 const initialQuery = {
   patterns: ['src/**/*.ts', 'lib/**/*.ts'],
   keywords: ['authentication', 'user', 'session'],
   excludes: ['*.test.ts', '*.spec.ts']
 };
 
-// 検索エージェントにディスパッチ
+// 派遣到檢索 agent
 const candidates = await retrieveFiles(initialQuery);
 ```
 
-### フェーズ2: EVALUATE
+### 階段 2：EVALUATE
 
-取得したコンテンツの関連性を評価:
+評估檢索內容的相關性：
 
 ```javascript
 function evaluateRelevance(files, task) {
@@ -70,32 +70,32 @@ function evaluateRelevance(files, task) {
 }
 ```
 
-スコアリング基準:
-- **高(0.8-1.0)**: ターゲット機能を直接実装
-- **中(0.5-0.7)**: 関連するパターンや型を含む
-- **低(0.2-0.4)**: 間接的に関連
-- **なし(0-0.2)**: 関連なし、除外
+評分標準：
+- **高（0.8-1.0）**：直接實作目標功能
+- **中（0.5-0.7）**：包含相關模式或類型
+- **低（0.2-0.4）**：間接相關
+- **無（0-0.2）**：不相關，排除
 
-### フェーズ3: REFINE
+### 階段 3：REFINE
 
-評価に基づいて検索基準を更新:
+基於評估更新搜尋標準：
 
 ```javascript
 function refineQuery(evaluation, previousQuery) {
   return {
-    // 高関連性ファイルで発見された新しいパターンを追加
+    // 新增在高相關性檔案中發現的新模式
     patterns: [...previousQuery.patterns, ...extractPatterns(evaluation)],
 
-    // コードベースで見つかった用語を追加
+    // 新增在程式碼庫中找到的術語
     keywords: [...previousQuery.keywords, ...extractKeywords(evaluation)],
 
-    // 確認された無関係なパスを除外
+    // 排除確認不相關的路徑
     excludes: [...previousQuery.excludes, ...evaluation
       .filter(e => e.relevance < 0.2)
       .map(e => e.path)
     ],
 
-    // 特定のギャップをターゲット
+    // 針對特定缺口
     focusAreas: evaluation
       .flatMap(e => e.missingContext)
       .filter(unique)
@@ -103,9 +103,9 @@ function refineQuery(evaluation, previousQuery) {
 }
 ```
 
-### フェーズ4: LOOP
+### 階段 4：LOOP
 
-洗練された基準で繰り返す(最大3サイクル):
+以精煉標準重複（最多 3 個循環）：
 
 ```javascript
 async function iterativeRetrieve(task, maxCycles = 3) {
@@ -116,13 +116,13 @@ async function iterativeRetrieve(task, maxCycles = 3) {
     const candidates = await retrieveFiles(query);
     const evaluation = evaluateRelevance(candidates, task);
 
-    // 十分なコンテキストがあるか確認
+    // 檢查是否有足夠上下文
     const highRelevance = evaluation.filter(e => e.relevance >= 0.7);
     if (highRelevance.length >= 3 && !hasCriticalGaps(evaluation)) {
       return highRelevance;
     }
 
-    // 洗練して続行
+    // 精煉並繼續
     query = refineQuery(evaluation, query);
     bestContext = mergeContext(bestContext, highRelevance);
   }
@@ -131,72 +131,72 @@ async function iterativeRetrieve(task, maxCycles = 3) {
 }
 ```
 
-## 実践例
+## 實際範例
 
-### 例1: バグ修正コンテキスト
-
-```
-タスク: "認証トークン期限切れバグを修正"
-
-サイクル1:
-  DISPATCH: src/**で"token"、"auth"、"expiry"を検索
-  EVALUATE: auth.ts(0.9)、tokens.ts(0.8)、user.ts(0.3)を発見
-  REFINE: "refresh"、"jwt"キーワードを追加; user.tsを除外
-
-サイクル2:
-  DISPATCH: 洗練された用語で検索
-  EVALUATE: session-manager.ts(0.95)、jwt-utils.ts(0.85)を発見
-  REFINE: 十分なコンテキスト(2つの高関連性ファイル)
-
-結果: auth.ts、tokens.ts、session-manager.ts、jwt-utils.ts
-```
-
-### 例2: 機能実装
+### 範例 1：Bug 修復上下文
 
 ```
-タスク: "APIエンドポイントにレート制限を追加"
+任務：「修復認證 token 過期 bug」
 
-サイクル1:
-  DISPATCH: routes/**で"rate"、"limit"、"api"を検索
-  EVALUATE: マッチなし - コードベースは"throttle"用語を使用
-  REFINE: "throttle"、"middleware"キーワードを追加
+循環 1：
+  DISPATCH：在 src/** 搜尋 "token"、"auth"、"expiry"
+  EVALUATE：找到 auth.ts (0.9)、tokens.ts (0.8)、user.ts (0.3)
+  REFINE：新增 "refresh"、"jwt" 關鍵字；排除 user.ts
 
-サイクル2:
-  DISPATCH: 洗練された用語で検索
-  EVALUATE: throttle.ts(0.9)、middleware/index.ts(0.7)を発見
-  REFINE: ルーターパターンが必要
+循環 2：
+  DISPATCH：搜尋精煉術語
+  EVALUATE：找到 session-manager.ts (0.95)、jwt-utils.ts (0.85)
+  REFINE：足夠上下文（2 個高相關性檔案）
 
-サイクル3:
-  DISPATCH: "router"、"express"パターンを検索
-  EVALUATE: router-setup.ts(0.8)を発見
-  REFINE: 十分なコンテキスト
-
-結果: throttle.ts、middleware/index.ts、router-setup.ts
+結果：auth.ts、tokens.ts、session-manager.ts、jwt-utils.ts
 ```
 
-## エージェントとの統合
+### 範例 2：功能實作
 
-エージェントプロンプトで使用:
+```
+任務：「為 API 端點增加速率限制」
+
+循環 1：
+  DISPATCH：在 routes/** 搜尋 "rate"、"limit"、"api"
+  EVALUATE：無匹配 - 程式碼庫使用 "throttle" 術語
+  REFINE：新增 "throttle"、"middleware" 關鍵字
+
+循環 2：
+  DISPATCH：搜尋精煉術語
+  EVALUATE：找到 throttle.ts (0.9)、middleware/index.ts (0.7)
+  REFINE：需要路由器模式
+
+循環 3：
+  DISPATCH：搜尋 "router"、"express" 模式
+  EVALUATE：找到 router-setup.ts (0.8)
+  REFINE：足夠上下文
+
+結果：throttle.ts、middleware/index.ts、router-setup.ts
+```
+
+## 與 Agents 整合
+
+在 agent 提示中使用：
 
 ```markdown
-このタスクのコンテキストを取得する際:
-1. 広範なキーワード検索から開始
-2. 各ファイルの関連性を評価(0-1スケール)
-3. まだ不足しているコンテキストを特定
-4. 検索基準を洗練して繰り返す(最大3サイクル)
-5. 関連性が0.7以上のファイルを返す
+為此任務檢索上下文時：
+1. 從廣泛關鍵字搜尋開始
+2. 評估每個檔案的相關性（0-1 尺度）
+3. 識別仍缺少的上下文
+4. 精煉搜尋標準並重複（最多 3 個循環）
+5. 回傳相關性 >= 0.7 的檔案
 ```
 
-## ベストプラクティス
+## 最佳實務
 
-1. **広く開始し、段階的に絞る** - 初期クエリで過度に指定しない
-2. **コードベースの用語を学ぶ** - 最初のサイクルでしばしば命名規則が明らかになる
-3. **不足しているものを追跡** - 明示的なギャップ識別が洗練を促進
-4. **「十分に良い」で停止** - 3つの高関連性ファイルは10個の平凡なファイルより優れている
-5. **確信を持って除外** - 低関連性ファイルは関連性を持つようにならない
+1. **從廣泛開始，逐漸縮小** - 不要過度指定初始查詢
+2. **學習程式碼庫術語** - 第一個循環通常會揭示命名慣例
+3. **追蹤缺失內容** - 明確的缺口識別驅動精煉
+4. **在「足夠好」時停止** - 3 個高相關性檔案勝過 10 個普通檔案
+5. **自信地排除** - 低相關性檔案不會變得相關
 
-## 関連項目
+## 相關
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - サブエージェントオーケストレーションセクション
-- `continuous-learning`スキル - 時間とともに改善するパターン用
-- `~/.claude/agents/`内のエージェント定義
+- [Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 子 agent 協調章節
+- `continuous-learning` 技能 - 用於隨時間改進的模式
+- `~/.claude/agents/` 中的 Agent 定義

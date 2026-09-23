@@ -1,16 +1,7 @@
 ---
-title: "/wiki-ingest — Slash Command for AI Coding Agents"
-description: "Ingest a source file from raw/ into the LLM Wiki — read, discuss, write summary page, update cross-references across 5-15 pages, regenerate index. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: wiki-ingest
+description: Ingest a source file from raw/ into the LLM Wiki — read, discuss, write summary page, update cross-references across 5-15 pages, regenerate index, append to log. Usage /wiki-ingest <path-to-source>
 ---
-
-# /wiki-ingest
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/wiki-ingest.md">Source</a></span>
-</div>
-
-<!-- canonical copy: engineering/llm-wiki/commands/wiki-ingest.md — keep in sync (root copy uses repo-root-relative script paths) -->
 
 # /wiki-ingest
 
@@ -30,13 +21,13 @@ A typical ingest touches **5-15 wiki pages**. You (the user) are in the loop: th
 
 ## What happens
 
-1. **Prep** — runs `engineering/llm-wiki/skills/llm-wiki/scripts/ingest_source.py` to get title, preview, and suggested summary path
+1. **Prep** — runs `skills/llm-wiki/scripts/ingest_source.py` to get title, preview, and suggested summary path
 2. **Read** — reads the source directly
 3. **Discuss** — reports TL;DR, key claims, which pages will be touched, any contradictions
 4. **Confirm** — waits for your go-ahead (or redirects)
 5. **Write** — creates the source summary, updates 5-15 pages, flags contradictions
-6. **Index** — runs `engineering/llm-wiki/skills/llm-wiki/scripts/update_index.py` or edits `wiki/index.md` inline
-7. **Log** — runs `engineering/llm-wiki/skills/llm-wiki/scripts/append_log.py --op ingest --title "<title>"`
+6. **Index** — runs `skills/llm-wiki/scripts/update_index.py` or edits `wiki/index.md` inline
+7. **Log** — runs `skills/llm-wiki/scripts/append_log.py --op ingest --title "<title>"`
 8. **Report** — bulleted wikilinks to every touched page
 
 ## Sub-agent

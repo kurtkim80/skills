@@ -1,16 +1,16 @@
-# 时间线编辑指南
+# タイムライン編集ガイド
 
-VideoDB 提供了一个非破坏性的时间线编辑器，用于从多个素材合成视频、添加文本和图像叠加、混合音轨以及修剪片段——所有这些都在服务器端完成，无需重新编码或本地工具。可用于修剪、合并片段、在视频上叠加音频/音乐、添加字幕以及叠加文本或图像。
+VideoDBは、複数のクリップからビデオを合成し、テキストや画像のオーバーレイを追加し、オーディオトラックをミックスし、クリップをトリミングするための非破壊的なタイムラインエディターを提供する——すべてサーバーサイドで、再エンコードやローカルツールは不要。トリミング、クリップのマージ、ビデオへのオーディオ/音楽のオーバーレイ、字幕の追加、テキストや画像のオーバーレイに使用できる。
 
 ## 前提条件
 
-视频、音频和图像**必须上传**到集合中，才能用作时间线素材。对于字幕叠加，视频还必须**为口语单词建立索引**。
+ビデオ、オーディオ、画像は、タイムラインアセットとして使用するために**コレクションにアップロードされている必要がある**。字幕オーバーレイには、ビデオも**音声単語のインデックスが作成されている必要がある**。
 
-## 核心概念
+## コアコンセプト
 
-### 时间线
+### タイムライン
 
-`Timeline` 是一个虚拟合成层。素材可以**内联**（在主轨道上顺序放置）或作为**叠加层**（在特定时间戳分层放置）放置在时间线上。不会修改原始媒体；最终流是按需编译的。
+`Timeline` は仮想合成レイヤーである。アセットはタイムラインに**インライン**（メイントラックに順番に配置）または**オーバーレイ**（特定のタイムスタンプにレイヤーとして配置）として配置できる。元のメディアは変更されない；最終ストリームはオンデマンドでコンパイルされる。
 
 ```python
 from videodb.timeline import Timeline
@@ -18,23 +18,23 @@ from videodb.timeline import Timeline
 timeline = Timeline(conn)
 ```
 
-### 素材
+### アセット
 
-时间线上的每个元素都是一个**素材**。VideoDB 提供五种素材类型：
+タイムライン上の各要素は**アセット**である。VideoDBは5種類のアセットタイプを提供する：
 
-| 素材 | 导入 | 主要用途 |
+| アセット | インポート | 主な用途 |
 |-------|--------|-------------|
-| `VideoAsset` | `from videodb.asset import VideoAsset` | 视频片段（修剪、排序） |
-| `AudioAsset` | `from videodb.asset import AudioAsset` | 音乐、音效、旁白 |
-| `ImageAsset` | `from videodb.asset import ImageAsset` | 徽标、缩略图、叠加层 |
-| `TextAsset` | `from videodb.asset import TextAsset, TextStyle` | 标题、字幕、下三分之一字幕 |
-| `CaptionAsset` | `from videodb.editor import CaptionAsset` | 自动渲染的字幕（编辑器 API） |
+| `VideoAsset` | `from videodb.asset import VideoAsset` | ビデオクリップ（トリミング、順序付け） |
+| `AudioAsset` | `from videodb.asset import AudioAsset` | 音楽、効果音、ナレーション |
+| `ImageAsset` | `from videodb.asset import ImageAsset` | ロゴ、サムネイル、オーバーレイ |
+| `TextAsset` | `from videodb.asset import TextAsset, TextStyle` | タイトル、字幕、ローワーサード |
+| `CaptionAsset` | `from videodb.editor import CaptionAsset` | 自動レンダリング字幕（エディターAPI） |
 
-## 构建时间线
+## タイムラインの構築
 
-### 内联添加视频片段
+### ビデオクリップをインラインで追加する
 
-内联素材在主视频轨道上一个接一个播放。`add_inline` 方法只接受 `VideoAsset`：
+インラインアセットはメインビデオトラックに順番に再生される。`add_inline` メソッドは `VideoAsset` のみを受け入れる：
 
 ```python
 from videodb.asset import VideoAsset
@@ -49,9 +49,9 @@ timeline.add_inline(VideoAsset(asset_id=video_b.id))
 stream_url = timeline.generate_stream()
 ```
 
-### 修剪 / 子片段
+### トリミング / サブクリップ
 
-在 `VideoAsset` 上使用 `start` 和 `end` 来提取一部分：
+`VideoAsset` の `start` と `end` を使用して一部を抽出する：
 
 ```python
 # Take only seconds 10–30 from the source video
@@ -59,19 +59,19 @@ clip = VideoAsset(asset_id=video.id, start=10, end=30)
 timeline.add_inline(clip)
 ```
 
-### VideoAsset 参数
+### VideoAssetのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | 必填 | 视频媒体 ID |
-| `start` | `float` | `0` | 修剪开始时间（秒） |
-| `end` | `float\|None` | `None` | 修剪结束时间（`None` = 完整视频） |
+| `asset_id` | `str` | 必須 | ビデオメディアID |
+| `start` | `float` | `0` | トリミング開始時間（秒） |
+| `end` | `float\|None` | `None` | トリミング終了時間（`None` = 完全なビデオ） |
 
-> **警告：** SDK 不会验证负时间戳。传递 `start=-5` 会被静默接受，但会产生损坏或意外的输出。在创建 `VideoAsset` 之前，请始终确保 `start >= 0`、`start < end` 和 `end <= video.length`。
+> **警告：** SDKは負のタイムスタンプを検証しない。`start=-5` を渡すと静かに受け入れられるが、破損したまたは予期しない出力を生成する。`VideoAsset` を作成する前に常に `start >= 0`、`start < end`、`end <= video.length` を確認すること。
 
-## 文本叠加
+## テキストオーバーレイ
 
-在时间线的任意点添加标题、下三分之一字幕或说明文字：
+タイムラインの任意の点にタイトル、ローワーサード、またはアノテーションを追加する：
 
 ```python
 from videodb.asset import TextAsset, TextStyle
@@ -92,39 +92,39 @@ title = TextAsset(
 timeline.add_overlay(0, title)
 ```
 
-### TextStyle 参数
+### TextStyleのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `fontsize` | `int` | `24` | 字体大小（像素） |
-| `fontcolor` | `str` | `"black"` | CSS 颜色名称或十六进制值 |
-| `fontcolor_expr` | `str` | `""` | 动态字体颜色表达式 |
-| `alpha` | `float` | `1.0` | 文本不透明度（0.0–1.0） |
-| `font` | `str` | `"Sans"` | 字体系列 |
-| `box` | `bool` | `True` | 启用背景框 |
-| `boxcolor` | `str` | `"white"` | 背景框颜色 |
-| `boxborderw` | `str` | `"10"` | 框边框宽度 |
-| `boxw` | `int` | `0` | 框宽度覆盖 |
-| `boxh` | `int` | `0` | 框高度覆盖 |
-| `line_spacing` | `int` | `0` | 行间距 |
-| `text_align` | `str` | `"T"` | 框内文本对齐方式 |
-| `y_align` | `str` | `"text"` | 垂直对齐参考 |
-| `borderw` | `int` | `0` | 文本边框宽度 |
-| `bordercolor` | `str` | `"black"` | 文本边框颜色 |
-| `expansion` | `str` | `"normal"` | 文本扩展模式 |
-| `basetime` | `int` | `0` | 基于时间的表达式的基础时间 |
-| `fix_bounds` | `bool` | `False` | 固定文本边界 |
-| `text_shaping` | `bool` | `True` | 启用文本整形 |
-| `shadowcolor` | `str` | `"black"` | 阴影颜色 |
-| `shadowx` | `int` | `0` | 阴影 X 偏移 |
-| `shadowy` | `int` | `0` | 阴影 Y 偏移 |
-| `tabsize` | `int` | `4` | 制表符大小（空格数） |
-| `x` | `str` | `"(main_w-text_w)/2"` | 水平位置表达式 |
-| `y` | `str` | `"(main_h-text_h)/2"` | 垂直位置表达式 |
+| `fontsize` | `int` | `24` | フォントサイズ（ピクセル） |
+| `fontcolor` | `str` | `"black"` | CSSカラー名または16進数値 |
+| `fontcolor_expr` | `str` | `""` | 動的フォントカラー式 |
+| `alpha` | `float` | `1.0` | テキストの不透明度（0.0〜1.0） |
+| `font` | `str` | `"Sans"` | フォントファミリー |
+| `box` | `bool` | `True` | 背景ボックスを有効にする |
+| `boxcolor` | `str` | `"white"` | 背景ボックスカラー |
+| `boxborderw` | `str` | `"10"` | ボックスの境界線幅 |
+| `boxw` | `int` | `0` | ボックス幅のオーバーライド |
+| `boxh` | `int` | `0` | ボックス高さのオーバーライド |
+| `line_spacing` | `int` | `0` | 行間隔 |
+| `text_align` | `str` | `"T"` | ボックス内のテキスト整列 |
+| `y_align` | `str` | `"text"` | 垂直整列の基準 |
+| `borderw` | `int` | `0` | テキスト境界線幅 |
+| `bordercolor` | `str` | `"black"` | テキスト境界線カラー |
+| `expansion` | `str` | `"normal"` | テキスト展開モード |
+| `basetime` | `int` | `0` | 時間ベースの式の基準時間 |
+| `fix_bounds` | `bool` | `False` | テキスト境界を固定する |
+| `text_shaping` | `bool` | `True` | テキストシェーピングを有効にする |
+| `shadowcolor` | `str` | `"black"` | シャドウカラー |
+| `shadowx` | `int` | `0` | シャドウXオフセット |
+| `shadowy` | `int` | `0` | シャドウYオフセット |
+| `tabsize` | `int` | `4` | タブサイズ（スペース数） |
+| `x` | `str` | `"(main_w-text_w)/2"` | 水平位置の式 |
+| `y` | `str` | `"(main_h-text_h)/2"` | 垂直位置の式 |
 
-## 音频叠加
+## オーディオオーバーレイ
 
-在主视频轨道上叠加背景音乐、音效或旁白：
+バックグラウンドミュージック、効果音、またはナレーションをメインビデオトラックの上にオーバーレイする：
 
 ```python
 from videodb.asset import AudioAsset
@@ -142,20 +142,20 @@ audio_layer = AudioAsset(
 timeline.add_overlay(0, audio_layer)
 ```
 
-### AudioAsset 参数
+### AudioAssetのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | 必填 | 音频媒体 ID |
-| `start` | `float` | `0` | 修剪开始时间（秒） |
-| `end` | `float\|None` | `None` | 修剪结束时间（`None` = 完整音频） |
-| `disable_other_tracks` | `bool` | `True` | 为 True 时，静音其他音轨 |
-| `fade_in_duration` | `float` | `0` | 淡入秒数（最大 5） |
-| `fade_out_duration` | `float` | `0` | 淡出秒数（最大 5） |
+| `asset_id` | `str` | 必須 | オーディオメディアID |
+| `start` | `float` | `0` | トリミング開始時間（秒） |
+| `end` | `float\|None` | `None` | トリミング終了時間（`None` = 完全なオーディオ） |
+| `disable_other_tracks` | `bool` | `True` | Trueの場合、他のオーディオトラックをミュートする |
+| `fade_in_duration` | `float` | `0` | フェードイン秒数（最大5） |
+| `fade_out_duration` | `float` | `0` | フェードアウト秒数（最大5） |
 
-## 图像叠加
+## 画像オーバーレイ
 
-添加徽标、水印或生成的图像作为叠加层：
+ロゴ、ウォーターマーク、または生成された画像をオーバーレイとして追加する：
 
 ```python
 from videodb.asset import ImageAsset
@@ -174,24 +174,24 @@ logo_overlay = ImageAsset(
 timeline.add_overlay(0, logo_overlay)
 ```
 
-### ImageAsset 参数
+### ImageAssetのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `asset_id` | `str` | 必填 | 图像媒体 ID |
-| `width` | `int\|str` | `100` | 显示宽度 |
-| `height` | `int\|str` | `100` | 显示高度 |
-| `x` | `int` | `80` | 水平位置（距离左侧的像素） |
-| `y` | `int` | `20` | 垂直位置（距离顶部的像素） |
-| `duration` | `float\|None` | `None` | 显示时长（秒） |
+| `asset_id` | `str` | 必須 | 画像メディアID |
+| `width` | `int\|str` | `100` | 表示幅 |
+| `height` | `int\|str` | `100` | 表示高さ |
+| `x` | `int` | `80` | 水平位置（左からのピクセル） |
+| `y` | `int` | `20` | 垂直位置（上からのピクセル） |
+| `duration` | `float\|None` | `None` | 表示時間（秒） |
 
-## 字幕叠加
+## 字幕オーバーレイ
 
-有两种方式可以为视频添加字幕。
+ビデオに字幕を追加する方法は2つある。
 
-### 方法 1：字幕工作流（最简单）
+### 方法1：字幕ワークフロー（最もシンプル）
 
-使用 `video.add_subtitle()` 将字幕直接烧录到视频流中。这在内部使用 `videodb.timeline.Timeline`：
+`video.add_subtitle()` を使用してビデオストリームに字幕を直接バーンインする。これは内部で `videodb.timeline.Timeline` を使用する：
 
 ```python
 from videodb import SubtitleStyle
@@ -211,9 +211,9 @@ stream_url = video.add_subtitle(style=SubtitleStyle(
 ))
 ```
 
-### 方法 2：编辑器 API（高级）
+### 方法2：エディターAPI（高度）
 
-编辑器 API（`videodb.editor`）提供了一个基于轨道的合成系统，包含 `CaptionAsset`、`Clip`、`Track` 及其自身的 `Timeline`。这是一个与上述使用的 `videodb.timeline.Timeline` 独立的 API。
+エディターAPI（`videodb.editor`）は、`CaptionAsset`、`Clip`、`Track`、独自の `Timeline` を持つトラックベースの合成システムを提供する。これは上記で使用した `videodb.timeline.Timeline` とは独立したAPIである。
 
 ```python
 from videodb.editor import (
@@ -249,33 +249,33 @@ editor_tl.add_track(track)
 stream_url = editor_tl.generate_stream()
 ```
 
-### CaptionAsset 参数
+### CaptionAssetのパラメータ
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `src` | `str` | `"auto"` | 字幕来源（`"auto"` 或 base64 ASS 字符串） |
-| `font` | `FontStyling\|None` | `FontStyling()` | 字体样式（名称、大小、粗体、斜体等） |
-| `primary_color` | `str` | `"&H00FFFFFF"` | 主文本颜色（ASS 格式） |
-| `secondary_color` | `str` | `"&H000000FF"` | 次文本颜色（ASS 格式） |
-| `back_color` | `str` | `"&H00000000"` | 背景颜色（ASS 格式） |
-| `border` | `BorderAndShadow\|None` | `BorderAndShadow()` | 边框和阴影样式 |
-| `position` | `Positioning\|None` | `Positioning()` | 字幕对齐方式和边距 |
-| `animation` | `CaptionAnimation\|None` | `None` | 动画效果（例如，`box_highlight`、`reveal`、`karaoke`） |
+| `src` | `str` | `"auto"` | 字幕ソース（`"auto"` またはbase64 ASS文字列） |
+| `font` | `FontStyling\|None` | `FontStyling()` | フォントスタイリング（名前、サイズ、太字、斜体など） |
+| `primary_color` | `str` | `"&H00FFFFFF"` | メインテキストカラー（ASSフォーマット） |
+| `secondary_color` | `str` | `"&H000000FF"` | サブテキストカラー（ASSフォーマット） |
+| `back_color` | `str` | `"&H00000000"` | 背景カラー（ASSフォーマット） |
+| `border` | `BorderAndShadow\|None` | `BorderAndShadow()` | 境界線とシャドウのスタイル |
+| `position` | `Positioning\|None` | `Positioning()` | 字幕の整列とマージン |
+| `animation` | `CaptionAnimation\|None` | `None` | アニメーション効果（例：`box_highlight`、`reveal`、`karaoke`） |
 
-## 编译与流式传输
+## コンパイルとストリーミング
 
-组装好时间线后，将其编译成可流式传输的 URL。流是即时生成的——无需渲染等待时间。
+タイムラインを組み立てたら、ストリーミング可能なURLにコンパイルする。ストリームはオンザフライで生成される——レンダリングの待ち時間はない。
 
 ```python
 stream_url = timeline.generate_stream()
 print(f"Stream: {stream_url}")
 ```
 
-有关更多流式传输选项（分段流、搜索到流、音频播放），请参阅 [streaming.md](streaming.md)。
+追加のストリーミングオプション（セグメントストリーム、検索からストリーム、オーディオ再生）については [streaming.md](streaming.md) を参照。
 
-## 完整工作流示例
+## 完全なワークフロー例
 
-### 带标题卡的高光集锦
+### タイトルカード付きのハイライトリール
 
 ```python
 import videodb
@@ -320,7 +320,7 @@ stream_url = timeline.generate_stream()
 print(f"Highlight reel: {stream_url}")
 ```
 
-### 带背景音乐的徽标叠加
+### バックグラウンドミュージック付きロゴオーバーレイ
 
 ```python
 import videodb
@@ -355,7 +355,7 @@ stream_url = timeline.generate_stream()
 print(f"Final video: {stream_url}")
 ```
 
-### 来自多个视频的多片段蒙太奇
+### 複数のビデオからのマルチクリップモンタージュ
 
 ```python
 import videodb
@@ -391,53 +391,53 @@ stream_url = timeline.generate_stream()
 print(f"Montage: {stream_url}")
 ```
 
-## 两个时间线 API
+## 2つのタイムラインAPI
 
-VideoDB 有两个独立的时间线系统。它们**不可互换**：
+VideoDBには2つの独立したタイムラインシステムがある。それらは**互換性がない**：
 
-| | `videodb.timeline.Timeline` | `videodb.editor.Timeline`（编辑器 API） |
+| | `videodb.timeline.Timeline` | `videodb.editor.Timeline`（エディターAPI） |
 |---|---|---|
-| **导入** | `from videodb.timeline import Timeline` | `from videodb.editor import Timeline as EditorTimeline` |
-| **素材** | `VideoAsset`、`AudioAsset`、`ImageAsset`、`TextAsset` | `CaptionAsset`、`Clip`、`Track` |
-| **方法** | `add_inline()`、`add_overlay()` | `add_track()` 配合 `Track` / `Clip` |
-| **最适合** | 视频合成、叠加、多片段编辑 | 带动画的字幕/字幕样式设计 |
+| **インポート** | `from videodb.timeline import Timeline` | `from videodb.editor import Timeline as EditorTimeline` |
+| **アセット** | `VideoAsset`、`AudioAsset`、`ImageAsset`、`TextAsset` | `CaptionAsset`、`Clip`、`Track` |
+| **メソッド** | `add_inline()`、`add_overlay()` | `add_track()` と `Track` / `Clip` の組み合わせ |
+| **最適な用途** | ビデオ合成、オーバーレイ、マルチクリップ編集 | アニメーション付き字幕/キャプションスタイリング |
 
-不要将一个 API 的素材混入另一个 API。`CaptionAsset` 仅适用于编辑器 API。`VideoAsset` / `AudioAsset` / `ImageAsset` / `TextAsset` 仅适用于 `videodb.timeline.Timeline`。
+一方のAPIのアセットをもう一方に混在させない。`CaptionAsset` はエディターAPIのみで機能する。`VideoAsset` / `AudioAsset` / `ImageAsset` / `TextAsset` は `videodb.timeline.Timeline` のみで機能する。
 
-## 限制与约束
+## 制限と制約
 
-时间线编辑器专为**非破坏性线性合成**而设计。**不支持**以下操作：
+タイムラインエディターは**非破壊的な線形合成**向けに設計されている。以下の操作は**サポートされていない**：
 
-### 不支持的操作
+### サポートされていない操作
 
-| 限制 | 详情 |
+| 制限 | 詳細 |
 |---|---|
-| **无过渡或效果** | 片段之间没有交叉淡入淡出、划像、溶解或过渡。所有剪辑都是硬切。 |
-| **无视频叠加视频（画中画）** | `add_inline()` 只接受 `VideoAsset`。无法将一个视频流叠加在另一个之上。图像叠加可以近似静态画中画，但不能是实时视频。 |
-| **无速度或播放控制** | 没有慢动作、快进、倒放或时间重映射。`VideoAsset` 没有 `speed` 参数。 |
-| **无裁剪、缩放或平移** | 无法裁剪视频帧的区域、应用缩放效果或在帧上平移。`video.reframe()` 仅用于宽高比转换。 |
-| **无视频滤镜或色彩分级** | 没有亮度、对比度、饱和度、色调或色彩校正调整。 |
-| **无动画文本** | `TextAsset` 在其整个持续时间内是静态的。没有淡入/淡出、移动或动画。对于动画字幕，请使用带有编辑器 API 的 `CaptionAsset`。 |
-| **无混合文本样式** | 单个 `TextAsset` 只有一个 `TextStyle`。无法在单个文本块内混合粗体、斜体或颜色。 |
-| **无空白或纯色片段** | 无法创建纯色帧、黑屏或独立的标题卡。文本和图像叠加需要在内联轨道上有 `VideoAsset` 作为底层。 |
-| **无音频音量控制** | `AudioAsset` 没有 `volume` 参数。音频要么是全音量，要么通过 `disable_other_tracks` 静音。无法以降低的音量混合。 |
-| **无关键帧动画** | 无法随时间改变叠加属性（例如，将图像从位置 A 移动到 B）。 |
+| **トランジションやエフェクトなし** | クリップ間のクロスフェード、ワイプ、ディゾルブ、トランジションはない。すべてのカットはハードカット。 |
+| **ビデオへのビデオオーバーレイなし（ピクチャーインピクチャー）** | `add_inline()` は `VideoAsset` のみを受け入れる。別のビデオストリームの上に1つのビデオストリームをオーバーレイすることはできない。画像オーバーレイは静的なピクチャーインピクチャーを近似できるが、ライブビデオではない。 |
+| **速度や再生制御なし** | スローモーション、早送り、逆再生、タイムリマッピングはない。`VideoAsset` には `speed` パラメータがない。 |
+| **クロップ、ズーム、パンなし** | ビデオフレームの領域をクロップしたり、ズームエフェクトを適用したり、フレームでパンすることはできない。`video.reframe()` はアスペクト比変換のみ。 |
+| **ビデオフィルターやカラーグレーディングなし** | 輝度、コントラスト、彩度、色相、カラーコレクション調整はない。 |
+| **アニメーションテキストなし** | `TextAsset` はその全持続時間にわたって静的。フェードイン/アウト、移動、アニメーションはない。アニメーション字幕にはエディターAPIで `CaptionAsset` を使用する。 |
+| **混合テキストスタイルなし** | 単一の `TextAsset` は1つの `TextStyle` のみを持つ。単一のテキストブロック内で太字、斜体、カラーを混在させることはできない。 |
+| **ブランクまたは単色クリップなし** | 単色フレーム、ブラックスクリーン、スタンドアロンタイトルカードを作成することはできない。テキストと画像のオーバーレイは、インライントラックに基礎として `VideoAsset` が必要。 |
+| **オーディオ音量コントロールなし** | `AudioAsset` には `volume` パラメータがない。オーディオはフルボリュームか、`disable_other_tracks` でミュートかのどちらか。低音量でミックスすることはできない。 |
+| **キーフレームアニメーションなし** | 時間をかけてオーバーレイプロパティを変更することはできない（例：画像を位置Aから位置Bに移動）。 |
 
-### 约束
+### 制約
 
-| 约束 | 详情 |
+| 制約 | 詳細 |
 |---|---|
-| **音频淡入淡出最长 5 秒** | `fade_in_duration` 和 `fade_out_duration` 各自上限为 5 秒。 |
-| **叠加层定位为绝对定位** | 叠加层使用时间轴起始点的绝对时间戳。重新排列内联片段不会移动其叠加层。 |
-| **内联轨道仅支持视频** | `add_inline()` 仅接受 `VideoAsset`。音频、图像和文本必须使用 `add_overlay()`。 |
-| **叠加层与片段无绑定关系** | 叠加层被放置在固定的时间轴时间戳上。无法将叠加层附加到特定的内联片段以使其随之移动。 |
+| **オーディオフェードは最大5秒** | `fade_in_duration` と `fade_out_duration` はそれぞれ最大5秒。 |
+| **オーバーレイの位置は絶対タイムライン基準** | オーバーレイはタイムライン開始からの絶対タイムスタンプを使用する。インラインクリップの再配置によってオーバーレイは移動しない。 |
+| **インライントラックはビデオのみ** | `add_inline()` は `VideoAsset` のみを受け入れる。オーディオ、画像、テキストは `add_overlay()` を使用する必要がある。 |
+| **オーバーレイはクリップにバインドされない** | オーバーレイは固定されたタイムラインタイムスタンプに配置される。オーバーレイを特定のインラインクリップに添付してそれと一緒に移動させることはできない。 |
 
-## 提示
+## ヒント
 
-* **非破坏性**：时间轴从不修改源媒体。您可以使用相同的素材创建多个时间轴。
-* **叠加层堆叠**：多个叠加层可以在同一时间戳开始。音频叠加层会混合在一起；图像/文本叠加层按添加顺序分层叠加。
-* **内联轨道仅支持 VideoAsset**：`add_inline()` 仅接受 `VideoAsset`。对于 `AudioAsset`、`ImageAsset` 和 `TextAsset`，请使用 `add_overlay()`。
-* **裁剪精度**：`start`/`end` 在 `VideoAsset` 和 `AudioAsset` 上以秒为单位。
-* **静音视频音频**：在 `AudioAsset` 上设置 `disable_other_tracks=True`，以便在叠加音乐或旁白时静音原始视频音频。
-* **淡入淡出限制**：`fade_in_duration` 和 `fade_out_duration` 在 `AudioAsset` 上最长不超过 5 秒。
-* **生成媒体**：使用 `coll.generate_music()`、`coll.generate_sound_effect()`、`coll.generate_voice()` 和 `coll.generate_image()` 创建可立即用作时间轴素材的媒体。
+* **非破壊的**：タイムラインはソースメディアを変更しない。同じアセットを使用して複数のタイムラインを作成できる。
+* **オーバーレイスタッキング**：複数のオーバーレイを同じタイムスタンプで開始できる。オーディオオーバーレイはミックスされる；画像/テキストオーバーレイは追加された順にレイヤー化される。
+* **インライントラックはVideoAssetのみ**：`add_inline()` は `VideoAsset` のみを受け入れる。`AudioAsset`、`ImageAsset`、`TextAsset` には `add_overlay()` を使用する。
+* **クリップ精度**：`VideoAsset` と `AudioAsset` の `start`/`end` は秒単位。
+* **ビデオオーディオのミュート**：音楽やナレーションをオーバーレイするときに元のビデオオーディオをミュートするために `AudioAsset` に `disable_other_tracks=True` を設定する。
+* **フェード制限**：`AudioAsset` の `fade_in_duration` と `fade_out_duration` は最大5秒。
+* **メディアの生成**：`coll.generate_music()`、`coll.generate_sound_effect()`、`coll.generate_voice()`、`coll.generate_image()` を使用してタイムラインアセットとしてすぐに使用できるメディアを作成する。

@@ -1,23 +1,23 @@
 ---
 name: nodejs-keccak256
-description: 防止 JavaScript 和 TypeScript 中的以太坊哈希错误。Node 的 sha3-256 是 NIST SHA3，而非以太坊 Keccak-256，会静默破坏选择器、签名、存储槽和地址推导。
+description: JavaScriptとTypeScriptにおけるEthereumハッシュバグを防ぐ。NodeのSHA3-256はNIST SHA3であり、Ethereum Keccak-256ではなく、セレクター、署名、ストレージスロット、アドレス導出を静かに破壊する。
 origin: ECC direct-port adaptation
 version: "1.0.0"
 ---
 
 # Node.js Keccak-256
 
-以太坊使用 Keccak-256，而非 Node 的 `crypto.createHash('sha3-256')` 所暴露的 NIST 标准化 SHA3 变体。
+EthereumはKeccak-256を使用し、Nodeの`crypto.createHash('sha3-256')`が公開するNIST標準化SHA3バリアントではない。
 
-## 何时使用
+## 使用するタイミング
 
-* 计算以太坊函数选择器或事件主题
-* 在 JS/TS 中构建 EIP-712、签名、Merkle 或存储槽辅助函数
-* 审查任何直接使用 Node crypto 对以太坊数据进行哈希的代码
+- Ethereum関数セレクターやイベントトピックの計算
+- JS/TSでEIP-712、署名、Merkle、またはストレージスロットヘルパーの構築
+- Nodeのcryptoを直接使用してEthereumデータをハッシュするコードのレビュー
 
-## 工作原理
+## 仕組み
 
-两种算法对相同输入会产生不同输出，且 Node 不会发出警告。
+2つのアルゴリズムは同じ入力に対して異なる出力を生成し、Nodeは警告しない。
 
 ```javascript
 import crypto from 'crypto';
@@ -30,7 +30,7 @@ const keccak = keccak256(toUtf8Bytes(data)).slice(2);
 console.log(nistSha3 === keccak); // false
 ```
 
-## 示例
+## 例
 
 ### ethers v6
 
@@ -64,7 +64,7 @@ const packed = web3.utils.soliditySha3(
 );
 ```
 
-### 常见模式
+### 一般的なパターン
 
 ```typescript
 import { id, keccak256, AbiCoder } from 'ethers';
@@ -79,7 +79,7 @@ function getMappingSlot(key: string, mappingSlot: number): string {
 }
 ```
 
-### 从公钥生成地址
+### 公開鍵からアドレス
 
 ```typescript
 import { keccak256 } from 'ethers';
@@ -90,13 +90,13 @@ function pubkeyToAddress(pubkeyBytes: Uint8Array): string {
 }
 ```
 
-### 审计你的代码库
+### コードベースの監査
 
 ```bash
 grep -rn "createHash.*sha3" --include="*.ts" --include="*.js" --exclude-dir=node_modules .
 grep -rn "keccak256" --include="*.ts" --include="*.js" . | grep -v node_modules
 ```
 
-## 规则
+## ルール
 
-在以太坊上下文中，切勿使用 `crypto.createHash('sha3-256')`。应使用来自 `ethers`、`viem`、`web3` 或其他明确 Keccak 实现的 Keccak 感知辅助函数。
+Ethereumコンテキストでは、`crypto.createHash('sha3-256')`を絶対に使用しない。`ethers`、`viem`、`web3`、または別の明示的なKeccak実装のKeccak対応ヘルパーを使用すること。

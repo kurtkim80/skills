@@ -1,30 +1,30 @@
 ---
 name: ecc-guide
-description: 在回答之前先读取仓库的实时状态，引导用户了解 ECC 当前的 agents、skills、命令、hooks、规则、安装配置档案以及项目接入流程。
+description: ECC の現在のエージェント、スキル、コマンド、フック、ルール、インストールプロファイル、およびプロジェクトオンボーディングをガイドしています。ライブリポジトリサーフェスを読んでから回答するようユーザーをガイドします。
 origin: community
 ---
 
-# ECC 指南
+# ECC Guide
 
-当用户需要帮助来理解、浏览、安装 Everything Claude Code 或在其中做选择时，使用此技能。
+Use this skill when a user needs help understanding, navigating, installing, or choosing parts of Everything Claude Code.
 
-## 何时使用
+## When To Use
 
-当用户出现以下情况时使用此技能：
+Use this skill when the user:
 
-- 询问 ECC 包含哪些内容
-- 需要帮助查找某个 skill、命令、agent、hook、规则或安装配置档案
-- 刚接触本仓库，需要一条引导路径
-- 询问"如何用 ECC 做 X？"
-- 询问哪些 ECC 组件适合某个项目
-- 需要简单了解命令、skills、agents、hooks 和规则之间的关系
-- 对安装路径、重复安装、重置/卸载或选择性安装选项感到困惑
+- asks what ECC includes
+- wants help finding a skill, command, agent, hook, rule, or install profile
+- is new to the repository and needs a guided path
+- asks "how do I do X with ECC?"
+- asks which ECC components fit a project
+- needs a lightweight explanation of how commands, skills, agents, hooks, and rules relate
+- is confused by install paths, duplicate installs, reset/uninstall, or selective install options
 
-## 核心原则
+## Core Principle
 
-依据当前文件回答，而不是凭记忆。ECC 变化很快，硬编码的目录数量、功能列表和安装说明都会过时。
+Answer from current files, not memory. ECC changes quickly, so hard-coded catalog counts, feature lists, and install instructions go stale.
 
-当 ECC 仓库可用时，先检查相关文件再给出具体答案：
+When the ECC repository is available, inspect the relevant files before giving a concrete answer:
 
 ```bash
 node scripts/ci/catalog.js --json
@@ -35,74 +35,74 @@ node scripts/install-plan.js --list-profiles
 node scripts/install-plan.js --list-components --json
 ```
 
-只读取回答用户问题所需的最小文件集。
+Use the smallest set of reads needed for the user's question.
 
-## 仓库地图
+## Repository Map
 
-- `README.md`：安装路径、卸载/重置指引、对外定位、常见问题
-- `AGENTS.md`：贡献者指引和项目结构
-- `agent.yaml`：导出的 gitagent 接口和命令列表
-- `commands/`：持续维护的斜杠命令兼容垫片
-- `skills/*/SKILL.md`：可复用的工作流和领域手册
-- `agents/*.md`：用于委派的子代理角色提示词
-- `rules/`：语言规则和运行环境规则
-- `hooks/README.md`、`hooks/hooks.json`、`scripts/hooks/`：hook 行为和安全门控
-- `manifests/install-*.json`：选择性安装的模块、组件、配置档案和目标支持
-- `docs/`：运行环境指南、架构笔记、翻译文档、发布文档
+- `README.md`: install paths, uninstall/reset guidance, public positioning, FAQs
+- `AGENTS.md`: contributor guidance and project structure
+- `agent.yaml`: exported gitagent surface and command list
+- `commands/`: maintained slash-command compatibility shims
+- `skills/*/SKILL.md`: reusable workflows and domain playbooks
+- `agents/*.md`: delegated subagent role prompts
+- `rules/`: language and harness rules
+- `hooks/README.md`, `hooks/hooks.json`, `scripts/hooks/`: hook behavior and safety gates
+- `manifests/install-*.json`: selective install modules, components, profiles, and target support
+- `docs/`: harness guides, architecture notes, translated docs, release docs
 
-## 回复风格
+## Response Style
 
-先给答案，再给下一步动作。大多数用户不需要完整的目录倾倒。
+Lead with the answer, then give the next action. Most users do not need a full catalog dump.
 
-良好的首次回复结构：
+Good first response shape:
 
-1. 用什么
-2. 为什么合适
-3. 要查看的确切文件或命令
-4. 一个后续命令或问题
+1. what to use
+2. why it fits
+3. exact file or command to inspect
+4. one next command or question
 
-避免：
+Avoid:
 
-- 默认列出所有 skill 或命令
-- 重复 README 的大段内容
-- 在已有 skill 优先路径时仍推荐已退役的命令垫片
-- 未检查文件系统就声称某个组件存在
-- 在托管安装器支持目标环境时，用手动复制命令代替安装指引
+- listing every skill or command by default
+- repeating large README sections
+- recommending retired command shims when a skill-first path exists
+- claiming a component exists without checking the filesystem
+- replacing install guidance with manual copy commands when the managed installer supports the target
 
-## 常见任务
+## Common Tasks
 
-### 新用户入门
+### New User Onboarding
 
-给出一份简短菜单：
+Give a short menu:
 
-- 安装或重置 ECC
-- 为项目挑选 skills
-- 理解命令与 skills 的区别
-- 检查 hooks 和安全行为
-- 运行一次运行环境审计
-- 查找某个特定工作流
+- install or reset ECC
+- pick skills for a project
+- understand commands vs skills
+- inspect hooks and safety behavior
+- run a harness audit
+- find a specific workflow
 
-安装/重置指向 `README.md`，项目级接入指向 `/project-init`。
+Point to `README.md` for install/reset and `/project-init` for project-specific onboarding.
 
-### 功能发现
+### Feature Discovery
 
-对于"我该用什么来做 X？"：
+For "what should I use for X?":
 
-1. 搜索 `skills/`、`commands/` 和 `agents/`。
-2. 优先把 skills 作为主要工作流入口。
-3. 仅当命令是持续维护的兼容垫片、或用户明确想要斜杠命令行为时才使用命令。
-4. 当委派有价值时提及 agents。
+1. Search `skills/`, `commands/`, and `agents/`.
+2. Prefer skills as the primary workflow surface.
+3. Use commands only when they are a maintained compatibility shim or a user explicitly wants slash-command behavior.
+4. Mention agents when delegation is useful.
 
-有用的搜索：
+Useful searches:
 
 ```bash
 rg -n "<query>" skills commands agents docs
 find skills -maxdepth 2 -name SKILL.md | sort
 ```
 
-### 安装指引
+### Install Guidance
 
-使用托管安装路径：
+Use managed install paths:
 
 ```bash
 node scripts/install-plan.js --list-profiles
@@ -110,36 +110,36 @@ node scripts/install-plan.js --profile minimal --target claude --json
 node scripts/install-apply.js --profile minimal --target claude --dry-run
 ```
 
-针对特定 skill 的安装：
+For specific skill installs:
 
 ```bash
 node scripts/install-plan.js --skills <skill-id> --target claude --json
 node scripts/install-apply.js --skills <skill-id> --target claude --dry-run
 ```
 
-提醒用户不要同时叠加插件安装和完整的手动/档案安装，除非他们有意要重复的组件面。
+Warn users not to stack plugin installs and full manual/profile installs unless they intentionally want duplicate surfaces.
 
-### 项目接入
+### Project Onboarding
 
-当用户想为目标仓库配置 ECC 时，使用 `/project-init`。预期顺序为：
+Use `/project-init` when the user wants ECC configured for a target repo. The expected sequence is:
 
-1. 从项目文件检测技术栈
-2. 生成一份 dry-run 安装计划
-3. 检查现有的 `CLAUDE.md` 和设置文件
-4. 在应用更改前先询问
-5. 保持生成的指引精简且针对该仓库
+1. detect the stack from project files
+2. resolve a dry-run install plan
+3. inspect existing `CLAUDE.md` and settings files
+4. ask before applying changes
+5. keep generated guidance minimal and repo-specific
 
-### 故障排查
+### Troubleshooting
 
-先询问目标运行环境和安装路径，然后检查：
+Ask for the target harness and install path first, then inspect:
 
-- 插件安装元数据
-- `.claude/`、`.cursor/`、`.codex/`、`.gemini/`、`.opencode/`、`.codebuddy/`、`.joycode/` 或 `.qwen/`
+- plugin install metadata
+- `.claude/`, `.cursor/`, `.codex/`, `.gemini/`, `.opencode/`, `.codebuddy/`, `.joycode/`, or `.qwen/`
 - `hooks/hooks.json`
-- 安装状态文件
-- 相关的命令/skill 文件
+- install-state files
+- relevant command/skill files
 
-针对仓库健康度，建议：
+For repo health, suggest:
 
 ```bash
 npm run harness:audit -- --format text
@@ -147,9 +147,9 @@ npm run observability:ready
 npm test
 ```
 
-## 输出模板
+## Output Templates
 
-### 简短推荐
+### Short Recommendation
 
 ```text
 Use <skill-or-command>. It fits because <reason>.
@@ -159,7 +159,7 @@ Verify with: <command>
 Next: <one concrete action>
 ```
 
-### 搜索结果
+### Search Results
 
 ```text
 Best matches:
@@ -169,7 +169,7 @@ Best matches:
 Recommendation: <which one to use first and why>
 ```
 
-### 安装计划摘要
+### Install Plan Summary
 
 ```text
 Detected: <stack evidence>
@@ -180,10 +180,10 @@ Would change: <paths>
 Needs approval before apply: <yes/no>
 ```
 
-## 相关入口
+## Related Surfaces
 
-- `/project-init`：面向目标仓库的技术栈感知接入计划
-- `/harness-audit`：确定性的就绪度评分卡
-- `/skill-health`：skill 质量审查
-- `/skill-create`：从本地 git 历史生成新 skill
-- `/security-scan`：检查 Claude/OpenCode 配置安全性
+- `/project-init`: stack-aware onboarding plan for a target repo
+- `/harness-audit`: deterministic readiness scorecard
+- `/skill-health`: skill quality review
+- `/skill-create`: generate a new skill from local git history
+- `/security-scan`: inspect Claude/OpenCode configuration security

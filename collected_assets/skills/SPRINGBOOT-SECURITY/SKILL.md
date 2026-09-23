@@ -1,17 +1,17 @@
 ---
 name: springboot-security
-description: Spring Security best practices for authn/authz, validation, CSRF, secrets, headers, rate limiting, and dependency security in Java Spring Boot services.
+description: Java Spring Boot 服务中关于身份验证/授权、验证、CSRF、密钥、标头、速率限制和依赖安全的 Spring Security 最佳实践。
 ---
 
-# Spring Boot セキュリティレビュー
+# Spring Boot 安全审查
 
-認証の追加、入力処理、エンドポイント作成、またはシークレット処理時に使用します。
+在添加身份验证、处理输入、创建端点或处理密钥时使用。
 
-## 認証
+## 身份验证
 
-- ステートレスJWTまたは失効リスト付き不透明トークンを優先
-- セッションには `httpOnly`、`Secure`、`SameSite=Strict` クッキーを使用
-- `OncePerRequestFilter` またはリソースサーバーでトークンを検証
+* 优先使用无状态 JWT 或带有撤销列表的不透明令牌
+* 对于会话，使用 `httpOnly`、`Secure`、`SameSite=Strict` cookie
+* 使用 `OncePerRequestFilter` 或资源服务器验证令牌
 
 ```java
 @Component
@@ -36,27 +36,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 }
 ```
 
-## 認可
+## 授权
 
-- メソッドセキュリティを有効化: `@EnableMethodSecurity`
-- `@PreAuthorize("hasRole('ADMIN')")` または `@PreAuthorize("@authz.canEdit(#id)")` を使用
-- デフォルトで拒否し、必要なスコープのみ公開
+* 启用方法安全：`@EnableMethodSecurity`
+* 使用 `@PreAuthorize("hasRole('ADMIN')")` 或 `@PreAuthorize("@authz.canEdit(#id)")`
+* 默认拒绝；仅公开必需的 scope
 
-## 入力検証
+## 输入验证
 
-- `@Valid` を使用してコントローラーでBean Validationを使用
-- DTOに制約を適用: `@NotBlank`、`@Email`、`@Size`、カスタムバリデーター
-- レンダリング前にホワイトリストでHTMLをサニタイズ
+* 在控制器上使用带有 `@Valid` 的 Bean 验证
+* 在 DTO 上应用约束：`@NotBlank`、`@Email`、`@Size`、自定义验证器
+* 在渲染之前使用白名单清理任何 HTML
 
-## SQLインジェクション防止
+## SQL 注入预防
 
-- Spring Dataリポジトリまたはパラメータ化クエリを使用
-- ネイティブクエリには `:param` バインディングを使用し、文字列を連結しない
+* 使用 Spring Data 存储库或参数化查询
+* 对于原生查询，使用 `:param` 绑定；切勿拼接字符串
 
-## CSRF保護
+## CSRF 保护
 
-- ブラウザセッションアプリの場合はCSRFを有効にし、フォーム/ヘッダーにトークンを含める
-- Bearerトークンを使用する純粋なAPIの場合は、CSRFを無効にしてステートレス認証に依存
+* 对于浏览器会话应用程序，保持 CSRF 启用；在表单/头中包含令牌
+* 对于使用 Bearer 令牌的纯 API，禁用 CSRF 并依赖无状态身份验证
 
 ```java
 http
@@ -64,13 +64,13 @@ http
   .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 ```
 
-## シークレット管理
+## 密钥管理
 
-- ソースコードにシークレットを含めない。環境変数またはvaultから読み込む
-- `application.yml` を認証情報から解放し、プレースホルダーを使用
-- トークンとDB認証情報を定期的にローテーション
+* 源代码中不包含密钥；从环境变量或 vault 加载
+* 保持 `application.yml` 不包含凭据；使用占位符
+* 定期轮换令牌和数据库凭据
 
-## セキュリティヘッダー
+## 安全头
 
 ```java
 http
@@ -82,38 +82,38 @@ http
     .referrerPolicy(rp -> rp.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)));
 ```
 
-## レート制限
+## 速率限制
 
-- 高コストなエンドポイントにBucket4jまたはゲートウェイレベルの制限を適用
-- バーストをログに記録してアラートを送信し、リトライヒント付きで429を返す
+* 在昂贵的端点上应用 Bucket4j 或网关级限制
+* 记录突发流量并告警；返回 429 并提供重试提示
 
-## 依存関係のセキュリティ
+## 依赖项安全
 
-- CIでOWASP Dependency Check / Snykを実行
-- Spring BootとSpring Securityをサポートされているバージョンに保つ
-- 既知のCVEでビルドを失敗させる
+* 在 CI 中运行 OWASP Dependency Check / Snyk
+* 保持 Spring Boot 和 Spring Security 在受支持的版本
+* 对已知 CVE 使构建失败
 
-## ロギングとPII
+## 日志记录和 PII
 
-- シークレット、トークン、パスワード、完全なPANデータをログに記録しない
-- 機密フィールドを編集し、構造化JSONロギングを使用
+* 切勿记录密钥、令牌、密码或完整的 PAN 数据
+* 擦除敏感字段；使用结构化 JSON 日志记录
 
-## ファイルアップロード
+## 文件上传
 
-- サイズ、コンテンツタイプ、拡張子を検証
-- Webルート外に保存し、必要に応じてスキャン
+* 验证大小、内容类型和扩展名
+* 存储在 Web 根目录之外；如果需要则进行扫描
 
-## リリース前チェックリスト
+## 发布前检查清单
 
-- [ ] 認証トークンが正しく検証され、期限切れになっている
-- [ ] すべての機密パスに認可ガードがある
-- [ ] すべての入力が検証およびサニタイズされている
-- [ ] 文字列連結されたSQLがない
-- [ ] アプリケーションタイプに対してCSRF対策が正しい
-- [ ] シークレットが外部化され、コミットされていない
-- [ ] セキュリティヘッダーが設定されている
-- [ ] APIにレート制限がある
-- [ ] 依存関係がスキャンされ、最新である
-- [ ] ログに機密データがない
+* \[ ] 身份验证令牌已验证并正确过期
+* \[ ] 每个敏感路径都有授权守卫
+* \[ ] 所有输入都已验证和清理
+* \[ ] 没有字符串拼接的 SQL
+* \[ ] CSRF 策略适用于应用程序类型
+* \[ ] 密钥已外部化；未提交任何密钥
+* \[ ] 安全头已配置
+* \[ ] API 有速率限制
+* \[ ] 依赖项已扫描并保持最新
+* \[ ] 日志不包含敏感数据
 
-**注意**: デフォルトで拒否し、入力を検証し、最小権限を適用し、設定によるセキュリティを優先します。
+**记住**：默认拒绝、验证输入、最小权限、优先采用安全配置。

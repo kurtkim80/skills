@@ -1,16 +1,7 @@
 ---
-title: "/karpathy-check — Slash Command for AI Coding Agents"
-description: "Run Karpathy's 4-principle review on staged changes or the last commit. Checks complexity, diff noise, hidden assumptions, and goal verification. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: karpathy-check
+description: Run Karpathy's 4-principle review on staged changes or the last commit. Checks complexity, diff noise, hidden assumptions, and goal verification. Usage /karpathy-check [--last-commit]
 ---
-
-# /karpathy-check
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/karpathy-check.md">Source</a></span>
-</div>
-
-<!-- canonical copy: engineering/karpathy-coder/commands/karpathy-check.md — keep in sync (root copy uses repo-root-relative script paths) -->
 
 # /karpathy-check
 
@@ -25,8 +16,8 @@ Review your staged changes (or last commit) against Karpathy's 4 coding principl
 
 ## What it runs
 
-1. **Principle #2 (Simplicity):** `engineering/karpathy-coder/skills/karpathy-coder/scripts/complexity_checker.py` on all changed files — detects over-engineering, premature abstractions, deep nesting, long functions
-2. **Principle #3 (Surgical):** `engineering/karpathy-coder/skills/karpathy-coder/scripts/diff_surgeon.py` on the diff — detects comment-only changes, whitespace noise, style drift, drive-by refactors
+1. **Principle #2 (Simplicity):** `skills/karpathy-coder/scripts/complexity_checker.py` on all changed files — detects over-engineering, premature abstractions, deep nesting, long functions
+2. **Principle #3 (Surgical):** `skills/karpathy-coder/scripts/diff_surgeon.py` on the diff — detects comment-only changes, whitespace noise, style drift, drive-by refactors
 3. **Principles #1 + #4 (Think + Goals):** The `karpathy-reviewer` agent reads the diff and applies human-judgment checks — hidden assumptions, missing verification
 
 ## Output

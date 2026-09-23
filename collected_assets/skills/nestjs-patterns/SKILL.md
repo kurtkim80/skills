@@ -1,22 +1,22 @@
 ---
 name: nestjs-patterns
-description: NestJS 架构模式，涵盖模块、控制器、提供者、DTO 验证、守卫、拦截器、配置以及生产级 TypeScript 后端。
+description: NestJS architecture patterns for modules, controllers, providers, DTO validation, guards, interceptors, config, and production-grade TypeScript backends.
 origin: ECC
 ---
 
-# NestJS 开发模式
+# NestJS Development Patterns
 
-适用于模块化 TypeScript 后端的生产级 NestJS 模式。
+Production-grade NestJS patterns for modular TypeScript backends.
 
-## 何时启用
+## When to Activate
 
-* 构建 NestJS API 或服务时
-* 组织模块、控制器和提供者时
-* 添加 DTO 验证、守卫、拦截器或异常过滤器时
-* 配置环境感知设置和数据库集成时
-* 测试 NestJS 单元或 HTTP 端点时
+- Building NestJS APIs or services
+- Structuring modules, controllers, and providers
+- Adding DTO validation, guards, interceptors, or exception filters
+- Configuring environment-aware settings and database integrations
+- Testing NestJS units or HTTP endpoints
 
-## 项目结构
+## Project Structure
 
 ```text
 src/
@@ -47,11 +47,11 @@ src/
 └── prisma/ or database/
 ```
 
-* 将领域代码保留在功能模块内。
-* 将跨切面的过滤器、装饰器、守卫和拦截器放在 `common/` 中。
-* 将 DTO 保留在所属模块附近。
+- Keep domain code inside feature modules.
+- Put cross-cutting filters, decorators, guards, and interceptors in `common/`.
+- Keep DTOs close to the module that owns them.
 
-## 启动与全局验证
+## Bootstrap and Global Validation
 
 ```ts
 async function bootstrap() {
@@ -74,10 +74,10 @@ async function bootstrap() {
 bootstrap();
 ```
 
-* 始终在公共 API 上启用 `whitelist` 和 `forbidNonWhitelisted`。
-* 优先使用一个全局验证管道，而不是为每个路由重复验证配置。
+- Always enable `whitelist` and `forbidNonWhitelisted` on public APIs.
+- Prefer one global validation pipe instead of repeating validation config per route.
 
-## 模块、控制器和提供者
+## Modules, Controllers, and Providers
 
 ```ts
 @Module({
@@ -112,11 +112,11 @@ export class UsersService {
 }
 ```
 
-* 控制器应保持精简：解析 HTTP 输入、调用提供者、返回响应 DTO。
-* 将业务逻辑放在可注入的服务中，而不是控制器中。
-* 仅导出其他模块真正需要的提供者。
+- Controllers should stay thin: parse HTTP input, call a provider, return response DTOs.
+- Put business logic in injectable services, not controllers.
+- Export only the providers other modules genuinely need.
 
-## DTO 与验证
+## DTOs and Validation
 
 ```ts
 export class CreateUserDto {
@@ -133,11 +133,11 @@ export class CreateUserDto {
 }
 ```
 
-* 使用 `class-validator` 验证每个请求 DTO。
-* 使用专用的响应 DTO 或序列化器，而不是直接返回 ORM 实体。
-* 避免泄露内部字段，如密码哈希、令牌或审计列。
+- Validate every request DTO with `class-validator`.
+- Use dedicated response DTOs or serializers instead of returning ORM entities directly.
+- Avoid leaking internal fields such as password hashes, tokens, or audit columns.
 
-## 认证、守卫与请求上下文
+## Auth, Guards, and Request Context
 
 ```ts
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -148,15 +148,17 @@ getAdminReport(@Req() req: AuthenticatedRequest) {
 }
 ```
 
-* 保持认证策略和守卫的模块局部性，除非它们确实是共享的。
-* 在守卫中编码粗粒度的访问规则，然后在服务中进行资源特定的授权。
-* 对经过认证的请求对象，优先使用显式的请求类型。
+- Keep auth strategies and guards module-local unless they are truly shared.
+- Encode coarse access rules in guards, then do resource-specific authorization in services.
+- Prefer explicit request types for authenticated request objects.
 
-## 异常过滤器与错误格式
+## Exception Filters and Error Shape
 
 ```ts
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(HttpExceptionFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>();
     const request = host.switchToHttp().getRequest<Request>();
@@ -168,6 +170,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
+    this.logger.error(
+      `Unhandled exception at ${request.url}: ${exception instanceof Error ? exception.message : exception}`,
+      exception instanceof Error ? exception.stack : undefined,
+    );
+
     return response.status(500).json({
       path: request.url,
       error: 'Internal server error',
@@ -176,10 +183,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 }
 ```
 
-* 在整个 API 中保持一致的错误封装格式。
-* 对预期的客户端错误抛出框架异常；集中记录并包装意外的失败。
+- Keep one consistent error envelope across the API.
+- Throw framework exceptions for expected client errors; log and wrap unexpected failures centrally.
 
-## 配置与环境验证
+## Config and Environment Validation
 
 ```ts
 ConfigModule.forRoot({
@@ -189,17 +196,17 @@ ConfigModule.forRoot({
 });
 ```
 
-* 在启动时验证环境变量，而不是在首次请求时惰性验证。
-* 将配置访问限制在类型化辅助函数或配置服务之后。
-* 在配置工厂中拆分开发/预发布/生产关注点，而不是在功能代码中到处分支。
+- Validate env at boot, not lazily at first request.
+- Keep config access behind typed helpers or config services.
+- Split dev/staging/prod concerns in config factories instead of branching throughout feature code.
 
-## 持久化与事务
+## Persistence and Transactions
 
-* 将仓库/ORM 代码保留在提供者之后，这些提供者使用领域语言进行通信。
-* 对于 Prisma 或 TypeORM，将事务工作流隔离在拥有工作单元的服务中。
-* 不要让控制器直接协调多步写入操作。
+- Keep repository / ORM code behind providers that speak domain language.
+- For Prisma or TypeORM, isolate transactional workflows in services that own the unit of work.
+- Do not let controllers coordinate multi-step writes directly.
 
-## 测试
+## Testing
 
 ```ts
 describe('UsersController', () => {
@@ -217,14 +224,14 @@ describe('UsersController', () => {
 });
 ```
 
-* 使用模拟依赖项对提供者进行单元测试。
-* 为守卫、验证管道和异常过滤器添加请求级测试。
-* 在测试中复用与生产环境相同的全局管道/过滤器。
+- Unit test providers in isolation with mocked dependencies.
+- Add request-level tests for guards, validation pipes, and exception filters.
+- Reuse the same global pipes/filters in tests that you use in production.
 
-## 生产默认设置
+## Production Defaults
 
-* 启用结构化日志和请求关联 ID。
-* 在环境/配置无效时终止，而不是部分启动。
-* 优先使用异步提供者初始化数据库/缓存客户端，并附带显式健康检查。
-* 将后台任务和事件消费者放在自己的模块中，而不是 HTTP 控制器内。
-* 对公共端点明确启用速率限制、认证和审计日志。
+- Enable structured logging and request correlation ids.
+- Terminate on invalid env/config instead of booting partially.
+- Prefer async provider initialization for DB/cache clients with explicit health checks.
+- Keep background jobs and event consumers in their own modules, not inside HTTP controllers.
+- Make rate limiting, auth, and audit logging explicit for public endpoints.

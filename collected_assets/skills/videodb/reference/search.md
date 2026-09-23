@@ -1,16 +1,16 @@
-# 搜索与索引指南
+# 検索とインデックスガイド
 
-搜索功能允许您使用自然语言查询、精确关键词或视觉场景描述来查找视频中的特定时刻。
+検索機能を使用すると、自然言語クエリ、正確なキーワード、またはビジュアルシーンの説明でビデオ内の特定のモーメントを見つけることができる。
 
 ## 前提条件
 
-视频**必须被索引**后才能进行搜索。每种索引类型对每个视频只需执行一次索引操作。
+ビデオは検索の前に**インデックス化されている必要がある**。各インデックスタイプは各ビデオに対して1回だけ実行が必要。
 
-## 索引
+## インデックス作成
 
-### 口语词索引
+### 音声単語インデックス
 
-为视频的转录语音内容建立索引，以支持语义搜索和关键词搜索：
+セマンティック検索とキーワード検索をサポートするためにビデオの転写音声コンテンツをインデックス化する：
 
 ```python
 video = coll.get_video(video_id)
@@ -19,20 +19,20 @@ video = coll.get_video(video_id)
 video.index_spoken_words(force=True)
 ```
 
-此操作会转录音轨，并在口语内容上构建可搜索的索引。这是进行语义搜索和关键词搜索所必需的。
+この操作はオーディオトラックを転写し、音声コンテンツ上に検索可能なインデックスを構築する。セマンティック検索とキーワード検索に必要。
 
-**参数：**
+**パラメータ：**
 
-| 参数 | 类型 | 默认值 | 描述 |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `language_code` | `str\|None` | `None` | 视频的语言代码 |
-| `segmentation_type` | `SegmentationType` | `SegmentationType.sentence` | 分割类型 (`sentence` 或 `llm`) |
-| `force` | `bool` | `False` | 设置为 `True` 以跳过已索引的情况（避免“已存在”错误） |
-| `callback_url` | `str\|None` | `None` | 用于异步通知的 Webhook URL |
+| `language_code` | `str\|None` | `None` | ビデオの言語コード |
+| `segmentation_type` | `SegmentationType` | `SegmentationType.sentence` | セグメンテーションタイプ（`sentence` または `llm`） |
+| `force` | `bool` | `False` | `True` に設定すると既にインデックス化済みをスキップする（「既に存在」エラーを回避） |
+| `callback_url` | `str\|None` | `None` | 非同期通知のWebhook URL |
 
-### 场景索引
+### シーンインデックス
 
-通过生成场景的 AI 描述来索引视觉内容。与口语词索引类似，如果场景索引已存在，此操作会引发错误。从错误消息中提取现有的 `scene_index_id`。
+シーンのAI説明を生成することでビジュアルコンテンツをインデックス化する。音声単語インデックスと同様に、シーンインデックスが既に存在する場合はこの操作がエラーを発生させる。エラーメッセージから既存の `scene_index_id` を抽出する。
 
 ```python
 import re
@@ -51,15 +51,15 @@ except Exception as e:
         raise
 ```
 
-**提取类型：**
+**抽出タイプ：**
 
-| 类型 | 描述 | 最佳适用场景 |
+| タイプ | 説明 | 最適な用途 |
 |------|-------------|----------|
-| `SceneExtractionType.shot_based` | 基于视觉镜头边界进行分割 | 通用目的，动作内容 |
-| `SceneExtractionType.time_based` | 按固定间隔进行分割 | 均匀采样，长时间静态内容 |
-| `SceneExtractionType.transcript` | 基于转录片段进行分割 | 语音驱动的场景边界 |
+| `SceneExtractionType.shot_based` | ビジュアルショット境界に基づいてセグメント化 | 汎用、アクションコンテンツ |
+| `SceneExtractionType.time_based` | 固定間隔でセグメント化 | 均一なサンプリング、長い静的コンテンツ |
+| `SceneExtractionType.transcript` | トランスクリプトセグメントに基づいてセグメント化 | 音声駆動のシーン境界 |
 
-**`time_based` 的参数：**
+**`time_based` のパラメータ：**
 
 ```python
 video.index_scenes(
@@ -69,11 +69,11 @@ video.index_scenes(
 )
 ```
 
-## 搜索类型
+## 検索タイプ
 
-### 语义搜索
+### セマンティック検索
 
-使用自然语言查询匹配口语内容：
+自然言語クエリを使用して音声コンテンツを照合する：
 
 ```python
 from videodb import SearchType
@@ -84,11 +84,11 @@ results = video.search(
 )
 ```
 
-返回口语内容在语义上与查询匹配的排序片段。
+クエリとセマンティックに一致する音声コンテンツのランク付けされたクリップを返す。
 
-### 关键词搜索
+### キーワード検索
 
-在转录语音中进行精确术语匹配：
+転写された音声内で正確な用語照合を行う：
 
 ```python
 results = video.search(
@@ -97,13 +97,13 @@ results = video.search(
 )
 ```
 
-返回包含精确关键词或短语的片段。
+正確なキーワードまたはフレーズを含むクリップを返す。
 
-### 场景搜索
+### シーン検索
 
-视觉内容查询与已索引的场景描述进行匹配。需要事先调用 `index_scenes()`。
+ビジュアルコンテンツクエリをインデックス化されたシーンの説明と照合する。事前に `index_scenes()` の呼び出しが必要。
 
-`index_scenes()` 返回一个 `scene_index_id`。将其传递给 `video.search()` 以定位特定的场景索引（当视频有多个场景索引时尤其重要）：
+`index_scenes()` は `scene_index_id` を返す。`video.search()` に渡して特定のシーンインデックスを対象にする（ビデオに複数のシーンインデックスがある場合に特に重要）：
 
 ```python
 from videodb import SearchType, IndexType
@@ -127,16 +127,16 @@ except InvalidRequestError as e:
         raise
 ```
 
-**重要说明：**
+**重要な注意事項：**
 
-* 将 `SearchType.semantic` 与 `index_type=IndexType.scene` 结合使用——这是最可靠的组合，适用于所有套餐。
-* `SearchType.scene` 存在，但可能并非在所有套餐中都可用（例如免费套餐）。建议优先使用 `SearchType.semantic` 与 `IndexType.scene`。
-* `scene_index_id` 参数是可选的。如果省略，搜索将针对视频上的所有场景索引运行。传递此参数以定位特定索引。
-* 您可以为每个视频创建多个场景索引（使用不同的提示或提取类型），并使用 `scene_index_id` 独立搜索它们。
+* `SearchType.semantic` と `index_type=IndexType.scene` を組み合わせて使用する——これはすべてのプランで機能する最も信頼性の高い組み合わせ。
+* `SearchType.scene` は存在するが、すべてのプラン（例：無料プラン）で利用可能ではない可能性がある。`IndexType.scene` と `SearchType.semantic` を使用することを推奨する。
+* `scene_index_id` パラメータはオプション。省略すると、検索はビデオ上のすべてのシーンインデックスに対して実行される。特定のインデックスを対象にするためにこのパラメータを渡す。
+* 各ビデオに対して複数のシーンインデックスを作成し（異なるプロンプトや抽出タイプを使用して）、`scene_index_id` を使用して独立して検索できる。
 
-### 带元数据筛选的场景搜索
+### メタデータフィルター付きシーン検索
 
-使用自定义元数据索引场景时，可以将语义搜索与元数据筛选器结合使用：
+カスタムメタデータでシーンをインデックス化する場合、セマンティック検索とメタデータフィルターを組み合わせて使用できる：
 
 ```python
 from videodb import SearchType, IndexType
@@ -150,13 +150,13 @@ results = video.search(
 )
 ```
 
-有关自定义元数据索引和筛选搜索的完整示例，请参阅 [scene\_level\_metadata\_indexing 示例](https://github.com/video-db/videodb-cookbook/blob/main/quickstart/scene_level_metadata_indexing.ipynb)。
+カスタムメタデータインデックスとフィルター検索の完全な例については、[scene\_level\_metadata\_indexing 例](https://github.com/video-db/videodb-cookbook/blob/main/quickstart/scene_level_metadata_indexing.ipynb) を参照。
 
-## 处理结果
+## 結果の処理
 
-### 获取片段
+### クリップを取得する
 
-访问单个结果片段：
+個々の結果クリップにアクセスする：
 
 ```python
 results = video.search("your query")
@@ -169,9 +169,9 @@ for shot in results.get_shots():
     print("---")
 ```
 
-### 播放编译结果
+### コンパイルされた結果を再生する
 
-将所有匹配片段作为单个编译视频进行流式播放：
+すべての一致するクリップを単一のコンパイルされたビデオとしてストリーミング再生する：
 
 ```python
 results = video.search("your query")
@@ -179,9 +179,9 @@ stream_url = results.compile()
 results.play()  # opens compiled stream in browser
 ```
 
-### 提取剪辑
+### クリップを抽出する
 
-下载或流式播放特定的结果片段：
+特定の結果クリップをダウンロードまたはストリーミングする：
 
 ```python
 for shot in results.get_shots():
@@ -189,9 +189,9 @@ for shot in results.get_shots():
     print(f"Clip: {stream_url}")
 ```
 
-## 跨集合搜索
+## コレクション横断検索
 
-跨集合中的所有视频进行搜索：
+コレクション内のすべてのビデオを横断して検索する：
 
 ```python
 coll = conn.get_collection()
@@ -206,11 +206,11 @@ for shot in results.get_shots():
     print(f"Video: {shot.video_id} [{shot.start:.1f}s - {shot.end:.1f}s]")
 ```
 
-> **注意：** 集合级搜索仅支持 `SearchType.semantic`。将 `SearchType.keyword` 或 `SearchType.scene` 与 `coll.search()` 结合使用将引发 `NotImplementedError`。要进行关键词或场景搜索，请改为对单个视频使用 `video.search()`。
+> **注意：** コレクションレベルの検索は `SearchType.semantic` のみをサポートする。`SearchType.keyword` または `SearchType.scene` を `coll.search()` と組み合わせると `NotImplementedError` が発生する。キーワードやシーン検索には代わりに個々のビデオで `video.search()` を使用する。
 
-## 搜索 + 编译
+## 検索 + コンパイル
 
-对匹配片段进行索引、搜索并编译成单个可播放的流：
+一致するクリップをインデックス化、検索し、単一の再生可能なストリームにコンパイルする：
 
 ```python
 video.index_spoken_words(force=True)
@@ -219,12 +219,12 @@ stream_url = results.compile()
 print(stream_url)
 ```
 
-## 提示
+## ヒント
 
-* **一次索引，多次搜索**：索引是昂贵的操作。一旦索引完成，搜索会很快。
-* **组合索引类型**：同时索引口语词和场景，以便在同一视频上启用所有搜索类型。
-* **优化查询**：语义搜索最适合描述性的自然语言短语，而不是单个关键词。
-* **使用关键词搜索提高精度**：当您需要精确的术语匹配时，关键词搜索可以避免语义漂移。
-* **处理“未找到结果”**：当没有结果匹配时，`video.search()` 会引发 `InvalidRequestError`。始终将搜索调用包装在 try/except 中，并将 `"No results found"` 视为空结果集。
-* **过滤场景搜索噪声**：对于模糊查询，语义场景搜索可能会返回低相关性的结果。使用 `score_threshold=0.3`（或更高值）来过滤噪声。
-* **幂等索引**：使用 `index_spoken_words(force=True)` 可以安全地重新索引。`index_scenes()` 没有 `force` 参数——将其包装在 try/except 中，并使用 `re.search(r"id\s+([a-f0-9]+)", str(e))` 从错误消息中提取现有的 `scene_index_id`。
+* **一度インデックス化、何度も検索**：インデックス作成は高コストな操作。一度インデックスが作成されれば、検索は速くなる。
+* **インデックスタイプを組み合わせる**：音声単語とシーンの両方をインデックス化して、同じビデオですべての検索タイプを有効にする。
+* **クエリの最適化**：セマンティック検索は単一のキーワードではなく説明的な自然言語フレーズで最もよく機能する。
+* **精度向上のためにキーワード検索を使用**：正確な用語照合が必要なときは、キーワード検索でセマンティックドリフトを避けられる。
+* **「結果なし」の処理**：一致するものがない場合、`video.search()` は `InvalidRequestError` を発生させる。常に検索呼び出しをtry/exceptで包み、`"No results found"` を空の結果セットとして扱うこと。
+* **シーン検索ノイズのフィルタリング**：あいまいなクエリの場合、セマンティックシーン検索は低関連性の結果を返す可能性がある。ノイズをフィルタリングするために `score_threshold=0.3`（またはより高い値）を使用する。
+* **べき等なインデックス作成**：`index_spoken_words(force=True)` を使用すると安全に再インデックス化できる。`index_scenes()` には `force` パラメータがない——try/exceptで包み、`re.search(r"id\s+([a-f0-9]+)", str(e))` を使用してエラーメッセージから既存の `scene_index_id` を抽出する。

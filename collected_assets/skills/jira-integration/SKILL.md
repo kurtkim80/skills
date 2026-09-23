@@ -1,34 +1,33 @@
 ---
 name: jira-integration
-description: 在检索Jira工单、分析需求、更新工单状态、添加评论或转换问题时使用此技能。通过MCP或直接REST调用提供Jira API模式。
+description: Jira チケットの取得、要件分析、チケットステータスの更新、コメントの追加、またはイシューのトランジションを行う際に使用します。MCP または直接 REST 呼び出しによる Jira API パターンを提供します。
 origin: ECC
 ---
 
-# Jira 集成技能
+# Jira インテグレーションスキル
 
-直接从 AI 编码工作流中检索、分析和更新 Jira 工单。支持 **基于 MCP**（推荐）和 **直接 REST API** 两种方式。
+AI コーディングワークフローから直接 Jira チケットを取得・分析・更新します。**MCP ベース**（推奨）と**直接 REST API** の両アプローチをサポートします。
 
-## 何时激活
+## アクティベートするタイミング
 
-* 获取 Jira 工单以理解需求
-* 从工单中提取可测试的验收标准
-* 向 Jira 问题添加进度评论
-* 转换工单状态（待办 → 进行中 → 完成）
-* 将合并请求或分支链接到 Jira 问题
-* 通过 JQL 查询搜索问题
+- 要件を理解するために Jira チケットを取得する
+- チケットからテスト可能な受け入れ基準を抽出する
+- Jira イシューに進捗コメントを追加する
+- チケットステータスをトランジションする（To Do → In Progress → Done）
+- マージリクエストやブランチを Jira イシューにリンクする
+- JQL クエリでイシューを検索する
 
 ## 前提条件
 
-### 选项 A：MCP 服务器（推荐）
+### オプション A: MCP サーバー（推奨）
 
-安装 `mcp-atlassian` MCP 服务器。这将向您的 AI 代理直接暴露 Jira 工具。
+`mcp-atlassian` MCP サーバーをインストールします。これにより Jira ツールが AI エージェントに直接公開されます。
 
-**要求：**
+**要件:**
+- Python 3.10 以上
+- `uvx`（`uv` から）、パッケージマネージャーまたは公式 `uv` インストールドキュメントからインストール
 
-* Python 3.10+
-* `uvx`（来自 `uv`），通过您的包管理器或官方 `uv` 安装文档进行安装
-
-**添加到您的 MCP 配置**（例如，`~/.claude.json` → `mcpServers`）：
+**MCP 設定に追加**（例: `~/.claude.json` → `mcpServers`）:
 
 ```json
 {
@@ -45,29 +44,28 @@ origin: ECC
 }
 ```
 
-> **安全：** 切勿在源代码中硬编码密钥。建议在系统环境（或密钥管理器）中设置 `JIRA_URL`、`JIRA_EMAIL` 和 `JIRA_API_TOKEN`。仅对本地未提交的配置文件使用 MCP `env` 块。
+> **セキュリティ:** シークレットをハードコードしないでください。`JIRA_URL`、`JIRA_EMAIL`、`JIRA_API_TOKEN` はシステム環境変数またはシークレットマネージャーに設定することを推奨します。MCP の `env` ブロックはローカルのコミットされていない設定ファイルにのみ使用してください。
 
-**获取 Jira API 令牌：**
+**Jira API トークンの取得方法:**
+1. <https://id.atlassian.com/manage-profile/security/api-tokens> にアクセス
+2. **API トークンを作成**をクリック
+3. トークンをコピーして環境変数に保存（ソースコードには絶対に保存しない）
 
-1. 访问 <https://id.atlassian.com/manage-profile/security/api-tokens>
-2. 点击 **创建 API 令牌**
-3. 复制令牌 — 将其存储在您的环境中，切勿存储在源代码中
+### オプション B: 直接 REST API
 
-### 选项 B：直接 REST API
+MCP が利用できない場合は、`curl` またはヘルパースクリプトで Jira REST API v3 を直接使用します。
 
-如果 MCP 不可用，可通过 `curl` 或辅助脚本直接使用 Jira REST API v3。
+**必要な環境変数:**
 
-**所需的环境变量：**
+| 変数 | 説明 |
+|------|------|
+| `JIRA_URL` | Jira インスタンスの URL（例: `https://yourorg.atlassian.net`） |
+| `JIRA_EMAIL` | Atlassian アカウントのメールアドレス |
+| `JIRA_API_TOKEN` | id.atlassian.com からの API トークン |
 
-| 变量 | 描述 |
-|----------|-------------|
-| `JIRA_URL` | 您的 Jira 实例 URL（例如，`https://yourorg.atlassian.net`） |
-| `JIRA_EMAIL` | 您的 Atlassian 账户邮箱 |
-| `JIRA_API_TOKEN` | 来自 id.atlassian.com 的 API 令牌 |
+シェル環境変数、シークレットマネージャー、またはリポジトリにコミットしないローカル環境ファイルに保存してください。
 
-将这些存储在您的 shell 环境、密钥管理器或未跟踪的本地环境文件中。不要将其提交到仓库。
-
-对于直接 `curl` 示例，请通过标准输入传递 Jira 用户配置，避免凭据出现在命令行参数中。
+直接 `curl` 例では、Jira ユーザー設定を標準入力で渡し、認証情報がコマンドライン引数に出ないようにします。
 
 ```bash
 jira_curl() {
@@ -76,27 +74,27 @@ jira_curl() {
 }
 ```
 
-## MCP 工具参考
+## MCP ツールリファレンス
 
-当配置了 `mcp-atlassian` MCP 服务器时，以下工具可用：
+`mcp-atlassian` MCP サーバーが設定されている場合、以下のツールが利用可能です。
 
-| 工具 | 用途 | 示例 |
-|------|---------|---------|
-| `jira_search` | JQL 查询 | `project = PROJ AND status = "In Progress"` |
-| `jira_get_issue` | 按键获取完整问题详情 | `PROJ-1234` |
-| `jira_create_issue` | 创建问题（任务、缺陷、故事、史诗） | 新建缺陷报告 |
-| `jira_update_issue` | 更新字段（摘要、描述、经办人） | 更改经办人 |
-| `jira_transition_issue` | 更改状态 | 移至“评审中” |
-| `jira_add_comment` | 添加评论 | 进度更新 |
-| `jira_get_sprint_issues` | 列出冲刺中的问题 | 活跃冲刺评审 |
-| `jira_create_issue_link` | 链接问题（阻塞、关联） | 依赖跟踪 |
-| `jira_get_issue_development_info` | 查看关联的 PR、分支、提交 | 开发上下文 |
+| ツール | 目的 | 例 |
+|--------|------|-----|
+| `jira_search` | JQL クエリ | `project = PROJ AND status = "In Progress"` |
+| `jira_get_issue` | キーで完全なイシュー詳細を取得 | `PROJ-1234` |
+| `jira_create_issue` | イシューの作成（タスク、バグ、ストーリー、エピック） | 新しいバグレポート |
+| `jira_update_issue` | フィールドの更新（概要、説明、担当者） | 担当者の変更 |
+| `jira_transition_issue` | ステータスの変更 | "In Review" に移動 |
+| `jira_add_comment` | コメントの追加 | 進捗更新 |
+| `jira_get_sprint_issues` | スプリント内のイシュー一覧 | アクティブスプリントレビュー |
+| `jira_create_issue_link` | イシューのリンク（Blocks、Relates to） | 依存関係の追跡 |
+| `jira_get_issue_development_info` | リンクされた PR、ブランチ、コミットの確認 | 開発コンテキスト |
 
-> **提示：** 在转换前始终调用 `jira_get_transitions` — 转换 ID 因项目工作流而异。
+> **ヒント:** トランジション前に必ず `jira_get_transitions` を呼び出してください。トランジション ID はプロジェクトのワークフローによって異なります。
 
-## 直接 REST API 参考
+## 直接 REST API リファレンス
 
-### 获取工单
+### チケットの取得
 
 ```bash
 jira_curl \
@@ -113,7 +111,7 @@ jira_curl \
   }'
 ```
 
-### 获取评论
+### コメントの取得
 
 ```bash
 jira_curl \
@@ -125,7 +123,7 @@ jira_curl \
   }'
 ```
 
-### 添加评论
+### コメントの追加
 
 ```bash
 jira_curl -X POST \
@@ -143,21 +141,21 @@ jira_curl -X POST \
   "$JIRA_URL/rest/api/3/issue/PROJ-1234/comment"
 ```
 
-### 转换工单
+### チケットのトランジション
 
 ```bash
-# 1. Get available transitions
+# 1. 利用可能なトランジションを取得
 jira_curl \
   "$JIRA_URL/rest/api/3/issue/PROJ-1234/transitions" | jq '.transitions[] | {id, name: .name}'
 
-# 2. Execute transition (replace TRANSITION_ID)
+# 2. トランジションを実行（TRANSITION_ID を置き換える）
 jira_curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"transition": {"id": "TRANSITION_ID"}}' \
   "$JIRA_URL/rest/api/3/issue/PROJ-1234/transitions"
 ```
 
-### 使用 JQL 搜索
+### JQL での検索
 
 ```bash
 jira_curl -G \
@@ -165,106 +163,100 @@ jira_curl -G \
   "$JIRA_URL/rest/api/3/search"
 ```
 
-## 分析工单
+## チケットの分析
 
-当为开发或测试自动化检索工单时，提取：
+開発またはテスト自動化のためにチケットを取得する際に抽出する内容:
 
-### 1. 可测试的需求
+### 1. テスト可能な要件
+- **機能要件** — 機能が行うこと
+- **受け入れ基準** — 満たさなければならない条件
+- **テスト可能な振る舞い** — 具体的なアクションと期待される結果
+- **ユーザーロール** — この機能を使用するのは誰か、その権限
+- **データ要件** — 必要なデータ
+- **インテグレーションポイント** — 関係する API、サービス、またはシステム
 
-* **功能需求** — 功能的作用
-* **验收标准** — 必须满足的条件
-* **可测试的行为** — 具体操作和预期结果
-* **用户角色** — 谁使用此功能及其权限
-* **数据需求** — 需要哪些数据
-* **集成点** — 涉及的 API、服务或系统
+### 2. 必要なテストタイプ
+- **ユニットテスト** — 個別の関数とユーティリティ
+- **インテグレーションテスト** — API エンドポイントとサービスインタラクション
+- **E2E テスト** — ユーザー向け UI フロー
+- **API テスト** — エンドポイントコントラクトとエラーハンドリング
 
-### 2. 所需的测试类型
+### 3. エッジケースとエラーシナリオ
+- 無効な入力（空、長すぎる、特殊文字）
+- 不正アクセス
+- ネットワーク障害またはタイムアウト
+- 同時ユーザーまたはレース条件
+- 境界条件
+- データの欠如または null 値
+- 状態遷移（ナビゲーションの戻り、リフレッシュなど）
 
-* **单元测试** — 单个函数和工具
-* **集成测试** — API 端点和服务交互
-* **端到端测试** — 面向用户的 UI 流程
-* **API 测试** — 端点契约和错误处理
-
-### 3. 边界情况与错误场景
-
-* 无效输入（空值、过长、特殊字符）
-* 未授权访问
-* 网络故障或超时
-* 并发用户或竞态条件
-* 边界条件
-* 数据缺失或为空
-* 状态转换（返回导航、刷新等）
-
-### 4. 结构化分析输出
+### 4. 構造化された分析出力
 
 ```
 Ticket: PROJ-1234
-Summary: [工单标题]
-Status: [当前状态]
-Priority: [高/中/低]
-Test Types: 单元测试, 集成测试, 端到端测试
+Summary: [チケットタイトル]
+Status: [現在のステータス]
+Priority: [High/Medium/Low]
+Test Types: Unit, Integration, E2E
 
 Requirements:
-1. [需求1]
-2. [需求2]
+1. [要件 1]
+2. [要件 2]
 
 Acceptance Criteria:
-- [ ] [验收标准1]
-- [ ] [验收标准2]
+- [ ] [基準 1]
+- [ ] [基準 2]
 
 Test Scenarios:
-- Happy Path: [描述]
-- Error Case: [描述]
-- Edge Case: [描述]
+- Happy Path: [説明]
+- Error Case: [説明]
+- Edge Case: [説明]
 
 Test Data Needed:
-- [测试数据1]
-- [测试数据2]
+- [データ項目 1]
+- [データ項目 2]
 
 Dependencies:
-- [依赖项1]
-- [依赖项2]
+- [依存関係 1]
+- [依存関係 2]
 ```
 
-## 更新工单
+## チケットの更新
 
-### 何时更新
+### 更新するタイミング
 
-| 工作流步骤 | Jira 更新 |
+| ワークフローステップ | Jira の更新 |
 |---|---|
-| 开始工作 | 转换为“进行中” |
-| 编写测试 | 评论并附上测试覆盖率摘要 |
-| 创建分支 | 评论并附上分支名称 |
-| 创建 PR/MR | 评论并附上链接，链接问题 |
-| 测试通过 | 评论并附上结果摘要 |
-| PR/MR 合并 | 转换为“完成”或“评审中” |
+| 作業開始 | "In Progress" にトランジション |
+| テスト作成完了 | テストカバレッジサマリーをコメント |
+| ブランチ作成 | ブランチ名をコメント |
+| PR/MR 作成 | リンク付きコメント、イシューをリンク |
+| テスト通過 | 結果サマリーをコメント |
+| PR/MR マージ | "Done" または "In Review" にトランジション |
 
-### 评论模板
+### コメントテンプレート
 
-**开始工作：**
-
+**作業開始:**
 ```
-开始实现此工单。
-分支：feat/PROJ-1234-feature-name
-```
-
-**测试已实现：**
-
-```
-已实现的自动化测试：
-
-单元测试：
-- [测试文件1] — [覆盖内容]
-- [测试文件2] — [覆盖内容]
-
-集成测试：
-- [测试文件] — [覆盖的端点/流程]
-
-所有测试在本地通过。覆盖率：XX%
+Starting implementation for this ticket.
+Branch: feat/PROJ-1234-feature-name
 ```
 
-**PR 已创建：**
+**テスト実装完了:**
+```
+Automated tests implemented:
 
+Unit Tests:
+- [テストファイル 1] — [カバー内容]
+- [テストファイル 2] — [カバー内容]
+
+Integration Tests:
+- [テストファイル] — [カバーするエンドポイント/フロー]
+
+All tests passing locally. Coverage: XX%
+```
+
+**PR 作成:**
 ```
 Pull request created:
 [PR Title](https://github.com/org/repo/pull/XXX)
@@ -272,8 +264,7 @@ Pull request created:
 Ready for review.
 ```
 
-**工作完成：**
-
+**作業完了:**
 ```
 Implementation complete.
 
@@ -282,30 +273,30 @@ Test results: All passing (X/Y)
 Coverage: XX%
 ```
 
-## 安全指南
+## セキュリティガイドライン
 
-* **切勿在**源代码或技能文件中硬编码 Jira API 令牌
-* **始终使用**环境变量或密钥管理器
-* **将 `.env`** 添加到每个项目的 `.gitignore` 中
-* **如果令牌暴露在 git 历史中，立即轮换**
-* **使用最小权限** API 令牌，范围限定在所需项目
-* **在发出 API 调用前验证**凭据是否已设置 — 快速失败并给出清晰消息
+- Jira API トークンをソースコードやスキルファイルに**絶対にハードコードしない**
+- 環境変数またはシークレットマネージャーを**必ず使用する**
+- すべてのプロジェクトで `.env` を `.gitignore` に**追加する**
+- git 履歴に露出した場合はトークンを即座に**ローテーションする**
+- 必要なプロジェクトに限定した**最小権限** API トークンを使用する
+- API 呼び出し前に認証情報が設定されているか**検証する** — 明確なメッセージとともに早期に失敗させる
 
-## 故障排除
+## トラブルシューティング
 
-| 错误 | 原因 | 修复 |
+| エラー | 原因 | 対処法 |
 |---|---|---|
-| `401 Unauthorized` | API 令牌无效或已过期 | 在 id.atlassian.com 重新生成 |
-| `403 Forbidden` | 令牌缺少项目权限 | 检查令牌范围和项目访问权限 |
-| `404 Not Found` | 工单键或基础 URL 错误 | 验证 `JIRA_URL` 和工单键 |
-| `spawn uvx ENOENT` | IDE 在 PATH 中找不到 `uvx` | 使用完整路径（例如，`~/.local/bin/uvx`）或在 `~/.zprofile` 中设置 PATH |
-| 连接超时 | 网络/VPN 问题 | 检查 VPN 连接和防火墙规则 |
+| `401 Unauthorized` | API トークンが無効または期限切れ | id.atlassian.com で再生成 |
+| `403 Forbidden` | トークンにプロジェクト権限がない | トークンのスコープとプロジェクトアクセスを確認 |
+| `404 Not Found` | チケットキーまたはベース URL が間違っている | `JIRA_URL` とチケットキーを確認 |
+| `spawn uvx ENOENT` | IDE が PATH で `uvx` を見つけられない | フルパス（例: `~/.local/bin/uvx`）を使用するか、`~/.zprofile` に PATH を設定 |
+| 接続タイムアウト | ネットワーク/VPN の問題 | VPN 接続とファイアウォールルールを確認 |
 
-## 最佳实践
+## ベストプラクティス
 
-* 边工作边更新 Jira，而不是最后一次性更新
-* 保持评论简洁但信息丰富
-* 链接而非复制 — 指向 PR、测试报告和仪表板
-* 如果需要他人输入，使用 @提及
-* 在开始前检查关联问题以了解完整功能范围
-* 如果验收标准模糊，在编写代码前要求澄清
+- 最後にまとめてではなく、作業しながら Jira を更新する
+- コメントは簡潔かつ情報量のあるものにする
+- コピーではなくリンクする — PR、テストレポート、ダッシュボードへのリンクを貼る
+- 他の人の意見が必要な場合は @メンションを使う
+- 作業を開始する前に、機能の全体的なスコープを理解するためにリンクされたイシューを確認する
+- 受け入れ基準が曖昧な場合は、コードを書く前に明確化を求める

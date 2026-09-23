@@ -1,15 +1,9 @@
 ---
-title: "/cs-product-research — Slash Command for AI Coding Agents"
-description: "Product / user research methodology. Select the right method for the goal (generative vs evaluative vs validation), compute method-based saturation /. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Product / user research methodology. Select the right method for the goal (generative vs evaluative vs validation), compute method-based saturation / sample size with an explicit confidence level, and synthesize coded observations into insights while flagging single-source anecdotes. Never fabricates insight. Direct invocation of the product-research skill.
+argument-hint: "<research context: goal, product stage, segments, coded observations>"
 ---
 
-# /cs-product-research
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research-ops/commands/cs-product-research.md">Source</a></span>
-</div>
-
+# /cs:product-research — Study design + saturation + insight synthesis
 
 Run the `product-research` skill on this input:
 

@@ -1,42 +1,42 @@
 ---
 name: nutrient-document-processing
-description: Nutrient DWS API を使用してドキュメントの処理、変換、OCR、抽出、編集、署名、フォーム入力を行います。PDF、DOCX、XLSX、PPTX、HTML、画像に対応しています。
+description: 使用Nutrient DWS API处理、转换、OCR、提取、编辑、签署和填写文档。支持PDF、DOCX、XLSX、PPTX、HTML和图像文件。
 ---
 
-# Nutrient Document Processing
+# 文档处理
 
-[Nutrient DWS Processor API](https://www.nutrient.io/api/) でドキュメントを処理します。フォーマット変換、テキストとテーブルの抽出、スキャンされたドキュメントの OCR、PII の編集、ウォーターマークの追加、デジタル署名、PDF フォームの入力が可能です。
+使用 [Nutrient DWS Processor API](https://www.nutrient.io/api/) 处理文档。转换格式、提取文本和表格、对扫描文档进行 OCR、编辑 PII、添加水印、数字签名以及填写 PDF 表单。
 
-## セットアップ
+## 设置
 
-**[nutrient.io](https://dashboard.nutrient.io/sign_up/?product=processor)** で無料の API キーを取得してください
+在 **[nutrient.io](https://dashboard.nutrient.io/sign_up/?product=processor)** 获取一个免费的 API 密钥
 
 ```bash
 export NUTRIENT_API_KEY="pdf_live_..."
 ```
 
-すべてのリクエストは `https://api.nutrient.io/build` に `instructions` JSON フィールドを含むマルチパート POST として送信されます。
+所有请求都以 multipart POST 形式发送到 `https://api.nutrient.io/build`，并附带一个 `instructions` JSON 字段。
 
 ## 操作
 
-### ドキュメントの変換
+### 转换文档
 
 ```bash
-# DOCX から PDF へ
+# DOCX to PDF
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.docx=@document.docx" \
   -F 'instructions={"parts":[{"file":"document.docx"}]}' \
   -o output.pdf
 
-# PDF から DOCX へ
+# PDF to DOCX
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
   -F 'instructions={"parts":[{"file":"document.pdf"}],"output":{"type":"docx"}}' \
   -o output.docx
 
-# HTML から PDF へ
+# HTML to PDF
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "index.html=@index.html" \
@@ -44,19 +44,19 @@ curl -X POST https://api.nutrient.io/build \
   -o output.pdf
 ```
 
-サポートされている入力形式: PDF、DOCX、XLSX、PPTX、DOC、XLS、PPT、PPS、PPSX、ODT、RTF、HTML、JPG、PNG、TIFF、HEIC、GIF、WebP、SVG、TGA、EPS。
+支持的输入格式：PDF, DOCX, XLSX, PPTX, DOC, XLS, PPT, PPS, PPSX, ODT, RTF, HTML, JPG, PNG, TIFF, HEIC, GIF, WebP, SVG, TGA, EPS。
 
-### テキストとデータの抽出
+### 提取文本和数据
 
 ```bash
-# プレーンテキストの抽出
+# Extract plain text
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
   -F 'instructions={"parts":[{"file":"document.pdf"}],"output":{"type":"text"}}' \
   -o output.txt
 
-# テーブルを Excel として抽出
+# Extract tables as Excel
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
@@ -64,10 +64,10 @@ curl -X POST https://api.nutrient.io/build \
   -o tables.xlsx
 ```
 
-### スキャンされたドキュメントの OCR
+### OCR 扫描文档
 
 ```bash
-# 検索可能な PDF への OCR（100以上の言語をサポート）
+# OCR to searchable PDF (supports 100+ languages)
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "scanned.pdf=@scanned.pdf" \
@@ -75,19 +75,19 @@ curl -X POST https://api.nutrient.io/build \
   -o searchable.pdf
 ```
 
-言語: ISO 639-2 コード（例: `eng`、`deu`、`fra`、`spa`、`jpn`、`kor`、`chi_sim`、`chi_tra`、`ara`、`hin`、`rus`）を介して100以上の言語をサポートしています。`english` や `german` などの完全な言語名も機能します。サポートされているすべてのコードについては、[完全な OCR 言語表](https://www.nutrient.io/guides/document-engine/ocr/language-support/)を参照してください。
+支持语言：通过 ISO 639-2 代码支持 100 多种语言（例如，`eng`, `deu`, `fra`, `spa`, `jpn`, `kor`, `chi_sim`, `chi_tra`, `ara`, `hin`, `rus`）。完整的语言名称如 `english` 或 `german` 也适用。查看 [完整的 OCR 语言表](https://www.nutrient.io/guides/document-engine/ocr/language-support/) 以获取所有支持的代码。
 
-### 機密情報の編集
+### 编辑敏感信息
 
 ```bash
-# パターンベース（SSN、メール）
+# Pattern-based (SSN, email)
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
   -F 'instructions={"parts":[{"file":"document.pdf"}],"actions":[{"type":"redaction","strategy":"preset","strategyOptions":{"preset":"social-security-number"}},{"type":"redaction","strategy":"preset","strategyOptions":{"preset":"email-address"}}]}' \
   -o redacted.pdf
 
-# 正規表現ベース
+# Regex-based
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
@@ -95,9 +95,9 @@ curl -X POST https://api.nutrient.io/build \
   -o redacted.pdf
 ```
 
-プリセット: `social-security-number`、`email-address`、`credit-card-number`、`international-phone-number`、`north-american-phone-number`、`date`、`time`、`url`、`ipv4`、`ipv6`、`mac-address`、`us-zip-code`、`vin`。
+预设：`social-security-number`, `email-address`, `credit-card-number`, `international-phone-number`, `north-american-phone-number`, `date`, `time`, `url`, `ipv4`, `ipv6`, `mac-address`, `us-zip-code`, `vin`。
 
-### ウォーターマークの追加
+### 添加水印
 
 ```bash
 curl -X POST https://api.nutrient.io/build \
@@ -107,10 +107,10 @@ curl -X POST https://api.nutrient.io/build \
   -o watermarked.pdf
 ```
 
-### デジタル署名
+### 数字签名
 
 ```bash
-# 自己署名 CMS 署名
+# Self-signed CMS signature
 curl -X POST https://api.nutrient.io/build \
   -H "Authorization: Bearer $NUTRIENT_API_KEY" \
   -F "document.pdf=@document.pdf" \
@@ -118,7 +118,7 @@ curl -X POST https://api.nutrient.io/build \
   -o signed.pdf
 ```
 
-### PDF フォームの入力
+### 填写 PDF 表单
 
 ```bash
 curl -X POST https://api.nutrient.io/build \
@@ -128,9 +128,9 @@ curl -X POST https://api.nutrient.io/build \
   -o filled.pdf
 ```
 
-## MCP サーバー（代替）
+## MCP 服务器（替代方案）
 
-ネイティブツール統合には、curl の代わりに MCP サーバーを使用します：
+对于原生工具集成，请使用 MCP 服务器代替 curl：
 
 ```json
 {
@@ -147,19 +147,19 @@ curl -X POST https://api.nutrient.io/build \
 }
 ```
 
-## 使用タイミング
+## 使用场景
 
-- フォーマット間でのドキュメント変換（PDF、DOCX、XLSX、PPTX、HTML、画像）
-- PDF からテキスト、テーブル、キー値ペアの抽出
-- スキャンされたドキュメントまたは画像の OCR
-- ドキュメントを共有する前の PII の編集
-- ドラフトまたは機密文書へのウォーターマークの追加
-- 契約または合意書へのデジタル署名
-- プログラムによる PDF フォームの入力
+* 在格式之间转换文档（PDF, DOCX, XLSX, PPTX, HTML, 图像）
+* 从 PDF 中提取文本、表格或键值对
+* 对扫描文档或图像进行 OCR
+* 在共享文档前编辑 PII
+* 为草稿或机密文档添加水印
+* 数字签署合同或协议
+* 以编程方式填写 PDF 表单
 
-## リンク
+## 链接
 
-- [API Playground](https://dashboard.nutrient.io/processor-api/playground/)
-- [完全な API ドキュメント](https://www.nutrient.io/guides/dws-processor/)
-- [Agent Skill リポジトリ](https://github.com/PSPDFKit-labs/nutrient-agent-skill)
-- [npm MCP サーバー](https://www.npmjs.com/package/@nutrient-sdk/dws-mcp-server)
+* [API 演练场](https://dashboard.nutrient.io/processor-api/playground/)
+* [完整 API 文档](https://www.nutrient.io/guides/dws-processor/)
+* [代理技能仓库](https://github.com/PSPDFKit-labs/nutrient-agent-skill)
+* [npm MCP 服务器](https://www.npmjs.com/package/@nutrient-sdk/dws-mcp-server)

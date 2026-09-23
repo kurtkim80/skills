@@ -1,15 +1,9 @@
 ---
-title: "/cs-notebooklm — Slash Command for AI Coding Agents"
-description: "/cs:notebooklm — NotebookLM browser automation. Action-routing intake (Q1: read / add source / Studio output / create new) + per-action Q2-Q4. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-notebooklm"
+description: "/cs:notebooklm — NotebookLM browser automation. Action-routing intake (Q1: read / add source / Studio output / create new) + per-action Q2-Q4 branching. Fire-and-notify for slow Studio ops. Mandatory custom prompts (defaults are mediocre). Requires browser automation environment — fails clean on web."
 ---
 
-# /cs-notebooklm
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/notebooklm/commands/cs-notebooklm.md">Source</a></span>
-</div>
-
+# /cs:notebooklm — NotebookLM Browser Automation
 
 **Command:** `/cs:notebooklm`
 
@@ -147,8 +141,8 @@ python ../skills/notebooklm/scripts/async_action_classifier.py --action audio_ov
 
 ## Related
 
-- Agent: [`cs-notebooklm`](https://github.com/alirezarezvani/claude-skills/tree/main/research/notebooklm/agents/cs-notebooklm.md)
-- Skill: [`notebooklm`](https://github.com/alirezarezvani/claude-skills/tree/main/research/notebooklm/skills/notebooklm/SKILL.md)
+- Agent: [`cs-notebooklm`](../agents/cs-notebooklm.md)
+- Skill: [`notebooklm`](../skills/notebooklm/SKILL.md)
 - Source spec: `megaprompts/03-notebooklm-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Research-domain siblings (different shape): `/cs:pulse`, `/cs:litreview`, `/cs:grants`, `/cs:dossier`, `/cs:patent`, `/cs:syllabus`
 

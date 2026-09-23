@@ -1,56 +1,56 @@
 ---
 name: laravel-tdd
-description: 使用 PHPUnit 和 Pest、工厂、数据库测试、模拟以及覆盖率目标进行 Laravel 的测试驱动开发。
+description: Desarrollo guiado por pruebas para Laravel con PHPUnit y Pest, factories, pruebas de base de datos, fakes y objetivos de cobertura.
 origin: ECC
 ---
 
-# Laravel TDD 工作流
+# Flujo de Trabajo TDD en Laravel
 
-使用 PHPUnit 和 Pest 为 Laravel 应用程序进行测试驱动开发，覆盖率（单元 + 功能）达到 80% 以上。
+Desarrollo guiado por pruebas para aplicaciones Laravel usando PHPUnit y Pest con 80%+ de cobertura (unit + feature).
 
-## 使用时机
+## Cuándo Usar
 
-* Laravel 中的新功能或端点
-* 错误修复或重构
-* 测试 Eloquent 模型、策略、作业和通知
-* 除非项目已标准化使用 PHPUnit，否则新测试首选 Pest
+- Nuevas funcionalidades o endpoints en Laravel
+- Correcciones de bugs o refactorizaciones
+- Probar modelos Eloquent, policies, jobs y notifications
+- Preferir Pest para pruebas nuevas a menos que el proyecto ya esté estandarizado en PHPUnit
 
-## 工作原理
+## Cómo Funciona
 
-### 红-绿-重构循环
+### Ciclo Rojo-Verde-Refactorizar
 
-1. 编写一个失败的测试
-2. 实施最小更改以通过测试
-3. 在保持测试通过的同时进行重构
+1) Escribir una prueba fallida
+2) Implementar el cambio mínimo para que pase
+3) Refactorizar manteniendo las pruebas en verde
 
-### 测试层级
+### Capas de Prueba
 
-* **单元**：纯 PHP 类、值对象、服务
-* **功能**：HTTP 端点、身份验证、验证、策略
-* **集成**：数据库 + 队列 + 外部边界
+- **Unit**: clases PHP puras, objetos de valor, servicios
+- **Feature**: endpoints HTTP, autenticación, validación, policies
+- **Integration**: base de datos + colas + límites externos
 
-根据范围选择层级：
+Elegir capas según el alcance:
 
-* 对纯业务逻辑和服务使用**单元**测试。
-* 对 HTTP、身份验证、验证和响应结构使用**功能**测试。
-* 当需要验证数据库/队列/外部服务组合时使用**集成**测试。
+- Usar pruebas **Unit** para lógica de negocio pura y servicios.
+- Usar pruebas **Feature** para HTTP, autenticación, validación y forma de respuesta.
+- Usar pruebas **Integration** cuando se validen BD/colas/servicios externos juntos.
 
-### 数据库策略
+### Estrategia de Base de Datos
 
-* 对于大多数功能/集成测试使用 `RefreshDatabase`（每次测试运行运行一次迁移，然后在支持时将每个测试包装在事务中；内存数据库可能每次测试重新迁移）
-* 当模式已迁移且仅需要每次测试回滚时使用 `DatabaseTransactions`
-* 当每次测试都需要完整迁移/刷新且可以承担其开销时使用 `DatabaseMigrations`
+- `RefreshDatabase` para la mayoría de pruebas feature/integration (ejecuta migraciones una vez por ejecución de prueba, luego envuelve cada prueba en una transacción cuando está soportado; las bases de datos en memoria pueden re-migrar por prueba)
+- `DatabaseTransactions` cuando el esquema ya está migrado y solo se necesita rollback por prueba
+- `DatabaseMigrations` cuando se necesita un migrate/fresh completo para cada prueba y se puede asumir el costo
 
-将 `RefreshDatabase` 作为触及数据库的测试的默认选择：对于支持事务的数据库，它每次测试运行运行一次迁移（通过静态标志）并将每个测试包装在事务中；对于 `:memory:` SQLite 或不支持事务的连接，它在每次测试前进行迁移。当模式已迁移且仅需要每次测试回滚时使用 `DatabaseTransactions`。
+Usar `RefreshDatabase` como predeterminado para pruebas que tocan la base de datos: para bases de datos con soporte de transacciones, ejecuta las migraciones una vez por ejecución de prueba (mediante un flag estático) y envuelve cada prueba en una transacción; para SQLite `:memory:` o conexiones sin transacciones, migra antes de cada prueba. Usar `DatabaseTransactions` cuando el esquema ya está migrado y solo se necesitan rollbacks por prueba.
 
-### 测试框架选择
+### Elección del Framework de Pruebas
 
-* 新测试默认使用 **Pest**（当可用时）。
-* 仅在项目已标准化使用它或需要 PHPUnit 特定工具时使用 **PHPUnit**。
+- Usar **Pest** por defecto para pruebas nuevas cuando esté disponible.
+- Usar **PHPUnit** solo si el proyecto ya lo estandariza o requiere herramientas específicas de PHPUnit.
 
-## 示例
+## Ejemplos
 
-### PHPUnit 示例
+### Ejemplo con PHPUnit
 
 ```php
 use App\Models\User;
@@ -75,7 +75,7 @@ final class ProjectControllerTest extends TestCase
 }
 ```
 
-### 功能测试示例（HTTP 层）
+### Ejemplo de Prueba Feature (Capa HTTP)
 
 ```php
 use App\Models\Project;
@@ -100,7 +100,7 @@ final class ProjectIndexTest extends TestCase
 }
 ```
 
-### Pest 示例
+### Ejemplo con Pest
 
 ```php
 use App\Models\User;
@@ -123,7 +123,7 @@ test('owner can create project', function () {
 });
 ```
 
-### Pest 功能测试示例（HTTP 层）
+### Ejemplo de Prueba Feature con Pest (Capa HTTP)
 
 ```php
 use App\Models\Project;
@@ -145,22 +145,22 @@ test('projects index returns paginated results', function () {
 });
 ```
 
-### 工厂和状态
+### Factories y Estados
 
-* 使用工厂生成测试数据
-* 为边缘情况定义状态（已归档、管理员、试用）
+- Usar factories para datos de prueba
+- Definir estados para casos límite (archivado, admin, trial)
 
 ```php
 $user = User::factory()->state(['role' => 'admin'])->create();
 ```
 
-### 数据库测试
+### Pruebas de Base de Datos
 
-* 使用 `RefreshDatabase` 保持干净状态
-* 保持测试隔离和确定性
-* 优先使用 `assertDatabaseHas` 而非手动查询
+- Usar `RefreshDatabase` para estado limpio
+- Mantener las pruebas aisladas y deterministas
+- Preferir `assertDatabaseHas` sobre consultas manuales
 
-### 持久性测试示例
+### Ejemplo de Prueba de Persistencia
 
 ```php
 use App\Models\Project;
@@ -182,12 +182,12 @@ final class ProjectRepositoryTest extends TestCase
 }
 ```
 
-### 副作用模拟
+### Fakes para Efectos Secundarios
 
-* 作业使用 `Bus::fake()`
-* 队列工作使用 `Queue::fake()`
-* 通知使用 `Mail::fake()` 和 `Notification::fake()`
-* 领域事件使用 `Event::fake()`
+- `Bus::fake()` para jobs
+- `Queue::fake()` para trabajo en cola
+- `Mail::fake()` y `Notification::fake()` para notificaciones
+- `Event::fake()` para eventos de dominio
 
 ```php
 use Illuminate\Support\Facades\Queue;
@@ -209,7 +209,7 @@ $user->notify(new InvoiceReady($invoice));
 Notification::assertSentTo($user, InvoiceReady::class);
 ```
 
-### 身份验证测试（Sanctum）
+### Pruebas de Autenticación (Sanctum)
 
 ```php
 use Laravel\Sanctum\Sanctum;
@@ -220,28 +220,28 @@ $response = $this->getJson('/api/projects');
 $response->assertOk();
 ```
 
-### HTTP 和外部服务
+### HTTP y Servicios Externos
 
-* 使用 `Http::fake()` 隔离外部 API
-* 使用 `Http::assertSent()` 断言出站负载
+- Usar `Http::fake()` para aislar APIs externas
+- Verificar payloads salientes con `Http::assertSent()`
 
-### 覆盖率目标
+### Objetivos de Cobertura
 
-* 对单元 + 功能测试强制执行 80% 以上的覆盖率
-* 在 CI 中使用 `pcov` 或 `XDEBUG_MODE=coverage`
+- Aplicar 80%+ de cobertura para pruebas unit + feature
+- Usar `pcov` o `XDEBUG_MODE=coverage` en CI
 
-### 测试命令
+### Comandos de Prueba
 
-* `php artisan test`
-* `vendor/bin/phpunit`
-* `vendor/bin/pest`
+- `php artisan test`
+- `vendor/bin/phpunit`
+- `vendor/bin/pest`
 
-### 测试配置
+### Configuración de Pruebas
 
-* 使用 `phpunit.xml` 设置 `DB_CONNECTION=sqlite` 和 `DB_DATABASE=:memory:` 以进行快速测试
-* 为测试保持独立的环境，以避免触及开发/生产数据
+- Usar `phpunit.xml` para establecer `DB_CONNECTION=sqlite` y `DB_DATABASE=:memory:` para pruebas rápidas
+- Mantener un entorno separado para pruebas para evitar tocar datos de desarrollo/producción
 
-### 授权测试
+### Pruebas de Autorización
 
 ```php
 use Illuminate\Support\Facades\Gate;
@@ -250,9 +250,9 @@ $this->assertTrue(Gate::forUser($user)->allows('update', $project));
 $this->assertFalse(Gate::forUser($otherUser)->allows('update', $project));
 ```
 
-### Inertia 功能测试
+### Pruebas Feature con Inertia
 
-使用 Inertia.js 时，使用 Inertia 测试辅助函数来断言组件名称和属性。
+Al usar Inertia.js, verificar el nombre del componente y las props con los helpers de testing de Inertia.
 
 ```php
 use App\Models\User;
@@ -280,4 +280,4 @@ final class DashboardInertiaTest extends TestCase
 }
 ```
 
-优先使用 `assertInertia` 而非原始 JSON 断言，以保持测试与 Inertia 响应一致。
+Preferir `assertInertia` sobre aserciones JSON crudas para mantener las pruebas alineadas con las respuestas de Inertia.

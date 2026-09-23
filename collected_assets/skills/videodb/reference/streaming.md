@@ -1,16 +1,16 @@
-# 流媒体与播放
+# ストリーミングと再生
 
-VideoDB 按需生成流媒体，返回 HLS 兼容的 URL，可在任何标准视频播放器中即时播放。无需渲染时间或导出等待——编辑、搜索和组合内容可立即流式传输。
+VideoDBはオンデマンドでストリーミングを生成し、任意の標準ビデオプレーヤーで即時再生できるHLS互換のURLを返す。レンダリング時間やエクスポート待ちは不要——編集、検索、合成されたコンテンツは即座にストリーミングできる。
 
 ## 前提条件
 
-视频**必须上传**到某个集合后，才能生成流媒体。对于基于搜索的流媒体，视频还必须被**索引**（口语单词和/或场景）。有关索引的详细信息，请参阅 [search.md](search.md)。
+ビデオはストリーミングを生成するために**コレクションにアップロードされている必要がある**。検索ベースのストリーミングには、ビデオも**インデックス化されている必要がある**（音声単語および/またはシーン）。インデックス作成の詳細については [search.md](search.md) を参照。
 
-## 核心概念
+## コアコンセプト
 
-### 流媒体生成
+### ストリーミング生成
 
-VideoDB 中的每个视频、搜索结果和时间线都可以生成一个**流媒体 URL**。该 URL 指向一个按需编译的 HLS（HTTP 实时流媒体）清单。
+VideoDBのすべてのビデオ、検索結果、タイムラインは**ストリームURL**を生成できる。このURLはオンデマンドでコンパイルされるHLS（HTTPライブストリーミング）マニフェストを指す。
 
 ```python
 # From a video
@@ -23,9 +23,9 @@ stream_url = timeline.generate_stream()
 stream_url = results.compile()
 ```
 
-## 流式传输单个视频
+## 単一ビデオのストリーミング
 
-### 基本播放
+### 基本再生
 
 ```python
 import videodb
@@ -42,7 +42,7 @@ print(f"Stream: {stream_url}")
 video.play()
 ```
 
-### 带字幕
+### 字幕付き
 
 ```python
 # Index and add subtitles first
@@ -53,9 +53,9 @@ stream_url = video.add_subtitle()
 print(f"Subtitled stream: {stream_url}")
 ```
 
-### 特定片段
+### 特定のセグメント
 
-通过传递时间戳范围的时间线，仅流式传输视频的一部分：
+タイムスタンプ範囲のタイムラインを渡すことでビデオの一部のみをストリーミングする：
 
 ```python
 # Stream seconds 10-30 and 60-90
@@ -63,9 +63,9 @@ stream_url = video.generate_stream(timeline=[(10, 30), (60, 90)])
 print(f"Segment stream: {stream_url}")
 ```
 
-## 流式传输时间线组合
+## タイムラインコンポジションのストリーミング
 
-构建多资产组合并实时流式传输：
+マルチアセットコンポジションを構築してリアルタイムでストリーミングする：
 
 ```python
 import videodb
@@ -98,13 +98,13 @@ stream_url = timeline.generate_stream()
 print(f"Composed stream: {stream_url}")
 ```
 
-**重要说明：**`add_inline()` 仅接受 `VideoAsset`。对于 `AudioAsset`、`ImageAsset` 和 `TextAsset`，请使用 `add_overlay()`。
+**重要な注意事項：** `add_inline()` は `VideoAsset` のみを受け入れる。`AudioAsset`、`ImageAsset`、`TextAsset` には `add_overlay()` を使用する。
 
-有关详细的时间线编辑，请参阅 [editor.md](editor.md)。
+詳細なタイムライン編集については [editor.md](editor.md) を参照。
 
-## 流式传输搜索结果
+## 検索結果のストリーミング
 
-将搜索结果编译为包含所有匹配片段的单一流：
+すべての一致するクリップを含む単一のストリームに検索結果をコンパイルする：
 
 ```python
 from videodb import SearchType
@@ -127,7 +127,7 @@ except InvalidRequestError as exc:
         raise
 ```
 
-### 流式传输单个搜索结果
+### 個別の検索結果をストリーミングする
 
 ```python
 from videodb.exceptions import InvalidRequestError
@@ -144,9 +144,9 @@ except InvalidRequestError as exc:
         raise
 ```
 
-## 音频播放
+## オーディオ再生
 
-获取音频内容的签名播放 URL：
+オーディオコンテンツの署名付き再生URLを取得する：
 
 ```python
 audio = coll.get_audio(audio_id)
@@ -154,11 +154,11 @@ playback_url = audio.generate_url()
 print(f"Audio URL: {playback_url}")
 ```
 
-## 完整工作流程示例
+## 完全なワークフロー例
 
-### 搜索到流媒体管道
+### 検索からストリーミングへのパイプライン
 
-在一个工作流程中结合搜索、时间线组合和流式传输：
+単一のワークフローで検索、タイムラインコンポジション、ストリーミングを組み合わせる：
 
 ```python
 import videodb
@@ -208,9 +208,9 @@ stream_url = timeline.generate_stream()
 print(f"Dynamic compilation: {stream_url}")
 ```
 
-### 多视频流
+### マルチビデオストリーム
 
-将来自不同视频的片段组合成单一流：
+異なるビデオからのクリップを単一のストリームに組み合わせる：
 
 ```python
 import videodb
@@ -236,9 +236,9 @@ stream_url = timeline.generate_stream()
 print(f"Multi-video stream: {stream_url}")
 ```
 
-### 条件流媒体组装
+### 条件付きストリーミングアセンブリ
 
-根据搜索结果的可用性动态构建流媒体：
+検索結果の可用性に基づいてストリームを動的に構築する：
 
 ```python
 import videodb
@@ -292,9 +292,9 @@ else:
     print(f"Full video stream: {stream_url}")
 ```
 
-### 直播事件回顾
+### ライブイベントのリキャップ
 
-将事件录音处理成包含多个部分的可流式传输回顾：
+イベント録音を複数のセクションを持つストリーミング可能なリキャップに処理する：
 
 ```python
 import videodb
@@ -394,13 +394,13 @@ print(f"Event recap: {stream_url}")
 
 ***
 
-## 提示
+## ヒント
 
-* **HLS 兼容性**：流媒体 URL 返回 HLS 清单（`.m3u8`）。它们在 Safari 中原生工作，在其他浏览器中通过 hls.js 或类似库工作。
-* **按需编译**：流媒体在请求时在服务器端编译。首次播放可能会有短暂的编译延迟；同一组合的后续播放会被缓存。
-* **缓存**：第二次调用 `video.generate_stream()`（不带参数）将返回缓存的流媒体 URL，而不是重新编译。
-* **片段流**：`video.generate_stream(timeline=[(start, end)])` 是流式传输特定剪辑的最快方式，无需构建完整的 `Timeline` 对象。
-* **内联与叠加**：`add_inline()` 仅接受 `VideoAsset` 并将资产按顺序放置在主轨道上。`add_overlay()` 接受 `AudioAsset`、`ImageAsset` 和 `TextAsset`，并在给定开始时间将它们叠加在顶部。
-* **TextStyle 默认值**：`TextStyle` 默认为 `font='Sans'`、`fontcolor='black'`。对于文本背景色，请使用 `boxcolor`（而非 `bgcolor`）。
-* **与生成结合**：使用 `coll.generate_music(prompt, duration)` 和 `coll.generate_image(prompt, aspect_ratio)` 为时间线组合创建资产。
-* **播放**：`.play()` 在默认系统浏览器中打开流媒体 URL。对于编程使用，请直接处理 URL 字符串。
+* **HLS互換性**：ストリームURLはHLSマニフェスト（`.m3u8`）を返す。Safariでネイティブに動作し、他のブラウザではhls.jsや類似のライブラリで動作する。
+* **オンデマンドコンパイル**：ストリーミングはリクエスト時にサーバーサイドでコンパイルされる。初回再生には短いコンパイル遅延が発生する場合がある；同じコンポジションの後続再生はキャッシュされる。
+* **キャッシング**：`video.generate_stream()`（引数なし）の2回目の呼び出しは再コンパイルせずにキャッシュされたストリームURLを返す。
+* **セグメントストリーム**：`video.generate_stream(timeline=[(start, end)])` は完全な `Timeline` オブジェクトを構築せずに特定のクリップをストリーミングする最速の方法。
+* **インラインとオーバーレイ**：`add_inline()` は `VideoAsset` のみを受け入れ、アセットをメイントラックに順番に配置する。`add_overlay()` は `AudioAsset`、`ImageAsset`、`TextAsset` を受け入れ、指定された開始時間にそれらを上にオーバーレイする。
+* **TextStyleのデフォルト**：`TextStyle` のデフォルトは `font='Sans'`、`fontcolor='black'`。テキストの背景色には `boxcolor`（`bgcolor` ではない）を使用する。
+* **生成との組み合わせ**：`coll.generate_music(prompt, duration)` と `coll.generate_image(prompt, aspect_ratio)` を使用してタイムラインコンポジションのアセットを作成する。
+* **再生**：`.play()` はデフォルトのシステムブラウザでストリームURLを開く。プログラム的な使用には直接URLの文字列を処理する。

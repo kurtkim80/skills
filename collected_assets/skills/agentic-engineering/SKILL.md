@@ -1,66 +1,135 @@
 ---
 name: agentic-engineering
-description: 作为代理工程师，采用评估优先执行、分解和成本感知模型路由进行操作。
-origin: ECC
+description: >
+  Operate as an agentic engineer using eval-first execution, decomposition,
+  and cost-aware model routing. Use when AI agents perform most implementation
+  work and humans enforce quality and risk controls.
+metadata:
+  origin: ECC
 ---
 
-# 智能体工程
+# Agentic Engineering
 
-在 AI 智能体执行大部分实施工作、而人类负责质量与风险控制的工程工作流中使用此技能。
+Use this skill for engineering workflows where AI agents perform most implementation work and humans enforce quality and risk controls.
 
-## 操作原则
+## Operating Principles
 
-1. 在执行前定义完成标准。
-2. 将工作分解为智能体可处理的单元。
-3. 根据任务复杂度路由模型层级。
-4. 使用评估和回归检查进行度量。
+1. Define completion criteria before execution.
+2. Decompose work into agent-sized units.
+3. Route model tiers by task complexity.
+4. Measure with evals and regression checks.
 
-## 评估优先循环
+## Eval-First Loop
 
-1. 定义能力评估和回归评估。
-2. 运行基线并捕获失败特征。
-3. 执行实施。
-4. 重新运行评估并比较差异。
+1. Define capability eval and regression eval.
+2. Run baseline and capture failure signatures.
+3. Execute implementation.
+4. Re-run evals and compare deltas.
 
-## 任务分解
+**Example workflow:**
+```
+1. Write test that captures desired behavior (eval)
+2. Run test → capture baseline failures
+3. Implement feature
+4. Re-run test → verify improvements
+5. Check for regressions in other tests
+```
 
-应用 15 分钟单元规则：
+## Task Decomposition
 
-* 每个单元应可独立验证
-* 每个单元应有一个主要风险
-* 每个单元应暴露一个清晰的完成条件
+Apply the 15-minute unit rule:
+- Each unit should be independently verifiable
+- Each unit should have a single dominant risk
+- Each unit should expose a clear done condition
 
-## 模型路由
+**Good decomposition:**
+```
+Task: Add user authentication
+├─ Unit 1: Add password hashing (15 min, security risk)
+├─ Unit 2: Create login endpoint (15 min, API contract risk)
+├─ Unit 3: Add session management (15 min, state risk)
+└─ Unit 4: Protect routes with middleware (15 min, auth logic risk)
+```
 
-* Haiku：分类、样板转换、狭窄编辑
-* Sonnet：实施和重构
-* Opus：架构、根因分析、多文件不变量
+**Bad decomposition:**
+```
+Task: Add user authentication (2 hours, multiple risks)
+```
 
-## 会话策略
+## Model Routing
 
-* 对于紧密耦合的单元，继续使用同一会话。
-* 在主要阶段转换后，启动新的会话。
-* 在里程碑完成后进行压缩，而不是在主动调试期间。
+Choose model tier based on task complexity:
 
-## AI 生成代码的审查重点
+- **Haiku**: Classification, boilerplate transforms, narrow edits
+  - Example: Rename variable, add type annotation, format code
 
-优先审查：
+- **Sonnet**: Implementation and refactors
+  - Example: Implement feature, refactor module, write tests
 
-* 不变量和边界情况
-* 错误边界
-* 安全性和身份验证假设
-* 隐藏的耦合和上线风险
+- **Opus**: Architecture, root-cause analysis, multi-file invariants
+  - Example: Design system, debug complex issue, review architecture
 
-当自动化格式化/代码检查工具已强制执行代码风格时，不要在仅涉及风格分歧的审查上浪费周期。
+**Cost discipline:** Escalate model tier only when lower tier fails with a clear reasoning gap.
 
-## 成本纪律
+## Session Strategy
 
-按任务跟踪：
+- **Continue session** for closely-coupled units
+  - Example: Implementing related functions in same module
 
-* 模型
-* 令牌估算
-* 重试次数
-* 实际用时
-* 成功/失败
+- **Start fresh session** after major phase transitions
+  - Example: Moving from implementation to testing
 
-仅当较低层级的模型失败且存在清晰的推理差距时，才升级模型层级。
+- **Compact after milestone completion**, not during active debugging
+  - Example: After feature complete, before starting next feature
+
+## Review Focus for AI-Generated Code
+
+Prioritize:
+- Invariants and edge cases
+- Error boundaries
+- Security and auth assumptions
+- Hidden coupling and rollout risk
+
+Do not waste review cycles on style-only disagreements when automated format/lint already enforce style.
+
+**Review checklist:**
+- [ ] Edge cases handled (null, empty, boundary values)
+- [ ] Error handling comprehensive
+- [ ] Security assumptions validated
+- [ ] No hidden coupling between modules
+- [ ] Rollout risk assessed (breaking changes, migrations)
+
+## Cost Discipline
+
+Track per task:
+- Model tier used
+- Token estimate
+- Retries needed
+- Wall-clock time
+- Success/failure outcome
+
+**Example tracking:**
+```
+Task: Implement user login
+Model: Sonnet
+Tokens: ~5k input, ~2k output
+Retries: 1 (initial implementation had auth bug)
+Time: 8 minutes
+Outcome: Success
+```
+
+## When to Use This Skill
+
+- Managing AI-driven development workflows
+- Planning agent task decomposition
+- Optimizing model tier selection
+- Implementing eval-first development
+- Reviewing AI-generated code
+- Tracking development costs
+
+## Integration with Other Skills
+
+- **tdd-workflow**: Combine with eval-first loop for test-driven development
+- **verification-loop**: Use for continuous validation during implementation
+- **search-first**: Apply before implementation to find existing solutions
+- **coding-standards**: Reference during code review phase

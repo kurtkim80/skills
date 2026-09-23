@@ -1,29 +1,29 @@
 ---
 name: kotlin-exposed-patterns
-description: JetBrains Exposed ORM 模式，包括 DSL 查询、DAO 模式、事务、HikariCP 连接池、Flyway 迁移和仓库模式。
+description: JetBrains Exposed ORM パターン（DSL クエリ、DAO パターン、トランザクション、HikariCP 接続プーリング、Flyway マイグレーション、リポジトリパターンを含む）。
 origin: ECC
 ---
 
-# Kotlin Exposed 模式
+# Kotlin Exposed パターン
 
-使用 JetBrains Exposed ORM 进行数据库访问的全面模式，包括 DSL 查询、DAO、事务以及生产就绪的配置。
+JetBrains Exposed ORM を使用したデータベースアクセスの包括的なパターン（DSL クエリ、DAO、トランザクション、プロダクション対応の設定を含む）。
 
-## 何时使用
+## 使用するタイミング
 
-* 使用 Exposed 设置数据库访问
-* 使用 Exposed DSL 或 DAO 编写 SQL 查询
-* 使用 HikariCP 配置连接池
-* 使用 Flyway 创建数据库迁移
-* 使用 Exposed 实现仓储模式
-* 处理 JSON 列和复杂查询
+- Exposed を使用したデータベースアクセスの設定
+- Exposed DSL または DAO を使用した SQL クエリの作成
+- HikariCP を使用した接続プーリングの設定
+- Flyway を使用したデータベースマイグレーションの作成
+- Exposed を使用したリポジトリパターンの実装
+- JSON カラムと複雑なクエリの処理
 
-## 工作原理
+## 動作の仕組み
 
-Exposed 提供两种查询风格：用于直接类似 SQL 表达式的 DSL 和用于实体生命周期管理的 DAO。HikariCP 通过 `HikariConfig` 配置来管理可重用的数据库连接池。Flyway 在启动时运行版本化的 SQL 迁移脚本以保持模式同步。所有数据库操作都在 `newSuspendedTransaction` 块内运行，以确保协程安全和原子性。仓储模式将 Exposed 查询包装在接口之后，使业务逻辑与数据层解耦，并且测试可以使用内存中的 H2 数据库。
+Exposed は 2 つのクエリスタイルを提供します: 直接 SQL に似た表現のための DSL と、エンティティライフサイクル管理のための DAO です。HikariCP は `HikariConfig` を通じて設定された再利用可能なデータベース接続のプールを管理します。Flyway はスタートアップ時にバージョン管理された SQL マイグレーションスクリプトを実行してスキーマを同期させます。すべてのデータベース操作はコルーチンの安全性とアトミシティのために `newSuspendedTransaction` ブロック内で実行されます。リポジトリパターンはビジネスロジックをデータレイヤーから切り離し、テストがインメモリ H2 データベースを使用できるようにします。
 
-## 示例
+## 使用例
 
-### DSL 查询
+### DSL クエリ
 
 ```kotlin
 suspend fun findUserById(id: UUID): UserRow? =
@@ -35,7 +35,7 @@ suspend fun findUserById(id: UUID): UserRow? =
     }
 ```
 
-### DAO 实体用法
+### DAO エンティティの使用
 
 ```kotlin
 suspend fun createUser(request: CreateUserRequest): User =
@@ -48,7 +48,7 @@ suspend fun createUser(request: CreateUserRequest): User =
     }
 ```
 
-### HikariCP 配置
+### HikariCP 設定
 
 ```kotlin
 val hikariConfig = HikariConfig().apply {
@@ -63,9 +63,9 @@ val hikariConfig = HikariConfig().apply {
 }
 ```
 
-## 数据库设置
+## データベースセットアップ
 
-### HikariCP 连接池
+### HikariCP 接続プーリング
 
 ```kotlin
 // DatabaseFactory.kt
@@ -95,7 +95,7 @@ data class DatabaseConfig(
 )
 ```
 
-### Flyway 迁移
+### Flyway マイグレーション
 
 ```kotlin
 // FlywayMigration.kt
@@ -108,7 +108,7 @@ fun runMigrations(config: DatabaseConfig) {
         .migrate()
 }
 
-// Application startup
+// アプリケーションスタートアップ
 fun Application.module() {
     val config = DatabaseConfig(
         url = environment.config.property("database.url").getString(),
@@ -121,7 +121,7 @@ fun Application.module() {
 }
 ```
 
-### 迁移文件
+### マイグレーションファイル
 
 ```sql
 -- src/main/resources/db/migration/V1__create_users.sql
@@ -139,9 +139,9 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
 ```
 
-## 表定义
+## テーブル定義
 
-### DSL 风格表
+### DSL スタイルのテーブル
 
 ```kotlin
 // tables/UsersTable.kt
@@ -170,7 +170,7 @@ object OrderItemsTable : UUIDTable("order_items") {
 }
 ```
 
-### 复合表
+### 複合テーブル
 
 ```kotlin
 object UserRolesTable : Table("user_roles") {
@@ -180,12 +180,12 @@ object UserRolesTable : Table("user_roles") {
 }
 ```
 
-## DSL 查询
+## DSL クエリ
 
-### 基本 CRUD
+### 基本的な CRUD
 
 ```kotlin
-// Insert
+// 挿入
 suspend fun insertUser(name: String, email: String, role: Role): UUID =
     newSuspendedTransaction {
         UsersTable.insertAndGetId {
@@ -195,7 +195,7 @@ suspend fun insertUser(name: String, email: String, role: Role): UUID =
         }.value
     }
 
-// Select by ID
+// ID で選択
 suspend fun findUserById(id: UUID): UserRow? =
     newSuspendedTransaction {
         UsersTable.selectAll()
@@ -204,7 +204,7 @@ suspend fun findUserById(id: UUID): UserRow? =
             .singleOrNull()
     }
 
-// Select with conditions
+// 条件付き選択
 suspend fun findActiveAdmins(): List<UserRow> =
     newSuspendedTransaction {
         UsersTable.selectAll()
@@ -213,7 +213,7 @@ suspend fun findActiveAdmins(): List<UserRow> =
             .map { it.toUser() }
     }
 
-// Update
+// 更新
 suspend fun updateUserEmail(id: UUID, newEmail: String): Boolean =
     newSuspendedTransaction {
         UsersTable.update({ UsersTable.id eq id }) {
@@ -222,13 +222,13 @@ suspend fun updateUserEmail(id: UUID, newEmail: String): Boolean =
         } > 0
     }
 
-// Delete
+// 削除
 suspend fun deleteUser(id: UUID): Boolean =
     newSuspendedTransaction {
         UsersTable.deleteWhere { UsersTable.id eq id } > 0
     }
 
-// Row mapping
+// 行マッピング
 private fun ResultRow.toUser() = UserRow(
     id = this[UsersTable.id].value,
     name = this[UsersTable.name],
@@ -240,10 +240,10 @@ private fun ResultRow.toUser() = UserRow(
 )
 ```
 
-### 高级查询
+### 高度なクエリ
 
 ```kotlin
-// Join queries
+// JOIN クエリ
 suspend fun findOrdersWithUser(userId: UUID): List<OrderWithUser> =
     newSuspendedTransaction {
         (OrdersTable innerJoin UsersTable)
@@ -260,7 +260,7 @@ suspend fun findOrdersWithUser(userId: UUID): List<OrderWithUser> =
             }
     }
 
-// Aggregation
+// 集計
 suspend fun countUsersByRole(): Map<Role, Long> =
     newSuspendedTransaction {
         UsersTable
@@ -271,7 +271,7 @@ suspend fun countUsersByRole(): Map<Role, Long> =
             }
     }
 
-// Subqueries
+// サブクエリ
 suspend fun findUsersWithOrders(): List<UserRow> =
     newSuspendedTransaction {
         UsersTable.selectAll()
@@ -282,7 +282,7 @@ suspend fun findUsersWithOrders(): List<UserRow> =
             .map { it.toUser() }
     }
 
-// LIKE and pattern matching — always escape user input to prevent wildcard injection
+// LIKE とパターンマッチング — ワイルドカードインジェクションを防ぐため常にユーザー入力をエスケープ
 private fun escapeLikePattern(input: String): String =
     input.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
@@ -298,7 +298,7 @@ suspend fun searchUsers(query: String): List<UserRow> =
     }
 ```
 
-### 分页
+### ページネーション
 
 ```kotlin
 data class Page<T>(
@@ -325,10 +325,10 @@ suspend fun findUsersPaginated(page: Int, limit: Int): Page<UserRow> =
     }
 ```
 
-### 批量操作
+### バッチ操作
 
 ```kotlin
-// Batch insert
+// バッチ挿入
 suspend fun insertUsers(users: List<CreateUserRequest>): List<UUID> =
     newSuspendedTransaction {
         UsersTable.batchInsert(users) { user ->
@@ -338,7 +338,7 @@ suspend fun insertUsers(users: List<CreateUserRequest>): List<UUID> =
         }.map { it[UsersTable.id].value }
     }
 
-// Upsert (insert or update on conflict)
+// アップサート（競合時に挿入または更新）
 suspend fun upsertUser(id: UUID, name: String, email: String) {
     newSuspendedTransaction {
         UsersTable.upsert(UsersTable.email) {
@@ -351,9 +351,9 @@ suspend fun upsertUser(id: UUID, name: String, email: String) {
 }
 ```
 
-## DAO 模式
+## DAO パターン
 
-### 实体定义
+### エンティティ定義
 
 ```kotlin
 // entities/UserEntity.kt
@@ -422,12 +422,12 @@ suspend fun updateUser(id: UUID, request: UpdateUserRequest): User? =
     }
 ```
 
-## 事务
+## トランザクション
 
-### 挂起事务支持
+### サスペンドトランザクションのサポート
 
 ```kotlin
-// Good: Use newSuspendedTransaction for coroutine support
+// 良い例: コルーチンサポートのために newSuspendedTransaction を使用
 suspend fun performDatabaseOperation(): Result<User> =
     runCatching {
         newSuspendedTransaction {
@@ -435,28 +435,28 @@ suspend fun performDatabaseOperation(): Result<User> =
                 name = "Alice"
                 email = "alice@example.com"
             }
-            // All operations in this block are atomic
+            // このブロック内のすべての操作はアトミック
             user.toModel()
         }
     }
 
-// Good: Nested transactions with savepoints
+// 良い例: セーブポイントによるネストされたトランザクション
 suspend fun transferFunds(fromId: UUID, toId: UUID, amount: Long) {
     newSuspendedTransaction {
         val from = UserEntity.findById(fromId) ?: throw NotFoundException("User $fromId not found")
         val to = UserEntity.findById(toId) ?: throw NotFoundException("User $toId not found")
 
-        // Debit
+        // デビット
         from.balance -= amount
-        // Credit
+        // クレジット
         to.balance += amount
 
-        // Both succeed or both fail
+        // 両方が成功するか両方が失敗するか
     }
 }
 ```
 
-### 事务隔离级别
+### トランザクション分離
 
 ```kotlin
 suspend fun readCommittedQuery(): List<User> =
@@ -466,14 +466,14 @@ suspend fun readCommittedQuery(): List<User> =
 
 suspend fun serializableOperation() {
     newSuspendedTransaction(transactionIsolation = Connection.TRANSACTION_SERIALIZABLE) {
-        // Strictest isolation level for critical operations
+        // クリティカルな操作のための最も厳格な分離レベル
     }
 }
 ```
 
-## 仓储模式
+## リポジトリパターン
 
-### 接口定义
+### インターフェース定義
 
 ```kotlin
 interface UserRepository {
@@ -488,7 +488,7 @@ interface UserRepository {
 }
 ```
 
-### Exposed 实现
+### Exposed 実装
 
 ```kotlin
 class ExposedUserRepository(
@@ -575,12 +575,12 @@ class ExposedUserRepository(
 }
 ```
 
-## JSON 列
+## JSON カラム
 
-### 使用 kotlinx.serialization 的 JSONB
+### kotlinx.serialization を使用した JSONB
 
 ```kotlin
-// Custom column type for JSONB
+// JSONB のカスタムカラム型
 inline fun <reified T : Any> Table.jsonb(
     name: String,
     json: Json,
@@ -604,7 +604,7 @@ inline fun <reified T : Any> Table.jsonb(
         }
 })
 
-// Usage in table
+// テーブルでの使用
 @Serializable
 data class UserMetadata(
     val preferences: Map<String, String> = emptyMap(),
@@ -616,9 +616,9 @@ object UsersTable : UUIDTable("users") {
 }
 ```
 
-## 使用 Exposed 进行测试
+## Exposed でのテスト
 
-### 用于测试的内存数据库
+### テスト用インメモリデータベース
 
 ```kotlin
 class UserRepositoryTest : FunSpec({
@@ -674,7 +674,7 @@ class UserRepositoryTest : FunSpec({
 })
 ```
 
-## Gradle 依赖项
+## Gradle 依存関係
 
 ```kotlin
 // build.gradle.kts
@@ -686,34 +686,34 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.0.0")
     implementation("org.jetbrains.exposed:exposed-json:1.0.0")
 
-    // Database driver
+    // データベースドライバー
     implementation("org.postgresql:postgresql:42.7.5")
 
-    // Connection pooling
+    // 接続プーリング
     implementation("com.zaxxer:HikariCP:6.2.1")
 
-    // Migrations
+    // マイグレーション
     implementation("org.flywaydb:flyway-core:10.22.0")
     implementation("org.flywaydb:flyway-database-postgresql:10.22.0")
 
-    // Testing
+    // テスト
     testImplementation("com.h2database:h2:2.3.232")
 }
 ```
 
-## 快速参考：Exposed 模式
+## クイックリファレンス: Exposed パターン
 
-| 模式 | 描述 |
-|---------|-------------|
-| `object Table : UUIDTable("name")` | 定义具有 UUID 主键的表 |
-| `newSuspendedTransaction { }` | 协程安全的事务块 |
-| `Table.selectAll().where { }` | 带条件的查询 |
-| `Table.insertAndGetId { }` | 插入并返回生成的 ID |
-| `Table.update({ condition }) { }` | 更新匹配的行 |
-| `Table.deleteWhere { }` | 删除匹配的行 |
-| `Table.batchInsert(items) { }` | 高效的批量插入 |
-| `innerJoin` / `leftJoin` | 连接表 |
-| `orderBy` / `limit` / `offset` | 排序和分页 |
-| `count()` / `sum()` / `avg()` | 聚合函数 |
+| パターン | 説明 |
+|---------|------|
+| `object Table : UUIDTable("name")` | UUID 主キーを持つテーブルを定義 |
+| `newSuspendedTransaction { }` | コルーチン安全なトランザクションブロック |
+| `Table.selectAll().where { }` | 条件付きクエリ |
+| `Table.insertAndGetId { }` | 挿入して生成された ID を返す |
+| `Table.update({ condition }) { }` | 一致する行を更新 |
+| `Table.deleteWhere { }` | 一致する行を削除 |
+| `Table.batchInsert(items) { }` | 効率的なバルク挿入 |
+| `innerJoin` / `leftJoin` | テーブルの結合 |
+| `orderBy` / `limit` / `offset` | ソートとページネーション |
+| `count()` / `sum()` / `avg()` | 集計関数 |
 
-**记住**：对于简单查询使用 DSL 风格，当需要实体生命周期管理时使用 DAO 风格。始终使用 `newSuspendedTransaction` 以获得协程支持，并将数据库操作包装在仓储接口之后以提高可测试性。
+**覚えておくこと**: シンプルなクエリには DSL スタイルを、エンティティライフサイクル管理が必要な場合は DAO スタイルを使用してください。コルーチンサポートには必ず `newSuspendedTransaction` を使用し、テスト可能性のためにデータベース操作をリポジトリインターフェースの後ろにラップしてください。

@@ -1,157 +1,154 @@
 ---
 name: gan-style-harness
-description: "受GAN启发的生成器-评估器代理框架，用于自主构建高质量应用。基于Anthropic 2026年3月的框架设计论文。"
+description: GAN（生成的敵対ネットワーク）スタイルの評価ハーネス、画像生成パターン、および品質メトリクス。
 origin: ECC-community
 tools: Read, Write, Edit, Bash, Grep, Glob, Task
 ---
 
-# GAN 风格编排技能
+# GAN-Style Harness Skill
 
-> 灵感来源于 [Anthropic 的长时间运行应用开发编排设计](https://www.anthropic.com/engineering/harness-design-long-running-apps)（2026年3月24日）
+> Inspired by [Anthropic's Harness Design for Long-Running Application Development](https://www.anthropic.com/engineering/harness-design-long-running-apps) (March 24, 2026)
 
-一种多智能体编排，将**生成**与**评估**分离，形成对抗性反馈循环，推动质量远超单个智能体所能达到的水平。
+A multi-agent harness that separates **generation** from **evaluation**, creating an adversarial feedback loop that drives quality far beyond what a single agent can achieve.
 
-## 核心洞察
+## Core Insight
 
-> 当要求评估自身工作时，智能体是病态的乐观主义者——它们会赞美平庸的输出，并说服自己忽略真正的问题。但设计一个**独立的评估器**并使其极度严格，远比教会生成器自我批评要容易得多。
+> When asked to evaluate their own work, agents are pathological optimists — they praise mediocre output and talk themselves out of legitimate issues. But engineering a **separate evaluator** to be ruthlessly strict is far more tractable than teaching a generator to self-critique.
 
-这与 GAN（生成对抗网络）的机制相同：生成器负责产出，评估器负责批评，这种反馈驱动下一轮迭代。
+This is the same dynamic as GANs (Generative Adversarial Networks): the Generator produces, the Evaluator critiques, and that feedback drives the next iteration.
 
-## 适用场景
+## When to Use
 
-* 根据一行提示构建完整应用
-* 需要高视觉质量的前端设计任务
-* 需要工作功能而不仅仅是代码的全栈项目
-* 任何"AI 垃圾"美学不可接受的任务
-* 愿意投入 50-200 美元以获得生产级质量输出的项目
+- Building complete applications from a one-line prompt
+- Frontend design tasks requiring high visual quality
+- Full-stack projects that need working features, not just code
+- Any task where "AI slop" aesthetics are unacceptable
+- Projects where you want to invest $50-200 for production-quality output
 
-## 不适用场景
+## When NOT to Use
 
-* 快速单文件修复（使用标准 `claude -p`）
-* 预算紧张的任务（<10 美元）
-* 简单重构（改用去垃圾化模式）
-* 已有完善测试规范的任务（使用 TDD 工作流）
+- Quick single-file fixes (use standard `claude -p`)
+- Tasks with tight budget constraints (<$10)
+- Simple refactoring (use de-sloppify pattern instead)
+- Tasks that are already well-specified with tests (use TDD workflow)
 
-## 架构
+## Architecture
 
 ```
                     ┌─────────────┐
-                    │   规划器    │
+                    │   PLANNER   │
                     │  (Sonnet)   │
                     └──────┬──────┘
-                           │ 产品规格
-                           │ (功能、冲刺、设计方向)
+                           │ Product Spec
+                           │ (features, sprints, design direction)
                            ▼
               ┌────────────────────────┐
               │                        │
-              │   生成器-评估器        │
-              │     反馈循环           │
+              │   GENERATOR-EVALUATOR  │
+              │      FEEDBACK LOOP     │
               │                        │
               │  ┌──────────┐          │
-              │  │ 生成器   │--构建-->│──┐
+              │  │GENERATOR │--build-->│──┐
               │  │ (Sonnet) │          │  │
               │  └────▲─────┘          │  │
-              │       │                │  │ 实时应用
-              │    反馈               │  │
+              │       │                │  │ live app
+              │    feedback             │  │
               │       │                │  │
               │  ┌────┴─────┐          │  │
-              │  │ 评估器   │<-测试---│──┘
+              │  │EVALUATOR │<-test----│──┘
               │  │ (Sonnet) │          │
               │  │+Playwright│         │
               │  └──────────┘          │
               │                        │
-              │   5-15 次迭代         │
+              │   5-15 iterations      │
               └────────────────────────┘
 ```
 
-## 三个智能体
+## The Three Agents
 
-### 1. 规划器智能体
+### 1. Planner Agent
 
-**角色：** 产品经理——将简短的提示扩展为完整的产品规格。
+**Role:** Product manager — expands a brief prompt into a full product specification.
 
-**关键行为：**
+**Key behaviors:**
+- Takes a one-line prompt and produces a 16-feature, multi-sprint specification
+- Defines user stories, technical requirements, and visual design direction
+- Is deliberately **ambitious** — conservative planning leads to underwhelming results
+- Produces evaluation criteria that the Evaluator will use later
 
-* 接收一行提示，生成包含 16 个功能、多个冲刺的规格
-* 定义用户故事、技术需求和视觉设计方向
-* 故意**雄心勃勃**——保守规划会导致结果平庸
-* 生成评估器后续使用的评估标准
+**Model:** Sonnet by default; raise via `GAN_PLANNER_MODEL=opus` for deeper spec expansion
 
-**模型：** 默认 Sonnet；可通过 `GAN_PLANNER_MODEL=opus` 提升以获得更深入的规格扩展
+### 2. Generator Agent
 
-### 2. 生成器智能体
+**Role:** Developer — implements features according to the spec.
 
-**角色：** 开发者——根据规格实现功能。
+**Key behaviors:**
+- Works in structured sprints (or continuous mode with newer models)
+- Negotiates a "sprint contract" with the Evaluator before writing code
+- Uses full-stack tooling: React, FastAPI/Express, databases, CSS
+- Manages git for version control between iterations
+- Reads Evaluator feedback and incorporates it in next iteration
 
-**关键行为：**
+**Model:** Sonnet by default; raise via `GAN_GENERATOR_MODEL=opus` for maximum coding capability
 
-* 按结构化冲刺工作（或使用较新模型的连续模式）
-* 在编写代码前与评估器协商"冲刺合约"
-* 使用全栈工具：React、FastAPI/Express、数据库、CSS
-* 管理 git 进行迭代间的版本控制
-* 读取评估器反馈并在下一轮迭代中采纳
+### 3. Evaluator Agent
 
-**模型：** 默认 Sonnet；可通过 `GAN_GENERATOR_MODEL=opus` 提升以获得最强编码能力
+**Role:** QA engineer — tests the live running application, not just code.
 
-### 3. 评估器智能体
+**Key behaviors:**
+- Uses **Playwright MCP** to interact with the live application
+- Clicks through features, fills forms, tests API endpoints
+- Scores against four criteria (configurable):
+  1. **Design Quality** — Does it feel like a coherent whole?
+  2. **Originality** — Custom decisions vs. template/AI patterns?
+  3. **Craft** — Typography, spacing, animations, micro-interactions?
+  4. **Functionality** — Do all features actually work?
+- Returns structured feedback with scores and specific issues
+- Is engineered to be **ruthlessly strict** — never praises mediocre work
 
-**角色：** QA 工程师——测试实时运行的应用，而不仅仅是代码。
+**Model:** Sonnet by default; raise via `GAN_EVALUATOR_MODEL=opus` for stronger judgment + tool use
 
-**关键行为：**
+## Evaluation Criteria
 
-* 使用 **Playwright MCP** 与实时应用交互
-* 点击功能、填写表单、测试 API 端点
-* 根据四个标准评分（可配置）：
-  1. **设计质量**——是否感觉像一个连贯的整体？
-  2. **原创性**——自定义决策 vs. 模板/AI 模式？
-  3. **工艺**——排版、间距、动画、微交互？
-  4. **功能性**——所有功能是否真正工作？
-* 返回结构化反馈，包含分数和具体问题
-* 设计为**极度严格**——从不赞美平庸的工作
-
-**模型：** 默认 Sonnet；可通过 `GAN_EVALUATOR_MODEL=opus` 提升以获得更强的判断力 + 工具使用能力
-
-## 评估标准
-
-默认四个标准，每个评分 1-10：
+The default four criteria, each scored 1-10:
 
 ```markdown
-## 评估标准
+## Evaluation Rubric
 
-### 设计质量（权重：0.3）
-- 1-3分：模板化、千篇一律的"AI生成"美学
-- 4-6分：合格但平庸，遵循常规设计
-- 7-8分：独特且连贯的视觉识别
-- 9-10分：可媲美专业设计师作品
+### Design Quality (weight: 0.3)
+- 1-3: Generic, template-like, "AI slop" aesthetics
+- 4-6: Competent but unremarkable, follows conventions
+- 7-8: Distinctive, cohesive visual identity
+- 9-10: Could pass for a professional designer's work
 
-### 原创性（权重：0.2）
-- 1-3分：默认配色、模板布局，缺乏个性
-- 4-6分：部分自定义选择，整体仍属常规模式
-- 7-8分：清晰的创意构思，独特的设计手法
-- 9-10分：令人惊喜、愉悦，真正新颖
+### Originality (weight: 0.2)
+- 1-3: Default colors, stock layouts, no personality
+- 4-6: Some custom choices, mostly standard patterns
+- 7-8: Clear creative vision, unique approach
+- 9-10: Surprising, delightful, genuinely novel
 
-### 工艺水平（权重：0.3）
-- 1-3分：布局错乱，状态缺失，无动画效果
-- 4-6分：功能可用但粗糙，间距不统一
-- 7-8分：精致流畅，过渡平滑，响应式设计
-- 9-10分：像素级完美，令人愉悦的微交互
+### Craft (weight: 0.3)
+- 1-3: Broken layouts, missing states, no animations
+- 4-6: Works but feels rough, inconsistent spacing
+- 7-8: Polished, smooth transitions, responsive
+- 9-10: Pixel-perfect, delightful micro-interactions
 
-### 功能性（权重：0.2）
-- 1-3分：核心功能损坏或缺失
-- 4-6分：主流程可用，边缘情况处理失败
-- 7-8分：所有功能正常，错误处理良好
-- 9-10分：无懈可击，覆盖所有边缘情况
+### Functionality (weight: 0.2)
+- 1-3: Core features broken or missing
+- 4-6: Happy path works, edge cases fail
+- 7-8: All features work, good error handling
+- 9-10: Bulletproof, handles every edge case
 ```
 
-### 评分
+### Scoring
 
-* **加权分数** = 总和（标准\_分数 \* 权重）
-* **通过阈值** = 7.0（可配置）
-* **最大迭代次数** = 15（可配置，通常 5-15 次足够）
+- **Weighted score** = sum of (criterion_score * weight)
+- **Pass threshold** = 7.0 (configurable)
+- **Max iterations** = 15 (configurable, typically 5-15 sufficient)
 
-## 使用方法
+## Usage
 
-### 通过命令行
+### Via Command
 
 ```bash
 # Full three-agent harness
@@ -164,7 +161,7 @@ tools: Read, Write, Edit, Bash, Grep, Glob, Task
 /project:gan-design "Create a landing page for a crypto portfolio tracker"
 ```
 
-### 通过 Shell 脚本
+### Via Shell Script
 
 ```bash
 # Basic usage
@@ -177,7 +174,7 @@ GAN_EVAL_CRITERIA="functionality,performance,security" \
 ./scripts/gan-harness.sh "Build a REST API for task management"
 ```
 
-### 通过 Claude Code（手动）
+### Via Claude Code (Manual)
 
 ```bash
 # Step 1: Plan
@@ -195,90 +192,87 @@ claude -p --model sonnet "You are a Generator. Read spec.md and feedback-001.md.
 # Repeat steps 3-4 until pass threshold met
 ```
 
-## 随模型能力的演进
+## Evolution Across Model Capabilities
 
-编排应随模型改进而简化。遵循 Anthropic 的演进路径：
+The harness should simplify as models improve. Following Anthropic's evolution:
 
-### 阶段 1 — 较弱模型（Sonnet 级别）
+### Stage 1 — Weaker Models (Sonnet-class)
+- Full sprint decomposition required
+- Context resets between sprints (avoid context anxiety)
+- 2-agent minimum: Initializer + Coding Agent
+- Heavy scaffolding compensates for model limitations
 
-* 需要完整的冲刺分解
-* 冲刺间重置上下文（避免上下文焦虑）
-* 最少 2 个智能体：初始化器 + 编码智能体
-* 大量脚手架弥补模型限制
+### Stage 2 — Capable Models (Opus 4.5-class)
+- Full 3-agent harness: Planner + Generator + Evaluator
+- Sprint contracts before each implementation phase
+- 10-sprint decomposition for complex apps
+- Context resets still useful but less critical
 
-### 阶段 2 — 能力型模型（Opus 4.5 级别）
+### Stage 3 — Frontier Models (Opus 4.6-class)
+- Simplified harness: single planning pass, continuous generation
+- Evaluation reduced to single end-pass (model is smarter)
+- No sprint structure needed
+- Automatic compaction handles context growth
 
-* 完整的 3 智能体编排：规划器 + 生成器 + 评估器
-* 每个实现阶段前有冲刺合约
-* 复杂应用分解为 10 个冲刺
-* 上下文重置仍有帮助但不再关键
+> **Key principle:** Every harness component encodes an assumption about what the model can't do alone. When models improve, re-test those assumptions. Strip away what's no longer needed.
 
-### 阶段 3 — 前沿模型（Opus 4.6 级别）
+## Configuration
 
-* 简化编排：单次规划，连续生成
-* 评估简化为单次最终评估（模型更智能）
-* 无需冲刺结构
-* 自动压缩处理上下文增长
+### Environment Variables
 
-> **关键原则：** 编排的每个组件都编码了一个关于模型无法独立完成什么的假设。当模型改进时，重新测试这些假设。剥离不再需要的部分。
-
-## 配置
-
-### 环境变量
-
-| 变量 | 默认值 | 描述 |
+| Variable | Default | Description |
 |----------|---------|-------------|
-| `GAN_MAX_ITERATIONS` | `15` | 最大生成器-评估器循环次数 |
-| `GAN_PASS_THRESHOLD` | `7.0` | 通过所需的加权分数（1-10） |
-| `GAN_PLANNER_MODEL` | `sonnet` | 规划智能体的模型 |
-| `GAN_GENERATOR_MODEL` | `sonnet` | 生成器智能体的模型 |
-| `GAN_EVALUATOR_MODEL` | `sonnet` | 评估器智能体的模型 |
-| `GAN_EVAL_CRITERIA` | `design,originality,craft,functionality` | 逗号分隔的标准 |
-| `GAN_DEV_SERVER_PORT` | `3000` | 实时应用的端口 |
-| `GAN_DEV_SERVER_CMD` | `npm run dev` | 启动开发服务器的命令 |
-| `GAN_PROJECT_DIR` | `.` | 项目工作目录 |
-| `GAN_SKIP_PLANNER` | `false` | 跳过规划器，直接使用规格 |
-| `GAN_EVAL_MODE` | `playwright` | `playwright`、`screenshot` 或 `code-only` |
+| `GAN_MAX_ITERATIONS` | `15` | Maximum generator-evaluator cycles |
+| `GAN_PASS_THRESHOLD` | `7.0` | Weighted score to pass (1-10) |
+| `GAN_PLANNER_MODEL` | `sonnet` | Model for planning agent |
+| `GAN_GENERATOR_MODEL` | `sonnet` | Model for generator agent |
+| `GAN_EVALUATOR_MODEL` | `sonnet` | Model for evaluator agent |
+| `GAN_EVAL_CRITERIA` | `design,originality,craft,functionality` | Comma-separated criteria |
+| `GAN_DEV_SERVER_PORT` | `3000` | Port for the live app |
+| `GAN_DEV_SERVER_CMD` | `npm run dev` | Command to start dev server |
+| `GAN_PROJECT_DIR` | `.` | Project working directory |
+| `GAN_SKIP_PLANNER` | `false` | Skip planner, use spec directly |
+| `GAN_EVAL_MODE` | `playwright` | `playwright`, `screenshot`, or `code-only` |
 
-### 评估模式
+### Evaluation Modes
 
-| 模式 | 工具 | 最适合 |
+| Mode | Tools | Best For |
 |------|-------|----------|
-| `playwright` | 浏览器 MCP + 实时交互 | 带 UI 的全栈应用 |
-| `screenshot` | 截图 + 视觉分析 | 静态网站、纯设计 |
-| `code-only` | 测试 + 代码检查 + 构建 | API、库、CLI 工具 |
+| `playwright` | Browser MCP + live interaction | Full-stack apps with UI |
+| `screenshot` | Screenshot + visual analysis | Static sites, design-only |
+| `code-only` | Tests + linting + build | APIs, libraries, CLI tools |
 
-## 反模式
+## Anti-Patterns
 
-1. **评估器过于宽松**——如果评估器在第一次迭代就通过所有内容，你的评分标准过于慷慨。收紧评分标准，并为常见的 AI 模式添加明确惩罚。
+1. **Evaluator too lenient** — If the evaluator passes everything on iteration 1, your rubric is too generous. Tighten scoring criteria and add explicit penalties for common AI patterns.
 
-2. **生成器忽略反馈**——确保反馈以文件形式传递，而非内联。生成器应在每次迭代开始时读取 `feedback-NNN.md`。
+2. **Generator ignoring feedback** — Ensure feedback is passed as a file, not inline. The generator should read `feedback-NNN.md` at the start of each iteration.
 
-3. **无限循环**——始终设置 `GAN_MAX_ITERATIONS`。如果生成器在 3 次迭代后无法突破分数平台，停止并标记为人工审查。
+3. **Infinite loops** — Always set `GAN_MAX_ITERATIONS`. If the generator can't improve past a score plateau after 3 iterations, stop and flag for human review.
 
-4. **评估器测试流于表面**——评估器必须使用 Playwright **交互**实时应用，而不仅仅是截图。点击按钮、填写表单、测试错误状态。
+4. **Evaluator testing superficially** — The evaluator must use Playwright to **interact** with the live app, not just screenshot it. Click buttons, fill forms, test error states.
 
-5. **评估器赞美自己的修复**——绝不允许评估器建议修复后再评估这些修复。评估器只负责批评；生成器负责修复。
+5. **Evaluator praising its own fixes** — Never let the evaluator suggest fixes and then evaluate those fixes. The evaluator only critiques; the generator fixes.
 
-6. **上下文耗尽**——对于长时间会话，使用 Claude Agent SDK 的自动压缩或在主要阶段之间重置上下文。
+6. **Context exhaustion** — For long sessions, use Claude Agent SDK's automatic compaction or reset context between major phases.
 
-## 结果：预期效果
+## Results: What to Expect
 
-基于 Anthropic 已发布的结果：
+Based on Anthropic's published results:
 
-| 指标 | 单智能体 | GAN 编排 | 改进 |
+| Metric | Solo Agent | GAN Harness | Improvement |
 |--------|-----------|-------------|-------------|
-| 时间 | 20 分钟 | 4-6 小时 | 12-18 倍更长 |
-| 成本 | 9 美元 | 125-200 美元 | 14-22 倍更多 |
-| 质量 | 勉强可用 | 生产就绪 | 质变 |
-| 核心功能 | 有缺陷 | 全部工作 | 不适用 |
-| 设计 | 通用 AI 垃圾 | 独特、精致 | 不适用 |
+| Time | 20 min | 4-6 hours | 12-18x longer |
+| Cost | $9 | $125-200 | 14-22x more |
+| Quality | Barely functional | Production-ready | Phase change |
+| Core features | Broken | All working | N/A |
+| Design | Generic AI slop | Distinctive, polished | N/A |
 
-**权衡很明确：** 约 20 倍的时间和成本，换来输出质量的质的飞跃。这适用于质量至关重要的项目。
+**The tradeoff is clear:** ~20x more time and cost for a qualitative leap in output quality. This is for projects where quality matters.
 
-## 参考
+## References
 
-* [Anthropic：长时间运行应用的编排设计](https://www.anthropic.com/engineering/harness-design-long-running-apps) — Prithvi Rajasekaran 的原始论文
-* [Epsilla：GAN 风格智能体循环](https://www.epsilla.com/blogs/anthropic-harness-engineering-multi-agent-gan-architecture) — 架构解构
-* [Martin Fowler：编排工程](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) — 更广泛的行业背景
-* [OpenAI：编排工程](https://openai.com/index/harness-engineering/) — OpenAI 的并行工作
+- [Anthropic: Harness Design for Long-Running Apps](https://www.anthropic.com/engineering/harness-design-long-running-apps) — Original paper by Prithvi Rajasekaran
+- [Epsilla: The GAN-Style Agent Loop](https://www.epsilla.com/blogs/anthropic-harness-engineering-multi-agent-gan-architecture) — Architecture deconstruction
+- [Martin Fowler: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) — Broader industry context
+- [OpenAI: Harness Engineering](https://openai.com/index/harness-engineering/) — OpenAI's parallel work

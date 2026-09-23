@@ -1,41 +1,58 @@
 ---
 name: agent-payment-x402
-description: 将 x402 支付执行添加到 AI 代理中——通过 MCP 工具实现每任务预算、支出控制和非托管钱包。当代理需要为 API、服务或其他代理付费时使用。
+description: タスクごとのバジェット、支出コントロール、ノンカストディアルウォレットを備えた x402 決済実行を AI エージェントに追加します。agentwallet-sdk を通じて Base をサポートし、OKX Payments / OKX エージェント決済プロトコルを通じて X Layer をサポートします。
 origin: community
 ---
 
-# 代理支付执行 (x402)
+# エージェント決済実行（x402）
 
-让AI代理能够自主支付并内置消费控制。使用x402 HTTP支付协议和MCP工具，使代理能够为外部服务、API或其他代理支付，无需托管风险。
+ポリシーゲートによる決済と組み込みの支出コントロールで AI エージェントを有効化します。x402 HTTP 決済プロトコルと MCP ツールを使用して、カストディアルリスクなしに外部サービス、API、または他のエージェントへの支払いを行えます。
 
-## 使用场景
+## 使用タイミング
 
-适用于：代理需要支付API调用、购买服务、与其他代理结算、强制执行每项任务消费限额，或管理非托管钱包。与成本感知LLM流水线和安全审查技能自然搭配。
+使用する場合：エージェントが API 呼び出しへの支払い、サービスの購入、別のエージェントとの決済、タスクごとの支出制限の強制、またはノンカストディアルウォレットの管理を必要とする場合。`cost-aware-llm-pipeline` および `security-review` スキルと自然に組み合わせられます。
 
-## 工作原理
+## 決定ツリー
 
-### x402协议
+エージェントが有料 API へのアクセスを購入するか、他者にアクセスを課金するかに基づいて統合パスを選択します：
 
-x402将HTTP 402（需要付款）扩展为机器可协商的流程。当服务器返回`402`时，代理的支付工具会自动协商价格、检查预算、签署交易并重试——无需人工干预。
+| ニーズ | 推奨パス |
+|------|------------------|
+| エージェントが Base または他の agentwallet 対応チェーンの 402 ゲート API に支払う | 厳格な支出ポリシーで `agentwallet-sdk` を MCP 決済サーバーとして使用 |
+| エージェントが X Layer の 402 ゲート API に支払う | `okx/onchainos-skills` の OKX エージェント決済プロトコルを使用；`okx-x402-payment` は廃止されたレガシーエイリアス |
+| TypeScript API がエージェントに課金する | Express、Hono、Fastify、または Next.js 向け OKX Payments TypeScript セラー SDK ドキュメントを使用 |
+| Go API がエージェントに課金する | Gin、Echo、または `net/http` 向け OKX Payments Go セラー SDK ドキュメントを使用 |
+| Rust API がエージェントに課金する | Axum 向け OKX Payments Rust セラー SDK ドキュメントを使用 |
+| Java API がエージェントに課金する | Spring Boot 2/3、Java EE、または Jakarta 向け OKX Payments Java セラー SDK ドキュメントを使用 |
+| Python API がエージェントに課金する | 実装前に現在の OKX Payments リポジトリを確認；Python セラーガイドがない場合がある |
 
-### 消费控制
+## 対応ネットワーク
 
-每次支付工具调用都会强制执行`SpendingPolicy`：
+- `agentwallet-sdk`: 本番使用前に現在のネットワークカバレッジをパッケージドキュメントで確認。Base Sepolia が最も安全な開発デフォルト；Base メインネットがオリジナルスキルで説明されている本番パス。
+- OKX Payments / X Layer: 現在のセラードキュメントは X Layer（`eip155:196`）と USDT0 決済を対象。決済パッケージとファシリテーターの動作が迅速に変わる可能性があるため、本番コードを生成する前に現在の SDK ドキュメントを取得すること。
 
-* **每任务预算** — 单次代理操作的最大支出
-* **每会话预算** — 整个会话的累计限额
-* **白名单接收方** — 限制代理可支付的地址/服务
-* **速率限制** — 每分钟/小时的最大交易数
+## 仕組み
 
-### 非托管钱包
+### x402 プロトコル
+x402 は HTTP 402（Payment Required）を機械が交渉可能なフローに拡張します。サーバーが `402` を返すと、エージェントの決済ツールが価格を交渉し、バジェットを確認し、トランザクションに署名し、オーケストレーターが設定したポリシーと確認境界内でのみリトライします。
 
-代理通过ERC-4337智能账户持有自己的密钥。编排器在委托前设置策略；代理只能在限定范围内支出。无资金池，无托管风险。
+### 支出コントロール
+すべての決済ツール呼び出しは `SpendingPolicy` を強制します：
+- **タスクごとのバジェット** — 単一エージェントアクションの最大支出
+- **セッションごとのバジェット** — セッション全体の累積制限
+- **許可リストに登録された受取人** — エージェントが支払える アドレス/サービスを制限
+- **レート制限** — 分/時間あたりの最大トランザクション数
 
-## MCP集成
+### ノンカストディアルウォレット
+エージェントは ERC-4337 スマートアカウントを通じて独自のキーを保持します。オーケストレーターが委任前にポリシーを設定し、エージェントは境界内でのみ支出できます。プールされた資金なし、カストディアルリスクなし。
 
-支付层暴露标准MCP工具，可无缝接入任何Claude Code或代理框架设置。
+## MCP 統合
 
-> **安全提示**：务必锁定包版本。此工具管理私钥——未锁定的`npx`安装会引入供应链风险。
+決済層は Claude Code またはエージェントハーネスのセットアップに組み込まれる標準 MCP ツールを公開します。
+
+> **セキュリティ注意**: 常にパッケージバージョンを固定してください。このツールは秘密鍵を管理します — 固定されていない `npx` インストールはサプライチェーンリスクをもたらします。
+
+### オプション A: agentwallet-sdk（Base / マルチチェーン）
 
 ```json
 {
@@ -48,40 +65,62 @@ x402将HTTP 402（需要付款）扩展为机器可协商的流程。当服务�
 }
 ```
 
-### 可用工具（代理可调用）
+### 利用可能なツール（エージェント呼び出し可能）
 
-| 工具 | 用途 |
+| ツール | 目的 |
 |------|---------|
-| `get_balance` | 检查代理钱包余额 |
-| `send_payment` | 向地址或ENS发送付款 |
-| `check_spending` | 查询剩余预算 |
-| `list_transactions` | 所有付款的审计追踪 |
+| `get_balance` | エージェントウォレットの残高を確認 |
+| `send_payment` | アドレスまたは ENS に支払いを送信 |
+| `check_spending` | 残りバジェットを照会 |
+| `list_transactions` | すべての支払いの監査証跡 |
 
-> **注意**：消费策略由**编排器**在委托给代理之前设置——而非代理本身。这防止代理自行提高消费限额。通过编排层或任务前钩子中的`set_policy`配置策略，切勿将其作为代理可调用工具。
+> **注意**: 支出ポリシーはエージェントへの委任前に**オーケストレーター**が設定します — エージェント自体では設定しません。これによりエージェントが独自の支出制限をエスカレーションするのを防ぎます。オーケストレーション層またはタスク前のフックで `set_policy` 経由でポリシーを設定し、エージェント呼び出し可能ツールとしては設定しないこと。
 
-## 示例
+### オプション B: OKX エージェント決済プロトコル（X Layer）
 
-### MCP客户端中的预算执行
+X Layer x402、マルチパーティ決済（MPP）、セッション決済、チャージ、A2A チャージフロー向けにこのパスを使用します。
 
-在构建调用agentpay MCP服务器的编排器时，在分派付费工具调用前强制执行预算。
+バイヤー側エージェントフローの場合：
 
-> **前提条件**：在添加MCP配置前安装包——`npx`不带`-y`会在非交互环境中提示确认，导致服务器挂起：`npm install -g agentwallet-sdk@6.0.0`
+1. 現在の `okx/onchainos-skills` リポジトリをインストールまたは参照する。
+2. `skills/okx-agent-payments-protocol/SKILL.md` をディスパッチャーとして使用する。
+3. `skills/okx-x402-payment/SKILL.md` は廃止された互換エイリアスとして扱い、正規スキルとしては扱わない。
+4. ウォレット状態の確認または決済アクションの前に明示的なユーザー確認を求める。汎用ツール呼び出しの背後に決済実行を隠さない。
+
+セラー側 API フローの場合、コードを生成する前に最新の言語固有ガイドを取得する：
+
+| ランタイム | 現在のガイド |
+|---------|---------------|
+| TypeScript | `https://raw.githubusercontent.com/okx/payments/main/typescript/SELLER.md` |
+| Go | `https://raw.githubusercontent.com/okx/payments/main/go/x402/SELLER.md` |
+| Rust | `https://raw.githubusercontent.com/okx/payments/main/rust/x402/SELLER.md` |
+| Java | `https://raw.githubusercontent.com/okx/payments/main/java/SELLER.md` |
+
+現在の OKX リポジトリを確認せずに古いドキュメントの例をコピーしないこと。現在の OKX ガイダンスはディスパッチャーとして `okx-agent-payments-protocol` を使用しており、Java セラードキュメントが利用可能になっています。
+
+## 例
+
+### MCP クライアントでのバジェット強制
+
+有料ツール呼び出しをディスパッチする前にバジェットを強制するオーケストレーターを構築する場合。
+
+> **前提条件**: MCP 設定を追加する前にパッケージをインストール — 非インタラクティブ環境では `-y` なしの `npx` は確認を求め、サーバーがハングします：`npm install -g agentwallet-sdk@6.0.0`
 
 ```typescript
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 async function main() {
-  // 1. Validate credentials before constructing the transport.
-  //    A missing key must fail immediately — never let the subprocess start without auth.
+  // 1. トランスポートを構築する前に認証情報を検証する。
+  //    キーが欠落している場合は即座に失敗する — 認証なしでサブプロセスを開始させない。
   const walletKey = process.env.WALLET_PRIVATE_KEY;
   if (!walletKey) {
     throw new Error("WALLET_PRIVATE_KEY is not set — refusing to start payment server");
   }
 
-  // Connect to the agentpay MCP server via stdio transport.
-  // Whitelist only the env vars the server needs — never forward all of process.env
-  // to a third-party subprocess that manages private keys.
+  // stdio トランスポートを介して agentpay MCP サーバーに接続する。
+  // サーバーが必要とする env 変数のみをホワイトリストに登録する —
+  // 秘密鍵を管理するサードパーティのサブプロセスに process.env のすべてを渡さない。
   const transport = new StdioClientTransport({
     command: "npx",
     args: ["agentwallet-sdk@6.0.0"],
@@ -94,8 +133,8 @@ async function main() {
   const agentpay = new Client({ name: "orchestrator", version: "1.0.0" });
   await agentpay.connect(transport);
 
-  // 2. Set spending policy before delegating to the agent.
-  //    Always verify success — a silent failure means no controls are active.
+  // 2. エージェントへの委任前に支出ポリシーを設定する。
+  //    常に成功を確認する — サイレントな失敗はコントロールがアクティブでないことを意味する。
   const policyResult = await agentpay.callTool({
     name: "set_policy",
     arguments: {
@@ -110,18 +149,18 @@ async function main() {
     );
   }
 
-  // 3. Use preToolCheck before any paid action
+  // 3. 有料アクションの前に preToolCheck を使用する
   await preToolCheck(agentpay, 0.01);
 }
 
-// Pre-tool hook: fail-closed budget enforcement with four distinct error paths.
+// プレツールフック: 4 つの異なるエラーパスを持つフェイルクローズドバジェット強制。
 async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
-  // Path 1: Reject invalid input (NaN/Infinity bypass the < comparison)
+  // パス 1: 無効な入力を拒否する（NaN/Infinity は < 比較をバイパスする）
   if (!Number.isFinite(apiCost) || apiCost < 0) {
     throw new Error(`Invalid apiCost: ${apiCost} — action blocked`);
   }
 
-  // Path 2: Transport/connectivity failure
+  // パス 2: トランスポート/接続の失敗
   let result;
   try {
     result = await agentpay.callTool({ name: "check_spending" });
@@ -129,14 +168,14 @@ async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
     throw new Error(`Payment service unreachable — action blocked: ${err}`);
   }
 
-  // Path 3: Tool returned an error (e.g., auth failure, wallet not initialised)
+  // パス 3: ツールがエラーを返した（例：認証失敗、ウォレット未初期化）
   if (result.isError) {
     throw new Error(
       `check_spending failed — action blocked: ${JSON.stringify(result.content)}`
     );
   }
 
-  // Path 4: Parse and validate the response shape
+  // パス 4: レスポンスの形状を解析して検証する
   let remaining: number;
   try {
     const parsed = JSON.parse(
@@ -152,7 +191,7 @@ async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
     );
   }
 
-  // Path 5: Budget exceeded
+  // パス 5: バジェット超過
   if (remaining < apiCost) {
     throw new Error(
       `Budget exceeded: need $${apiCost} but only $${remaining} remaining`
@@ -166,17 +205,20 @@ main().catch((err) => {
 });
 ```
 
-## 最佳实践
+## ベストプラクティス
 
-* **委托前设置预算**：生成子代理时，通过编排层附加SpendingPolicy。切勿让代理拥有无限支出权限。
-* **锁定依赖项**：始终在MCP配置中指定确切版本（例如`agentwallet-sdk@6.0.0`）。部署到生产环境前验证包完整性。
-* **审计追踪**：在任务后钩子中使用`list_transactions`记录支出内容和原因。
-* **故障关闭**：如果支付工具不可达，阻止付费操作——不要回退到无计量访问。
-* **配合安全审查**：支付工具是高权限操作。应用与shell访问相同的审查标准。
-* **先在测试网测试**：开发时使用Base Sepolia；生产环境切换到Base主网。
+- **委任前にバジェットを設定する**: サブエージェントを生成する際、オーケストレーション層を通じて SpendingPolicy を添付する。エージェントに無制限の支出を与えない。
+- **依存関係を固定する**: MCP 設定に常に正確なバージョンを指定する（例：`agentwallet-sdk@6.0.0`）。本番デプロイ前にパッケージの整合性を確認する。
+- **監査証跡**: タスク後のフックで `list_transactions` を使用して何が使われたかをログに記録する。
+- **フェイルクローズド**: 決済ツールに到達できない場合、有料アクションをブロックする — 課金されないアクセスにフォールバックしない。
+- **security-review と組み合わせる**: 決済ツールは高い権限を持つ。シェルアクセスと同じ精査を適用する。
+- **まずテストネットでテストする**: 開発には Base Sepolia を使用；本番には Base メインネットに切り替える。
 
-## 生产参考
+## 本番リファレンス
 
-* **npm**：[`agentwallet-sdk`](https://www.npmjs.com/package/agentwallet-sdk)
-* **合并到NVIDIA NeMo Agent Toolkit**：[PR #17](https://github.com/NVIDIA/NeMo-Agent-Toolkit-Examples/pull/17) — NVIDIA代理示例的x402支付工具
-* **协议规范**：[x402.org](https://x402.org)
+- **npm**: [`agentwallet-sdk`](https://www.npmjs.com/package/agentwallet-sdk)
+- **NVIDIA NeMo エージェントツールキットにマージ**: [PR #17](https://github.com/NVIDIA/NeMo-Agent-Toolkit-Examples/pull/17) — NVIDIA のエージェント例向け x402 決済ツール
+- **プロトコル仕様**: [x402.org](https://x402.org)
+- **OKX Payments SDK**: [`okx/payments`](https://github.com/okx/payments) — X Layer x402 向け TypeScript、Go、Rust、Java セラー統合
+- **OKX エージェント決済プロトコルスキル**: [`okx/onchainos-skills`](https://github.com/okx/onchainos-skills/tree/main/skills/okx-agent-payments-protocol)
+- **OKX Payments 概要**: [web3.okx.com/onchainos/dev-docs/payments/overview](https://web3.okx.com/onchainos/dev-docs/payments/overview)

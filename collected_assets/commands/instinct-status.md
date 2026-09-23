@@ -1,28 +1,59 @@
 ---
-description: Show learned instincts (project + global) with confidence
-agent: build
+name: instinct-status
+description: Mostrar los instintos aprendidos (proyecto + global) con confianza
+command: true
 ---
 
-# Instinct Status Command
+# Comando Instinct Status
 
-Show instinct status from continuous-learning-v2: $ARGUMENTS
+Muestra los instintos aprendidos para el proyecto actual más los instintos globales, agrupados por dominio.
 
-## Your Task
+## Implementación
 
-Resolve the active ECC plugin root with the same walker `hooks/hooks.json`
-uses (env var → standard install → known plugin roots → plugin cache →
-fallback), then run the instinct CLI. This avoids reading a stale legacy
-`~/.claude/skills/continuous-learning-v2/` install when the plugin is
-active under `~/.claude/plugins/cache/...` (#2037).
+Ejecutar la CLI de instintos usando la ruta raíz del plugin:
 
 ```bash
-ECC_ROOT="${CLAUDE_PLUGIN_ROOT:-$(node -e "var r=(function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}try{var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=f.readdirSync(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=f.readdirSync(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}}catch(_){}return d})();console.log(r)")}"
-python3 "$ECC_ROOT/skills/continuous-learning-v2/scripts/instinct-cli.py" status
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" status
 ```
 
-## Behavior Notes
+O si `CLAUDE_PLUGIN_ROOT` no está configurado (instalación manual):
 
-- Output includes both project-scoped and global instincts.
-- Project instincts override global instincts when IDs conflict.
-- Output is grouped by domain with confidence bars.
-- This command does not support extra filters in v2.1.
+```bash
+python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
+```
+
+## Uso
+
+```
+/instinct-status
+```
+
+## Qué Hacer
+
+1. Detectar el contexto actual del proyecto (hash de remote/ruta de git)
+2. Leer instintos del proyecto desde `~/.claude/homunculus/projects/<project-id>/instincts/`
+3. Leer instintos globales desde `~/.claude/homunculus/instincts/`
+4. Fusionar con reglas de precedencia (el proyecto sobreescribe global cuando hay colisión de IDs)
+5. Mostrar agrupados por dominio con barras de confianza y estadísticas de observación
+
+## Formato de Salida
+
+```
+============================================================
+  ESTADO DE INSTINTOS - 12 en total
+============================================================
+
+  Proyecto: my-app (a1b2c3d4e5f6)
+  Instintos del proyecto: 8
+  Instintos globales:     4
+
+## CON ALCANCE DE PROYECTO (my-app)
+  ### WORKFLOW (3)
+    ███████░░░  70%  grep-before-edit [proyecto]
+              disparador: when modifying code
+
+## GLOBAL (aplican a todos los proyectos)
+  ### SECURITY (2)
+    █████████░  85%  validate-user-input [global]
+              disparador: when handling user input
+```

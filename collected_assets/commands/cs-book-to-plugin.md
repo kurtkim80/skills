@@ -1,15 +1,9 @@
 ---
-title: "/cs-book-to-plugin — Slash Command for AI Coding Agents"
-description: "/cs:book-to-plugin <compiled-skill-dir> [--domain <domain>] — wrap a compiled book skill in a claude-skills plugin package (manifest + cs-* agent +. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-book-to-plugin"
+description: "/cs:book-to-plugin <compiled-skill-dir> [--domain <domain>] — wrap a compiled book skill in a claude-skills plugin package (manifest + cs-* agent + /cs:* command + README) so the rest of the library can route to it. Use after /cs:book-to-skill, or when an existing knowledge-base skill folder needs to become an installable plugin."
 ---
 
-# /cs-book-to-plugin
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/book-to-skill/commands/cs-book-to-plugin.md">Source</a></span>
-</div>
-
+# /cs:book-to-plugin — Ingest a Compiled Skill into the Library
 
 **Command:** `/cs:book-to-plugin <compiled-skill-dir> [--domain <domain>] [--rights <basis>]`
 

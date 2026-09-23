@@ -1,88 +1,88 @@
 ---
 name: hermes-imports
-description: 将本地 Hermes 操作员工作流转换为经过清理的 ECC 技能和发布包工件。在准备将 Hermes 工作流用于公共 ECC 重用而不泄露私有工作区状态、凭据或仅本地路径时使用。
+description: Hermesデータインポート、マッピング、変換、およびデータインテグリティ検証。
 origin: ECC
 ---
 
-# Hermes 导入
+# Hermes Imports
 
-当需要将重复的 Hermes 工作流转化为可在 ECC 中安全发布的内容时，使用此技能。
+Use this skill when turning a repeated Hermes workflow into something safe to ship in ECC.
 
-Hermes 是操作员外壳。ECC 是可复用工作流层。导入操作应将稳定模式从 Hermes 迁移至 ECC，同时避免移动私有状态。
+Hermes is the operator shell. ECC is the reusable workflow layer. Imports should move stable patterns from Hermes into ECC without moving private state.
 
-## 使用时机
+## When To Use
 
-* Hermes 工作流重复次数足够多，已具备可复用性
-* 本地操作员提示词需要升级为公共 ECC 技能
-* 启动、内容、研究或工程工作流需要经过净化的交接文档
-* 工作流中包含本地路径、凭证、个人数据集或私有账户名，发布前必须移除
+- A Hermes workflow has repeated enough times to become reusable.
+- A local operator prompt should become a public ECC skill.
+- A launch, content, research, or engineering workflow needs sanitized handoff docs.
+- A workflow mentions local paths, credentials, personal datasets, or private account names that must be removed before publication.
 
-## 导入规则
+## Import Rules
 
-* 将本地路径转换为仓库相对路径或占位符
-* 用角色标签（如 `operator`、`default profile`、`workspace owner`）替换真实账户名
-* 仅通过提供商名称描述凭证要求
-* 保持示例简洁且可操作
-* 不得发布原始工作区导出文件、令牌、OAuth 文件、健康数据、CRM 数据或财务数据
-* 若工作流依赖私有状态才能理解，则保留在本地
+- Convert local paths to repo-relative paths or placeholders.
+- Replace live account names with role labels such as `operator`, `default profile`, or `workspace owner`.
+- Describe credential requirements by provider name only.
+- Keep examples narrow and operational.
+- Do not ship raw workspace exports, tokens, OAuth files, health data, CRM data, or finance data.
+- If the workflow requires private state to make sense, keep it local.
 
-## 净化检查清单
+## Sanitization Checklist
 
-提交导入的工作流前，需扫描：
+Before committing an imported workflow, scan for:
 
-* 绝对路径（如 `/Users/...`）
-* `~/.hermes` 路径（除非文档明确说明本地设置）
-* API 密钥、令牌、Cookie、OAuth 文件或 Bearer 字符串
-* 电话号码、私人邮箱地址及个人联系人图谱
-* 尚未公开的客户名称、家族名称或账户名
-* 收入、健康或 CRM 详情
-* 包含私有系统工具输出的原始日志
+- absolute paths such as `/Users/...`
+- `~/.hermes` paths unless the doc is explicitly explaining local setup
+- API keys, tokens, cookies, OAuth files, or bearer strings
+- phone numbers, private email addresses, and personal contact graphs
+- client names, family names, or account names that are not already public
+- revenue, health, or CRM details
+- raw logs that include tool output from private systems
 
-## 转换模式
+## Conversion Pattern
 
-1. 识别可重复的操作员循环
-2. 剥离私有输入与输出
-3. 将本地路径重写为仓库相对路径示例
-4. 将一次性指令转化为 `When To Use` 章节及简短流程
-5. 添加具体输出要求
-6. 在发起 PR 前执行密钥与本地路径扫描
+1. Identify the repeatable operator loop.
+2. Strip private inputs and outputs.
+3. Rewrite local paths as repo-relative examples.
+4. Turn one-off instructions into a `When To Use` section and a short process.
+5. Add concrete output requirements.
+6. Run a secret and local-path scan before opening a PR.
 
-## 示例：启动交接
+## Example: Launch Handoff
 
-本地 Hermes 提示词：
-
-```text
-读取我的本地工作区文件并最终确定发布文案。
-```
-
-ECC 安全版本：
+Local Hermes prompt:
 
 ```text
-使用 docs/releases/<version>/ 下的公开发布包。
-返回一条 X 帖子、一条 LinkedIn 帖子、一份录制检查清单以及缺失资源列表。
+Read my local workspace files and finalize launch copy.
 ```
 
-## 示例：静默时段操作员任务
-
-本地 Hermes 任务：
+ECC-safe version:
 
 ```text
-夜间运行我的私人收件箱、财务和内容检查。
+Use the public release pack under docs/releases/<version>/.
+Return one X thread, one LinkedIn post, one recording checklist, and the missing assets list.
 ```
 
-ECC 安全版本：
+## Example: Quiet-Hours Operator Job
+
+Local Hermes job:
 
 ```text
-描述调度器策略、静默时段、升级规则以及检查类别。请勿包含私有数据源或凭据。
+Run my private inbox, finance, and content checks overnight.
 ```
 
-## 输出契约
+ECC-safe version:
 
-返回：
+```text
+Describe the scheduler policy, the quiet-hours window, the escalation rules, and the categories of checks. Do not include private data sources or credentials.
+```
 
-* 候选 ECC 技能名称
-* 净化后的工作流摘要
-* 必需的公共输入
-* 已移除的私有输入
-* 剩余风险
-* 应创建或更新的文件
+## Output Contract
+
+Return:
+
+- candidate ECC skill name
+- sanitized workflow summary
+- required public inputs
+- private inputs removed
+- remaining risks
+- files that should be created or updated

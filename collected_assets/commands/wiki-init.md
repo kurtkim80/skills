@@ -1,16 +1,7 @@
 ---
-title: "/wiki-init — Slash Command for AI Coding Agents"
-description: "Bootstrap a fresh LLM Wiki vault with the three-layer structure, schema files, and starter templates. Usage /wiki-init <path> --topic '<topic>'. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: wiki-init
+description: Bootstrap a fresh LLM Wiki vault with the three-layer structure, schema files, and starter templates. Usage /wiki-init <path> --topic "<topic>" [--tool all|claude-code|codex|cursor|antigravity]
 ---
-
-# /wiki-init
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/wiki-init.md">Source</a></span>
-</div>
-
-<!-- canonical copy: engineering/llm-wiki/commands/wiki-init.md — keep in sync -->
 
 # /wiki-init
 

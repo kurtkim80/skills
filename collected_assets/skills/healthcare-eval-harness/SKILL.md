@@ -1,60 +1,60 @@
 ---
 name: healthcare-eval-harness
-description: 用于医疗应用部署的患者安全评估工具。针对CDSS准确性、PHI暴露、临床工作流完整性和集成合规性的自动化测试套件。在安全故障时阻止部署。
+description: ヘルスケアAIモデル評価ハーネス、臨床メトリクス、およびレギュレーション遵守の検証。
 origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
 version: "1.0.0"
 ---
 
-# 医疗评估框架 — 患者安全验证
+# Healthcare Eval Harness — Patient Safety Verification
 
-医疗应用部署的自动化验证系统。单个严重故障将阻止部署。患者安全不容妥协。
+Automated verification system for healthcare application deployments. A single CRITICAL failure blocks deployment. Patient safety is non-negotiable.
 
-> **注意：** 示例使用 Jest 作为参考测试运行器。请根据您的框架（Vitest、pytest、PHPUnit 等）调整命令——测试类别和通过阈值与框架无关。
+> **Note:** Examples use Jest as the reference test runner. Adapt commands for your framework (Vitest, pytest, PHPUnit, etc.) — the test categories and pass thresholds are framework-agnostic.
 
-## 使用场景
+## When to Use
 
-* 部署任何 EMR/EHR 应用之前
-* 修改 CDSS 逻辑（药物相互作用、剂量验证、评分）之后
-* 更改涉及患者数据的数据库模式之后
-* 修改身份验证或访问控制之后
-* 配置医疗应用 CI/CD 流水线期间
-* 解决临床模块合并冲突之后
+- Before any deployment of EMR/EHR applications
+- After modifying CDSS logic (drug interactions, dose validation, scoring)
+- After changing database schemas that touch patient data
+- After modifying authentication or access control
+- During CI/CD pipeline configuration for healthcare apps
+- After resolving merge conflicts in clinical modules
 
-## 工作原理
+## How It Works
 
-评估框架按顺序运行五个测试类别。前三个（CDSS 准确性、PHI 暴露、数据完整性）是严重关卡，要求 100% 通过率——单个故障即阻止部署。其余两个（临床工作流、集成）是高优先级关卡，要求 95% 以上通过率。
+The eval harness runs five test categories in order. The first three (CDSS Accuracy, PHI Exposure, Data Integrity) are CRITICAL gates requiring 100% pass rate — a single failure blocks deployment. The remaining two (Clinical Workflow, Integration) are HIGH gates requiring 95%+ pass rate.
 
-每个类别对应一个 Jest 测试路径模式。CI 流水线使用 `--bail`（首次失败即停止）运行严重关卡，并使用 `--coverage --coverageThreshold` 强制执行覆盖率阈值。
+Each category maps to a Jest test path pattern. The CI pipeline runs CRITICAL gates with `--bail` (stop on first failure) and enforces coverage thresholds with `--coverage --coverageThreshold`.
 
-### 评估类别
+### Eval Categories
 
-**1. CDSS 准确性（严重 — 要求 100%）**
+**1. CDSS Accuracy (CRITICAL — 100% required)**
 
-测试所有临床决策支持逻辑：药物相互作用对（双向）、剂量验证规则、临床评分与发布规范的对比、无假阴性、无静默故障。
+Tests all clinical decision support logic: drug interaction pairs (both directions), dose validation rules, clinical scoring vs published specs, no false negatives, no silent failures.
 
 ```bash
 npx jest --testPathPattern='tests/cdss' --bail --ci --coverage
 ```
 
-**2. PHI 暴露（严重 — 要求 100%）**
+**2. PHI Exposure (CRITICAL — 100% required)**
 
-测试受保护健康信息泄露：API 错误响应、控制台输出、URL 参数、浏览器存储、跨机构隔离、未认证访问、服务角色密钥缺失。
+Tests for protected health information leaks: API error responses, console output, URL parameters, browser storage, cross-facility isolation, unauthenticated access, service role key absence.
 
 ```bash
 npx jest --testPathPattern='tests/security/phi' --bail --ci
 ```
 
-**3. 数据完整性（严重 — 要求 100%）**
+**3. Data Integrity (CRITICAL — 100% required)**
 
-测试临床数据安全：锁定就诊记录、审计追踪条目、级联删除保护、并发编辑处理、无孤立记录。
+Tests clinical data safety: locked encounters, audit trail entries, cascade delete protection, concurrent edit handling, no orphaned records.
 
 ```bash
 npx jest --testPathPattern='tests/data-integrity' --bail --ci
 ```
 
-**4. 临床工作流（高优先级 — 要求 95% 以上）**
+**4. Clinical Workflow (HIGH — 95%+ required)**
 
-测试端到端流程：就诊生命周期、模板渲染、用药集、药物/诊断搜索、处方 PDF、红色警报。
+Tests end-to-end flows: encounter lifecycle, template rendering, medication sets, drug/diagnosis search, prescription PDF, red flag alerts.
 
 ```bash
 tmp_json=$(mktemp)
@@ -69,9 +69,9 @@ rate=$(echo "scale=2; $passed * 100 / $total" | bc)
 echo "Clinical pass rate: ${rate}% ($passed/$total)"
 ```
 
-**5. 集成合规性（高优先级 — 要求 95% 以上）**
+**5. Integration Compliance (HIGH — 95%+ required)**
 
-测试外部系统：HL7 消息解析（v2.x）、FHIR 验证、实验室结果映射、格式错误消息处理。
+Tests external systems: HL7 message parsing (v2.x), FHIR validation, lab result mapping, malformed message handling.
 
 ```bash
 tmp_json=$(mktemp)
@@ -86,17 +86,17 @@ rate=$(echo "scale=2; $passed * 100 / $total" | bc)
 echo "Integration pass rate: ${rate}% ($passed/$total)"
 ```
 
-### 通过/失败矩阵
+### Pass/Fail Matrix
 
-| 类别 | 阈值 | 失败时操作 |
+| Category | Threshold | On Failure |
 |----------|-----------|------------|
-| CDSS 准确性 | 100% | **阻止部署** |
-| PHI 暴露 | 100% | **阻止部署** |
-| 数据完整性 | 100% | **阻止部署** |
-| 临床工作流 | 95% 以上 | 警告，允许经审查后部署 |
-| 集成 | 95% 以上 | 警告，允许经审查后部署 |
+| CDSS Accuracy | 100% | **BLOCK deployment** |
+| PHI Exposure | 100% | **BLOCK deployment** |
+| Data Integrity | 100% | **BLOCK deployment** |
+| Clinical Workflow | 95%+ | WARN, allow with review |
+| Integration | 95%+ | WARN, allow with review |
 
-### CI/CD 集成
+### CI/CD Integration
 
 ```yaml
 name: Healthcare Safety Gate
@@ -155,18 +155,18 @@ jobs:
           fi
 ```
 
-### 反模式
+### Anti-Patterns
 
-* 跳过 CDSS 测试，因为"上次通过了"
-* 将严重关卡阈值设为低于 100%
-* 在严重测试套件中使用 `--no-bail`
-* 在集成测试中模拟 CDSS 引擎（必须测试真实逻辑）
-* 安全关卡为红色时仍允许部署
-* 在 CDSS 套件中运行测试时不使用 `--coverage`
+- Skipping CDSS tests "because they passed last time"
+- Setting CRITICAL thresholds below 100%
+- Using `--no-bail` on CRITICAL test suites
+- Mocking the CDSS engine in integration tests (must test real logic)
+- Allowing deployments when safety gate is red
+- Running tests without `--coverage` on CDSS suites
 
-## 示例
+## Examples
 
-### 示例 1：本地运行所有严重关卡
+### Example 1: Run All Critical Gates Locally
 
 ```bash
 npx jest --testPathPattern='tests/cdss' --bail --ci --coverage && \
@@ -174,7 +174,7 @@ npx jest --testPathPattern='tests/security/phi' --bail --ci && \
 npx jest --testPathPattern='tests/data-integrity' --bail --ci
 ```
 
-### 示例 2：检查高优先级关卡通过率
+### Example 2: Check HIGH Gate Pass Rate
 
 ```bash
 tmp_json=$(mktemp)
@@ -187,21 +187,21 @@ jq '{
 # Expected: { "passed": 21, "total": 22, "rate": 95.45 }
 ```
 
-### 示例 3：评估报告
+### Example 3: Eval Report
 
 ```
-## 医疗评估：2026-03-27 [commit abc1234]
+## Healthcare Eval: 2026-03-27 [commit abc1234]
 
-### 患者安全：通过
+### Patient Safety: PASS
 
-| 类别 | 测试数 | 通过 | 失败 | 状态 |
+| Category | Tests | Pass | Fail | Status |
 |----------|-------|------|------|--------|
-| CDSS 准确性 | 39 | 39 | 0 | 通过 |
-| PHI 暴露 | 8 | 8 | 0 | 通过 |
-| 数据完整性 | 12 | 12 | 0 | 通过 |
-| 临床工作流 | 22 | 21 | 1 | 95.5% 通过 |
-| 集成 | 6 | 6 | 0 | 通过 |
+| CDSS Accuracy | 39 | 39 | 0 | PASS |
+| PHI Exposure | 8 | 8 | 0 | PASS |
+| Data Integrity | 12 | 12 | 0 | PASS |
+| Clinical Workflow | 22 | 21 | 1 | 95.5% PASS |
+| Integration | 6 | 6 | 0 | PASS |
 
-### 覆盖率：84%（目标：80%以上）
-### 结论：可安全部署
+### Coverage: 84% (target: 80%+)
+### Verdict: SAFE TO DEPLOY
 ```

@@ -1,16 +1,13 @@
 ---
-title: "Patent Agent — AI Coding Agent & Codex Skill"
-description: "Patent prior-art + landscape intelligence persona. Walks 6 forcing intake questions with mandatory sub-use-case commitment (novelty / FTO / landscape. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-patent
+description: Patent prior-art + landscape intelligence persona. Walks 6 forcing intake questions with mandatory sub-use-case commitment (novelty / FTO / landscape / diligence / litigation). Refuses to start without a sub-use-case picked. Refuses generic "patent help" requests. Searches Google Patents + Espacenet + USPTO + optional Lens.org sequentially at 1 q/sec. Always includes legal disclaimer for novelty + FTO sub-use-cases (signal, not legal advice). Family-resolves duplicates across jurisdictions. Outputs 8-section .docx with verdict + audit log.
+skills: research/patent/skills/patent
+domain: research
+model: opus
+tools: [Read, Write, Bash, WebFetch, WebSearch]
 ---
 
 # Patent Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Research</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/research/patent/agents/cs-patent.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -52,7 +49,7 @@ The cs-patent agent orchestrates the `patent` skill across prior-art + landscape
 
 ## Skill Integration
 
-**Skill Location:** [`skills/patent`](https://github.com/alirezarezvani/claude-skills/tree/main/research/patent/skills/patent)
+**Skill Location:** `../skills/patent/`
 
 ### Python Tools (Stdlib)
 
@@ -68,9 +65,9 @@ The cs-patent agent orchestrates the `patent` skill across prior-art + landscape
 
 ## Related Agents
 
-- [cs-litreview](https://github.com/alirezarezvani/claude-skills/tree/main/research/litreview/agents/cs-litreview.md) — sibling, academic literature
-- [cs-grants](https://github.com/alirezarezvani/claude-skills/tree/main/research/grants/agents/cs-grants.md) — sibling, NIH funding
-- [cs-dossier](https://github.com/alirezarezvani/claude-skills/tree/main/research/dossier/agents/cs-dossier.md) — sibling, hypothesis-tested entity research
+- [cs-litreview](../../litreview/agents/cs-litreview.md) — sibling, academic literature
+- [cs-grants](../../grants/agents/cs-grants.md) — sibling, NIH funding
+- [cs-dossier](../../dossier/agents/cs-dossier.md) — sibling, hypothesis-tested entity research
 - Future: cs-syllabus (course readings)
 
 ---

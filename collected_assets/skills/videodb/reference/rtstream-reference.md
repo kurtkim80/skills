@@ -1,24 +1,24 @@
-# RTStream 参考
+# RTStreamリファレンス
 
-RTStream 操作的代码级详情。工作流程指南请参阅 [rtstream.md](rtstream.md)。
-有关使用指导和流程选择，请从 [../SKILL.md](../SKILL.md) 开始。
+RTStream操作のコードレベルの詳細。ワークフローガイドは [rtstream.md](rtstream.md) を参照。
+使用ガイダンスとフロー選択については、[../SKILL.md](../SKILL.md) から始めること。
 
-基于 [docs.videodb.io](https://docs.videodb.io/pages/ingest/live-streams/realtime-apis.md)。
+[docs.videodb.io](https://docs.videodb.io/pages/ingest/live-streams/realtime-apis.md) に基づく。
 
 ***
 
-## Collection RTStream 方法
+## CollectionのRTStreamメソッド
 
-`Collection` 上用于管理 RTStream 的方法：
+`Collection` 上でRTStreamを管理するメソッド：
 
-| 方法 | 返回 | 描述 |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `coll.connect_rtstream(url, name, ...)` | `RTStream` | 从 RTSP/RTMP URL 创建新的 RTStream |
-| `coll.get_rtstream(id)` | `RTStream` | 通过 ID 获取现有的 RTStream |
-| `coll.list_rtstreams(limit, offset, status, name, ordering)` | `List[RTStream]` | 列出集合中的所有 RTStream |
-| `coll.search(query, namespace="rtstream")` | `RTStreamSearchResult` | 在所有 RTStream 中搜索 |
+| `coll.connect_rtstream(url, name, ...)` | `RTStream` | RTSP/RTMP URLから新しいRTStreamを作成する |
+| `coll.get_rtstream(id)` | `RTStream` | IDで既存のRTStreamを取得する |
+| `coll.list_rtstreams(limit, offset, status, name, ordering)` | `List[RTStream]` | コレクション内のすべてのRTStreamをリストする |
+| `coll.search(query, namespace="rtstream")` | `RTStreamSearchResult` | すべてのRTStreamで検索する |
 
-### 连接 RTStream
+### RTStreamへの接続
 
 ```python
 import videodb
@@ -37,13 +37,13 @@ rtstream = coll.connect_rtstream(
 )
 ```
 
-### 获取现有 RTStream
+### 既存のRTStreamを取得する
 
 ```python
 rtstream = coll.get_rtstream("rts-xxx")
 ```
 
-### 列出 RTStream
+### RTStreamをリストする
 
 ```python
 rtstreams = coll.list_rtstreams(
@@ -58,9 +58,9 @@ for rts in rtstreams:
     print(f"{rts.id}: {rts.name} - {rts.status}")
 ```
 
-### 从捕获会话获取
+### キャプチャセッションから取得する
 
-捕获会话激活后，检索 RTStream 对象：
+キャプチャセッションがアクティブになったら、RTStreamオブジェクトを取得する：
 
 ```python
 session = conn.get_capture_session(session_id)
@@ -70,7 +70,7 @@ displays = session.get_rtstream("screen")
 system_audios = session.get_rtstream("system_audio")
 ```
 
-或使用 `capture_session.active` WebSocket 事件中的 `rtstreams` 数据：
+または `capture_session.active` WebSocketイベントの `rtstreams` データを使用する：
 
 ```python
 for rts in rtstreams:
@@ -79,26 +79,26 @@ for rts in rtstreams:
 
 ***
 
-## RTStream 方法
+## RTStreamメソッド
 
-| 方法 | 返回 | 描述 |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `rtstream.start()` | `None` | 开始摄取 |
-| `rtstream.stop()` | `None` | 停止摄取 |
-| `rtstream.generate_stream(start, end)` | `str` | 流式传输录制的片段（Unix 时间戳） |
-| `rtstream.export(name=None)` | `RTStreamExportResult` | 导出为永久视频 |
-| `rtstream.index_visuals(prompt, ...)` | `RTStreamSceneIndex` | 创建带 AI 分析的视觉索引 |
-| `rtstream.index_audio(prompt, ...)` | `RTStreamSceneIndex` | 创建带 LLM 摘要的音频索引 |
-| `rtstream.list_scene_indexes()` | `List[RTStreamSceneIndex]` | 列出流上的所有场景索引 |
-| `rtstream.get_scene_index(index_id)` | `RTStreamSceneIndex` | 获取特定场景索引 |
-| `rtstream.search(query, ...)` | `RTStreamSearchResult` | 搜索索引内容 |
-| `rtstream.start_transcript(ws_connection_id, engine)` | `dict` | 开始实时转录 |
-| `rtstream.get_transcript(page, page_size, start, end, since)` | `dict` | 获取转录页面 |
-| `rtstream.stop_transcript(engine)` | `dict` | 停止转录 |
+| `rtstream.start()` | `None` | 取り込みを開始する |
+| `rtstream.stop()` | `None` | 取り込みを停止する |
+| `rtstream.generate_stream(start, end)` | `str` | 録画されたセグメントをストリーミングする（Unixタイムスタンプ） |
+| `rtstream.export(name=None)` | `RTStreamExportResult` | 永続的なビデオとしてエクスポートする |
+| `rtstream.index_visuals(prompt, ...)` | `RTStreamSceneIndex` | AI分析付きのビジュアルインデックスを作成する |
+| `rtstream.index_audio(prompt, ...)` | `RTStreamSceneIndex` | LLMサマリー付きのオーディオインデックスを作成する |
+| `rtstream.list_scene_indexes()` | `List[RTStreamSceneIndex]` | ストリーム上のすべてのシーンインデックスをリストする |
+| `rtstream.get_scene_index(index_id)` | `RTStreamSceneIndex` | 特定のシーンインデックスを取得する |
+| `rtstream.search(query, ...)` | `RTStreamSearchResult` | インデックス化されたコンテンツを検索する |
+| `rtstream.start_transcript(ws_connection_id, engine)` | `dict` | リアルタイム転写を開始する |
+| `rtstream.get_transcript(page, page_size, start, end, since)` | `dict` | 転写ページを取得する |
+| `rtstream.stop_transcript(engine)` | `dict` | 転写を停止する |
 
 ***
 
-## 启动和停止
+## 開始と停止
 
 ```python
 # Begin ingestion
@@ -112,9 +112,9 @@ rtstream.stop()
 
 ***
 
-## 生成流
+## ストリームの生成
 
-使用 Unix 时间戳（而非秒数偏移）从录制内容生成播放流：
+秒数オフセットではなくUnixタイムスタンプを使用して録画から再生ストリームを生成する：
 
 ```python
 import time
@@ -135,9 +135,9 @@ print(f"Recorded stream: {stream_url}")
 
 ***
 
-## 导出为视频
+## ビデオとしてエクスポートする
 
-将录制的流导出为集合中的永久视频：
+録画されたストリームをコレクション内の永続的なビデオとしてエクスポートする：
 
 ```python
 export_result = rtstream.export(name="Meeting Recording 2024-01-15")
@@ -148,32 +148,32 @@ print(f"Player URL: {export_result.player_url}")
 print(f"Duration: {export_result.duration}s")
 ```
 
-### RTStreamExportResult 属性
+### RTStreamExportResult属性
 
-| 属性 | 类型 | 描述 |
+| 属性 | 型 | 説明 |
 |----------|------|-------------|
-| `video_id` | `str` | 导出视频的 ID |
-| `stream_url` | `str` | HLS 流 URL |
-| `player_url` | `str` | Web 播放器 URL |
-| `name` | `str` | 视频名称 |
-| `duration` | `float` | 时长（秒） |
+| `video_id` | `str` | エクスポートされたビデオのID |
+| `stream_url` | `str` | HLSストリームURL |
+| `player_url` | `str` | Webプレーヤー URL |
+| `name` | `str` | ビデオ名 |
+| `duration` | `float` | 長さ（秒） |
 
 ***
 
-## AI 管道
+## AIパイプライン
 
-AI 管道处理实时流并通过 WebSocket 发送结果。
+AIパイプラインはライブストリームを処理し、WebSocket経由で結果を送信する。
 
-### RTStream AI 管道方法
+### RTStream AIパイプラインメソッド
 
-| 方法 | 返回 | 描述 |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `rtstream.index_audio(prompt, batch_config, ...)` | `RTStreamSceneIndex` | 开始带 LLM 摘要的音频索引 |
-| `rtstream.index_visuals(prompt, batch_config, ...)` | `RTStreamSceneIndex` | 开始屏幕内容的视觉索引 |
+| `rtstream.index_audio(prompt, batch_config, ...)` | `RTStreamSceneIndex` | LLMサマリー付きのオーディオインデックスを開始する |
+| `rtstream.index_visuals(prompt, batch_config, ...)` | `RTStreamSceneIndex` | 画面コンテンツのビジュアルインデックスを開始する |
 
-### 音频索引
+### オーディオインデックス
 
-以一定间隔生成音频内容的 LLM 摘要：
+一定間隔でオーディオコンテンツのLLMサマリーを生成する：
 
 ```python
 audio_index = rtstream.index_audio(
@@ -185,15 +185,15 @@ audio_index = rtstream.index_audio(
 )
 ```
 
-**音频 batch\_config 选项：**
+**オーディオのbatch\_configオプション：**
 
-| 类型 | 值 | 描述 |
+| タイプ | 値 | 説明 |
 |------|-------|-------------|
-| `"word"` | count | 每 N 个词分段 |
-| `"sentence"` | count | 每 N 个句子分段 |
-| `"time"` | seconds | 每 N 秒分段 |
+| `"word"` | count | N単語ごとにセグメント化 |
+| `"sentence"` | count | N文ごとにセグメント化 |
+| `"time"` | seconds | N秒ごとにセグメント化 |
 
-示例：
+例：
 
 ```python
 {"type": "word", "value": 50}      # every 50 words
@@ -201,11 +201,11 @@ audio_index = rtstream.index_audio(
 {"type": "time", "value": 30}      # every 30 seconds
 ```
 
-结果通过 `audio_index` WebSocket 通道送达。
+結果は `audio_index` WebSocketチャネル経由で届く。
 
-### 视觉索引
+### ビジュアルインデックス
 
-生成视觉内容的 AI 描述：
+ビジュアルコンテンツのAI説明を生成する：
 
 ```python
 scene_index = rtstream.index_visuals(
@@ -217,29 +217,29 @@ scene_index = rtstream.index_visuals(
 )
 ```
 
-**参数：**
+**パラメータ：**
 
-| 参数 | 类型 | 描述 |
+| パラメータ | 型 | 説明 |
 |-----------|------|-------------|
-| `prompt` | `str` | AI 模型的指令（支持结构化 JSON 输出） |
-| `batch_config` | `dict` | 控制帧采样（见下文） |
-| `model_name` | `str` | 模型层级：`"mini"`、`"basic"`、`"pro"`、`"ultra"` |
-| `name` | `str` | 索引名称（可选） |
-| `ws_connection_id` | `str` | 用于接收结果的 WebSocket 连接 ID |
+| `prompt` | `str` | AIモデルへの指示（構造化JSON出力をサポート） |
+| `batch_config` | `dict` | フレームサンプリングを制御する（以下を参照） |
+| `model_name` | `str` | モデル層：`"mini"`、`"basic"`、`"pro"`、`"ultra"` |
+| `name` | `str` | インデックス名（オプション） |
+| `ws_connection_id` | `str` | 結果を受信するWebSocket接続ID |
 
-**视觉 batch\_config：**
+**ビジュアルのbatch\_config：**
 
-| 键 | 类型 | 描述 |
+| キー | 型 | 説明 |
 |-----|------|-------------|
-| `type` | `str` | 仅 `"time"` 支持视觉索引 |
-| `value` | `int` | 窗口大小（秒） |
-| `frame_count` | `int` | 每个窗口提取的帧数 |
+| `type` | `str` | ビジュアルインデックスでは `"time"` のみサポート |
+| `value` | `int` | ウィンドウサイズ（秒） |
+| `frame_count` | `int` | 各ウィンドウで抽出するフレーム数 |
 
-示例：`{"type": "time", "value": 2, "frame_count": 5}` 每 2 秒采样 5 帧并将其发送到模型。
+例：`{"type": "time", "value": 2, "frame_count": 5}` は2秒ごとに5フレームをサンプリングしてモデルに送信する。
 
-**结构化 JSON 输出：**
+**構造化JSON出力：**
 
-使用请求 JSON 格式的提示语以获得结构化响应：
+構造化されたレスポンスを得るためにJSONフォーマットをリクエストするプロンプトを使用する：
 
 ```python
 scene_index = rtstream.index_visuals(
@@ -258,18 +258,18 @@ Return only valid JSON.""",
 )
 ```
 
-结果通过 `scene_index` WebSocket 通道送达。
+結果は `scene_index` WebSocketチャネル経由で届く。
 
 ***
 
-## 批处理配置摘要
+## バッチ設定のサマリー
 
-| 索引类型 | `type` 选项 | `value` | 额外键 |
+| インデックスタイプ | `type` オプション | `value` | 追加キー |
 |---------------|----------------|---------|------------|
-| **音频** | `"word"`、`"sentence"`、`"time"` | words/sentences/seconds | - |
-| **视觉** | 仅 `"time"` | seconds | `frame_count` |
+| **オーディオ** | `"word"`、`"sentence"`、`"time"` | words/sentences/seconds | - |
+| **ビジュアル** | `"time"` のみ | seconds | `frame_count` |
 
-示例：
+例：
 
 ```python
 # Audio: every 50 words
@@ -284,9 +284,9 @@ Return only valid JSON.""",
 
 ***
 
-## 转录
+## 転写
 
-通过 WebSocket 进行实时转录：
+WebSocket経由のリアルタイム転写：
 
 ```python
 # Start live transcription
@@ -309,13 +309,13 @@ transcript = rtstream.get_transcript(
 rtstream.stop_transcript(engine=None)
 ```
 
-转录结果通过 `transcript` WebSocket 通道送达。
+転写結果は `transcript` WebSocketチャネル経由で届く。
 
 ***
 
 ## RTStreamSceneIndex
 
-当您调用 `index_audio()` 或 `index_visuals()` 时，该方法返回一个 `RTStreamSceneIndex` 对象。此对象表示正在运行的索引，并提供用于管理场景和警报的方法。
+`index_audio()` または `index_visuals()` を呼び出すと、メソッドは `RTStreamSceneIndex` オブジェクトを返す。このオブジェクトは実行中のインデックスを表し、シーンとアラートを管理するためのメソッドを提供する。
 
 ```python
 # index_visuals returns an RTStreamSceneIndex
@@ -331,33 +331,33 @@ audio_index = rtstream.index_audio(
 )
 ```
 
-### RTStreamSceneIndex 属性
+### RTStreamSceneIndex属性
 
-| 属性 | 类型 | 描述 |
+| 属性 | 型 | 説明 |
 |----------|------|-------------|
-| `rtstream_index_id` | `str` | 索引的唯一 ID |
-| `rtstream_id` | `str` | 父 RTStream 的 ID |
-| `extraction_type` | `str` | 提取类型（`time` 或 `transcript`） |
-| `extraction_config` | `dict` | 提取配置 |
-| `prompt` | `str` | 用于分析的提示语 |
-| `name` | `str` | 索引名称 |
-| `status` | `str` | 状态（`connected`、`stopped`） |
+| `rtstream_index_id` | `str` | インデックスの一意ID |
+| `rtstream_id` | `str` | 親RTStreamのID |
+| `extraction_type` | `str` | 抽出タイプ（`time` または `transcript`） |
+| `extraction_config` | `dict` | 抽出設定 |
+| `prompt` | `str` | 分析に使用するプロンプト |
+| `name` | `str` | インデックス名 |
+| `status` | `str` | 状態（`connected`、`stopped`） |
 
-### RTStreamSceneIndex 方法
+### RTStreamSceneIndexメソッド
 
-| 方法 | 返回 | 描述 |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `index.get_scenes(start, end, page, page_size)` | `dict` | 获取已索引的场景 |
-| `index.start()` | `None` | 启动/恢复索引 |
-| `index.stop()` | `None` | 停止索引 |
-| `index.create_alert(event_id, callback_url, ws_connection_id)` | `str` | 创建事件检测警报 |
-| `index.list_alerts()` | `list` | 列出此索引上的所有警报 |
-| `index.enable_alert(alert_id)` | `None` | 启用警报 |
-| `index.disable_alert(alert_id)` | `None` | 禁用警报 |
+| `index.get_scenes(start, end, page, page_size)` | `dict` | インデックス化されたシーンを取得する |
+| `index.start()` | `None` | インデックスを開始/再開する |
+| `index.stop()` | `None` | インデックスを停止する |
+| `index.create_alert(event_id, callback_url, ws_connection_id)` | `str` | イベント検出アラートを作成する |
+| `index.list_alerts()` | `list` | このインデックスのすべてのアラートをリストする |
+| `index.enable_alert(alert_id)` | `None` | アラートを有効にする |
+| `index.disable_alert(alert_id)` | `None` | アラートを無効にする |
 
-### 获取场景
+### シーンの取得
 
-从索引轮询已索引的场景：
+インデックスからインデックス化されたシーンをポーリングする：
 
 ```python
 result = scene_index.get_scenes(
@@ -375,7 +375,7 @@ if result["next_page"]:
     pass
 ```
 
-### 管理场景索引
+### シーンインデックスの管理
 
 ```python
 # List all indexes on the stream
@@ -393,18 +393,18 @@ scene_index.start()
 
 ***
 
-## 事件
+## イベント
 
-事件是可重用的检测规则。创建一次，即可通过警报附加到任何索引。
+イベントは再利用可能な検出ルール。一度作成すれば、アラートを通じて任意のインデックスに添付できる。
 
-### 连接事件方法
+### 接続イベントメソッド
 
-| 方法 | 返回 | 描述 |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `conn.create_event(event_prompt, label)` | `str` (event\_id) | 创建检测事件 |
-| `conn.list_events()` | `list` | 列出所有事件 |
+| `conn.create_event(event_prompt, label)` | `str` (event\_id) | 検出イベントを作成する |
+| `conn.list_events()` | `list` | すべてのイベントをリストする |
 
-### 创建事件
+### イベントの作成
 
 ```python
 event_id = conn.create_event(
@@ -413,7 +413,7 @@ event_id = conn.create_event(
 )
 ```
 
-### 列出事件
+### イベントのリスト
 
 ```python
 events = conn.list_events()
@@ -423,11 +423,11 @@ for event in events:
 
 ***
 
-## 警报
+## アラート
 
-警报将事件连接到索引以实现实时通知。当 AI 检测到与事件描述匹配的内容时，会发送警报。
+アラートはイベントをインデックスに接続してリアルタイム通知を実現する。AIがイベントの説明に一致するコンテンツを検出すると、アラートが送信される。
 
-### 创建警报
+### アラートの作成
 
 ```python
 # Get the RTStreamSceneIndex from index_visuals
@@ -444,9 +444,9 @@ alert_id = scene_index.create_alert(
 )
 ```
 
-**注意：** `callback_url` 是必需的。如果仅使用 WebSocket 交付，请传递空字符串 `""`。
+**注意：** `callback_url` は必須。WebSocket配信のみを使用する場合は空文字列 `""` を渡す。
 
-### 管理警报
+### アラートの管理
 
 ```python
 # List all alerts on an index
@@ -457,14 +457,14 @@ scene_index.disable_alert(alert_id)
 scene_index.enable_alert(alert_id)
 ```
 
-### 警报交付
+### アラート配信
 
-| 方法 | 延迟 | 使用场景 |
+| 方法 | 遅延 | ユースケース |
 |--------|---------|----------|
-| WebSocket | 实时 | 仪表板、实时 UI |
-| Webhook | < 1 秒 | 服务器到服务器、自动化 |
+| WebSocket | リアルタイム | ダッシュボード、ライブUI |
+| Webhook | < 1秒 | サーバー間、自動化 |
 
-### WebSocket 警报事件
+### WebSocketアラートイベント
 
 ```json
 {
@@ -478,7 +478,7 @@ scene_index.enable_alert(alert_id)
 }
 ```
 
-### Webhook 负载
+### Webhookペイロード
 
 ```json
 {
@@ -496,29 +496,29 @@ scene_index.enable_alert(alert_id)
 
 ***
 
-## WebSocket 集成
+## WebSocket統合
 
-所有实时 AI 结果均通过 WebSocket 交付。将 `ws_connection_id` 传递给：
+すべてのリアルタイムAI結果はWebSocket経由で配信される。以下に `ws_connection_id` を渡す：
 
 * `rtstream.start_transcript()`
 * `rtstream.index_audio()`
 * `rtstream.index_visuals()`
 * `scene_index.create_alert()`
 
-### WebSocket 通道
+### WebSocketチャネル
 
-| 通道 | 来源 | 内容 |
+| チャネル | ソース | コンテンツ |
 |---------|--------|---------|
-| `transcript` | `start_transcript()` | 实时语音转文本 |
-| `scene_index` | `index_visuals()` | 视觉分析结果 |
-| `audio_index` | `index_audio()` | 音频分析结果 |
-| `alert` | `create_alert()` | 警报通知 |
+| `transcript` | `start_transcript()` | リアルタイム音声テキスト変換 |
+| `scene_index` | `index_visuals()` | ビジュアル分析結果 |
+| `audio_index` | `index_audio()` | オーディオ分析結果 |
+| `alert` | `create_alert()` | アラート通知 |
 
-有关 WebSocket 事件结构和 ws\_listener 用法，请参阅 [capture-reference.md](capture-reference.md)。
+WebSocketイベント構造とws\_listenerの使用については [capture-reference.md](capture-reference.md) を参照。
 
 ***
 
-## 完整工作流程
+## 完全なワークフロー
 
 ```python
 import time

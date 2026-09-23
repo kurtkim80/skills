@@ -1,121 +1,121 @@
 ---
 name: email-ops
-description: 以证据为先的邮箱分类、草稿、发送验证及已发送邮件安全跟进工作流，适用于ECC。当用户希望整理邮件、通过真实邮件界面起草或发送、或证明已发送邮件内容时使用。
+description: ECC用の証拠ベースのメールボックストリアージ、ドラフト作成、送信検証、および送信済みメールセーフフォローアップワークフロー。ユーザーがメールを整理したり、実際のメールサーフェスを通じてドラフトまたは送信したい、または送信済みメールに何が到着したかを証明したい場合に使用します。
 origin: ECC
 ---
 
-# 邮件操作
+# Email Ops
 
-当实际任务为邮箱工作时使用：分类、起草、回复、发送，或确认邮件已进入已发送文件夹。
+Use this when the real task is mailbox work: triage, drafting, replying, sending, or proving a message landed in Sent.
 
-这不是通用写作技能，而是围绕实际邮件界面的操作工作流。
+This is not a generic writing skill. It is an operator workflow around the actual mail surface.
 
-## 技能栈
+## Skill Stack
 
-在相关场景下调用这些ECC原生技能：
+Pull these ECC-native skills into the workflow when relevant:
 
-* `brand-voice` 在起草任何面向用户的内容之前
-* `investor-outreach` 用于面向投资者、合作伙伴或赞助商的邮件
-* `customer-billing-ops` 当邮件线程属于账单/支持事件而非普通通信时
-* `knowledge-ops` 当需要将消息或线程捕获到持久上下文中时
-* `research-ops` 当回复依赖最新外部事实时
+- `brand-voice` before drafting anything user-facing
+- `investor-outreach` for investor, partner, or sponsor-facing mail
+- `customer-billing-ops` when the thread is a billing/support incident rather than generic correspondence
+- `knowledge-ops` when the message or thread should be captured into durable context afterward
+- `research-ops` when a reply depends on fresh external facts
 
-## 使用时机
+## When to Use
 
-* 用户要求分类收件箱或清理低价值邮件
-* 用户需要起草、回复或发送新邮件
-* 用户想确认邮件是否已发送
-* 用户需要验证使用的账户、线程或已发送记录
+- user asks to triage inbox or archive low-signal mail
+- user wants a draft, reply, or new outbound email
+- user wants to know whether a mail was already sent
+- the user wants proof of which account, thread, or Sent entry was used
 
-## 安全护栏
+## Guardrails
 
-* 除非用户明确要求实时发送，否则先起草
-* 未经真实已发送文件夹或客户端确认，不得声称邮件已发送
-* 不随意切换发件账户；选择与项目和收件人匹配的账户
-* 清理时不删除不确定的业务邮件
-* 若任务实为私信或iMessage工作，转交至`messages-ops`
+- draft first unless the user clearly asked for a live send
+- never claim a message was sent without a real Sent-folder or client-side confirmation
+- do not switch sender accounts casually; choose the account that matches the project and recipient
+- do not delete uncertain business mail during cleanup
+- if the task is really DM or iMessage work, hand off to `messages-ops`
 
-## 工作流程
+## Workflow
 
-### 1. 确认具体界面
+### 1. Resolve the exact surface
 
-操作前明确：
+Before acting, settle:
 
-* 哪个邮箱账户
-* 哪个线程或收件人
-* 任务是分类、起草、回复还是发送
-* 用户需要仅起草还是实时发送
+- which mailbox account
+- which thread or recipient
+- whether the task is triage, draft, reply, or send
+- whether the user wants draft-only or live send
 
-### 2. 撰写前阅读线程
+### 2. Read the thread before composing
 
-若回复：
+If replying:
 
-* 阅读现有线程
-* 识别最后一次对外联系
-* 识别任何承诺、截止日期或未回答问题
+- read the existing thread
+- identify the last outbound touch
+- identify any commitments, deadlines, or unanswered questions
 
-若创建新外发邮件：
+If creating a new outbound:
 
-* 确定亲密度等级
-* 选择正确渠道和发件账户
-* 起草前调用`brand-voice`
+- identify warmth level
+- select the correct channel and sender account
+- pull `brand-voice` before drafting
 
-### 3. 起草，然后验证
+### 3. Draft, then verify
 
-仅起草任务：
+For draft-only work:
 
-* 生成最终副本
-* 说明发件人、收件人、主题和目的
+- produce the final copy
+- state sender, recipient, subject, and purpose
 
-实时发送任务：
+For live-send work:
 
-* 先验证最终正文
-* 通过选定邮件界面发送
-* 确认消息已进入已发送文件夹或等效的已发送副本存储
+- verify the exact final body first
+- send through the chosen mail surface
+- confirm the message landed in Sent or the equivalent sent-copy store
 
-### 4. 报告确切状态
+### 4. Report exact state
 
-使用精确状态词：
+Use exact status words:
 
-* 已起草
-* 待审批
-* 已发送
-* 被阻止
-* 等待验证
+- drafted
+- approval-pending
+- sent
+- blocked
+- awaiting verification
 
-若发送界面被阻止，保留草稿并报告确切阻止原因，而非未经说明即改用第二传输方式。
+If the send surface is blocked, preserve the draft and report the exact blocker instead of improvising a second transport without saying so.
 
-## 输出格式
+## Output Format
 
 ```text
-邮件界面
-- 账户
-- 邮件线程/收件人
-- 请求的操作
+MAIL SURFACE
+- account
+- thread / recipient
+- requested action
 
-草稿
-- 主题
-- 正文
+DRAFT
+- subject
+- body
 
-状态
-- 已草拟/已发送/已拦截
-- 适用时附上发送证明
+STATUS
+- drafted / sent / blocked
+- proof of Sent when applicable
 
-下一步
-- 发送
-- 跟进
-- 归档/移动
+NEXT STEP
+- send
+- follow up
+- archive / move
 ```
 
-## 常见陷阱
+## Pitfalls
 
-* 未经已发送副本检查不得声称发送成功
-* 不得忽略线程历史而撰写无上下文的回复
-* 不得混淆邮箱工作与私信或短信工作流
-* 不得泄露机密、认证详情或不必要的消息元数据
+- do not claim send success without a sent-copy check
+- do not ignore the thread history and write a contextless reply
+- do not mix mailbox work with DM or text-message workflows
+- do not expose secrets, auth details, or unnecessary message metadata
 
-## 验证
+## Verification
 
-* 回复中指明账户和线程或收件人
-* 任何发送声明均包含已发送证明或明确的客户端确认
-* 最终状态为：已起草/已发送/被阻止/等待验证
+- the response names the account and thread or recipient
+- any send claim includes Sent proof or an explicit client-side confirmation
+- the final state is one of drafted / sent / blocked / awaiting verification

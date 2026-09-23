@@ -3,31 +3,31 @@ name: backend-patterns
 description: Backend architecture patterns, API design, database optimization, and server-side best practices for Node.js, Express, and Next.js API routes.
 ---
 
-# バックエンド開発パターン
+# 後端開發模式
 
-スケーラブルなサーバーサイドアプリケーションのためのバックエンドアーキテクチャパターンとベストプラクティス。
+用於可擴展伺服器端應用程式的後端架構模式和最佳實務。
 
-## API設計パターン
+## API 設計模式
 
-### RESTful API構造
+### RESTful API 結構
 
 ```typescript
-// ✅ リソースベースのURL
-GET    /api/markets                 # リソースのリスト
-GET    /api/markets/:id             # 単一リソースの取得
-POST   /api/markets                 # リソースの作成
-PUT    /api/markets/:id             # リソースの置換
-PATCH  /api/markets/:id             # リソースの更新
-DELETE /api/markets/:id             # リソースの削除
+// ✅ 基於資源的 URL
+GET    /api/markets                 # 列出資源
+GET    /api/markets/:id             # 取得單一資源
+POST   /api/markets                 # 建立資源
+PUT    /api/markets/:id             # 替換資源
+PATCH  /api/markets/:id             # 更新資源
+DELETE /api/markets/:id             # 刪除資源
 
-// ✅ フィルタリング、ソート、ページネーション用のクエリパラメータ
+// ✅ 用於過濾、排序、分頁的查詢參數
 GET /api/markets?status=active&sort=volume&limit=20&offset=0
 ```
 
-### リポジトリパターン
+### Repository 模式
 
 ```typescript
-// データアクセスロジックの抽象化
+// 抽象資料存取邏輯
 interface MarketRepository {
   findAll(filters?: MarketFilters): Promise<Market[]>
   findById(id: string): Promise<Market | null>
@@ -54,26 +54,26 @@ class SupabaseMarketRepository implements MarketRepository {
     return data
   }
 
-  // その他のメソッド...
+  // 其他方法...
 }
 ```
 
-### サービスレイヤーパターン
+### Service 層模式
 
 ```typescript
-// ビジネスロジックをデータアクセスから分離
+// 業務邏輯與資料存取分離
 class MarketService {
   constructor(private marketRepo: MarketRepository) {}
 
   async searchMarkets(query: string, limit: number = 10): Promise<Market[]> {
-    // ビジネスロジック
+    // 業務邏輯
     const embedding = await generateEmbedding(query)
     const results = await this.vectorSearch(embedding, limit)
 
-    // 完全なデータを取得
+    // 取得完整資料
     const markets = await this.marketRepo.findByIds(results.map(r => r.id))
 
-    // 類似度でソート
+    // 依相似度排序
     return markets.sort((a, b) => {
       const scoreA = results.find(r => r.id === a.id)?.score || 0
       const scoreB = results.find(r => r.id === b.id)?.score || 0
@@ -82,15 +82,15 @@ class MarketService {
   }
 
   private async vectorSearch(embedding: number[], limit: number) {
-    // ベクトル検索の実装
+    // 向量搜尋實作
   }
 }
 ```
 
-### ミドルウェアパターン
+### Middleware 模式
 
 ```typescript
-// リクエスト/レスポンス処理パイプライン
+// 請求/回應處理流水線
 export function withAuth(handler: NextApiHandler): NextApiHandler {
   return async (req, res) => {
     const token = req.headers.authorization?.replace('Bearer ', '')
@@ -109,18 +109,18 @@ export function withAuth(handler: NextApiHandler): NextApiHandler {
   }
 }
 
-// 使用方法
+// 使用方式
 export default withAuth(async (req, res) => {
-  // ハンドラーはreq.userにアクセス可能
+  // Handler 可存取 req.user
 })
 ```
 
-## データベースパターン
+## 資料庫模式
 
-### クエリ最適化
+### 查詢優化
 
 ```typescript
-// ✅ 良い: 必要な列のみを選択
+// ✅ 良好：只選擇需要的欄位
 const { data } = await supabase
   .from('markets')
   .select('id, name, status, volume')
@@ -128,25 +128,25 @@ const { data } = await supabase
   .order('volume', { ascending: false })
   .limit(10)
 
-// ❌ 悪い: すべてを選択
+// ❌ 不良：選擇所有欄位
 const { data } = await supabase
   .from('markets')
   .select('*')
 ```
 
-### N+1クエリ防止
+### N+1 查詢問題預防
 
 ```typescript
-// ❌ 悪い: N+1クエリ問題
+// ❌ 不良：N+1 查詢問題
 const markets = await getMarkets()
 for (const market of markets) {
-  market.creator = await getUser(market.creator_id)  // Nクエリ
+  market.creator = await getUser(market.creator_id)  // N 次查詢
 }
 
-// ✅ 良い: バッチフェッチ
+// ✅ 良好：批次取得
 const markets = await getMarkets()
 const creatorIds = markets.map(m => m.creator_id)
-const creators = await getUsers(creatorIds)  // 1クエリ
+const creators = await getUsers(creatorIds)  // 1 次查詢
 const creatorMap = new Map(creators.map(c => [c.id, c]))
 
 markets.forEach(market => {
@@ -154,14 +154,14 @@ markets.forEach(market => {
 })
 ```
 
-### トランザクションパターン
+### Transaction 模式
 
 ```typescript
 async function createMarketWithPosition(
   marketData: CreateMarketDto,
   positionData: CreatePositionDto
 ) {
-  // Supabaseトランザクションを使用
+  // 使用 Supabase transaction
   const { data, error } = await supabase.rpc('create_market_with_position', {
     market_data: marketData,
     position_data: positionData
@@ -171,7 +171,7 @@ async function createMarketWithPosition(
   return data
 }
 
-// SupabaseのSQL関数
+// Supabase 中的 SQL 函式
 CREATE OR REPLACE FUNCTION create_market_with_position(
   market_data jsonb,
   position_data jsonb
@@ -180,21 +180,21 @@ RETURNS jsonb
 LANGUAGE plpgsql
 AS $$
 BEGIN
-  -- トランザクションは自動的に開始
+  -- 自動開始 transaction
   INSERT INTO markets VALUES (market_data);
   INSERT INTO positions VALUES (position_data);
   RETURN jsonb_build_object('success', true);
 EXCEPTION
   WHEN OTHERS THEN
-    -- ロールバックは自動的に発生
+    -- 自動 rollback
     RETURN jsonb_build_object('success', false, 'error', SQLERRM);
 END;
 $$;
 ```
 
-## キャッシング戦略
+## 快取策略
 
-### Redisキャッシングレイヤー
+### Redis 快取層
 
 ```typescript
 class CachedMarketRepository implements MarketRepository {
@@ -204,18 +204,18 @@ class CachedMarketRepository implements MarketRepository {
   ) {}
 
   async findById(id: string): Promise<Market | null> {
-    // 最初にキャッシュをチェック
+    // 先檢查快取
     const cached = await this.redis.get(`market:${id}`)
 
     if (cached) {
       return JSON.parse(cached)
     }
 
-    // キャッシュミス - データベースから取得
+    // 快取未命中 - 從資料庫取得
     const market = await this.baseRepo.findById(id)
 
     if (market) {
-      // 5分間キャッシュ
+      // 快取 5 分鐘
       await this.redis.setex(`market:${id}`, 300, JSON.stringify(market))
     }
 
@@ -228,31 +228,31 @@ class CachedMarketRepository implements MarketRepository {
 }
 ```
 
-### Cache-Asideパターン
+### Cache-Aside 模式
 
 ```typescript
 async function getMarketWithCache(id: string): Promise<Market> {
   const cacheKey = `market:${id}`
 
-  // キャッシュを試す
+  // 嘗試快取
   const cached = await redis.get(cacheKey)
   if (cached) return JSON.parse(cached)
 
-  // キャッシュミス - DBから取得
+  // 快取未命中 - 從資料庫取得
   const market = await db.markets.findUnique({ where: { id } })
 
   if (!market) throw new Error('Market not found')
 
-  // キャッシュを更新
+  // 更新快取
   await redis.setex(cacheKey, 300, JSON.stringify(market))
 
   return market
 }
 ```
 
-## エラーハンドリングパターン
+## 錯誤處理模式
 
-### 集中エラーハンドラー
+### 集中式錯誤處理器
 
 ```typescript
 class ApiError extends Error {
@@ -282,7 +282,7 @@ export function errorHandler(error: unknown, req: Request): Response {
     }, { status: 400 })
   }
 
-  // 予期しないエラーをログに記録
+  // 記錄非預期錯誤
   console.error('Unexpected error:', error)
 
   return NextResponse.json({
@@ -291,7 +291,7 @@ export function errorHandler(error: unknown, req: Request): Response {
   }, { status: 500 })
 }
 
-// 使用方法
+// 使用方式
 export async function GET(request: Request) {
   try {
     const data = await fetchData()
@@ -302,7 +302,7 @@ export async function GET(request: Request) {
 }
 ```
 
-### 指数バックオフによるリトライ
+### 指數退避重試
 
 ```typescript
 async function fetchWithRetry<T>(
@@ -318,7 +318,7 @@ async function fetchWithRetry<T>(
       lastError = error as Error
 
       if (i < maxRetries - 1) {
-        // 指数バックオフ: 1秒、2秒、4秒
+        // 指數退避：1s, 2s, 4s
         const delay = Math.pow(2, i) * 1000
         await new Promise(resolve => setTimeout(resolve, delay))
       }
@@ -328,13 +328,13 @@ async function fetchWithRetry<T>(
   throw lastError!
 }
 
-// 使用方法
+// 使用方式
 const data = await fetchWithRetry(() => fetchFromAPI())
 ```
 
-## 認証と認可
+## 認證與授權
 
-### JWTトークン検証
+### JWT Token 驗證
 
 ```typescript
 import jwt from 'jsonwebtoken'
@@ -364,7 +364,7 @@ export async function requireAuth(request: Request) {
   return verifyToken(token)
 }
 
-// APIルートでの使用方法
+// 在 API 路由中使用
 export async function GET(request: Request) {
   const user = await requireAuth(request)
 
@@ -374,7 +374,7 @@ export async function GET(request: Request) {
 }
 ```
 
-### ロールベースアクセス制御
+### 基於角色的存取控制
 
 ```typescript
 type Permission = 'read' | 'write' | 'delete' | 'admin'
@@ -408,18 +408,18 @@ export function requirePermission(permission: Permission) {
   }
 }
 
-// 使用方法 - HOFがハンドラーをラップ
+// 使用方式 - HOF 包裝 handler
 export const DELETE = requirePermission('delete')(
   async (request: Request, user: User) => {
-    // ハンドラーは検証済みの権限を持つ認証済みユーザーを受け取る
+    // Handler 接收已驗證且具有已驗證權限的使用者
     return new Response('Deleted', { status: 200 })
   }
 )
 ```
 
-## レート制限
+## 速率限制
 
-### シンプルなインメモリレートリミッター
+### 簡單的記憶體速率限制器
 
 ```typescript
 class RateLimiter {
@@ -433,14 +433,14 @@ class RateLimiter {
     const now = Date.now()
     const requests = this.requests.get(identifier) || []
 
-    // ウィンドウ外の古いリクエストを削除
+    // 移除視窗外的舊請求
     const recentRequests = requests.filter(time => now - time < windowMs)
 
     if (recentRequests.length >= maxRequests) {
-      return false  // レート制限超過
+      return false  // 超過速率限制
     }
 
-    // 現在のリクエストを追加
+    // 新增當前請求
     recentRequests.push(now)
     this.requests.set(identifier, recentRequests)
 
@@ -453,7 +453,7 @@ const limiter = new RateLimiter()
 export async function GET(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || 'unknown'
 
-  const allowed = await limiter.checkLimit(ip, 100, 60000)  // 100 req/分
+  const allowed = await limiter.checkLimit(ip, 100, 60000)  // 100 請求/分鐘
 
   if (!allowed) {
     return NextResponse.json({
@@ -461,13 +461,13 @@ export async function GET(request: Request) {
     }, { status: 429 })
   }
 
-  // リクエストを続行
+  // 繼續處理請求
 }
 ```
 
-## バックグラウンドジョブとキュー
+## 背景任務與佇列
 
-### シンプルなキューパターン
+### 簡單佇列模式
 
 ```typescript
 class JobQueue<T> {
@@ -499,11 +499,11 @@ class JobQueue<T> {
   }
 
   private async execute(job: T): Promise<void> {
-    // ジョブ実行ロジック
+    // 任務執行邏輯
   }
 }
 
-// マーケットインデックス作成用の使用方法
+// 用於索引市場的使用範例
 interface IndexJob {
   marketId: string
 }
@@ -513,16 +513,16 @@ const indexQueue = new JobQueue<IndexJob>()
 export async function POST(request: Request) {
   const { marketId } = await request.json()
 
-  // ブロッキングの代わりにキューに追加
+  // 加入佇列而非阻塞
   await indexQueue.add({ marketId })
 
   return NextResponse.json({ success: true, message: 'Job queued' })
 }
 ```
 
-## ロギングとモニタリング
+## 日誌與監控
 
-### 構造化ロギング
+### 結構化日誌
 
 ```typescript
 interface LogContext {
@@ -564,7 +564,7 @@ class Logger {
 
 const logger = new Logger()
 
-// 使用方法
+// 使用方式
 export async function GET(request: Request) {
   const requestId = crypto.randomUUID()
 
@@ -584,4 +584,4 @@ export async function GET(request: Request) {
 }
 ```
 
-**注意**: バックエンドパターンは、スケーラブルで保守可能なサーバーサイドアプリケーションを実現します。複雑さのレベルに適したパターンを選択してください。
+**記住**：後端模式能實現可擴展、可維護的伺服器端應用程式。選擇符合你複雜度等級的模式。

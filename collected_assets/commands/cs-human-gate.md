@@ -1,15 +1,10 @@
 ---
-title: "/cs-human-gate — Slash Command for AI Coding Agents"
-description: "/cs:human-gate — Get real human review on an artifact and prove it happened. Builds a single-file review page, collects batched feedback as. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-human-gate"
+description: "/cs:human-gate — Get real human review on an artifact and prove it happened. Builds a single-file review page, collects batched feedback as structured data, and runs a gate that refuses to close while a BLOCKER is open, the reviewer is unnamed, or nobody has looked at all. Non-blocking: hands over the path and ends the turn."
+argument-hint: "[path to the .md or .html artifact] [optional: open|status|collect|close]"
 ---
 
-# /cs-human-gate
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/human-gate/commands/cs-human-gate.md">Source</a></span>
-</div>
-
+# /cs:human-gate — Human Verification Gate
 
 **Command:** `/cs:human-gate <artifact> [step]`
 

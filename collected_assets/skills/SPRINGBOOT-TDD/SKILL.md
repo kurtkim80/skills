@@ -1,26 +1,26 @@
 ---
 name: springboot-tdd
-description: Test-driven development for Spring Boot using JUnit 5, Mockito, MockMvc, Testcontainers, and JaCoCo. Use when adding features, fixing bugs, or refactoring.
+description: 使用JUnit 5、Mockito、MockMvc、Testcontainers和JaCoCo进行Spring Boot的测试驱动开发。适用于添加功能、修复错误或重构时。
 ---
 
-# Spring Boot TDD ワークフロー
+# Spring Boot TDD 工作流程
 
-80%以上のカバレッジ（ユニット+統合）を持つSpring Bootサービスのためのテスト駆動開発ガイダンス。
+适用于 Spring Boot 服务、覆盖率 80%+（单元 + 集成）的 TDD 指南。
 
-## いつ使用するか
+## 何时使用
 
-- 新機能やエンドポイント
-- バグ修正やリファクタリング
-- データアクセスロジックやセキュリティルールの追加
+* 新功能或端点
+* 错误修复或重构
+* 添加数据访问逻辑或安全规则
 
-## ワークフロー
+## 工作流程
 
-1) テストを最初に書く（失敗すべき）
-2) テストを通すための最小限のコードを実装
-3) テストをグリーンに保ちながらリファクタリング
-4) カバレッジを強制（JaCoCo）
+1. 先写测试（它们应该失败）
+2. 实现最小代码以通过测试
+3. 在测试通过后进行重构
+4. 强制覆盖率（JaCoCo）
 
-## ユニットテスト（JUnit 5 + Mockito）
+## 单元测试 (JUnit 5 + Mockito)
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -41,12 +41,13 @@ class MarketServiceTest {
 }
 ```
 
-パターン:
-- Arrange-Act-Assert
-- 部分モックを避ける。明示的なスタビングを優先
-- バリエーションに`@ParameterizedTest`を使用
+模式：
 
-## Webレイヤーテスト（MockMvc）
+* Arrange-Act-Assert
+* 避免部分模拟；优先使用显式桩
+* 使用 `@ParameterizedTest` 处理变体
+
+## Web 层测试 (MockMvc)
 
 ```java
 @WebMvcTest(MarketController.class)
@@ -65,7 +66,7 @@ class MarketControllerTest {
 }
 ```
 
-## 統合テスト（SpringBootTest）
+## 集成测试 (SpringBootTest)
 
 ```java
 @SpringBootTest
@@ -86,7 +87,7 @@ class MarketIntegrationTest {
 }
 ```
 
-## 永続化テスト（DataJpaTest）
+## 持久层测试 (DataJpaTest)
 
 ```java
 @DataJpaTest
@@ -109,12 +110,13 @@ class MarketRepositoryTest {
 
 ## Testcontainers
 
-- 本番環境を反映するためにPostgres/Redis用の再利用可能なコンテナを使用
-- `@DynamicPropertySource`経由でJDBC URLをSpringコンテキストに注入
+* 对 Postgres/Redis 使用可复用的容器以镜像生产环境
+* 通过 `@DynamicPropertySource` 连接，将 JDBC URL 注入 Spring 上下文
 
-## カバレッジ（JaCoCo）
+## 覆盖率 (JaCoCo)
 
-Mavenスニペット:
+Maven 片段：
+
 ```xml
 <plugin>
   <groupId>org.jacoco</groupId>
@@ -133,13 +135,13 @@ Mavenスニペット:
 </plugin>
 ```
 
-## アサーション
+## 断言
 
-- 可読性のためにAssertJ（`assertThat`）を優先
-- JSONレスポンスには`jsonPath`を使用
-- 例外には: `assertThatThrownBy(...)`
+* 为可读性，优先使用 AssertJ (`assertThat`)
+* 对于 JSON 响应，使用 `jsonPath`
+* 对于异常：`assertThatThrownBy(...)`
 
-## テストデータビルダー
+## 测试数据构建器
 
 ```java
 class MarketBuilder {
@@ -149,9 +151,9 @@ class MarketBuilder {
 }
 ```
 
-## CIコマンド
+## CI 命令
 
-- Maven: `mvn -T 4 test` または `mvn verify`
-- Gradle: `./gradlew test jacocoTestReport`
+* Maven: `mvn -T 4 test` 或 `mvn verify`
+* Gradle: `./gradlew test jacocoTestReport`
 
-**覚えておいてください**: テストは高速で、分離され、決定論的に保ちます。実装の詳細ではなく、動作をテストします。
+**记住**：保持测试快速、隔离且确定。测试行为，而非实现细节。

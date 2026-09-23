@@ -1,88 +1,24 @@
 ---
-description: Orchestrate multiple agents for complex tasks
-agent: planner
-subtask: true
+description: Legacy slash-entry shim for dmux-workflows and autonomous-agent-harness. Prefer the skills directly.
 ---
 
-# Orchestrate Command
+# Orchestrate Command (Legacy Shim)
 
-Orchestrate multiple specialized agents for this complex task: $ARGUMENTS
+Use this only if you still invoke `/orchestrate`. The maintained orchestration guidance lives in `skills/dmux-workflows/SKILL.md` and `skills/autonomous-agent-harness/SKILL.md`.
 
-## Your Task
+## Canonical Surface
 
-1. **Analyze task complexity** and break into subtasks
-2. **Identify optimal agents** for each subtask
-3. **Create execution plan** with dependencies
-4. **Coordinate execution** - parallel where possible
-5. **Synthesize results** into unified output
+- Prefer `dmux-workflows` for parallel panes, worktrees, and multi-agent splits.
+- Prefer `autonomous-agent-harness` for longer-running loops, governance, scheduling, and control-plane style execution.
+- Keep this file only as a compatibility entry point.
 
-## Available Agents
+## Arguments
 
-| Agent | Specialty | Use For |
-|-------|-----------|---------|
-| planner | Implementation planning | Complex feature design |
-| architect | System design | Architectural decisions |
-| code-reviewer | Code quality | Review changes |
-| security-reviewer | Security analysis | Vulnerability detection |
-| tdd-guide | Test-driven dev | Feature implementation |
-| build-error-resolver | Build fixes | TypeScript/build errors |
-| e2e-runner | E2E testing | User flow testing |
-| doc-updater | Documentation | Updating docs |
-| refactor-cleaner | Code cleanup | Dead code removal |
-| go-reviewer | Go code | Go-specific review |
-| go-build-resolver | Go builds | Go build errors |
-| database-reviewer | Database | Query optimization |
+`$ARGUMENTS`
 
-## Orchestration Patterns
+## Delegation
 
-### Sequential Execution
-```
-planner → tdd-guide → code-reviewer → security-reviewer
-```
-Use when: Later tasks depend on earlier results
-
-### Parallel Execution
-```
-┌→ security-reviewer
-planner →├→ code-reviewer
-└→ architect
-```
-Use when: Tasks are independent
-
-### Fan-Out/Fan-In
-```
-         ┌→ agent-1 ─┐
-planner →├→ agent-2 ─┼→ synthesizer
-         └→ agent-3 ─┘
-```
-Use when: Multiple perspectives needed
-
-## Execution Plan Format
-
-### Phase 1: [Name]
-- Agent: [agent-name]
-- Task: [specific task]
-- Depends on: [none or previous phase]
-
-### Phase 2: [Name] (parallel)
-- Agent A: [agent-name]
-  - Task: [specific task]
-- Agent B: [agent-name]
-  - Task: [specific task]
-- Depends on: Phase 1
-
-### Phase 3: Synthesis
-- Combine results from Phase 2
-- Generate unified output
-
-## Coordination Rules
-
-1. **Plan before execute** - Create full execution plan first
-2. **Minimize handoffs** - Reduce context switching
-3. **Parallelize when possible** - Independent tasks in parallel
-4. **Clear boundaries** - Each agent has specific scope
-5. **Single source of truth** - One agent owns each artifact
-
----
-
-**NOTE**: Complex tasks benefit from multi-agent orchestration. Simple tasks should use single agents directly.
+Apply the orchestration skills instead of maintaining a second workflow spec here.
+- Start with `dmux-workflows` for split/parallel execution.
+- Pull in `autonomous-agent-harness` when the user is really asking for persistent loops, governance, or operator-layer behavior.
+- Keep handoffs structured, but let the skills define the maintained sequencing rules.

@@ -1,55 +1,55 @@
 ---
 name: django-security
-description: Django security best practices, authentication, authorization, CSRF protection, SQL injection prevention, XSS prevention, and secure deployment configurations.
+description: Django安全最佳实践，身份验证，授权，CSRF保护，SQL注入预防，XSS预防和安全部署配置。
 ---
 
-# Django セキュリティベストプラクティス
+# Django 安全最佳实践
 
-一般的な脆弱性から保護するためのDjangoアプリケーションの包括的なセキュリティガイドライン。
+保护 Django 应用程序免受常见漏洞侵害的全面安全指南。
 
-## いつ有効化するか
+## 何时启用
 
-- Django認証と認可を設定するとき
-- ユーザー権限とロールを実装するとき
-- 本番セキュリティ設定を構成するとき
-- Djangoアプリケーションのセキュリティ問題をレビューするとき
-- Djangoアプリケーションを本番環境にデプロイするとき
+* 设置 Django 认证和授权时
+* 实现用户权限和角色时
+* 配置生产环境安全设置时
+* 审查 Django 应用程序的安全问题时
+* 将 Django 应用程序部署到生产环境时
 
-## 核となるセキュリティ設定
+## 核心安全设置
 
-### 本番設定の構成
+### 生产环境设置配置
 
 ```python
 # settings/production.py
 import os
 
-DEBUG = False  # 重要: 本番環境では絶対にTrueにしない
+DEBUG = False  # CRITICAL: Never use True in production
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
-# セキュリティヘッダー
+# Security headers
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000  # 1年
+SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
-# HTTPSとクッキー
+# HTTPS and Cookies
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-# シークレットキー（環境変数経由で設定する必要があります）
+# Secret key (must be set via environment variable)
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured('DJANGO_SECRET_KEY environment variable is required')
 
-# パスワード検証
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -69,9 +69,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 ```
 
-## 認証
+## 认证
 
-### カスタムユーザーモデル
+### 自定义用户模型
 
 ```python
 # apps/users/models.py
@@ -79,12 +79,12 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    """より良いセキュリティのためのカスタムユーザーモデル。"""
+    """Custom user model for better security."""
 
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
 
-    USERNAME_FIELD = 'email'  # メールをユーザー名として使用
+    USERNAME_FIELD = 'email'  # Use email as username
     REQUIRED_FIELDS = ['username']
 
     class Meta:
@@ -99,10 +99,10 @@ class User(AbstractUser):
 AUTH_USER_MODEL = 'users.User'
 ```
 
-### パスワードハッシング
+### 密码哈希
 
 ```python
-# デフォルトではDjangoはPBKDF2を使用。より強力なセキュリティのために:
+# Django uses PBKDF2 by default. For stronger security:
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -111,20 +111,20 @@ PASSWORD_HASHERS = [
 ]
 ```
 
-### セッション管理
+### 会话管理
 
 ```python
-# セッション設定
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'  # または 'db'
+# Session configuration
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'  # Or 'db'
 SESSION_CACHE_ALIAS = 'default'
-SESSION_COOKIE_AGE = 3600 * 24 * 7  # 1週間
+SESSION_COOKIE_AGE = 3600 * 24 * 7  # 1 week
 SESSION_SAVE_EVERY_REQUEST = False
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # より良いUXですが、セキュリティは低い
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Better UX, but less secure
 ```
 
-## 認可
+## 授权
 
-### パーミッション
+### 权限
 
 ```python
 # models.py
@@ -143,7 +143,7 @@ class Post(models.Model):
         ]
 
     def user_can_edit(self, user):
-        """ユーザーがこの投稿を編集できるかチェック。"""
+        """Check if user can edit this post."""
         return self.author == user or user.has_perm('app.can_edit_others')
 
 # views.py
@@ -153,32 +153,32 @@ from django.views.generic import UpdateView
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     permission_required = 'app.can_edit_others'
-    raise_exception = True  # リダイレクトの代わりに403を返す
+    raise_exception = True  # Return 403 instead of redirect
 
     def get_queryset(self):
-        """ユーザーが自分の投稿のみを編集できるようにする。"""
+        """Only allow users to edit their own posts."""
         return Post.objects.filter(author=self.request.user)
 ```
 
-### カスタムパーミッション
+### 自定义权限
 
 ```python
 # permissions.py
 from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-    """所有者のみがオブジェクトを編集できるようにする。"""
+    """Allow only owners to edit objects."""
 
     def has_object_permission(self, request, view, obj):
-        # 読み取り権限は任意のリクエストに許可
+        # Read permissions allowed for any request
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # 書き込み権限は所有者のみ
+        # Write permissions only for owner
         return obj.author == request.user
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    """管理者は何でもでき、他は読み取りのみ。"""
+    """Allow admins to do anything, others read-only."""
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -186,13 +186,13 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 class IsVerifiedUser(permissions.BasePermission):
-    """検証済みユーザーのみを許可。"""
+    """Allow only verified users."""
 
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and request.user.is_verified
 ```
 
-### ロールベースアクセス制御(RBAC)
+### 基于角色的访问控制 (RBAC)
 
 ```python
 # models.py
@@ -212,9 +212,9 @@ class User(AbstractUser):
     def is_moderator(self):
         return self.role in ['admin', 'moderator']
 
-# Mixin
+# Mixins
 class AdminRequiredMixin:
-    """管理者ロールを要求するMixin。"""
+    """Mixin to require admin role."""
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_admin():
@@ -223,97 +223,97 @@ class AdminRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 ```
 
-## SQLインジェクション防止
+## SQL 注入防护
 
-### Django ORM保護
+### Django ORM 保护
 
 ```python
-# GOOD: Django ORMは自動的にパラメータをエスケープ
+# GOOD: Django ORM automatically escapes parameters
 def get_user(username):
-    return User.objects.get(username=username)  # 安全
+    return User.objects.get(username=username)  # Safe
 
-# GOOD: raw()でパラメータを使用
+# GOOD: Using parameters with raw()
 def search_users(query):
     return User.objects.raw('SELECT * FROM users WHERE username = %s', [query])
 
-# BAD: ユーザー入力を直接補間しない
+# BAD: Never directly interpolate user input
 def get_user_bad(username):
-    return User.objects.raw(f'SELECT * FROM users WHERE username = {username}')  # 脆弱！
+    return User.objects.raw(f'SELECT * FROM users WHERE username = {username}')  # VULNERABLE!
 
-# GOOD: 適切なエスケープでfilterを使用
+# GOOD: Using filter with proper escaping
 def get_users_by_email(email):
-    return User.objects.filter(email__iexact=email)  # 安全
+    return User.objects.filter(email__iexact=email)  # Safe
 
-# GOOD: 複雑なクエリにQオブジェクトを使用
+# GOOD: Using Q objects for complex queries
 from django.db.models import Q
 def search_users_complex(query):
     return User.objects.filter(
         Q(username__icontains=query) |
         Q(email__icontains=query)
-    )  # 安全
+    )  # Safe
 ```
 
-### raw()での追加セキュリティ
+### 使用 raw() 的额外安全措施
 
 ```python
-# 生のSQLを使用する必要がある場合は、常にパラメータを使用
+# If you must use raw SQL, always use parameters
 User.objects.raw(
     'SELECT * FROM users WHERE email = %s AND status = %s',
     [user_input_email, status]
 )
 ```
 
-## XSS防止
+## XSS 防护
 
-### テンプレートエスケープ
+### 模板转义
 
 ```django
-{# Djangoはデフォルトで変数を自動エスケープ - 安全 #}
-{{ user_input }}  {# エスケープされたHTML #}
+{# Django auto-escapes variables by default - SAFE #}
+{{ user_input }}  {# Escaped HTML #}
 
-{# 信頼できるコンテンツのみを明示的に安全とマーク #}
-{{ trusted_html|safe }}  {# エスケープされない #}
+{# Explicitly mark safe only for trusted content #}
+{{ trusted_html|safe }}  {# Not escaped #}
 
-{# 安全なHTMLのためにテンプレートフィルタを使用 #}
-{{ user_input|escape }}  {# デフォルトと同じ #}
-{{ user_input|striptags }}  {# すべてのHTMLタグを削除 #}
+{# Use template filters for safe HTML #}
+{{ user_input|escape }}  {# Same as default #}
+{{ user_input|striptags }}  {# Remove all HTML tags #}
 
-{# JavaScriptエスケープ #}
+{# JavaScript escaping #}
 <script>
     var username = {{ username|escapejs }};
 </script>
 ```
 
-### 安全な文字列処理
+### 安全字符串处理
 
 ```python
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
-# BAD: エスケープせずにユーザー入力を安全とマークしない
+# BAD: Never mark user input as safe without escaping
 def render_bad(user_input):
-    return mark_safe(user_input)  # 脆弱！
+    return mark_safe(user_input)  # VULNERABLE!
 
-# GOOD: 最初にエスケープ、次に安全とマーク
+# GOOD: Escape first, then mark safe
 def render_good(user_input):
     return mark_safe(escape(user_input))
 
-# GOOD: 変数を持つHTMLにformat_htmlを使用
+# GOOD: Use format_html for HTML with variables
 from django.utils.html import format_html
 
 def greet_user(username):
     return format_html('<span class="user">{}</span>', escape(username))
 ```
 
-### HTTPヘッダー
+### HTTP 头部
 
 ```python
 # settings.py
-SECURE_CONTENT_TYPE_NOSNIFF = True  # MIMEスニッフィングを防止
-SECURE_BROWSER_XSS_FILTER = True  # XSSフィルタを有効化
-X_FRAME_OPTIONS = 'DENY'  # クリックジャッキングを防止
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filter
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
 
-# カスタムミドルウェア
+# Custom middleware
 from django.conf import settings
 
 class SecurityHeaderMiddleware:
@@ -329,25 +329,25 @@ class SecurityHeaderMiddleware:
         return response
 ```
 
-## CSRF保護
+## CSRF 防护
 
-### デフォルトCSRF保護
+### 默认 CSRF 防护
 
 ```python
-# settings.py - CSRFはデフォルトで有効
-CSRF_COOKIE_SECURE = True  # HTTPSでのみ送信
-CSRF_COOKIE_HTTPONLY = True  # JavaScriptアクセスを防止
-CSRF_COOKIE_SAMESITE = 'Lax'  # 一部のケースでCSRFを防止
-CSRF_TRUSTED_ORIGINS = ['https://example.com']  # 信頼されたドメイン
+# settings.py - CSRF is enabled by default
+CSRF_COOKIE_SECURE = True  # Only send over HTTPS
+CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access
+CSRF_COOKIE_SAMESITE = 'Lax'  # Prevent CSRF in some cases
+CSRF_TRUSTED_ORIGINS = ['https://example.com']  # Trusted domains
 
-# テンプレート使用
+# Template usage
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Submit</button>
 </form>
 
-# AJAXリクエスト
+# AJAX requests
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -373,34 +373,34 @@ fetch('/api/endpoint/', {
 });
 ```
 
-### ビューの除外（慎重に使用）
+### 豁免视图（谨慎使用）
 
 ```python
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt  # 絶対に必要な場合のみ使用！
+@csrf_exempt  # Only use when absolutely necessary!
 def webhook_view(request):
-    # 外部サービスからのWebhook
+    # Webhook from external service
     pass
 ```
 
-## ファイルアップロードセキュリティ
+## 文件上传安全
 
-### ファイル検証
+### 文件验证
 
 ```python
 import os
 from django.core.exceptions import ValidationError
 
 def validate_file_extension(value):
-    """ファイル拡張子を検証。"""
+    """Validate file extension."""
     ext = os.path.splitext(value.name)[1]
     valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf']
     if not ext.lower() in valid_extensions:
         raise ValidationError('Unsupported file extension.')
 
 def validate_file_size(value):
-    """ファイルサイズを検証（最大5MB）。"""
+    """Validate file size (max 5MB)."""
     filesize = value.size
     if filesize > 5 * 1024 * 1024:
         raise ValidationError('File too large. Max size is 5MB.')
@@ -413,24 +413,24 @@ class Document(models.Model):
     )
 ```
 
-### 安全なファイルストレージ
+### 安全的文件存储
 
 ```python
 # settings.py
 MEDIA_ROOT = '/var/www/media/'
 MEDIA_URL = '/media/'
 
-# 本番環境でメディアに別のドメインを使用
+# Use a separate domain for media in production
 MEDIA_DOMAIN = 'https://media.example.com'
 
-# ユーザーアップロードを直接提供しない
-# 静的ファイルにはwhitenoiseまたはCDNを使用
-# メディアファイルには別のサーバーまたはS3を使用
+# Don't serve user uploads directly
+# Use whitenoise or a CDN for static files
+# Use a separate server or S3 for media files
 ```
 
-## APIセキュリティ
+## API 安全
 
-### レート制限
+### 速率限制
 
 ```python
 # settings.py
@@ -446,7 +446,7 @@ REST_FRAMEWORK = {
     }
 }
 
-# カスタムスロットル
+# Custom throttle
 from rest_framework.throttling import UserRateThrottle
 
 class BurstRateThrottle(UserRateThrottle):
@@ -458,7 +458,7 @@ class SustainedRateThrottle(UserRateThrottle):
     rate = '1000/day'
 ```
 
-### API用認証
+### API 认证
 
 ```python
 # settings.py
@@ -483,9 +483,9 @@ def protected_view(request):
     return Response({'message': 'You are authenticated'})
 ```
 
-## セキュリティヘッダー
+## 安全头部
 
-### Content Security Policy
+### 内容安全策略
 
 ```python
 # settings.py
@@ -512,34 +512,34 @@ class CSPMiddleware:
         return response
 ```
 
-## 環境変数
+## 环境变量
 
-### シークレットの管理
+### 管理密钥
 
 ```python
-# python-decoupleまたはdjango-environを使用
+# Use python-decouple or django-environ
 import environ
 
 env = environ.Env(
-    # キャスティング、デフォルト値を設定
+    # set casting, default value
     DEBUG=(bool, False)
 )
 
-# .envファイルを読み込む
+# reading .env file
 environ.Env.read_env()
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DATABASE_URL = env('DATABASE_URL')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
-# .envファイル（これをコミットしない）
+# .env file (never commit this)
 DEBUG=False
 SECRET_KEY=your-secret-key-here
 DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 ALLOWED_HOSTS=example.com,www.example.com
 ```
 
-## セキュリティイベントのログ記録
+## 记录安全事件
 
 ```python
 # settings.py
@@ -572,21 +572,21 @@ LOGGING = {
 }
 ```
 
-## クイックセキュリティチェックリスト
+## 快速安全检查清单
 
-| チェック | 説明 |
+| 检查项 | 描述 |
 |-------|-------------|
-| `DEBUG = False` | 本番環境でDEBUGを決して実行しない |
-| HTTPSのみ | SSLを強制、セキュアクッキー |
-| 強力なシークレット | SECRET_KEYに環境変数を使用 |
-| パスワード検証 | すべてのパスワードバリデータを有効化 |
-| CSRF保護 | デフォルトで有効、無効にしない |
-| XSS防止 | Djangoは自動エスケープ、ユーザー入力で`|safe`を使用しない |
-| SQLインジェクション | ORMを使用、クエリで文字列を連結しない |
-| ファイルアップロード | ファイルタイプとサイズを検証 |
-| レート制限 | APIエンドポイントをスロットル |
-| セキュリティヘッダー | CSP、X-Frame-Options、HSTS |
-| ログ記録 | セキュリティイベントをログ |
-| 更新 | DjangoとDependenciesを最新に保つ |
+| `DEBUG = False` | 切勿在生产环境中启用 DEBUG |
+| 仅限 HTTPS | 强制 SSL，使用安全 Cookie |
+| 强密钥 | 对 SECRET\_KEY 使用环境变量 |
+| 密码验证 | 启用所有密码验证器 |
+| CSRF 防护 | 默认启用，不要禁用 |
+| XSS 防护 | Django 自动转义，不要在用户输入上使用 `&#124;safe` |
+| SQL 注入 | 使用 ORM，切勿在查询中拼接字符串 |
+| 文件上传 | 验证文件类型和大小 |
+| 速率限制 | 限制 API 端点访问频率 |
+| 安全头部 | CSP、X-Frame-Options、HSTS |
+| 日志记录 | 记录安全事件 |
+| 更新 | 保持 Django 及其依赖项为最新版本 |
 
-**覚えておいてください**: セキュリティは製品ではなく、プロセスです。定期的にセキュリティプラクティスをレビューし、更新してください。
+请记住：安全是一个过程，而非产品。请定期审查并更新您的安全实践。

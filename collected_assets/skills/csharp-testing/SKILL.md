@@ -1,34 +1,34 @@
 ---
 name: csharp-testing
-description: 使用 xUnit、FluentAssertions、模拟、集成测试和测试组织最佳实践的 C# 和 .NET 测试模式。
+description: xUnit、FluentAssertions、モッキング、統合テスト、テスト組織のベストプラクティスを使用したC#と.NETのテストパターン。
 origin: ECC
 ---
 
-# C# 测试模式
+# C#テストパターン
 
-使用 xUnit、FluentAssertions 和现代测试实践为 .NET 应用程序提供的全面测试模式。
+xUnit、FluentAssertions、最新のテストプラクティスを使用した.NETアプリケーションの包括的なテストパターン。
 
-## 何时使用
+## 起動条件
 
-* 为 C# 代码编写新测试
-* 审查测试质量和覆盖率
-* 为 .NET 项目搭建测试基础设施
-* 调试不稳定或缓慢的测试
+- C#コードの新しいテストを書く場合
+- テスト品質とカバレッジのレビュー
+- .NETプロジェクトのテストインフラストラクチャの設定
+- フレーキーまたは遅いテストのデバッグ
 
-## 测试框架栈
+## テストフレームワークスタック
 
-| 工具 | 用途 |
+| ツール | 目的 |
 |---|---|
-| **xUnit** | 测试框架（.NET 首选） |
-| **FluentAssertions** | 可读的断言语法 |
-| **NSubstitute** 或 **Moq** | 模拟依赖项 |
-| **Testcontainers** | 集成测试中的真实基础设施 |
-| **WebApplicationFactory** | ASP.NET Core 集成测试 |
-| **Bogus** | 生成逼真的测试数据 |
+| **xUnit** | テストフレームワーク（.NETに推奨） |
+| **FluentAssertions** | 読みやすいアサーション構文 |
+| **NSubstitute**または**Moq** | 依存関係のモッキング |
+| **Testcontainers** | 統合テストでの実際のインフラ |
+| **WebApplicationFactory** | ASP.NET Core統合テスト |
+| **Bogus** | 現実的なテストデータ生成 |
 
-## 单元测试结构
+## ユニットテスト構造
 
-### 安排-操作-断言
+### Arrange-Act-Assert
 
 ```csharp
 public sealed class OrderServiceTests
@@ -81,7 +81,7 @@ public sealed class OrderServiceTests
 }
 ```
 
-### 使用 Theory 的参数化测试
+### Theoryによるパラメータ化テスト
 
 ```csharp
 [Theory]
@@ -113,7 +113,7 @@ public static TheoryData<CreateOrderRequest, string> InvalidOrderCases => new()
 };
 ```
 
-## 使用 NSubstitute 进行模拟
+## NSubstituteによるモッキング
 
 ```csharp
 [Fact]
@@ -140,16 +140,16 @@ public async Task PlaceOrderAsync_PersistsOrder()
     // Act
     await _sut.PlaceOrderAsync(request, CancellationToken.None);
 
-    // Assert — verify the repository was called
+    // Assert — リポジトリが呼び出されたことを検証
     await _repository.Received(1).AddAsync(
         Arg.Is<Order>(o => o.CustomerId == request.CustomerId),
         Arg.Any<CancellationToken>());
 }
 ```
 
-## ASP.NET Core 集成测试
+## ASP.NET Core統合テスト
 
-### WebApplicationFactory 设置
+### WebApplicationFactoryのセットアップ
 
 ```csharp
 public sealed class OrderApiTests : IClassFixture<WebApplicationFactory<Program>>
@@ -162,7 +162,7 @@ public sealed class OrderApiTests : IClassFixture<WebApplicationFactory<Program>
         {
             builder.ConfigureServices(services =>
             {
-                // Replace real DB with in-memory for tests
+                // テスト用にインメモリDBで実際のDBを置き換え
                 services.RemoveAll<DbContextOptions<AppDbContext>>();
                 services.AddDbContext<AppDbContext>(options =>
                     options.UseInMemoryDatabase("TestDb"));
@@ -195,7 +195,7 @@ public sealed class OrderApiTests : IClassFixture<WebApplicationFactory<Program>
 }
 ```
 
-### 使用 Testcontainers 进行测试
+### Testcontainersによるテスト
 
 ```csharp
 public sealed class PostgresOrderRepositoryTests : IAsyncLifetime
@@ -237,7 +237,7 @@ public sealed class PostgresOrderRepositoryTests : IAsyncLifetime
 }
 ```
 
-## 测试组织
+## テスト組織
 
 ```
 tests/
@@ -259,7 +259,7 @@ tests/
       DatabaseFixture.cs
 ```
 
-## 测试数据构建器
+## テストデータビルダー
 
 ```csharp
 public sealed class OrderBuilder
@@ -282,40 +282,40 @@ public sealed class OrderBuilder
     public Order Build() => Order.Create(_customerId, _items);
 }
 
-// Usage in tests
+// テストでの使用
 var order = new OrderBuilder()
     .WithCustomer("cust-vip")
     .WithItem("SKU-PREMIUM", 3, 99.99m)
     .Build();
 ```
 
-## 常见反模式
+## よくあるアンチパターン
 
-| 反模式 | 修复方法 |
+| アンチパターン | 修正方法 |
 |---|---|
-| 测试实现细节 | 测试行为和结果 |
-| 共享的可变测试状态 | 每个测试使用新实例（xUnit 通过构造函数实现） |
-| 在异步测试中使用 `Thread.Sleep` | 使用带超时的 `Task.Delay` 或轮询辅助方法 |
-| 对 `ToString()` 输出进行断言 | 对类型化属性进行断言 |
-| 每个测试一个巨型断言 | 每个测试一个逻辑断言 |
-| 测试名称描述实现 | 按行为命名：`Method_ExpectedResult_WhenCondition` |
-| 忽略 `CancellationToken` | 始终传递并验证取消 |
+| 実装の詳細をテストする | 動作と結果をテストする |
+| 共有の可変テスト状態 | テストごとに新しいインスタンス（xUnitはコンストラクタでこれを行う） |
+| 非同期テストでの`Thread.Sleep` | タイムアウトまたはポーリングヘルパーを使用した`Task.Delay` |
+| `ToString()`出力のアサーション | 型付きプロパティのアサーション |
+| テストごとに1つの巨大なアサーション | テストごとに1つの論理的なアサーション |
+| 実装を記述するテスト名 | 動作で命名: `Method_ExpectedResult_WhenCondition` |
+| `CancellationToken`を無視する | 常に渡してキャンセルを確認する |
 
-## 运行测试
+## テストの実行
 
 ```bash
-# Run all tests
+# すべてのテストを実行
 dotnet test
 
-# Run with coverage
+# カバレッジを付けて実行
 dotnet test --collect:"XPlat Code Coverage"
 
-# Run specific project
+# 特定のプロジェクトを実行
 dotnet test tests/MyApp.UnitTests/
 
-# Filter by test name
+# テスト名でフィルタリング
 dotnet test --filter "FullyQualifiedName~OrderService"
 
-# Watch mode during development
+# 開発中のウォッチモード
 dotnet watch test --project tests/MyApp.UnitTests/
 ```

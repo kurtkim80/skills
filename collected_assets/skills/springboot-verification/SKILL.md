@@ -1,62 +1,59 @@
 ---
 name: springboot-verification
-description: "Spring Boot项目验证循环：构建、静态分析、测试覆盖、安全扫描，以及发布或PR前的差异审查。"
+description: "Bucle de verificación para proyectos Spring Boot: build, análisis estático, pruebas con cobertura, escaneos de seguridad y revisión de diff antes del lanzamiento o PR."
 origin: ECC
 ---
 
-# Spring Boot 验证循环
+# Bucle de Verificación Spring Boot
 
-在提交 PR 前、重大变更后以及部署前运行。
+Ejecutar antes de PRs, después de cambios importantes y antes del despliegue.
 
-## 何时激活
+## Cuándo Activar
 
-* 为 Spring Boot 服务开启拉取请求之前
-* 在重大重构或依赖项升级之后
-* 用于暂存或生产环境的部署前验证
-* 运行完整的构建 → 代码检查 → 测试 → 安全扫描流水线
-* 验证测试覆盖率是否满足阈值
+- Antes de abrir un pull request para un servicio Spring Boot
+- Después de refactorizaciones importantes o actualizaciones de dependencias
+- Verificación previa al despliegue para staging o producción
+- Ejecutar el pipeline completo de build → lint → test → escaneo de seguridad
+- Validar que la cobertura de pruebas cumpla los umbrales
 
-## 阶段 1：构建
+## Fase 1: Build
 
 ```bash
 mvn -T 4 clean verify -DskipTests
-# or
+# o
 ./gradlew clean assemble -x test
 ```
 
-如果构建失败，停止并修复。
+Si el build falla, detener y corregir.
 
-## 阶段 2：静态分析
+## Fase 2: Análisis Estático
 
-Maven（常用插件）：
-
+Maven (plugins comunes):
 ```bash
 mvn -T 4 spotbugs:check pmd:check checkstyle:check
 ```
 
-Gradle（如果已配置）：
-
+Gradle (si está configurado):
 ```bash
 ./gradlew checkstyleMain pmdMain spotbugsMain
 ```
 
-## 阶段 3：测试 + 覆盖率
+## Fase 3: Pruebas + Cobertura
 
 ```bash
 mvn -T 4 test
-mvn jacoco:report   # verify 80%+ coverage
-# or
+mvn jacoco:report   # verificar cobertura 80%+
+# o
 ./gradlew test jacocoTestReport
 ```
 
-报告：
+Reporte:
+- Total de pruebas, pasadas/fallidas
+- % de cobertura (líneas/ramas)
 
-* 总测试数，通过/失败
-* 覆盖率百分比（行/分支）
+### Pruebas Unitarias
 
-### 单元测试
-
-使用模拟的依赖项来隔离测试服务逻辑：
+Probar la lógica del servicio en aislamiento con dependencias mockeadas:
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -88,9 +85,9 @@ class UserServiceTest {
 }
 ```
 
-### 使用 Testcontainers 进行集成测试
+### Pruebas de Integración con Testcontainers
 
-针对真实数据库（而非 H2）进行测试：
+Probar contra una base de datos real en lugar de H2:
 
 ```java
 @SpringBootTest
@@ -122,9 +119,9 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### 使用 MockMvc 进行 API 测试
+### Pruebas de API con MockMvc
 
-在完整的 Spring 上下文中测试控制器层：
+Probar la capa controller con el contexto completo de Spring:
 
 ```java
 @WebMvcTest(UserController.class)
@@ -159,77 +156,76 @@ class UserControllerTest {
 }
 ```
 
-## 阶段 4：安全扫描
+## Fase 4: Escaneo de Seguridad
 
 ```bash
-# Dependency CVEs
+# CVEs de dependencias
 mvn org.owasp:dependency-check-maven:check
-# or
+# o
 ./gradlew dependencyCheckAnalyze
 
-# Secrets in source
+# Secretos en código fuente
 grep -rn "password\s*=\s*\"" src/ --include="*.java" --include="*.yml" --include="*.properties"
 grep -rn "sk-\|api_key\|secret" src/ --include="*.java" --include="*.yml"
 
-# Secrets (git history)
-git secrets --scan  # if configured
+# Secretos (historial de git)
+git secrets --scan  # si está configurado
 ```
 
-### 常见安全发现
+### Hallazgos Comunes de Seguridad
 
-```
-# 检查 System.out.println（应使用日志记录器）
+```bash
+# Verificar System.out.println (usar logger en su lugar)
 grep -rn "System\.out\.print" src/main/ --include="*.java"
 
-# 检查响应中的原始异常消息
+# Verificar mensajes de excepción en bruto en respuestas
 grep -rn "e\.getMessage()" src/main/ --include="*.java"
 
-# 检查通配符 CORS 配置
+# Verificar CORS comodín
 grep -rn "allowedOrigins.*\*" src/main/ --include="*.java"
 ```
 
-## 阶段 5：代码检查/格式化（可选关卡）
+## Fase 5: Lint/Formato (compuerta opcional)
 
 ```bash
-mvn spotless:apply   # if using Spotless plugin
+mvn spotless:apply   # si se usa el plugin Spotless
 ./gradlew spotlessApply
 ```
 
-## 阶段 6：差异审查
+## Fase 6: Revisión de Diff
 
 ```bash
 git diff --stat
 git diff
 ```
 
-检查清单：
+Lista de verificación:
+- Sin logs de depuración residuales (`System.out`, `log.debug` sin guardias)
+- Errores y códigos HTTP con significado
+- Transacciones y validación presentes donde se necesitan
+- Cambios de configuración documentados
 
-* 没有遗留调试日志（`System.out`、`log.debug` 没有防护）
-* 有意义的错误信息和 HTTP 状态码
-* 在需要的地方有事务和验证
-* 配置变更已记录
-
-## 输出模板
+## Plantilla de Salida
 
 ```
-验证报告
-===================
-构建:     [通过/失败]
-静态分析:    [通过/失败] (spotbugs/pmd/checkstyle)
-测试:     [通过/失败] (X/Y 通过, Z% 覆盖率)
-安全性:  [通过/失败] (CVE 发现数: N)
-差异:      [X 个文件变更]
+REPORTE DE VERIFICACIÓN
+=======================
+Build:      [PASS/FAIL]
+Estático:   [PASS/FAIL] (spotbugs/pmd/checkstyle)
+Pruebas:    [PASS/FAIL] (X/Y pasadas, Z% cobertura)
+Seguridad:  [PASS/FAIL] (hallazgos CVE: N)
+Diff:       [X archivos modificados]
 
-总体:   [就绪 / 未就绪]
+General:    [LISTO / NO LISTO]
 
-待修复问题:
+Problemas a Corregir:
 1. ...
 2. ...
 ```
 
-## 持续模式
+## Modo Continuo
 
-* 在重大变更时或长时间会话中每 30–60 分钟重新运行各阶段
-* 保持短循环：`mvn -T 4 test` + spotbugs 以获取快速反馈
+- Volver a ejecutar las fases ante cambios significativos o cada 30–60 minutos en sesiones largas
+- Mantener un bucle corto: `mvn -T 4 test` + spotbugs para retroalimentación rápida
 
-**记住**：快速反馈胜过意外惊喜。保持关卡严格——将警告视为生产系统中的缺陷。
+**Recuerda**: La retroalimentación rápida supera las sorpresas tardías. Mantener la compuerta estricta — tratar las advertencias como defectos en sistemas de producción.

@@ -1,68 +1,40 @@
----
-description: Review code for quality, security, and maintainability
-agent: code-reviewer
-subtask: true
----
+# 코드 리뷰
 
-# Code Review Command
+커밋되지 않은 변경사항에 대한 포괄적인 보안 및 품질 리뷰를 수행합니다:
 
-Review code changes for quality, security, and maintainability: $ARGUMENTS
+1. 변경된 파일 목록 조회: git diff --name-only HEAD
 
-## Your Task
+2. 각 변경된 파일에 대해 다음을 검사합니다:
 
-1. **Get changed files**: Run `git diff --name-only HEAD`
-2. **Analyze each file** for issues
-3. **Generate structured report**
-4. **Provide actionable recommendations**
+**보안 이슈 (CRITICAL):**
+- 하드코딩된 인증 정보, API 키, 토큰
+- SQL 인젝션 취약점
+- XSS 취약점
+- 누락된 입력 유효성 검사
+- 안전하지 않은 의존성
+- 경로 탐색(Path Traversal) 위험
 
-## Check Categories
+**코드 품질 (HIGH):**
+- 50줄 초과 함수
+- 800줄 초과 파일
+- 4단계 초과 중첩 깊이
+- 누락된 에러 처리
+- 디버그 로깅 문구(예: 개발용 로그/print 등)
+- TODO/FIXME 주석
+- 활성 언어에 대한 공개 API 문서 누락(예: JSDoc/Go doc/Docstring 등)
 
-### Security Issues (CRITICAL)
-- [ ] Hardcoded credentials, API keys, tokens
-- [ ] SQL injection vulnerabilities
-- [ ] XSS vulnerabilities
-- [ ] Missing input validation
-- [ ] Insecure dependencies
-- [ ] Path traversal risks
-- [ ] Authentication/authorization flaws
+**모범 사례 (MEDIUM):**
+- 변이(Mutation) 패턴 (불변 패턴을 사용하세요)
+- 코드/주석의 이모지 사용
+- 새 코드에 대한 테스트 누락
+- 접근성(a11y) 문제
 
-### Code Quality (HIGH)
-- [ ] Functions > 50 lines
-- [ ] Files > 800 lines
-- [ ] Nesting depth > 4 levels
-- [ ] Missing error handling
-- [ ] console.log statements
-- [ ] TODO/FIXME comments
-- [ ] Missing JSDoc for public APIs
+3. 다음을 포함한 보고서를 생성합니다:
+   - 심각도: CRITICAL, HIGH, MEDIUM, LOW
+   - 파일 위치 및 줄 번호
+   - 이슈 설명
+   - 수정 제안
 
-### Best Practices (MEDIUM)
-- [ ] Mutation patterns (use immutable instead)
-- [ ] Unnecessary complexity
-- [ ] Missing tests for new code
-- [ ] Accessibility issues (a11y)
-- [ ] Performance concerns
+4. CRITICAL 또는 HIGH 이슈가 발견되면 commit을 차단합니다
 
-### Style (LOW)
-- [ ] Inconsistent naming
-- [ ] Missing type annotations
-- [ ] Formatting issues
-
-## Report Format
-
-For each issue found:
-
-```
-**[SEVERITY]** file.ts:123
-Issue: [Description]
-Fix: [How to fix]
-```
-
-## Decision
-
-- **CRITICAL or HIGH issues**: Block commit, require fixes
-- **MEDIUM issues**: Recommend fixes before merge
-- **LOW issues**: Optional improvements
-
----
-
-**IMPORTANT**: Never approve code with security vulnerabilities!
+보안 취약점이 있는 코드는 절대 승인하지 마세요!

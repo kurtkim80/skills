@@ -3,24 +3,24 @@ name: clickhouse-io
 description: ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads.
 ---
 
-# ClickHouse 分析パターン
+# ClickHouse 分析模式
 
-高性能分析とデータエンジニアリングのためのClickHouse固有のパターン。
+用於高效能分析和資料工程的 ClickHouse 特定模式。
 
-## 概要
+## 概述
 
-ClickHouseは、オンライン分析処理（OLAP）用のカラム指向データベース管理システム（DBMS）です。大規模データセットに対する高速分析クエリに最適化されています。
+ClickHouse 是一個列式資料庫管理系統（DBMS），用於線上分析處理（OLAP）。它針對大型資料集的快速分析查詢進行了優化。
 
-**主な機能:**
-- カラム指向ストレージ
-- データ圧縮
-- 並列クエリ実行
-- 分散クエリ
-- リアルタイム分析
+**關鍵特性：**
+- 列式儲存
+- 資料壓縮
+- 平行查詢執行
+- 分散式查詢
+- 即時分析
 
-## テーブル設計パターン
+## 表格設計模式
 
-### MergeTreeエンジン（最も一般的）
+### MergeTree 引擎（最常見）
 
 ```sql
 CREATE TABLE markets_analytics (
@@ -38,10 +38,10 @@ ORDER BY (date, market_id)
 SETTINGS index_granularity = 8192;
 ```
 
-### ReplacingMergeTree（重複排除）
+### ReplacingMergeTree（去重）
 
 ```sql
--- 重複がある可能性のあるデータ（複数のソースからなど）用
+-- 用於可能有重複的資料（例如來自多個來源）
 CREATE TABLE user_events (
     event_id String,
     user_id String,
@@ -54,10 +54,10 @@ ORDER BY (user_id, event_id, timestamp)
 PRIMARY KEY (user_id, event_id);
 ```
 
-### AggregatingMergeTree（事前集計）
+### AggregatingMergeTree（預聚合）
 
 ```sql
--- 集計メトリクスの維持用
+-- 用於維護聚合指標
 CREATE TABLE market_stats_hourly (
     hour DateTime,
     market_id String,
@@ -68,7 +68,7 @@ CREATE TABLE market_stats_hourly (
 PARTITION BY toYYYYMM(hour)
 ORDER BY (hour, market_id);
 
--- 集計データのクエリ
+-- 查詢聚合資料
 SELECT
     hour,
     market_id,
@@ -81,12 +81,12 @@ GROUP BY hour, market_id
 ORDER BY hour DESC;
 ```
 
-## クエリ最適化パターン
+## 查詢優化模式
 
-### 効率的なフィルタリング
+### 高效過濾
 
 ```sql
--- ✅ 良い: インデックス列を最初に使用
+-- ✅ 良好：先使用索引欄位
 SELECT *
 FROM markets_analytics
 WHERE date >= '2025-01-01'
@@ -95,7 +95,7 @@ WHERE date >= '2025-01-01'
 ORDER BY date DESC
 LIMIT 100;
 
--- ❌ 悪い: インデックスのない列を最初にフィルタリング
+-- ❌ 不良：先過濾非索引欄位
 SELECT *
 FROM markets_analytics
 WHERE volume > 1000
@@ -103,10 +103,10 @@ WHERE volume > 1000
   AND date >= '2025-01-01';
 ```
 
-### 集計
+### 聚合
 
 ```sql
--- ✅ 良い: ClickHouse固有の集計関数を使用
+-- ✅ 良好：使用 ClickHouse 特定聚合函式
 SELECT
     toStartOfDay(created_at) AS day,
     market_id,
@@ -119,7 +119,7 @@ WHERE created_at >= today() - INTERVAL 7 DAY
 GROUP BY day, market_id
 ORDER BY day DESC, total_volume DESC;
 
--- ✅ パーセンタイルにはquantileを使用（percentileより効率的）
+-- ✅ 使用 quantile 計算百分位數（比 percentile 更高效）
 SELECT
     quantile(0.50)(trade_size) AS median,
     quantile(0.95)(trade_size) AS p95,
@@ -128,10 +128,10 @@ FROM trades
 WHERE created_at >= now() - INTERVAL 1 HOUR;
 ```
 
-### ウィンドウ関数
+### 視窗函式
 
 ```sql
--- 累計計算
+-- 計算累計總和
 SELECT
     date,
     market_id,
@@ -146,9 +146,9 @@ WHERE date >= today() - INTERVAL 30 DAY
 ORDER BY market_id, date;
 ```
 
-## データ挿入パターン
+## 資料插入模式
 
-### 一括挿入（推奨）
+### 批量插入（推薦）
 
 ```typescript
 import { ClickHouse } from 'clickhouse'
@@ -162,7 +162,7 @@ const clickhouse = new ClickHouse({
   }
 })
 
-// ✅ バッチ挿入（効率的）
+// ✅ 批量插入（高效）
 async function bulkInsertTrades(trades: Trade[]) {
   const values = trades.map(trade => `(
     '${trade.id}',
@@ -178,19 +178,19 @@ async function bulkInsertTrades(trades: Trade[]) {
   `).toPromise()
 }
 
-// ❌ 個別挿入（低速）
+// ❌ 個別插入（慢）
 async function insertTrade(trade: Trade) {
-  // ループ内でこれをしないでください！
+  // 不要在迴圈中這樣做！
   await clickhouse.query(`
     INSERT INTO trades VALUES ('${trade.id}', ...)
   `).toPromise()
 }
 ```
 
-### ストリーミング挿入
+### 串流插入
 
 ```typescript
-// 継続的なデータ取り込み用
+// 用於持續資料攝取
 import { createWriteStream } from 'fs'
 import { pipeline } from 'stream/promises'
 
@@ -205,12 +205,12 @@ async function streamInserts() {
 }
 ```
 
-## マテリアライズドビュー
+## 物化視圖
 
-### リアルタイム集計
+### 即時聚合
 
 ```sql
--- 時間別統計のマテリアライズドビューを作成
+-- 建立每小時統計的物化視圖
 CREATE MATERIALIZED VIEW market_stats_hourly_mv
 TO market_stats_hourly
 AS SELECT
@@ -222,7 +222,7 @@ AS SELECT
 FROM trades
 GROUP BY hour, market_id;
 
--- マテリアライズドビューのクエリ
+-- 查詢物化視圖
 SELECT
     hour,
     market_id,
@@ -234,12 +234,12 @@ WHERE hour >= now() - INTERVAL 24 HOUR
 GROUP BY hour, market_id;
 ```
 
-## パフォーマンスモニタリング
+## 效能監控
 
-### クエリパフォーマンス
+### 查詢效能
 
 ```sql
--- 低速クエリをチェック
+-- 檢查慢查詢
 SELECT
     query_id,
     user,
@@ -256,10 +256,10 @@ ORDER BY query_duration_ms DESC
 LIMIT 10;
 ```
 
-### テーブル統計
+### 表格統計
 
 ```sql
--- テーブルサイズをチェック
+-- 檢查表格大小
 SELECT
     database,
     table,
@@ -272,12 +272,12 @@ GROUP BY database, table
 ORDER BY sum(bytes) DESC;
 ```
 
-## 一般的な分析クエリ
+## 常見分析查詢
 
-### 時系列分析
+### 時間序列分析
 
 ```sql
--- 日次アクティブユーザー
+-- 每日活躍使用者
 SELECT
     toDate(timestamp) AS date,
     uniq(user_id) AS daily_active_users
@@ -286,7 +286,7 @@ WHERE timestamp >= today() - INTERVAL 30 DAY
 GROUP BY date
 ORDER BY date;
 
--- リテンション分析
+-- 留存分析
 SELECT
     signup_date,
     countIf(days_since_signup = 0) AS day_0,
@@ -306,10 +306,10 @@ GROUP BY signup_date
 ORDER BY signup_date DESC;
 ```
 
-### ファネル分析
+### 漏斗分析
 
 ```sql
--- コンバージョンファネル
+-- 轉換漏斗
 SELECT
     countIf(step = 'viewed_market') AS viewed,
     countIf(step = 'clicked_trade') AS clicked,
@@ -327,10 +327,10 @@ FROM (
 GROUP BY session_id;
 ```
 
-### コホート分析
+### 世代分析
 
 ```sql
--- サインアップ月別のユーザーコホート
+-- 按註冊月份的使用者世代
 SELECT
     toStartOfMonth(signup_date) AS cohort,
     toStartOfMonth(activity_date) AS month,
@@ -347,17 +347,17 @@ GROUP BY cohort, month, months_since_signup
 ORDER BY cohort, months_since_signup;
 ```
 
-## データパイプラインパターン
+## 資料管線模式
 
-### ETLパターン
+### ETL 模式
 
 ```typescript
-// 抽出、変換、ロード
+// 提取、轉換、載入
 async function etlPipeline() {
-  // 1. ソースから抽出
+  // 1. 從來源提取
   const rawData = await extractFromPostgres()
 
-  // 2. 変換
+  // 2. 轉換
   const transformed = rawData.map(row => ({
     date: new Date(row.created_at).toISOString().split('T')[0],
     market_id: row.market_slug,
@@ -365,18 +365,18 @@ async function etlPipeline() {
     trades: parseInt(row.trade_count)
   }))
 
-  // 3. ClickHouseにロード
+  // 3. 載入到 ClickHouse
   await bulkInsertToClickHouse(transformed)
 }
 
-// 定期的に実行
-setInterval(etlPipeline, 60 * 60 * 1000)  // 1時間ごと
+// 定期執行
+setInterval(etlPipeline, 60 * 60 * 1000)  // 每小時
 ```
 
-### 変更データキャプチャ（CDC）
+### 變更資料捕獲（CDC）
 
 ```typescript
-// PostgreSQLの変更をリッスンしてClickHouseに同期
+// 監聽 PostgreSQL 變更並同步到 ClickHouse
 import { Client } from 'pg'
 
 const pgClient = new Client({ connectionString: process.env.DATABASE_URL })
@@ -397,33 +397,33 @@ pgClient.on('notification', async (msg) => {
 })
 ```
 
-## ベストプラクティス
+## 最佳實務
 
-### 1. パーティショニング戦略
-- 時間でパーティション化（通常は月または日）
-- パーティションが多すぎないようにする（パフォーマンスへの影響）
-- パーティションキーにはDATEタイプを使用
+### 1. 分區策略
+- 按時間分區（通常按月或日）
+- 避免太多分區（效能影響）
+- 分區鍵使用 DATE 類型
 
-### 2. ソートキー
-- 最も頻繁にフィルタリングされる列を最初に配置
-- カーディナリティを考慮（高カーディナリティを最初に）
-- 順序は圧縮に影響
+### 2. 排序鍵
+- 最常過濾的欄位放在最前面
+- 考慮基數（高基數優先）
+- 排序影響壓縮
 
-### 3. データタイプ
-- 最小の適切なタイプを使用（UInt32 vs UInt64）
-- 繰り返される文字列にはLowCardinalityを使用
-- カテゴリカルデータにはEnumを使用
+### 3. 資料類型
+- 使用最小的適當類型（UInt32 vs UInt64）
+- 重複字串使用 LowCardinality
+- 分類資料使用 Enum
 
-### 4. 避けるべき
-- SELECT *（列を指定）
-- FINAL（代わりにクエリ前にデータをマージ）
-- JOINが多すぎる（分析用に非正規化）
-- 小さな頻繁な挿入（代わりにバッチ処理）
+### 4. 避免
+- SELECT *（指定欄位）
+- FINAL（改為在查詢前合併資料）
+- 太多 JOINs（為分析反正規化）
+- 小量頻繁插入（改用批量）
 
-### 5. モニタリング
-- クエリパフォーマンスを追跡
-- ディスク使用量を監視
-- マージ操作をチェック
-- 低速クエリログをレビュー
+### 5. 監控
+- 追蹤查詢效能
+- 監控磁碟使用
+- 檢查合併操作
+- 審查慢查詢日誌
 
-**注意**: ClickHouseは分析ワークロードに優れています。クエリパターンに合わせてテーブルを設計し、挿入をバッチ化し、リアルタイム集計にはマテリアライズドビューを活用します。
+**記住**：ClickHouse 擅長分析工作負載。為你的查詢模式設計表格，批量插入，並利用物化視圖進行即時聚合。

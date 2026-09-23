@@ -1,25 +1,25 @@
 ---
 name: dotnet-patterns
-description: 惯用的C#和.NET模式、约定、依赖注入、async/await以及构建健壮、可维护的.NET应用程序的最佳实践。
+description: C#と.NET言語固有のパターン、規約、依存性注入、async/await、およびロバストで保守可能な.NETアプリケーション構築のためのベストプラクティス。
 origin: ECC
 ---
 
-# .NET 开发模式
+# .NET Development Patterns
 
-用于构建健壮、高性能且可维护应用程序的惯用 C# 和 .NET 模式。
+Idiomatic C# and .NET patterns for building robust, performant, and maintainable applications.
 
-## 何时激活
+## When to Activate
 
-* 编写新的 C# 代码时
-* 审查 C# 代码时
-* 重构现有 .NET 应用程序时
-* 使用 ASP.NET Core 设计服务架构时
+- Writing new C# code
+- Reviewing C# code
+- Refactoring existing .NET applications
+- Designing service architectures with ASP.NET Core
 
-## 核心原则
+## Core Principles
 
-### 1. 优先使用不可变性
+### 1. Prefer Immutability
 
-对数据模型使用记录和仅初始化属性。可变性应作为明确且有理由的选择。
+Use records and init-only properties for data models. Mutability should be an explicit, justified choice.
 
 ```csharp
 // Good: Immutable value object
@@ -40,9 +40,9 @@ public class Order
 }
 ```
 
-### 2. 显式优于隐式
+### 2. Explicit Over Implicit
 
-明确表达可空性、访问修饰符和意图。
+Be clear about nullability, access modifiers, and intent.
 
 ```csharp
 // Good: Explicit access modifiers and nullability
@@ -64,9 +64,9 @@ public sealed class UserService
 }
 ```
 
-### 3. 依赖抽象
+### 3. Depend on Abstractions
 
-对服务边界使用接口。通过依赖注入容器注册。
+Use interfaces for service boundaries. Register via DI container.
 
 ```csharp
 // Good: Interface-based dependency
@@ -81,9 +81,9 @@ public interface IOrderRepository
 builder.Services.AddScoped<IOrderRepository, SqlOrderRepository>();
 ```
 
-## 异步/等待模式
+## Async/Await Patterns
 
-### 正确使用异步
+### Proper Async Usage
 
 ```csharp
 // Good: Async all the way, with CancellationToken
@@ -107,7 +107,7 @@ public OrderSummary GetOrderSummary(Guid orderId)
 }
 ```
 
-### 并行异步操作
+### Parallel Async Operations
 
 ```csharp
 // Good: Concurrent independent operations
@@ -126,9 +126,9 @@ public async Task<DashboardData> LoadDashboardAsync(CancellationToken cancellati
 }
 ```
 
-## 选项模式
+## Options Pattern
 
-将配置节绑定到强类型对象。
+Bind configuration sections to strongly-typed objects.
 
 ```csharp
 public sealed class SmtpOptions
@@ -152,9 +152,9 @@ public class EmailService(IOptions<SmtpOptions> options)
 }
 ```
 
-## 结果模式
+## Result Pattern
 
-对预期失败返回显式成功/失败，而非抛出异常。
+Return explicit success/failure instead of throwing for expected failures.
 
 ```csharp
 public sealed record Result<T>
@@ -182,7 +182,7 @@ public async Task<Result<Order>> PlaceOrderAsync(CreateOrderRequest request)
 }
 ```
 
-## 使用 EF Core 的仓储模式
+## Repository Pattern with EF Core
 
 ```csharp
 public sealed class SqlOrderRepository : IOrderRepository
@@ -218,7 +218,7 @@ public sealed class SqlOrderRepository : IOrderRepository
 }
 ```
 
-## 中间件与管道
+## Middleware and Pipeline
 
 ```csharp
 // Custom middleware
@@ -254,7 +254,7 @@ public sealed class RequestTimingMiddleware
 }
 ```
 
-## 最小 API 模式
+## Minimal API Patterns
 
 ```csharp
 // Organized with route groups
@@ -285,7 +285,7 @@ orders.MapPost("/", async (
 });
 ```
 
-## 守卫子句
+## Guard Clauses
 
 ```csharp
 // Good: Early returns with clear validation
@@ -307,15 +307,15 @@ public async Task<ProcessResult> ProcessPaymentAsync(
 }
 ```
 
-## 应避免的反模式
+## Anti-Patterns to Avoid
 
-| 反模式 | 修复方案 |
+| Anti-Pattern | Fix |
 |---|---|
-| `async void` 方法 | 返回 `Task`（事件处理程序除外） |
-| `.Result` 或 `.Wait()` | 使用 `await` |
-| `catch (Exception) { }` | 处理或带上下文重新抛出 |
-| 构造函数中的 `new Service()` | 使用构造函数注入 |
-| `public` 字段 | 使用带适当访问器的属性 |
-| 业务逻辑中的 `dynamic` | 使用泛型或显式类型 |
-| 可变的 `static` 状态 | 使用依赖注入作用域或 `ConcurrentDictionary` |
-| 循环中的 `string.Format` | 使用 `StringBuilder` 或内插字符串处理程序 |
+| `async void` methods | Return `Task` (except event handlers) |
+| `.Result` or `.Wait()` | Use `await` |
+| `catch (Exception) { }` | Handle or rethrow with context |
+| `new Service()` in constructors | Use constructor injection |
+| `public` fields | Use properties with appropriate accessors |
+| `dynamic` in business logic | Use generics or explicit types |
+| Mutable `static` state | Use DI scoping or `ConcurrentDictionary` |
+| `string.Format` in loops | Use `StringBuilder` or interpolated string handlers |

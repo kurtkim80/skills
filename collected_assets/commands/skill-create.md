@@ -1,117 +1,89 @@
 ---
-description: Generate skills from git history analysis
-agent: build
+name: skill-create
+description: Analizar el historial local de git para extraer patrones de codificación y generar archivos SKILL.md. Versión local de la Skill Creator GitHub App.
+allowed-tools: ["Bash", "Read", "Write", "Grep", "Glob"]
 ---
 
-# Skill Create Command
+# /skill-create - Generación Local de Skills
 
-Analyze git history to generate Claude Code skills: $ARGUMENTS
+Analizar el historial de git de tu repositorio para extraer patrones de codificación y generar archivos SKILL.md que enseñan a Claude las prácticas de tu equipo.
 
-## Your Task
+## Uso
 
-1. **Analyze commits** - Pattern recognition from history
-2. **Extract patterns** - Common practices and conventions
-3. **Generate SKILL.md** - Structured skill documentation
-4. **Create instincts** - For continuous-learning-v2
-
-## Analysis Process
-
-### Step 1: Gather Commit Data
 ```bash
-# Recent commits
-git log --oneline -100
-
-# Commits by file type
-git log --name-only --pretty=format: | sort | uniq -c | sort -rn
-
-# Most changed files
-git log --pretty=format: --name-only | sort | uniq -c | sort -rn | head -20
+/skill-create                    # Analizar el repositorio actual
+/skill-create --commits 100      # Analizar los últimos 100 commits
+/skill-create --output ./skills  # Directorio de salida personalizado
+/skill-create --instincts        # También generar instintos para continuous-learning-v2
 ```
 
-### Step 2: Identify Patterns
+## Qué Hace
 
-**Commit Message Patterns**:
-- Common prefixes (feat, fix, refactor)
-- Naming conventions
-- Co-author patterns
+1. **Parsear Historial de Git** - Analizar commits, cambios de archivos y patrones
+2. **Detectar Patrones** - Identificar flujos de trabajo y convenciones recurrentes
+3. **Generar SKILL.md** - Crear archivos de skill válidos de Claude Code
+4. **Opcionalmente Crear Instintos** - Para el sistema continuous-learning-v2
 
-**Code Patterns**:
-- File structure conventions
-- Import organization
-- Error handling approaches
+## Pasos de Análisis
 
-**Review Patterns**:
-- Common review feedback
-- Recurring fix types
-- Quality gates
+### Paso 1: Recopilar Datos de Git
 
-### Step 3: Generate SKILL.md
+```bash
+# Obtener commits recientes con cambios de archivos
+git log --oneline -n ${COMMITS:-200} --name-only --pretty=format:"%H|%s|%ad" --date=short
+
+# Obtener frecuencia de commits por archivo
+git log --oneline -n 200 --name-only | grep -v "^$" | grep -v "^[a-f0-9]" | sort | uniq -c | sort -rn | head -20
+
+# Obtener patrones de mensajes de commit
+git log --oneline -n 200 | cut -d' ' -f2- | head -50
+```
+
+### Paso 2: Detectar Patrones
+
+| Patrón | Método de Detección |
+|--------|---------------------|
+| **Convenciones de commit** | Regex en mensajes de commit (feat:, fix:, chore:) |
+| **Co-cambios de archivos** | Archivos que siempre cambian juntos |
+| **Secuencias de flujo de trabajo** | Patrones de cambio de archivos repetidos |
+| **Arquitectura** | Estructura de carpetas y convenciones de nomenclatura |
+| **Patrones de testing** | Ubicaciones de archivos de prueba, nomenclatura, cobertura |
+
+### Paso 3: Generar SKILL.md
 
 ```markdown
-# [Skill Name]
-
-## Overview
-[What this skill teaches]
-
-## Patterns
-
-### Pattern 1: [Name]
-- When to use
-- Implementation
-- Example
-
-### Pattern 2: [Name]
-- When to use
-- Implementation
-- Example
-
-## Best Practices
-
-1. [Practice 1]
-2. [Practice 2]
-3. [Practice 3]
-
-## Common Mistakes
-
-1. [Mistake 1] - How to avoid
-2. [Mistake 2] - How to avoid
-
-## Examples
-
-### Good Example
-```[language]
-// Code example
-```
-
-### Anti-pattern
-```[language]
-// What not to do
-```
-```
-
-### Step 4: Generate Instincts
-
-For continuous-learning-v2:
-
-```json
-{
-  "instincts": [
-    {
-      "trigger": "[situation]",
-      "action": "[response]",
-      "confidence": 0.8,
-      "source": "git-history-analysis"
-    }
-  ]
-}
-```
-
-## Output
-
-Creates:
-- `skills/[name]/SKILL.md` - Skill documentation
-- `skills/[name]/instincts.json` - Instinct collection
-
+---
+name: {nombre-repo}-patterns
+description: Patrones de codificación extraídos de {nombre-repo}
+version: 1.0.0
+source: local-git-analysis
+analyzed_commits: {cantidad}
 ---
 
-**TIP**: Run `/skill-create --instincts` to also generate instincts for continuous learning.
+# Patrones de {Nombre Repo}
+
+## Convenciones de Commit
+{patrones detectados en mensajes de commit}
+
+## Arquitectura del Código
+{estructura de carpetas y organización detectadas}
+
+## Flujos de Trabajo
+{patrones de cambio de archivos repetidos detectados}
+
+## Patrones de Testing
+{convenciones de pruebas detectadas}
+```
+
+## Integración con GitHub App
+
+Para funciones avanzadas (10k+ commits, compartir en equipo, PRs automáticos), usar la [Skill Creator GitHub App](https://github.com/apps/skill-creator):
+
+- Comentar `/skill-creator analyze` en cualquier issue
+- Recibe un PR con las skills generadas
+
+## Comandos Relacionados
+
+- `/instinct-import` - Importar instintos generados
+- `/instinct-status` - Ver instintos aprendidos
+- `/evolve` - Agrupar instintos en skills/agentes

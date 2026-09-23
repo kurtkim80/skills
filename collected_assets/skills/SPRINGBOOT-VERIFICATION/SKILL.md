@@ -3,98 +3,102 @@ name: springboot-verification
 description: Verification loop for Spring Boot projects: build, static analysis, tests with coverage, security scans, and diff review before release or PR.
 ---
 
-# Spring Boot 検証ループ
+# Spring Boot 验证循环
 
-PR前、大きな変更後、デプロイ前に実行します。
+在提交 PR 前、重大变更后以及部署前运行。
 
-## フェーズ1: ビルド
+## 阶段 1：构建
 
 ```bash
 mvn -T 4 clean verify -DskipTests
-# または
+# or
 ./gradlew clean assemble -x test
 ```
 
-ビルドが失敗した場合は、停止して修正します。
+如果构建失败，停止并修复。
 
-## フェーズ2: 静的解析
+## 阶段 2：静态分析
 
-Maven（一般的なプラグイン）:
+Maven（常用插件）：
+
 ```bash
 mvn -T 4 spotbugs:check pmd:check checkstyle:check
 ```
 
-Gradle（設定されている場合）:
+Gradle（如果已配置）：
+
 ```bash
 ./gradlew checkstyleMain pmdMain spotbugsMain
 ```
 
-## フェーズ3: テスト + カバレッジ
+## 阶段 3：测试 + 覆盖率
 
 ```bash
 mvn -T 4 test
-mvn jacoco:report   # 80%以上のカバレッジを確認
-# または
+mvn jacoco:report   # verify 80%+ coverage
+# or
 ./gradlew test jacocoTestReport
 ```
 
-レポート:
-- 総テスト数、合格/失敗
-- カバレッジ%（行/分岐）
+报告：
 
-## フェーズ4: セキュリティスキャン
+* 总测试数，通过/失败
+* 覆盖率百分比（行/分支）
+
+## 阶段 4：安全扫描
 
 ```bash
-# 依存関係のCVE
+# Dependency CVEs
 mvn org.owasp:dependency-check-maven:check
-# または
+# or
 ./gradlew dependencyCheckAnalyze
 
-# シークレット（git）
-git secrets --scan  # 設定されている場合
+# Secrets (git)
+git secrets --scan  # if configured
 ```
 
-## フェーズ5: Lint/Format（オプションゲート）
+## 阶段 5：代码检查/格式化（可选关卡）
 
 ```bash
-mvn spotless:apply   # Spotlessプラグインを使用している場合
+mvn spotless:apply   # if using Spotless plugin
 ./gradlew spotlessApply
 ```
 
-## フェーズ6: 差分レビュー
+## 阶段 6：差异审查
 
 ```bash
 git diff --stat
 git diff
 ```
 
-チェックリスト:
-- デバッグログが残っていない（`System.out`、ガードなしの `log.debug`）
-- 意味のあるエラーとHTTPステータス
-- 必要な場所にトランザクションと検証がある
-- 設定変更が文書化されている
+检查清单：
 
-## 出力テンプレート
+* 没有遗留调试日志（`System.out`、`log.debug` 没有防护）
+* 有意义的错误信息和 HTTP 状态码
+* 在需要的地方有事务和验证
+* 配置变更已记录
+
+## 输出模板
 
 ```
-検証レポート
+VERIFICATION REPORT
 ===================
-ビルド:     [合格/不合格]
-静的解析:   [合格/不合格] (spotbugs/pmd/checkstyle)
-テスト:     [合格/不合格] (X/Y 合格, Z% カバレッジ)
-セキュリティ: [合格/不合格] (CVE発見: N)
-差分:       [X ファイル変更]
+Build:     [PASS/FAIL]
+Static:    [PASS/FAIL] (spotbugs/pmd/checkstyle)
+Tests:     [PASS/FAIL] (X/Y passed, Z% coverage)
+Security:  [PASS/FAIL] (CVE findings: N)
+Diff:      [X files changed]
 
-全体:       [準備完了 / 未完了]
+Overall:   [READY / NOT READY]
 
-修正が必要な問題:
+Issues to Fix:
 1. ...
 2. ...
 ```
 
-## 継続モード
+## 持续模式
 
-- 大きな変更があった場合、または長いセッションで30〜60分ごとにフェーズを再実行
-- 短いループを維持: `mvn -T 4 test` + spotbugs で迅速なフィードバック
+* 在重大变更时或长时间会话中每 30–60 分钟重新运行各阶段
+* 保持短循环：`mvn -T 4 test` + spotbugs 以获取快速反馈
 
-**注意**: 迅速なフィードバックは遅い驚きに勝ります。ゲートを厳格に保ち、本番システムでは警告を欠陥として扱います。
+**记住**：快速反馈胜过意外惊喜。保持关卡严格——将警告视为生产系统中的缺陷。

@@ -1,15 +1,9 @@
 ---
-title: "/cs-claude-coach — Slash Command for AI Coding Agents"
-description: "Activate the claude-coach skill — personal Claude power-user coaching for the rest of the conversation.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Activate the claude-coach skill — personal Claude power-user coaching for the rest of the conversation.
+argument-hint: "[use cases, e.g. 'writing, coding']"
 ---
 
-# /cs-claude-coach
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/claude-coach/commands/cs-claude-coach.md">Source</a></span>
-</div>
-
+# /cs:claude-coach
 
 Activates the `claude-coach` skill. From this point on, the conversation gains:
 

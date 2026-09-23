@@ -1,15 +1,9 @@
 ---
-title: "/cs-forgetting-audit — Slash Command for AI Coding Agents"
-description: "Run only the blocking forgetting gate on a memory design or store — what leaves, and on what rule.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Run only the blocking forgetting gate on a memory design or store — what leaves, and on what rule.
+argument-hint: "[policy JSON, or a memory directory to audit]"
 ---
 
-# /cs-forgetting-audit
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/memory-engineering/commands/cs-forgetting-audit.md">Source</a></span>
-</div>
-
+# /cs:forgetting-audit
 
 The short pass. Skip the cost and architecture work; answer one question about
 `$ARGUMENTS`:

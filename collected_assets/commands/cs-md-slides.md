@@ -1,15 +1,9 @@
 ---
-title: "/cs-md-slides — Slash Command for AI Coding Agents"
-description: "Convert a markdown deck (slides separated by --- HR boundaries or by # H1 headings, with optional <!-- notes: ... --> presenter notes blocks) into a. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Convert a markdown deck (slides separated by --- HR boundaries or by # H1 headings, with optional <!-- notes: ... --> presenter notes blocks) into a single-file HTML presentation with arrow-key navigation, presenter mode (split view with current slide + notes + clock + next-slide preview), URL-hash deep linking, and @media print page-per-slide for PDF export. Refuses 1-slide decks (it's a poster) or inputs without clear boundaries. Single-file output; Google Fonts CSS is the only external (Prism is opt-in via --syntax).
+argument-hint: "<path to markdown deck> [--boundary auto|hr|h1] [--title \"My Talk\"] [--syntax] [--strict-notes]"
 ---
 
-# /cs-md-slides
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/markdown-html/commands/cs-md-slides.md">Source</a></span>
-</div>
-
+# /cs:md-slides — Markdown deck → single-file HTML presentation
 
 Convert the markdown deck at **$ARGUMENTS** into a single-file interactive HTML presentation.
 

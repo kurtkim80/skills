@@ -1,91 +1,91 @@
 ---
 name: java-coding-standards
-description: Spring Bootサービス向けのJavaコーディング標準：命名、不変性、Optional使用、ストリーム、例外、ジェネリクス、プロジェクトレイアウト。
+description: Java coding standards for Spring Boot services: naming, immutability, Optional usage, streams, exceptions, generics, and project layout.
 ---
 
-# Javaコーディング標準
+# Java 编码规范
 
-Spring Bootサービスにおける読みやすく保守可能なJava(17+)コードの標準。
+适用于 Spring Boot 服务中可读、可维护的 Java (17+) 代码的规范。
 
-## 核となる原則
+## 核心原则
 
-- 巧妙さよりも明確さを優先
-- デフォルトで不変; 共有可変状態を最小化
-- 意味のある例外で早期失敗
-- 一貫した命名とパッケージ構造
+* 清晰优于巧妙
+* 默认不可变；最小化共享可变状态
+* 快速失败并提供有意义的异常
+* 一致的命名和包结构
 
 ## 命名
 
 ```java
-// ✅ クラス/レコード: PascalCase
+// ✅ Classes/Records: PascalCase
 public class MarketService {}
 public record Money(BigDecimal amount, Currency currency) {}
 
-// ✅ メソッド/フィールド: camelCase
+// ✅ Methods/fields: camelCase
 private final MarketRepository marketRepository;
 public Market findBySlug(String slug) {}
 
-// ✅ 定数: UPPER_SNAKE_CASE
+// ✅ Constants: UPPER_SNAKE_CASE
 private static final int MAX_PAGE_SIZE = 100;
 ```
 
-## 不変性
+## 不可变性
 
 ```java
-// ✅ recordとfinalフィールドを優先
+// ✅ Favor records and final fields
 public record MarketDto(Long id, String name, MarketStatus status) {}
 
 public class Market {
   private final Long id;
   private final String name;
-  // getterのみ、setterなし
+  // getters only, no setters
 }
 ```
 
-## Optionalの使用
+## Optional 使用
 
 ```java
-// ✅ find*メソッドからOptionalを返す
+// ✅ Return Optional from find* methods
 Optional<Market> market = marketRepository.findBySlug(slug);
 
-// ✅ get()の代わりにmap/flatMapを使用
+// ✅ Map/flatMap instead of get()
 return market
     .map(MarketResponse::from)
     .orElseThrow(() -> new EntityNotFoundException("Market not found"));
 ```
 
-## ストリームのベストプラクティス
+## Streams 最佳实践
 
 ```java
-// ✅ 変換にストリームを使用し、パイプラインを短く保つ
+// ✅ Use streams for transformations, keep pipelines short
 List<String> names = markets.stream()
     .map(Market::name)
     .filter(Objects::nonNull)
     .toList();
 
-// ❌ 複雑なネストされたストリームを避ける; 明確性のためにループを優先
+// ❌ Avoid complex nested streams; prefer loops for clarity
 ```
 
-## 例外
+## 异常
 
-- ドメインエラーには非チェック例外を使用; 技術的例外はコンテキストとともにラップ
-- ドメイン固有の例外を作成(例: `MarketNotFoundException`)
-- 広範な`catch (Exception ex)`を避ける(中央でリスロー/ログ記録する場合を除く)
+* 领域错误使用非受检异常；包装技术异常时提供上下文
+* 创建特定领域的异常（例如，`MarketNotFoundException`）
+* 避免宽泛的 `catch (Exception ex)`，除非在中心位置重新抛出/记录
 
 ```java
 throw new MarketNotFoundException(slug);
 ```
 
-## ジェネリクスと型安全性
+## 泛型和类型安全
 
-- 生の型を避ける; ジェネリックパラメータを宣言
-- 再利用可能なユーティリティには境界付きジェネリクスを優先
+* 避免原始类型；声明泛型参数
+* 对于可复用的工具类，优先使用有界泛型
 
 ```java
 public <T extends Identifiable> Map<Long, T> indexById(Collection<T> items) { ... }
 ```
 
-## プロジェクト構造(Maven/Gradle)
+## 项目结构 (Maven/Gradle)
 
 ```
 src/main/java/com/example/app/
@@ -98,25 +98,25 @@ src/main/java/com/example/app/
   util/
 src/main/resources/
   application.yml
-src/test/java/... (mainをミラー)
+src/test/java/... (mirrors main)
 ```
 
-## フォーマットとスタイル
+## 格式化和风格
 
-- 一貫して2または4スペースを使用(プロジェクト標準)
-- ファイルごとに1つのpublicトップレベル型
-- メソッドを短く集中的に保つ; ヘルパーを抽出
-- メンバーの順序: 定数、フィールド、コンストラクタ、publicメソッド、protected、private
+* 一致地使用 2 或 4 个空格（项目标准）
+* 每个文件一个公共顶级类型
+* 保持方法简短且专注；提取辅助方法
+* 成员顺序：常量、字段、构造函数、公共方法、受保护方法、私有方法
 
-## 避けるべきコードの臭い
+## 需要避免的代码坏味道
 
-- 長いパラメータリスト → DTO/ビルダーを使用
-- 深いネスト → 早期リターン
-- マジックナンバー → 名前付き定数
-- 静的可変状態 → 依存性注入を優先
-- サイレントなcatchブロック → ログを記録して行動、または再スロー
+* 长参数列表 → 使用 DTO/构建器
+* 深度嵌套 → 提前返回
+* 魔法数字 → 命名常量
+* 静态可变状态 → 优先使用依赖注入
+* 静默捕获块 → 记录日志并处理或重新抛出
 
-## ログ記録
+## 日志记录
 
 ```java
 private static final Logger log = LoggerFactory.getLogger(MarketService.class);
@@ -124,15 +124,15 @@ log.info("fetch_market slug={}", slug);
 log.error("failed_fetch_market slug={}", slug, ex);
 ```
 
-## Null処理
+## Null 处理
 
-- やむを得ない場合のみ`@Nullable`を受け入れる; それ以外は`@NonNull`を使用
-- 入力にBean Validation(`@NotNull`、`@NotBlank`)を使用
+* 仅在不可避免时接受 `@Nullable`；否则使用 `@NonNull`
+* 在输入上使用 Bean 验证（`@NotNull`, `@NotBlank`）
 
-## テストの期待
+## 测试期望
 
-- JUnit 5 + AssertJで流暢なアサーション
-- モック用のMockito; 可能な限り部分モックを避ける
-- 決定論的テストを優先; 隠れたsleepなし
+* 使用 JUnit 5 + AssertJ 进行流畅的断言
+* 使用 Mockito 进行模拟；尽可能避免部分模拟
+* 倾向于确定性测试；没有隐藏的休眠
 
-**覚えておく**: コードを意図的、型付き、観察可能に保つ。必要性が証明されない限り、マイクロ最適化よりも保守性を最適化します。
+**记住**：保持代码意图明确、类型安全且可观察。除非证明有必要，否则优先考虑可维护性而非微优化。

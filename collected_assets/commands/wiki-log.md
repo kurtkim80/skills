@@ -1,16 +1,7 @@
 ---
-title: "/wiki-log — Slash Command for AI Coding Agents"
-description: "Show recent entries from the LLM Wiki log (wiki/log.md). Uses the standardized ## [YYYY-MM-DD] header format so grep + tail works. Usage /wiki-log. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: wiki-log
+description: Show recent entries from the LLM Wiki log (wiki/log.md). Uses the standardized ## [YYYY-MM-DD] header format so grep + tail works. Usage /wiki-log [--last N] [--op ingest|query|lint|...]
 ---
-
-# /wiki-log
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/wiki-log.md">Source</a></span>
-</div>
-
-<!-- canonical copy: engineering/llm-wiki/commands/wiki-log.md — keep in sync -->
 
 # /wiki-log
 
