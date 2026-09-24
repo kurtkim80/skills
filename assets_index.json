@@ -21969,6 +21969,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hunt-host-header"
     },
+    "weather-data-lifecycle-management": {
+      "name": "weather-data-lifecycle-management",
+      "type": "skill",
+      "description": "Manage ownership, retention, and cleanup of downloaded weather data across one-shot jobs, interactive viewers, caches, failures, and cancellation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/weather-data-lifecycle-management"
+    },
     "seo-drift": {
       "name": "seo-drift",
       "type": "skill",
@@ -23712,6 +23720,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/applicationinsights-web-ts",
       "description_ko": "Application Insights JavaScript SDK(@microsoft/applicationinsights-web)를 사용하여 브라우저/웹앱을 계측합니다."
+    },
+    "agent-memory-discipline": {
+      "name": "agent-memory-discipline",
+      "type": "skill",
+      "description": "Rules for when an agent should recall from long-term memory before acting and when it should save decisions, corrections and failures afterwards. Works with any memory backend.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agent-memory-discipline"
     },
     "varlock-claude-skill": {
       "name": "varlock-claude-skill",
@@ -29087,6 +29103,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/case-review",
       "description_ko": "리버스 엔지니어링 또는 평가 사례 패키지의 품질 게이트 검토: 범위 준비 상태, 증거-찾기-경로 추적성, 작업 항목 적용 범위, 타임라인 일관성 및 아티팩트 해시."
+    },
+    "noaa-radar-satellite-fetching": {
+      "name": "noaa-radar-satellite-fetching",
+      "type": "skill",
+      "description": "Retrieve NOAA NEXRAD and GOES products from public cloud archives using verified site, product, channel, sector, and scan-time selection.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/noaa-radar-satellite-fetching"
     },
     "seo-images": {
       "name": "seo-images",
@@ -35803,6 +35827,14 @@
       "path": "collected_assets/skills/tdd-workflows",
       "description_ko": "tdd 워크플로 tdd 주기(tdd-workflows-tdd-cycle의 별칭)로 작업할 때 사용합니다."
     },
+    "weather-data-reproducibility": {
+      "name": "weather-data-reproducibility",
+      "type": "skill",
+      "description": "Record and verify provenance manifests for weather-data inputs and derived artifacts, including object identity, selections, software versions, transformations, and hashes.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/weather-data-reproducibility"
+    },
     "tune-monitor": {
       "name": "tune-monitor",
       "type": "skill",
@@ -36246,6 +36278,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hr-pro",
       "description_ko": "채용, 온보딩/오프보딩, PTO 및 휴가, 성과, 규정 준수 정책 및 직원 관계를 위한 전문적이고 윤리적인 HR 파트너입니다."
+    },
+    "weather-model-run-discovery": {
+      "name": "weather-model-run-discovery",
+      "type": "skill",
+      "description": "Resolve the newest complete numerical weather prediction cycle and forecast objects across provider mirrors without downloading full payloads.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/weather-model-run-discovery"
     },
     "brevo-automation": {
       "name": "brevo-automation",
@@ -37088,6 +37128,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/mesh-memory",
       "description_ko": "MCP를 통해 AI 에이전트를 위한 자체 호스팅 의미 메모리입니다. 작업 일지, 결정 사항, 메모를 저장한 다음 키워드가 아닌 의미를 기준으로 세션 전체에서 이를 불러올 수 있습니다. 자동 태그 기능이 있는 Postgres + pgVector."
+    },
+    "weather-pipeline-performance-diagnosis": {
+      "name": "weather-pipeline-performance-diagnosis",
+      "type": "skill",
+      "description": "Diagnose slow weather-data workflows by measuring discovery, transfer, parsing, scientific processing, and rendering separately before changing code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/weather-pipeline-performance-diagnosis"
     },
     "domain-driven-design": {
       "name": "domain-driven-design",
