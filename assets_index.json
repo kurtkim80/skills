@@ -20732,6 +20732,14 @@
       "path": "collected_assets/skills/terraform-specialist",
       "description_ko": "고급 IaC 자동화, 상태 관리 및 엔터프라이즈 인프라 패턴을 마스터하는 전문가 Terraform/OpenTofu 전문가입니다."
     },
+    "nexrad-radar-visualization": {
+      "name": "nexrad-radar-visualization",
+      "type": "skill",
+      "description": "Plot NEXRAD Level II/III site scans and decoded radar mosaics with correct radar geometry, map grids, units, quality masks, timestamps, and provenance.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nexrad-radar-visualization"
+    },
     "azure-mgmt-apicenter-dotnet": {
       "name": "azure-mgmt-apicenter-dotnet",
       "type": "skill",
@@ -22074,6 +22082,14 @@
       "path": "collected_assets/skills/social-post-writer-seo",
       "description_ko": "소셜 미디어 전략가이자 콘텐츠 작가입니다. Instagram, LinkedIn, Facebook을 위한 명확하고 매력적인 소셜 미디어 게시물을 만듭니다."
     },
+    "testdriver-e2e-testing": {
+      "name": "testdriver-e2e-testing",
+      "type": "skill",
+      "description": "Build E2E tests with TestDriver.ai, the AI code reviewer that runs every pull request in a real desktop sandbox, finds bugs, and builds regression tests",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/testdriver-e2e-testing"
+    },
     "hunt-nextjs": {
       "name": "hunt-nextjs",
       "type": "skill",
@@ -23022,6 +23038,14 @@
       "path": "collected_assets/skills/acceptance-orchestrator",
       "description_ko": "인적 재개입을 최소화하면서 문제 접수부터 구현, 검토, 배포, 승인 확인까지 코딩 작업을 엔드투엔드 방식으로 진행해야 하는 경우에 사용하세요."
     },
+    "mcp-dependency-drift-audit": {
+      "name": "mcp-dependency-drift-audit",
+      "type": "skill",
+      "description": "Statically audit MCP configs for mutable npm/npx package references before approval or CI, without executing discovered MCP servers.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/mcp-dependency-drift-audit"
+    },
     "logic-diff": {
       "name": "logic-diff",
       "type": "skill",
@@ -23843,6 +23867,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-mgmt-apimanagement-py",
       "description_ko": "Python용 Azure API 관리 SDK. APIM 서비스, API, 제품, 구독 및 정책을 관리하는 데 사용합니다."
+    },
+    "film-crew": {
+      "name": "film-crew",
+      "type": "skill",
+      "description": "Turn a one-line AI video idea into a shot list and per-shot, model-ready prompts via a film crew (director, DP, gaffer, editor, script supervisor). Also fixes failing video prompts and diagnoses bad clips before a reroll. Works with Wan, LTX, Kling, Veo, Seedance, Hailuo, Runway.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/film-crew"
     },
     "hunt-dispatch": {
       "name": "hunt-dispatch",
@@ -26515,6 +26547,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/eas-observe"
+    },
+    "nexrad-product-access": {
+      "name": "nexrad-product-access",
+      "type": "skill",
+      "description": "Discover and access NEXRAD data for a selected radar site, time, product, or Level II moment using completed archive volumes, real-time chunks, or supported Level III sources with metadata validation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nexrad-product-access"
     },
     "modellix": {
       "name": "modellix",
@@ -29424,6 +29464,14 @@
       "path": "collected_assets/skills/odoo-rpc-api",
       "description_ko": "Odoo의 외부 JSON-RPC 및 XML-RPC API 전문가입니다. 인증, 모델 호출, CRUD 기록, Python, JavaScript 및 컬의 실제 통합 예를 다룹니다."
     },
+    "radar-satellite-analysis": {
+      "name": "radar-satellite-analysis",
+      "type": "skill",
+      "description": "Interpret weather radar and satellite observations by validating product metadata and geometry, deriving storm and cloud structures, tracking evolution, and quantifying uncertainty.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/radar-satellite-analysis"
+    },
     "vercel-react-view-transitions": {
       "name": "vercel-react-view-transitions",
       "type": "skill",
@@ -30542,6 +30590,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-monitor-ingestion-java",
       "description_ko": "Java용 Azure Monitor 수집 SDK. DCR(데이터 수집 규칙) 및 DCE(데이터 수집 끝점)를 통해 Azure Monitor에 사용자 지정 로그를 보냅니다."
+    },
+    "nexrad-mosaic-access": {
+      "name": "nexrad-mosaic-access",
+      "type": "skill",
+      "description": "Access official NOAA/NCEP MRMS radar and multisensor composites for a region and time; validate product, grid, domain, quality, timestamp, and provenance.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nexrad-mosaic-access"
     },
     "llm-prompt-optimizer": {
       "name": "llm-prompt-optimizer",
@@ -37074,6 +37130,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/wireshark-analysis",
       "description_ko": "보안 조사, 성능 최적화 및 문제 해결을 위해 Wireshark를 사용하여 포괄적인 네트워크 트래픽 분석을 실행하여 네트워크 패킷을 캡처, 필터링 및 검사합니다."
+    },
+    "nexrad-mosaic-construction": {
+      "name": "nexrad-mosaic-construction",
+      "type": "skill",
+      "description": "Construct a quality-aware NEXRAD multi-radar mosaic from aligned single-site products with explicit coverage, beam geometry, quality weighting, overlap resolution, and provenance.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nexrad-mosaic-construction"
     },
     "longbridge-fundamentals": {
       "name": "longbridge-fundamentals",
@@ -58552,6 +58616,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/agents/code-testing-implementer.agent.md",
       "description_ko": ">-"
+    },
+    "build-failure-analyst.agent": {
+      "name": "build-failure-analyst.agent",
+      "type": "agent",
+      "description": "Expert build-failure analyst for .NET / MSBuild repositories. Invoke when a build produced a binary log (`*.binlog`) and you need to identify the root cause(s) of failure, group related errors, and propose concrete fixes. Queries the binlog live through the `binlog-mcp` MCP server (containerised — see the calling workflow's `mcp-servers.binlog-mcp` config) and posts an analysis comment plus inline `suggestion` blocks on the originating PR.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/agents/build-failure-analyst.agent.md"
     },
     "agentic-workflows": {
       "name": "agentic-workflows",
