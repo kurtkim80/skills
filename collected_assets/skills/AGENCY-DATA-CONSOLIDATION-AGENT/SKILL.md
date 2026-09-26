@@ -1,10 +1,11 @@
 ---
 name: agency-data-consolidation-agent
+version: 1.0.0
 description: AI agent that consolidates extracted sales data into live reporting dashboards with territory, rep, and pipeline summaries
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Data Consolidation Agent
+
 
 # Data Consolidation Agent
 

@@ -1,16 +1,13 @@
 ---
-title: "GDPR DPO Auditor Agent — AI Coding Agent & Codex Skill"
-description: "GDPR / DSGVO Data Protection Officer audit persona. Lawful-basis-discipline + DPIA-quality + Schrems-II-transfer-aware. Coordinates with ISO 27001. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-dpo-gdpr
+description: GDPR / DSGVO Data Protection Officer audit persona. Lawful-basis-discipline + DPIA-quality + Schrems-II-transfer-aware. Coordinates with ISO 27001 Article 32 organizational measures, EU AI Act Article 27 FRIA (overlapping artefact), and SOC 2 Privacy criteria. NOT executive privacy strategy — DPO is operationally independent per Article 38.
+skills: ra-qm-team/skills/gdpr-dsgvo-expert
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # GDPR DPO Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-dpo-gdpr.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -40,38 +37,38 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/gdpr-dsgvo-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert)
+**Skill Location:** `../../ra-qm-team/skills/gdpr-dsgvo-expert/`
 
 ### Python Tools
 
 1. **GDPR Compliance Checker**
-   - Path: [`scripts/gdpr_compliance_checker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/scripts/gdpr_compliance_checker.py)
+   - Path: `../../ra-qm-team/skills/gdpr-dsgvo-expert/scripts/gdpr_compliance_checker.py`
    - Usage: `python gdpr_compliance_checker.py compliance_state.json`
    - Returns: compliance posture across Articles 5, 6, 9, 30, 32, 33-34, 35 with gap analysis
 
 2. **DPIA Generator**
-   - Path: [`scripts/dpia_generator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/scripts/dpia_generator.py)
+   - Path: `../../ra-qm-team/skills/gdpr-dsgvo-expert/scripts/dpia_generator.py`
    - Usage: `python dpia_generator.py processing_activity.json`
    - Returns: DPIA per Article 35(7) required elements; identifies residual high risk requiring Article 36 prior consultation
 
 3. **Data Subject Rights Tracker**
-   - Path: [`scripts/data_subject_rights_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/scripts/data_subject_rights_tracker.py)
+   - Path: `../../ra-qm-team/skills/gdpr-dsgvo-expert/scripts/data_subject_rights_tracker.py`
    - Usage: `python data_subject_rights_tracker.py dsar_log.json`
    - Returns: DSAR workflow completeness + response timing vs Article 12(3) 1-month SLA
 
 ### Knowledge Bases
 
-- [`references/gdpr_compliance_guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_compliance_guide.md) — Full GDPR compliance guide
-- [`references/german_bdsg_requirements.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/references/german_bdsg_requirements.md) — German BDSG sectoral overlay
-- [`references/dpia_methodology.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/references/dpia_methodology.md) — DPIA methodology
-- [`references/gdpr_audit_playbook.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md) — Full 7-phase audit playbook (NEW in Phase 2)
+- `../../ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_compliance_guide.md` — Full GDPR compliance guide
+- `../../ra-qm-team/skills/gdpr-dsgvo-expert/references/german_bdsg_requirements.md` — German BDSG sectoral overlay
+- `../../ra-qm-team/skills/gdpr-dsgvo-expert/references/dpia_methodology.md` — DPIA methodology
+- `../../ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md` — Full 7-phase audit playbook (NEW in Phase 2)
 
 ### Adjacent Skills
 
-- [`skills/information-security-manager-iso27001`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/information-security-manager-iso27001) — Article 32 organizational measures
-- [`skills/soc2-compliance`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance) — SOC 2 Privacy criteria overlap
-- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator
-- [`c-level-advisor/general-counsel-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/general-counsel-advisor) — Novel-case legal review
+- `../../ra-qm-team/skills/information-security-manager-iso27001/` — Article 32 organizational measures
+- `../../ra-qm-team/skills/soc2-compliance/` — SOC 2 Privacy criteria overlap
+- `../skills/compliance-os/` — Meta-orchestrator
+- `../../c-level-advisor/general-counsel-advisor/` — Novel-case legal review
 
 ## Workflows
 
@@ -147,13 +144,13 @@ python dpia_generator.py processing_activity.json
 - [cs-ciso-iso27001](cs-ciso-iso27001.md) — Article 32 organizational measures overlap
 - [cs-ai-act-compliance](cs-ai-act-compliance.md) — EU AI Act Article 27 FRIA integration
 - [cs-soc2-auditor](cs-soc2-auditor.md) — SOC 2 Privacy TSC overlap
-- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
+- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
 
 ## References
 
-- Skill: [../../ra-qm-team/skills/gdpr-dsgvo-expert/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/SKILL.md)
-- Playbook: [../../ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md)
-- Sibling command: [`/cs:gdpr-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/gdpr-audit-prep/SKILL.md)
+- Skill: [../../ra-qm-team/skills/gdpr-dsgvo-expert/SKILL.md](../../ra-qm-team/skills/gdpr-dsgvo-expert/SKILL.md)
+- Playbook: [../../ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md](../../ra-qm-team/skills/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md)
+- Sibling command: [`/cs:gdpr-audit-prep`](../skills/gdpr-audit-prep/SKILL.md)
 
 ---
 

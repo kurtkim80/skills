@@ -1,16 +1,13 @@
 ---
-title: "Inbox-Setup Agent — AI Coding Agent & Codex Skill"
-description: "One-time email-triage onboarding persona. Conducts an 8-section interactive interview (~25-31 grill-me questions) to build a personalized knowledge. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-inbox-setup
+description: One-time email-triage onboarding persona. Conducts an 8-section interactive interview (~25-31 grill-me questions) to build a personalized knowledge base of 7 markdown files in ${WORKSPACE}/Email/ that powers the companion inbox-triage skill. Refuses to batch questions. Refuses to skip the sample-emails ask (S3). Refuses to overwrite existing files without per-file consent on re-run. Refuses to persist sensitive credentials.
+skills: productivity/email/skills/inbox-setup
+domain: productivity
+model: opus
+tools: [Read, Write, Edit, Bash, Glob, Grep]
 ---
 
 # Inbox-Setup Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Productivity</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/agents/cs-inbox-setup.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -64,30 +61,30 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/inbox-setup`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup)
+**Skill Location:** `../skills/inbox-setup/`
 
 ### Python Tools (Stdlib)
 
 1. **KB Validator**
-   - Path: [`scripts/kb_validator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/scripts/kb_validator.py)
+   - Path: `../skills/inbox-setup/scripts/kb_validator.py`
    - Usage: `python kb_validator.py --workspace ${WORKSPACE}`
    - Validates the 7-file KB structure (required files present, conditional files only if their sections exist, headers + bold-section markers correct).
 
 2. **Section Progress Tracker**
-   - Path: [`scripts/section_progress_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/scripts/section_progress_tracker.py)
+   - Path: `../skills/inbox-setup/scripts/section_progress_tracker.py`
    - Usage: `python section_progress_tracker.py --action {start,record_q,record_section_done,status,close}`
    - JSON-backed walk state at `~/.inbox_setup_sessions/<session>.json`. Tracks which section is active, which questions answered, which files committed.
 
 3. **Voice Sample Analyzer**
-   - Path: [`scripts/voice_sample_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/scripts/voice_sample_analyzer.py)
+   - Path: `../skills/inbox-setup/scripts/voice_sample_analyzer.py`
    - Usage: `python voice_sample_analyzer.py --samples-file /tmp/samples.txt`
    - Extracts voice patterns from pasted sent-email samples: opening phrases, sign-offs, sentence length, sentence-types, casual/formal markers.
 
 ### Knowledge Bases
 
-- [`references/kb_file_contract.md`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/references/kb_file_contract.md) — the canonical 7-file contract (write perspective)
-- [`references/grill_me_section_walk.md`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/references/grill_me_section_walk.md) — 8-section discipline + skip-logic + commit-per-section
-- [`references/voice_calibration.md`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/references/voice_calibration.md) — sample-based voice extraction theory + anti-patterns
+- `../skills/inbox-setup/references/kb_file_contract.md` — the canonical 7-file contract (write perspective)
+- `../skills/inbox-setup/references/grill_me_section_walk.md` — 8-section discipline + skip-logic + commit-per-section
+- `../skills/inbox-setup/references/voice_calibration.md` — sample-based voice extraction theory + anti-patterns
 
 ## Workflows
 
@@ -194,14 +191,14 @@ Re-run /cs:inbox-setup when business/pricing/priorities change.
 ## Related Agents
 
 - [cs-inbox-triage](./cs-inbox-triage.md) — companion skill, reads the KB this skill writes
-- [cs-grill-master](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
-- [cs-capture](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/agents/cs-capture.md) — brain-dump organizer (different mode)
+- [cs-grill-master](../../../engineering/grill-me/agents/cs-grill-master.md) — plan-only grill (different domain)
+- [cs-capture](../../../productivity/capture/agents/cs-capture.md) — brain-dump organizer (different mode)
 
 ## References
 
-- Skill: [../skills/inbox-setup/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-setup/SKILL.md)
+- Skill: [../skills/inbox-setup/SKILL.md](../skills/inbox-setup/SKILL.md)
 - Source spec: `megaprompts/06-inbox-setup-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
-- Sibling command: [`/cs:inbox-setup`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/commands/cs-inbox-setup.md)
+- Sibling command: [`/cs:inbox-setup`](../commands/cs-inbox-setup.md)
 
 ---
 

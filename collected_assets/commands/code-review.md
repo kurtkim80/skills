@@ -1,40 +1,40 @@
-# 코드 리뷰
+# Code Review
 
-커밋되지 않은 변경사항에 대한 포괄적인 보안 및 품질 리뷰를 수행합니다:
+Commit edilmemiş değişikliklerin kapsamlı güvenlik ve kalite incelemesi:
 
-1. 변경된 파일 목록 조회: git diff --name-only HEAD
+1. Değişen dosyaları al: git diff --name-only HEAD
 
-2. 각 변경된 파일에 대해 다음을 검사합니다:
+2. Her değişen dosya için şunları kontrol et:
 
-**보안 이슈 (CRITICAL):**
-- 하드코딩된 인증 정보, API 키, 토큰
-- SQL 인젝션 취약점
-- XSS 취약점
-- 누락된 입력 유효성 검사
-- 안전하지 않은 의존성
-- 경로 탐색(Path Traversal) 위험
+**Güvenlik Sorunları (KRİTİK):**
+- Hardcode edilmiş kimlik bilgileri, API anahtarları, token'lar
+- SQL injection açıklıkları
+- XSS açıklıkları
+- Eksik input validasyonu
+- Güvenli olmayan bağımlılıklar
+- Path traversal riskleri
 
-**코드 품질 (HIGH):**
-- 50줄 초과 함수
-- 800줄 초과 파일
-- 4단계 초과 중첩 깊이
-- 누락된 에러 처리
-- 디버그 로깅 문구(예: 개발용 로그/print 등)
-- TODO/FIXME 주석
-- 활성 언어에 대한 공개 API 문서 누락(예: JSDoc/Go doc/Docstring 등)
+**Kod Kalitesi (YÜKSEK):**
+- 50 satırdan uzun fonksiyonlar
+- 800 satırdan uzun dosyalar
+- 4 seviyeden fazla iç içe geçme derinliği
+- Eksik hata yönetimi
+- console.log ifadeleri
+- TODO/FIXME yorumları
+- Public API'ler için eksik JSDoc
 
-**모범 사례 (MEDIUM):**
-- 변이(Mutation) 패턴 (불변 패턴을 사용하세요)
-- 코드/주석의 이모지 사용
-- 새 코드에 대한 테스트 누락
-- 접근성(a11y) 문제
+**En İyi Uygulamalar (ORTA):**
+- Mutation desenleri (immutable kullanın)
+- Kod/yorumlarda emoji kullanımı
+- Yeni kod için eksik testler
+- Erişilebilirlik sorunları (a11y)
 
-3. 다음을 포함한 보고서를 생성합니다:
-   - 심각도: CRITICAL, HIGH, MEDIUM, LOW
-   - 파일 위치 및 줄 번호
-   - 이슈 설명
-   - 수정 제안
+3. Şunları içeren rapor oluştur:
+   - Önem derecesi: KRİTİK, YÜKSEK, ORTA, DÜŞÜK
+   - Dosya konumu ve satır numaraları
+   - Sorun açıklaması
+   - Önerilen düzeltme
 
-4. CRITICAL 또는 HIGH 이슈가 발견되면 commit을 차단합니다
+4. KRİTİK veya YÜKSEK sorunlar bulunursa commit'i engelle
 
-보안 취약점이 있는 코드는 절대 승인하지 마세요!
+Güvenlik açıklıkları olan kodu asla onaylamayın!

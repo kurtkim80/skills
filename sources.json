@@ -399,5 +399,19 @@
     "branch": "main",
     "skills_subpath": "skills",
     "description": "The Agent Harness Performance Optimization System — Skills, instincts, memory, harness evaluation, verification (⭐ 264k)"
+  },
+  {
+    "name": "aloth/PowerSkills",
+    "repo": "https://github.com/aloth/PowerSkills.git",
+    "branch": "main",
+    "skills_subpath": "skills",
+    "description": "Comprehensive Windows OS automation, PowerShell scripts, desktop control, registry and system management"
+  },
+  {
+    "name": "hmohamed01/powershell-expert",
+    "repo": "https://github.com/hmohamed01/powershell-expert.git",
+    "branch": "main",
+    "skills_subpath": "",
+    "description": "PowerShell 7+, Windows API, WMI/CIM diagnostics, Event Log analysis, and Windows service management"
   }
 ]

@@ -1,10 +1,11 @@
 ---
 name: agency-ux-researcher
+version: 1.0.0
 description: Expert user experience researcher specializing in user behavior analysis, usability testing, and data-driven design insights. Provides actionable research findings that improve product usability and user satisfaction
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# UX Researcher
+
 
 # UX Researcher Agent Personality
 

@@ -1,100 +1,270 @@
----
-description: Crear un plan de implementación multi-modelo sin modificar código de producción.
----
+# Plan - Multi-Model İşbirlikçi Planlama
 
-# Plan - Planificación Colaborativa Multi-Modelo
+Multi-model işbirlikçi planlama - Context retrieval + Dual-model analiz → Adım adım implementation planı oluştur.
 
-Planificación colaborativa multi-modelo - Recuperación de contexto + Análisis de doble modelo → Generar plan de implementación paso a paso.
+> **Ön koşul:** Bu komut, temel ECC kurulumunun parçası **olmayan** harici `ccg-workflow` runtime'ını gerektirir. Bu komutun bağımlı olduğu `~/.claude/bin/codeagent-wrapper` ve `~/.claude/.ccg/prompts/*` rol dosyalarını sağlamak için `npx ccg-workflow` komutuyla başlatın. Bu runtime olmadan bu komut düzgün çalışmaz.
 
 $ARGUMENTS
 
 ---
 
-## Protocolos Principales
+## Ana Protokoller
 
-- **Solo Planificación**: Este comando permite leer contexto y escribir en archivos de plan `.claude/plan/*`, pero **NUNCA modificar código de producción**
-- **Soberanía del Código**: Los modelos externos tienen **cero acceso de escritura al sistema de archivos**, todas las modificaciones por Claude
-- **Paralelo Obligatorio**: Las llamadas a Codex/Gemini DEBEN usar `run_in_background: true`
+- **Dil Protokolü**: Tool/model'lerle etkileşimde **İngilizce** kullan, kullanıcıyla kendi dilinde iletişim kur
+- **Zorunlu Parallel**: Codex/Gemini çağrıları `run_in_background: true` kullanmalı (ana thread'i bloke etmemek için tek model çağrılarında bile)
+- **Kod Egemenliği**: Harici modellerin **sıfır dosya sistemi yazma erişimi**, tüm değişiklikler Claude tarafından
+- **Stop-Loss Mekanizması**: Mevcut faz çıktısı doğrulanana kadar bir sonraki faza geçme
+- **Sadece Planlama**: Bu komut context okumaya ve `.claude/plan/*` plan dosyalarına yazmaya izin verir, ancak **ASLA production kodu değiştirmez**
 
 ---
 
-## Flujo de Ejecución
+## Multi-Model Çağrı Spesifikasyonu
 
-**Tarea de Planificación**: $ARGUMENTS
+**Çağrı Sözdizimi** (parallel: `run_in_background: true` kullan):
 
-### Fase 1: Recuperación Completa de Contexto
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- \"$PWD\" <<'EOF'
+ROLE_FILE: <role prompt path>
+<TASK>
+Requirement: <enhanced requirement>
+Context: <retrieved project context>
+</TASK>
+OUTPUT: Step-by-step implementation plan with pseudo-code. DO NOT modify any files.
+EOF",
+  run_in_background: true,
+  timeout: 3600000,
+  description: "Brief description"
+})
+```
 
-`[Modo: Investigación]`
+**Model Parametre Notları**:
+- `{{GEMINI_MODEL_FLAG}}`: `--backend gemini` kullanırken, `--gemini-model gemini-3-pro-preview` ile değiştir (trailing space not edin); codex için boş string kullan
 
-1. **Mejora del Prompt** (si el MCP ace-tool está disponible)
-2. **Recuperación de Contexto**: Obtener definiciones y firmas completas para clases, funciones y variables relevantes
-3. **Verificación de Completitud**: Si los requisitos aún tienen ambigüedad, **DEBE** presentar preguntas guía al usuario
+**Role Prompts**:
 
-### Fase 2: Análisis Colaborativo Multi-Modelo
+| Phase | Codex | Gemini |
+|-------|-------|--------|
+| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
+| Planning | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/architect.md` |
 
-`[Modo: Análisis]`
+**Session Reuse**: Her çağrı `SESSION_ID: xxx` döndürür (genellikle wrapper tarafından çıktılanır), sonraki `/ccg:execute` kullanımı için **MUTLAKA kaydet**.
 
-**Llamadas en Paralelo** a Codex y Gemini:
+**Background Task'leri Bekle** (max timeout 600000ms = 10 dakika):
 
-1. **Análisis Backend de Codex**: Viabilidad técnica, impacto arquitectónico, consideraciones de rendimiento
-2. **Análisis Frontend de Gemini**: Impacto en UI/UX, experiencia de usuario, diseño visual
+```
+TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
+```
 
-**Guardar SESSION_ID** (`CODEX_SESSION` y `GEMINI_SESSION`).
+**ÖNEMLİ**:
+- `timeout: 600000` belirtilmeli, aksi takdirde varsayılan 30 saniye erken timeout'a neden olur
+- 10 dakika sonra hala tamamlanmamışsa, `TaskOutput` ile polling'e devam et, **ASLA process'i öldürme**
+- Bekleme timeout nedeniyle atlanırsa, **MUTLAKA `AskUserQuestion` çağırarak kullanıcıya beklemeye devam etmek veya task'i öldürmek isteyip istemediğini sor**
 
-**Validación Cruzada**:
-1. Identificar consenso (señal fuerte)
-2. Identificar divergencia (necesita ponderación)
-3. Fortalezas complementarias: lógica backend sigue a Codex, diseño frontend sigue a Gemini
+---
 
-### Fase 2: Generar Plan de Implementación (Versión Final de Claude)
+## Execution Workflow
 
-Sintetizar ambos análisis, generar **Plan de Implementación Paso a Paso**:
+**Planlama Görevi**: $ARGUMENTS
+
+### Phase 1: Tam Context Retrieval
+
+`[Mode: Research]`
+
+#### 1.1 Prompt Enhancement (İLK önce çalıştırılmalı)
+
+**ace-tool MCP mevcutsa**, `mcp__ace-tool__enhance_prompt` tool'unu çağır:
+
+```
+mcp__ace-tool__enhance_prompt({
+  prompt: "$ARGUMENTS",
+  conversation_history: "<son 5-10 konuşma turu>",
+  project_root_path: "$PWD"
+})
+```
+
+Enhanced prompt'u bekle, **orijinal $ARGUMENTS'ı tüm sonraki fazlar için enhanced sonuçla değiştir**.
+
+**ace-tool MCP mevcut DEĞİLSE**: Bu adımı atla ve tüm sonraki fazlar için orijinal `$ARGUMENTS`'ı olduğu gibi kullan.
+
+#### 1.2 Context Retrieval
+
+**ace-tool MCP mevcutsa**, `mcp__ace-tool__search_context` tool'unu çağır:
+
+```
+mcp__ace-tool__search_context({
+  query: "<enhanced requirement'a dayalı semantik sorgu>",
+  project_root_path: "$PWD"
+})
+```
+
+- Doğal dil kullanarak semantik sorgu oluştur (Where/What/How)
+- **ASLA varsayımlara dayalı cevap verme**
+
+**ace-tool MCP mevcut DEĞİLSE**, fallback olarak Claude Code built-in tool'ları kullan:
+1. **Glob**: Pattern'e göre ilgili dosyaları bul (örn., `Glob("**/*.ts")`, `Glob("src/**/*.py")`)
+2. **Grep**: Anahtar semboller, fonksiyon adları, sınıf tanımlarını ara (örn., `Grep("className|functionName")`)
+3. **Read**: Tam context toplamak için keşfedilen dosyaları oku
+4. **Task (Explore agent)**: Daha derin keşif için, codebase genelinde aramak üzere `Task`'ı `subagent_type: "Explore"` ile kullan
+
+#### 1.3 Tamamlılık Kontrolü
+
+- İlgili sınıflar, fonksiyonlar, değişkenler için **tam tanımlar ve imzalar** elde etmeli
+- Context yetersizse, **recursive retrieval** tetikle
+- Çıktıya öncelik ver: giriş dosyası + satır numarası + anahtar sembol adı; belirsizliği çözmek için gerekli olduğunda minimal kod snippet'leri ekle
+
+#### 1.4 Requirement Alignment
+
+- Requirement'larda hala belirsizlik varsa, kullanıcı için yönlendirici sorular **MUTLAKA** çıktıla
+- Requirement sınırları net olana kadar (eksiklik yok, fazlalık yok)
+
+### Phase 2: Multi-Model İşbirlikçi Analiz
+
+`[Mode: Analysis]`
+
+#### 2.1 Input'ları Dağıt
+
+**Parallel call** Codex ve Gemini (`run_in_background: true`):
+
+**Orijinal requirement**'ı (önceden belirlenmiş görüşler olmadan) her iki modele dağıt:
+
+1. **Codex Backend Analysis**:
+   - ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
+   - Odak: Teknik fizibilite, mimari etki, performans değerlendirmeleri, potansiyel riskler
+   - OUTPUT: Çok perspektifli çözümler + artı/eksi analizi
+
+2. **Gemini Frontend Analysis**:
+   - ROLE_FILE: `~/.claude/.ccg/prompts/gemini/analyzer.md`
+   - Odak: UI/UX etkisi, kullanıcı deneyimi, görsel tasarım
+   - OUTPUT: Çok perspektifli çözümler + artı/eksi analizi
+
+`TaskOutput` ile her iki modelin tam sonuçlarını bekle. **SESSION_ID'yi kaydet** (`CODEX_SESSION` ve `GEMINI_SESSION`).
+
+#### 2.2 Cross-Validation
+
+Perspektifleri entegre et ve optimizasyon için iterate et:
+
+1. **Consensus tanımla** (güçlü sinyal)
+2. **Divergence tanımla** (değerlendirme gerektirir)
+3. **Tamamlayıcı güçlü yönler**: Backend logic Codex'i takip eder, Frontend design Gemini'yi takip eder
+4. **Mantıksal akıl yürütme**: Çözümlerdeki mantıksal boşlukları elimine et
+
+#### 2.3 (İsteğe Bağlı ama Önerilen) Dual-Model Plan Taslağı
+
+Claude'un sentezlenmiş planındaki eksiklik riskini azaltmak için, her iki modelin de "plan taslakları" çıktılamasını parallel yaptır (yine **dosya değiştirmesine izin verilmez**):
+
+1. **Codex Plan Draft** (Backend otoritesi):
+   - ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
+   - OUTPUT: Adım adım plan + pseudo-code (odak: data flow/edge cases/error handling/test strategy)
+
+2. **Gemini Plan Draft** (Frontend otoritesi):
+   - ROLE_FILE: `~/.claude/.ccg/prompts/gemini/architect.md`
+   - OUTPUT: Adım adım plan + pseudo-code (odak: information architecture/interaction/accessibility/visual consistency)
+
+`TaskOutput` ile her iki modelin tam sonuçlarını bekle, önerilerindeki anahtar farkları kaydet.
+
+#### 2.4 Implementation Planı Oluştur (Claude Final Version)
+
+Her iki analizi sentezle, **Adım Adım Implementation Planı** oluştur:
 
 ```markdown
-## Plan de Implementación: <Nombre de Tarea>
+## Implementation Plan: <Task Name>
 
-### Tipo de Tarea
+### Task Type
 - [ ] Frontend (→ Gemini)
 - [ ] Backend (→ Codex)
-- [ ] Fullstack (→ Paralelo)
+- [ ] Fullstack (→ Parallel)
 
-### Solución Técnica
-<Solución óptima sintetizada del análisis de Codex + Gemini>
+### Technical Solution
+<Codex + Gemini analizinden sentezlenmiş optimal çözüm>
 
-### Pasos de Implementación
-1. <Paso 1> - Entregable esperado
-2. <Paso 2> - Entregable esperado
+### Implementation Steps
+1. <Step 1> - Beklenen teslim edilen
+2. <Step 2> - Beklenen teslim edilen
 ...
 
-### Archivos Clave
-| Archivo | Operación | Descripción |
-|---------|-----------|-------------|
-| ruta/al/archivo.ts:L10-L50 | Modificar | Descripción |
+### Key Files
+| File | Operation | Description |
+|------|-----------|-------------|
+| path/to/file.ts:L10-L50 | Modify | Description |
 
-### SESSION_ID (para uso de /ccg:execute)
+### Risks and Mitigation
+| Risk | Mitigation |
+|------|------------|
+
+### SESSION_ID (for /ccg:execute use)
 - CODEX_SESSION: <session_id>
 - GEMINI_SESSION: <session_id>
 ```
 
-### Fin de Fase 2: Entrega del Plan (No Ejecución)
+### Phase 2 End: Plan Teslimi (Execution Değil)
 
-**Las responsabilidades de `/ccg:plan` terminan aquí**:
+**`/ccg:plan` sorumlulukları burada biter, MUTLAKA şu aksiyonları çalıştır**:
 
-1. Presentar el plan completo al usuario
-2. Guardar el plan en `.claude/plan/<nombre-característica>.md`
-3. Solicitar revisión del usuario
+1. Tam implementation planını kullanıcıya sun (pseudo-code dahil)
+2. Planı `.claude/plan/<feature-name>.md`'ye kaydet (requirement'tan feature adını çıkar, örn., `user-auth`, `payment-module`)
+3. **Kalın metinle** prompt çıktıla (MUTLAKA gerçek kaydedilen dosya yolunu kullan):
 
-**ABSOLUTAMENTE PROHIBIDO**:
-- Preguntar "Y/N" y luego auto-ejecutar (la ejecución es responsabilidad de `/ccg:execute`)
-- Cualquier operación de escritura en código de producción
-- Llamar automáticamente a `/ccg:execute` o cualquier acción de implementación
+   ---
+**Plan oluşturuldu ve `.claude/plan/actual-feature-name.md` dosyasına kaydedildi**
+
+**Lütfen yukarıdaki planı inceleyin. Şunları yapabilirsiniz:**
+- **Planı değiştir**: Neyin ayarlanması gerektiğini söyleyin, planı güncelleyeceğim
+- **Planı çalıştır**: Aşağıdaki komutu yeni bir oturuma kopyalayın
+
+   ```
+   /ccg:execute .claude/plan/actual-feature-name.md
+   ```
+   ---
+
+**NOT**: Yukarıdaki `actual-feature-name.md` gerçek kaydedilen dosya adıyla değiştirilmelidir!
+
+4. **Mevcut yanıtı hemen sonlandır** (Burada dur. Daha fazla tool çağrısı yok.)
+
+**KESINLIKLE YASAK**:
+- Kullanıcıya "Y/N" sor sonra otomatik çalıştır (execution `/ccg:execute`'un sorumluluğudur)
+- Production koduna herhangi bir yazma operasyonu
+- `/ccg:execute`'u veya herhangi bir implementation aksiyonunu otomatik çağır
+- Kullanıcı açıkça değişiklik talep etmediğinde model çağrılarını tetiklemeye devam et
 
 ---
 
-## Reglas Clave
+## Plan Kaydetme
 
-1. **Solo planificación, sin implementación** – Este comando no ejecuta ningún cambio de código
-2. **Sin prompts Y/N** – Solo presentar el plan, dejar que el usuario decida los próximos pasos
-3. **Reglas de Confianza** – Backend sigue a Codex, Frontend sigue a Gemini
-4. Los modelos externos tienen **cero acceso de escritura al sistema de archivos**
-5. **Traspaso de SESSION_ID** – El plan debe incluir `CODEX_SESSION` / `GEMINI_SESSION` al final
+Planlama tamamlandıktan sonra, planı şuraya kaydet:
+
+- **İlk planlama**: `.claude/plan/<feature-name>.md`
+- **İterasyon versiyonları**: `.claude/plan/<feature-name>-v2.md`, `.claude/plan/<feature-name>-v3.md`...
+
+Plan dosyası yazma, planı kullanıcıya sunmadan önce tamamlanmalı.
+
+---
+
+## Plan Değişiklik Akışı
+
+Kullanıcı plan değişikliği talep ederse:
+
+1. Kullanıcı geri bildirimine göre plan içeriğini ayarla
+2. `.claude/plan/<feature-name>.md` dosyasını güncelle
+3. Değiştirilmiş planı yeniden sun
+4. Kullanıcıyı tekrar gözden geçirmeye veya çalıştırmaya davet et
+
+---
+
+## Sonraki Adımlar
+
+Kullanıcı onayladıktan sonra, **manuel** olarak çalıştır:
+
+```bash
+/ccg:execute .claude/plan/<feature-name>.md
+```
+
+---
+
+## Ana Kurallar
+
+1. **Sadece plan, implementation yok** – Bu komut hiçbir kod değişikliği çalıştırmaz
+2. **Y/N prompt'ları yok** – Sadece planı sun, kullanıcının sonraki adımlara karar vermesine izin ver
+3. **Güven Kuralları** – Backend Codex'i takip eder, Frontend Gemini'yi takip eder
+4. Harici modellerin **sıfır dosya sistemi yazma erişimi**
+5. **SESSION_ID Devri** – Plan sonunda `CODEX_SESSION` / `GEMINI_SESSION` içermeli (`/ccg:execute resume <SESSION_ID>` kullanımı için)

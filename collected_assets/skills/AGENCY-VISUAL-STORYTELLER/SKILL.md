@@ -1,10 +1,11 @@
 ---
 name: agency-visual-storyteller
+version: 1.0.0
 description: Expert visual communication specialist focused on creating compelling visual narratives, multimedia content, and brand storytelling through design. Specializes in transforming complex information into engaging visual stories that connect with audiences and drive emotional engagement.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Visual Storyteller
+
 
 # Visual Storyteller Agent
 

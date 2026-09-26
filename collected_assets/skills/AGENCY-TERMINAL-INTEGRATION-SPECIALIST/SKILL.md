@@ -1,10 +1,11 @@
 ---
 name: agency-terminal-integration-specialist
+version: 1.0.0
 description: Terminal emulation, text rendering optimization, and SwiftTerm integration for modern Swift applications
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Terminal Integration Specialist
+
 
 # Terminal Integration Specialist
 

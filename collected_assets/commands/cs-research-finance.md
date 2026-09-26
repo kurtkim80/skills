@@ -1,9 +1,15 @@
 ---
-description: R&D program finance. Build a multi-period program budget with the F&A (indirect) split, track burn rate and runway against value-inflection milestones, and route R&D cost items to a capitalize-vs-expense determination. Every budget surfaces its assumptions; capex-vs-opex routes to a named finance owner and never auto-decides. Direct invocation of the research-finance skill.
-argument-hint: "<program context: work packages, F&A rate, cash on hand, milestones, cost items>"
+title: "/cs-research-finance — Slash Command for AI Coding Agents"
+description: "R&D program finance. Build a multi-period program budget with the F&A (indirect) split, track burn rate and runway against value-inflection. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:research-finance — Program budget + burn/runway + capex-vs-opex routing
+# /cs-research-finance
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research-ops/commands/cs-research-finance.md">Source</a></span>
+</div>
+
 
 Run the `research-finance` skill on this input:
 

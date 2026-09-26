@@ -1,16 +1,13 @@
 ---
-title: "Roast Judge Agent — AI Coding Agent & Codex Skill"
-description: "Convenes a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on a business idea, then acts as the Judge to deliver one GO. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-roast-judge
+description: Convenes a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on a business idea, then acts as the Judge to deliver one GO / RESHAPE / KILL verdict with the cheapest 48-hour test to de-risk it. Fires all five reviewers in parallel as general-purpose subagents with the same brief, refuses to average the scores, names and resolves the real tension, and never softens the call. Use to pressure-test or stress-test an idea before building it.
+skills: productivity/roast/skills/roast
+domain: productivity
+model: opus
+tools: [Read, Bash, Task, WebSearch]
 ---
 
 # Roast Judge Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Productivity</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/productivity/roast/agents/cs-roast-judge.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -52,7 +49,7 @@ opinion on an idea before they build it:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/roast`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/roast/skills/roast)
+**Skill Location:** `../skills/roast/`
 
 ### Python Tools (Stdlib)
 
@@ -79,7 +76,7 @@ opinion on an idea before they build it:
 
 ## Related Agents
 
-- [cs-andreessen](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/agents/cs-andreessen.md) — productivity sibling, single market-first lens
+- [cs-andreessen](../../andreessen/agents/cs-andreessen.md) — productivity sibling, single market-first lens
 
 ---
 

@@ -1,15 +1,9 @@
 ---
-title: "/cs-andreessen — Slash Command for AI Coding Agents"
-description: "/cs:andreessen — Marc Andreessen-mode verdict on a venture, idea, feature, or career bet. Market-first, no hedging, no disclaimers, explicit. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-andreessen"
+description: "/cs:andreessen — Marc Andreessen-mode verdict on a venture, idea, feature, or career bet. Market-first, no hedging, no disclaimers, explicit confidence levels, strongest counterargument first. Issues BUILD-POUR-FUEL / MARKET-FIRST-DERISK / KILL-OR-REPICK-MARKET backed by deterministic tools. Also runs the 3x5-card + Anti-Todo daily routine."
 ---
 
-# /cs-andreessen
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/andreessen/commands/cs-andreessen.md">Source</a></span>
-</div>
-
+# /cs:andreessen — Market-First Decision Mode
 
 **Command:** `/cs:andreessen`
 
@@ -89,8 +83,8 @@ python ../skills/andreessen/scripts/anti_todo_card.py --summary
 
 ## Related
 
-- Agent: [`cs-andreessen`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/agents/cs-andreessen.md)
-- Skill: [`andreessen`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/skills/andreessen/SKILL.md)
+- Agent: [`cs-andreessen`](../agents/cs-andreessen.md)
+- Skill: [`andreessen`](../skills/andreessen/SKILL.md)
 - Companion command: [`/cs:pmf-check`](./cs-pmf-check.md)
 - Siblings: `/cs:reflect`, `/cs:capture` (productivity)
 

@@ -1,70 +1,70 @@
-# /learn - 재사용 가능한 패턴 추출
+# /learn - Yeniden Kullanılabilir Desenleri Çıkar
 
-현재 세션을 분석하고 스킬로 저장할 가치가 있는 패턴을 추출합니다.
+Mevcut oturumu analiz et ve skill olarak kaydetmeye değer desenleri çıkar.
 
-## 트리거
+## Tetikleyici
 
-세션 중 중요한 문제를 해결했을 때 `/learn`을 실행합니다.
+Önemsiz olmayan bir sorunu çözdüğünüzde, oturum sırasında herhangi bir noktada `/learn` komutunu çalıştırın.
 
-## 추출 대상
+## Ne Çıkarılmalı
 
-다음을 찾습니다:
+Şunları arayın:
 
-1. **에러 해결 패턴**
-   - 어떤 에러가 발생했는가?
-   - 근본 원인은 무엇이었는가?
-   - 무엇이 해결했는가?
-   - 유사한 에러에 재사용 가능한가?
+1. **Hata Çözüm Desenleri**
+   - Hangi hata oluştu?
+   - Kök neden neydi?
+   - Onu ne düzeltti?
+   - Bu benzer hatalar için yeniden kullanılabilir mi?
 
-2. **디버깅 기법**
-   - 직관적이지 않은 디버깅 단계
-   - 효과적인 도구 조합
-   - 진단 패턴
+2. **Hata Ayıklama Teknikleri**
+   - Bariz olmayan hata ayıklama adımları
+   - İşe yarayan araç kombinasyonları
+   - Tanılama desenleri
 
-3. **우회 방법**
-   - 라이브러리 특이 사항
-   - API 제한 사항
-   - 버전별 수정 사항
+3. **Geçici Çözümler**
+   - Kütüphane gariplikleri
+   - API sınırlamaları
+   - Versiyona özel düzeltmeler
 
-4. **프로젝트 특화 패턴**
-   - 발견된 코드베이스 컨벤션
-   - 내려진 아키텍처 결정
-   - 통합 패턴
+4. **Projeye Özgü Desenler**
+   - Keşfedilen kod tabanı kuralları
+   - Verilen mimari kararlar
+   - Entegrasyon desenleri
 
-## 출력 형식
+## Çıktı Formatı
 
-`~/.claude/skills/learned/[pattern-name].md`에 스킬 파일을 생성합니다:
+`~/.claude/skills/learned/[desen-adi].md` konumunda bir skill dosyası oluştur:
 
 ```markdown
-# [설명적인 패턴 이름]
+# [Açıklayıcı Desen Adı]
 
-**추출일:** [날짜]
-**컨텍스트:** [이 패턴이 적용되는 상황에 대한 간략한 설명]
+**Çıkarıldı:** [Tarih]
+**Bağlam:** [Bunun ne zaman geçerli olduğunun kısa açıklaması]
 
-## 문제
-[이 패턴이 해결하는 문제 - 구체적으로 작성]
+## Sorun
+[Bunun çözdüğü sorun - spesifik olun]
 
-## 해결 방법
-[패턴/기법/우회 방법]
+## Çözüm
+[Desen/teknik/geçici çözüm]
 
-## 예시
-[해당하는 경우 코드 예시]
+## Örnek
+[Uygulanabilirse kod örneği]
 
-## 사용 시점
-[트리거 조건 - 이 스킬이 활성화되어야 하는 상황]
+## Ne Zaman Kullanılır
+[Tetikleyici koşullar - bu skill'i neyin etkinleştirmesi gerektiği]
 ```
 
-## 프로세스
+## Süreç
 
-1. 세션에서 추출 가능한 패턴 검토
-2. 가장 가치 있고 재사용 가능한 인사이트 식별
-3. 스킬 파일 초안 작성
-4. 저장 전 사용자 확인 요청
-5. `~/.claude/skills/learned/`에 저장
+1. Çıkarılabilir desenler için oturumu incele
+2. En değerli/yeniden kullanılabilir içgörüyü tanımla
+3. Skill dosyasını taslak olarak hazırla
+4. Kaydetmeden önce kullanıcıdan onay iste
+5. `~/.claude/skills/learned/` konumuna kaydet
 
-## 참고 사항
+## Notlar
 
-- 사소한 수정은 추출하지 않기 (오타, 단순 구문 에러)
-- 일회성 이슈는 추출하지 않기 (특정 API 장애 등)
-- 향후 세션에서 시간을 절약할 수 있는 패턴에 집중
-- 스킬은 집중적으로 - 스킬당 하나의 패턴
+- Önemsiz düzeltmeleri çıkarmayın (yazım hataları, basit sözdizimi hataları)
+- Tek seferlik sorunları çıkarmayın (belirli API kesintileri, vb.)
+- Gelecekteki oturumlarda zaman kazandıracak desenlere odaklanın
+- Skill'leri odaklı tutun - skill başına bir desen

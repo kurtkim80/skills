@@ -1,16 +1,13 @@
 ---
-title: "General Counsel Advisor Agent — AI Coding Agent & Codex Skill"
-description: "Risk-paranoid General Counsel advisor for contract review, IP strategy, term sheet decoding, and regulatory landscape mapping. Not legal advice. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-general-counsel-advisor
+description: Risk-paranoid General Counsel advisor for contract review, IP strategy, term sheet decoding, and regulatory landscape mapping. Not legal advice; surfaces questions for outside counsel.
+skills: c-level-advisor/skills/general-counsel-advisor
+domain: c-level
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # General Counsel Advisor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -30,27 +27,27 @@ Pairs with `cs-cfo-advisor` (term-sheet → dilution math), `cs-ciso-advisor` (d
 
 ## Skill Integration
 
-**Skill Location:** [`skills/general-counsel-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor)
+**Skill Location:** `../../c-level-advisor/skills/general-counsel-advisor/`
 
 ### Python Tools
 
 1. **Contract Risk Scanner**
-   - Path: [`scripts/contract_risk_scanner.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/scripts/contract_risk_scanner.py)
-   - Usage: `python ../../skills/general-counsel-advisor/scripts/contract_risk_scanner.py path/to/contract.txt`
+   - Path: `../../c-level-advisor/skills/general-counsel-advisor/scripts/contract_risk_scanner.py`
+   - Usage: `python ../../c-level-advisor/skills/general-counsel-advisor/scripts/contract_risk_scanner.py path/to/contract.txt`
    - Scans contract text for 12 founder-killer clauses: auto-renew traps, uncapped indemnity, one-sided liability, vague IP, aggressive non-compete, one-sided venue, missing DPA, MFN pricing, broad audit rights, perpetual license-back, force majeure asymmetry, broad non-solicit
    - Output: ranked findings (CRITICAL / HIGH / MEDIUM) with excerpt, why-it-matters, suggested redline
 
 2. **Term Sheet Analyzer**
-   - Path: [`scripts/term_sheet_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/scripts/term_sheet_analyzer.py)
-   - Usage: `python ../../skills/general-counsel-advisor/scripts/term_sheet_analyzer.py term_sheet.json`
+   - Path: `../../c-level-advisor/skills/general-counsel-advisor/scripts/term_sheet_analyzer.py`
+   - Usage: `python ../../c-level-advisor/skills/general-counsel-advisor/scripts/term_sheet_analyzer.py term_sheet.json`
    - Scores a term sheet 0-100 across 12 dimensions: liquidation preference, anti-dilution, option pool, board, vesting, pro-rata, drag-along, protective provisions, info rights, dividends, valuation/dilution, holistic
    - Output: founder-friendliness grade (FOUNDER_FRIENDLY / NEGOTIATE / HOSTILE) + per-clause flags
 
 ### Knowledge Bases
 
-- [`references/contracts_playbook.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/references/contracts_playbook.md) — 7 startup contract types (MSA, SaaS, NDA, DPA, employment, contractor, equity), top redlines per type, quick triage heuristics
-- [`references/ip_and_regulatory.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/references/ip_and_regulatory.md) — IP inventory (patents, copyright, trademark, trade secrets), invention assignment, OSS license compliance, regulatory trigger matrix (HIPAA, GDPR, FDA, fintech, AI Act), SOC 2 → ISO sequencing
-- [`references/term_sheet_decoder.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/references/term_sheet_decoder.md) — Full term sheet glossary, founder-friendly defaults cheat sheet, negotiation strategy, the three clauses that matter most
+- `../../c-level-advisor/skills/general-counsel-advisor/references/contracts_playbook.md` — 7 startup contract types (MSA, SaaS, NDA, DPA, employment, contractor, equity), top redlines per type, quick triage heuristics
+- `../../c-level-advisor/skills/general-counsel-advisor/references/ip_and_regulatory.md` — IP inventory (patents, copyright, trademark, trade secrets), invention assignment, OSS license compliance, regulatory trigger matrix (HIPAA, GDPR, FDA, fintech, AI Act), SOC 2 → ISO sequencing
+- `../../c-level-advisor/skills/general-counsel-advisor/references/term_sheet_decoder.md` — Full term sheet glossary, founder-friendly defaults cheat sheet, negotiation strategy, the three clauses that matter most
 
 ## Workflows
 
@@ -60,7 +57,7 @@ Pairs with `cs-cfo-advisor` (term-sheet → dilution math), `cs-ciso-advisor` (d
 ```bash
 # 1. Save contract as text
 # 2. Scan for the 12 common founder-killer clauses
-python ../../skills/general-counsel-advisor/scripts/contract_risk_scanner.py path/to/contract.txt
+python ../../c-level-advisor/skills/general-counsel-advisor/scripts/contract_risk_scanner.py path/to/contract.txt
 # 3. For each CRITICAL/HIGH finding, draft a counter-proposal
 # 4. Send redlines + counter-proposals to outside counsel
 ```
@@ -72,7 +69,7 @@ python ../../skills/general-counsel-advisor/scripts/contract_risk_scanner.py pat
 
 ```bash
 # 1. Build term_sheet.json matching the schema (see --help)
-python ../../skills/general-counsel-advisor/scripts/term_sheet_analyzer.py term_sheet.json
+python ../../c-level-advisor/skills/general-counsel-advisor/scripts/term_sheet_analyzer.py term_sheet.json
 # 2. Identify the top 3 NEGOTIATE / CRITICAL items
 # 3. Cross-check with cs-cfo-advisor for dilution math
 # 4. Decide which 3 to fight for (don't try to win all 20)
@@ -128,12 +125,12 @@ echo "Source: $CONTRACT"
 echo ""
 
 # 1. Risk scan
-python ../../skills/general-counsel-advisor/scripts/contract_risk_scanner.py "$CONTRACT"
+python ../../c-level-advisor/skills/general-counsel-advisor/scripts/contract_risk_scanner.py "$CONTRACT"
 
 echo ""
 echo "📚 Reference checks:"
-echo "- Contracts playbook: ../../skills/general-counsel-advisor/references/contracts_playbook.md"
-echo "- Regulatory triggers: ../../skills/general-counsel-advisor/references/ip_and_regulatory.md"
+echo "- Contracts playbook: ../../c-level-advisor/skills/general-counsel-advisor/references/contracts_playbook.md"
+echo "- Regulatory triggers: ../../c-level-advisor/skills/general-counsel-advisor/references/ip_and_regulatory.md"
 echo ""
 echo "📋 Required before sign:"
 echo "  ☐ All CRITICAL findings addressed or accepted with documented reason"
@@ -155,14 +152,14 @@ echo "  ☐ /cs:freeze applied if irreversible (term sheet, M&A LOI, employment 
 
 - [cs-cfo-advisor](cs-cfo-advisor.md) — term sheet → dilution math
 - [cs-ciso-advisor](cs-ciso-advisor.md) — data-touching contracts, compliance overlap
-- [cs-ceo-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-ceo-advisor.md) — board / fundraising strategic context
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — regulated-industry execution (ISO 13485, MDR, FDA)
+- [cs-ceo-advisor](../../agents/c-level/cs-ceo-advisor.md) — board / fundraising strategic context
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — regulated-industry execution (ISO 13485, MDR, FDA)
 
 ## References
 
-- Skill: [../../skills/general-counsel-advisor/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/general-counsel-advisor/SKILL.md)
-- Voice spec: [../references/persona-voices.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/references/persona-voices.md)
-- Sibling command: [`/cs:gc-review`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/skills/gc-review/SKILL.md)
+- Skill: [../../c-level-advisor/skills/general-counsel-advisor/SKILL.md](../../c-level-advisor/skills/general-counsel-advisor/SKILL.md)
+- Voice spec: [../references/persona-voices.md](../references/persona-voices.md)
+- Sibling command: [`/cs:gc-review`](../skills/gc-review/SKILL.md)
 
 ---
 

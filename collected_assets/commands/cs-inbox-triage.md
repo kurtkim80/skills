@@ -1,15 +1,9 @@
 ---
-title: "/cs-inbox-triage — Slash Command for AI Coding Agents"
-description: "/cs:inbox-triage — Recurring email triage execution. Reads 7-file KB built by /cs:inbox-setup. Classifies recent emails, drafts replies (NEVER. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-inbox-triage"
+description: "/cs:inbox-triage — Recurring email triage execution. Reads 7-file KB built by /cs:inbox-setup. Classifies recent emails, drafts replies (NEVER SENDS), delivers report, updates KB. Run 1-3x/day or on demand. Halts with clear message if KB missing."
 ---
 
-# /cs-inbox-triage
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/email/commands/cs-inbox-triage.md">Source</a></span>
-</div>
-
+# /cs:inbox-triage — Recurring Email Triage
 
 **Command:** `/cs:inbox-triage`
 
@@ -126,8 +120,8 @@ python ../skills/inbox-triage/scripts/draft_safety_validator.py \
 ## Related
 
 - Companion: [`/cs:inbox-setup`](./cs-inbox-setup.md) — must run first
-- Agent: [`cs-inbox-triage`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/agents/cs-inbox-triage.md)
-- Skill: [`inbox-triage`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/email/skills/inbox-triage/SKILL.md)
+- Agent: [`cs-inbox-triage`](../agents/cs-inbox-triage.md)
+- Skill: [`inbox-triage`](../skills/inbox-triage/SKILL.md)
 - Source spec: `megaprompts/07-inbox-triage-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 
 ---

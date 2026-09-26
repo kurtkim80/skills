@@ -1,10 +1,11 @@
 ---
 name: agency-behavioral-nudge-engine
+version: 1.0.0
 description: Behavioral psychology specialist that adapts software interaction cadences and styles to maximize user motivation and success.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Behavioral Nudge Engine
+
 
 # 🧠 Behavioral Nudge Engine
 

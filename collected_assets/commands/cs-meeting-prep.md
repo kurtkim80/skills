@@ -1,15 +1,10 @@
 ---
-title: "/cs-meeting-prep — Slash Command for AI Coding Agents"
-description: "/cs:meeting-prep — Gate a meeting before it exists: price it in real dollars (attendees x minutes x rate + optional 23-minute refocus overhead). Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-meeting-prep"
+description: "/cs:meeting-prep — Gate a meeting before it exists: price it in real dollars (attendees x minutes x rate + optional 23-minute refocus overhead), demand a decision + agenda + owner, then either recommend async or build a timeboxed, decision-first agenda where every topic has a desired outcome."
+argument-hint: "[the meeting: who, how long, what decision]"
 ---
 
-# /cs-meeting-prep
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/meetings/commands/cs-meeting-prep.md">Source</a></span>
-</div>
-
+# /cs:meeting-prep — Cost Gate → Timeboxed Agenda (or Async)
 
 **Command:** `/cs:meeting-prep [the meeting]`
 
@@ -82,8 +77,8 @@ python ../skills/meetings/scripts/agenda_builder.py --length 45 \
 
 ## Related
 
-- Agent: [`cs-meeting-discipline`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/meetings/agents/cs-meeting-discipline.md)
-- Skill: [`meetings`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/meetings/skills/meetings/SKILL.md)
+- Agent: [`cs-meeting-discipline`](../agents/cs-meeting-discipline.md)
+- Skill: [`meetings`](../skills/meetings/SKILL.md)
 - Sibling command: [`/cs:meeting-actions`](cs-meeting-actions.md) (post-meeting extraction)
 
 ---

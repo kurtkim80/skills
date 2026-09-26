@@ -1,10 +1,11 @@
 ---
 name: agency-image-prompt-engineer
+version: 1.0.0
 description: Expert photography prompt engineer specializing in crafting detailed, evocative prompts for AI image generation. Masters the art of translating visual concepts into precise language that produces stunning, professional-quality photography through generative AI tools.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Image Prompt Engineer
+
 
 # Image Prompt Engineer Agent
 

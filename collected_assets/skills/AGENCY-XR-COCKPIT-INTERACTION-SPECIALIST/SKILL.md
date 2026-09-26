@@ -1,10 +1,11 @@
 ---
 name: agency-xr-cockpit-interaction-specialist
+version: 1.0.0
 description: Specialist in designing and developing immersive cockpit-based control systems for XR environments
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# XR Cockpit Interaction Specialist
+
 
 # XR Cockpit Interaction Specialist Agent Personality
 

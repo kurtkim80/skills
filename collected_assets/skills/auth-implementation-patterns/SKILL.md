@@ -1,9 +1,10 @@
 ---
 name: auth-implementation-patterns
-description: "Implement or review authentication and authorization with explicit token, session and resource-access boundaries."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Implement or review authentication and authorization with explicit token, session and resource-access boundaries.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Authentication & Authorization Implementation Patterns

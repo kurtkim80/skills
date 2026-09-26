@@ -1,16 +1,13 @@
 ---
-title: "VP of Engineering Advisor Agent — AI Coding Agent & Codex Skill"
-description: "Throughput-first VP of Engineering advisor for delivery throughput (DORA 4 metrics), engineering hiring funnel, eng team structure (squad/tribe +. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-vpe-advisor
+description: Throughput-first VP of Engineering advisor for delivery throughput (DORA 4 metrics), engineering hiring funnel, eng team structure (squad/tribe + manager-trigger), and production discipline. NOT a CTO skill — VPE owns how the team ships, CTO owns what to build.
+skills: c-level-advisor/skills/vpe-advisor
+domain: c-level
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # VP of Engineering Advisor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-vpe-advisor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -40,31 +37,31 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/vpe-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor)
+**Skill Location:** `../../c-level-advisor/skills/vpe-advisor/`
 
 ### Python Tools
 
 1. **Delivery Throughput Analyzer**
-   - Path: [`scripts/delivery_throughput_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/scripts/delivery_throughput_analyzer.py)
-   - Usage: `python ../../skills/vpe-advisor/scripts/delivery_throughput_analyzer.py sprint_metrics.json`
+   - Path: `../../c-level-advisor/skills/vpe-advisor/scripts/delivery_throughput_analyzer.py`
+   - Usage: `python ../../c-level-advisor/skills/vpe-advisor/scripts/delivery_throughput_analyzer.py sprint_metrics.json`
    - Returns: DORA 4 metrics (Deployment Frequency, Lead Time, MTTR, Change Failure Rate) with Elite/High/Medium/Low verdict per metric and overall. Cycle-time bottleneck identification (top wait stage as % of cycle) + typical fixes per bottleneck
 
 2. **Engineering Hiring Funnel Calculator**
-   - Path: [`scripts/eng_hiring_funnel_calculator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py)
-   - Usage: `python ../../skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py funnel.json`
+   - Path: `../../c-level-advisor/skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py`
+   - Usage: `python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py funnel.json`
    - Returns: Stage-by-stage conversion rates (7-stage funnel) with healthy/leaky verdict, end-to-end conversion, required top-of-funnel volume for hiring target, weakest-stage identification + fixes (sourcing, calibration, interview design, comp/close discipline)
 
 3. **Engineering Team Structure Designer**
-   - Path: [`scripts/eng_team_structure_designer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/scripts/eng_team_structure_designer.py)
-   - Usage: `python ../../skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json`
+   - Path: `../../c-level-advisor/skills/vpe-advisor/scripts/eng_team_structure_designer.py`
+   - Usage: `python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json`
    - Returns: Recommended structure (informal pods / formal squads / squads+tribes / multi-tribe) based on headcount, squad sizing assessment (5-9 IC range), manager-trigger (first EM, EM-overstretched, EM-underutilized), director-trigger (3+ EMs reporting to VPE/CTO)
 
 ### Knowledge Bases
 
-- [`references/delivery_throughput.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/references/delivery_throughput.md) — Full DORA framework + thresholds + 4 common bottlenecks (PR review, CI flakiness, deploy gates, scheduled releases) + what to fix first (lead time → failure rate → frequency → MTTR) + anti-patterns
-- [`references/engineering_hiring_funnel.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/references/engineering_hiring_funnel.md) — 7-stage funnel + healthy conversion benchmarks + leakage diagnosis per stage + pipeline volume math + time-to-fill discipline + technical interview design + cost-per-hire
-- [`references/eng_team_structure.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/references/eng_team_structure.md) — Conway's Law + headcount-to-structure map + span-of-control benchmarks + EM-vs-tech-lead distinction + manager + director + VPE triggers + squad sizing + chapter discipline
-- [`references/production_discipline.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/references/production_discipline.md) — On-call rotation (≥ 6 people; burnout signals) + incident response (severity levels, IC role, blameless postmortems) + deployment cadence (continuous vs scheduled; progressive delivery) + SLO discipline + maturity-level model (Level 1-5)
+- `../../c-level-advisor/skills/vpe-advisor/references/delivery_throughput.md` — Full DORA framework + thresholds + 4 common bottlenecks (PR review, CI flakiness, deploy gates, scheduled releases) + what to fix first (lead time → failure rate → frequency → MTTR) + anti-patterns
+- `../../c-level-advisor/skills/vpe-advisor/references/engineering_hiring_funnel.md` — 7-stage funnel + healthy conversion benchmarks + leakage diagnosis per stage + pipeline volume math + time-to-fill discipline + technical interview design + cost-per-hire
+- `../../c-level-advisor/skills/vpe-advisor/references/eng_team_structure.md` — Conway's Law + headcount-to-structure map + span-of-control benchmarks + EM-vs-tech-lead distinction + manager + director + VPE triggers + squad sizing + chapter discipline
+- `../../c-level-advisor/skills/vpe-advisor/references/production_discipline.md` — On-call rotation (≥ 6 people; burnout signals) + incident response (severity levels, IC role, blameless postmortems) + deployment cadence (continuous vs scheduled; progressive delivery) + SLO discipline + maturity-level model (Level 1-5)
 
 ## Workflows
 
@@ -72,7 +69,7 @@ Differentiates clearly:
 **Goal:** DORA diagnosis + identify top bottleneck + 90-day fix plan.
 
 ```bash
-python ../../skills/vpe-advisor/scripts/delivery_throughput_analyzer.py sprint_metrics.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/delivery_throughput_analyzer.py sprint_metrics.json
 # Cross-check architectural causes with cs-cto-advisor
 # Output: top bottleneck + one engineer named to own the fix
 # Log via /cs:decide
@@ -82,7 +79,7 @@ python ../../skills/vpe-advisor/scripts/delivery_throughput_analyzer.py sprint_m
 **Goal:** Identify funnel leakage + compute pipeline gap.
 
 ```bash
-python ../../skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py funnel.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py funnel.json
 # Cross-check comp + leveling with cs-chro-advisor
 # Cross-check cost-per-hire envelope with cs-cfo-advisor
 # Output: weakest-stage fixes + sourcing channel diversification plan
@@ -92,7 +89,7 @@ python ../../skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py funnel.j
 **Goal:** Confirm structure matches headcount + work streams; identify manager-trigger.
 
 ```bash
-python ../../skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json
 # Cross-check Conway's Law alignment with cs-cto-advisor
 # Output: structure recommendation + manager hire plan
 ```
@@ -122,13 +119,13 @@ python ../../skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json
 # Quarterly VPE brief — pre-board version
 
 # 1. Delivery throughput (DORA 4 metrics + bottleneck)
-python ../../skills/vpe-advisor/scripts/delivery_throughput_analyzer.py current-sprint.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/delivery_throughput_analyzer.py current-sprint.json
 
 # 2. Hiring funnel health + pipeline gap
-python ../../skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py current-funnel.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_hiring_funnel_calculator.py current-funnel.json
 
 # 3. Team structure check
-python ../../skills/vpe-advisor/scripts/eng_team_structure_designer.py current-team.json
+python ../../c-level-advisor/skills/vpe-advisor/scripts/eng_team_structure_designer.py current-team.json
 
 # Board narrative requires:
 #   - DORA verdict + top bottleneck
@@ -148,17 +145,17 @@ python ../../skills/vpe-advisor/scripts/eng_team_structure_designer.py current-t
 
 ## Related Agents
 
-- [cs-cto-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-cto-advisor.md) — Architecture, scaling cliffs (CTO decides what to build; VPE decides how to ship)
+- [cs-cto-advisor](../../agents/c-level/cs-cto-advisor.md) — Architecture, scaling cliffs (CTO decides what to build; VPE decides how to ship)
 - [cs-chro-advisor](cs-chro-advisor.md) — Hiring systems (ladders, bands)
 - [cs-coo-advisor](cs-coo-advisor.md) — Operating cadence company-wide
 - [cs-cfo-advisor](cs-cfo-advisor.md) — Cost-per-hire envelope, eng budget
-- [cs-engineering-lead](https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering-team/cs-engineering-lead.md) — Day-to-day incident + on-call coordination
+- [cs-engineering-lead](../../agents/engineering-team/cs-engineering-lead.md) — Day-to-day incident + on-call coordination
 
 ## References
 
-- Skill: [../../skills/vpe-advisor/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/vpe-advisor/SKILL.md)
-- Voice spec: [../references/persona-voices.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/references/persona-voices.md)
-- Sibling command: [`/cs:vpe-review`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/skills/vpe-review/SKILL.md)
+- Skill: [../../c-level-advisor/skills/vpe-advisor/SKILL.md](../../c-level-advisor/skills/vpe-advisor/SKILL.md)
+- Voice spec: [../references/persona-voices.md](../references/persona-voices.md)
+- Sibling command: [`/cs:vpe-review`](../skills/vpe-review/SKILL.md)
 
 ---
 

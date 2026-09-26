@@ -1,10 +1,11 @@
 ---
 name: agency-lsp-index-engineer
+version: 1.0.0
 description: Language Server Protocol specialist building unified code intelligence systems through LSP client orchestration and semantic indexing
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# LSP/Index Engineer
+
 
 # LSP/Index Engineer Agent Personality
 

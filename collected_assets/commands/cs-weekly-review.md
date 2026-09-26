@@ -1,15 +1,10 @@
 ---
-title: "/cs-weekly-review — Slash Command for AI Coding Agents"
-description: "/cs:weekly-review — Run a GTD weekly review: GET CLEAR (collect, inboxes to zero, empty your head), GET CURRENT (next actions, both calendars. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-weekly-review"
+description: "/cs:weekly-review — Run a GTD weekly review: GET CLEAR (collect, inboxes to zero, empty your head), GET CURRENT (next actions, both calendars, waiting-for, projects — all mandatory), GET CREATIVE (someday/maybe, new ideas). Deterministic gate names every missing step; commitment auditor scores portfolio health 0-100."
+argument-hint: "[optional: directory or notes to review]"
 ---
 
-# /cs-weekly-review
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/weekly-review/commands/cs-weekly-review.md">Source</a></span>
-</div>
-
+# /cs:weekly-review — GTD Weekly Review Loop → Trusted System
 
 **Command:** `/cs:weekly-review [directory or notes]`
 
@@ -86,8 +81,8 @@ python ../skills/weekly-review/scripts/commitment_auditor.py --input commitments
 
 ## Related
 
-- Agent: [`cs-weekly-review`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/weekly-review/agents/cs-weekly-review.md)
-- Skill: [`weekly-review`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/weekly-review/skills/weekly-review/SKILL.md)
+- Agent: [`cs-weekly-review`](../agents/cs-weekly-review.md)
+- Skill: [`weekly-review`](../skills/weekly-review/SKILL.md)
 - Siblings: `/cs:capture` (intake side of the same system), `productivity/reflect` (one-off reflection)
 
 ---

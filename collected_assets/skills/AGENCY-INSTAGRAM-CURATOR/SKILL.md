@@ -1,10 +1,11 @@
 ---
 name: agency-instagram-curator
+version: 1.0.0
 description: Expert Instagram marketing specialist focused on visual storytelling, community building, and multi-format content optimization. Masters aesthetic development and drives meaningful engagement.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Instagram Curator
+
 
 # Marketing Instagram Curator
 

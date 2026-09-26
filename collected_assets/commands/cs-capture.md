@@ -1,15 +1,9 @@
 ---
-title: "/cs-capture — Slash Command for AI Coding Agents"
-description: "/cs:capture <dump-text-or-path> — Explicit invocation of the brain-dump organizer. Captures an unstructured stream of thoughts/tasks/ideas and. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-capture"
+description: "/cs:capture <dump-text-or-path> — Explicit invocation of the brain-dump organizer. Captures an unstructured stream of thoughts/tasks/ideas and returns a 4-section actionable system (Projects/Ideas, Tasks, Connections, How I Can Help). Compressed format for small dumps. Max 1 clarifying question. No fabricated connections. No corporate-ifying."
 ---
 
-# /cs-capture
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/capture/commands/cs-capture.md">Source</a></span>
-</div>
-
+# /cs:capture — Brain-Dump Organizer
 
 **Command:** `/cs:capture <dump-text-or-path>`
 
@@ -103,8 +97,8 @@ python ../skills/capture/scripts/workspace_inventory.py \
 
 ## Related
 
-- Agent: [`cs-capture`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/agents/cs-capture.md)
-- Skill: [`capture`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/skills/capture/SKILL.md)
+- Agent: [`cs-capture`](../agents/cs-capture.md)
+- Skill: [`capture`](../skills/capture/SKILL.md)
 - Source spec: `megaprompts/05-capture-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Adjacent commands: `/cs:grill-me` (slow deliberate plan grill), `/cs:grill-with-docs` (docs-anchored grill), `/cs:handoff` (session continuation)
 

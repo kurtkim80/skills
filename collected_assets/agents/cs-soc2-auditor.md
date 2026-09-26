@@ -1,16 +1,13 @@
 ---
-title: "SOC 2 Type II Auditor Agent — AI Coding Agent & Codex Skill"
-description: "SOC 2 Type II auditor persona — observation-period discipline + AICPA TSC focused. Coordinates with ISO 27001 (75% overlap, the canonical cross-walk. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-soc2-auditor
+description: SOC 2 Type II auditor persona — observation-period discipline + AICPA TSC focused. Coordinates with ISO 27001 (75% overlap, the canonical cross-walk pair) and GDPR (if Privacy TSC in scope). NOT executive cybersecurity strategy (see cs-ciso-advisor); NOT external audit firm engagement (that's the licensed CPA firm's role).
+skills: ra-qm-team/skills/soc2-compliance
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # SOC 2 Type II Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-soc2-auditor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -39,38 +36,38 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/soc2-compliance`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance)
+**Skill Location:** `../../ra-qm-team/skills/soc2-compliance/`
 
 ### Python Tools
 
 1. **Control Matrix Builder**
-   - Path: [`scripts/control_matrix_builder.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/scripts/control_matrix_builder.py)
+   - Path: `../../ra-qm-team/skills/soc2-compliance/scripts/control_matrix_builder.py`
    - Usage: `python control_matrix_builder.py program.json`
    - Returns: per-TSC control matrix with ISO 27001 cross-reference for 75% reuse mapping
 
 2. **Evidence Tracker**
-   - Path: [`scripts/evidence_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/scripts/evidence_tracker.py)
+   - Path: `../../ra-qm-team/skills/soc2-compliance/scripts/evidence_tracker.py`
    - Usage: `python evidence_tracker.py evidence_log.json`
    - Returns: continuous-operation evidence status with exception flags during observation period
 
 3. **Gap Analyzer**
-   - Path: [`scripts/gap_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/scripts/gap_analyzer.py)
+   - Path: `../../ra-qm-team/skills/soc2-compliance/scripts/gap_analyzer.py`
    - Usage: `python gap_analyzer.py current_state.json`
    - Returns: gap analysis vs target TSC scope; remediation priority before observation period starts
 
 ### Knowledge Bases
 
-- [`references/trust_service_criteria.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/references/trust_service_criteria.md) — Trust Services Criteria
-- [`references/evidence_collection_guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/references/evidence_collection_guide.md) — Evidence collection guide
-- [`references/type1_vs_type2.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/references/type1_vs_type2.md) — Type I vs Type II differences
-- [`references/soc2_audit_playbook.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md) — Full 12-month observation-period playbook (NEW in Phase 2)
+- `../../ra-qm-team/skills/soc2-compliance/references/trust_service_criteria.md` — Trust Services Criteria
+- `../../ra-qm-team/skills/soc2-compliance/references/evidence_collection_guide.md` — Evidence collection guide
+- `../../ra-qm-team/skills/soc2-compliance/references/type1_vs_type2.md` — Type I vs Type II differences
+- `../../ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md` — Full 12-month observation-period playbook (NEW in Phase 2)
 
 ### Adjacent Skills
 
-- [`skills/isms-audit-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/isms-audit-expert) — ISO 27001 audit (the 75% cross-walk pair)
-- [`skills/information-security-manager-iso27001`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/information-security-manager-iso27001) — ISO 27001 implementation
-- [`skills/gdpr-dsgvo-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/gdpr-dsgvo-expert) — GDPR (Privacy TSC overlap)
-- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator
+- `../../ra-qm-team/skills/isms-audit-expert/` — ISO 27001 audit (the 75% cross-walk pair)
+- `../../ra-qm-team/skills/information-security-manager-iso27001/` — ISO 27001 implementation
+- `../../ra-qm-team/skills/gdpr-dsgvo-expert/` — GDPR (Privacy TSC overlap)
+- `../skills/compliance-os/` — Meta-orchestrator
 
 ## Workflows
 
@@ -141,13 +138,13 @@ python ../../compliance-os/skills/compliance-os/scripts/audit_simulator.py soc2_
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator
 - [cs-ciso-iso27001](cs-ciso-iso27001.md) — ISO 27001 audit (75% cross-walk pair)
 - [cs-dpo-gdpr](cs-dpo-gdpr.md) — GDPR (Privacy TSC overlap)
-- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
+- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
 
 ## References
 
-- Skill: [../../ra-qm-team/skills/soc2-compliance/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/SKILL.md)
-- Playbook: [../../ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md)
-- Sibling command: [`/cs:soc2-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/soc2-audit-prep/SKILL.md)
+- Skill: [../../ra-qm-team/skills/soc2-compliance/SKILL.md](../../ra-qm-team/skills/soc2-compliance/SKILL.md)
+- Playbook: [../../ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md](../../ra-qm-team/skills/soc2-compliance/references/soc2_audit_playbook.md)
+- Sibling command: [`/cs:soc2-audit-prep`](../skills/soc2-audit-prep/SKILL.md)
 
 ---
 

@@ -1,79 +1,74 @@
----
-name: checkpoint
-description: 워크플로우에서 checkpoint를 생성, 검증, 조회 또는 정리합니다.
----
+# Checkpoint Komutu
 
-# Checkpoint 명령어
+İş akışınızda bir checkpoint oluşturun veya doğrulayın.
 
-워크플로우에서 checkpoint를 생성하거나 검증합니다.
+## Kullanım
 
-## 사용법
+`/checkpoint [create|verify|list|clear] [isim]`
 
-`/checkpoint [create|verify|list|clear] [name]`
+## Checkpoint Oluştur
 
-## Checkpoint 생성
+Checkpoint oluştururken:
 
-Checkpoint를 생성할 때:
-
-1. `/verify quick`를 실행하여 현재 상태가 깨끗한지 확인합니다
-2. Checkpoint 이름으로 git stash 또는 commit을 생성합니다
-3. `.claude/checkpoints.log`에 checkpoint를 기록합니다:
+1. Mevcut durumun temiz olduğundan emin olmak için `/verify quick` çalıştır
+2. Checkpoint adıyla bir git stash veya commit oluştur
+3. Checkpoint'i `.claude/checkpoints.log`'a kaydet:
 
 ```bash
 echo "$(date +%Y-%m-%d-%H:%M) | $CHECKPOINT_NAME | $(git rev-parse --short HEAD)" >> .claude/checkpoints.log
 ```
 
-4. Checkpoint 생성 완료를 보고합니다
+4. Checkpoint oluşturulduğunu raporla
 
-## Checkpoint 검증
+## Checkpoint'i Doğrula
 
-Checkpoint와 대조하여 검증할 때:
+Bir checkpoint'e karşı doğrularken:
 
-1. 로그에서 checkpoint를 읽습니다
-2. 현재 상태를 checkpoint와 비교합니다:
-   - Checkpoint 이후 추가된 파일
-   - Checkpoint 이후 수정된 파일
-   - 현재와 당시의 테스트 통과율
-   - 현재와 당시의 커버리지
+1. Log'dan checkpoint'i oku
+2. Mevcut durumu checkpoint ile karşılaştır:
+   - Checkpoint'ten sonra eklenen dosyalar
+   - Checkpoint'ten sonra değiştirilen dosyalar
+   - Şimdiki vs o zamanki test başarı oranı
+   - Şimdiki vs o zamanki kapsama oranı
 
-3. 보고:
+3. Raporla:
 ```
-CHECKPOINT COMPARISON: $NAME
+CHECKPOINT KARŞILAŞTIRMASI: $NAME
 ============================
-Files changed: X
-Tests: +Y passed / -Z failed
-Coverage: +X% / -Y%
-Build: [PASS/FAIL]
+Değişen dosyalar: X
+Testler: +Y geçti / -Z başarısız
+Kapsama: +X% / -Y%
+Build: [GEÇTİ/BAŞARISIZ]
 ```
 
-## Checkpoint 목록
+## Checkpoint'leri Listele
 
-모든 checkpoint를 다음 정보와 함께 표시합니다:
-- 이름
-- 타임스탬프
+Tüm checkpoint'leri şunlarla göster:
+- Ad
+- Zaman damgası
 - Git SHA
-- 상태 (current, behind, ahead)
+- Durum (mevcut, geride, ileride)
 
-## 워크플로우
+## İş Akışı
 
-일반적인 checkpoint 흐름:
+Tipik checkpoint akışı:
 
 ```
-[시작] --> /checkpoint create "feature-start"
+[Başlangıç] --> /checkpoint create "feature-start"
    |
-[구현] --> /checkpoint create "core-done"
+[Uygula] --> /checkpoint create "core-done"
    |
-[테스트] --> /checkpoint verify "core-done"
+[Test] --> /checkpoint verify "core-done"
    |
-[리팩토링] --> /checkpoint create "refactor-done"
+[Refactor] --> /checkpoint create "refactor-done"
    |
 [PR] --> /checkpoint verify "feature-start"
 ```
 
-## 인자
+## Argümanlar
 
 $ARGUMENTS:
-- `create <name>` - 이름이 지정된 checkpoint를 생성합니다
-- `verify <name>` - 이름이 지정된 checkpoint와 검증합니다
-- `list` - 모든 checkpoint를 표시합니다
-- `clear` - 이전 checkpoint를 제거합니다 (최근 5개만 유지)
+- `create <isim>` - İsimlendirilmiş checkpoint oluştur
+- `verify <isim>` - İsimlendirilmiş checkpoint'e karşı doğrula
+- `list` - Tüm checkpoint'leri göster
+- `clear` - Eski checkpoint'leri kaldır (son 5'i tutar)

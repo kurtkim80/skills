@@ -1,60 +1,60 @@
 ---
-description: Go용 TDD 워크플로우 강제. 테이블 기반 테스트를 먼저 작성한 후 구현. go test -cover로 80% 이상 커버리지 검증.
+description: Go için TDD iş akışını zorlar. Önce table-driven testler yaz, sonra uygula. go test -cover ile %80+ kapsama doğrula.
 ---
 
-# Go TDD 커맨드
+# Go TDD Komutu
 
-이 커맨드는 관용적 Go 테스팅 패턴을 사용하여 Go 코드에 테스트 주도 개발 방법론을 강제합니다.
+Bu komut, idiomatic Go test desenlerini kullanarak Go kodu için test odaklı geliştirme metodolojisini zorlar.
 
-## 이 커맨드가 하는 것
+## Bu Komut Ne Yapar
 
-1. **타입/인터페이스 정의**: 함수 시그니처를 먼저 스캐폴딩
-2. **테이블 기반 테스트 작성**: 포괄적인 테스트 케이스 생성 (RED)
-3. **테스트 실행**: 올바른 이유로 테스트가 실패하는지 확인
-4. **코드 구현**: 통과하기 위한 최소한의 코드 작성 (GREEN)
-5. **리팩토링**: 테스트를 통과시키면서 개선
-6. **커버리지 확인**: 80% 이상 커버리지 확보
+1. **Tipleri/Interface'leri Tanımla**: Önce fonksiyon imzalarını tasarla
+2. **Table-Driven Testler Yaz**: Kapsamlı test senaryoları oluştur (RED)
+3. **Testleri Çalıştır**: Testlerin doğru sebepten başarısız olduğunu doğrula
+4. **Kodu Uygula**: Geçmek için minimal kod yaz (GREEN)
+5. **Refactor Et**: Testleri yeşil tutarken iyileştir
+6. **Kapsama Kontrol Et**: %80+ kapsama sağla
 
-## 사용 시점
+## Ne Zaman Kullanılır
 
-`/go-test`를 사용해야 할 때:
-- 새로운 Go 함수 구현
-- 기존 코드에 테스트 커버리지 추가
-- 버그 수정 (실패하는 테스트를 먼저 작성)
-- 핵심 비즈니스 로직 구현
-- Go에서 TDD 워크플로우 학습
+`/go-test` komutunu şu durumlarda kullanın:
+- Yeni Go fonksiyonları uygularken
+- Mevcut koda test kapsama eklerken
+- Hataları düzeltirken (önce başarısız test yaz)
+- Kritik iş mantığı oluştururken
+- Go'da TDD iş akışını öğrenirken
 
-## TDD 사이클
+## TDD Döngüsü
 
 ```
-RED     → 실패하는 테이블 기반 테스트 작성
-GREEN   → 통과하기 위한 최소한의 코드 구현
-REFACTOR → 코드 개선, 테스트는 통과 유지
-REPEAT  → 다음 테스트 케이스
+RED     → Başarısız table-driven test yaz
+GREEN   → Geçmek için minimal kod uygula
+REFACTOR → Kodu iyileştir, testler yeşil kalsın
+TEKRARLA → Sonraki test senaryosu
 ```
 
-## 예시 세션
+## Örnek Oturum
 
 ````
-User: /go-test 이메일 주소를 검증하는 함수가 필요합니다
+Kullanıcı: /go-test E-posta adreslerini doğrulamak için bir fonksiyona ihtiyacım var
 
 Agent:
-# TDD 세션: 이메일 검증기
+# TDD Oturumu: E-posta Doğrulayıcı
 
-## 1단계: 인터페이스 정의
+## Adım 1: Interface Tanımla
 
 ```go
 // validator/email.go
 package validator
 
-// ValidateEmail은 주어진 문자열이 유효한 이메일 주소인지 확인합니다.
-// 유효하면 nil을 반환하고, 그렇지 않으면 이슈를 설명하는 error를 반환합니다.
+// ValidateEmail verilen string'in geçerli bir e-posta adresi olup olmadığını kontrol eder.
+// Geçerliyse nil, aksi takdirde sorunu açıklayan hata döndürür.
 func ValidateEmail(email string) error {
     panic("not implemented")
 }
 ```
 
-## 2단계: 테이블 기반 테스트 작성 (RED)
+## Adım 2: Table-Driven Testler Yaz (RED)
 
 ```go
 // validator/email_test.go
@@ -70,51 +70,51 @@ func TestValidateEmail(t *testing.T) {
         email   string
         wantErr bool
     }{
-        // 유효한 이메일
-        {"단순 이메일", "user@example.com", false},
-        {"서브도메인 포함", "user@mail.example.com", false},
-        {"플러스 포함", "user+tag@example.com", false},
-        {"점 포함", "first.last@example.com", false},
+        // Geçerli e-postalar
+        {"basit e-posta", "user@example.com", false},
+        {"subdomain ile", "user@mail.example.com", false},
+        {"artı ile", "user+tag@example.com", false},
+        {"noktalar ile", "first.last@example.com", false},
 
-        // 유효하지 않은 이메일
-        {"빈 문자열", "", true},
-        {"@ 기호 없음", "userexample.com", true},
-        {"도메인 없음", "user@", true},
-        {"로컬 파트 없음", "@example.com", true},
-        {"이중 @", "user@@example.com", true},
-        {"공백 포함", "user @example.com", true},
-        {"TLD 없음", "user@example", true},
+        // Geçersiz e-postalar
+        {"boş string", "", true},
+        {"at işareti yok", "userexample.com", true},
+        {"domain yok", "user@", true},
+        {"local kısım yok", "@example.com", true},
+        {"çift at", "user@@example.com", true},
+        {"boşluklar", "user @example.com", true},
+        {"tld yok", "user@example", true},
     }
 
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             err := ValidateEmail(tt.email)
             if tt.wantErr && err == nil {
-                t.Errorf("ValidateEmail(%q) = nil; want error", tt.email)
+                t.Errorf("ValidateEmail(%q) = nil; hata bekleniyor", tt.email)
             }
             if !tt.wantErr && err != nil {
-                t.Errorf("ValidateEmail(%q) = %v; want nil", tt.email, err)
+                t.Errorf("ValidateEmail(%q) = %v; nil bekleniyor", tt.email, err)
             }
         })
     }
 }
 ```
 
-## 3단계: 테스트 실행 - 실패 확인
+## Adım 3: Testleri Çalıştır - Başarısızlığı Doğrula
 
 ```bash
 $ go test ./validator/...
 
 --- FAIL: TestValidateEmail (0.00s)
-    --- FAIL: TestValidateEmail/단순_이메일 (0.00s)
+    --- FAIL: TestValidateEmail/basit_e-posta (0.00s)
         panic: not implemented
 
 FAIL
 ```
 
-✓ 예상대로 테스트 실패 (panic).
+✓ Testler beklendiği gibi başarısız (panic).
 
-## 4단계: 최소한의 코드 구현 (GREEN)
+## Adım 4: Minimal Kod Uygula (GREEN)
 
 ```go
 // validator/email.go
@@ -128,8 +128,8 @@ import (
 var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 
 var (
-    ErrEmailEmpty   = errors.New("email cannot be empty")
-    ErrEmailInvalid = errors.New("email format is invalid")
+    ErrEmailEmpty   = errors.New("e-posta boş olamaz")
+    ErrEmailInvalid = errors.New("e-posta formatı geçersiz")
 )
 
 func ValidateEmail(email string) error {
@@ -143,7 +143,7 @@ func ValidateEmail(email string) error {
 }
 ```
 
-## 5단계: 테스트 실행 - 통과 확인
+## Adım 5: Testleri Çalıştır - Başarıyı Doğrula
 
 ```bash
 $ go test ./validator/...
@@ -152,9 +152,9 @@ PASS
 ok      project/validator    0.003s
 ```
 
-✓ 모든 테스트 통과!
+✓ Tüm testler geçiyor!
 
-## 6단계: 커버리지 확인
+## Adım 6: Kapsama Kontrol Et
 
 ```bash
 $ go test -cover ./validator/...
@@ -164,14 +164,14 @@ coverage: 100.0% of statements
 ok      project/validator    0.003s
 ```
 
-✓ 커버리지: 100%
+✓ Kapsama: 100%
 
-## TDD 완료!
+## TDD Tamamlandı!
 ````
 
-## 테스트 패턴
+## Test Desenleri
 
-### 테이블 기반 테스트
+### Table-Driven Testler
 ```go
 tests := []struct {
     name     string
@@ -179,30 +179,30 @@ tests := []struct {
     want     OutputType
     wantErr  bool
 }{
-    {"케이스 1", input1, want1, false},
-    {"케이스 2", input2, want2, true},
+    {"senaryo 1", input1, want1, false},
+    {"senaryo 2", input2, want2, true},
 }
 
 for _, tt := range tests {
     t.Run(tt.name, func(t *testing.T) {
         got, err := Function(tt.input)
-        // 단언문
+        // assertion'lar
     })
 }
 ```
 
-### 병렬 테스트
+### Paralel Testler
 ```go
 for _, tt := range tests {
-    tt := tt // 캡처
+    tt := tt // Yakala
     t.Run(tt.name, func(t *testing.T) {
         t.Parallel()
-        // 테스트 본문
+        // test gövdesi
     })
 }
 ```
 
-### 테스트 헬퍼
+### Test Yardımcıları
 ```go
 func setupTestDB(t *testing.T) *sql.DB {
     t.Helper()
@@ -212,57 +212,57 @@ func setupTestDB(t *testing.T) *sql.DB {
 }
 ```
 
-## 커버리지 커맨드
+## Kapsama Komutları
 
 ```bash
-# 기본 커버리지
+# Basit kapsama
 go test -cover ./...
 
-# 커버리지 프로파일
+# Kapsama profili
 go test -coverprofile=coverage.out ./...
 
-# 브라우저에서 확인
+# Tarayıcıda görüntüle
 go tool cover -html=coverage.out
 
-# 함수별 커버리지
+# Fonksiyona göre kapsama
 go tool cover -func=coverage.out
 
-# 레이스 감지와 함께
+# Race tespiti ile
 go test -race -cover ./...
 ```
 
-## 커버리지 목표
+## Kapsama Hedefleri
 
-| 코드 유형 | 목표 |
-|-----------|------|
-| 핵심 비즈니스 로직 | 100% |
-| 공개 API | 90%+ |
-| 일반 코드 | 80%+ |
-| 생성된 코드 | 제외 |
+| Kod Türü | Hedef |
+|-----------|--------|
+| Kritik iş mantığı | 100% |
+| Public API'ler | 90%+ |
+| Genel kod | 80%+ |
+| Oluşturulan kod | Hariç tut |
 
-## TDD 모범 사례
+## TDD En İyi Uygulamaları
 
-**해야 할 것:**
-- 구현 전에 테스트를 먼저 작성
-- 각 변경 후 테스트 실행
-- 포괄적인 커버리지를 위해 테이블 기반 테스트 사용
-- 구현 세부사항이 아닌 동작 테스트
-- 엣지 케이스 포함 (빈 값, nil, 최대값)
+**YAPIN:**
+- Herhangi bir uygulamadan ÖNCE test yaz
+- Her değişiklikten sonra testleri çalıştır
+- Kapsamlı kapsama için table-driven testler kullan
+- Uygulama detaylarını değil, davranışı test et
+- Edge case'leri dahil et (boş, nil, maksimum değerler)
 
-**하지 말아야 할 것:**
-- 테스트 전에 구현 작성
-- RED 단계 건너뛰기
-- private 함수를 직접 테스트
-- 테스트에서 `time.Sleep` 사용
-- 불안정한 테스트 무시
+**YAPMAYIN:**
+- Testlerden önce uygulama yazma
+- RED aşamasını atlama
+- Private fonksiyonları doğrudan test etme
+- Testlerde `time.Sleep` kullanma
+- Dengesiz testleri görmezden gelme
 
-## 관련 커맨드
+## İlgili Komutlar
 
-- `/go-build` - build 에러 수정
-- `/go-review` - 구현 후 코드 리뷰
-- `/verify` - 전체 검증 루프
+- `/go-build` - Build hatalarını düzelt
+- `/go-review` - Uygulamadan sonra kodu incele
+- `/verify` - Tam doğrulama döngüsünü çalıştır
 
-## 관련 항목
+## İlgili
 
-- 스킬: `skills/golang-testing/`
-- 스킬: `skills/tdd-workflow/`
+- Skill: `skills/golang-testing/`
+- Skill: `skills/tdd-workflow/`

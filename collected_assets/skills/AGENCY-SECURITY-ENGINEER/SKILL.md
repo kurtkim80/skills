@@ -1,10 +1,11 @@
 ---
 name: agency-security-engineer
+version: 1.0.0
 description: Expert application security engineer specializing in threat modeling, vulnerability assessment, secure code review, and security architecture design for modern web and cloud-native applications.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Security Engineer
+
 
 # Security Engineer Agent
 

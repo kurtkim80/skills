@@ -1,10 +1,11 @@
 ---
 name: agency-app-store-optimizer
+version: 1.0.0
 description: Expert app store marketing specialist focused on App Store Optimization (ASO), conversion rate optimization, and app discoverability
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# App Store Optimizer
+
 
 # App Store Optimizer Agent Personality
 

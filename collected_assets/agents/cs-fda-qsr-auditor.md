@@ -1,16 +1,13 @@
 ---
-title: "FDA QSR Auditor Agent — AI Coding Agent & Codex Skill"
-description: "FDA 21 CFR 820 (QSR / QMSR) auditor persona. Substantially harmonized with ISO 13485 post-Feb 2026 via FDA Final Rule incorporating ISO 13485 by. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-fda-qsr-auditor
+description: "FDA 21 CFR 820 (QSR / QMSR) auditor persona. Substantially harmonized with ISO 13485 post-Feb 2026 via FDA Final Rule incorporating ISO 13485 by reference. Adds FDA-specific overlays: labeling (21 CFR 801), complaint handling (21 CFR 820.198), MDR reporting (21 CFR 803), 510(k) / PMA submissions. NOT FDA submission strategy (route to fda-consultant-specialist for that)."
+skills: ra-qm-team/skills/fda-consultant-specialist
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # FDA QSR Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-fda-qsr-auditor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -39,40 +36,40 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/fda-consultant-specialist`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist)
+**Skill Location:** `../../ra-qm-team/skills/fda-consultant-specialist/`
 
 ### Python Tools
 
 1. **QSR Compliance Checker**
-   - Path: [`scripts/qsr_compliance_checker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/scripts/qsr_compliance_checker.py)
+   - Path: `../../ra-qm-team/skills/fda-consultant-specialist/scripts/qsr_compliance_checker.py`
    - Usage: `python qsr_compliance_checker.py compliance_state.json`
    - Returns: compliance posture across 21 CFR 820 sections; post-Feb 2026 substantially harmonized with ISO 13485
 
 2. **FDA Submission Tracker**
-   - Path: [`scripts/fda_submission_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/scripts/fda_submission_tracker.py)
+   - Path: `../../ra-qm-team/skills/fda-consultant-specialist/scripts/fda_submission_tracker.py`
    - Usage: `python fda_submission_tracker.py submissions.json`
    - Returns: 510(k) / PMA / IDE submission status with FDA review timelines
 
 3. **HIPAA Risk Assessment**
-   - Path: [`scripts/hipaa_risk_assessment.py`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/scripts/hipaa_risk_assessment.py)
+   - Path: `../../ra-qm-team/skills/fda-consultant-specialist/scripts/hipaa_risk_assessment.py`
    - Usage: `python hipaa_risk_assessment.py phi_inventory.json`
    - Returns: HIPAA Security Rule + Privacy Rule risk assessment (overlap with FDA cybersecurity expectations for devices)
 
 ### Knowledge Bases
 
-- [`references/fda_submission_guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/references/fda_submission_guide.md)
-- [`references/qsr_compliance_requirements.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/references/qsr_compliance_requirements.md)
-- [`references/hipaa_compliance_framework.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/references/hipaa_compliance_framework.md)
-- [`references/device_cybersecurity_guidance.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/references/device_cybersecurity_guidance.md)
-- [`references/fda_capa_requirements.md`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/references/fda_capa_requirements.md)
+- `../../ra-qm-team/skills/fda-consultant-specialist/references/fda_submission_guide.md`
+- `../../ra-qm-team/skills/fda-consultant-specialist/references/qsr_compliance_requirements.md`
+- `../../ra-qm-team/skills/fda-consultant-specialist/references/hipaa_compliance_framework.md`
+- `../../ra-qm-team/skills/fda-consultant-specialist/references/device_cybersecurity_guidance.md`
+- `../../ra-qm-team/skills/fda-consultant-specialist/references/fda_capa_requirements.md`
 
 ### Adjacent Skills
 
-- [`skills/quality-manager-qms-iso13485`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/quality-manager-qms-iso13485) — ISO 13485 implementation (substantially harmonized)
-- [`skills/qms-audit-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/qms-audit-expert) — ISO 13485 audit (paired with cs-cqm-iso13485)
-- [`skills/mdr-745-specialist`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/mdr-745-specialist) — EU MDR (parallel regulatory regime)
-- [`skills/capa-officer`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/capa-officer) — CAPA system (21 CFR 820.100 = ISO 13485 8.5.2)
-- [`skills/risk-management-specialist`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/risk-management-specialist) — ISO 14971 + FDA cybersecurity expectations
+- `../../ra-qm-team/skills/quality-manager-qms-iso13485/` — ISO 13485 implementation (substantially harmonized)
+- `../../ra-qm-team/skills/qms-audit-expert/` — ISO 13485 audit (paired with cs-cqm-iso13485)
+- `../../ra-qm-team/skills/mdr-745-specialist/` — EU MDR (parallel regulatory regime)
+- `../../ra-qm-team/skills/capa-officer/` — CAPA system (21 CFR 820.100 = ISO 13485 8.5.2)
+- `../../ra-qm-team/skills/risk-management-specialist/` — ISO 14971 + FDA cybersecurity expectations
 
 ## Workflows
 
@@ -154,13 +151,13 @@ python ../../compliance-os/skills/compliance-os/scripts/audit_simulator.py fda_q
 
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator
 - [cs-cqm-iso13485](cs-cqm-iso13485.md) — ISO 13485 audit (substantially harmonized post-Feb 2026)
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator
-- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Warning Letter response coordination
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator
+- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Warning Letter response coordination
 
 ## References
 
-- Skill: [../../ra-qm-team/skills/fda-consultant-specialist/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team/skills/fda-consultant-specialist/SKILL.md)
-- Sibling command: [`/cs:fda-qsr-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/fda-qsr-audit-prep/SKILL.md)
+- Skill: [../../ra-qm-team/skills/fda-consultant-specialist/SKILL.md](../../ra-qm-team/skills/fda-consultant-specialist/SKILL.md)
+- Sibling command: [`/cs:fda-qsr-audit-prep`](../skills/fda-qsr-audit-prep/SKILL.md)
 
 ---
 

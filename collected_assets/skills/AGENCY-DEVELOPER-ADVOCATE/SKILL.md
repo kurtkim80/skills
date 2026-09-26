@@ -1,10 +1,11 @@
 ---
 name: agency-developer-advocate
+version: 1.0.0
 description: Expert developer advocate specializing in building developer communities, creating compelling technical content, optimizing developer experience (DX), and driving platform adoption through authentic engineering engagement. Bridges product and engineering teams with external developers.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Developer Advocate
+
 
 # Developer Advocate Agent
 

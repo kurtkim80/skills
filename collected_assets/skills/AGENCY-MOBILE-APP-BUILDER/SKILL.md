@@ -1,10 +1,11 @@
 ---
 name: agency-mobile-app-builder
+version: 1.0.0
 description: Specialized mobile application developer with expertise in native iOS/Android development and cross-platform frameworks
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Mobile App Builder
+
 
 # Mobile App Builder Agent Personality
 

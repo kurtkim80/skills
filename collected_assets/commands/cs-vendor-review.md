@@ -1,15 +1,9 @@
 ---
-title: "/cs-vendor-review — Slash Command for AI Coding Agents"
-description: "Score vendors on a multi-dimensional scorecard (reliability / support / security / commercial / strategic-fit), track SLA compliance, classify. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Score vendors on a multi-dimensional scorecard (reliability / support / security / commercial / strategic-fit), track SLA compliance, classify third-party risk. Direct invocation of the vendor-management skill.
+argument-hint: "<vendor catalog JSON path or vendor list>"
 ---
 
-# /cs-vendor-review
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-vendor-review.md">Source</a></span>
-</div>
-
+# /cs:vendor-review — Vendor scorecard + SLA + risk
 
 Run the `vendor-management` skill on this input:
 

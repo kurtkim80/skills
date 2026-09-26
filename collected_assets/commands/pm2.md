@@ -1,67 +1,63 @@
----
-description: Analizar un proyecto y generar comandos de servicio PM2 para los servicios detectados de frontend, backend o base de datos.
----
-
 # PM2 Init
 
-Auto-analizar el proyecto y generar comandos de servicio PM2.
+Projeyi otomatik analiz et ve PM2 servis komutları oluştur.
 
-**Comando**: `$ARGUMENTS`
-
----
-
-## Flujo de Trabajo
-
-1. Verificar PM2 (instalar mediante `npm install -g pm2` si falta)
-2. Escanear el proyecto para identificar servicios (frontend/backend/base de datos)
-3. Generar archivos de configuración y archivos de comando individuales
+**Komut**: `$ARGUMENTS`
 
 ---
 
-## Detección de Servicios
+## İş Akışı
 
-| Tipo | Detección | Puerto por Defecto |
-|------|-----------|-------------------|
+1. PM2'yi kontrol et (yoksa `npm install -g pm2` ile yükle)
+2. Servisleri (frontend/backend/database) tanımlamak için projeyi tara
+3. Config dosyaları ve bireysel komut dosyaları oluştur
+
+---
+
+## Servis Tespiti
+
+| Tip | Tespit | Varsayılan Port |
+|------|-----------|--------------|
 | Vite | vite.config.* | 5173 |
 | Next.js | next.config.* | 3000 |
 | Nuxt | nuxt.config.* | 3000 |
-| CRA | react-scripts en package.json | 3000 |
-| Express/Node | directorio server/backend/api + package.json | 3000 |
+| CRA | package.json'da react-scripts | 3000 |
+| Express/Node | server/backend/api dizini + package.json | 3000 |
 | FastAPI/Flask | requirements.txt / pyproject.toml | 8000 |
 | Go | go.mod / main.go | 8080 |
 
-**Prioridad de Detección de Puerto**: Usuario especificado > .env > archivo de config > args de scripts > puerto por defecto
+**Port Tespit Önceliği**: Kullanıcı belirtimi > .env > config dosyası > script argümanları > varsayılan port
 
 ---
 
-## Archivos Generados
+## Oluşturulan Dosyalar
 
 ```
 project/
-├── ecosystem.config.cjs              # Configuración PM2
-├── {backend}/start.cjs               # Wrapper Python (si aplica)
+├── ecosystem.config.cjs              # PM2 config
+├── {backend}/start.cjs               # Python wrapper (geçerliyse)
 └── .claude/
     ├── commands/
-    │   ├── pm2-all.md                # Iniciar todo + monit
-    │   ├── pm2-all-stop.md           # Detener todo
-    │   ├── pm2-all-restart.md        # Reiniciar todo
-    │   ├── pm2-{puerto}.md           # Iniciar único + logs
-    │   ├── pm2-{puerto}-stop.md      # Detener único
-    │   ├── pm2-{puerto}-restart.md   # Reiniciar único
-    │   ├── pm2-logs.md               # Ver todos los logs
-    │   └── pm2-status.md             # Ver estado
+    │   ├── pm2-all.md                # Hepsini başlat + monit
+    │   ├── pm2-all-stop.md           # Hepsini durdur
+    │   ├── pm2-all-restart.md        # Hepsini yeniden başlat
+    │   ├── pm2-{port}.md             # Tekli başlat + logs
+    │   ├── pm2-{port}-stop.md        # Tekli durdur
+    │   ├── pm2-{port}-restart.md     # Tekli yeniden başlat
+    │   ├── pm2-logs.md               # Tüm logları göster
+    │   └── pm2-status.md             # Durumu göster
     └── scripts/
-        ├── pm2-logs-{puerto}.ps1     # Logs de servicio único
-        └── pm2-monit.ps1             # Monitor PM2
+        ├── pm2-logs-{port}.ps1       # Tekli servis logları
+        └── pm2-monit.ps1             # PM2 monitor
 ```
 
 ---
 
-## Configuración Windows (IMPORTANTE)
+## Windows Konfigürasyonu (ÖNEMLİ)
 
 ### ecosystem.config.cjs
 
-**Debe usar extensión `.cjs`**
+**`.cjs` uzantısı kullanmalı**
 
 ```javascript
 module.exports = {
@@ -74,43 +70,203 @@ module.exports = {
       args: '--port 3000',
       interpreter: 'C:/Program Files/nodejs/node.exe',
       env: { NODE_ENV: 'development' }
+    },
+    // Python
+    {
+      name: 'project-8000',
+      cwd: './backend',
+      script: 'start.cjs',
+      interpreter: 'C:/Program Files/nodejs/node.exe',
+      env: { PYTHONUNBUFFERED: '1' }
     }
   ]
 }
 ```
 
+**Framework script yolları:**
+
+| Framework | script | args |
+|-----------|--------|------|
+| Vite | `node_modules/vite/bin/vite.js` | `--port {port}` |
+| Next.js | `node_modules/next/dist/bin/next` | `dev -p {port}` |
+| Nuxt | `node_modules/nuxt/bin/nuxt.mjs` | `dev --port {port}` |
+| Express | `src/index.js` veya `server.js` | - |
+
+### Python Wrapper Script (start.cjs)
+
+```javascript
+const { spawn } = require('child_process');
+const proc = spawn('python', ['-m', 'uvicorn', 'app.main:app', '--host', '0.0.0.0', '--port', '8000', '--reload'], {
+  cwd: __dirname, stdio: 'inherit', windowsHide: true
+});
+proc.on('close', (code) => process.exit(code));
+```
+
 ---
 
-## Reglas Clave
+## Komut Dosyası Şablonları (Minimal İçerik)
 
-1. **Archivo de config**: `ecosystem.config.cjs` (no .js)
-2. **Node.js**: Especificar ruta del bin directamente + intérprete
-3. **Python**: Script wrapper Node.js + `windowsHide: true`
-4. **Abrir nueva ventana**: `start wt.exe -d "{ruta}" pwsh -NoExit -c "comando"`
-5. **Contenido mínimo**: Cada archivo de comando tiene solo 1-2 líneas de descripción + bloque bash
-6. **Ejecución directa**: Sin necesidad de parseo por IA, solo ejecutar el comando bash
+### pm2-all.md (Hepsini başlat + monit)
+````markdown
+Tüm servisleri başlat ve PM2 monitör aç.
+```bash
+cd "{PROJECT_ROOT}" && pm2 start ecosystem.config.cjs && start wt.exe -d "{PROJECT_ROOT}" pwsh -NoExit -c "pm2 monit"
+```
+````
+
+### pm2-all-stop.md
+````markdown
+Tüm servisleri durdur.
+```bash
+cd "{PROJECT_ROOT}" && pm2 stop all
+```
+````
+
+### pm2-all-restart.md
+````markdown
+Tüm servisleri yeniden başlat.
+```bash
+cd "{PROJECT_ROOT}" && pm2 restart all
+```
+````
+
+### pm2-{port}.md (Tekli başlat + logs)
+````markdown
+{name} ({port}) başlat ve logları aç.
+```bash
+cd "{PROJECT_ROOT}" && pm2 start ecosystem.config.cjs --only {name} && start wt.exe -d "{PROJECT_ROOT}" pwsh -NoExit -c "pm2 logs {name}"
+```
+````
+
+### pm2-{port}-stop.md
+````markdown
+{name} ({port}) durdur.
+```bash
+cd "{PROJECT_ROOT}" && pm2 stop {name}
+```
+````
+
+### pm2-{port}-restart.md
+````markdown
+{name} ({port}) yeniden başlat.
+```bash
+cd "{PROJECT_ROOT}" && pm2 restart {name}
+```
+````
+
+### pm2-logs.md
+````markdown
+Tüm PM2 loglarını göster.
+```bash
+cd "{PROJECT_ROOT}" && pm2 logs
+```
+````
+
+### pm2-status.md
+````markdown
+PM2 durumunu göster.
+```bash
+cd "{PROJECT_ROOT}" && pm2 status
+```
+````
+
+### PowerShell Scripts (pm2-logs-{port}.ps1)
+```powershell
+Set-Location "{PROJECT_ROOT}"
+pm2 logs {name}
+```
+
+### PowerShell Scripts (pm2-monit.ps1)
+```powershell
+Set-Location "{PROJECT_ROOT}"
+pm2 monit
+```
 
 ---
 
-## Resumen Post-Init
+## Ana Kurallar
 
-Después de generar todos los archivos:
+1. **Config dosyası**: `ecosystem.config.cjs` (.js değil)
+2. **Node.js**: Bin yolunu doğrudan belirt + interpreter
+3. **Python**: Node.js wrapper script + `windowsHide: true`
+4. **Yeni pencere aç**: `start wt.exe -d "{path}" pwsh -NoExit -c "command"`
+5. **Minimal içerik**: Her komut dosyası sadece 1-2 satır açıklama + bash bloğu
+6. **Doğrudan çalıştırma**: AI ayrıştırması gerekmez, sadece bash komutunu çalıştır
+
+---
+
+## Çalıştır
+
+`$ARGUMENTS`'a göre init'i çalıştır:
+
+1. Servisleri taramak için projeyi tara
+2. `ecosystem.config.cjs` oluştur
+3. Python servisleri için `{backend}/start.cjs` oluştur (geçerliyse)
+4. `.claude/commands/` dizininde komut dosyaları oluştur
+5. `.claude/scripts/` dizininde script dosyaları oluştur
+6. **Proje CLAUDE.md'yi PM2 bilgisiyle güncelle** (aşağıya bakın)
+7. **Terminal komutlarıyla tamamlama özetini göster**
+
+---
+
+## Post-Init: CLAUDE.md'yi Güncelle
+
+Dosyalar oluşturulduktan sonra, projenin `CLAUDE.md` dosyasına PM2 bölümünü ekle (yoksa oluştur):
+
+````markdown
+## PM2 Services
+
+| Port | Name | Type |
+|------|------|------|
+| {port} | {name} | {type} |
+
+**Terminal Commands:**
+```bash
+pm2 start ecosystem.config.cjs   # İlk seferinde
+pm2 start all                    # İlk seferinden sonra
+pm2 stop all / pm2 restart all
+pm2 start {name} / pm2 stop {name}
+pm2 logs / pm2 status / pm2 monit
+pm2 save                         # Process listesini kaydet
+pm2 resurrect                    # Kaydedilen listeyi geri yükle
+```
+````
+
+**CLAUDE.md güncelleme kuralları:**
+- PM2 bölümü varsa, değiştir
+- Yoksa, sona ekle
+- İçeriği minimal ve temel tut
+
+---
+
+## Post-Init: Özet Göster
+
+Tüm dosyalar oluşturulduktan sonra, çıktı:
 
 ```
-## PM2 Init Completado
+## PM2 Init Complete
 
-**Servicios:**
+**Services:**
 
-| Puerto | Nombre | Tipo |
-|--------|--------|------|
-| {puerto} | {nombre} | {tipo} |
+| Port | Name | Type |
+|------|------|------|
+| {port} | {name} | {type} |
 
-**Comandos Claude:** /pm2-all, /pm2-all-stop, /pm2-{puerto}, /pm2-{puerto}-stop, /pm2-logs, /pm2-status
+**Claude Commands:** /pm2-all, /pm2-all-stop, /pm2-{port}, /pm2-{port}-stop, /pm2-logs, /pm2-status
 
-**Comandos de Terminal:**
-pm2 start ecosystem.config.cjs   # Primera vez
-pm2 start all                    # Después de la primera vez
-pm2 stop all / pm2 restart all
-pm2 logs / pm2 status / pm2 monit
-pm2 resurrect                    # Restaurar lista guardada
+**Terminal Commands:**
+## İlk seferinde (config dosyasıyla)
+pm2 start ecosystem.config.cjs && pm2 save
+
+## İlk seferinden sonra (basitleştirilmiş)
+pm2 start all          # Hepsini başlat
+pm2 stop all           # Hepsini durdur
+pm2 restart all        # Hepsini yeniden başlat
+pm2 start {name}       # Tekli başlat
+pm2 stop {name}        # Tekli durdur
+pm2 logs               # Logları göster
+pm2 monit              # Monitor paneli
+pm2 resurrect          # Kaydedilen process'leri geri yükle
+
+**İpucu:** Basitleştirilmiş komutları etkinleştirmek için ilk başlatmadan sonra `pm2 save` çalıştırın.
 ```

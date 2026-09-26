@@ -1,15 +1,9 @@
 ---
-title: "/cs-grill-product — Slash Command for AI Coding Agents"
-description: "Matt Pocock-style interrogation of a product plan against the product canon (Torres, Cagan Transformed, Reinertsen/WSJF, Amplitude North Star. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Matt Pocock-style interrogation of a product plan against the product canon (Torres, Cagan Transformed, Reinertsen/WSJF, Amplitude North Star, evals-as-PRD). One forcing question per turn with a recommended answer; refuses to invoke any sub-skill or start a loop until the outcome-defining decisions are locked. Use before running /cs:product or /cs:product-loop on a fuzzy plan.
+argument-hint: "<product plan, roadmap, feature idea, or strategy to interrogate>"
 ---
 
-# /cs-grill-product
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/product-team/commands/cs-grill-product.md">Source</a></span>
-</div>
-
+# /cs:grill-product — grill a product plan before running it
 
 Interrogate this plan — do not execute anything yet:
 

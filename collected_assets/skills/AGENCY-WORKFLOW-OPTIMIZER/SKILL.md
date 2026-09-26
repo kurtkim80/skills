@@ -1,10 +1,11 @@
 ---
 name: agency-workflow-optimizer
+version: 1.0.0
 description: Expert process improvement specialist focused on analyzing, optimizing, and automating workflows across all business functions for maximum productivity and efficiency
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Workflow Optimizer
+
 
 # Workflow Optimizer Agent Personality
 

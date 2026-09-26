@@ -1,54 +1,54 @@
 ---
 name: skill-health
-description: チャートとアナリティクス付きのスキルポートフォリオヘルスダッシュボードを表示
+description: 显示技能组合健康仪表板，包含图表和分析
 command: true
 ---
 
-# スキルヘルスダッシュボード
+# 技能健康仪表盘
 
-ポートフォリオ内のすべてのスキルについて、成功率スパークライン、失敗パターンのクラスタリング、保留中の修正案、バージョン履歴を含む包括的なヘルスダッシュボードを表示します。
+展示投资组合中所有技能的综合健康仪表盘，包含成功率走势图、故障模式聚类、待处理修订和版本历史。
 
-## 実装
+## 实现
 
-ダッシュボードモードでスキルヘルスCLIを実行:
+在仪表盘模式下运行技能健康 CLI：
 
 ```bash
 ECC_ROOT="${CLAUDE_PLUGIN_ROOT:-$(node -e "var r=(function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}try{var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=f.readdirSync(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=f.readdirSync(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}}catch(_){}return d})();console.log(r)")}"
 node "$ECC_ROOT/scripts/skills-health.js" --dashboard
 ```
 
-特定のパネルのみ:
+仅针对特定面板：
 
 ```bash
 ECC_ROOT="${CLAUDE_PLUGIN_ROOT:-$(node -e "var r=(function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}try{var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=f.readdirSync(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=f.readdirSync(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}}catch(_){}return d})();console.log(r)")}"
 node "$ECC_ROOT/scripts/skills-health.js" --dashboard --panel failures
 ```
 
-機械読み取り可能な出力:
+获取机器可读输出：
 
 ```bash
 ECC_ROOT="${CLAUDE_PLUGIN_ROOT:-$(node -e "var r=(function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}try{var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=f.readdirSync(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=f.readdirSync(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}}catch(_){}return d})();console.log(r)")}"
 node "$ECC_ROOT/scripts/skills-health.js" --dashboard --json
 ```
 
-## 使い方
+## 使用方法
 
 ```
-/skill-health                    # フルダッシュボードビュー
-/skill-health --panel failures   # 失敗クラスタリングパネルのみ
-/skill-health --json             # 機械読み取り可能なJSON出力
+/skill-health                    # 完整仪表盘视图
+/skill-health --panel failures   # 仅故障聚类面板
+/skill-health --json             # 机器可读的 JSON 输出
 ```
 
-## 動作内容
+## 操作步骤
 
-1. --dashboardフラグでskills-health.jsスクリプトを実行
-2. ユーザーに出力を表示
-3. 低下しているスキルがある場合、ハイライトして/evolveの実行を提案
-4. 保留中の修正案がある場合、レビューを提案
+1. 使用 --dashboard 标志运行 skills-health.js 脚本
+2. 向用户显示输出
+3. 如果有任何技能出现衰退，高亮显示并建议运行 /evolve
+4. 如果有待处理修订，建议进行审查
 
-## パネル
+## 面板
 
-- **成功率（30日）** — スキルごとの日次成功率を表示するスパークラインチャート
-- **失敗パターン** — 水平バーチャート付きのクラスタ化された失敗理由
-- **保留中の修正案** — レビュー待ちの修正提案
-- **バージョン履歴** — スキルごとのバージョンスナップショットのタイムライン
+* **成功率 (30天)** — 显示每个技能每日成功率的走势图
+* **故障模式** — 聚类故障原因并显示水平条形图
+* **待处理修订** — 等待审查的修订提案
+* **版本历史** — 每个技能的版本快照时间线

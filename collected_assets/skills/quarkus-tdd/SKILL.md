@@ -1,36 +1,38 @@
 ---
 name: quarkus-tdd
-description: Desarrollo guiado por pruebas para Quarkus 3.x LTS usando JUnit 5, Mockito, REST Assured, pruebas Camel y JaCoCo. Usar al agregar funcionalidades, corregir bugs o refactorizar servicios orientados a eventos.
+description: JUnit 5、Mockito、REST Assured、Camelテスト、JaCoCoを使用したQuarkus 3.xのテスト駆動開発。機能追加、バグ修正、またはイベント駆動サービスのリファクタリング時に使用。
 origin: ECC
 ---
 
-# Flujo de Trabajo TDD en Quarkus
+# Quarkus TDD Workflow
 
-Orientación TDD para servicios Quarkus 3.x con 80%+ de cobertura (unit + integración). Optimizado para arquitecturas orientadas a eventos con Apache Camel.
+80%以上のカバレッジ（ユニット+統合）を備えたQuarkus 3.xサービスのTDD指導。Apache Camelを使用したイベント駆動アーキテクチャに最適化。
 
-## Cuándo Usar
+## When to Use
 
-- Nuevas funcionalidades o endpoints REST
-- Correcciones de bugs o refactorizaciones
-- Agregar lógica de acceso a datos, reglas de seguridad o streams reactivos
-- Probar rutas Apache Camel y manejadores de eventos
-- Probar servicios orientados a eventos con RabbitMQ
-- Probar lógica de flujo condicional
-- Validar operaciones asíncronas con CompletableFuture
-- Probar propagación de LogContext
+- 新機能またはRESTエンドポイント
+- バグ修正またはリファクタリング
+- データアクセスロジック、セキュリティルール、またはリアクティブストリーム追加
+- Apache Camelルートとイベントハンドラーテスト
+- RabbitMQを使用したイベント駆動サービステスト
+- 条件フローロジック検証
+- CompletableFuture非同期操作検証
+- LogContextプロパゲーション テスト
 
-## Flujo de Trabajo
+## Workflow
 
-1. Escribir pruebas primero (deben fallar)
-2. Implementar el código mínimo para que pasen
-3. Refactorizar con pruebas en verde
-4. Exigir cobertura con JaCoCo (objetivo 80%+)
+1. テストを先に書く（失敗するはず）
+2. 最小限のコードで合格実装
+3. テストが緑の状態でリファクタリング
+4. JaCoCoでカバレッジ実装（80%以上を目標）
 
-## Pruebas Unitarias con Organización @Nested
+## Unit Tests with @Nested Organization
+
+包括的で読みやすいテストのため、以下の構造化されたアプローチに従います：
 
 ```java
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Pruebas Unitarias de OrderService")
+@DisplayName("OrderService Unit Tests")
 class OrderServiceTest {
 
   @Mock
@@ -56,11 +58,11 @@ class OrderServiceTest {
   }
 
   @Nested
-  @DisplayName("Pruebas para createOrder")
+  @DisplayName("createOrder のテスト")
   class CreateOrder {
 
     @Test
-    @DisplayName("Debe persistir orden y publicar evento de fulfillment")
+    @DisplayName("有効なコマンドが与えられた場合、注文を永続化してフルフィルメントイベントを発行する")
     void givenValidCommand_whenCreateOrder_thenPersistsAndPublishes() {
       // ARRANGE
       doNothing().when(orderRepository).persist(any(Order.class));
@@ -77,7 +79,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("Debe rechazar customer id vacío")
+    @DisplayName("顧客IDが無い場合、BadRequestをスロー")
     void givenMissingCustomerId_whenCreateOrder_thenThrowsBadRequest() {
       // ARRANGE
       CreateOrderCommand invalid = new CreateOrderCommand("", validCommand.lines());
@@ -94,10 +96,10 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("Debe registrar evento de error cuando falla la persistencia")
+    @DisplayName("永続化失敗時、エラーイベントを記録")
     void givenPersistenceFailure_whenCreateOrder_thenRecordsErrorEvent() {
       // ARRANGE
-      doThrow(new PersistenceException("base de datos no disponible"))
+      doThrow(new PersistenceException("database unavailable"))
           .when(orderRepository).persist(any(Order.class));
 
       // ACT & ASSERT
@@ -106,35 +108,48 @@ class OrderServiceTest {
           () -> orderService.createOrder(validCommand)
       );
 
-      assertThat(exception.getMessage()).contains("base de datos no disponible");
+      assertThat(exception.getMessage()).contains("database unavailable");
       verify(eventService).createErrorEvent(
           eq(validCommand),
           eq("ORDER_CREATE_FAILED"),
-          contains("base de datos no disponible")
+          contains("database unavailable")
       );
       verify(fulfillmentPublisher, never()).publishAsync(any());
+    }
+
+    @Test
+    @DisplayName("nullコマンドが与えられた場合、NullPointerExceptionをスロー")
+    void givenNullCommand_whenCreateOrder_thenThrowsNullPointerException() {
+      // ACT & ASSERT
+      assertThrows(
+          NullPointerException.class,
+          () -> orderService.createOrder(null)
+      );
+
+      verify(orderRepository, never()).persist(any(Order.class));
     }
   }
 }
 ```
 
-### Patrones Clave de Prueba
+### Key Testing Patterns
 
-1. **Clases @Nested**: Agrupar pruebas por método bajo prueba
-2. **@DisplayName**: Proporcionar descripciones legibles para reportes
-3. **Convención de nombres**: `givenX_whenY_thenZ` para claridad
-4. **Patrón AAA**: Comentarios explícitos `// ARRANGE`, `// ACT`, `// ASSERT`
-5. **@BeforeEach**: Configurar datos de prueba comunes para reducir duplicación
-6. **assertDoesNotThrow**: Probar escenarios exitosos sin capturar excepciones
-7. **assertThrows**: Probar escenarios de excepción con validación de mensajes
-8. **verify()**: Asegurar que los métodos sean llamados correctamente
-9. **never()**: Asegurar que los métodos NO sean llamados en escenarios de error
+1. **@Nested クラス**: テストするメソッド別にテストをグループ化
+2. **@DisplayName**: テストレポート用の読みやすい説明提供
+3. **命名規則**: 明確性のため `givenX_whenY_thenZ`
+4. **AAA パターン**: 明示的な `// ARRANGE`, `// ACT`, `// ASSERT` コメント
+5. **@BeforeEach**: 重複削減のためテストデータを共通設定
+6. **assertDoesNotThrow**: 例外をキャッチせずに成功シナリオをテスト
+7. **assertThrows**: AssertJを使用したメッセージ検証で例外シナリオをテスト
+8. **包括的カバレッジ**: 正常系、null入力、エッジケース、例外をテスト
+9. **相互作用検証**: Mockito `verify()` でメソッド呼び出しが正しく行われたか確認
+10. **Never検証**: `never()` でエラーシナリオでメソッドが呼ばれていないことを確認
 
-## Pruebas de Rutas Camel
+## Testing Camel Routes
 
 ```java
 @QuarkusTest
-@DisplayName("Pruebas de Ruta Camel Business Rules")
+@DisplayName("Business Rules Camel Route Tests")
 class BusinessRulesRouteTest {
 
   @Inject
@@ -153,22 +168,24 @@ class BusinessRulesRouteTest {
 
   @BeforeEach
   void setUp() {
+    // ARRANGE - テストデータ
     testPayload = new BusinessRulesPayload();
     testPayload.setDocumentId(1L);
     testPayload.setFlowProfile(FlowProfile.BASIC);
   }
 
   @Nested
-  @DisplayName("Pruebas para ruta business-rules-publisher")
+  @DisplayName("business-rules-publisher ルートのテスト")
   class BusinessRulesPublisher {
 
     @Test
-    @DisplayName("Debe publicar mensaje exitosamente en RabbitMQ")
+    @DisplayName("有効なペイロードが与えられた場合、メッセージをRabbitMQに送信")
     void givenValidPayload_whenPublish_thenMessageSentToQueue() throws Exception {
       // ARRANGE
       MockEndpoint mockRabbitMQ = camelContext.getEndpoint("mock:rabbitmq", MockEndpoint.class);
       mockRabbitMQ.expectedMessageCount(1);
 
+      // テスト用の実エンドポイントをモックに置き換え
       camelContext.getRouteController().stopRoute("business-rules-publisher");
       AdviceWith.adviceWith(camelContext, "business-rules-publisher", advice -> {
         advice.replaceFromWith("direct:business-rules-publisher");
@@ -179,22 +196,101 @@ class BusinessRulesRouteTest {
       // ACT
       producerTemplate.sendBody("direct:business-rules-publisher", testPayload);
 
-      // ASSERT
+      // ASSERT — .marshal().json(JsonLibrary.Jackson)の後、bodyはJSON文字列
       mockRabbitMQ.assertIsSatisfied(5000);
 
       assertThat(mockRabbitMQ.getExchanges()).hasSize(1);
       String body = mockRabbitMQ.getExchanges().get(0).getIn().getBody(String.class);
       assertThat(body).contains("\"documentId\":1");
     }
+
+    @Test
+    @DisplayName("ペイロード与えられた場合、JSONに整形")
+    void givenPayload_whenPublish_thenMarshalledToJson() throws Exception {
+      // ARRANGE
+      MockEndpoint mockMarshal = new MockEndpoint("mock:marshal");
+      camelContext.addEndpoint("mock:marshal", mockMarshal);
+      mockMarshal.expectedMessageCount(1);
+
+      camelContext.getRouteController().stopRoute("business-rules-publisher");
+      AdviceWith.adviceWith(camelContext, "business-rules-publisher", advice -> {
+        advice.weaveAddLast().to("mock:marshal");
+      });
+      camelContext.getRouteController().startRoute("business-rules-publisher");
+
+      // ACT
+      producerTemplate.sendBody("direct:business-rules-publisher", testPayload);
+
+      // ASSERT
+      mockMarshal.assertIsSatisfied(5000);
+
+      String body = mockMarshal.getExchanges().get(0).getIn().getBody(String.class);
+      assertThat(body).contains("\"documentId\":1");
+      assertThat(body).contains("\"flowProfile\":\"BASIC\"");
+    }
+  }
+
+  @Nested
+  @DisplayName("document-processing ルートのテスト")
+  class DocumentProcessing {
+
+    @Test
+    @DisplayName("請求書タイプが与えられた場合、正しいプロセッサーにルーティング")
+    void givenInvoiceType_whenProcess_thenRoutesToInvoiceProcessor() throws Exception {
+      // ARRANGE
+      MockEndpoint mockInvoice = camelContext.getEndpoint("mock:invoice", MockEndpoint.class);
+      mockInvoice.expectedMessageCount(1);
+
+      camelContext.getRouteController().stopRoute("document-processing");
+      AdviceWith.adviceWith(camelContext, "document-processing", advice -> {
+        advice.weaveByToString(".*direct:process-invoice.*").replace().to("mock:invoice");
+      });
+      camelContext.getRouteController().startRoute("document-processing");
+
+      // ACT
+      producerTemplate.sendBodyAndHeader("direct:process-document",
+          testPayload, "documentType", "INVOICE");
+
+      // ASSERT
+      mockInvoice.assertIsSatisfied(5000);
+    }
+
+    @Test
+    @DisplayName("検証エラーが与えられた場合、エラーハンドラーにルーティング")
+    void givenValidationError_whenProcess_thenRoutesToErrorHandler() throws Exception {
+      // ARRANGE
+      MockEndpoint mockError = camelContext.getEndpoint("mock:error", MockEndpoint.class);
+      mockError.expectedMessageCount(1);
+
+      camelContext.getRouteController().stopRoute("document-processing");
+      AdviceWith.adviceWith(camelContext, "document-processing", advice -> {
+        advice.weaveByToString(".*direct:validation-error-handler.*")
+            .replace().to("mock:error");
+      });
+      camelContext.getRouteController().startRoute("document-processing");
+
+      // バリデータビーンをモック化して例外をスロー
+      when(documentValidator.validate(any())).thenThrow(new ValidationException("Invalid document"));
+
+      // ACT
+      producerTemplate.sendBody("direct:process-document", testPayload);
+
+      // ASSERT
+      mockError.assertIsSatisfied(5000);
+
+      Exception exception = mockError.getExchanges().get(0).getException();
+      assertThat(exception).isInstanceOf(ValidationException.class);
+      assertThat(exception.getMessage()).contains("Invalid document");
+    }
   }
 }
 ```
 
-## Pruebas de Servicios de Eventos
+## Testing Event Services
 
 ```java
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Pruebas Unitarias de EventService")
+@DisplayName("EventService Unit Tests")
 class EventServiceTest {
 
   @Mock
@@ -206,16 +302,23 @@ class EventServiceTest {
   @InjectMocks
   private EventService eventService;
 
+  private BusinessRulesPayload testPayload;
+
+  @BeforeEach
+  void setUp() {
+    // ARRANGE
+    testPayload = new BusinessRulesPayload();
+    testPayload.setDocumentId(1L);
+  }
+
   @Nested
-  @DisplayName("Pruebas para createSuccessEvent")
+  @DisplayName("createSuccessEvent のテスト")
   class CreateSuccessEvent {
 
     @Test
-    @DisplayName("Debe crear evento de éxito con atributos correctos")
+    @DisplayName("有効なペイロードが与えられた場合、正しい属性でサクセスイベント作成")
     void givenValidPayload_whenCreateSuccessEvent_thenEventPersisted() throws Exception {
       // ARRANGE
-      BusinessRulesPayload testPayload = new BusinessRulesPayload();
-      testPayload.setDocumentId(1L);
       when(objectMapper.writeValueAsString(testPayload)).thenReturn("{\"documentId\":1}");
 
       // ACT
@@ -226,12 +329,13 @@ class EventServiceTest {
       verify(eventRepository).persist(argThat(event ->
           event.getType().equals("DOCUMENT_PROCESSED") &&
           event.getStatus() == EventStatus.SUCCESS &&
+          event.getPayload().equals("{\"documentId\":1}") &&
           event.getTimestamp() != null
       ));
     }
 
     @Test
-    @DisplayName("Debe lanzar excepción cuando el payload es null")
+    @DisplayName("nullペイロードが与えられた場合、例外をスロー")
     void givenNullPayload_whenCreateSuccessEvent_thenThrowsException() {
       // ARRANGE
       Object nullPayload = null;
@@ -248,16 +352,33 @@ class EventServiceTest {
   }
 
   @Nested
-  @DisplayName("Pruebas para createErrorEvent")
+  @DisplayName("createErrorEvent のテスト")
   class CreateErrorEvent {
 
+    @Test
+    @DisplayName("エラーが与えられた場合、エラーメッセージ付きエラーイベント作成")
+    void givenError_whenCreateErrorEvent_thenEventPersistedWithMessage() throws Exception {
+      // ARRANGE
+      String errorMessage = "Processing failed";
+      when(objectMapper.writeValueAsString(testPayload)).thenReturn("{\"documentId\":1}");
+
+      // ACT
+      assertDoesNotThrow(() ->
+          eventService.createErrorEvent(testPayload, "PROCESSING_ERROR", errorMessage));
+
+      // ASSERT
+      verify(eventRepository).persist(argThat(event ->
+          event.getType().equals("PROCESSING_ERROR") &&
+          event.getStatus() == EventStatus.ERROR &&
+          event.getErrorMessage().equals(errorMessage) &&
+          event.getPayload().equals("{\"documentId\":1}")
+      ));
+    }
+
     @ParameterizedTest
-    @DisplayName("Debe rechazar mensajes de error inválidos")
+    @DisplayName("不正なエラーメッセージが与えられた場合、例外をスロー")
     @ValueSource(strings = {"", " "})
     void givenBlankErrorMessage_whenCreateErrorEvent_thenThrowsException(String blankMessage) {
-      // ARRANGE
-      BusinessRulesPayload testPayload = new BusinessRulesPayload();
-
       // ACT & ASSERT
       IllegalArgumentException exception = assertThrows(
           IllegalArgumentException.class,
@@ -270,10 +391,11 @@ class EventServiceTest {
 }
 ```
 
-## Pruebas de CompletableFuture
+## Testing CompletableFuture
 
 ```java
 @ExtendWith(MockitoExtension.class)
+@DisplayName("FileStorageService Unit Tests")
 class FileStorageServiceTest {
 
   @Mock
@@ -285,56 +407,204 @@ class FileStorageServiceTest {
   @InjectMocks
   private FileStorageService fileStorageService;
 
-  @Test
-  @DisplayName("Debe manejar fallo de S3")
-  void givenS3Failure_whenUpload_thenCompletableFutureFails() {
-    // ARRANGE — ejecutar sincrónicamente para que la excepción se propague
-    doAnswer(invocation -> {
-      ((Runnable) invocation.getArgument(0)).run();
-      return null;
-    }).when(executorService).execute(any(Runnable.class));
+  private InputStream testInputStream;
+  private LogContext testLogContext;
 
-    when(s3Client.putObject(any(PutObjectRequest.class), any(RequestBody.class)))
-        .thenThrow(new StorageException("S3 no disponible"));
+  @BeforeEach
+  void setUp() {
+    // ARRANGE
+    testInputStream = new ByteArrayInputStream("test content".getBytes());
+    testLogContext = new LogContext();
+    testLogContext.put("traceId", "trace-123");
+  }
 
-    // ACT
-    CompletableFuture<StoredDocumentInfo> future =
-        fileStorageService.uploadOriginalFile(testInputStream, 1024L,
-            testLogContext, InvoiceFormat.UBL);
+  @Nested
+  @DisplayName("uploadOriginalFile のテスト")
+  class UploadOriginalFile {
 
-    // ASSERT
-    assertThatThrownBy(() -> future.join())
-        .isInstanceOf(CompletionException.class)
-        .hasCauseInstanceOf(StorageException.class)
-        .hasMessageContaining("S3 no disponible");
+    @Test
+    @DisplayName("有効なファイルが与えられた場合、ファイルアップロード成功とドキュメント情報を返す")
+    void givenValidFile_whenUpload_thenReturnsDocumentInfo() throws Exception {
+      // ARRANGE
+      doAnswer(invocation -> {
+        ((Runnable) invocation.getArgument(0)).run();
+        return null;
+      }).when(executorService).execute(any(Runnable.class));
+
+      when(s3Client.putObject(any(PutObjectRequest.class), any(RequestBody.class)))
+          .thenReturn(PutObjectResponse.builder().build());
+
+      // ACT
+      CompletableFuture<StoredDocumentInfo> future =
+          fileStorageService.uploadOriginalFile(testInputStream, 1024L,
+              testLogContext, InvoiceFormat.UBL);
+
+      StoredDocumentInfo result = future.join();
+
+      // ASSERT
+      assertThat(result).isNotNull();
+      assertThat(result.getPath()).isNotBlank();
+      assertThat(result.getSize()).isEqualTo(1024L);
+      assertThat(result.getUploadedAt()).isNotNull();
+
+      verify(s3Client).putObject(any(PutObjectRequest.class), any(RequestBody.class));
+    }
+
+    @Test
+    @DisplayName("S3アップロード失敗が与えられた場合、CompletableFutureが失敗")
+    void givenS3Failure_whenUpload_thenCompletableFutureFails() {
+      // ARRANGE — 例外がfutureを通じてプロパゲートされるように同期実行
+      doAnswer(invocation -> {
+        ((Runnable) invocation.getArgument(0)).run();
+        return null;
+      }).when(executorService).execute(any(Runnable.class));
+
+      when(s3Client.putObject(any(PutObjectRequest.class), any(RequestBody.class)))
+          .thenThrow(new StorageException("S3 unavailable"));
+
+      // ACT
+      CompletableFuture<StoredDocumentInfo> future =
+          fileStorageService.uploadOriginalFile(testInputStream, 1024L,
+              testLogContext, InvoiceFormat.UBL);
+
+      // ASSERT
+      assertThatThrownBy(() -> future.join())
+          .isInstanceOf(CompletionException.class)
+          .hasCauseInstanceOf(StorageException.class)
+          .hasMessageContaining("S3 unavailable");
+    }
+
+    @Test
+    @DisplayName("LogContextが与えられた場合、非同期操作にコンテキストをプロパゲート")
+    void givenLogContext_whenUpload_thenContextPropagated() throws Exception {
+      // ARRANGE
+      AtomicReference<LogContext> capturedContext = new AtomicReference<>();
+
+      doAnswer(invocation -> {
+        capturedContext.set(CustomLog.getCurrentContext());
+        ((Runnable) invocation.getArgument(0)).run();
+        return null;
+      }).when(executorService).execute(any(Runnable.class));
+
+      // ACT
+      fileStorageService.uploadOriginalFile(testInputStream, 1024L,
+          testLogContext, InvoiceFormat.UBL).join();
+
+      // ASSERT
+      assertThat(capturedContext.get()).isNotNull();
+      assertThat(capturedContext.get().get("traceId")).isEqualTo("trace-123");
+    }
   }
 }
 ```
 
-## Pruebas de Capa de Recurso (REST Assured)
+## Resource Layer Tests (REST Assured)
 
 ```java
 @QuarkusTest
-@DisplayName("Pruebas de API DocumentResource")
+@DisplayName("DocumentResource API Tests")
 class DocumentResourceTest {
 
   @InjectMock
   DocumentService documentService;
 
-  @Test
-  @DisplayName("Debe crear documento y retornar 201")
-  void givenValidRequest_whenCreate_thenReturns201() {
-    // ARRANGE
-    Document document = createDocument(1L, "DOC-001");
-    when(documentService.create(any())).thenReturn(document);
+  @Nested
+  @DisplayName("GET /api/documents のテスト")
+  class ListDocuments {
 
-    // ACT & ASSERT
-    given()
+    @Test
+    @DisplayName("ドキュメントが存在する場合、ドキュメント一覧を返す")
+    void givenDocumentsExist_whenList_thenReturnsOk() {
+      // ARRANGE
+      List<Document> documents = List.of(createDocument(1L, "DOC-001"));
+      when(documentService.list(0, 20)).thenReturn(documents);
+
+      // ACT & ASSERT
+      given()
+          .when().get("/api/documents")
+          .then()
+          .statusCode(200)
+          .body("$.size()", is(1))
+          .body("[0].referenceNumber", equalTo("DOC-001"));
+    }
+  }
+
+  @Nested
+  @DisplayName("POST /api/documents のテスト")
+  class CreateDocument {
+
+    @Test
+    @DisplayName("有効なリクエストが与えられた場合、ドキュメント作成して201を返す")
+    void givenValidRequest_whenCreate_thenReturns201() {
+      // ARRANGE
+      Document document = createDocument(1L, "DOC-001");
+      when(documentService.create(any())).thenReturn(document);
+
+      // ACT & ASSERT
+      given()
+          .contentType(ContentType.JSON)
+          .body("""
+              {
+                "referenceNumber": "DOC-001",
+                "description": "Test document",
+                "validUntil": "2030-01-01T00:00:00Z",
+                "categories": ["test"]
+              }
+              """)
+          .when().post("/api/documents")
+          .then()
+          .statusCode(201)
+          .header("Location", containsString("/api/documents/1"))
+          .body("referenceNumber", equalTo("DOC-001"));
+    }
+
+    @Test
+    @DisplayName("不正なリクエストが与えられた場合、400を返す")
+    void givenInvalidRequest_whenCreate_thenReturns400() {
+      // ACT & ASSERT
+      given()
+          .contentType(ContentType.JSON)
+          .body("""
+              {
+                "referenceNumber": "",
+                "description": "Test"
+              }
+              """)
+          .when().post("/api/documents")
+          .then()
+          .statusCode(400);
+    }
+  }
+
+  private Document createDocument(Long id, String referenceNumber) {
+    Document document = new Document();
+    document.setId(id);
+    document.setReferenceNumber(referenceNumber);
+    document.setStatus(DocumentStatus.PENDING);
+    return document;
+  }
+}
+```
+
+## Integration Tests with Real Database
+
+```java
+@QuarkusTest
+@TestProfile(IntegrationTestProfile.class)
+@DisplayName("Document Integration Tests")
+class DocumentIntegrationTest {
+
+  @Test
+  @Transactional
+  @DisplayName("新規ドキュメントをAPIで作成・取得、成功する")
+  void givenNewDocument_whenCreateAndRetrieve_thenSuccessful() {
+    // ACT - APIで作成
+    Long id = given()
         .contentType(ContentType.JSON)
         .body("""
             {
-              "referenceNumber": "DOC-001",
-              "description": "Documento de prueba",
+              "referenceNumber": "INT-001",
+              "description": "Integration test",
               "validUntil": "2030-01-01T00:00:00Z",
               "categories": ["test"]
             }
@@ -342,31 +612,21 @@ class DocumentResourceTest {
         .when().post("/api/documents")
         .then()
         .statusCode(201)
-        .header("Location", containsString("/api/documents/1"))
-        .body("referenceNumber", equalTo("DOC-001"));
-  }
+        .extract().path("id");
 
-  @Test
-  @DisplayName("Debe retornar 400 para entrada inválida")
-  void givenInvalidRequest_whenCreate_thenReturns400() {
+    // ASSERT - APIで取得
     given()
-        .contentType(ContentType.JSON)
-        .body("""
-            {
-              "referenceNumber": "",
-              "description": "Test"
-            }
-            """)
-        .when().post("/api/documents")
+        .when().get("/api/documents/" + id)
         .then()
-        .statusCode(400);
+        .statusCode(200)
+        .body("referenceNumber", equalTo("INT-001"));
   }
 }
 ```
 
-## Cobertura con JaCoCo
+## Coverage with JaCoCo
 
-### Configuración Maven (Completa)
+### Maven Configuration (Complete)
 
 ```xml
 <plugin>
@@ -374,12 +634,15 @@ class DocumentResourceTest {
   <artifactId>jacoco-maven-plugin</artifactId>
   <version>0.8.13</version>
   <executions>
+    <!-- テスト実行用エージェント準備 -->
     <execution>
       <id>prepare-agent</id>
       <goals>
         <goal>prepare-agent</goal>
       </goals>
     </execution>
+
+    <!-- カバレッジレポート生成 -->
     <execution>
       <id>report</id>
       <phase>verify</phase>
@@ -387,6 +650,8 @@ class DocumentResourceTest {
         <goal>report</goal>
       </goals>
     </execution>
+
+    <!-- カバレッジ閾値を強制 -->
     <execution>
       <id>check</id>
       <goals>
@@ -416,19 +681,20 @@ class DocumentResourceTest {
 </plugin>
 ```
 
-Ejecutar pruebas con cobertura:
+カバレッジ付きテスト実行:
 ```bash
 mvn clean test
 mvn jacoco:report
 mvn jacoco:check
 
-# Reporte en: target/site/jacoco/index.html
+# レポート: target/site/jacoco/index.html
 ```
 
-## Dependencias de Prueba
+## Test Dependencies
 
 ```xml
 <dependencies>
+    <!-- Quarkus Testing -->
     <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-junit5</artifactId>
@@ -439,17 +705,30 @@ mvn jacoco:check
         <artifactId>quarkus-junit5-mockito</artifactId>
         <scope>test</scope>
     </dependency>
+
+    <!-- Mockito -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- AssertJ（JUnitアサーション推奨） -->
     <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>3.24.2</version>
         <scope>test</scope>
     </dependency>
+
+    <!-- REST Assured -->
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
         <scope>test</scope>
     </dependency>
+
+    <!-- Camel Testing -->
     <dependency>
         <groupId>org.apache.camel.quarkus</groupId>
         <artifactId>camel-quarkus-junit5</artifactId>
@@ -458,28 +737,75 @@ mvn jacoco:check
 </dependencies>
 ```
 
-## Buenas Prácticas
+## Best Practices
 
-### Organización de Pruebas
-- Usar clases `@Nested` para agrupar pruebas por método bajo prueba
-- Usar `@DisplayName` para descripciones legibles en reportes
-- Seguir la convención de nombres `givenX_whenY_thenZ`
-- Usar `@BeforeEach` para configuración de datos comunes
+### テスト組織
+- テストするメソッド別にグループ化するため`@Nested`クラス使用
+- レポートで見やすいテスト説明のため`@DisplayName`使用
+- テストメソッド命名は`givenX_whenY_thenZ`規則に従う
+- 重複削減のため@BeforeEachで共通テストデータ設定
 
-### Cobertura de Pruebas
-- Probar rutas felices para todos los métodos públicos
-- Probar manejo de entradas null
-- Probar casos borde (colecciones vacías, valores de frontera)
-- Probar escenarios de excepción de forma comprensiva
-- Apuntar a 80%+ de cobertura de líneas, 70%+ de ramas
+### テスト構造
+- 明示的コメント（`// ARRANGE`, `// ACT`, `// ASSERT`）でAAAパターン従う
+- 成功シナリオでは`assertDoesNotThrow`使用
+- 例外シナリオではメッセージ検証と共に`assertThrows`使用
+- AssertJ `contains()`または`isEqualTo()`で例外メッセージ検証
 
-### Aserciones
-- **Preferir AssertJ** (`assertThat`) sobre aserciones JUnit para verificar valores
-- Para excepciones: usar JUnit `assertThrows` para capturar, luego AssertJ para validar
-- Para escenarios exitosos sin excepción: usar JUnit `assertDoesNotThrow`
+### テストカバレッジ
+- 全パブリックメソッドの正常系パスをテスト
+- null入力ハンドリングテスト
+- エッジケース（空のコレクション、境界値、負のID、空文字列）テスト
+- 例外シナリオを包括的にテスト
+- 外部依存関係（リポジトリ、サービス、Camelエンドポイント）をモック化
+- 80%以上の行カバレッジ、70%以上のブランチカバレッジ目指す
 
-### Pruebas de Integración
-- Usar `@QuarkusTest` para pruebas de integración
-- Usar `@InjectMock` para mockear dependencias en pruebas Quarkus
-- Preferir REST Assured para pruebas de API
-- Usar `@TestProfile` para configuración específica de prueba
+### アサーション
+- **AssertJ推奨**（JUnitアサーション代わりに`assertThat`使用）
+- 読みやすさのため流暢なAssertJ API使用：`assertThat(list).hasSize(3).contains(item)`
+- 例外は、JUnit `assertThrows`でキャプチャ、AssertJでメッセージ検証
+- 非スロー成功パスはJUnit `assertDoesNotThrow`使用
+- コレクションには`extracting()`, `filteredOn()`, `containsExactly()`使用
+
+### 統合テスト
+- 統合テスト用に`@QuarkusTest`使用
+- Quarkusテストの依存関係モック化に`@InjectMock`使用
+- APIテストに REST Assured優先使用
+- テスト固有設定に`@TestProfile`使用
+
+### イベント駆動テスト
+- `AdviceWith`と`MockEndpoint`でCamelルートテスト
+- 必要に応じて`@CamelQuarkusTest`注釈使用（スタンドアロンCamelテスト）
+- メッセージ内容、ヘッダー、ルーティングロジック検証
+- エラーハンドリングルートを別個にテスト
+- ユニットテストで外部システム（RabbitMQ、S3、データベース）をモック化
+
+### Camel ルートテスト
+- メッセージフロー確認に`MockEndpoint`使用
+- テスト用ルート変更にエンドポイントをモックに置き換える`AdviceWith`使用
+- メッセージ変換と整形テスト
+- 例外処理とデッドレターキューテスト
+
+### 非同期操作テスト
+- CompletableFutureの成功・失敗シナリオテスト
+- 非同期完了待機に`.join()`使用
+- CompletableFutureから例外プロパゲーション検証
+- 非同期操作へのLogContextプロパゲーション検証
+
+### パフォーマンス
+- テストを高速で分離した状態に保つ
+- 継続モードでテスト実行：`mvn quarkus:test`
+- 入力バリエーション用に パラメータ化テスト（`@ParameterizedTest`）使用
+- 再利用可能なテストデータビルダーまたはファクトリメソッド構築
+
+### Quarkus固有
+- 最新LTSバージョン（Quarkus 3.x）に留める
+- 定期的にネイティブコンパイル互換性テスト
+- 異なるシナリオでQuarkusテストプロファイル活用
+- ローカルテストにQuarkus dev サービス活用
+- `@MockBean`代わりに`@InjectMock`（Quarkus固有）使用
+
+### 検証ベストプラクティス
+- モック化された依存関係の相互作用は常に検証
+- エラーシナリオでメソッドが呼ばれていないことを確認するに`verify(mock, never())`使用
+- 複雑な引数マッチングに`argThat()`使用
+- 呼び出し順序が重要な場合`InOrder`（Mockitoから）で検証

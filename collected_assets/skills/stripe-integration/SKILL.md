@@ -1,9 +1,10 @@
 ---
 name: stripe-integration
-description: "Implement and verify Stripe checkout, subscriptions, webhooks and refunds with explicit server-side authorization and retry boundaries."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Implement and verify Stripe checkout, subscriptions, webhooks and refunds with explicit server-side authorization and retry boundaries.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Stripe Integration

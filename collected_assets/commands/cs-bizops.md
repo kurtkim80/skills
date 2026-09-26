@@ -1,15 +1,9 @@
 ---
-title: "/cs-bizops — Slash Command for AI Coding Agents"
-description: "Top-level Business Operations router. Routes the inquiry to one of six BizOps sub-skills (process, vendor, capacity, comms, knowledge, procurement). Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: "Top-level Business Operations router. Routes the inquiry to one of six BizOps sub-skills (process, vendor, capacity, comms, knowledge, procurement) and returns a digest. Invokes the business-operations-skills orchestrator (context: fork)."
+argument-hint: "<inquiry>"
 ---
 
-# /cs-bizops
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-bizops.md">Source</a></span>
-</div>
-
+# /cs:bizops — Business Operations router
 
 Use the `cs-bizops-orchestrator` agent + `business-operations-skills` orchestrator skill to handle this inquiry:
 

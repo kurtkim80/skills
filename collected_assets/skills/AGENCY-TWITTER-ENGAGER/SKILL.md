@@ -1,10 +1,11 @@
 ---
 name: agency-twitter-engager
+version: 1.0.0
 description: Expert Twitter marketing specialist focused on real-time engagement, thought leadership building, and community-driven growth. Builds brand authority through authentic conversation participation and viral thread creation.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Twitter Engager
+
 
 # Marketing Twitter Engager
 

@@ -1,104 +1,193 @@
----
-description: Ejecutar un flujo de trabajo de desarrollo multi-modelo completo con investigación, planificación, ejecución, optimización y revisión.
----
+# Workflow - Multi-Model İşbirlikçi Geliştirme
 
-# Workflow - Desarrollo Colaborativo Multi-Modelo
+Multi-model işbirlikçi geliştirme iş akışı (Research → Ideation → Plan → Execute → Optimize → Review), akıllı yönlendirme ile: Frontend → Gemini, Backend → Codex.
 
-Flujo de trabajo de desarrollo colaborativo multi-modelo (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión), con enrutamiento inteligente: Frontend → Gemini, Backend → Codex.
+> **Ön koşul:** Bu komut, temel ECC kurulumunun parçası **olmayan** harici `ccg-workflow` runtime'ını gerektirir. Bu komutun bağımlı olduğu `~/.claude/bin/codeagent-wrapper` ve `~/.claude/.ccg/prompts/*` rol dosyalarını sağlamak için `npx ccg-workflow` komutuyla başlatın. Bu runtime olmadan bu komut düzgün çalışmaz.
 
-## Uso
+Kalite kontrol noktaları, MCP servisleri ve multi-model işbirliği ile yapılandırılmış geliştirme iş akışı.
+
+## Kullanım
 
 ```bash
-/workflow <descripción de la tarea>
+/workflow <task açıklaması>
 ```
 
-## Contexto
+## Context
 
-- Tarea a desarrollar: $ARGUMENTS
-- Flujo de trabajo estructurado de 6 fases con puertas de calidad
-- Colaboración multi-modelo: Codex (backend) + Gemini (frontend) + Claude (orquestación)
+- Geliştirilecek görev: $ARGUMENTS
+- Kalite kontrol noktalarıyla 6 fazlı yapılandırılmış iş akışı
+- Multi-model işbirliği: Codex (backend) + Gemini (frontend) + Claude (orkestrasyon)
+- MCP servis entegrasyonu (ace-tool, isteğe bağlı) gelişmiş yetenekler için
 
-## Tu Rol
+## Rolünüz
 
-Eres el **Orquestador**, coordinando un sistema colaborativo multi-modelo (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión).
+**Orkestratör**sünüz, multi-model işbirlikçi sistemi koordine ediyorsunuz (Research → Ideation → Plan → Execute → Optimize → Review). Deneyimli geliştiriciler için kısa ve profesyonel iletişim kurun.
 
-**Modelos Colaboradores**:
-- **Codex** – Lógica backend, algoritmos, depuración (**Autoridad de backend, confiable**)
-- **Gemini** – UI/UX frontend, diseño visual (**Experto en frontend, opiniones de backend solo como referencia**)
-- **Claude (propio)** – Orquestación, planificación, ejecución, entrega
-
----
-
-## Pautas de Comunicación
-
-1. Comenzar respuestas con etiqueta de modo `[Modo: X]`, el inicial es `[Modo: Investigación]`
-2. Seguir secuencia estricta: `Investigación → Ideación → Plan → Ejecución → Optimización → Revisión`
-3. Solicitar confirmación del usuario después de completar cada fase
-4. Forzar parada cuando la puntuación < 7 o el usuario no aprueba
+**İşbirlikçi Modeller**:
+- **ace-tool MCP** (isteğe bağlı) – Code retrieval + Prompt enhancement
+- **Codex** – Backend logic, algoritmalar, debugging (**Backend otoritesi, güvenilir**)
+- **Gemini** – Frontend UI/UX, görsel tasarım (**Frontend uzmanı, backend görüşleri sadece referans için**)
+- **Claude (self)** – Orkestrasyon, planlama, execution, teslimat
 
 ---
 
-## Flujo de Ejecución
+## Multi-Model Çağrı Spesifikasyonu
 
-**Descripción de la Tarea**: $ARGUMENTS
+**Çağrı sözdizimi** (parallel: `run_in_background: true`, sequential: `false`):
 
-### Fase 1: Investigación y Análisis
+```
+# Yeni session çağrısı
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- \"$PWD\" <<'EOF'
+ROLE_FILE: <role prompt path>
+<TASK>
+Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
+Context: <önceki fazlardan proje context'i ve analiz>
+</TASK>
+OUTPUT: Expected output format
+EOF",
+  run_in_background: true,
+  timeout: 3600000,
+  description: "Brief description"
+})
 
-`[Modo: Investigación]` - Entender requisitos y recopilar contexto:
+# Session devam ettirme çağrısı
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - \"$PWD\" <<'EOF'
+ROLE_FILE: <role prompt path>
+<TASK>
+Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
+Context: <önceki fazlardan proje context'i ve analiz>
+</TASK>
+OUTPUT: Expected output format
+EOF",
+  run_in_background: true,
+  timeout: 3600000,
+  description: "Brief description"
+})
+```
 
-1. **Mejora del Prompt** (si el MCP ace-tool está disponible)
-2. **Recuperación de Contexto**
-3. **Puntuación de Completitud de Requisitos** (0-10):
-   - Claridad del objetivo (0-3), Resultado esperado (0-3), Límites del alcance (0-2), Restricciones (0-2)
-   - ≥7: Continuar | <7: Parar, hacer preguntas aclaratorias
+**Model Parametre Notları**:
+- `{{GEMINI_MODEL_FLAG}}`: `--backend gemini` kullanırken, `--gemini-model gemini-3-pro-preview` ile değiştir (trailing space not edin); codex için boş string kullan
 
-### Fase 2: Ideación de Soluciones
+**Role Prompts**:
 
-`[Modo: Ideación]` - Análisis paralelo multi-modelo:
+| Phase | Codex | Gemini |
+|-------|-------|--------|
+| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
+| Planning | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/architect.md` |
+| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
 
-**Llamadas en Paralelo**:
-- Codex: Viabilidad técnica, soluciones, riesgos
-- Gemini: Viabilidad de UI, soluciones, evaluación de UX
+**Session Reuse**: Her çağrı `SESSION_ID: xxx` döndürür, sonraki fazlar için `resume xxx` subcommand kullan (not: `resume`, `--resume` değil).
 
-**Guardar SESSION_ID** (`CODEX_SESSION` y `GEMINI_SESSION`).
+**Parallel Çağrılar**: Başlatmak için `run_in_background: true` kullan, sonuçları `TaskOutput` ile bekle. **Bir sonraki faza geçmeden önce tüm modellerin dönmesini MUTLAKA bekle**.
 
-### Fase 3: Planificación Detallada
+**Background Task'leri Bekle** (max timeout 600000ms = 10 dakika kullan):
 
-`[Modo: Plan]` - Planificación colaborativa multi-modelo:
+```
+TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
+```
 
-**Llamadas en Paralelo** (reanudar sesión):
-- Codex: Arquitectura backend
-- Gemini: Arquitectura frontend
-
-**Síntesis de Claude**: Adoptar plan backend de Codex + plan frontend de Gemini.
-
-### Fase 4: Implementación
-
-`[Modo: Ejecutar]` - Desarrollo de código:
-
-- Seguir estrictamente el plan aprobado
-- Seguir los estándares de código existentes del proyecto
-
-### Fase 5: Optimización de Código
-
-`[Modo: Optimizar]` - Revisión paralela multi-modelo:
-
-**Llamadas en Paralelo**:
-- Codex: Seguridad, rendimiento, manejo de errores
-- Gemini: Accesibilidad, consistencia de diseño
-
-### Fase 6: Revisión de Calidad
-
-`[Modo: Revisión]` - Evaluación final:
-
-- Verificar completitud contra el plan
-- Ejecutar pruebas para verificar la funcionalidad
-- Reportar problemas y recomendaciones
+**ÖNEMLİ**:
+- `timeout: 600000` belirtilmeli, aksi takdirde varsayılan 30 saniye erken timeout'a neden olur.
+- 10 dakika sonra hala tamamlanmamışsa, `TaskOutput` ile polling'e devam et, **ASLA process'i öldürme**.
+- Bekleme timeout nedeniyle atlanırsa, **MUTLAKA `AskUserQuestion` çağırarak kullanıcıya beklemeye devam etmek veya task'i öldürmek isteyip istemediğini sor. Asla doğrudan öldürme.**
 
 ---
 
-## Reglas Clave
+## İletişim Yönergeleri
 
-1. La secuencia de fases no puede omitirse (a menos que el usuario lo indique explícitamente)
-2. Los modelos externos tienen **cero acceso de escritura al sistema de archivos**, todas las modificaciones por Claude
-3. **Forzar parada** cuando la puntuación < 7 o el usuario no aprueba
+1. Yanıtlara mode etiketi `[Mode: X]` ile başla, ilk `[Mode: Research]`.
+2. Katı sıra takip et: `Research → Ideation → Plan → Execute → Optimize → Review`.
+3. Her faz tamamlandıktan sonra kullanıcı onayı iste.
+4. Skor < 7 veya kullanıcı onaylamadığında zorla durdur.
+5. Gerektiğinde kullanıcı etkileşimi için `AskUserQuestion` tool kullan (örn., onay/seçim/approval).
+
+## Harici Orkestrasyon Ne Zaman Kullanılır
+
+İş paralel worker'lar arasında bölünmesi gerektiğinde harici tmux/worktree orkestrasyonu kullan; bu worker'ların izole git state'i, bağımsız terminalleri veya ayrı build/test çalıştırması gerekir. Hafif analiz, planlama veya review için in-process subagent'ları kullan; burada ana session tek yazar olarak kalır.
+
+```bash
+node scripts/orchestrate-worktrees.js .claude/plan/workflow-e2e-test.json --execute
+```
+
+---
+
+## Execution Workflow
+
+**Task Açıklaması**: $ARGUMENTS
+
+### Phase 1: Research & Analysis
+
+`[Mode: Research]` - Requirement'ları anla ve context topla:
+
+1. **Prompt Enhancement** (ace-tool MCP mevcutsa): `mcp__ace-tool__enhance_prompt` çağır, **orijinal $ARGUMENTS'ı tüm sonraki Codex/Gemini çağrıları için enhanced sonuçla değiştir**. Mevcut değilse, `$ARGUMENTS`'ı olduğu gibi kullan.
+2. **Context Retrieval** (ace-tool MCP mevcutsa): `mcp__ace-tool__search_context` çağır. Mevcut değilse, built-in tool'ları kullan: dosya keşfi için `Glob`, sembol araması için `Grep`, context toplama için `Read`, daha derin keşif için `Task` (Explore agent).
+3. **Requirement Tamamlılık Skoru** (0-10):
+   - Hedef netliği (0-3), Beklenen sonuç (0-3), Kapsam sınırları (0-2), Kısıtlamalar (0-2)
+   - ≥7: Devam et | <7: Dur, açıklayıcı sorular sor
+
+### Phase 2: Solution Ideation
+
+`[Mode: Ideation]` - Multi-model parallel analiz:
+
+**Parallel Çağrılar** (`run_in_background: true`):
+- Codex: Analyzer prompt kullan, teknik fizibilite, çözümler, riskler çıktıla
+- Gemini: Analyzer prompt kullan, UI fizibilite, çözümler, UX değerlendirmesi çıktıla
+
+`TaskOutput` ile sonuçları bekle. **SESSION_ID'yi kaydet** (`CODEX_SESSION` ve `GEMINI_SESSION`).
+
+**Yukarıdaki `Multi-Model Çağrı Spesifikasyonu`'ndaki `ÖNEMLİ` talimatları takip et**
+
+Her iki analizi sentezle, çözüm karşılaştırması çıktıla (en az 2 seçenek), kullanıcı seçimini bekle.
+
+### Phase 3: Detailed Planning
+
+`[Mode: Plan]` - Multi-model işbirlikçi planlama:
+
+**Parallel Çağrılar** (`resume <SESSION_ID>` ile session devam ettir):
+- Codex: Architect prompt + `resume $CODEX_SESSION` kullan, backend mimarisi çıktıla
+- Gemini: Architect prompt + `resume $GEMINI_SESSION` kullan, frontend mimarisi çıktıla
+
+`TaskOutput` ile sonuçları bekle.
+
+**Yukarıdaki `Multi-Model Çağrı Spesifikasyonu`'ndaki `ÖNEMLİ` talimatları takip et**
+
+**Claude Sentezi**: Codex backend planı + Gemini frontend planını benimsle, kullanıcı onayından sonra `.claude/plan/task-name.md`'ye kaydet.
+
+### Phase 4: Implementation
+
+`[Mode: Execute]` - Kod geliştirme:
+
+- Onaylanan planı kesinlikle takip et
+- Mevcut proje kod standartlarını takip et
+- Önemli kilometre taşlarında geri bildirim iste
+
+### Phase 5: Code Optimization
+
+`[Mode: Optimize]` - Multi-model parallel review:
+
+**Parallel Çağrılar**:
+- Codex: Reviewer prompt kullan, güvenlik, performans, hata işleme üzerine odaklan
+- Gemini: Reviewer prompt kullan, accessibility, tasarım tutarlılığı üzerine odaklan
+
+`TaskOutput` ile sonuçları bekle. Review geri bildirimlerini entegre et, kullanıcı onayından sonra optimizasyonu çalıştır.
+
+**Yukarıdaki `Multi-Model Çağrı Spesifikasyonu`'ndaki `ÖNEMLİ` talimatları takip et**
+
+### Phase 6: Quality Review
+
+`[Mode: Review]` - Nihai değerlendirme:
+
+- Plana karşı tamamlılığı kontrol et
+- Fonksiyonaliteyi doğrulamak için test'leri çalıştır
+- Sorunları ve önerileri raporla
+- Nihai kullanıcı onayı iste
+
+---
+
+## Ana Kurallar
+
+1. Faz sırası atlanamaz (kullanıcı açıkça talimat vermedikçe)
+2. Harici modellerin **sıfır dosya sistemi yazma erişimi**, tüm değişiklikler Claude tarafından
+3. Skor < 7 veya kullanıcı onaylamadığında **zorla durdur**

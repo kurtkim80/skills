@@ -1,54 +1,55 @@
 ---
-description: Kotlin/Gradleビルドエラー、コンパイラ警告、依存関係の問題をインクリメンタルに修正します。最小限の外科的修正のためにkotlin-build-resolverエージェントを呼び出します。
+description: 逐步修复 Kotlin/Gradle 构建错误、编译器警告和依赖项问题。调用 kotlin-build-resolver 代理进行最小化、精准的修复。
 ---
 
-# Kotlinビルドと修正
+# Kotlin 构建与修复
 
-このコマンドは**kotlin-build-resolver**エージェントを呼び出し、Kotlinビルドエラーを最小限の変更でインクリメンタルに修正します。
+此命令调用 **kotlin-build-resolver** 代理，以最小的改动增量修复 Kotlin 构建错误。
 
-## このコマンドの動作
+## 此命令的作用
 
-1. **診断を実行**: `./gradlew build`、`detekt`、`ktlintCheck`を実行
-2. **エラーを解析**: ファイルごとにグループ化し、重大度でソート
-3. **インクリメンタルに修正**: 一度に1つのエラー
-4. **各修正を検証**: 各変更後にビルドを再実行
-5. **サマリーを報告**: 修正されたものと残りを表示
+1. **运行诊断**：执行 `./gradlew build`、`detekt`、`ktlintCheck`
+2. **解析错误**：按文件分组并按严重性排序
+3. **增量修复**：每次修复一个错误
+4. **验证每次修复**：每次更改后重新运行构建
+5. **报告摘要**：显示已修复的内容和剩余问题
 
-## 使用するタイミング
+## 何时使用
 
-`/kotlin-build`を使用するのは:
-- `./gradlew build`がエラーで失敗する場合
-- Kotlinコンパイラがエラーを報告する場合
-- `./gradlew detekt`が違反を報告する場合
-- Gradle依存関係の解決が失敗する場合
-- ビルドを壊す変更をプルした後
+在以下情况使用 `/kotlin-build`：
 
-## 実行される診断コマンド
+* `./gradlew build` 因错误而失败
+* Kotlin 编译器报告错误
+* `./gradlew detekt` 报告违规
+* Gradle 依赖项解析失败
+* 拉取更改后导致构建失败
+
+## 运行的诊断命令
 
 ```bash
-# プライマリビルドチェック
+# Primary build check
 ./gradlew build 2>&1
 
-# 静的解析
+# Static analysis
 ./gradlew detekt 2>&1 || echo "detekt not configured"
 ./gradlew ktlintCheck 2>&1 || echo "ktlint not configured"
 
-# 依存関係の問題
+# Dependency issues
 ./gradlew dependencies --configuration runtimeClasspath 2>&1 | head -100
 
-# キャッシュや依存関係メタデータが疑わしい場合のオプションの深いリフレッシュ
+# Optional deep refresh when caches or dependency metadata are suspect
 ./gradlew build --refresh-dependencies
 ```
 
-## セッション例
+## 示例会话
 
 ````text
 User: /kotlin-build
 
 Agent:
-# Kotlinビルド解決
+# Kotlin Build Resolution
 
-## 初期診断
+## Initial Diagnostics
 
 ```bash
 $ ./gradlew build
@@ -57,118 +58,119 @@ e: src/main/kotlin/com/example/routes/UserRoutes.kt:42:9 Type mismatch: inferred
 e: src/main/kotlin/com/example/routes/UserRoutes.kt:58:5 'when' expression must be exhaustive
 ```
 
-検出されたエラー: 3
+Errors found: 3
 
-## 修正 1: 未解決の参照
+## Fix 1: Unresolved Reference
 
 File: src/main/kotlin/com/example/service/UserService.kt:25
 Error: Unresolved reference: UserRepository
-Cause: importの欠落
+Cause: Missing import
 
 ```kotlin
-// importを追加
+// Added import
 import com.example.repository.UserRepository
 ```
 
 ```bash
 $ ./gradlew build
-# 残りエラー: 2
+# 2 errors remaining
 ```
 
-## 修正 2: 型の不一致
+## Fix 2: Type Mismatch
 
 File: src/main/kotlin/com/example/routes/UserRoutes.kt:42
 Error: Type mismatch: inferred type is String but Int was expected
 
 ```kotlin
-// 変更前
+// Changed
 val count = call.parameters["count"]
-// 変更後
+// To
 val count = call.parameters["count"]?.toIntOrNull()
     ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid count")
 ```
 
 ```bash
 $ ./gradlew build
-# 残りエラー: 1
+# 1 error remaining
 ```
 
-## 修正 3: 非網羅的なWhen
+## Fix 3: Non-Exhaustive When
 
 File: src/main/kotlin/com/example/routes/UserRoutes.kt:58
 Error: 'when' expression must be exhaustive
 
 ```kotlin
-// 欠落ブランチを追加
+// Added missing branch
 when (user.role) {
     Role.ADMIN -> handleAdmin(user)
     Role.USER -> handleUser(user)
-    Role.MODERATOR -> handleModerator(user) // 追加
+    Role.MODERATOR -> handleModerator(user) // Added
 }
 ```
 
 ```bash
 $ ./gradlew build
-# ビルド成功！
+# Build successful!
 ```
 
-## 最終検証
+## Final Verification
 
 ```bash
 $ ./gradlew detekt
-# 問題なし
+# No issues
 
 $ ./gradlew test
-# 全テスト通過
+# All tests passed
 ```
 
-## サマリー
+## Summary
 
-| メトリクス | 件数 |
-|-----------|------|
-| 修正されたビルドエラー | 3 |
-| 修正されたDetekt問題 | 0 |
-| 変更されたファイル | 2 |
-| 残りの問題 | 0 |
+| Metric | Count |
+|--------|-------|
+| Build errors fixed | 3 |
+| Detekt issues fixed | 0 |
+| Files modified | 2 |
+| Remaining issues | 0 |
 
-ビルドステータス: PASS: SUCCESS
+Build Status: PASS: SUCCESS
 ````
 
-## 一般的に修正されるエラー
+## 常见的已修复错误
 
-| エラー | 典型的な修正 |
-|--------|-------------|
-| `Unresolved reference: X` | importまたは依存関係を追加 |
-| `Type mismatch` | 型変換または代入を修正 |
-| `'when' must be exhaustive` | 欠落したsealedクラスのブランチを追加 |
-| `Suspend function can only be called from coroutine` | `suspend`修飾子を追加 |
-| `Smart cast impossible` | ローカル`val`または`let`を使用 |
-| `None of the following candidates is applicable` | 引数の型を修正 |
-| `Could not resolve dependency` | バージョンを修正またはリポジトリを追加 |
+| 错误 | 典型修复方法 |
+|-------|-------------|
+| `Unresolved reference: X` | 添加导入或依赖项 |
+| `Type mismatch` | 修复类型转换或赋值 |
+| `'when' must be exhaustive` | 添加缺失的密封类分支 |
+| `Suspend function can only be called from coroutine` | 添加 `suspend` 修饰符 |
+| `Smart cast impossible` | 使用局部 `val` 或 `let` |
+| `None of the following candidates is applicable` | 修复参数类型 |
+| `Could not resolve dependency` | 修复版本或添加仓库 |
 
-## 修正戦略
+## 修复策略
 
-1. **ビルドエラーを最初に** — コードがコンパイルされなければならない
-2. **Detekt違反を次に** — コード品質の問題を修正
-3. **ktlint警告を3番目に** — フォーマットを修正
-4. **一度に1つの修正** — 各変更を検証
-5. **最小限の変更** — リファクタリングせず、修正のみ
+1. **首先修复构建错误** - 代码必须能够编译
+2. **其次修复 Detekt 违规** - 修复代码质量问题
+3. **再次修复 ktlint 警告** - 修复格式问题
+4. **一次修复一个** - 验证每次更改
+5. **最小化改动** - 不进行重构，仅修复问题
 
 ## 停止条件
 
-エージェントは以下の場合に停止して報告する:
-- 3回の試行後も同じエラーが持続
-- 修正がより多くのエラーを導入
-- アーキテクチャ変更が必要
-- 外部依存関係が不足
+代理将在以下情况下停止并报告：
 
-## 関連コマンド
+* 同一错误尝试修复 3 次后仍然存在
+* 修复引入了更多错误
+* 需要进行架构性更改
+* 缺少外部依赖项
 
-- `/kotlin-test` — ビルド成功後にテストを実行
-- `/kotlin-review` — コード品質をレビュー
-- `verification-loop`スキル — 完全な検証ループ
+## 相关命令
 
-## 関連
+* `/kotlin-test` - 构建成功后运行测试
+* `/kotlin-review` - 审查代码质量
+* `/verify` - 完整的验证循环
 
-- エージェント: `agents/kotlin-build-resolver.md`
-- スキル: `skills/kotlin-patterns/`
+## 相关
+
+* 代理：`agents/kotlin-build-resolver.md`
+* 技能：`skills/kotlin-patterns/`

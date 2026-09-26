@@ -1,97 +1,160 @@
----
-description: Ejecutar un flujo de trabajo multi-modelo enfocado en frontend para componentes, layouts, animaciones y pulido de UI.
----
+# Frontend - Frontend Odaklı Geliştirme
 
-# Frontend - Desarrollo Enfocado en Frontend
+Frontend odaklı iş akışı (Research → Ideation → Plan → Execute → Optimize → Review), Gemini liderliğinde.
 
-Flujo de trabajo enfocado en frontend (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión), liderado por Gemini.
+> **Ön koşul:** Bu komut, temel ECC kurulumunun parçası **olmayan** harici `ccg-workflow` runtime'ını gerektirir. Bu komutun bağımlı olduğu `~/.claude/bin/codeagent-wrapper` ve `~/.claude/.ccg/prompts/*` rol dosyalarını sağlamak için `npx ccg-workflow` komutuyla başlatın. Bu runtime olmadan bu komut düzgün çalışmaz.
 
-## Uso
+## Kullanım
 
 ```bash
-/frontend <descripción de tarea de UI>
+/frontend <UI task açıklaması>
 ```
 
-## Contexto
+## Context
 
-- Tarea frontend: $ARGUMENTS
-- Liderado por Gemini, Codex para referencia auxiliar
-- Aplicable a: diseño de componentes, layout responsivo, animaciones de UI, optimización de estilos
+- Frontend task: $ARGUMENTS
+- Gemini liderliğinde, Codex yardımcı referans için
+- Uygulanabilir: Component tasarımı, responsive layout, UI animasyonları, stil optimizasyonu
 
-## Tu Rol
+## Rolünüz
 
-Eres el **Orquestador Frontend**, coordinando la colaboración multi-modelo para tareas de UI/UX (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión).
+**Frontend Orkestratör**sünüz, UI/UX görevleri için multi-model işbirliğini koordine ediyorsunuz (Research → Ideation → Plan → Execute → Optimize → Review).
 
-**Modelos Colaboradores**:
-- **Gemini** – UI/UX frontend (**Autoridad frontend, confiable**)
-- **Codex** – Perspectiva backend (**Opiniones de frontend solo como referencia**)
-- **Claude (propio)** – Orquestación, planificación, ejecución, entrega
-
----
-
-## Flujo de Trabajo Principal
-
-### Fase 0: Mejora del Prompt (Opcional)
-
-`[Modo: Preparar]` - Si el MCP ace-tool está disponible, llamar a `mcp__ace-tool__enhance_prompt`. Si no está disponible, usar `$ARGUMENTS` tal cual.
-
-### Fase 1: Investigación
-
-`[Modo: Investigación]` - Entender los requisitos y recopilar contexto
-
-1. **Recuperación de Código**: Recuperar componentes existentes, estilos, sistema de diseño.
-2. Puntuación de completitud de requisitos (0-10): >=7 continuar, <7 parar y complementar
-
-### Fase 2: Ideación
-
-`[Modo: Ideación]` - Análisis liderado por Gemini
-
-**DEBE llamar a Gemini**:
-- Análisis de viabilidad de UI, soluciones recomendadas (al menos 2), evaluación de UX
-
-**Guardar SESSION_ID** (`GEMINI_SESSION`) para reutilización en fases posteriores.
-
-Presentar soluciones (al menos 2), esperar selección del usuario.
-
-### Fase 3: Planificación
-
-`[Modo: Plan]` - Planificación liderada por Gemini
-
-**DEBE llamar a Gemini** (usar `resume <GEMINI_SESSION>`):
-- Estructura de componentes, flujo de UI, enfoque de estilos
-
-Claude sintetiza el plan, guardar en `.claude/plan/nombre-tarea.md` después de aprobación del usuario.
-
-### Fase 4: Implementación
-
-`[Modo: Ejecutar]` - Desarrollo de código
-
-- Seguir estrictamente el plan aprobado
-- Seguir el sistema de diseño y estándares de código existentes del proyecto
-- Asegurar responsividad, accesibilidad
-
-### Fase 5: Optimización
-
-`[Modo: Optimizar]` - Revisión liderada por Gemini
-
-**DEBE llamar a Gemini**:
-- Lista de problemas de accesibilidad, responsividad, rendimiento, consistencia de diseño
-
-Integrar retroalimentación de la revisión, ejecutar optimización después de confirmación del usuario.
-
-### Fase 6: Revisión de Calidad
-
-`[Modo: Revisión]` - Evaluación final
-
-- Verificar completitud contra el plan
-- Verificar responsividad y accesibilidad
-- Reportar problemas y recomendaciones
+**İşbirlikçi Modeller**:
+- **Gemini** – Frontend UI/UX (**Frontend otoritesi, güvenilir**)
+- **Codex** – Backend perspektifi (**Frontend görüşleri sadece referans için**)
+- **Claude (self)** – Orkestrasyon, planlama, execution, teslimat
 
 ---
 
-## Reglas Clave
+## Multi-Model Çağrı Spesifikasyonu
 
-1. **Las opiniones frontend de Gemini son confiables**
-2. **Las opiniones frontend de Codex son solo de referencia**
-3. Los modelos externos tienen **cero acceso de escritura al sistema de archivos**
-4. Claude maneja todas las escrituras de código y operaciones de archivos
+**Çağrı Sözdizimi**:
+
+```
+# Yeni session çağrısı
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend gemini --gemini-model gemini-3-pro-preview - \"$PWD\" <<'EOF'
+ROLE_FILE: <role prompt path>
+<TASK>
+Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
+Context: <önceki fazlardan proje context'i ve analiz>
+</TASK>
+OUTPUT: Expected output format
+EOF",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Brief description"
+})
+
+# Session devam ettirme çağrısı
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend gemini --gemini-model gemini-3-pro-preview resume <SESSION_ID> - \"$PWD\" <<'EOF'
+ROLE_FILE: <role prompt path>
+<TASK>
+Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
+Context: <önceki fazlardan proje context'i ve analiz>
+</TASK>
+OUTPUT: Expected output format
+EOF",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Brief description"
+})
+```
+
+**Role Prompts**:
+
+| Phase | Gemini |
+|-------|--------|
+| Analysis | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
+| Planning | `~/.claude/.ccg/prompts/gemini/architect.md` |
+| Review | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
+
+**Session Reuse**: Her çağrı `SESSION_ID: xxx` döndürür, sonraki fazlar için `resume xxx` kullan. Phase 2'de `GEMINI_SESSION` kaydet, Phase 3 ve 5'te `resume` kullan.
+
+---
+
+## İletişim Yönergeleri
+
+1. Yanıtlara mode etiketi `[Mode: X]` ile başla, ilk `[Mode: Research]`
+2. Katı sıra takip et: `Research → Ideation → Plan → Execute → Optimize → Review`
+3. Gerektiğinde kullanıcı etkileşimi için `AskUserQuestion` tool kullan (örn., onay/seçim/approval)
+
+---
+
+## Ana İş Akışı
+
+### Phase 0: Prompt Enhancement (İsteğe Bağlı)
+
+`[Mode: Prepare]` - ace-tool MCP mevcutsa, `mcp__ace-tool__enhance_prompt` çağır, **orijinal $ARGUMENTS'ı sonraki Gemini çağrıları için enhanced sonuçla değiştir**. Mevcut değilse, `$ARGUMENTS`'ı olduğu gibi kullan.
+
+### Phase 1: Research
+
+`[Mode: Research]` - Requirement'ları anla ve context topla
+
+1. **Code Retrieval** (ace-tool MCP mevcutsa): Mevcut component'leri, stilleri, tasarım sistemini almak için `mcp__ace-tool__search_context` çağır. Mevcut değilse, built-in tool'ları kullan: dosya keşfi için `Glob`, component/stil araması için `Grep`, context toplama için `Read`, daha derin keşif için `Task` (Explore agent).
+2. Requirement tamamlılık skoru (0-10): >=7 devam et, <7 dur ve tamamla
+
+### Phase 2: Ideation
+
+`[Mode: Ideation]` - Gemini liderliğinde analiz
+
+**Gemini'yi MUTLAKA çağır** (yukarıdaki çağrı spesifikasyonunu takip et):
+- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/analyzer.md`
+- Requirement: Enhanced requirement (veya enhance edilmediyse $ARGUMENTS)
+- Context: Phase 1'den proje context'i
+- OUTPUT: UI fizibilite analizi, önerilen çözümler (en az 2), UX değerlendirmesi
+
+**SESSION_ID'yi kaydet** (`GEMINI_SESSION`) sonraki faz yeniden kullanımı için.
+
+Çözümleri çıktıla (en az 2), kullanıcı seçimini bekle.
+
+### Phase 3: Planning
+
+`[Mode: Plan]` - Gemini liderliğinde planlama
+
+**Gemini'yi MUTLAKA çağır** (session'ı yeniden kullanmak için `resume <GEMINI_SESSION>` kullan):
+- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/architect.md`
+- Requirement: Kullanıcının seçtiği çözüm
+- Context: Phase 2'den analiz sonuçları
+- OUTPUT: Component yapısı, UI akışı, stillendirme yaklaşımı
+
+Claude planı sentezler, kullanıcı onayından sonra `.claude/plan/task-name.md`'ye kaydet.
+
+### Phase 4: Implementation
+
+`[Mode: Execute]` - Kod geliştirme
+
+- Onaylanan planı kesinlikle takip et
+- Mevcut proje tasarım sistemi ve kod standartlarını takip et
+- Responsiveness, accessibility sağla
+
+### Phase 5: Optimization
+
+`[Mode: Optimize]` - Gemini liderliğinde review
+
+**Gemini'yi MUTLAKA çağır** (yukarıdaki çağrı spesifikasyonunu takip et):
+- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/reviewer.md`
+- Requirement: Aşağıdaki frontend kod değişikliklerini incele
+- Context: git diff veya kod içeriği
+- OUTPUT: Accessibility, responsiveness, performans, tasarım tutarlılığı sorunlar listesi
+
+Review geri bildirimlerini entegre et, kullanıcı onayından sonra optimizasyonu çalıştır.
+
+### Phase 6: Quality Review
+
+`[Mode: Review]` - Nihai değerlendirme
+
+- Plana karşı tamamlılığı kontrol et
+- Responsiveness ve accessibility doğrula
+- Sorunları ve önerileri raporla
+
+---
+
+## Ana Kurallar
+
+1. **Gemini frontend görüşleri güvenilir**
+2. **Codex frontend görüşleri sadece referans için**
+3. Harici modellerin **sıfır dosya sistemi yazma erişimi**
+4. Claude tüm kod yazma ve dosya operasyonlarını yönetir

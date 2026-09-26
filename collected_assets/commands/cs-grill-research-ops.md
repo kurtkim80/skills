@@ -1,9 +1,15 @@
 ---
-description: Matt Pocock-style docs-anchored grilling for a Research Operations plan — clinical study, R&D budget, market size, or product study. Walks the plan against the research canon (ICH E9, IAS 38, Cochran, Kotler, Nielsen) one question at a time, recommends an answer per question, and refuses to invoke any sub-skill until the lane-defining decisions are locked. Use before running /cs:research-ops on a fuzzy plan.
-argument-hint: "<plan, study, budget, market question, or fuzzy research problem>"
+title: "/cs-grill-research-ops — Slash Command for AI Coding Agents"
+description: "Matt Pocock-style docs-anchored grilling for a Research Operations plan — clinical study, R&D budget, market size, or product study. Walks the plan. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:grill-research-ops — Research grill against the research-ops canon
+# /cs-grill-research-ops
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research-ops/commands/cs-grill-research-ops.md">Source</a></span>
+</div>
+
 
 Apply Matt Pocock's `grill-with-docs` discipline to this plan / problem:
 

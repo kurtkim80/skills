@@ -1,16 +1,13 @@
 ---
-title: "Compliance Officer Agent (Multi-Framework Orchestrator) — AI Coding Agent & Codex Skill"
-description: "Multi-framework compliance officer orchestrating cross-framework programs. Routes per-framework deep work to specialist skills (ISO 42001, EU AI Act. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-compliance-officer
+description: Multi-framework compliance officer orchestrating cross-framework programs. Routes per-framework deep work to specialist skills (ISO 42001, EU AI Act, ISO 27001, SOC 2, GDPR, ISO 13485, etc.). Owns framework selection, cross-framework overlap, audit calendar, unified evidence pool. NOT a per-framework deep-dive (those live in ra-qm-team specialist skills).
+skills: compliance-os/skills/compliance-os
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # Compliance Officer Agent (Multi-Framework Orchestrator)
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-compliance-officer.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -40,36 +37,36 @@ Differentiates clearly:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os)
+**Skill Location:** `../skills/compliance-os/`
 
 ### Python Tools
 
 1. **Framework Selector**
-   - Path: [`scripts/framework_selector.py`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/scripts/framework_selector.py)
+   - Path: `../skills/compliance-os/scripts/framework_selector.py`
    - Usage: `python framework_selector.py path/to/company_profile.json`
    - Returns: applicable frameworks ranked by priority (binding > certifiable > reference) + dependency graph (e.g., ISO 42001 satisfied by ISO 27001 prerequisite) + rationale per framework
 
 2. **Cross-Framework Mapper**
-   - Path: [`scripts/cross_framework_mapper.py`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/scripts/cross_framework_mapper.py)
+   - Path: `../skills/compliance-os/scripts/cross_framework_mapper.py`
    - Usage: `python cross_framework_mapper.py path/to/program.json`
    - Returns: merged control catalog (19 themes covering access, asset, risk, supplier, incident, logging, change, BCP, training, data, audit, mgmt review, crypto, secure SDLC, vuln, physical, privacy, document control, CAPA) with HIGH/MED/LOW confidence per framework + reuse-leverage scoring
 
 3. **Audit Simulator**
-   - Path: [`scripts/audit_simulator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/scripts/audit_simulator.py)
+   - Path: `../skills/compliance-os/scripts/audit_simulator.py`
    - Usage: `python audit_simulator.py path/to/audit_scope.json`
    - Returns: 8-15 finding scenarios with IIA-target severity distribution (≥ 40% observation, ≤ 15% critical) + 3-5 interview questions per scoped control + document-review requests
 
 4. **Evidence Pool Generator**
-   - Path: [`scripts/evidence_pool_generator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/scripts/evidence_pool_generator.py)
+   - Path: `../skills/compliance-os/scripts/evidence_pool_generator.py`
    - Usage: `python evidence_pool_generator.py path/to/program.json`
    - Returns: 15-artefact unified evidence pool with reuse-leverage scoring + owner + acquisition cost + retention requirement per artefact
 
 ### Knowledge Bases
 
-- [`references/compliance_os_pattern.md`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/references/compliance_os_pattern.md) — Meta-framework architecture; when to orchestrate vs run separately; the Integrated Management System (IMS) pattern
-- [`references/cross_framework_overlap.md`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/references/cross_framework_overlap.md) — 9-framework × control-family overlap matrix with sequencing guidance
-- [`references/audit_simulation_methodology.md`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/references/audit_simulation_methodology.md) — ISO 19011 + IIA IPPF + AICPA AT-C audit-simulation principles
-- [`references/evidence_management.md`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/references/evidence_management.md) — Evidence pool design + reuse leverage + retention + freshness
+- `../skills/compliance-os/references/compliance_os_pattern.md` — Meta-framework architecture; when to orchestrate vs run separately; the Integrated Management System (IMS) pattern
+- `../skills/compliance-os/references/cross_framework_overlap.md` — 9-framework × control-family overlap matrix with sequencing guidance
+- `../skills/compliance-os/references/audit_simulation_methodology.md` — ISO 19011 + IIA IPPF + AICPA AT-C audit-simulation principles
+- `../skills/compliance-os/references/evidence_management.md` — Evidence pool design + reuse leverage + retention + freshness
 
 ## Workflows
 
@@ -185,15 +182,15 @@ python ../skills/compliance-os/scripts/evidence_pool_generator.py program.json
 
 - [cs-aims-iso42001](cs-aims-iso42001.md) — ISO 42001 deep-dive specialist (paired with iso42001-specialist skill)
 - [cs-ai-act-compliance](cs-ai-act-compliance.md) — EU AI Act Article-cited operations (paired with eu-ai-act-specialist skill)
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device-focused QMS / regulatory orchestrator (compliance-officer is broader; quality-regulatory is medical-device deep)
-- [cs-caio-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy (build-vs-buy, model selection)
-- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Legal exposure (contracts, IP)
-- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device-focused QMS / regulatory orchestrator (compliance-officer is broader; quality-regulatory is medical-device deep)
+- [cs-caio-advisor](../../c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy (build-vs-buy, model selection)
+- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Legal exposure (contracts, IP)
+- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
 
 ## References
 
-- Skill: [../skills/compliance-os/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os/SKILL.md)
-- Sibling commands: [`/cs:compliance-readiness`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-readiness/SKILL.md), [`/cs:aims-audit`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/aims-audit/SKILL.md), [`/cs:ai-act-readiness`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/ai-act-readiness/SKILL.md)
+- Skill: [../skills/compliance-os/SKILL.md](../skills/compliance-os/SKILL.md)
+- Sibling commands: [`/cs:compliance-readiness`](../skills/compliance-readiness/SKILL.md), [`/cs:aims-audit`](../skills/aims-audit/SKILL.md), [`/cs:ai-act-readiness`](../skills/ai-act-readiness/SKILL.md)
 
 ---
 

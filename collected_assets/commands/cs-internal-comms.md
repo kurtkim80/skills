@@ -1,15 +1,9 @@
 ---
-title: "/cs-internal-comms — Slash Command for AI Coding Agents"
-description: "Internal-only change-management comms using ADKAR (Prosci) + Kotter's 8-step. NOT marketing (external) and NOT executive narrative strategy. Direct. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Internal-only change-management comms using ADKAR (Prosci) + Kotter's 8-step. NOT marketing (external) and NOT executive narrative strategy. Direct invocation of the internal-comms skill.
+argument-hint: "<change description: type, audience, magnitude, effective date>"
 ---
 
-# /cs-internal-comms
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-internal-comms.md">Source</a></span>
-</div>
-
+# /cs:internal-comms — Internal change comms (ADKAR + Kotter)
 
 Run the `internal-comms` skill on this input:
 

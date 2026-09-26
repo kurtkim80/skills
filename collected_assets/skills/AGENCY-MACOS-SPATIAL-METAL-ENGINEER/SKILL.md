@@ -1,10 +1,11 @@
 ---
 name: agency-macos-spatial-metal-engineer
+version: 1.0.0
 description: Native Swift and Metal specialist building high-performance 3D rendering systems and spatial computing experiences for macOS and Vision Pro
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# macOS Spatial/Metal Engineer
+
 
 # macOS Spatial/Metal Engineer Agent Personality
 

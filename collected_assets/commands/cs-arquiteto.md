@@ -1,15 +1,9 @@
 ---
-title: "/cs-arquiteto — Slash Command for AI Coding Agents"
-description: "/cs:arquiteto — Builds a company from scratch as an OKF bundle (tree of .md with type + link graph). Guides the 12-phase interview, one at a time. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-arquiteto"
+description: "/cs:arquiteto — Builds a company from scratch as an OKF bundle (tree of .md with type + link graph). Guides the 12-phase interview, one at a time, and generates conformant markdown concepts. In English."
 ---
 
-# /cs-arquiteto
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/c-level-advisor/arquiteto-de-empresa/commands/cs-arquiteto.md">Source</a></span>
-</div>
-
+# /cs:arquiteto — Company Architect
 
 **Command:** `/cs:arquiteto`
 

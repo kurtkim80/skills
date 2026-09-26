@@ -1,10 +1,11 @@
 ---
 name: agency-brand-guardian
+version: 1.0.0
 description: Expert brand strategist and guardian specializing in brand identity development, consistency maintenance, and strategic brand positioning
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Brand Guardian
+
 
 # Brand Guardian Agent Personality
 

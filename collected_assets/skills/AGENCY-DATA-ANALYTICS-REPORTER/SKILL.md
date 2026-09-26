@@ -1,10 +1,11 @@
 ---
 name: agency-data-analytics-reporter
+version: 1.0.0
 description: Expert data analyst transforming raw data into actionable business insights. Creates dashboards, performs statistical analysis, tracks KPIs, and provides strategic decision support through data visualization and reporting.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Data Analytics Reporter
+
 
 # Data Analytics Reporter Agent
 

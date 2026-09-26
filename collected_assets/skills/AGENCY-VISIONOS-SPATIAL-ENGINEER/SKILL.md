@@ -1,10 +1,11 @@
 ---
 name: agency-visionos-spatial-engineer
+version: 1.0.0
 description: Native visionOS spatial computing, SwiftUI volumetric interfaces, and Liquid Glass design implementation
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# visionOS Spatial Engineer
+
 
 # visionOS Spatial Engineer
 

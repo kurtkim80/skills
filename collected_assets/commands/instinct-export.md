@@ -1,45 +1,45 @@
 ---
 name: instinct-export
-description: Exportar instintos del alcance del proyecto/global a un archivo
+description: İçgüdüleri proje/global kapsamdan bir dosyaya aktar
 command: /instinct-export
 ---
 
-# Comando Instinct Export
+# Instinct Export Komutu
 
-Exporta los instintos a un formato compartible. Perfecto para:
-- Compartir con compañeros de equipo
-- Transferir a una nueva máquina
-- Contribuir a las convenciones del proyecto
+İçgüdüleri paylaşılabilir bir formata aktarır. Şunlar için mükemmel:
+- Takım arkadaşlarıyla paylaşmak
+- Yeni bir makineye aktarmak
+- Proje konvansiyonlarına katkıda bulunmak
 
-## Uso
+## Kullanım
 
 ```
-/instinct-export                           # Exportar todos los instintos personales
-/instinct-export --domain testing          # Exportar solo instintos de testing
-/instinct-export --min-confidence 0.7      # Solo exportar instintos de alta confianza
+/instinct-export                           # Tüm kişisel içgüdüleri dışa aktar
+/instinct-export --domain testing          # Sadece testing içgüdülerini dışa aktar
+/instinct-export --min-confidence 0.7      # Sadece yüksek güvenli içgüdüleri dışa aktar
 /instinct-export --output team-instincts.yaml
 /instinct-export --scope project --output project-instincts.yaml
 ```
 
-## Qué Hacer
+## Yapılacaklar
 
-1. Detectar el contexto actual del proyecto
-2. Cargar instintos por alcance seleccionado:
-   - `project`: solo el proyecto actual
-   - `global`: solo global
-   - `all`: proyecto + global fusionados (por defecto)
-3. Aplicar filtros (`--domain`, `--min-confidence`)
-4. Escribir la exportación en formato YAML al archivo (o stdout si no se proporciona ruta de salida)
+1. Mevcut proje bağlamını tespit et
+2. Seçilen kapsama göre içgüdüleri yükle:
+   - `project`: sadece mevcut proje
+   - `global`: sadece global
+   - `all`: proje + global birleştirilmiş (varsayılan)
+3. Filtreleri uygula (`--domain`, `--min-confidence`)
+4. YAML formatında dosyaya yaz (veya çıktı yolu verilmediyse stdout'a)
 
-## Formato de Salida
+## Çıktı Formatı
 
-Crea un archivo YAML:
+Bir YAML dosyası oluşturur:
 
 ```yaml
-# Exportación de Instintos
-# Generado: 2025-01-22
-# Fuente: personal
-# Cantidad: 12 instintos
+# Instincts Export
+# Generated: 2025-01-22
+# Source: personal
+# Count: 12 instincts
 
 ---
 id: prefer-functional-style
@@ -52,15 +52,15 @@ project_id: a1b2c3d4e5f6
 project_name: my-app
 ---
 
-# Preferir Estilo Funcional
+# Prefer Functional Style
 
-## Acción
-Usar patrones funcionales sobre clases.
+## Action
+Use functional patterns over classes.
 ```
 
-## Flags
+## Bayraklar
 
-- `--domain <nombre>`: Exportar solo el dominio especificado
-- `--min-confidence <n>`: Umbral mínimo de confianza
-- `--output <archivo>`: Ruta del archivo de salida (imprime a stdout si se omite)
-- `--scope <project|global|all>`: Alcance de exportación (por defecto: `all`)
+- `--domain <name>`: Sadece belirtilen domain'i dışa aktar
+- `--min-confidence <n>`: Minimum güven eşiği
+- `--output <file>`: Çıktı dosya yolu (atlandığında stdout'a yazdırır)
+- `--scope <project|global|all>`: Dışa aktarma kapsamı (varsayılan: `all`)

@@ -1,15 +1,9 @@
 ---
-title: "/cs-commercial-forecast — Slash Command for AI Coding Agents"
-description: "Forward bookings / billings / ARR forecast with funnel + cohort math + conversion-assumption disclosure. NOT financial close (finance). Direct. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Forward bookings / billings / ARR forecast with funnel + cohort math + conversion-assumption disclosure. NOT financial close (finance). Direct invocation of the commercial-forecaster skill.
+argument-hint: "<pipeline export path or cohort + funnel data>"
 ---
 
-# /cs-commercial-forecast
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-commercial-forecast.md">Source</a></span>
-</div>
-
+# /cs:commercial-forecast — Forward bookings + cohort ARR + funnel confidence
 
 Run the `commercial-forecaster` skill on this input:
 

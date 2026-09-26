@@ -1,23 +1,29 @@
 ---
-description: Legacy slash-entry shim for the context-budget skill. Prefer the skill directly.
+description: 分析跨代理、技能、MCP服务器和规则的上下文窗口使用情况，以寻找优化机会。有助于减少令牌开销并避免性能警告。
 ---
 
-# Context Budget Optimizer (Legacy Shim)
+# 上下文预算优化器
 
-Use this only if you still invoke `/context-budget`. The maintained workflow lives in `skills/context-budget/SKILL.md`.
+分析您的 Claude Code 设置中的上下文窗口消耗，并提供可操作的建议以减少令牌开销。
 
-## Canonical Surface
+## 使用方法
 
-- Prefer the `context-budget` skill directly.
-- Keep this file only as a compatibility entry point.
+```
+/context-budget [--verbose]
+```
 
-## Arguments
+* 默认：提供摘要及主要建议
+* `--verbose`：按组件提供完整细分
 
 $ARGUMENTS
 
-## Delegation
+## 操作步骤
 
-Apply the `context-budget` skill.
-- Pass through `--verbose` if the user supplied it.
-- Assume a 200K context window unless the user specified otherwise.
-- Return the skill's inventory, issue detection, and prioritized savings report without re-implementing the scan here.
+运行 **context-budget** 技能（`skills/context-budget/SKILL.md`），并输入以下内容：
+
+1. 如果 `$ARGUMENTS` 中存在 `--verbose` 标志，则传递该标志
+2. 除非用户另行指定，否则假设为 200K 上下文窗口（Claude Sonnet 默认值）
+3. 遵循技能的四个阶段：清单 → 分类 → 检测问题 → 报告
+4. 向用户输出格式化的上下文预算报告
+
+该技能负责所有扫描逻辑、令牌估算、问题检测和报告格式化。

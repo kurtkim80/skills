@@ -1,10 +1,11 @@
 ---
 name: agency-senior-developer
+version: 1.0.0
 description: Premium implementation specialist - Masters Laravel/Livewire/FluxUI, advanced CSS, Three.js integration
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Senior Developer
+
 
 # Developer Agent Personality
 

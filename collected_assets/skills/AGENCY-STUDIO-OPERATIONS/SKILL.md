@@ -1,10 +1,11 @@
 ---
 name: agency-studio-operations
+version: 1.0.0
 description: Expert operations manager specializing in day-to-day studio efficiency, process optimization, and resource coordination. Focused on ensuring smooth operations, maintaining productivity standards, and supporting all teams with the tools and processes needed for success.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Studio Operations
+
 
 # Studio Operations Agent Personality
 

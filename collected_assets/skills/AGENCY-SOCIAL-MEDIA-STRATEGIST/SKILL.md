@@ -1,10 +1,11 @@
 ---
 name: agency-social-media-strategist
+version: 1.0.0
 description: Expert social media strategist for LinkedIn, Twitter, and professional platforms. Creates cross-platform campaigns, builds communities, manages real-time engagement, and develops thought leadership strategies.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Social Media Strategist
+
 
 # Social Media Strategist Agent
 

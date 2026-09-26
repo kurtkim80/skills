@@ -1,42 +1,42 @@
 ---
-description: 선호하는 패키지 매니저(npm/pnpm/yarn/bun) 설정
+description: Tercih ettiğiniz paket yöneticisini yapılandırın (npm/pnpm/yarn/bun)
 disable-model-invocation: true
 ---
 
-# 패키지 매니저 설정
+# Paket Yöneticisi Kurulumu
 
-프로젝트 또는 전역으로 선호하는 패키지 매니저를 설정합니다.
+Bu proje veya global olarak tercih ettiğiniz paket yöneticisini yapılandırın.
 
-## 사용법
+## Kullanım
 
 ```bash
-# 현재 패키지 매니저 감지
+# Mevcut paket yöneticisini tespit et
 node scripts/setup-package-manager.js --detect
 
-# 전역 설정
+# Global tercihi ayarla
 node scripts/setup-package-manager.js --global pnpm
 
-# 프로젝트 설정
+# Proje tercihini ayarla
 node scripts/setup-package-manager.js --project bun
 
-# 사용 가능한 패키지 매니저 목록
+# Mevcut paket yöneticilerini listele
 node scripts/setup-package-manager.js --list
 ```
 
-## 감지 우선순위
+## Tespit Önceliği
 
-패키지 매니저를 결정할 때 다음 순서로 확인합니다:
+Hangi paket yöneticisinin kullanılacağını belirlerken, şu sıra kontrol edilir:
 
-1. **환경 변수**: `CLAUDE_PACKAGE_MANAGER`
-2. **프로젝트 설정**: `.claude/package-manager.json`
-3. **package.json**: `packageManager` 필드
-4. **락 파일**: package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb의 존재 여부
-5. **전역 설정**: `~/.claude/package-manager.json`
-6. **폴백**: `npm`
+1. **Environment variable**: `CLAUDE_PACKAGE_MANAGER`
+2. **Proje config**: `.claude/package-manager.json`
+3. **package.json**: `packageManager` alanı
+4. **Lock dosyası**: package-lock.json, yarn.lock, pnpm-lock.yaml veya bun.lockb varlığı
+5. **Global config**: `~/.claude/package-manager.json`
+6. **Fallback**: İlk mevcut paket yöneticisi (pnpm > bun > yarn > npm)
 
-## 설정 파일
+## Yapılandırma Dosyaları
 
-### 전역 설정
+### Global Yapılandırma
 ```json
 // ~/.claude/package-manager.json
 {
@@ -44,7 +44,7 @@ node scripts/setup-package-manager.js --list
 }
 ```
 
-### 프로젝트 설정
+### Proje Yapılandırması
 ```json
 // .claude/package-manager.json
 {
@@ -59,9 +59,9 @@ node scripts/setup-package-manager.js --list
 }
 ```
 
-## 환경 변수
+## Environment Variable
 
-`CLAUDE_PACKAGE_MANAGER`를 설정하면 다른 모든 감지 방법을 무시합니다:
+Tüm diğer tespit yöntemlerini geçersiz kılmak için `CLAUDE_PACKAGE_MANAGER` ayarlayın:
 
 ```bash
 # Windows (PowerShell)
@@ -71,9 +71,9 @@ $env:CLAUDE_PACKAGE_MANAGER = "pnpm"
 export CLAUDE_PACKAGE_MANAGER=pnpm
 ```
 
-## 감지 실행
+## Tespiti Çalıştır
 
-현재 패키지 매니저 감지 결과를 확인하려면 다음을 실행하세요:
+Mevcut paket yöneticisi tespit sonuçlarını görmek için şunu çalıştırın:
 
 ```bash
 node scripts/setup-package-manager.js --detect

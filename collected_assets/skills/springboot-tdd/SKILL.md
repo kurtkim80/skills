@@ -1,27 +1,26 @@
 ---
 name: springboot-tdd
-description: Desarrollo guiado por pruebas para Spring Boot usando JUnit 5, Mockito, MockMvc, Testcontainers y JaCoCo. Usar al agregar funcionalidades, corregir bugs o refactorizar.
-origin: ECC
+description: Test-driven development for Spring Boot using JUnit 5, Mockito, MockMvc, Testcontainers, and JaCoCo. Use when adding features, fixing bugs, or refactoring.
 ---
 
-# Flujo de Trabajo TDD en Spring Boot
+# Spring Boot TDD ワークフロー
 
-Orientación TDD para servicios Spring Boot con 80%+ de cobertura (unit + integración).
+80%以上のカバレッジ（ユニット+統合）を持つSpring Bootサービスのためのテスト駆動開発ガイダンス。
 
-## Cuándo Usar
+## いつ使用するか
 
-- Nuevas funcionalidades o endpoints
-- Correcciones de bugs o refactorizaciones
-- Agregar lógica de acceso a datos o reglas de seguridad
+- 新機能やエンドポイント
+- バグ修正やリファクタリング
+- データアクセスロジックやセキュリティルールの追加
 
-## Flujo de Trabajo
+## ワークフロー
 
-1) Escribir pruebas primero (deben fallar)
-2) Implementar el código mínimo para que pasen
-3) Refactorizar con pruebas en verde
-4) Exigir cobertura con JaCoCo
+1) テストを最初に書く（失敗すべき）
+2) テストを通すための最小限のコードを実装
+3) テストをグリーンに保ちながらリファクタリング
+4) カバレッジを強制（JaCoCo）
 
-## Pruebas Unitarias (JUnit 5 + Mockito)
+## ユニットテスト（JUnit 5 + Mockito）
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -42,12 +41,12 @@ class MarketServiceTest {
 }
 ```
 
-Patrones:
+パターン:
 - Arrange-Act-Assert
-- Evitar mocks parciales; preferir stubbing explícito
-- Usar `@ParameterizedTest` para variantes
+- 部分モックを避ける。明示的なスタビングを優先
+- バリエーションに`@ParameterizedTest`を使用
 
-## Pruebas de Capa Web (MockMvc)
+## Webレイヤーテスト（MockMvc）
 
 ```java
 @WebMvcTest(MarketController.class)
@@ -66,7 +65,7 @@ class MarketControllerTest {
 }
 ```
 
-## Pruebas de Integración (SpringBootTest)
+## 統合テスト（SpringBootTest）
 
 ```java
 @SpringBootTest
@@ -87,7 +86,7 @@ class MarketIntegrationTest {
 }
 ```
 
-## Pruebas de Persistencia (DataJpaTest)
+## 永続化テスト（DataJpaTest）
 
 ```java
 @DataJpaTest
@@ -110,12 +109,12 @@ class MarketRepositoryTest {
 
 ## Testcontainers
 
-- Usar contenedores reutilizables para Postgres/Redis que reflejen producción
-- Conectar mediante `@DynamicPropertySource` para inyectar URLs JDBC en el contexto de Spring
+- 本番環境を反映するためにPostgres/Redis用の再利用可能なコンテナを使用
+- `@DynamicPropertySource`経由でJDBC URLをSpringコンテキストに注入
 
-## Cobertura (JaCoCo)
+## カバレッジ（JaCoCo）
 
-Fragmento Maven:
+Mavenスニペット:
 ```xml
 <plugin>
   <groupId>org.jacoco</groupId>
@@ -134,13 +133,13 @@ Fragmento Maven:
 </plugin>
 ```
 
-## Aserciones
+## アサーション
 
-- Preferir AssertJ (`assertThat`) para legibilidad
-- Para respuestas JSON, usar `jsonPath`
-- Para excepciones: `assertThatThrownBy(...)`
+- 可読性のためにAssertJ（`assertThat`）を優先
+- JSONレスポンスには`jsonPath`を使用
+- 例外には: `assertThatThrownBy(...)`
 
-## Builders de Datos de Prueba
+## テストデータビルダー
 
 ```java
 class MarketBuilder {
@@ -150,9 +149,9 @@ class MarketBuilder {
 }
 ```
 
-## Comandos de CI
+## CIコマンド
 
-- Maven: `mvn -T 4 test` o `mvn verify`
+- Maven: `mvn -T 4 test` または `mvn verify`
 - Gradle: `./gradlew test jacocoTestReport`
 
-**Recuerda**: Mantener las pruebas rápidas, aisladas y deterministas. Probar comportamiento, no detalles de implementación.
+**覚えておいてください**: テストは高速で、分離され、決定論的に保ちます。実装の詳細ではなく、動作をテストします。

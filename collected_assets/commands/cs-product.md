@@ -1,15 +1,9 @@
 ---
-title: "/cs-product — Slash Command for AI Coding Agents"
-description: "Top-level product-team router. Classifies a product inquiry across 16 lanes (prioritization, OKRs, UX, design system, competitive, analytics. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Top-level product-team router. Classifies a product inquiry across 16 lanes (prioritization, OKRs, UX, design system, competitive, analytics, experiments, discovery, roadmaps, spec-to-repo, landing, SaaS scaffold, stories, HIG, code-to-PRD, summarizer) with a deterministic script and forks context to the right sub-skill via the product-skills orchestrator, returning a ≤200-word digest with one grill challenge.
+argument-hint: "<product inquiry: prioritize features, plan an experiment, discovery health, etc.>"
 ---
 
-# /cs-product
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/product-team/commands/cs-product.md">Source</a></span>
-</div>
-
+# /cs:product — Product Team router
 
 Route this inquiry through the `product-skills` orchestrator:
 

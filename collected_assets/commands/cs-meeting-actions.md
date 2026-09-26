@@ -1,15 +1,10 @@
 ---
-title: "/cs-meeting-actions — Slash Command for AI Coding Agents"
-description: "/cs:meeting-actions — Turn raw meeting notes into an owned action-item checklist: extracts checkboxes, ACTION:/TODO: lines, '@name will …' and 'Name. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-meeting-actions"
+description: "/cs:meeting-actions — Turn raw meeting notes into an owned action-item checklist: extracts checkboxes, ACTION:/TODO: lines, '@name will …' and 'Name will … by date' patterns, groups by owner, and flags every ORPHAN (no owner) and NO-DUE item. An action without an owner and a date is not an action."
+argument-hint: "[path to notes file, or paste the notes]"
 ---
 
-# /cs-meeting-actions
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/meetings/commands/cs-meeting-actions.md">Source</a></span>
-</div>
-
+# /cs:meeting-actions — Raw Notes → Owned Action Checklist
 
 **Command:** `/cs:meeting-actions [notes file or pasted notes]`
 
@@ -77,8 +72,8 @@ Then walk the flags: assign every ORPHAN, date every NO-DUE, and post the checkl
 
 ## Related
 
-- Agent: [`cs-meeting-discipline`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/meetings/agents/cs-meeting-discipline.md)
-- Skill: [`meetings`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/meetings/skills/meetings/SKILL.md)
+- Agent: [`cs-meeting-discipline`](../agents/cs-meeting-discipline.md)
+- Skill: [`meetings`](../skills/meetings/SKILL.md)
 - Sibling command: [`/cs:meeting-prep`](cs-meeting-prep.md) (pre-meeting gate + agenda)
 
 ---

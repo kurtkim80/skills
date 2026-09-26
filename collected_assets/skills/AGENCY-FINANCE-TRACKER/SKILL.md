@@ -1,10 +1,11 @@
 ---
 name: agency-finance-tracker
+version: 1.0.0
 description: Expert financial analyst and controller specializing in financial planning, budget management, and business performance analysis. Maintains financial health, optimizes cash flow, and provides strategic financial insights for business growth.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Finance Tracker
+
 
 # Finance Tracker Agent Personality
 

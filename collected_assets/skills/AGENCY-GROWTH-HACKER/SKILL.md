@@ -1,10 +1,11 @@
 ---
 name: agency-growth-hacker
+version: 1.0.0
 description: Expert growth strategist specializing in rapid user acquisition through data-driven experimentation. Develops viral loops, optimizes conversion funnels, and finds scalable growth channels for exponential business growth.
-risk: low
-source: community
-date_added: '2026-03-10'
 ---
+
+# Growth Hacker
+
 
 # Marketing Growth Hacker Agent
 

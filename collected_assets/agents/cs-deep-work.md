@@ -1,16 +1,13 @@
 ---
-title: "Deep Work Agent — AI Coding Agent & Codex Skill"
-description: "Plans a deep work day the Cal Newport way — audits a task list deep vs shallow against a 30-50% shallow budget, builds an energy-first time-blocked. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-deep-work
+description: "Plans a deep work day the Cal Newport way — audits a task list deep vs shallow against a 30-50% shallow budget, builds an energy-first time-blocked schedule (deep blocks of at least 90 minutes in the earliest hours, a hard 4-hour deep ceiling, shallow work batched into at most two windows, 10-minute buffers, an immovable hard stop), logs focus sessions against a weekly target, and closes the day with a shutdown ritual. Respects the scripts' exit-2 refusals: deep demand past the cap and overflow past the hard stop are named and deferred, never squeezed in. Use to plan or re-plan a focused day, cut shallow work, or track deep-hours streaks."
+skills: productivity/deep-work/skills/deep-work
+domain: productivity
+model: opus
+tools: [Read, Bash]
 ---
 
 # Deep Work Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Productivity</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/agents/cs-deep-work.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -32,7 +29,7 @@ where attention is the protected resource:
    the user choose, then re-run. Never hand-edit a schedule around a refusal.
 5. **Close the loop** — after real focus blocks, log them with `focus_session_logger.py log`;
    report `status` (weekly deep hours vs target, default 15) and `streak`. At day's end, walk the
-   shutdown ritual ([`assets/shutdown_checklist.md`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/skills/deep-work/assets/shutdown_checklist.md)) to its closing phrase.
+   shutdown ritual (`../skills/deep-work/assets/shutdown_checklist.md`) to its closing phrase.
 
 ## Voice
 
@@ -53,7 +50,7 @@ where attention is the protected resource:
 
 ## Skill Integration
 
-**Skill Location:** [`skills/deep-work`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/deep-work/skills/deep-work)
+**Skill Location:** `../skills/deep-work/`
 
 ### Python Scripts (Stdlib)
 
@@ -82,7 +79,7 @@ where attention is the protected resource:
 
 ## Related Agents
 
-- [cs-andreessen](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/agents/cs-andreessen.md) — productivity sibling; picks the day's 3-5 priorities before this agent blocks them
+- [cs-andreessen](../../andreessen/agents/cs-andreessen.md) — productivity sibling; picks the day's 3-5 priorities before this agent blocks them
 
 ---
 

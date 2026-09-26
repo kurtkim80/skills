@@ -1,55 +1,55 @@
 ---
-description: Go build 에러, go vet 경고, 린터 이슈를 점진적으로 수정합니다. 최소한의 정밀한 수정을 위해 go-build-resolver 에이전트를 호출합니다.
+description: Go build hatalarını, go vet uyarılarını ve linter sorunlarını aşamalı olarak düzelt. Minimal, cerrahi düzeltmeler için go-build-resolver agent'ını çağırır.
 ---
 
 # Go Build and Fix
 
-이 커맨드는 **go-build-resolver** 에이전트를 호출하여 최소한의 변경으로 Go build 에러를 점진적으로 수정합니다.
+Bu komut, minimal değişikliklerle Go build hatalarını aşamalı olarak düzeltmek için **go-build-resolver** agent'ını çağırır.
 
-## 이 커맨드가 하는 것
+## Bu Komut Ne Yapar
 
-1. **진단 실행**: `go build`, `go vet`, `staticcheck` 실행
-2. **에러 분석**: 파일별로 그룹화하고 심각도순 정렬
-3. **점진적 수정**: 한 번에 하나의 에러씩
-4. **각 수정 검증**: 각 변경 후 build 재실행
-5. **요약 보고**: 수정된 것과 남은 것 표시
+1. **Diagnostics Çalıştır**: `go build`, `go vet`, `staticcheck` yürüt
+2. **Hataları Parse Et**: Dosyaya göre grupla ve önem derecesine göre sırala
+3. **Aşamalı Düzelt**: Bir seferde bir hata
+4. **Her Düzeltmeyi Doğrula**: Her değişiklikten sonra build'i yeniden çalıştır
+5. **Özet Raporla**: Neyin düzeltildiğini ve neyin kaldığını göster
 
-## 사용 시점
+## Ne Zaman Kullanılır
 
-`/go-build`를 사용해야 할 때:
-- `go build ./...`가 에러로 실패할 때
-- `go vet ./...`가 이슈를 보고할 때
-- `golangci-lint run`이 경고를 보여줄 때
-- 모듈 의존성이 깨졌을 때
-- 변경사항을 pull한 후 build가 깨졌을 때
+`/go-build` komutunu şu durumlarda kullanın:
+- `go build ./...` hatalarla başarısız olduğunda
+- `go vet ./...` sorunlar raporladığında
+- `golangci-lint run` uyarılar gösterdiğinde
+- Modül bağımlılıkları bozulduğunda
+- Build'i bozan değişiklikleri pull ettikten sonra
 
-## 실행되는 진단 커맨드
+## Çalıştırılan Diagnostic Komutları
 
 ```bash
-# 기본 build 확인
+# Birincil build kontrolü
 go build ./...
 
-# 정적 분석
+# Static analiz
 go vet ./...
 
-# 확장 린팅 (사용 가능한 경우)
+# Genişletilmiş linting (mevcutsa)
 staticcheck ./...
 golangci-lint run
 
-# 모듈 이슈
+# Modül sorunları
 go mod verify
 go mod tidy -v
 ```
 
-## 예시 세션
+## Örnek Oturum
 
-````text
-User: /go-build
+```text
+Kullanıcı: /go-build
 
 Agent:
-# Go Build 해결
+# Go Build Çözümü
 
-## 초기 진단
+## İlk Diagnostics
 
 ```bash
 $ go build ./...
@@ -58,51 +58,51 @@ internal/handler/api.go:42:9: cannot use x (type string) as type int
 internal/handler/api.go:58:2: missing return at end of function
 ```
 
-발견된 에러: 3개
+Bulunan hatalar: 3
 
-## 수정 1: 정의되지 않은 식별자
+## Düzeltme 1: Tanımsız Tanımlayıcı
 
-파일: internal/service/user.go:25
-에러: undefined: UserRepository
-원인: import 누락
+Dosya: internal/service/user.go:25
+Hata: undefined: UserRepository
+Neden: Eksik import
 
 ```go
-// import 추가
+// Import eklendi
 import "project/internal/repository"
 
-// 변경 전
+// Değiştirildi
 var repo UserRepository
-// 변경 후
+// Şuna
 var repo repository.UserRepository
 ```
 
 ```bash
 $ go build ./...
-# 2개 에러 남음
+# 2 hata kaldı
 ```
 
-## 수정 2: 타입 불일치
+## Düzeltme 2: Tip Uyuşmazlığı
 
-파일: internal/handler/api.go:42
-에러: cannot use x (type string) as type int
+Dosya: internal/handler/api.go:42
+Hata: cannot use x (type string) as type int
 
 ```go
-// 변경 전
+// Değiştirildi
 count := params.Get("count")
-// 변경 후
+// Şuna
 countStr := params.Get("count")
 count, _ := strconv.Atoi(countStr)
 ```
 
 ```bash
 $ go build ./...
-# 1개 에러 남음
+# 1 hata kaldı
 ```
 
-## 수정 3: 누락된 return
+## Düzeltme 3: Eksik Return
 
-파일: internal/handler/api.go:58
-에러: missing return at end of function
+Dosya: internal/handler/api.go:58
+Hata: missing return at end of function
 
 ```go
 func GetUser(id string) (*User, error) {
@@ -110,74 +110,74 @@ func GetUser(id string) (*User, error) {
         return nil, ErrInvalidID
     }
     user := findUser(id)
-    // 누락된 return 추가
+    // Eksik return eklendi
     return user, nil
 }
 ```
 
 ```bash
 $ go build ./...
-# Build 성공!
+# Build başarılı!
 ```
 
-## 최종 검증
+## Son Doğrulama
 
 ```bash
 $ go vet ./...
-# 이슈 없음
+# Sorun yok
 
 $ go test ./...
 ok      project/internal/service   0.015s
 ok      project/internal/handler   0.023s
 ```
 
-## 요약
+## Özet
 
-| 항목 | 수량 |
-|------|------|
-| 수정된 Build 에러 | 3 |
-| 수정된 Vet 경고 | 0 |
-| 수정된 파일 | 2 |
-| 남은 이슈 | 0 |
+| Metrik | Sayı |
+|--------|-------|
+| Düzeltilen build hataları | 3 |
+| Düzeltilen vet uyarıları | 0 |
+| Değiştirilen dosyalar | 2 |
+| Kalan sorunlar | 0 |
 
-Build 상태: PASS: 성공
-````
+Build Durumu: PASS: BAŞARILI
+```
 
-## 자주 발생하는 에러
+## Düzeltilen Yaygın Hatalar
 
-| 에러 | 일반적인 수정 방법 |
-|------|-------------------|
-| `undefined: X` | import 추가 또는 오타 수정 |
-| `cannot use X as Y` | 타입 변환 또는 할당 수정 |
-| `missing return` | return 문 추가 |
-| `X does not implement Y` | 누락된 메서드 추가 |
-| `import cycle` | 패키지 구조 재구성 |
-| `declared but not used` | 변수 제거 또는 사용 |
-| `cannot find package` | `go get` 또는 `go mod tidy` |
+| Hata | Tipik Düzeltme |
+|-------|-------------|
+| `undefined: X` | Import ekle veya yazım hatasını düzelt |
+| `cannot use X as Y` | Tip dönüşümü veya atamayı düzelt |
+| `missing return` | Return ifadesi ekle |
+| `X does not implement Y` | Eksik metod ekle |
+| `import cycle` | Paketleri yeniden yapılandır |
+| `declared but not used` | Değişkeni kaldır veya kullan |
+| `cannot find package` | `go get` veya `go mod tidy` |
 
-## 수정 전략
+## Düzeltme Stratejisi
 
-1. **Build 에러 먼저** - 코드가 컴파일되어야 함
-2. **Vet 경고 두 번째** - 의심스러운 구조 수정
-3. **Lint 경고 세 번째** - 스타일과 모범 사례
-4. **한 번에 하나씩** - 각 변경 검증
-5. **최소한의 변경** - 리팩토링이 아닌 수정만
+1. **Önce build hataları** - Kodun compile edilmesi gerekli
+2. **İkinci olarak vet uyarıları** - Şüpheli yapıları düzelt
+3. **Üçüncü olarak lint uyarıları** - Stil ve en iyi uygulamalar
+4. **Bir seferde bir düzeltme** - Her değişikliği doğrula
+5. **Minimal değişiklikler** - Refactor etme, sadece düzelt
 
-## 중단 조건
+## Durdurma Koşulları
 
-에이전트가 중단하고 보고하는 경우:
-- 3번 시도 후에도 같은 에러가 지속
-- 수정이 더 많은 에러를 발생시킴
-- 아키텍처 변경이 필요한 경우
-- 외부 의존성이 누락된 경우
+Agent şu durumlarda durur ve raporlar:
+- Aynı hata 3 denemeden sonra devam ederse
+- Düzeltme daha fazla hata oluşturursa
+- Mimari değişiklikler gerektirirse
+- Harici bağımlılıklar eksikse
 
-## 관련 커맨드
+## İlgili Komutlar
 
-- `/go-test` - build 성공 후 테스트 실행
-- `/go-review` - 코드 품질 리뷰
-- `/verify` - 전체 검증 루프
+- `/go-test` - Build başarılı olduktan sonra testleri çalıştır
+- `/go-review` - Kod kalitesini incele
+- `/verify` - Tam doğrulama döngüsü
 
-## 관련 항목
+## İlgili
 
-- 에이전트: `agents/go-build-resolver.md`
-- 스킬: `skills/golang-patterns/`
+- Agent: `agents/go-build-resolver.md`
+- Skill: `skills/golang-patterns/`

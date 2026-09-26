@@ -1,6 +1,6 @@
 ---
 name: frontend-slides
-description: フロントエンドプレゼンテーション、デモンストレーション、およびスライド構成のためのパターンとベストプラクティス。
+description: Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files. Use when the user wants to build a presentation, convert a PPT/PPTX to web, or create slides for a talk/pitch. Helps non-designers discover their aesthetic through visual exploration rather than abstract choices.
 origin: ECC
 ---
 
@@ -8,7 +8,7 @@ origin: ECC
 
 Create zero-dependency, animation-rich HTML presentations that run entirely in the browser.
 
-Inspired by the visual exploration approach showcased in work by zarazhangrui (credit: @zarazhangrui).
+Inspired by the visual exploration approach showcased in work by [zarazhangrui](https://github.com/zarazhangrui).
 
 ## When to Activate
 
