@@ -1,174 +1,89 @@
 ---
 name: skill-create
-description: Kodlama desenlerini çıkarmak ve SKILL.md dosyaları oluşturmak için yerel git geçmişini analiz et. Skill Creator GitHub App'ın yerel versiyonu.
+description: Analizar el historial local de git para extraer patrones de codificación y generar archivos SKILL.md. Versión local de la Skill Creator GitHub App.
 allowed-tools: ["Bash", "Read", "Write", "Grep", "Glob"]
 ---
 
-# /skill-create - Yerel Skill Oluşturma
+# /skill-create - Generación Local de Skills
 
-Repository'nizin git geçmişini analiz ederek kodlama desenlerini çıkarın ve Claude'a ekibinizin uygulamalarını öğreten SKILL.md dosyaları oluşturun.
+Analizar el historial de git de tu repositorio para extraer patrones de codificación y generar archivos SKILL.md que enseñan a Claude las prácticas de tu equipo.
 
-## Kullanım
+## Uso
 
 ```bash
-/skill-create                    # Mevcut repo'yu analiz et
-/skill-create --commits 100      # Son 100 commit'i analiz et
-/skill-create --output ./skills  # Özel çıktı dizini
-/skill-create --instincts        # continuous-learning-v2 için instinct'ler de oluştur
+/skill-create                    # Analizar el repositorio actual
+/skill-create --commits 100      # Analizar los últimos 100 commits
+/skill-create --output ./skills  # Directorio de salida personalizado
+/skill-create --instincts        # También generar instintos para continuous-learning-v2
 ```
 
-## Ne Yapar
+## Qué Hace
 
-1. **Git Geçmişini Parse Eder** - Commit'leri, dosya değişikliklerini ve desenleri analiz eder
-2. **Desenleri Tespit Eder** - Tekrarlayan iş akışlarını ve kuralları tanımlar
-3. **SKILL.md Oluşturur** - Geçerli Claude Code skill dosyaları oluşturur
-4. **İsteğe Bağlı Instinct'ler Oluşturur** - continuous-learning-v2 sistemi için
+1. **Parsear Historial de Git** - Analizar commits, cambios de archivos y patrones
+2. **Detectar Patrones** - Identificar flujos de trabajo y convenciones recurrentes
+3. **Generar SKILL.md** - Crear archivos de skill válidos de Claude Code
+4. **Opcionalmente Crear Instintos** - Para el sistema continuous-learning-v2
 
-## Analiz Adımları
+## Pasos de Análisis
 
-### Adım 1: Git Verilerini Topla
+### Paso 1: Recopilar Datos de Git
 
 ```bash
-# Dosya değişiklikleriyle son commit'leri al
+# Obtener commits recientes con cambios de archivos
 git log --oneline -n ${COMMITS:-200} --name-only --pretty=format:"%H|%s|%ad" --date=short
 
-# Dosyaya göre commit sıklığını al
+# Obtener frecuencia de commits por archivo
 git log --oneline -n 200 --name-only | grep -v "^$" | grep -v "^[a-f0-9]" | sort | uniq -c | sort -rn | head -20
 
-# Commit mesaj desenlerini al
+# Obtener patrones de mensajes de commit
 git log --oneline -n 200 | cut -d' ' -f2- | head -50
 ```
 
-### Adım 2: Desenleri Tespit Et
+### Paso 2: Detectar Patrones
 
-Bu desen türlerini ara:
+| Patrón | Método de Detección |
+|--------|---------------------|
+| **Convenciones de commit** | Regex en mensajes de commit (feat:, fix:, chore:) |
+| **Co-cambios de archivos** | Archivos que siempre cambian juntos |
+| **Secuencias de flujo de trabajo** | Patrones de cambio de archivos repetidos |
+| **Arquitectura** | Estructura de carpetas y convenciones de nomenclatura |
+| **Patrones de testing** | Ubicaciones de archivos de prueba, nomenclatura, cobertura |
 
-| Desen | Tespit Yöntemi |
-|---------|-----------------|
-| **Commit kuralları** | Commit mesajlarında regex (feat:, fix:, chore:) |
-| **Dosya birlikte değişimleri** | Her zaman birlikte değişen dosyalar |
-| **İş akışı dizileri** | Tekrarlanan dosya değişim desenleri |
-| **Mimari** | Klasör yapısı ve isimlendirme kuralları |
-| **Test desenleri** | Test dosya konumları, isimlendirme, kapsama |
-
-### Adım 3: SKILL.md Oluştur
-
-Çıktı formatı:
+### Paso 3: Generar SKILL.md
 
 ```markdown
 ---
-name: {repo-name}-patterns
-description: {repo-name}'den çıkarılan kodlama desenleri
+name: {nombre-repo}-patterns
+description: Patrones de codificación extraídos de {nombre-repo}
 version: 1.0.0
 source: local-git-analysis
-analyzed_commits: {count}
+analyzed_commits: {cantidad}
 ---
 
-# {Repo Name} Desenleri
+# Patrones de {Nombre Repo}
 
-## Commit Kuralları
-{tespit edilen commit mesaj desenleri}
+## Convenciones de Commit
+{patrones detectados en mensajes de commit}
 
-## Kod Mimarisi
-{tespit edilen klasör yapısı ve organizasyon}
+## Arquitectura del Código
+{estructura de carpetas y organización detectadas}
 
-## İş Akışları
-{tespit edilen tekrarlayan dosya değişim desenleri}
+## Flujos de Trabajo
+{patrones de cambio de archivos repetidos detectados}
 
-## Test Desenleri
-{tespit edilen test kuralları}
+## Patrones de Testing
+{convenciones de pruebas detectadas}
 ```
 
-### Adım 4: Instinct'ler Oluştur (--instincts varsa)
+## Integración con GitHub App
 
-continuous-learning-v2 entegrasyonu için:
+Para funciones avanzadas (10k+ commits, compartir en equipo, PRs automáticos), usar la [Skill Creator GitHub App](https://github.com/apps/skill-creator):
 
-```yaml
----
-id: {repo}-commit-convention
-trigger: "bir commit mesajı yazarken"
-confidence: 0.8
-domain: git
-source: local-repo-analysis
----
+- Comentar `/skill-creator analyze` en cualquier issue
+- Recibe un PR con las skills generadas
 
-# Conventional Commits Kullan
+## Comandos Relacionados
 
-## Aksiyon
-Commit'leri şu öneklerle başlat: feat:, fix:, chore:, docs:, test:, refactor:
-
-## Kanıt
-- {n} commit analiz edildi
-- {percentage}% conventional commit formatını takip ediyor
-```
-
-## Örnek Çıktı
-
-Bir TypeScript projesinde `/skill-create` çalıştırmak şunları üretebilir:
-
-```markdown
----
-name: my-app-patterns
-description: my-app repository'sinden kodlama desenleri
-version: 1.0.0
-source: local-git-analysis
-analyzed_commits: 150
----
-
-# My App Desenleri
-
-## Commit Kuralları
-
-Bu proje **conventional commits** kullanıyor:
-- `feat:` - Yeni özellikler
-- `fix:` - Hata düzeltmeleri
-- `chore:` - Bakım görevleri
-- `docs:` - Dokümantasyon güncellemeleri
-
-## Kod Mimarisi
-
-```
-src/
-├── components/     # React componentleri (PascalCase.tsx)
-├── hooks/          # Özel hook'lar (use*.ts)
-├── utils/          # Yardımcı fonksiyonlar
-├── types/          # TypeScript tip tanımları
-└── services/       # API ve harici servisler
-```
-
-## İş Akışları
-
-### Yeni Bir Component Ekleme
-1. `src/components/ComponentName.tsx` oluştur
-2. `src/components/__tests__/ComponentName.test.tsx`'de testler ekle
-3. `src/components/index.ts`'den export et
-
-### Database Migration
-1. `src/db/schema.ts`'yi değiştir
-2. `pnpm db:generate` çalıştır
-3. `pnpm db:migrate` çalıştır
-
-## Test Desenleri
-
-- Test dosyaları: `__tests__/` dizinleri veya `.test.ts` eki
-- Kapsama hedefi: 80%+
-- Framework: Vitest
-```
-
-## GitHub App Entegrasyonu
-
-Gelişmiş özellikler için (10k+ commit, ekip paylaşımı, otomatik PR'lar), [Skill Creator GitHub App](https://github.com/apps/skill-creator) kullanın:
-
-- Yükle: [github.com/apps/skill-creator](https://github.com/apps/skill-creator)
-- Herhangi bir issue'da `/skill-creator analyze` yorumu yap
-- Oluşturulan skill'lerle PR alın
-
-## İlgili Komutlar
-
-- `/instinct-import` - Oluşturulan instinct'leri import et
-- `/instinct-status` - Öğrenilen instinct'leri görüntüle
-- `/evolve` - Instinct'leri skill'ler/agent'lara kümelendir
-
----
-
-*[Everything Claude Code](https://github.com/affaan-m/everything-claude-code)'un bir parçası*
+- `/instinct-import` - Importar instintos generados
+- `/instinct-status` - Ver instintos aprendidos
+- `/evolve` - Agrupar instintos en skills/agentes

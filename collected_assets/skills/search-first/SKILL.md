@@ -1,181 +1,179 @@
 ---
 name: search-first
-description: コーディング前の調査ワークフロー。カスタムコードを書く前に既存のツール、ライブラリ、パターンを検索します。researcher エージェントを呼び出します。
-origin: ECC
+description: >
+  Research-before-coding workflow. Search for existing tools, libraries, and
+  patterns before writing custom code. Systematizes the "search for existing
+  solutions before implementing" approach. Use when starting new features or
+  adding functionality.
+metadata:
+  origin: ECC
 ---
 
-# /search-first — コーディング前に調査する
+# /search-first — Research Before You Code
 
-「既存のソリューションを実装前に検索する」ワークフローを体系化します。
+Systematizes the "search for existing solutions before implementing" workflow.
 
-## トリガー
+## Trigger
 
-以下の場合にこのスキルを使用します:
-- 既存のソリューションが存在する可能性が高い新しい機能を開始する場合
-- 依存関係やインテグレーションを追加する場合
-- ユーザーが「X 機能を追加して」と要求し、コードを書こうとしている場合
-- 新しいユーティリティ、ヘルパー、または抽象化を作成する前
+Use this skill when:
+- Starting a new feature that likely has existing solutions
+- Adding a dependency or integration
+- The user asks "add X functionality" and you're about to write code
+- Before creating a new utility, helper, or abstraction
 
-## ワークフロー
+## Scope and Approval Rules
+
+Default to read-only research: inspect the repo, package metadata, docs, and public examples before recommending a dependency or integration. Do not install packages, configure MCP servers, publish artifacts, open PRs, or make external write actions from this skill unless the user has explicitly approved that action in the current task.
+
+When a candidate requires credentials, paid services, network writes, or project-wide config changes, return a recommendation and approval checkpoint instead of applying it directly.
+
+## Workflow
 
 ```
 ┌─────────────────────────────────────────────┐
-│  0. ツール利用可能性の事前確認              │
-│     依存する前に検索チャネルを確認；        │
-│     スキップしたチャネルを正直に報告する    │
+│  1. NEED ANALYSIS                           │
+│     Define what functionality is needed      │
+│     Identify language/framework constraints  │
 ├─────────────────────────────────────────────┤
-│  1. ニーズ分析                              │
-│     必要な機能を定義する                    │
-│     言語/フレームワークの制約を特定する     │
-├─────────────────────────────────────────────┤
-│  2. 並列検索（researcher エージェント）     │
+│  2. PARALLEL SEARCH (researcher agent)      │
 │     ┌──────────┐ ┌──────────┐ ┌──────────┐  │
 │     │  npm /   │ │  MCP /   │ │  GitHub / │  │
-│     │  PyPI    │ │  スキル  │ │  Web      │  │
+│     │  PyPI    │ │  Skills  │ │  Web      │  │
 │     └──────────┘ └──────────┘ └──────────┘  │
 ├─────────────────────────────────────────────┤
-│  3. 評価                                    │
-│     候補をスコアリング（機能性、保守性、    │
-│     コミュニティ、ドキュメント、ライセンス、│
-│     依存関係）                              │
+│  3. EVALUATE                                │
+│     Score candidates (functionality, maint, │
+│     community, docs, license, deps)         │
 ├─────────────────────────────────────────────┤
-│  4. 決定                                    │
+│  4. DECIDE                                  │
 │     ┌─────────┐  ┌──────────┐  ┌─────────┐  │
-│     │ 採用    │  │ 拡張/   │  │ カスタム │  │
-│     │ そのまま│  │ ラップ   │  │ ビルド   │  │
+│     │  Adopt  │  │  Extend  │  │  Build   │  │
+│     │ as-is   │  │  /Wrap   │  │  Custom  │  │
 │     └─────────┘  └──────────┘  └─────────┘  │
 ├─────────────────────────────────────────────┤
-│  5. 実装                                    │
-│     パッケージをインストール / MCP を設定 / │
-│     最小限のカスタムコードを書く            │
+│  5. APPROVAL CHECKPOINT / IMPLEMENT         │
+│     Recommend package / MCP / custom code   │
+│     Apply only after explicit approval      │
 └─────────────────────────────────────────────┘
 ```
 
-## 判断マトリクス
+## Decision Matrix
 
-| シグナル | アクション |
+| Signal | Action |
 |--------|--------|
-| 完全一致、よく保守されている、MIT/Apache | **採用** — 直接インストールして使用 |
-| 部分一致、良い基盤 | **拡張** — インストール + 薄いラッパーを書く |
-| 複数の弱い一致 | **組み合わせ** — 2〜3 の小さなパッケージを組み合わせる |
-| 適切なものが見つからない | **ビルド** — カスタムを書くが、調査に基づいて |
+| Exact match, well-maintained, MIT/Apache | **Adopt** — recommend the package and request approval before install or config changes |
+| Partial match, good foundation | **Extend** — recommend the package plus a thin wrapper, then wait for approval before applying |
+| Multiple weak matches | **Compose** — propose 2-3 small packages and the integration plan before installing anything |
+| Nothing suitable found | **Build** — explain why custom code is warranted, then implement only within the approved task scope |
 
-## 使い方
+## How to Use
 
-### ステップ 0: ツール利用可能性の事前確認
+### Quick Mode (inline)
 
-これはエージェントのガイダンスであり、実行可能なセットアップスクリプトではありません。目の前のタスクとプロジェクトに関連するチャネルのみを確認します。
+Before writing a utility or adding functionality, mentally run through:
 
-| チャネル | 確認 | 欠如している場合 |
-|---------|-------|------------|
-| リポジトリ検索 | `rg --files` と的を絞った `rg` クエリ | 可視ファイルのみが検査されたことを明示 |
-| パッケージレジストリ | `npm --version`、`python -m pip --version`、またはプロジェクトのパッケージマネージャー | Web/ドキュメント検索を使用し、レジストリカバレッジを主張しない |
-| GitHub CLI | `gh auth status` | 公開 Web またはローカル git 履歴のみを使用 |
-| MCP/ドキュメントツール | 利用可能なツールリストまたはローカル MCP 設定 | 公式ドキュメント/ウェブ検索にフォールバック |
-| スキルディレクトリ | `ls ~/.claude/skills ~/.codex/skills`（該当する場合） | ローカルスキルカタログが利用できないと明示 |
+0. Does this already exist in the repo? → Search through relevant modules/tests first
+1. Is this a common problem? → Search npm/PyPI
+2. Is there an MCP for this? → Check MCP configuration and search
+3. Is there a skill for this? → Check available skills
+4. Is there a GitHub implementation/template? → Run GitHub code search for maintained OSS before writing net-new code
 
-### クイックモード（インライン）
+### Full Mode (subagent)
 
-ユーティリティを書いたり機能を追加したりする前に、以下を確認します:
-
-0. これはリポジトリに既に存在するか？ → まず関連モジュール/テストを `rg` で確認
-1. これはよくある問題か？ → npm/PyPI を検索
-2. MCP はあるか？ → `~/.claude/settings.json` を確認して検索
-3. このためのスキルはあるか？ → `~/.claude/skills/` を確認
-4. GitHub に実装/テンプレートがあるか？ → 新規コードを書く前に保守された OSS の GitHub コード検索を実行
-
-### フルモード（エージェント）
-
-非自明な機能には、researcher エージェントを起動します:
+For non-trivial functionality, delegate to a research-focused subagent:
 
 ```
-Agent(subagent_type="general-purpose", prompt="
-  既存のツールを調査してください: [説明]
-  言語/フレームワーク: [言語]
-  制約: [あれば]
+Invoke subagent with prompt:
+  "Research existing tools for: [DESCRIPTION]
+   Language/framework: [LANG]
+   Constraints: [ANY]
 
-  検索先: npm/PyPI、MCP サーバー、Claude Code スキル、GitHub
-  返却: 推薦付きの構造化比較
-")
+   Search: npm/PyPI, MCP servers, skills, GitHub
+   Return: Structured comparison with recommendation"
 ```
 
-古い Claude Code ドキュメントではこれを `Task(...)` と呼ぶ場合があります；アクティブなハーネスが公開している現在のエージェント/サブエージェントツール名を使用してください。
+## Search Shortcuts by Category
 
-## カテゴリ別検索ショートカット
+### Development Tooling
+- Linting → `eslint`, `ruff`, `textlint`, `markdownlint`
+- Formatting → `prettier`, `black`, `gofmt`
+- Testing → `jest`, `pytest`, `go test`
+- Pre-commit → `husky`, `lint-staged`, `pre-commit`
 
-### 開発ツール
-- Linting → `eslint`、`ruff`、`textlint`、`markdownlint`
-- フォーマット → `prettier`、`black`、`gofmt`
-- テスト → `jest`、`pytest`、`go test`
-- プレコミット → `husky`、`lint-staged`、`pre-commit`
+### AI/LLM Integration
+- Claude SDK → Check for latest docs
+- Prompt management → Check MCP servers
+- Document processing → `unstructured`, `pdfplumber`, `mammoth`
 
-### AI/LLM 統合
-- Claude SDK → 最新ドキュメントには Context7 を使用
-- プロンプト管理 → MCP サーバーを確認
-- 文書処理 → `unstructured`、`pdfplumber`、`mammoth`
+### Data & APIs
+- HTTP clients → `httpx` (Python), `ky`/`got` (Node)
+- Validation → `zod` (TS), `pydantic` (Python)
+- Database → Check for MCP servers first
 
-### データ & API
-- HTTP クライアント → `httpx`（Python）、`ky`/`undici`（Node）
-- バリデーション → `zod`（TS）、`pydantic`（Python）
-- データベース → まず MCP サーバーを確認
+### Content & Publishing
+- Markdown processing → `remark`, `unified`, `markdown-it`
+- Image optimization → `sharp`, `imagemin`
 
-### コンテンツ & 公開
-- Markdown 処理 → `remark`、`unified`、`markdown-it`
-- 画像最適化 → `sharp`、`imagemin`
+## Integration Points
 
-## 統合ポイント
+### With planner agent
+The planner should invoke researcher before Phase 1 (Architecture Review):
+- Researcher identifies available tools
+- Planner incorporates them into the implementation plan
+- Avoids "reinventing the wheel" in the plan
 
-### planner エージェントとの統合
-planner はフェーズ1（アーキテクチャレビュー）の前に researcher を呼び出すべきです:
-- Researcher が利用可能なツールを特定
-- Planner がそれらを実装計画に組み込む
-- 計画での「車輪の再発明」を回避
+### With architect agent
+The architect should consult researcher for:
+- Technology stack decisions
+- Integration pattern discovery
+- Existing reference architectures
 
-### architect エージェントとの統合
-architect は以下のために researcher に相談すべきです:
-- テクノロジースタックの決定
-- 統合パターンの発見
-- 既存のリファレンスアーキテクチャ
+### With iterative-retrieval skill
+Combine for progressive discovery:
+- Cycle 1: Broad search (npm, PyPI, MCP)
+- Cycle 2: Evaluate top candidates in detail
+- Cycle 3: Test compatibility with project constraints
 
-### iterative-retrieval スキルとの統合
-段階的な発見のために組み合わせます:
-- サイクル1: 広い検索（npm、PyPI、MCP）
-- サイクル2: 上位候補を詳細に評価
-- サイクル3: プロジェクトの制約との互換性をテスト
+## Examples
 
-## 例
-
-### 例1: 「デッドリンクチェックを追加」
+### Example 1: "Add dead link checking"
 ```
-必要: Markdown ファイルのリンク切れを確認
-検索: npm "markdown dead link checker"
-発見: textlint-rule-no-dead-link（スコア: 9/10）
-アクション: 採用 — npm install textlint-rule-no-dead-link
-結果: カスタムコードなし、実証済みのソリューション
+Need: Check markdown files for broken links
+Search: npm "markdown dead link checker"
+Found: textlint-rule-no-dead-link (score: 9/10)
+Action: ADOPT — recommend `textlint-rule-no-dead-link` and ask before installing it
+Result: Zero custom code if approved, battle-tested solution
 ```
 
-### 例2: 「HTTP クライアントラッパーを追加」
+### Example 2: "Add HTTP client wrapper"
 ```
-必要: リトライとタイムアウト処理を持つ信頼性の高い HTTP クライアント
-検索: npm "http client retry", PyPI "httpx retry"
-発見: got（Node）with retry plugin, httpx（Python）with built-in retry
-アクション: 採用 — got/httpx をリトライ設定で直接使用
-結果: カスタムコードなし、本番実証済みのライブラリ
-```
-
-### 例3: 「設定ファイルリンターを追加」
-```
-必要: プロジェクト設定ファイルをスキーマに対して検証
-検索: npm "config linter schema", "json schema validator cli"
-発見: ajv-cli（スコア: 8/10）
-アクション: 採用 + 拡張 — ajv-cli をインストール、プロジェクト固有のスキーマを記述
-結果: 1 パッケージ + 1 スキーマファイル、カスタム検証ロジックなし
+Need: Resilient HTTP client with retries and timeout handling
+Search: npm "http client retry", PyPI "httpx retry"
+Found: got (Node) with retry plugin, httpx (Python) with built-in retry
+Action: ADOPT — recommend `got`/`httpx` directly with retry config and ask before changing dependencies
+Result: Zero custom code if approved, production-proven libraries
 ```
 
-## アンチパターン
+### Example 3: "Add config file linter"
+```
+Need: Validate project config files against a schema
+Search: npm "config linter schema", "json schema validator cli"
+Found: ajv-cli (score: 8/10)
+Action: ADOPT + EXTEND — recommend `ajv-cli` plus a project-specific schema, then wait for approval before install/write
+Result: 1 package + 1 schema file if approved, no custom validation logic
+```
 
-- **コードへの飛び込み**: 既存のものがあるか確認せずにユーティリティを書く
-- **MCP の無視**: MCP サーバーが既にその機能を提供しているかチェックしない
-- **サイレントスキップ**: 検索チャネルが利用できなかったのに「何も見つからなかった」と報告する
-- **過度なカスタマイズ**: ライブラリをラップしすぎてそのメリットを失う
-- **依存関係の肥大化**: 1つの小さな機能のために巨大なパッケージをインストールする
+## Anti-Patterns
+
+- **Jumping to code**: Writing a utility without checking if one exists
+- **Ignoring MCP**: Not checking if an MCP server already provides the capability
+- **Over-customizing**: Wrapping a library so heavily it loses its benefits
+- **Dependency bloat**: Installing a massive package for one small feature
+
+## When to Use This Skill
+
+- Starting new features
+- Adding dependencies or integrations
+- Before writing utilities or helpers
+- When evaluating technology choices
+- Planning architecture decisions

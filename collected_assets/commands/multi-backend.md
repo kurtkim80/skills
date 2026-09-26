@@ -1,160 +1,97 @@
-# Backend - Backend Odaklı Geliştirme
+---
+description: Ejecutar un flujo de trabajo multi-modelo enfocado en backend para APIs, algoritmos, datos y lógica de negocio.
+---
 
-Backend odaklı iş akışı (Research → Ideation → Plan → Execute → Optimize → Review), Codex liderliğinde.
+# Backend - Desarrollo Enfocado en Backend
 
-> **Ön koşul:** Bu komut, temel ECC kurulumunun parçası **olmayan** harici `ccg-workflow` runtime'ını gerektirir. Bu komutun bağımlı olduğu `~/.claude/bin/codeagent-wrapper` ve `~/.claude/.ccg/prompts/*` rol dosyalarını sağlamak için `npx ccg-workflow` komutuyla başlatın. Bu runtime olmadan bu komut düzgün çalışmaz.
+Flujo de trabajo enfocado en backend (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión), liderado por Codex.
 
-## Kullanım
+## Uso
 
 ```bash
-/backend <backend task açıklaması>
+/backend <descripción de tarea backend>
 ```
 
-## Context
+## Contexto
 
-- Backend task: $ARGUMENTS
-- Codex liderliğinde, Gemini yardımcı referans için
-- Uygulanabilir: API tasarımı, algoritma implementasyonu, veritabanı optimizasyonu, business logic
+- Tarea backend: $ARGUMENTS
+- Liderado por Codex, Gemini para referencia auxiliar
+- Aplicable a: diseño de API, implementación de algoritmos, optimización de base de datos, lógica de negocio
 
-## Rolünüz
+## Tu Rol
 
-**Backend Orkestratör**sünüz, sunucu tarafı görevler için multi-model işbirliğini koordine ediyorsunuz (Research → Ideation → Plan → Execute → Optimize → Review).
+Eres el **Orquestador Backend**, coordinando la colaboración multi-modelo para tareas del lado del servidor (Investigación → Ideación → Plan → Ejecución → Optimización → Revisión).
 
-**İşbirlikçi Modeller**:
-- **Codex** – Backend logic, algoritmalar (**Backend otoritesi, güvenilir**)
-- **Gemini** – Frontend perspektifi (**Backend görüşleri sadece referans için**)
-- **Claude (self)** – Orkestrasyon, planlama, execution, teslimat
-
----
-
-## Multi-Model Çağrı Spesifikasyonu
-
-**Çağrı Sözdizimi**:
-
-```
-# Yeni session çağrısı
-Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend codex - \"$PWD\" <<'EOF'
-ROLE_FILE: <role prompt path>
-<TASK>
-Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
-Context: <önceki fazlardan proje context'i ve analiz>
-</TASK>
-OUTPUT: Expected output format
-EOF",
-  run_in_background: false,
-  timeout: 3600000,
-  description: "Brief description"
-})
-
-# Session devam ettirme çağrısı
-Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend codex resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <role prompt path>
-<TASK>
-Requirement: <enhanced requirement (veya enhance edilmediyse $ARGUMENTS)>
-Context: <önceki fazlardan proje context'i ve analiz>
-</TASK>
-OUTPUT: Expected output format
-EOF",
-  run_in_background: false,
-  timeout: 3600000,
-  description: "Brief description"
-})
-```
-
-**Role Prompts**:
-
-| Phase | Codex |
-|-------|-------|
-| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` |
-| Planning | `~/.claude/.ccg/prompts/codex/architect.md` |
-| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` |
-
-**Session Reuse**: Her çağrı `SESSION_ID: xxx` döndürür, sonraki fazlar için `resume xxx` kullan. Phase 2'de `CODEX_SESSION` kaydet, Phase 3 ve 5'te `resume` kullan.
+**Modelos Colaboradores**:
+- **Codex** – Lógica backend, algoritmos (**Autoridad de backend, confiable**)
+- **Gemini** – Perspectiva frontend (**Opiniones de backend solo como referencia**)
+- **Claude (propio)** – Orquestación, planificación, ejecución, entrega
 
 ---
 
-## İletişim Yönergeleri
+## Flujo de Trabajo Principal
 
-1. Yanıtlara mode etiketi `[Mode: X]` ile başla, ilk `[Mode: Research]`
-2. Katı sıra takip et: `Research → Ideation → Plan → Execute → Optimize → Review`
-3. Gerektiğinde kullanıcı etkileşimi için `AskUserQuestion` tool kullan (örn., onay/seçim/approval)
+### Fase 0: Mejora del Prompt (Opcional)
 
----
+`[Modo: Preparar]` - Si el MCP ace-tool está disponible, llamar a `mcp__ace-tool__enhance_prompt`. Si no está disponible, usar `$ARGUMENTS` tal cual.
 
-## Ana İş Akışı
+### Fase 1: Investigación
 
-### Phase 0: Prompt Enhancement (İsteğe Bağlı)
+`[Modo: Investigación]` - Entender los requisitos y recopilar contexto
 
-`[Mode: Prepare]` - ace-tool MCP mevcutsa, `mcp__ace-tool__enhance_prompt` çağır, **orijinal $ARGUMENTS'ı sonraki Codex çağrıları için enhanced sonuçla değiştir**. Mevcut değilse, `$ARGUMENTS`'ı olduğu gibi kullan.
+1. **Recuperación de Código** (si el MCP ace-tool está disponible): Llamar a `mcp__ace-tool__search_context`. Si no está disponible, usar herramientas integradas: `Glob` para descubrir archivos, `Grep` para buscar símbolos/APIs, `Read` para recopilar contexto.
+2. Puntuación de completitud de requisitos (0-10): >=7 continuar, <7 parar y complementar
 
-### Phase 1: Research
+### Fase 2: Ideación
 
-`[Mode: Research]` - Requirement'ları anla ve context topla
+`[Modo: Ideación]` - Análisis liderado por Codex
 
-1. **Code Retrieval** (ace-tool MCP mevcutsa): Mevcut API'leri, veri modellerini, servis mimarisini almak için `mcp__ace-tool__search_context` çağır. Mevcut değilse, built-in tool'ları kullan: dosya keşfi için `Glob`, sembol/API araması için `Grep`, context toplama için `Read`, daha derin keşif için `Task` (Explore agent).
-2. Requirement tamamlılık skoru (0-10): >=7 devam et, <7 dur ve tamamla
+**DEBE llamar a Codex**:
+- Análisis de viabilidad técnica, soluciones recomendadas (al menos 2), evaluación de riesgos
 
-### Phase 2: Ideation
+**Guardar SESSION_ID** (`CODEX_SESSION`) para reutilización en fases posteriores.
 
-`[Mode: Ideation]` - Codex liderliğinde analiz
+Presentar soluciones (al menos 2), esperar selección del usuario.
 
-**Codex'i MUTLAKA çağır** (yukarıdaki çağrı spesifikasyonunu takip et):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
-- Requirement: Enhanced requirement (veya enhance edilmediyse $ARGUMENTS)
-- Context: Phase 1'den proje context'i
-- OUTPUT: Teknik fizibilite analizi, önerilen çözümler (en az 2), risk değerlendirmesi
+### Fase 3: Planificación
 
-**SESSION_ID'yi kaydet** (`CODEX_SESSION`) sonraki faz yeniden kullanımı için.
+`[Modo: Plan]` - Planificación liderada por Codex
 
-Çözümleri çıktıla (en az 2), kullanıcı seçimini bekle.
+**DEBE llamar a Codex** (usar `resume <CODEX_SESSION>`):
+- Estructura de archivos, diseño de funciones/clases, relaciones de dependencia
 
-### Phase 3: Planning
+Claude sintetiza el plan, guardar en `.claude/plan/nombre-tarea.md` después de aprobación del usuario.
 
-`[Mode: Plan]` - Codex liderliğinde planlama
+### Fase 4: Implementación
 
-**Codex'i MUTLAKA çağır** (session'ı yeniden kullanmak için `resume <CODEX_SESSION>` kullan):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
-- Requirement: Kullanıcının seçtiği çözüm
-- Context: Phase 2'den analiz sonuçları
-- OUTPUT: Dosya yapısı, fonksiyon/sınıf tasarımı, bağımlılık ilişkileri
+`[Modo: Ejecutar]` - Desarrollo de código
 
-Claude planı sentezler, kullanıcı onayından sonra `.claude/plan/task-name.md`'ye kaydet.
+- Seguir estrictamente el plan aprobado
+- Seguir los estándares de código existentes del proyecto
+- Asegurar manejo de errores, seguridad, optimización de rendimiento
 
-### Phase 4: Implementation
+### Fase 5: Optimización
 
-`[Mode: Execute]` - Kod geliştirme
+`[Modo: Optimizar]` - Revisión liderada por Codex
 
-- Onaylanan planı kesinlikle takip et
-- Mevcut proje kod standartlarını takip et
-- Hata işleme, güvenlik, performans optimizasyonu sağla
+**DEBE llamar a Codex**:
+- Lista de problemas de seguridad, rendimiento, manejo de errores, cumplimiento de API
 
-### Phase 5: Optimization
+Integrar retroalimentación de la revisión, ejecutar optimización después de confirmación del usuario.
 
-`[Mode: Optimize]` - Codex liderliğinde review
+### Fase 6: Revisión de Calidad
 
-**Codex'i MUTLAKA çağır** (yukarıdaki çağrı spesifikasyonunu takip et):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/reviewer.md`
-- Requirement: Aşağıdaki backend kod değişikliklerini incele
-- Context: git diff veya kod içeriği
-- OUTPUT: Güvenlik, performans, hata işleme, API uyumu sorunlar listesi
+`[Modo: Revisión]` - Evaluación final
 
-Review geri bildirimlerini entegre et, kullanıcı onayından sonra optimizasyonu çalıştır.
-
-### Phase 6: Quality Review
-
-`[Mode: Review]` - Nihai değerlendirme
-
-- Plana karşı tamamlılığı kontrol et
-- Fonksiyonaliteyi doğrulamak için test'leri çalıştır
-- Sorunları ve önerileri raporla
+- Verificar completitud contra el plan
+- Ejecutar pruebas para verificar la funcionalidad
+- Reportar problemas y recomendaciones
 
 ---
 
-## Ana Kurallar
+## Reglas Clave
 
-1. **Codex backend görüşleri güvenilir**
-2. **Gemini backend görüşleri sadece referans için**
-3. Harici modellerin **sıfır dosya sistemi yazma erişimi**
-4. Claude tüm kod yazma ve dosya operasyonlarını yönetir
+1. **Las opiniones de backend de Codex son confiables**
+2. **Las opiniones de backend de Gemini son solo de referencia**
+3. Los modelos externos tienen **cero acceso de escritura al sistema de archivos**
+4. Claude maneja todas las escrituras de código y operaciones de archivos

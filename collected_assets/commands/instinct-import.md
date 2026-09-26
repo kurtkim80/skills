@@ -1,88 +1,88 @@
 ---
 name: instinct-import
-description: İçgüdüleri dosya veya URL'den proje/global kapsama aktar
+description: Importar instintos desde archivo o URL al alcance del proyecto/global
 command: true
 ---
 
-# Instinct Import Komutu
+# Comando Instinct Import
 
-## Uygulama
+## Implementación
 
-Plugin root path kullanarak instinct CLI'ı çalıştır:
-
-```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7] [--scope project|global]
-```
-
-Veya `CLAUDE_PLUGIN_ROOT` ayarlanmamışsa (manuel kurulum):
+Ejecutar la CLI de instintos usando la ruta raíz del plugin:
 
 ```bash
-python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file-or-url>
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <archivo-o-url> [--dry-run] [--force] [--min-confidence 0.7] [--scope project|global]
 ```
 
-Yerel dosya yollarından veya HTTP(S) URL'lerinden içgüdüleri içe aktar.
+O si `CLAUDE_PLUGIN_ROOT` no está configurado (instalación manual):
 
-## Kullanım
+```bash
+python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <archivo-o-url>
+```
+
+Importar instintos desde rutas de archivos locales o URLs HTTP(S).
+
+## Uso
 
 ```
 /instinct-import team-instincts.yaml
-/instinct-import https://raw.githubusercontent.com/org/repo/main/instincts.yaml
+/instinct-import https://github.com/org/repo/instincts.yaml
 /instinct-import team-instincts.yaml --dry-run
 /instinct-import team-instincts.yaml --scope global --force
 ```
 
-## Yapılacaklar
+## Qué Hacer
 
-1. İçgüdü dosyasını al (yerel yol veya URL)
-2. Formatı doğrula ve ayrıştır
-3. Mevcut içgüdülerle duplikasyon kontrolü yap
-4. Yeni içgüdüleri birleştir veya ekle
-5. İçgüdüleri inherited dizinine kaydet:
-   - Proje kapsamı: `~/.claude/homunculus/projects/<project-id>/instincts/inherited/`
-   - Global kapsam: `~/.claude/homunculus/instincts/inherited/`
+1. Obtener el archivo de instintos (ruta local o URL)
+2. Parsear y validar el formato
+3. Verificar duplicados con instintos existentes
+4. Fusionar o añadir nuevos instintos
+5. Guardar en el directorio de instintos heredados:
+   - Alcance de proyecto: `~/.claude/homunculus/projects/<project-id>/instincts/inherited/`
+   - Alcance global: `~/.claude/homunculus/instincts/inherited/`
 
-## İçe Aktarma İşlemi
+## Proceso de Importación
 
 ```
- Importing instincts from: team-instincts.yaml
+ Importando instintos desde: team-instincts.yaml
 ================================================
 
-Found 12 instincts to import.
+12 instintos encontrados para importar.
 
-Analyzing conflicts...
+Analizando conflictos...
 
-## New Instincts (8)
-These will be added:
-  ✓ use-zod-validation (confidence: 0.7)
-  ✓ prefer-named-exports (confidence: 0.65)
-  ✓ test-async-functions (confidence: 0.8)
+## Nuevos Instintos (8)
+Estos se añadirán:
+  ✓ use-zod-validation (confianza: 0.7)
+  ✓ prefer-named-exports (confianza: 0.65)
+  ✓ test-async-functions (confianza: 0.8)
   ...
 
-## Duplicate Instincts (3)
-Already have similar instincts:
-  WARNING: prefer-functional-style
-     Local: 0.8 confidence, 12 observations
-     Import: 0.7 confidence
-     → Keep local (higher confidence)
+## Instintos Duplicados (3)
+Ya existen instintos similares:
+  ADVERTENCIA: prefer-functional-style
+     Local: confianza 0.8, 12 observaciones
+     Importado: confianza 0.7
+     → Conservar local (mayor confianza)
 
-  WARNING: test-first-workflow
-     Local: 0.75 confidence
-     Import: 0.9 confidence
-     → Update to import (higher confidence)
+  ADVERTENCIA: test-first-workflow
+     Local: confianza 0.75
+     Importado: confianza 0.9
+     → Actualizar al importado (mayor confianza)
 
-Import 8 new, update 1?
+¿Importar 8 nuevos, actualizar 1?
 ```
 
-## Birleştirme Davranışı
+## Comportamiento de Fusión
 
-Mevcut ID'ye sahip bir içgüdü içe aktarılırken:
-- Daha yüksek güvenli içe aktarma güncelleme adayı olur
-- Eşit/düşük güvenli içe aktarma atlanır
-- `--force` kullanılmadıkça kullanıcı onaylar
+Al importar un instinto con un ID existente:
+- El importado con mayor confianza se convierte en candidato de actualización
+- El importado con igual/menor confianza se omite
+- El usuario confirma a menos que se use `--force`
 
-## Kaynak İzleme
+## Seguimiento de Fuente
 
-İçe aktarılan içgüdüler şu şekilde işaretlenir:
+Los instintos importados se marcan con:
 ```yaml
 source: inherited
 scope: project
@@ -91,24 +91,24 @@ project_id: "a1b2c3d4e5f6"
 project_name: "my-project"
 ```
 
-## Bayraklar
+## Flags
 
-- `--dry-run`: İçe aktarmadan önizle
-- `--force`: Onay istemini atla
-- `--min-confidence <n>`: Sadece eşiğin üzerindeki içgüdüleri içe aktar
-- `--scope <project|global>`: Hedef kapsamı seç (varsayılan: `project`)
+- `--dry-run`: Vista previa sin importar
+- `--force`: Omitir el prompt de confirmación
+- `--min-confidence <n>`: Solo importar instintos por encima del umbral
+- `--scope <project|global>`: Seleccionar el alcance destino (por defecto: `project`)
 
-## Çıktı
+## Salida
 
-İçe aktarma sonrası:
+Después de la importación:
 ```
-PASS: Import complete!
+¡Importación completada!
 
-Added: 8 instincts
-Updated: 1 instinct
-Skipped: 3 instincts (equal/higher confidence already exists)
+Añadidos: 8 instintos
+Actualizados: 1 instinto
+Omitidos: 3 instintos (ya existe igual/mayor confianza)
 
-New instincts saved to: ~/.claude/homunculus/instincts/inherited/
+Nuevos instintos guardados en: ~/.claude/homunculus/instincts/inherited/
 
-Run /instinct-status to see all instincts.
+Ejecutar /instinct-status para ver todos los instintos.
 ```

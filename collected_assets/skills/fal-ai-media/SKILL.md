@@ -1,24 +1,26 @@
 ---
 name: fal-ai-media
-description: Unified media generation via fal.ai MCP — image, video, and audio. Covers text-to-image (Nano Banana), text/image-to-video (Seedance, Kling, Veo 3), text-to-speech (CSM-1B), and video-to-audio (ThinkSound). Use when the user wants to generate images, videos, or audio with AI.
-license: MIT
+description: fal.ai MCPによる統合メディア生成（画像、動画、音声）。テキストから画像（Nano Banana）、テキスト/画像から動画（Seedance、Kling、Veo 3）、テキストから音声（CSM-1B）、動画から音声（ThinkSound）をカバーします。ユーザーがAIで画像、動画、音声を生成したい場合に使用します。
+origin: ECC
 ---
 
-# fal.ai Media Generation
+# fal.aiメディア生成
 
-Generate images, videos, and audio using fal.ai models via MCP.
+> **変化が早いスキル。** fal.aiのモデルID、価格、入力、MCPツール名は急速に変わります。特定のモデル、パラメーター、出力形式、またはコストを約束する前に、現在のモデルメタデータを検索または取得してください。
 
-## When to Activate
+MCPを通じてfal.aiモデルを使用して画像、動画、音声を生成します。
 
-- User wants to generate images from text prompts
-- Creating videos from text or images
-- Generating speech, music, or sound effects
-- Any media generation task
-- User says "generate image", "create video", "text to speech", "make a thumbnail", or similar
+## アクティベートするタイミング
 
-## MCP Requirement
+- ユーザーがテキストプロンプトから画像を生成したい場合
+- テキストまたは画像から動画を作成する場合
+- 音声、音楽、または効果音を生成する場合
+- あらゆるメディア生成タスク
+- ユーザーが「generate image」「create video」「text to speech」「make a thumbnail」などと言う場合
 
-fal.ai MCP server must be configured. Add to `~/.claude.json`:
+## MCP要件
+
+fal.ai MCPサーバーを設定する必要があります。`~/.claude.json`に追加してください:
 
 ```json
 "fal-ai": {
@@ -28,32 +30,32 @@ fal.ai MCP server must be configured. Add to `~/.claude.json`:
 }
 ```
 
-Get an API key at [fal.ai](https://fal.ai).
+APIキーは[fal.ai](https://fal.ai)で取得してください。
 
-## MCP Tools
+## MCPツール
 
-The fal.ai MCP provides these tools:
-- `search` — Find available models by keyword
-- `find` — Get model details and parameters
-- `generate` — Run a model with parameters
-- `result` — Check async generation status
-- `status` — Check job status
-- `cancel` — Cancel a running job
-- `estimate_cost` — Estimate generation cost
-- `models` — List popular models
-- `upload` — Upload files for use as inputs
+fal.ai MCPは以下のツールを提供します:
+- `search` — キーワードで利用可能なモデルを検索
+- `find` — モデルの詳細とパラメーターを取得
+- `generate` — パラメーターでモデルを実行
+- `result` — 非同期生成のステータスを確認
+- `status` — ジョブステータスを確認
+- `cancel` — 実行中のジョブをキャンセル
+- `estimate_cost` — 生成コストを見積もる
+- `models` — 人気モデルの一覧表示
+- `upload` — 入力として使用するファイルをアップロード
 
 ---
 
-## Image Generation
+## 画像生成
 
-### Nano Banana 2 (Fast)
-Best for: quick iterations, drafts, text-to-image, image editing.
+### Nano Banana 2（高速）
+ベストユースケース: クイックイテレーション、ドラフト、テキストから画像、画像編集。
 
 ```
 generate(
-  model_name: "fal-ai/nano-banana-2",
-  input: {
+  app_id: "fal-ai/nano-banana-2",
+  input_data: {
     "prompt": "a futuristic cityscape at sunset, cyberpunk style",
     "image_size": "landscape_16_9",
     "num_images": 1,
@@ -62,13 +64,13 @@ generate(
 )
 ```
 
-### Nano Banana Pro (High Fidelity)
-Best for: production images, realism, typography, detailed prompts.
+### Nano Banana Pro（高忠実度）
+ベストユースケース: 本番画像、リアリズム、タイポグラフィ、詳細なプロンプト。
 
 ```
 generate(
-  model_name: "fal-ai/nano-banana-pro",
-  input: {
+  app_id: "fal-ai/nano-banana-pro",
+  input_data: {
     "prompt": "professional product photo of wireless headphones on marble surface, studio lighting",
     "image_size": "square",
     "num_images": 1,
@@ -77,27 +79,27 @@ generate(
 )
 ```
 
-### Common Image Parameters
+### 一般的な画像パラメーター
 
-| Param | Type | Options | Notes |
+| パラメーター | 型 | オプション | 備考 |
 |-------|------|---------|-------|
-| `prompt` | string | required | Describe what you want |
-| `image_size` | string | `square`, `portrait_4_3`, `landscape_16_9`, `portrait_16_9`, `landscape_4_3` | Aspect ratio |
-| `num_images` | number | 1-4 | How many to generate |
-| `seed` | number | any integer | Reproducibility |
-| `guidance_scale` | number | 1-20 | How closely to follow the prompt (higher = more literal) |
+| `prompt` | string | 必須 | 生成したいものを説明する |
+| `image_size` | string | `square`、`portrait_4_3`、`landscape_16_9`、`portrait_16_9`、`landscape_4_3` | アスペクト比 |
+| `num_images` | number | 1-4 | 生成する数 |
+| `seed` | number | 任意の整数 | 再現性 |
+| `guidance_scale` | number | 1-20 | プロンプトへの追従度（高いほど文字通り） |
 
-### Image Editing
-Use Nano Banana 2 with an input image for inpainting, outpainting, or style transfer:
+### 画像編集
+インペインティング、アウトペインティング、またはスタイル転送にNano Banana 2を入力画像と共に使用:
 
 ```
-# First upload the source image
+# まずソース画像をアップロード
 upload(file_path: "/path/to/image.png")
 
-# Then generate with image input
+# 次に画像入力で生成
 generate(
-  model_name: "fal-ai/nano-banana-2",
-  input: {
+  app_id: "fal-ai/nano-banana-2",
+  input_data: {
     "prompt": "same scene but in watercolor style",
     "image_url": "<uploaded_url>",
     "image_size": "landscape_16_9"
@@ -107,15 +109,15 @@ generate(
 
 ---
 
-## Video Generation
+## 動画生成
 
-### Seedance 1.0 Pro (ByteDance)
-Best for: text-to-video, image-to-video with high motion quality.
+### Seedance 1.0 Pro（ByteDance）
+ベストユースケース: テキストから動画、高モーション品質の画像から動画。
 
 ```
 generate(
-  model_name: "fal-ai/seedance-1-0-pro",
-  input: {
+  app_id: "fal-ai/seedance-1-0-pro",
+  input_data: {
     "prompt": "a drone flyover of a mountain lake at golden hour, cinematic",
     "duration": "5s",
     "aspect_ratio": "16:9",
@@ -125,12 +127,12 @@ generate(
 ```
 
 ### Kling Video v3 Pro
-Best for: text/image-to-video with native audio generation.
+ベストユースケース: ネイティブ音声生成付きのテキスト/画像から動画。
 
 ```
 generate(
-  model_name: "fal-ai/kling-video/v3/pro",
-  input: {
+  app_id: "fal-ai/kling-video/v3/pro",
+  input_data: {
     "prompt": "ocean waves crashing on a rocky coast, dramatic clouds",
     "duration": "5s",
     "aspect_ratio": "16:9"
@@ -138,26 +140,26 @@ generate(
 )
 ```
 
-### Veo 3 (Google DeepMind)
-Best for: video with generated sound, high visual quality.
+### Veo 3（Google DeepMind）
+ベストユースケース: 生成された音声付き、高視覚品質の動画。
 
 ```
 generate(
-  model_name: "fal-ai/veo-3",
-  input: {
+  app_id: "fal-ai/veo-3",
+  input_data: {
     "prompt": "a bustling Tokyo street market at night, neon signs, crowd noise",
     "aspect_ratio": "16:9"
   }
 )
 ```
 
-### Image-to-Video
-Start from an existing image:
+### 画像から動画
+既存の画像から開始:
 
 ```
 generate(
-  model_name: "fal-ai/seedance-1-0-pro",
-  input: {
+  app_id: "fal-ai/seedance-1-0-pro",
+  input_data: {
     "prompt": "camera slowly zooms out, gentle wind moves the trees",
     "image_url": "<uploaded_image_url>",
     "duration": "5s"
@@ -165,48 +167,48 @@ generate(
 )
 ```
 
-### Video Parameters
+### 動画パラメーター
 
-| Param | Type | Options | Notes |
+| パラメーター | 型 | オプション | 備考 |
 |-------|------|---------|-------|
-| `prompt` | string | required | Describe the video |
-| `duration` | string | `"5s"`, `"10s"` | Video length |
-| `aspect_ratio` | string | `"16:9"`, `"9:16"`, `"1:1"` | Frame ratio |
-| `seed` | number | any integer | Reproducibility |
-| `image_url` | string | URL | Source image for image-to-video |
+| `prompt` | string | 必須 | 動画を説明する |
+| `duration` | string | `"5s"`、`"10s"` | 動画の長さ |
+| `aspect_ratio` | string | `"16:9"`、`"9:16"`、`"1:1"` | フレーム比率 |
+| `seed` | number | 任意の整数 | 再現性 |
+| `image_url` | string | URL | 画像から動画用のソース画像 |
 
 ---
 
-## Audio Generation
+## 音声生成
 
-### CSM-1B (Conversational Speech)
-Text-to-speech with natural, conversational quality.
+### CSM-1B（会話的スピーチ）
+自然な会話品質のテキストから音声。
 
 ```
 generate(
-  model_name: "fal-ai/csm-1b",
-  input: {
+  app_id: "fal-ai/csm-1b",
+  input_data: {
     "text": "Hello, welcome to the demo. Let me show you how this works.",
     "speaker_id": 0
   }
 )
 ```
 
-### ThinkSound (Video-to-Audio)
-Generate matching audio from video content.
+### ThinkSound（動画から音声）
+動画コンテンツからマッチする音声を生成。
 
 ```
 generate(
-  model_name: "fal-ai/thinksound",
-  input: {
+  app_id: "fal-ai/thinksound",
+  input_data: {
     "video_url": "<video_url>",
     "prompt": "ambient forest sounds with birds chirping"
   }
 )
 ```
 
-### ElevenLabs (via API, no MCP)
-For professional voice synthesis, use ElevenLabs directly:
+### ElevenLabs（API経由、MCPなし）
+プロフェッショナルな音声合成には、ElevenLabsを直接使用:
 
 ```python
 import os
@@ -228,50 +230,57 @@ with open("output.mp3", "wb") as f:
     f.write(resp.content)
 ```
 
-### VideoDB Generative Audio
-If VideoDB is configured, use its generative audio:
+### VideoDB生成音声
+VideoDBが設定されている場合、その生成音声を使用:
 
 ```python
-# Voice generation
+# 音声生成
 audio = coll.generate_voice(text="Your narration here", voice="alloy")
 
-# Music generation
+# 音楽生成
 music = coll.generate_music(prompt="upbeat electronic background music", duration=30)
 
-# Sound effects
+# 効果音
 sfx = coll.generate_sound_effect(prompt="thunder crack followed by rain")
 ```
 
 ---
 
-## Cost Estimation
+## コスト見積もり
 
-Before generating, check estimated cost:
+生成前に見積もりコストを確認:
 
 ```
-estimate_cost(model_name: "fal-ai/nano-banana-pro", input: {...})
+estimate_cost(
+  estimate_type: "unit_price",
+  endpoints: {
+    "fal-ai/nano-banana-pro": {
+      "unit_quantity": 1
+    }
+  }
+)
 ```
 
-## Model Discovery
+## モデル探索
 
-Find models for specific tasks:
+特定のタスクに対するモデルを検索:
 
 ```
 search(query: "text to video")
-find(model_name: "fal-ai/seedance-1-0-pro")
+find(endpoint_ids: ["fal-ai/seedance-1-0-pro"])
 models()
 ```
 
-## Tips
+## ヒント
 
-- Use `seed` for reproducible results when iterating on prompts
-- Start with lower-cost models (Nano Banana 2) for prompt iteration, then switch to Pro for finals
-- For video, keep prompts descriptive but concise — focus on motion and scene
-- Image-to-video produces more controlled results than pure text-to-video
-- Check `estimate_cost` before running expensive video generations
+- プロンプトを繰り返す際の再現性のために`seed`を使用する
+- プロンプトのイテレーションには低コストのモデル（Nano Banana 2）から始め、最終版ではProに切り替える
+- 動画の場合、プロンプトはモーションとシーンに焦点を当てて説明的だが簡潔に
+- 画像から動画は純粋なテキストから動画よりも制御された結果を生成する
+- 高コストの動画生成を実行する前に`estimate_cost`を確認する
 
-## Related Skills
+## 関連スキル
 
-- `videodb` — Video processing, editing, and streaming
-- `video-editing` — AI-powered video editing workflows
-- `content-engine` — Content creation for social platforms
+- `videodb` — 動画処理、編集、ストリーミング
+- `video-editing` — AI駆動の動画編集ワークフロー
+- `content-engine` — ソーシャルプラットフォーム向けコンテンツ作成

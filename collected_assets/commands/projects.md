@@ -1,39 +1,39 @@
 ---
 name: projects
-description: 列出已知项目及其本能统计数据
+description: 既知のプロジェクトとその本能統計を一覧表示する
 command: true
 ---
 
-# 项目命令
+# プロジェクト コマンド
 
-列出项目注册条目以及每个项目的本能/观察计数，适用于 continuous-learning-v2。
+continuous-learning-v2 のプロジェクト登録エントリと各プロジェクトの本能/観察カウントを一覧表示します。
 
-## 实现
+## 実装
 
-使用插件根路径运行本能 CLI：
+プラグインルートパスを使って本能 CLI を実行します：
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" projects
 ```
 
-或者如果 `CLAUDE_PLUGIN_ROOT` 未设置（手动安装）：
+または `CLAUDE_PLUGIN_ROOT` が設定されていない場合（手動インストール）：
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py projects
 ```
 
-## 用法
+## 使い方
 
 ```bash
 /projects
 ```
 
-## 操作步骤
+## 操作手順
 
-1. 读取 `~/.claude/homunculus/projects.json`
-2. 对于每个项目，显示：
-   * 项目名称、ID、根目录、远程地址
-   * 个人和继承的本能计数
-   * 观察事件计数
-   * 最后看到的时间戳
-3. 同时显示全局本能总数
+1. `~/.claude/homunculus/projects.json` を読み取る
+2. 各プロジェクトについて以下を表示する：
+   * プロジェクト名、ID、ルートディレクトリ、リモートアドレス
+   * 個人および継承された本能カウント
+   * 観察イベントカウント
+   * 最終確認タイムスタンプ
+3. グローバル本能の合計も表示する

@@ -1,90 +1,77 @@
 ---
 name: documentation-lookup
-description: Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples, or when the user names a framework (e.g. React, Next.js, Prisma).
+description: 訓練データの代わりにContext7 MCP経由で最新のライブラリとフレームワークドキュメント使用。セットアップの質問、APIリファレンス、コード例、またはユーザーがフレームワーク（例：React、Next.js、Prisma）に名前を付けるときにアクティベーション。
 origin: ECC
 ---
 
-# Documentation Lookup (Context7)
+# ドキュメント ルックアップ（Context7）
 
-When the user asks about libraries, frameworks, or APIs, fetch current documentation via the Context7 MCP (tools `resolve-library-id` and `query-docs`) instead of relying on training data.
+ユーザーがライブラリ、フレームワーク、またはAPIについて尋ねるときは、訓練データに依存する代わりにContext7 MCP（ツール`resolve-library-id`および`query-docs`）を通じて現在のドキュメントをフェッチします。
 
-## Core Concepts
+## コア概念
 
-- **Context7**: MCP server that exposes live documentation; use it instead of training data for libraries and APIs.
-- **resolve-library-id**: Returns Context7-compatible library IDs (e.g. `/vercel/next.js`) from a library name and query.
-- **query-docs**: Fetches documentation and code snippets for a given library ID and question. Always call resolve-library-id first to get a valid library ID.
+- **Context7**：ライブドキュメントを公開するMCPサーバー；ライブラリとAPI用の訓練データの代わりに使用。
+- **resolve-library-id**：ライブラリ名とクエリからContext7互換のライブラリID（例：`/vercel/next.js`）を返す。
+- **query-docs**：指定されたライブラリIDと質問のドキュメントとコードスニペットをフェッチ。有効なライブラリIDを取得するため、最初にresolve-library-idを呼び出す必須。
 
-## When to use
+## 使用時期
 
-Activate when the user:
+ユーザーが以下の場合にアクティベーション：
 
-- Asks setup or configuration questions (e.g. "How do I configure Next.js middleware?")
-- Requests code that depends on a library ("Write a Prisma query for...")
-- Needs API or reference information ("What are the Supabase auth methods?")
-- Mentions specific frameworks or libraries (React, Vue, Svelte, Express, Tailwind, Prisma, Supabase, etc.)
+- セットアップまたは構成の質問（例：「Next.jsミドルウェアを構成する方法は？」）
+- ライブラリに依存するコードをリクエスト（「Prismaクエリを書いて...」）
+- APIまたはリファレンス情報が必要（「Supabase認証方法は何ですか？」）
+- 特定のフレームワークまたはライブラリに言及（React、Vue、Svelte、Express、Tailwind、Prisma、Supabaseなど）
 
-Use this skill whenever the request depends on accurate, up-to-date behavior of a library, framework, or API. Applies across harnesses that have the Context7 MCP configured (e.g. Claude Code, Cursor, Codex).
+リクエストがライブラリ、フレームワーク、またはAPIの正確で最新の動作に依存するときはいつでもこのスキルを使用。Context7 MCPが構成されたハーネス全体に適用されます（例：Claude Code、Cursor、Codex）。
 
-## How it works
+## 動作方法
 
-### Step 1: Resolve the Library ID
+### ステップ1：ライブラリIDを解決
 
-Call the **resolve-library-id** MCP tool with:
+**resolve-library-id** MCPツールを以下で呼び出す：
 
-- **libraryName**: The library or product name taken from the user's question (e.g. `Next.js`, `Prisma`, `Supabase`).
-- **query**: The user's full question. This improves relevance ranking of results.
+- **libraryName**：ユーザーの質問から取得したライブラリまたはプロダクト名（例：`Next.js`、`Prisma`、`Supabase`）。
+- **query**：ユーザーの完全な質問。これにより結果の関連性ランキングが改善。
 
-You must obtain a Context7-compatible library ID (format `/org/project` or `/org/project/version`) before querying docs. Do not call query-docs without a valid library ID from this step.
+クエリドキュメントを呼び出す前に、Context7互換のライブラリID（形式`/org/project`または`/org/project/version`）を取得する必要があります。このステップから有効なライブラリIDなしでquery-docsを呼び出さないでください。
 
-### Step 2: Select the Best Match
+### ステップ2：最適なマッチを選択
 
-From the resolution results, choose one result using:
+解決結果から、以下を使用して1つの結果を選択：
 
-- **Name match**: Prefer exact or closest match to what the user asked for.
-- **Benchmark score**: Higher scores indicate better documentation quality (100 is highest).
-- **Source reputation**: Prefer High or Medium reputation when available.
-- **Version**: If the user specified a version (e.g. "React 19", "Next.js 15"), prefer a version-specific library ID if listed (e.g. `/org/project/v1.2.0`).
+- **名前マッチ**：ユーザーが尋ねたものに対する正確なまたは最も近いマッチを好む。
+- **ベンチマークスコア**：より高いスコアはより良いドキュメント品質を示す（100は最高）。
+- **ソース評判**：利用可能な場合はHigh またはMedium評判を好む。
+- **バージョン**：ユーザーがバージョンを指定した場合（例：「React 19」、「Next.js 15」）、バージョン固有のライブラリIDを好む（例：`/org/project/v1.2.0`）。
 
-### Step 3: Fetch the Documentation
+### ステップ3：ドキュメントをフェッチ
 
-Call the **query-docs** MCP tool with:
+**query-docs** MCPツールを以下で呼び出す：
 
-- **libraryId**: The selected Context7 library ID from Step 2 (e.g. `/vercel/next.js`).
-- **query**: The user's specific question or task. Be specific to get relevant snippets.
+- **libraryId**：ステップ2から選択したContext7ライブラリID（例：`/vercel/next.js`）。
+- **query**：ユーザーの特定の質問またはタスク。関連スニペットを取得するために具体的にする。
 
-Limit: do not call query-docs (or resolve-library-id) more than 3 times per question. If the answer is unclear after 3 calls, state the uncertainty and use the best information you have rather than guessing.
+制限：質問ごとにquery-docs（またはresolve-library-id）を3回以上呼び出さない。3回の呼び出し後も答えが不明確の場合は、不確実性を述べ、推測するのではなく最良の情報を使用。
 
-### Step 4: Use the Documentation
+### ステップ4：ドキュメントを使用
 
-- Answer the user's question using the fetched, current information.
-- Include relevant code examples from the docs when helpful.
-- Cite the library or version when it matters (e.g. "In Next.js 15...").
+- フェッチされた現在の情報を使用してユーザーの質問に答える。
+- 役立つ場合はドキュメントからの関連するコード例を含める。
+- 重要な場合はライブラリまたはバージョンを引用（例：「Next.js 15では...」）。
 
-## Examples
+## 例
 
-### Example: Next.js middleware
+### 例：Next.jsミドルウェア
 
-1. Call **resolve-library-id** with `libraryName: "Next.js"`, `query: "How do I set up Next.js middleware?"`.
-2. From results, pick the best match (e.g. `/vercel/next.js`) by name and benchmark score.
-3. Call **query-docs** with `libraryId: "/vercel/next.js"`, `query: "How do I set up Next.js middleware?"`.
-4. Use the returned snippets and text to answer; include a minimal `middleware.ts` example from the docs if relevant.
+1. `libraryName: "Next.js"`、`query: "Next.jsミドルウェアを設定する方法は？"`で**resolve-library-id**を呼び出す。
+2. 結果から、名前とベンチマークスコアで最良のマッチ（例：`/vercel/next.js`）を選択。
+3. `libraryId: "/vercel/next.js"`、`query: "Next.jsミドルウェアを設定する方法は？"`で**query-docs**を呼び出す。
+4. 返されたスニペットとテキストを使用して答え、関連する場合はドキュメントの最小`middleware.ts`例を含める。
 
-### Example: Prisma query
+### 例：Prismaクエリ
 
-1. Call **resolve-library-id** with `libraryName: "Prisma"`, `query: "How do I query with relations?"`.
-2. Select the official Prisma library ID (e.g. `/prisma/prisma`).
-3. Call **query-docs** with that `libraryId` and the query.
-4. Return the Prisma Client pattern (e.g. `include` or `select`) with a short code snippet from the docs.
-
-### Example: Supabase auth methods
-
-1. Call **resolve-library-id** with `libraryName: "Supabase"`, `query: "What are the auth methods?"`.
-2. Pick the Supabase docs library ID.
-3. Call **query-docs**; summarize the auth methods and show minimal examples from the fetched docs.
-
-## Best Practices
-
-- **Be specific**: Use the user's full question as the query where possible for better relevance.
-- **Version awareness**: When users mention versions, use version-specific library IDs from the resolve step when available.
-- **Prefer official sources**: When multiple matches exist, prefer official or primary packages over community forks.
-- **No sensitive data**: Redact API keys, passwords, tokens, and other secrets from any query sent to Context7. Treat the user's question as potentially containing secrets before passing it to resolve-library-id or query-docs.
+1. `libraryName: "Prisma"`、`query: "関係を持つクエリ方法は？"`で**resolve-library-id**を呼び出す。
+2. 公式Prismaライブラリ ID（例：`/prisma/prisma`）を選択。
+3. その`libraryId`とクエリで**query-docs**を呼び出す。
+4. Prisma Clientパターン（例：`include`または`select`）とドキュメントの短いコードスニペットを返す。

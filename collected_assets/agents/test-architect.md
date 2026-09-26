@@ -1,18 +1,16 @@
 ---
-name: test-architect
-description: >-
-  Plans test strategy for complex applications. Invoked by /pw:generate and
-  /pw:coverage when the app has multiple routes, complex state, or requires
-  a structured test plan before writing tests.
-tools:
-  - Read
-  - Grep
-  - Glob
-  - LS
-model: inherit
+title: "Test Architect Agent — AI Coding Agent & Codex Skill"
+description: "Plans test strategy for complex applications. Invoked by /pw:generate and /pw:coverage when the app has multiple routes, complex state, or requires a. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Test Architect Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-code-braces: Engineering - Core</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/playwright-pro/agents/test-architect.md">Source</a></span>
+</div>
+
 
 You are a test architecture specialist. Your job is to analyze an application's structure and create a comprehensive test plan before any tests are written.
 

@@ -1,48 +1,47 @@
 ---
-description: 为Rust强制执行TDD工作流。先写测试，然后实现。使用cargo-llvm-cov验证80%以上的覆盖率。
+description: RustにおけるTDDワークフローを強制します。テストを先に書き、その後に実装します。cargo-llvm-covで80%以上のカバレッジを検証します。
 ---
 
-# Rust TDD 命令
+# Rust TDD コマンド
 
-该命令使用 `#[test]`、rstest、proptest 和 mockall 来强制执行 Rust 代码的测试驱动开发方法。
+このコマンドは、`#[test]`、rstest、proptest、mockall を使用した Rust コードのテスト駆動開発手法を強制します。
 
-## 该命令的作用
+## このコマンドの機能
 
-1. **定义类型/特征**：使用 `todo!()` 搭建函数签名
-2. **编写测试**：创建全面的测试模块（RED）
-3. **运行测试**：验证测试因正确的原因而失败
-4. **实现代码**：编写通过测试所需的最少代码（GREEN）
-5. **重构**：在保持测试通过的前提下进行改进
-6. **检查覆盖率**：使用 cargo-llvm-cov 确保 80%+ 的覆盖率
+1. **型/トレイトの定義**: `todo!()` で関数シグネチャをスキャフォールドする
+2. **テストの作成**: 包括的なテストモジュールを作成する（RED）
+3. **テストの実行**: テストが正しい理由で失敗することを確認する
+4. **コードの実装**: テストを通過する最小限のコードを書く（GREEN）
+5. **リファクタリング**: テストをグリーンに保ちながら改善する
+6. **カバレッジの確認**: cargo-llvm-cov で80%以上のカバレッジを確保する
 
-## 何时使用
+## 使用するタイミング
 
-在以下情况使用 `/rust-test`：
+以下の場合に `/rust-test` を使用してください：
+- 新しい Rust の関数、メソッド、トレイトを実装する場合
+- 既存の Rust コードにテストカバレッジを追加する場合
+- バグを修正する場合（先に失敗するテストを書く）
+- 重要なビジネスロジックを構築する場合
+- Rust での TDD ワークフローを学習する場合
 
-* 实现新的 Rust 函数、方法或特征时
-* 为现有 Rust 代码添加测试覆盖时
-* 修复错误时（首先编写失败的测试）
-* 构建关键业务逻辑时
-* 学习 Rust 中的 TDD 工作流程时
-
-## TDD 循环
+## TDD サイクル
 
 ```
-RED     -> 先编写失败的测试
-GREEN   -> 实现最小化代码以通过测试
-REFACTOR -> 改进代码，保持测试通过
-REPEAT  -> 下一个测试用例
+RED     -> 先に失敗するテストを書く
+GREEN   -> テストを通過する最小限のコードを実装する
+REFACTOR -> コードを改善し、テストはグリーンを維持する
+REPEAT  -> 次のテストケースへ
 ```
 
-## 示例会话
+## セッション例
 
 ````text
-User: /rust-test I need a function to validate user registration
+User: /rust-test ユーザー登録を検証する関数が必要です
 
-Agent:
-# TDD Session: Registration Validator
+エージェント:
+# TDD セッション: 登録バリデーター
 
-## Step 1: Define Interface
+## ステップ 1: インターフェースの定義
 
 ```rust
 // src/validator.rs
@@ -62,7 +61,7 @@ pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult 
 }
 ```
 
-## Step 2: Write Tests (RED)
+## ステップ 2: テストの作成（RED）
 
 ```rust
 #[cfg(test)]
@@ -122,7 +121,7 @@ mod tests {
 }
 ```
 
-## Step 3: Run Tests — Verify FAIL
+## ステップ 3: テストの実行 — 失敗を確認
 
 ```bash
 $ cargo test
@@ -133,9 +132,9 @@ test tests::invalid_email_returns_invalid ... FAILED
 test tests::short_password_returns_invalid ... FAILED
 ```
 
-Tests fail as expected (todo! panic).
+テストは想定通り失敗しました（todo! パニック）。
 
-## Step 4: Implement Minimal Code (GREEN)
+## ステップ 4: 最小限のコードを実装（GREEN）
 
 ```rust
 pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult {
@@ -159,7 +158,7 @@ pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult 
 }
 ```
 
-## Step 5: Run Tests — Verify PASS
+## ステップ 5: テストの実行 — 成功を確認
 
 ```bash
 $ cargo test
@@ -172,23 +171,23 @@ test tests::short_password_returns_invalid ... ok
 test result: ok. 4 passed; 0 failed
 ```
 
-All tests passing!
+すべてのテストが成功しました！
 
-## Step 6: Check Coverage
+## ステップ 6: カバレッジの確認
 
 ```bash
 $ cargo llvm-cov
 Coverage: 100.0% of lines
 ```
 
-Coverage: 100%
+カバレッジ: 100%
 
-## TDD Complete!
+## TDD 完了！
 ````
 
-## 测试模式
+## テストパターン
 
-### 单元测试
+### ユニットテスト
 
 ```rust
 #[cfg(test)]
@@ -209,7 +208,7 @@ mod tests {
 }
 ```
 
-### 使用 rstest 进行参数化测试
+### rstest によるパラメータ化テスト
 
 ```rust
 use rstest::{rstest, fixture};
@@ -223,7 +222,7 @@ fn test_string_length(#[case] input: &str, #[case] expected: usize) {
 }
 ```
 
-### 异步测试
+### 非同期テスト
 
 ```rust
 #[tokio::test]
@@ -234,7 +233,7 @@ async fn fetches_data_successfully() {
 }
 ```
 
-### 基于属性的测试
+### プロパティベーステスト
 
 ```rust
 use proptest::prelude::*;
@@ -249,63 +248,61 @@ proptest! {
 }
 ```
 
-## 覆盖率命令
+## カバレッジコマンド
 
 ```bash
-# Summary report
+# サマリーレポート
 cargo llvm-cov
 
-# HTML report
+# HTMLレポート
 cargo llvm-cov --html
 
-# Fail if below threshold
+# しきい値を下回った場合に失敗
 cargo llvm-cov --fail-under-lines 80
 
-# Run specific test
+# 特定のテストを実行
 cargo test test_name
 
-# Run with output
+# 出力付きで実行
 cargo test -- --nocapture
 
-# Run without stopping on first failure
+# 最初の失敗で停止しない
 cargo test --no-fail-fast
 ```
 
-## 覆盖率目标
+## カバレッジ目標
 
-| 代码类型 | 目标 |
+| コードの種類 | 目標 |
 |-----------|--------|
-| 关键业务逻辑 | 100% |
-| 公共 API | 90%+ |
-| 通用代码 | 80%+ |
-| 生成的 / FFI 绑定 | 排除 |
+| 重要なビジネスロジック | 100% |
+| パブリック API | 90%以上 |
+| 一般的なコード | 80%以上 |
+| 生成コード / FFI バインディング | 除外 |
 
-## TDD 最佳实践
+## TDD ベストプラクティス
 
-**应做：**
+**すべきこと:**
+- 実装の前にまずテストを書く
+- 変更のたびにテストを実行する
+- より良いエラーメッセージのために `assert!` よりも `assert_eq!` を使用する
+- よりクリーンな出力のために `Result` を返すテストで `?` を使用する
+- 実装ではなく振る舞いをテストする
+- エッジケースを含める（空、境界値、エラーパス）
 
-* **首先**编写测试，在任何实现之前
-* 每次更改后运行测试
-* 使用 `assert_eq!` 而非 `assert!` 以获得更好的错误信息
-* 在返回 `Result` 的测试中使用 `?` 以获得更清晰的输出
-* 测试行为，而非实现
-* 包含边界情况（空值、边界值、错误路径）
+**すべきでないこと:**
+- テストの前に実装を書く
+- RED フェーズをスキップする
+- `Result::is_err()` で対応できる場合に `#[should_panic]` を使用する
+- テストで `sleep()` を使用する — チャネルまたは `tokio::time::pause()` を使用する
+- すべてをモック化する — 可能な場合は統合テストを優先する
 
-**不应做：**
+## 関連コマンド
 
-* 在测试之前编写实现
-* 跳过 RED 阶段
-* 在 `Result::is_err()` 可用时使用 `#[should_panic]`
-* 在测试中使用 `sleep()` — 应使用通道或 `tokio::time::pause()`
-* 模拟一切 — 在可行时优先使用集成测试
+- `/rust-build` - ビルドエラーの修正
+- `/rust-review` - 実装後のコードレビュー
+- `verification-loop` スキル - 完全な検証ループの実行
 
-## 相关命令
+## 関連
 
-* `/rust-build` - 修复构建错误
-* `/rust-review` - 在实现后审查代码
-* `/verify` - 运行完整的验证循环
-
-## 相关
-
-* 技能：`skills/rust-testing/`
-* 技能：`skills/rust-patterns/`
+- スキル: `skills/rust-testing/`
+- スキル: `skills/rust-patterns/`

@@ -1,26 +1,36 @@
 ---
 name: clickhouse-io
-description: ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads.
+description: 고성능 분석 워크로드를 위한 ClickHouse 데이터베이스 패턴, 쿼리 최적화, 분석 및 데이터 엔지니어링 모범 사례.
+origin: ECC
 ---
 
-# ClickHouse 分析パターン
+# ClickHouse 분석 패턴
 
-高性能分析とデータエンジニアリングのためのClickHouse固有のパターン。
+고성능 분석 및 데이터 엔지니어링을 위한 ClickHouse 전용 패턴.
 
-## 概要
+## 활성화 시점
 
-ClickHouseは、オンライン分析処理（OLAP）用のカラム指向データベース管理システム（DBMS）です。大規模データセットに対する高速分析クエリに最適化されています。
+- ClickHouse 테이블 스키마 설계 시 (MergeTree 엔진 선택)
+- 분석 쿼리 작성 시 (집계, 윈도우 함수, 조인)
+- 쿼리 성능 최적화 시 (파티션 프루닝, 프로젝션, 구체화된 뷰)
+- 대량 데이터 수집 시 (배치 삽입, Kafka 통합)
+- PostgreSQL/MySQL에서 ClickHouse로 분석 마이그레이션 시
+- 실시간 대시보드 또는 시계열 분석 구현 시
 
-**主な機能:**
-- カラム指向ストレージ
-- データ圧縮
-- 並列クエリ実行
-- 分散クエリ
-- リアルタイム分析
+## 개요
 
-## テーブル設計パターン
+ClickHouse는 온라인 분석 처리(OLAP)를 위한 컬럼 지향 데이터베이스 관리 시스템(DBMS)입니다. 대규모 데이터셋에 대한 빠른 분석 쿼리에 최적화되어 있습니다.
 
-### MergeTreeエンジン（最も一般的）
+**주요 특징:**
+- 컬럼 지향 저장소
+- 데이터 압축
+- 병렬 쿼리 실행
+- 분산 쿼리
+- 실시간 분석
+
+## 테이블 설계 패턴
+
+### MergeTree 엔진 (가장 일반적)
 
 ```sql
 CREATE TABLE markets_analytics (
@@ -38,10 +48,10 @@ ORDER BY (date, market_id)
 SETTINGS index_granularity = 8192;
 ```
 
-### ReplacingMergeTree（重複排除）
+### ReplacingMergeTree (중복 제거)
 
 ```sql
--- 重複がある可能性のあるデータ（複数のソースからなど）用
+-- 중복이 있을 수 있는 데이터용 (예: 여러 소스에서 수집된 경우)
 CREATE TABLE user_events (
     event_id String,
     user_id String,
@@ -54,10 +64,10 @@ ORDER BY (user_id, event_id, timestamp)
 PRIMARY KEY (user_id, event_id);
 ```
 
-### AggregatingMergeTree（事前集計）
+### AggregatingMergeTree (사전 집계)
 
 ```sql
--- 集計メトリクスの維持用
+-- 집계 메트릭을 유지하기 위한 용도
 CREATE TABLE market_stats_hourly (
     hour DateTime,
     market_id String,
@@ -68,7 +78,7 @@ CREATE TABLE market_stats_hourly (
 PARTITION BY toYYYYMM(hour)
 ORDER BY (hour, market_id);
 
--- 集計データのクエリ
+-- 집계된 데이터 조회
 SELECT
     hour,
     market_id,
@@ -81,12 +91,12 @@ GROUP BY hour, market_id
 ORDER BY hour DESC;
 ```
 
-## クエリ最適化パターン
+## 쿼리 최적화 패턴
 
-### 効率的なフィルタリング
+### 효율적인 필터링
 
 ```sql
--- PASS: 良い: インデックス列を最初に使用
+-- PASS: 좋음: 인덱스된 컬럼을 먼저 사용
 SELECT *
 FROM markets_analytics
 WHERE date >= '2025-01-01'
@@ -95,7 +105,7 @@ WHERE date >= '2025-01-01'
 ORDER BY date DESC
 LIMIT 100;
 
--- FAIL: 悪い: インデックスのない列を最初にフィルタリング
+-- FAIL: 나쁨: 비인덱스 컬럼을 먼저 필터링
 SELECT *
 FROM markets_analytics
 WHERE volume > 1000
@@ -103,10 +113,10 @@ WHERE volume > 1000
   AND date >= '2025-01-01';
 ```
 
-### 集計
+### 집계
 
 ```sql
--- PASS: 良い: ClickHouse固有の集計関数を使用
+-- PASS: 좋음: ClickHouse 전용 집계 함수를 사용
 SELECT
     toStartOfDay(created_at) AS day,
     market_id,
@@ -119,7 +129,7 @@ WHERE created_at >= today() - INTERVAL 7 DAY
 GROUP BY day, market_id
 ORDER BY day DESC, total_volume DESC;
 
--- PASS: パーセンタイルにはquantileを使用（percentileより効率的）
+-- PASS: 백분위수에는 quantile 사용 (percentile보다 효율적)
 SELECT
     quantile(0.50)(trade_size) AS median,
     quantile(0.95)(trade_size) AS p95,
@@ -128,10 +138,10 @@ FROM trades
 WHERE created_at >= now() - INTERVAL 1 HOUR;
 ```
 
-### ウィンドウ関数
+### 윈도우 함수
 
 ```sql
--- 累計計算
+-- 누적 합계 계산
 SELECT
     date,
     market_id,
@@ -146,9 +156,9 @@ WHERE date >= today() - INTERVAL 30 DAY
 ORDER BY market_id, date;
 ```
 
-## データ挿入パターン
+## 데이터 삽입 패턴
 
-### 一括挿入（推奨）
+### 배치 삽입 (권장)
 
 ```typescript
 import { createClient } from '@clickhouse/client'
@@ -159,7 +169,7 @@ const clickhouse = createClient({
   password: process.env.CLICKHOUSE_PASSWORD
 })
 
-// PASS: バッチ挿入（効率的）
+// PASS: 배치 삽입 (효율적)
 async function bulkInsertTrades(trades: Trade[]) {
   await clickhouse.insert({
     table: 'trades',
@@ -174,9 +184,9 @@ async function bulkInsertTrades(trades: Trade[]) {
   })
 }
 
-// FAIL: 個別挿入（低速）
+// FAIL: 개별 삽입 (느림)
 async function insertTrade(trade: Trade) {
-  // ループ内でこれをしないでください！
+  // 루프 안에서 이렇게 하지 마세요!
   await clickhouse.insert({
     table: 'trades',
     values: [{
@@ -191,10 +201,10 @@ async function insertTrade(trade: Trade) {
 }
 ```
 
-### ストリーミング挿入
+### 스트리밍 삽입
 
 ```typescript
-// 継続的なデータ取り込み用
+// 연속적인 데이터 수집용
 import { Readable } from 'node:stream'
 
 async function streamInserts(dataSource: AsyncIterable<Record<string, unknown>>) {
@@ -206,12 +216,12 @@ async function streamInserts(dataSource: AsyncIterable<Record<string, unknown>>)
 }
 ```
 
-## マテリアライズドビュー
+## 구체화된 뷰
 
-### リアルタイム集計
+### 실시간 집계
 
 ```sql
--- 時間別統計のマテリアライズドビューを作成
+-- 시간별 통계를 위한 materialized view 생성
 CREATE MATERIALIZED VIEW market_stats_hourly_mv
 TO market_stats_hourly
 AS SELECT
@@ -223,7 +233,7 @@ AS SELECT
 FROM trades
 GROUP BY hour, market_id;
 
--- マテリアライズドビューのクエリ
+-- materialized view 조회
 SELECT
     hour,
     market_id,
@@ -235,12 +245,12 @@ WHERE hour >= now() - INTERVAL 24 HOUR
 GROUP BY hour, market_id;
 ```
 
-## パフォーマンスモニタリング
+## 성능 모니터링
 
-### クエリパフォーマンス
+### 쿼리 성능
 
 ```sql
--- 低速クエリをチェック
+-- 느린 쿼리 확인
 SELECT
     query_id,
     user,
@@ -257,10 +267,10 @@ ORDER BY query_duration_ms DESC
 LIMIT 10;
 ```
 
-### テーブル統計
+### 테이블 통계
 
 ```sql
--- テーブルサイズをチェック
+-- 테이블 크기 확인
 SELECT
     database,
     table,
@@ -273,12 +283,12 @@ GROUP BY database, table
 ORDER BY sum(bytes) DESC;
 ```
 
-## 一般的な分析クエリ
+## 일반적인 분석 쿼리
 
-### 時系列分析
+### 시계열 분석
 
 ```sql
--- 日次アクティブユーザー
+-- 일간 활성 사용자
 SELECT
     toDate(timestamp) AS date,
     uniq(user_id) AS daily_active_users
@@ -287,7 +297,7 @@ WHERE timestamp >= today() - INTERVAL 30 DAY
 GROUP BY date
 ORDER BY date;
 
--- リテンション分析
+-- 리텐션 분석
 SELECT
     signup_date,
     countIf(days_since_signup = 0) AS day_0,
@@ -307,10 +317,10 @@ GROUP BY signup_date
 ORDER BY signup_date DESC;
 ```
 
-### ファネル分析
+### 퍼널 분석
 
 ```sql
--- コンバージョンファネル
+-- 전환 퍼널
 SELECT
     countIf(step = 'viewed_market') AS viewed,
     countIf(step = 'clicked_trade') AS clicked,
@@ -328,10 +338,10 @@ FROM (
 GROUP BY session_id;
 ```
 
-### コホート分析
+### 코호트 분석
 
 ```sql
--- サインアップ月別のユーザーコホート
+-- 가입 월별 사용자 코호트
 SELECT
     toStartOfMonth(signup_date) AS cohort,
     toStartOfMonth(activity_date) AS month,
@@ -348,17 +358,17 @@ GROUP BY cohort, month, months_since_signup
 ORDER BY cohort, months_since_signup;
 ```
 
-## データパイプラインパターン
+## 데이터 파이프라인 패턴
 
-### ETLパターン
+### ETL 패턴
 
 ```typescript
-// 抽出、変換、ロード
+// 추출, 변환, 적재(ETL)
 async function etlPipeline() {
-  // 1. ソースから抽出
+  // 1. 소스에서 추출
   const rawData = await extractFromPostgres()
 
-  // 2. 変換
+  // 2. 변환
   const transformed = rawData.map(row => ({
     date: new Date(row.created_at).toISOString().split('T')[0],
     market_id: row.market_slug,
@@ -366,18 +376,29 @@ async function etlPipeline() {
     trades: parseInt(row.trade_count)
   }))
 
-  // 3. ClickHouseにロード
+  // 3. ClickHouse에 적재
   await bulkInsertToClickHouse(transformed)
 }
 
-// 定期的に実行
-setInterval(etlPipeline, 60 * 60 * 1000)  // 1時間ごと
+// 주기적으로 실행
+let etlRunning = false
+
+setInterval(async () => {
+  if (etlRunning) return
+
+  etlRunning = true
+  try {
+    await etlPipeline()
+  } finally {
+    etlRunning = false
+  }
+}, 60 * 60 * 1000)  // Every hour
 ```
 
-### 変更データキャプチャ（CDC）
+### 변경 데이터 캡처 (CDC)
 
 ```typescript
-// PostgreSQLの変更をリッスンしてClickHouseに同期
+// PostgreSQL 변경을 수신하고 ClickHouse와 동기화
 import { Client } from 'pg'
 
 const pgClient = new Client({ connectionString: process.env.DATABASE_URL })
@@ -402,33 +423,33 @@ pgClient.on('notification', async (msg) => {
 })
 ```
 
-## ベストプラクティス
+## 모범 사례
 
-### 1. パーティショニング戦略
-- 時間でパーティション化（通常は月または日）
-- パーティションが多すぎないようにする（パフォーマンスへの影響）
-- パーティションキーにはDATEタイプを使用
+### 1. 파티셔닝 전략
+- 시간별 파티셔닝 (보통 월 또는 일)
+- 파티션이 너무 많은 것 방지 (성능 영향)
+- 파티션 키에 DATE 타입 사용
 
-### 2. ソートキー
-- 最も頻繁にフィルタリングされる列を最初に配置
-- カーディナリティを考慮（高カーディナリティを最初に）
-- 順序は圧縮に影響
+### 2. 정렬 키
+- 가장 자주 필터링되는 컬럼을 먼저 배치
+- 카디널리티 고려 (높은 카디널리티 먼저)
+- 정렬이 압축에 영향을 미침
 
-### 3. データタイプ
-- 最小の適切なタイプを使用（UInt32 vs UInt64）
-- 繰り返される文字列にはLowCardinalityを使用
-- カテゴリカルデータにはEnumを使用
+### 3. 데이터 타입
+- 가장 작은 적절한 타입 사용 (UInt32 vs UInt64)
+- 반복되는 문자열에 LowCardinality 사용
+- 범주형 데이터에 Enum 사용
 
-### 4. 避けるべき
-- SELECT *（列を指定）
-- FINAL（代わりにクエリ前にデータをマージ）
-- JOINが多すぎる（分析用に非正規化）
-- 小さな頻繁な挿入（代わりにバッチ処理）
+### 4. 피해야 할 것
+- SELECT * (컬럼을 명시)
+- FINAL (쿼리 전에 데이터를 병합)
+- 너무 많은 JOIN (분석을 위해 비정규화)
+- 작은 빈번한 삽입 (배치 처리)
 
-### 5. モニタリング
-- クエリパフォーマンスを追跡
-- ディスク使用量を監視
-- マージ操作をチェック
-- 低速クエリログをレビュー
+### 5. 모니터링
+- 쿼리 성능 추적
+- 디스크 사용량 모니터링
+- 병합 작업 확인
+- 슬로우 쿼리 로그 검토
 
-**注意**: ClickHouseは分析ワークロードに優れています。クエリパターンに合わせてテーブルを設計し、挿入をバッチ化し、リアルタイム集計にはマテリアライズドビューを活用します。
+**기억하세요**: ClickHouse는 분석 워크로드에 탁월합니다. 쿼리 패턴에 맞게 테이블을 설계하고, 배치 삽입을 사용하며, 실시간 집계를 위해 구체화된 뷰를 활용하세요.

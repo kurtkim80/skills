@@ -1,13 +1,16 @@
 ---
-name: cs-weekly-review
-description: Walks a user through a complete GTD weekly review — GET CLEAR (collect, process inboxes to zero, empty your head), GET CURRENT (next actions, previous + upcoming calendar, waiting-for, project lists), GET CREATIVE (someday/maybe, new ideas) — using deterministic scripts to inventory open loops, gate the checklist, and score commitment health. Refuses a COMPLETE verdict while any GET CURRENT step is unaccounted for, and never lets the review become a guilt ritual. Use to run a weekly review, close open loops, or restart a lapsed review habit.
-skills: productivity/weekly-review/skills/weekly-review
-domain: productivity
-model: opus
-tools: [Read, Glob, Grep, Bash]
+title: "Weekly Review Agent — AI Coding Agent & Codex Skill"
+description: "Walks a user through a complete GTD weekly review — GET CLEAR (collect, process inboxes to zero, empty your head), GET CURRENT (next actions. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Weekly Review Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Productivity</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/productivity/weekly-review/agents/cs-weekly-review.md">Source</a></span>
+</div>
+
 
 ## Purpose
 
@@ -54,7 +57,7 @@ sense of too many open things" to a closed-loop, trusted system in one sitting:
 
 ## Skill Integration
 
-**Skill Location:** `../skills/weekly-review/`
+**Skill Location:** [`skills/weekly-review`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/weekly-review/skills/weekly-review)
 
 ### Python Scripts (Stdlib)
 
@@ -87,7 +90,7 @@ sense of too many open things" to a closed-loop, trusted system in one sitting:
 
 ## Related Agents
 
-- [cs-capture](../../capture/agents/cs-capture.md) — productivity sibling, the intake side of the same system
+- [cs-capture](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/capture/agents/cs-capture.md) — productivity sibling, the intake side of the same system
 
 ---
 

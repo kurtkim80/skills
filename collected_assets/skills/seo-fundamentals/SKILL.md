@@ -1,10 +1,9 @@
 ---
 name: seo-fundamentals
 description: Core principles of SEO including E-E-A-T, Core Web Vitals, technical foundations, content quality, and how modern search engines evaluate pages.
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-02-27'
+risk: safe
+source: community
+date_added: '2026-02-27'
 ---
 
 # SEO Fundamentals

@@ -1,15 +1,9 @@
 ---
-title: "/cs-clinical-research — Slash Command for AI Coding Agents"
-description: "Clinical study design. Select and classify endpoints, estimate sample size / power (means / proportions / survival), and score a study plan for a GO. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Clinical study design. Select and classify endpoints, estimate sample size / power (means / proportions / survival), and score a study plan for a GO / GO-WITH-CONDITIONS / REDESIGN / NO-GO phase-gate decision. Every output is an ESTIMATE plus a named clinical owner — never clinical fact. Direct invocation of the clinical-research skill.
+argument-hint: "<study context: indication, design, endpoints, effect size, target enrollment>"
 ---
 
-# /cs-clinical-research
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research-ops/commands/cs-clinical-research.md">Source</a></span>
-</div>
-
+# /cs:clinical-research — Endpoint selection + sample-size + phase-gate feasibility
 
 Run the `clinical-research` skill on this input:
 

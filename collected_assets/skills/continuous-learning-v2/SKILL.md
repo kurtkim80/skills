@@ -1,27 +1,51 @@
 ---
 name: continuous-learning-v2
-description: フックを介してセッションを観察し、信頼度スコアリング付きのアトミックなインスティンクトを作成し、スキル/コマンド/エージェントに進化させるインスティンクトベースの学習システム。
-version: 2.0.0
+description: 훅을 통해 세션을 관찰하고, 신뢰도 점수가 있는 원자적 본능을 생성하며, 이를 스킬/명령어/에이전트로 진화시키는 본능 기반 학습 시스템. v2.1에서는 프로젝트 간 오염을 방지하기 위한 프로젝트 범위 본능이 추가되었습니다.
+origin: ECC
+version: 2.1.0
 ---
 
-# Continuous Learning v2 - インスティンクトベースアーキテクチャ
+# 지속적 학습 v2.1 - 본능 기반 아키텍처
 
-Claude Codeセッションを信頼度スコアリング付きの小さな学習済み行動である「インスティンクト」を通じて再利用可能な知識に変える高度な学習システム。
+Claude Code 세션을 원자적 "본능(instinct)" -- 신뢰도 점수가 있는 작은 학습된 행동 -- 을 통해 재사용 가능한 지식으로 변환하는 고급 학습 시스템입니다.
 
-## v2の新機能
+**v2.1**에서는 **프로젝트 범위 본능**이 추가되었습니다 -- React 패턴은 React 프로젝트에, Python 규칙은 Python 프로젝트에 유지되며, 범용 패턴(예: "항상 입력 유효성 검사")은 전역으로 공유됩니다.
 
-| 機能 | v1 | v2 |
+## 활성화 시점
+
+- Claude Code 세션에서 자동 학습 설정 시
+- 훅을 통한 본능 기반 행동 추출 구성 시
+- 학습된 행동의 신뢰도 임계값 조정 시
+- 본능 라이브러리 검토, 내보내기, 가져오기 시
+- 본능을 완전한 스킬, 명령어 또는 에이전트로 진화 시
+- 프로젝트 범위 vs 전역 본능 관리 시
+- 프로젝트에서 전역 범위로 본능 승격 시
+
+## v2.1의 새로운 기능
+
+| 기능 | v2.0 | v2.1 |
+|---------|------|------|
+| 저장소 | 전역 (~/.claude/homunculus/) | 프로젝트 범위 (projects/<hash>/) |
+| 범위 | 모든 본능이 어디서나 적용 | 프로젝트 범위 + 전역 |
+| 감지 | 없음 | git remote URL / 저장소 경로 |
+| 승격 | 해당 없음 | 2개 이상 프로젝트에서 확인 시 프로젝트 -> 전역 |
+| 명령어 | 4개 (status/evolve/export/import) | 6개 (+promote/projects) |
+| 프로젝트 간 | 오염 위험 | 기본적으로 격리 |
+
+## v2의 새로운 기능 (v1 대비)
+
+| 기능 | v1 | v2 |
 |---------|----|----|
-| 観察 | Stopフック（セッション終了） | PreToolUse/PostToolUse（100%信頼性） |
-| 分析 | メインコンテキスト | バックグラウンドエージェント（Haiku） |
-| 粒度 | 完全なスキル | アトミック「インスティンクト」 |
-| 信頼度 | なし | 0.3-0.9重み付け |
-| 進化 | 直接スキルへ | インスティンクト → クラスター → スキル/コマンド/エージェント |
-| 共有 | なし | インスティンクトのエクスポート/インポート |
+| 관찰 | Stop 훅 (세션 종료) | PreToolUse/PostToolUse (100% 신뢰성) |
+| 분석 | 메인 컨텍스트 | 백그라운드 에이전트 (Haiku) |
+| 세분성 | 전체 스킬 | 원자적 "본능" |
+| 신뢰도 | 없음 | 0.3-0.9 가중치 |
+| 진화 | 직접 스킬로 | 본능 -> 클러스터 -> 스킬/명령어/에이전트 |
+| 공유 | 없음 | 본능 내보내기/가져오기 |
 
-## インスティンクトモデル
+## 본능 모델
 
-インスティンクトは小さな学習済み行動です：
+본능은 작은 학습된 행동입니다:
 
 ```yaml
 ---
@@ -30,78 +54,98 @@ trigger: "when writing new functions"
 confidence: 0.7
 domain: "code-style"
 source: "session-observation"
+scope: project
+project_id: "a1b2c3d4e5f6"
+project_name: "my-react-app"
 ---
 
-# 関数型スタイルを優先
+# Prefer Functional Style
 
 ## Action
-適切な場合はクラスよりも関数型パターンを使用します。
+Use functional patterns over classes when appropriate.
 
 ## Evidence
-- 関数型パターンの優先が5回観察されました
-- ユーザーが2025-01-15にクラスベースのアプローチを関数型に修正しました
+- Observed 5 instances of functional pattern preference
+- User corrected class-based approach to functional on 2025-01-15
 ```
 
-**プロパティ：**
-- **アトミック** — 1つのトリガー、1つのアクション
-- **信頼度重み付け** — 0.3 = 暫定的、0.9 = ほぼ確実
-- **ドメインタグ付き** — code-style、testing、git、debugging、workflowなど
-- **証拠に基づく** — それを作成した観察を追跡
+**속성:**
+- **원자적** -- 하나의 트리거, 하나의 액션
+- **신뢰도 가중치** -- 0.3 = 잠정적, 0.9 = 거의 확실
+- **도메인 태그** -- code-style, testing, git, debugging, workflow 등
+- **증거 기반** -- 어떤 관찰이 이를 생성했는지 추적
+- **범위 인식** -- `project` (기본값) 또는 `global`
 
-## 仕組み
+## 작동 방식
 
 ```
-セッションアクティビティ
-      │
-      │ フックがプロンプト + ツール使用をキャプチャ（100%信頼性）
-      ▼
-┌─────────────────────────────────────────┐
-│         observations.jsonl              │
-│   （プロンプト、ツール呼び出し、結果）       │
-└─────────────────────────────────────────┘
-      │
-      │ Observerエージェントが読み取り（バックグラウンド、Haiku）
-      ▼
-┌─────────────────────────────────────────┐
-│          パターン検出                    │
-│   • ユーザー修正 → インスティンクト      │
-│   • エラー解決 → インスティンクト        │
-│   • 繰り返しワークフロー → インスティンクト │
-└─────────────────────────────────────────┘
-      │
-      │ 作成/更新
-      ▼
-┌─────────────────────────────────────────┐
-│         instincts/personal/             │
-│   • prefer-functional.md (0.7)          │
-│   • always-test-first.md (0.9)          │
-│   • use-zod-validation.md (0.6)         │
-└─────────────────────────────────────────┘
-      │
-      │ /evolveクラスター
-      ▼
-┌─────────────────────────────────────────┐
-│              evolved/                   │
-│   • commands/new-feature.md             │
-│   • skills/testing-workflow.md          │
-│   • agents/refactor-specialist.md       │
-└─────────────────────────────────────────┘
+세션 활동 (git 저장소 내)
+      |
+      | 훅이 프롬프트 + 도구 사용을 캡처 (100% 신뢰성)
+      | + 프로젝트 컨텍스트 감지 (git remote / 저장소 경로)
+      v
++---------------------------------------------+
+|  projects/<project-hash>/observations.jsonl  |
+|   (프롬프트, 도구 호출, 결과, 프로젝트)         |
++---------------------------------------------+
+      |
+      | 관찰자 에이전트가 읽기 (백그라운드, Haiku)
+      v
++---------------------------------------------+
+|          패턴 감지                             |
+|   * 사용자 수정 -> 본능                        |
+|   * 에러 해결 -> 본능                          |
+|   * 반복 워크플로우 -> 본능                     |
+|   * 범위 결정: 프로젝트 또는 전역?              |
++---------------------------------------------+
+      |
+      | 생성/업데이트
+      v
++---------------------------------------------+
+|  projects/<project-hash>/instincts/personal/ |
+|   * prefer-functional.yaml (0.7) [project]   |
+|   * use-react-hooks.yaml (0.9) [project]     |
++---------------------------------------------+
+|  instincts/personal/  (전역)                  |
+|   * always-validate-input.yaml (0.85) [global]|
+|   * grep-before-edit.yaml (0.6) [global]     |
++---------------------------------------------+
+      |
+      | /evolve 클러스터링 + /promote
+      v
++---------------------------------------------+
+|  projects/<hash>/evolved/ (프로젝트 범위)      |
+|  evolved/ (전역)                              |
+|   * commands/new-feature.md                  |
+|   * skills/testing-workflow.md               |
+|   * agents/refactor-specialist.md            |
++---------------------------------------------+
 ```
 
-## クイックスタート
+## 프로젝트 감지
 
-### 1. 観察フックを有効化
+시스템이 현재 프로젝트를 자동으로 감지합니다:
 
-`~/.claude/settings.json`に追加します。
+1. **`CLAUDE_PROJECT_DIR` 환경 변수** (최우선 순위)
+2. **`git remote get-url origin`** -- 이식 가능한 프로젝트 ID를 생성하기 위해 해시됨 (서로 다른 머신에서 같은 저장소는 같은 ID를 가짐)
+3. **`git rev-parse --show-toplevel`** -- 저장소 경로를 사용한 폴백 (머신별)
+4. **전역 폴백** -- 프로젝트가 감지되지 않으면 본능은 전역 범위로 이동
 
-**プラグインとしてインストールした場合**（推奨）：
+각 프로젝트는 12자 해시 ID를 받습니다 (예: `a1b2c3d4e5f6`). `~/.claude/homunculus/projects.json`의 레지스트리 파일이 ID를 사람이 읽을 수 있는 이름에 매핑합니다.
 
-```json
-プラグインの `hooks/hooks.json` が Claude Code v2.1+ で自動読み込みされるため、`~/.claude/settings.json` に追加の hook 設定は不要です。`observe.sh` はそこで既に登録されています。
+## 빠른 시작
 
-以前に `observe.sh` を `~/.claude/settings.json` にコピーした場合は、重複した `PreToolUse` / `PostToolUse` ブロックを削除してください。重複登録は二重実行と `${CLAUDE_PLUGIN_ROOT}` 解決エラーを引き起こします。この変数はプラグイン管理の `hooks/hooks.json` でのみ展開されます。
+### 1. 관찰 훅 활성화
 
-**`~/.claude/skills`に手動でインストールした場合**：
+`~/.claude/settings.json`에 추가하세요.
+
+**플러그인으로 설치한 경우** (권장):
+
+`~/.claude/settings.json`에 추가 hook 블록을 넣지 마세요. Claude Code v2.1+가 플러그인의 `hooks/hooks.json`을 자동으로 로드하며, `observe.sh`는 이미 그곳에 등록되어 있습니다.
+
+이전에 `observe.sh`를 `~/.claude/settings.json`에 복사했다면 중복된 `PreToolUse` / `PostToolUse` 블록을 제거하세요. 중복 등록은 이중 실행과 `${CLAUDE_PLUGIN_ROOT}` 해석 오류를 일으킵니다. 이 변수는 플러그인 소유 `hooks/hooks.json` 항목에서만 확장됩니다.
+
+**수동으로 `~/.claude/skills`에 설치한 경우**, 아래 내용을 `~/.claude/settings.json`에 추가하세요:
 
 ```json
 {
@@ -124,145 +168,179 @@ source: "session-observation"
 }
 ```
 
-### 2. ディレクトリ構造を初期化
+### 2. 디렉터리 구조 초기화
 
-Python CLIが自動的に作成しますが、手動で作成することもできます：
-
-```bash
-mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands}}
-touch ~/.claude/homunculus/observations.jsonl
-```
-
-### 3. インスティンクトコマンドを使用
+시스템은 첫 사용 시 자동으로 디렉터리를 생성하지만, 수동으로도 생성할 수 있습니다:
 
 ```bash
-/instinct-status     # 信頼度スコア付きの学習済みインスティンクトを表示
-/evolve              # 関連するインスティンクトをスキル/コマンドにクラスター化
-/instinct-export     # 共有のためにインスティンクトをエクスポート
-/instinct-import     # 他の人からインスティンクトをインポート
+# Global directories
+mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands},projects}
+
+# Project directories are auto-created when the hook first runs in a git repo
 ```
 
-## コマンド
+### 3. 본능 명령어 사용
 
-| コマンド | 説明 |
+```bash
+/instinct-status     # 학습된 본능 표시 (프로젝트 + 전역)
+/evolve              # 관련 본능을 스킬/명령어로 클러스터링
+/instinct-export     # 본능을 파일로 내보내기
+/instinct-import     # 다른 사람의 본능 가져오기
+/promote             # 프로젝트 본능을 전역 범위로 승격
+/projects            # 모든 알려진 프로젝트와 본능 개수 목록
+```
+
+## 명령어
+
+| 명령어 | 설명 |
 |---------|-------------|
-| `/instinct-status` | すべての学習済みインスティンクトを信頼度と共に表示 |
-| `/evolve` | 関連するインスティンクトをスキル/コマンドにクラスター化 |
-| `/instinct-export` | 共有のためにインスティンクトをエクスポート |
-| `/instinct-import <file>` | 他の人からインスティンクトをインポート |
+| `/instinct-status` | 모든 본능 (프로젝트 범위 + 전역) 을 신뢰도와 함께 표시 |
+| `/evolve` | 관련 본능을 스킬/명령어로 클러스터링, 승격 제안 |
+| `/instinct-export` | 본능 내보내기 (범위/도메인으로 필터링 가능) |
+| `/instinct-import <file>` | 범위 제어와 함께 본능 가져오기 |
+| `/promote [id]` | 프로젝트 본능을 전역 범위로 승격 |
+| `/projects` | 모든 알려진 프로젝트와 본능 개수 목록 |
 
-## 設定
+## 구성
 
-`config.json`を編集：
+백그라운드 관찰자를 제어하려면 `config.json`을 편집하세요:
 
 ```json
 {
-  "version": "2.0",
-  "observation": {
-    "enabled": true,
-    "store_path": "~/.claude/homunculus/observations.jsonl",
-    "max_file_size_mb": 10,
-    "archive_after_days": 7
-  },
-  "instincts": {
-    "personal_path": "~/.claude/homunculus/instincts/personal/",
-    "inherited_path": "~/.claude/homunculus/instincts/inherited/",
-    "min_confidence": 0.3,
-    "auto_approve_threshold": 0.7,
-    "confidence_decay_rate": 0.05
-  },
+  "version": "2.1",
   "observer": {
-    "enabled": true,
-    "model": "haiku",
+    "enabled": false,
     "run_interval_minutes": 5,
-    "patterns_to_detect": [
-      "user_corrections",
-      "error_resolutions",
-      "repeated_workflows",
-      "tool_preferences"
-    ]
-  },
-  "evolution": {
-    "cluster_threshold": 3,
-    "evolved_path": "~/.claude/homunculus/evolved/"
+    "min_observations_to_analyze": 20
   }
 }
 ```
 
-## ファイル構造
+| 키 | 기본값 | 설명 |
+|-----|---------|-------------|
+| `observer.enabled` | `false` | 백그라운드 관찰자 에이전트 활성화 |
+| `observer.run_interval_minutes` | `5` | 관찰자가 관찰 결과를 분석하는 빈도 |
+| `observer.min_observations_to_analyze` | `20` | 분석 실행 전 최소 관찰 횟수 |
+
+기타 동작 (관찰 캡처, 본능 임계값, 프로젝트 범위, 승격 기준)은 `instinct-cli.py`와 `observe.sh`의 코드 기본값으로 구성됩니다.
+
+## 파일 구조
 
 ```
 ~/.claude/homunculus/
-├── identity.json           # プロフィール、技術レベル
-├── observations.jsonl      # 現在のセッション観察
-├── observations.archive/   # 処理済み観察
-├── instincts/
-│   ├── personal/           # 自動学習されたインスティンクト
-│   └── inherited/          # 他の人からインポート
-└── evolved/
-    ├── agents/             # 生成された専門エージェント
-    ├── skills/             # 生成されたスキル
-    └── commands/           # 生成されたコマンド
++-- identity.json           # 프로필, 기술 수준
++-- projects.json           # 레지스트리: 프로젝트 해시 -> 이름/경로/리모트
++-- observations.jsonl      # 전역 관찰 결과 (폴백)
++-- instincts/
+|   +-- personal/           # 전역 자동 학습된 본능
+|   +-- inherited/          # 전역 가져온 본능
++-- evolved/
+|   +-- agents/             # 전역 생성된 에이전트
+|   +-- skills/             # 전역 생성된 스킬
+|   +-- commands/           # 전역 생성된 명령어
++-- projects/
+    +-- a1b2c3d4e5f6/       # 프로젝트 해시 (git remote URL에서)
+    |   +-- observations.jsonl
+    |   +-- observations.archive/
+    |   +-- instincts/
+    |   |   +-- personal/   # 프로젝트별 자동 학습
+    |   |   +-- inherited/  # 프로젝트별 가져온 것
+    |   +-- evolved/
+    |       +-- skills/
+    |       +-- commands/
+    |       +-- agents/
+    +-- f6e5d4c3b2a1/       # 다른 프로젝트
+        +-- ...
 ```
 
-## Skill Creatorとの統合
+## 범위 결정 가이드
 
-[Skill Creator GitHub App](https://skill-creator.app)を使用すると、**両方**が生成されます：
-- 従来のSKILL.mdファイル（後方互換性のため）
-- インスティンクトコレクション（v2学習システム用）
+| 패턴 유형 | 범위 | 예시 |
+|-------------|-------|---------|
+| 언어/프레임워크 규칙 | **project** | "React hooks 사용", "Django REST 패턴 따르기" |
+| 파일 구조 선호도 | **project** | "`__tests__`/에 테스트", "src/components/에 컴포넌트" |
+| 코드 스타일 | **project** | "함수형 스타일 사용", "dataclasses 선호" |
+| 에러 처리 전략 | **project** | "에러에 Result 타입 사용" |
+| 보안 관행 | **global** | "사용자 입력 유효성 검사", "SQL 새니타이징" |
+| 일반 모범 사례 | **global** | "테스트 먼저 작성", "항상 에러 처리" |
+| 도구 워크플로우 선호도 | **global** | "편집 전 Grep", "쓰기 전 Read" |
+| Git 관행 | **global** | "Conventional commits", "작고 집중된 커밋" |
 
-リポジトリ分析からのインスティンクトには`source: "repo-analysis"`があり、ソースリポジトリURLが含まれます。
+## 본능 승격 (프로젝트 -> 전역)
 
-## 信頼度スコアリング
+같은 본능이 높은 신뢰도로 여러 프로젝트에 나타나면, 전역 범위로 승격할 후보가 됩니다.
 
-信頼度は時間とともに進化します：
+**자동 승격 기준:**
+- 2개 이상 프로젝트에서 같은 본능 ID
+- 평균 신뢰도 >= 0.8
 
-| スコア | 意味 | 動作 |
+**승격 방법:**
+
+```bash
+# Promote a specific instinct
+python3 instinct-cli.py promote prefer-explicit-errors
+
+# Auto-promote all qualifying instincts
+python3 instinct-cli.py promote
+
+# Preview without changes
+python3 instinct-cli.py promote --dry-run
+```
+
+`/evolve` 명령어도 승격 후보를 제안합니다.
+
+## 신뢰도 점수
+
+신뢰도는 시간이 지남에 따라 진화합니다:
+
+| 점수 | 의미 | 동작 |
 |-------|---------|----------|
-| 0.3 | 暫定的 | 提案されるが強制されない |
-| 0.5 | 中程度 | 関連する場合に適用 |
-| 0.7 | 強い | 適用が自動承認される |
-| 0.9 | ほぼ確実 | コア動作 |
+| 0.3 | 잠정적 | 제안되지만 강제되지 않음 |
+| 0.5 | 보통 | 관련 시 적용 |
+| 0.7 | 강함 | 적용이 자동 승인됨 |
+| 0.9 | 거의 확실 | 핵심 행동 |
 
-**信頼度が上がる**場合：
-- パターンが繰り返し観察される
-- ユーザーが提案された動作を修正しない
-- 他のソースからの類似インスティンクトが一致する
+**신뢰도가 증가하는 경우:**
+- 패턴이 반복적으로 관찰됨
+- 사용자가 제안된 행동을 수정하지 않음
+- 다른 소스의 유사한 본능이 동의함
 
-**信頼度が下がる**場合：
-- ユーザーが明示的に動作を修正する
-- パターンが長期間観察されない
-- 矛盾する証拠が現れる
+**신뢰도가 감소하는 경우:**
+- 사용자가 행동을 명시적으로 수정함
+- 패턴이 오랜 기간 관찰되지 않음
+- 모순되는 증거가 나타남
 
-## 観察にスキルではなくフックを使用する理由は？
+## 왜 관찰에 스킬이 아닌 훅을 사용하나요?
 
-> 「v1はスキルに依存して観察していました。スキルは確率的で、Claudeの判断に基づいて約50-80%の確率で発火します。」
+> "v1은 관찰에 스킬을 의존했습니다. 스킬은 확률적입니다 -- Claude의 판단에 따라 약 50-80%의 확률로 실행됩니다."
 
-フックは**100%の確率で**決定論的に発火します。これは次のことを意味します：
-- すべてのツール呼び出しが観察される
-- パターンが見逃されない
-- 学習が包括的
+훅은 **100% 확률로** 결정적으로 실행됩니다. 이는 다음을 의미합니다:
+- 모든 도구 호출이 관찰됨
+- 패턴이 누락되지 않음
+- 학습이 포괄적임
 
-## 後方互換性
+## 하위 호환성
 
-v2はv1と完全に互換性があります：
-- 既存の`~/.claude/skills/learned/`スキルは引き続き機能
-- Stopフックは引き続き実行される（ただしv2にもフィードされる）
-- 段階的な移行パス：両方を並行して実行
+v2.1은 v2.0 및 v1과 완전히 호환됩니다:
+- `~/.claude/homunculus/instincts/`의 기존 전역 본능이 전역 본능으로 계속 작동
+- v1의 기존 `~/.claude/skills/learned/` 스킬이 계속 작동
+- Stop 훅이 여전히 실행됨 (하지만 이제 v2에도 데이터를 공급)
+- 점진적 마이그레이션: 둘 다 병렬로 실행 가능
 
-## プライバシー
+## 개인정보 보호
 
-- 観察はマシン上で**ローカル**に保持されます
-- **インスティンクト**（パターン）のみをエクスポート可能
-- 実際のコードや会話内容は共有されません
-- エクスポートする内容を制御できます
+- 관찰 결과는 사용자의 머신에 **로컬**로 유지
+- 프로젝트 범위 본능은 프로젝트별로 격리됨
+- **본능**(패턴)만 내보낼 수 있음 -- 원시 관찰 결과는 아님
+- 실제 코드나 대화 내용은 공유되지 않음
+- 내보내기와 승격 대상을 사용자가 제어
 
-## 関連
+## 관련 자료
 
-- [Skill Creator](https://skill-creator.app) - リポジトリ履歴からインスティンクトを生成
-- Homunculus - v2アーキテクチャのインスピレーション（アトミック観察、信頼度スコアリング、インスティンクト進化パイプライン）
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 継続的学習セクション
+- [Skill Creator](https://skill-creator.app) - 저장소 히스토리에서 본능 생성
+- Homunculus - v2 본능 기반 아키텍처에 영감을 준 커뮤니티 프로젝트 (원자적 관찰, 신뢰도 점수, 본능 진화 파이프라인)
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 지속적 학습 섹션
 
 ---
 
-*インスティンクトベースの学習：一度に1つの観察で、Claudeにあなたのパターンを教える。*
+*본능 기반 학습: Claude에게 당신의 패턴을 가르치기, 한 번에 하나의 프로젝트씩.*

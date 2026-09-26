@@ -1,11 +1,15 @@
 ---
-name: cs-handoff-setup
-description: "First-run setup for the handoff skill. Walks 5 questions (save location, retention, redaction strictness, git context, recommender scope) and writes the config. Run any time to reconfigure."
-argument-hint: "[--project to set project-specific overrides]"
-allowed-tools: ["Bash"]
+title: "/cs-handoff-setup — Slash Command for AI Coding Agents"
+description: "First-run setup for the handoff skill. Walks 5 questions (save location, retention, redaction strictness, git context, recommender scope) and writes. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:handoff-setup
+# /cs-handoff-setup
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/handoff/commands/cs-handoff-setup.md">Source</a></span>
+</div>
+
 
 Configure the handoff skill. Walks 5 questions (plus 1-2 optional) and writes the config. Re-run any time.
 

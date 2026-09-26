@@ -1,12 +1,14 @@
 ---
 name: verification-loop
-description: "A comprehensive verification system for Claude Code sessions. Use when verifying a Claude Code session's work before claiming it is complete."
-license: MIT
+description: >
+  A comprehensive verification system for Kiro sessions.
+metadata:
+  origin: ECC
 ---
 
 # Verification Loop Skill
 
-A comprehensive verification system for Claude Code sessions.
+A comprehensive verification system for Kiro sessions.
 
 ## When to Use
 
@@ -122,5 +124,5 @@ Run: /verify
 
 ## Integration with Hooks
 
-This skill complements PostToolUse hooks but provides deeper verification.
+This skill complements postToolUse hooks but provides deeper verification.
 Hooks catch issues immediately; this skill provides comprehensive review.

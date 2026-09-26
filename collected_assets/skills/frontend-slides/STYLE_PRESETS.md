@@ -1,40 +1,41 @@
-# Style Presets Reference
+# スタイルプリセットリファレンス
 
-Curated visual styles for `frontend-slides`.
+`frontend-slides` 用にまとめられたビジュアルスタイル。
 
-Use this file for:
-- the mandatory viewport-fitting CSS base
-- preset selection and mood mapping
-- CSS gotchas and validation rules
+このファイルの用途：
 
-Abstract shapes only. Avoid illustrations unless the user explicitly asks for them.
+* 強制的なビューポート適合CSSの基礎
+* プリセットの選択とムードマッピング
+* CSSの落とし穴とバリデーションルール
 
-## Viewport Fit Is Non-Negotiable
+抽象的な形状のみを使用する。ユーザーが明示的に要求しない限り、イラストを避ける。
 
-Every slide must fully fit in one viewport.
+## ビューポート適合は妥協しない
 
-### Golden Rule
+各スライドは1つのビューポートに完全に収まる必要がある。
+
+### 黄金ルール
 
 ```text
-Each slide = exactly one viewport height.
-Too much content = split into more slides.
-Never scroll inside a slide.
+各スライド = ちょうど1つのビューポートの高さ。
+コンテンツが多すぎる = 複数のスライドに分割する。
+スライド内でスクロールさせない。
 ```
 
-### Density Limits
+### コンテンツ密度の制限
 
-| Slide Type | Maximum Content |
-|------------|-----------------|
-| Title slide | 1 heading + 1 subtitle + optional tagline |
-| Content slide | 1 heading + 4-6 bullets or 2 paragraphs |
-| Feature grid | 6 cards maximum |
-| Code slide | 8-10 lines maximum |
-| Quote slide | 1 quote + attribution |
-| Image slide | 1 image, ideally under 60vh |
+| スライドタイプ | 最大コンテンツ量 |
+|---|---|
+| タイトルスライド | 1つのタイトル + 1つのサブタイトル + オプションのキャッチフレーズ |
+| コンテンツスライド | 1つのタイトル + 4〜6つの箇条書きまたは2段落 |
+| 機能グリッド | 最大6枚のカード |
+| コードスライド | 最大8〜10行 |
+| 引用スライド | 1つの引用 + 出典 |
+| 画像スライド | 1枚の画像、理想的には60vh未満 |
 
-## Mandatory Base CSS
+## 強制基礎CSS
 
-Copy this block into every generated presentation and then theme on top of it.
+このコードブロックを生成されるすべてのプレゼンテーションにコピーし、その上にテーマを適用する。
 
 ```css
 /* ===========================================
@@ -163,168 +164,170 @@ img, .image-container {
 }
 ```
 
-## Viewport Checklist
+## ビューポートチェックリスト
 
-- every `.slide` has `height: 100vh`, `height: 100dvh`, and `overflow: hidden`
-- all typography uses `clamp()`
-- all spacing uses `clamp()` or viewport units
-- images have `max-height` constraints
-- grids adapt with `auto-fit` + `minmax()`
-- short-height breakpoints exist at `700px`, `600px`, and `500px`
-- if anything feels cramped, split the slide
+* すべての `.slide` に `height: 100vh`、`height: 100dvh`、`overflow: hidden` がある
+* すべてのタイポグラフィが `clamp()` を使用している
+* すべての間隔が `clamp()` またはビューポート単位を使用している
+* 画像に `max-height` 制約がある
+* グリッドが適合のために `auto-fit` + `minmax()` を使用している
+* 短い高さのブレークポイントが `700px`、`600px`、`500px` に存在する
+* コンテンツが窮屈に感じられる場合は、スライドを分割する
 
-## Mood to Preset Mapping
+## ムードからプリセットへのマッピング
 
-| Mood | Good Presets |
-|------|--------------|
-| Impressed / Confident | Bold Signal, Electric Studio, Dark Botanical |
-| Excited / Energized | Creative Voltage, Neon Cyber, Split Pastel |
-| Calm / Focused | Notebook Tabs, Paper & Ink, Swiss Modern |
-| Inspired / Moved | Dark Botanical, Vintage Editorial, Pastel Geometry |
+| ムード | 推奨プリセット |
+|---|---|
+| 印象的 / 自信あり | Bold Signal, Electric Studio, Dark Botanical |
+| 興奮 / 活力 | Creative Voltage, Neon Cyber, Split Pastel |
+| 落ち着き / 集中 | Notebook Tabs, Paper & Ink, Swiss Modern |
+| インスピレーション / 感動 | Dark Botanical, Vintage Editorial, Pastel Geometry |
 
-## Preset Catalog
+## プリセットカタログ
 
 ### 1. Bold Signal
 
-- Vibe: confident, high-impact, keynote-ready
-- Best for: pitch decks, launches, statements
-- Fonts: Archivo Black + Space Grotesk
-- Palette: charcoal base, hot orange focal card, crisp white text
-- Signature: oversized section numbers, high-contrast card on dark field
+* 雰囲気：自信あり、高インパクト、基調講演に適している
+* 最適用途：ピッチデッキ、製品ローンチ、アナウンス
+* フォント：Archivo Black + Space Grotesk
+* カラーパレット：チャコールの基調色、明るいオレンジのフォーカスカード、純白のテキスト
+* 特徴：超大きなセクション番号、ダーク背景上の高コントラストカード
 
 ### 2. Electric Studio
 
-- Vibe: clean, bold, agency-polished
-- Best for: client presentations, strategic reviews
-- Fonts: Manrope only
-- Palette: black, white, saturated cobalt accent
-- Signature: two-panel split and sharp editorial alignment
+* 雰囲気：クリーン、大胆、機関誌レベルの洗練さ
+* 最適用途：クライアントデッキ、戦略レビュー
+* フォント：Manropeのみ
+* カラーパレット：ブラック、ホワイト、彩度の高いコバルトブルーのアクセント
+* 特徴：デュアルパネル分割とシャープな編集スタイルのアライメント
 
 ### 3. Creative Voltage
 
-- Vibe: energetic, retro-modern, playful confidence
-- Best for: creative studios, brand work, product storytelling
-- Fonts: Syne + Space Mono
-- Palette: electric blue, neon yellow, deep navy
-- Signature: halftone textures, badges, punchy contrast
+* 雰囲気：活力、レトロモダン、遊び心と自信
+* 最適用途：クリエイティブスタジオ、ブランドワーク、プロダクトストーリーテリング
+* フォント：Syne + Space Mono
+* カラーパレット：エレクトリックブルー、ネオンイエロー、ディープネイビー
+* 特徴：ハーフトーンテクスチャ、バッジ、強いコントラスト
 
 ### 4. Dark Botanical
 
-- Vibe: elegant, premium, atmospheric
-- Best for: luxury brands, thoughtful narratives, premium product decks
-- Fonts: Cormorant + IBM Plex Sans
-- Palette: near-black, warm ivory, blush, gold, terracotta
-- Signature: blurred abstract circles, fine rules, restrained motion
+* 雰囲気：エレガント、ハイエンド、雰囲気がある
+* 最適用途：ラグジュアリーブランド、思慮深いナラティブ、プレミアム製品デモ
+* フォント：Cormorant + IBM Plex Sans
+* カラーパレット：ほぼブラック、温かみのあるアイボリー、ブラッシュ、ゴールド、テラコッタ
+* 特徴：ぼかされた抽象的な円、細いライン、抑制されたモーション
 
 ### 5. Notebook Tabs
 
-- Vibe: editorial, organized, tactile
-- Best for: reports, reviews, structured storytelling
-- Fonts: Bodoni Moda + DM Sans
-- Palette: cream paper on charcoal with pastel tabs
-- Signature: paper sheet, colored side tabs, binder details
+* 雰囲気：編集的、整理された、触覚的
+* 最適用途：レポート、レビュー、構造化されたストーリーテリング
+* フォント：Bodoni Moda + DM Sans
+* カラーパレット：チャコール上のクリーム色の用紙とソフトカラーのタブ
+* 特徴：紙の効果、カラーサイドタブ、バインダーの詳細
 
 ### 6. Pastel Geometry
 
-- Vibe: approachable, modern, friendly
-- Best for: product overviews, onboarding, lighter brand decks
-- Fonts: Plus Jakarta Sans only
-- Palette: pale blue field, cream card, soft pink/mint/lavender accents
-- Signature: vertical pills, rounded cards, soft shadows
+* 雰囲気：親しみやすい、モダン、フレンドリー
+* 最適用途：製品概要、入門、軽めのブランドプレゼン
+* フォント：Plus Jakarta Sansのみ
+* カラーパレット：薄いブルーの背景、クリーム色のカード、ソフトなピンク/ミント/ラベンダーのアクセント
+* 特徴：縦長のピル形状、角丸カード、ソフトシャドウ
 
 ### 7. Split Pastel
 
-- Vibe: playful, modern, creative
-- Best for: agency intros, workshops, portfolios
-- Fonts: Outfit only
-- Palette: peach + lavender split with mint badges
-- Signature: split backdrop, rounded tags, light grid overlays
+* 雰囲気：楽しい、モダン、クリエイティブ
+* 最適用途：エージェンシー紹介、ワークショップ、ポートフォリオ
+* フォント：Outfitのみ
+* カラーパレット：ミントバッジとのピーチ + ラベンダーの分割背景
+* 特徴：分割背景、角丸タグ、軽いグリッドオーバーレイ
 
 ### 8. Vintage Editorial
 
-- Vibe: witty, personality-driven, magazine-inspired
-- Best for: personal brands, opinionated talks, storytelling
-- Fonts: Fraunces + Work Sans
-- Palette: cream, charcoal, dusty warm accents
-- Signature: geometric accents, bordered callouts, punchy serif headlines
+* 雰囲気：機知に富む、個性的、雑誌にインスパイアされた
+* 最適用途：パーソナルブランド、オピニオントーク、ストーリーテリング
+* フォント：Fraunces + Work Sans
+* カラーパレット：クリーム、チャコール、くすんだ温かみのあるアクセント
+* 特徴：幾何学的なアクセント、ボーダー付きのコールアウト、印象的なセリフの見出し
 
 ### 9. Neon Cyber
 
-- Vibe: futuristic, techy, kinetic
-- Best for: AI, infra, dev tools, future-of-X talks
-- Fonts: Clash Display + Satoshi
-- Palette: midnight navy, cyan, magenta
-- Signature: glow, particles, grids, data-radar energy
+* 雰囲気：未来的、テック感、ダイナミック
+* 最適用途：AI、インフラ、デベロッパーツール、未来トレンドについての講演
+* フォント：Clash Display + Satoshi
+* カラーパレット：ミッドナイトネイビー、シアン、マゼンタ
+* 特徴：グロー効果、パーティクル、グリッド、データレーダーエナジー感
 
 ### 10. Terminal Green
 
-- Vibe: developer-focused, hacker-clean
-- Best for: APIs, CLI tools, engineering demos
-- Fonts: JetBrains Mono only
-- Palette: GitHub dark + terminal green
-- Signature: scan lines, command-line framing, precise monospace rhythm
+* 雰囲気：デベロッパー向け、ハッカーな簡潔さ
+* 最適用途：API、CLIツール、エンジニアリングデモ
+* フォント：JetBrains Monoのみ
+* カラーパレット：GitHubダーク + ターミナルグリーン
+* 特徴：スキャンライン、コマンドラインフレーミング、精確なモノスペースのリズム
 
 ### 11. Swiss Modern
 
-- Vibe: minimal, precise, data-forward
-- Best for: corporate, product strategy, analytics
-- Fonts: Archivo + Nunito
-- Palette: white, black, signal red
-- Signature: visible grids, asymmetry, geometric discipline
+* 雰囲気：ミニマリスト、精密、データ指向
+* 最適用途：エンタープライズ、製品戦略、アナリティクス
+* フォント：Archivo + Nunito
+* カラーパレット：ホワイト、ブラック、シグナルレッド
+* 特徴：可視グリッド、非対称、幾何学的な秩序感
 
 ### 12. Paper & Ink
 
-- Vibe: literary, thoughtful, story-driven
-- Best for: essays, keynote narratives, manifesto decks
-- Fonts: Cormorant Garamond + Source Serif 4
-- Palette: warm cream, charcoal, crimson accent
-- Signature: pull quotes, drop caps, elegant rules
+* 雰囲気：文学的、思慮深い、ストーリー駆動
+* 最適用途：散文、基調講演のナラティブ、マニフェスト的なプレゼン
+* フォント：Cormorant Garamond + Source Serif 4
+* カラーパレット：温かみのあるクリーム、チャコール、ディープレッドのアクセント
+* 特徴：引用のハイライト、ドロップキャップ、エレガントなライン
 
-## Direct Selection Prompts
+## 直接選択プロンプト
 
-If the user already knows the style they want, let them pick directly from the preset names above instead of forcing preview generation.
+ユーザーがすでに望むスタイルを知っている場合、プレビューを強制的に生成するのではなく、上記のプリセット名から直接選んでもらう。
 
-## Animation Feel Mapping
+## アニメーションの感覚マッピング
 
-| Feeling | Motion Direction |
-|---------|------------------|
-| Dramatic / Cinematic | slow fades, parallax, large scale-ins |
-| Techy / Futuristic | glow, particles, grid motion, scramble text |
-| Playful / Friendly | springy easing, rounded shapes, floating motion |
-| Professional / Corporate | subtle 200-300ms transitions, clean slides |
-| Calm / Minimal | very restrained movement, whitespace-first |
-| Editorial / Magazine | strong hierarchy, staggered text and image interplay |
+| 感覚 | モーションの方向 |
+|---|---|
+| ドラマチック / シネマティック | ゆっくりとしたフェード、視差スクロール、大スケールのズームイン |
+| テック感 / 未来的 | グロー、パーティクル、グリッドモーション、テキストのスクランブル表示 |
+| 楽しい / フレンドリー | バウンスのイージング、丸い形状、フローティングモーション |
+| プロフェッショナル / エンタープライズ | 微妙な200〜300msのトランジション、クリーンなスライド切り替え |
+| 落ち着き / ミニマリスト | 非常に控えめなモーション、空白を優先 |
+| 編集的 / 雑誌的 | 強い階層性、テキストと画像のずらしたインタラクション |
 
-## CSS Gotcha: Negating Functions
+## CSSの落とし穴：否定関数
 
-Never write these:
+以下は絶対に書かない：
 
 ```css
 right: -clamp(28px, 3.5vw, 44px);
 margin-left: -min(10vw, 100px);
 ```
 
-Browsers ignore them silently.
+ブラウザはそれらを静かに無視する。
 
-Always write this instead:
+代わりに常にこのように書く：
 
 ```css
 right: calc(-1 * clamp(28px, 3.5vw, 44px));
 margin-left: calc(-1 * min(10vw, 100px));
 ```
 
-## Validation Sizes
+## バリデーションサイズ
 
-Test at minimum:
-- Desktop: `1920x1080`, `1440x900`, `1280x720`
-- Tablet: `1024x768`, `768x1024`
-- Mobile: `375x667`, `414x896`
-- Landscape phone: `667x375`, `896x414`
+少なくとも以下のサイズでテストする：
 
-## Anti-Patterns
+* デスクトップ：`1920x1080`、`1440x900`、`1280x720`
+* タブレット：`1024x768`、`768x1024`
+* モバイル：`375x667`、`414x896`
+* 横向きモバイル：`667x375`、`896x414`
 
-Do not use:
-- purple-on-white startup templates
-- Inter / Roboto / Arial as the visual voice unless the user explicitly wants utilitarian neutrality
-- bullet walls, tiny type, or code blocks that require scrolling
-- decorative illustrations when abstract geometry would do the job better
+## アンチパターン
+
+使用しない：
+
+* 紫背景に白テキストのスタートアップテンプレート
+* Inter / Roboto / Arial をビジュアルボイスとして使用する（ユーザーが実用主義的なニュートラルスタイルを明示的に望む場合を除く）
+* 箇条書きの詰め込み、過小なフォント、スクロールが必要なコードブロック
+* 抽象的な幾何学形状がより良い働きをする場合に装飾的なイラストを使用する

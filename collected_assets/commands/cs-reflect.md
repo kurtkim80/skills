@@ -1,9 +1,15 @@
 ---
-name: "cs-reflect"
-description: "/cs:reflect — Mid-conversation reflection: halts current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis (Macro / Gap / Reflective / Bias / Contextual), ends with Continue / Pivot / Pause recommendation. Flowing prose, no headers. Honest output — no manufactured problems."
+title: "/cs-reflect — Slash Command for AI Coding Agents"
+description: "/cs:reflect — Mid-conversation reflection: halts current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:reflect — Mid-Conversation Reassessment
+# /cs-reflect
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/reflect/commands/cs-reflect.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:reflect`
 
@@ -103,8 +109,8 @@ python ../skills/reflect/scripts/directional_recommendation_validator.py --outpu
 
 ## Related
 
-- Agent: [`cs-reflect`](../agents/cs-reflect.md)
-- Skill: [`reflect`](../skills/reflect/SKILL.md)
+- Agent: [`cs-reflect`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/reflect/agents/cs-reflect.md)
+- Skill: [`reflect`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/reflect/skills/reflect/SKILL.md)
 - Source spec: `megaprompts/02-reflect-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling: `/cs:capture` (productivity, brain-dump organizer)
 - Adjacent (different shape): `/cs:grill-me`, `/cs:grill-with-docs`

@@ -1,65 +1,65 @@
 ---
 name: agent-sort
-description: Build an evidence-backed ECC install plan for a specific repo by sorting skills, commands, rules, hooks, and extras into DAILY vs LIBRARY buckets using parallel repo-aware review passes. Use when ECC should be trimmed to what a project actually needs instead of loading the full bundle.
-license: MIT
+description: 並行リポジトリ対応のレビューパスを使用して、スキル、コマンド、ルール、フック、エクストラを DAILY と LIBRARY のバケットに分類することで、特定のリポジトリ向けのエビデンスに基づいた ECC インストール計画を構築します。プロジェクトが完全なバンドルをロードする代わりに実際に必要なものに ECC をトリミングする必要がある場合に使用します。
+origin: ECC
 ---
 
-# Agent Sort
+# エージェントソート
 
-Use this skill when a repo needs a project-specific ECC surface instead of the default full install.
+リポジトリにデフォルトのフルインストールではなく、プロジェクト固有の ECC サーフェスが必要な場合にこのスキルを使用します。
 
-The goal is not to guess what "feels useful." The goal is to classify ECC components with evidence from the actual codebase.
+目標は「便利そうなもの」を推測することではありません。目標は実際のコードベースからのエビデンスで ECC コンポーネントを分類することです。
 
-## When to Use
+## 使用タイミング
 
-- A project only needs a subset of ECC and full installs are too noisy
-- The repo stack is clear, but nobody wants to hand-curate skills one by one
-- A team wants a repeatable install decision backed by grep evidence instead of opinion
-- You need to separate always-loaded daily workflow surfaces from searchable library/reference surfaces
-- A repo has drifted into the wrong language, rule, or hook set and needs cleanup
+- プロジェクトが ECC のサブセットのみを必要とし、フルインストールがノイズが多すぎる場合
+- リポジトリスタックが明確だが、誰もスキルを一つずつ手動でキュレーションしたくない場合
+- チームが意見ではなく grep エビデンスに基づく繰り返し可能なインストール決定を望む場合
+- 常にロードされる毎日のワークフローサーフェスと検索可能なライブラリ/参照サーフェスを分離する必要がある場合
+- リポジトリが間違った言語、ルール、またはフックセットにドリフトし、クリーンアップが必要な場合
 
-## Non-Negotiable Rules
+## 非交渉ルール
 
-- Use the current repository as the source of truth, not generic preferences
-- Every DAILY decision must cite concrete repo evidence
-- LIBRARY does not mean "delete"; it means "keep accessible without loading by default"
-- Do not install hooks, rules, or scripts that the current repo cannot use
-- Prefer ECC-native surfaces; do not introduce a second install system
+- 現在のリポジトリを真実の源として使用し、一般的な好みではない
+- すべての DAILY 決定は具体的なリポジトリエビデンスを引用すること
+- LIBRARY は「削除」を意味しない；「デフォルトでロードせずにアクセス可能に保つ」を意味する
+- 現在のリポジトリが使用できないフック、ルール、スクリプトをインストールしない
+- ECC ネイティブのサーフェスを優先；2 番目のインストールシステムを導入しない
 
-## Outputs
+## 成果物
 
-Produce these artifacts in order:
+この順序で成果物を生成する：
 
-1. DAILY inventory
-2. LIBRARY inventory
-3. install plan
-4. verification report
-5. optional `skill-library` router if the project wants one
+1. DAILY インベントリ
+2. LIBRARY インベントリ
+3. インストール計画
+4. 検証レポート
+5. プロジェクトがルーターを望む場合はオプションの `skill-library` ルーター
 
-## Classification Model
+## 分類モデル
 
-Use two buckets only:
+2 つのバケットのみを使用する：
 
 - `DAILY`
-  - should load every session for this repo
-  - strongly matched to the repo's language, framework, workflow, or operator surface
+  - このリポジトリのすべてのセッションでロードすべき
+  - リポジトリの言語、フレームワーク、ワークフロー、またはオペレーターサーフェスに強くマッチ
 - `LIBRARY`
-  - useful to retain, but not worth loading by default
-  - should remain reachable through search, router skill, or selective manual use
+  - 保持するのに有用だが、デフォルトでロードする価値はない
+  - 検索、ルータースキル、または選択的な手動使用を通じてアクセス可能に維持すべき
 
-## Evidence Sources
+## エビデンスソース
 
-Use repo-local evidence before making any classification:
+分類を行う前にリポジトリローカルのエビデンスを使用する：
 
-- file extensions
-- package managers and lockfiles
-- framework configs
-- CI and hook configs
-- build/test scripts
-- imports and dependency manifests
-- repo docs that explicitly describe the stack
+- ファイル拡張子
+- パッケージマネージャーとロックファイル
+- フレームワーク設定
+- CI とフック設定
+- ビルド/テストスクリプト
+- インポートと依存関係マニフェスト
+- スタックを明示的に説明するリポジトリドキュメント
 
-Useful commands include:
+有用なコマンド：
 
 ```bash
 rg --files
@@ -71,145 +71,145 @@ cat pubspec.yaml
 cat go.mod
 ```
 
-## Parallel Review Passes
+## 並行レビューパス
 
-If parallel subagents are available, split the review into these passes:
+並行サブエージェントが利用可能な場合、レビューをこれらのパスに分割する：
 
-1. Agents
-   - classify `agents/*`
-2. Skills
-   - classify `skills/*`
-3. Commands
-   - classify `commands/*`
-4. Rules
-   - classify `rules/*`
-5. Hooks and scripts
-   - classify hook surfaces, MCP health checks, helper scripts, and OS compatibility
-6. Extras
-   - classify contexts, examples, MCP configs, templates, and guidance docs
+1. エージェント
+   - `agents/*` を分類
+2. スキル
+   - `skills/*` を分類
+3. コマンド
+   - `commands/*` を分類
+4. ルール
+   - `rules/*` を分類
+5. フックとスクリプト
+   - フックサーフェス、MCP ヘルスチェック、ヘルパースクリプト、OS 互換性を分類
+6. エクストラ
+   - コンテキスト、例、MCP 設定、テンプレート、ガイダンスドキュメントを分類
 
-If subagents are not available, run the same passes sequentially.
+サブエージェントが利用できない場合、同じパスを順次実行する。
 
-## Core Workflow
+## コアワークフロー
 
-### 1. Read the repo
+### 1. リポジトリを読む
 
-Establish the real stack before classifying anything:
+何かを分類する前に実際のスタックを確立する：
 
-- languages in use
-- frameworks in use
-- primary package manager
-- test stack
-- lint/format stack
-- deployment/runtime surface
-- operator integrations already present
+- 使用中の言語
+- 使用中のフレームワーク
+- 主要なパッケージマネージャー
+- テストスタック
+- lint/フォーマットスタック
+- デプロイ/ランタイムサーフェス
+- 既に存在するオペレーター統合
 
-### 2. Build the evidence table
+### 2. エビデステーブルを構築する
 
-For every candidate surface, record:
+すべての候補サーフェスについて記録する：
 
-- component path
-- component type
-- proposed bucket
-- repo evidence
-- short justification
+- コンポーネントパス
+- コンポーネントタイプ
+- 提案されたバケット
+- リポジトリエビデンス
+- 短い正当化
 
-Use this format:
+このフォーマットを使用する：
 
 ```text
-skills/frontend-patterns | skill | DAILY | 84 .tsx files, next.config.ts present | core frontend stack
-skills/django-patterns   | skill | LIBRARY | no .py files, no pyproject.toml       | not active in this repo
-rules/typescript/*       | rules | DAILY | package.json + tsconfig.json            | active TS repo
-rules/python/*           | rules | LIBRARY | zero Python source files             | keep accessible only
+skills/frontend-patterns | skill | DAILY | 84 .tsx files, next.config.ts present | コアフロントエンドスタック
+skills/django-patterns   | skill | LIBRARY | no .py files, no pyproject.toml       | このリポジトリではアクティブでない
+rules/typescript/*       | rules | DAILY | package.json + tsconfig.json            | アクティブな TS リポジトリ
+rules/python/*           | rules | LIBRARY | zero Python source files             | アクセス可能に保つのみ
 ```
 
-### 3. Decide DAILY vs LIBRARY
+### 3. DAILY か LIBRARY かを決定する
 
-Promote to `DAILY` when:
+`DAILY` に昇格させる場合：
 
-- the repo clearly uses the matching stack
-- the component is general enough to help every session
-- the repo already depends on the corresponding runtime or workflow
+- リポジトリが対応するスタックを明確に使用している
+- コンポーネントが十分に一般的で、すべてのセッションで役立つ
+- リポジトリが既に対応するランタイムまたはワークフローに依存している
 
-Demote to `LIBRARY` when:
+`LIBRARY` に降格させる場合：
 
-- the component is off-stack
-- the repo might need it later, but not every day
-- it adds context overhead without immediate relevance
+- コンポーネントがオフスタック
+- リポジトリが後で必要とするかもしれないが、毎日は必要ない
+- 即時の関連性なしにコンテキストオーバーヘッドを追加する
 
-### 4. Build the install plan
+### 4. インストール計画を構築する
 
-Translate the classification into action:
+分類をアクションに変換する：
 
-- DAILY skills -> install or keep in `.claude/skills/`
-- DAILY commands -> keep as explicit shims only if still useful
-- DAILY rules -> install only matching language sets
-- DAILY hooks/scripts -> keep only compatible ones
-- LIBRARY surfaces -> keep accessible through search or `skill-library`
+- DAILY スキル -> `.claude/skills/` にインストールまたは保持
+- DAILY コマンド -> まだ有用な場合のみ明示的なシムとして保持
+- DAILY ルール -> 対応する言語セットのみインストール
+- DAILY フック/スクリプト -> 互換性のあるもののみ保持
+- LIBRARY サーフェス -> 検索または `skill-library` を通じてアクセス可能に保つ
 
-If the repo already uses selective installs, update that plan instead of creating another system.
+リポジトリが既に選択的インストールを使用している場合、別のシステムを作成するのではなくその計画を更新する。
 
-### 5. Create the optional library router
+### 5. オプションのライブラリルーターを作成する
 
-If the project wants a searchable library surface, create:
+プロジェクトが検索可能なライブラリサーフェスを望む場合、作成する：
 
 - `.claude/skills/skill-library/SKILL.md`
 
-That router should contain:
+そのルーターは含むべき内容：
 
-- a short explanation of DAILY vs LIBRARY
-- grouped trigger keywords
-- where the library references live
+- DAILY と LIBRARY の短い説明
+- グループ化されたトリガーキーワード
+- ライブラリ参照がある場所
 
-Do not duplicate every skill body inside the router.
+ルーター内にすべてのスキル本体を重複させない。
 
-### 6. Verify the result
+### 6. 結果を検証する
 
-After the plan is applied, verify:
+計画が適用された後、確認する：
 
-- every DAILY file exists where expected
-- stale language rules were not left active
-- incompatible hooks were not installed
-- the resulting install actually matches the repo stack
+- すべての DAILY ファイルが期待される場所に存在する
+- 古い言語ルールがアクティブなままでない
+- 互換性のないフックがインストールされていない
+- 結果のインストールが実際にリポジトリスタックと一致する
 
-Return a compact report with:
+以下を含むコンパクトなレポートを返す：
 
-- DAILY count
-- LIBRARY count
-- removed stale surfaces
-- open questions
+- DAILY カウント
+- LIBRARY カウント
+- 削除された古いサーフェス
+- 未解決の質問
 
-## Handoffs
+## ハンドオフ
 
-If the next step is interactive installation or repair, hand off to:
+次のステップがインタラクティブなインストールまたは修復の場合、ハンドオフ先：
 
 - `configure-ecc`
 
-If the next step is overlap cleanup or catalog review, hand off to:
+次のステップが重複のクリーンアップまたはカタログレビューの場合、ハンドオフ先：
 
 - `skill-stocktake`
 
-If the next step is broader context trimming, hand off to:
+次のステップがより広いコンテキストのトリミングの場合、ハンドオフ先：
 
 - `strategic-compact`
 
-## Output Format
+## 出力フォーマット
 
-Return the result in this order:
+この順序で結果を返す：
 
 ```text
 STACK
-- language/framework/runtime summary
+- 言語/フレームワーク/ランタイムのサマリー
 
 DAILY
-- always-loaded items with evidence
+- エビデンスを伴う常にロードされるアイテム
 
 LIBRARY
-- searchable/reference items with evidence
+- エビデンスを伴う検索可能/参照アイテム
 
 INSTALL PLAN
-- what should be installed, removed, or routed
+- インストール、削除、またはルーティングすべきもの
 
 VERIFICATION
-- checks run and remaining gaps
+- 実行されたチェックと残っているギャップ
 ```

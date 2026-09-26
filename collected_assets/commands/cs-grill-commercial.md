@@ -1,9 +1,15 @@
 ---
-description: Matt Pocock-style docs-anchored grilling for a Commercial plan, deal, pricing decision, or forecast. Walks the user's plan against the SaaS pricing canon (Skok, Tunguz, Bessemer, Ramanujam, ProfitWell, Winning by Design) one question at a time, recommends an answer per question, and refuses to invoke any sub-skill until the lane-defining decisions are locked. Use before running /cs:commercial on a fuzzy plan.
-argument-hint: "<plan, deal, pricing question, or fuzzy commercial problem>"
+title: "/cs-grill-commercial — Slash Command for AI Coding Agents"
+description: "Matt Pocock-style docs-anchored grilling for a Commercial plan, deal, pricing decision, or forecast. Walks the user's plan against the SaaS pricing. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:grill-commercial — Commercial grill against the SaaS pricing canon
+# /cs-grill-commercial
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/commercial/commands/cs-grill-commercial.md">Source</a></span>
+</div>
+
 
 Apply Matt Pocock's `grill-with-docs` discipline to this Commercial plan / problem:
 

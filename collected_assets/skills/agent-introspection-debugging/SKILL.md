@@ -1,153 +1,153 @@
 ---
 name: agent-introspection-debugging
-description: Structured self-debugging workflow for AI agent failures using capture, diagnosis, contained recovery, and introspection reports. Use when an agent run fails and you need a reproducible diagnosis instead of a retry.
-license: MIT
+description: キャプチャ、診断、封じ込め回復、内省レポートを使用した AI エージェント障害のための構造化された自己デバッグワークフロー。
+origin: ECC
 ---
 
-# Agent Introspection Debugging
+# エージェント内省デバッグ
 
-Use this skill when an agent run is failing repeatedly, consuming tokens without progress, looping on the same tools, or drifting away from the intended task.
+エージェント実行が繰り返し失敗している、進展なくトークンを消費している、同じツールをループしている、または意図したタスクから逸脱している場合にこのスキルを使用します。
 
-This is a workflow skill, not a hidden runtime. It teaches the agent to debug itself systematically before escalating to a human.
+これはワークフロースキルであり、隠れたランタイムではありません。エージェントが人間にエスカレーションする前に体系的に自己デバッグするよう教えます。
 
-## When to Activate
+## 起動タイミング
 
-- Maximum tool call / loop-limit failures
-- Repeated retries with no forward progress
-- Context growth or prompt drift that starts degrading output quality
-- File-system or environment state mismatch between expectation and reality
-- Tool failures that are likely recoverable with diagnosis and a smaller corrective action
+- ツール呼び出しの最大数 / ループ制限の失敗
+- 前進なしの繰り返しリトライ
+- 出力品質の低下を招くコンテキストの増大またはプロンプトのドリフト
+- 期待と現実の間でのファイルシステムや環境状態の不一致
+- 診断とより小さな修正アクションで回復可能なツールの失敗
 
-## Scope Boundaries
+## スコープ境界
 
-Activate this skill for:
-- capturing failure state before retrying blindly
-- diagnosing common agent-specific failure patterns
-- applying contained recovery actions
-- producing a structured human-readable debug report
+このスキルを起動するのは以下の場合：
+- 盲目的にリトライする前に障害状態をキャプチャする
+- エージェント固有の一般的な障害パターンを診断する
+- 封じ込め回復アクションを適用する
+- 構造化された人間が読めるデバッグレポートを生成する
 
-Do not use this skill as the primary source for:
-- feature verification after code changes; use `verification-loop`
-- framework-specific debugging when a narrower ECC skill already exists
-- runtime promises the current harness cannot enforce automatically
+このスキルを主なソースとして使用しない場合：
+- コード変更後の機能検証; `verification-loop` を使用
+- より狭い ECC スキルが既に存在するフレームワーク固有のデバッグ
+- 現在のハーネスが自動的に強制できないランタイムの約束
 
-## Four-Phase Loop
+## 四フェーズループ
 
-### Phase 1: Failure Capture
+### フェーズ 1: 障害キャプチャ
 
-Before trying to recover, record the failure precisely.
+回復を試みる前に、障害を正確に記録します。
 
-Capture:
-- error type, message, and stack trace when available
-- last meaningful tool call sequence
-- what the agent was trying to do
-- current context pressure: repeated prompts, oversized pasted logs, duplicated plans, or runaway notes
-- current environment assumptions: cwd, branch, relevant service state, expected files
+キャプチャ内容：
+- エラーの種類、メッセージ、スタックトレース（利用可能な場合）
+- 最後の意味のあるツール呼び出しシーケンス
+- エージェントが何をしようとしていたか
+- 現在のコンテキスト圧力：繰り返されるプロンプト、過大なペーストされたログ、重複した計画、暴走するノート
+- 現在の環境の前提：cwd、ブランチ、関連するサービス状態、期待されるファイル
 
-Minimum capture template:
+最小キャプチャテンプレート：
 
 ```markdown
-## Failure Capture
-- Session / task:
-- Goal in progress:
-- Error:
-- Last successful step:
-- Last failed tool / command:
-- Repeated pattern seen:
-- Environment assumptions to verify:
+## 障害キャプチャ
+- セッション / タスク:
+- 進行中の目標:
+- エラー:
+- 最後に成功したステップ:
+- 最後に失敗したツール / コマンド:
+- 観察された繰り返しパターン:
+- 検証すべき環境の前提:
 ```
 
-### Phase 2: Root-Cause Diagnosis
+### フェーズ 2: 根本原因診断
 
-Match the failure to a known pattern before changing anything.
+何も変更する前に、障害を既知のパターンに照合します。
 
-| Pattern | Likely Cause | Check |
+| パターン | 考えられる原因 | チェック |
 | --- | --- | --- |
-| Maximum tool calls / repeated same command | loop or no-exit observer path | inspect the last N tool calls for repetition |
-| Context overflow / degraded reasoning | unbounded notes, repeated plans, oversized logs | inspect recent context for duplication and low-signal bulk |
-| `ECONNREFUSED` / timeout | service unavailable or wrong port | verify service health, URL, and port assumptions |
-| `429` / quota exhaustion | retry storm or missing backoff | count repeated calls and inspect retry spacing |
-| file missing after write / stale diff | race, wrong cwd, or branch drift | re-check path, cwd, git status, and actual file existence |
-| tests still failing after “fix” | wrong hypothesis | isolate the exact failing test and re-derive the bug |
+| ツール呼び出しの最大数 / 同じコマンドの繰り返し | ループまたは出口なしのオブザーバーパス | 最後の N 回のツール呼び出しを繰り返しについて検査する |
+| コンテキストオーバーフロー / 推論の低下 | 無制限のノート、繰り返される計画、過大なログ | 最近のコンテキストを重複と低シグナルのバルクについて検査する |
+| `ECONNREFUSED` / タイムアウト | サービスが利用不可または間違ったポート | サービスの健全性、URL、ポートの前提を確認する |
+| `429` / クォータ枯渇 | リトライストームまたはバックオフなし | 繰り返し呼び出しを数え、リトライ間隔を検査する |
+| 書き込み後にファイルが見つからない / 古い差分 | レース、間違った cwd、またはブランチドリフト | パス、cwd、git ステータス、実際のファイル存在を再確認する |
+| 「修正」後もテストが失敗し続ける | 間違った仮説 | 失敗している正確なテストを分離し、バグを再導出する |
 
-Diagnosis questions:
-- is this a logic failure, state failure, environment failure, or policy failure?
-- did the agent lose the real objective and start optimizing the wrong subtask?
-- is the failure deterministic or transient?
-- what is the smallest reversible action that would validate the diagnosis?
+診断の質問：
+- これはロジックの失敗か、状態の失敗か、環境の失敗か、ポリシーの失敗か？
+- エージェントは実際の目標を見失い、間違ったサブタスクを最適化し始めたか？
+- 障害は決定論的か一時的か？
+- 診断を検証する最小の可逆的アクションは何か？
 
-### Phase 3: Contained Recovery
+### フェーズ 3: 封じ込め回復
 
-Recover with the smallest action that changes the diagnosis surface.
+診断の表面を変える最小のアクションで回復します。
 
-Safe recovery actions:
-- stop repeated retries and restate the hypothesis
-- trim low-signal context and keep only the active goal, blockers, and evidence
-- re-check the actual filesystem / branch / process state
-- narrow the task to one failing command, one file, or one test
-- switch from speculative reasoning to direct observation
-- escalate to a human when the failure is high-risk or externally blocked
+安全な回復アクション：
+- 繰り返しのリトライを停止し、仮説を再述べる
+- 低シグナルのコンテキストを削除し、アクティブな目標、ブロッカー、エビデンスのみを保持する
+- 実際のファイルシステム / ブランチ / プロセス状態を再確認する
+- タスクを 1 つの失敗しているコマンド、1 つのファイル、または 1 つのテストに絞り込む
+- 推測的な推論から直接観察に切り替える
+- 障害が高リスクまたは外部的にブロックされている場合は人間にエスカレーションする
 
-Do not claim unsupported auto-healing actions like “reset agent state” or “update harness config” unless you are actually doing them through real tools in the current environment.
+現在の環境の実際のツールを通じて実際にそれらを行っていない限り、「エージェント状態をリセット」または「ハーネス設定を更新」のような自動回復アクションを主張しないこと。
 
-Contained recovery checklist:
-
-```markdown
-## Recovery Action
-- Diagnosis chosen:
-- Smallest action taken:
-- Why this is safe:
-- What evidence would prove the fix worked:
-```
-
-### Phase 4: Introspection Report
-
-End with a report that makes the recovery legible to the next agent or human.
+封じ込め回復チェックリスト：
 
 ```markdown
-## Agent Self-Debug Report
-- Session / task:
-- Failure:
-- Root cause:
-- Recovery action:
-- Result: success | partial | blocked
-- Token / time burn risk:
-- Follow-up needed:
-- Preventive change to encode later:
+## 回復アクション
+- 選択した診断:
+- 取った最小アクション:
+- なぜこれが安全か:
+- 修正が機能したことを証明するエビデンスは何か:
 ```
 
-## Recovery Heuristics
+### フェーズ 4: 内省レポート
 
-Prefer these interventions in order:
+次のエージェントや人間が回復を理解できるレポートで終了します。
 
-1. Restate the real objective in one sentence.
-2. Verify the world state instead of trusting memory.
-3. Shrink the failing scope.
-4. Run one discriminating check.
-5. Only then retry.
+```markdown
+## エージェント自己デバッグレポート
+- セッション / タスク:
+- 障害:
+- 根本原因:
+- 回復アクション:
+- 結果: 成功 | 部分的 | ブロック中
+- トークン / 時間の消費リスク:
+- 必要なフォローアップ:
+- 後でエンコードすべき予防的変更:
+```
 
-Bad pattern:
-- retrying the same action three times with slightly different wording
+## 回復ヒューリスティクス
 
-Good pattern:
-- capture failure
-- classify the pattern
-- run one direct check
-- change the plan only if the check supports it
+この順序で介入を優先する：
 
-## Integration with ECC
+1. 実際の目標を一文で再述べる。
+2. メモリを信頼するのではなく世界の状態を確認する。
+3. 失敗しているスコープを縮小する。
+4. 1 つの識別チェックを実行する。
+5. その後にのみリトライする。
 
-- Use `verification-loop` after recovery if code was changed.
-- Use `continuous-learning-v2` when the failure pattern is worth turning into an instinct or later skill.
-- Use `council` when the issue is not technical failure but decision ambiguity.
-- Use `workspace-surface-audit` if the failure came from conflicting local state or repo drift.
+悪いパターン：
+- わずかに異なる言葉で同じアクションを 3 回リトライする
 
-## Output Standard
+良いパターン：
+- 障害をキャプチャする
+- パターンを分類する
+- 1 つの直接チェックを実行する
+- チェックがサポートする場合にのみ計画を変更する
 
-When this skill is active, do not end with “I fixed it” alone.
+## ECC との統合
 
-Always provide:
-- the failure pattern
-- the root-cause hypothesis
-- the recovery action
-- the evidence that the situation is now better or still blocked
+- コードが変更された場合、回復後に `verification-loop` を使用する。
+- 障害パターンが本能や将来のスキルに変える価値がある場合は `continuous-learning-v2` を使用する。
+- 問題が技術的な失敗ではなく決定の曖昧さである場合は `council` を使用する。
+- 障害が競合するローカル状態やリポジトリのドリフトから来た場合は `workspace-surface-audit` を使用する。
+
+## 出力標準
+
+このスキルがアクティブな場合、「修正しました」だけで終わらないこと。
+
+常に提供する：
+- 障害パターン
+- 根本原因の仮説
+- 回復アクション
+- 状況が改善されたまたはまだブロックされているエビデンス

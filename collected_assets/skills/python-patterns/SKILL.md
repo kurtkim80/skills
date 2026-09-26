@@ -1,749 +1,428 @@
 ---
 name: python-patterns
-description: Pythonic イディオム、PEP 8標準、型ヒント、堅牢で効率的かつ保守可能なPythonアプリケーションを構築するためのベストプラクティス。
+description: >
+  Python-specific design patterns and best practices including protocols,
+  dataclasses, context managers, decorators, async/await, type hints, and
+  package organization. Use when working with Python code to apply Pythonic
+  patterns.
+metadata:
+  origin: ECC
+  globs: ["**/*.py", "**/*.pyi"]
 ---
 
-# Python開発パターン
+# Python Patterns
 
-堅牢で効率的かつ保守可能なアプリケーションを構築するための慣用的なPythonパターンとベストプラクティス。
+> This skill provides comprehensive Python patterns extending common design principles with Python-specific idioms.
 
-## いつ有効化するか
+## Protocol (Duck Typing)
 
-- 新しいPythonコードを書くとき
-- Pythonコードをレビューするとき
-- 既存のPythonコードをリファクタリングするとき
-- Pythonパッケージ/モジュールを設計するとき
-
-## 核となる原則
-
-### 1. 可読性が重要
-
-Pythonは可読性を優先します。コードは明白で理解しやすいものであるべきです。
-
-```python
-# Good: Clear and readable
-def get_active_users(users: list[User]) -> list[User]:
-    """Return only active users from the provided list."""
-    return [user for user in users if user.is_active]
-
-
-# Bad: Clever but confusing
-def get_active_users(u):
-    return [x for x in u if x.a]
-```
-
-### 2. 明示的は暗黙的より良い
-
-魔法を避け、コードが何をしているかを明確にしましょう。
-
-```python
-# Good: Explicit configuration
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-
-# Bad: Hidden side effects
-import some_module
-some_module.setup()  # What does this do?
-```
-
-### 3. EAFP - 許可を求めるより許しを請う方が簡単
-
-Pythonは条件チェックよりも例外処理を好みます。
-
-```python
-# Good: EAFP style
-def get_value(dictionary: dict, key: str, default_value: Any = None) -> Any:
-    try:
-        return dictionary[key]
-    except KeyError:
-        return default_value
-
-# Bad: LBYL (Look Before You Leap) style
-def get_value(dictionary: dict, key: str, default_value: Any = None) -> Any:
-    if key in dictionary:
-        return dictionary[key]
-    else:
-        return default_value
-```
-
-## 型ヒント
-
-### 基本的な型アノテーション
-
-```python
-from typing import Optional, List, Dict, Any
-
-def process_user(
-    user_id: str,
-    data: Dict[str, Any],
-    active: bool = True
-) -> Optional[User]:
-    """Process a user and return the updated User or None."""
-    if not active:
-        return None
-    return User(user_id, data)
-```
-
-### モダンな型ヒント（Python 3.9+）
-
-```python
-# Python 3.9+ - Use built-in types
-def process_items(items: list[str]) -> dict[str, int]:
-    return {item: len(item) for item in items}
-
-# Python 3.8 and earlier - Use typing module
-from typing import List, Dict
-
-def process_items(items: List[str]) -> Dict[str, int]:
-    return {item: len(item) for item in items}
-```
-
-### 型エイリアスとTypeVar
-
-```python
-from typing import TypeVar, Union
-
-# Type alias for complex types
-JSON = Union[dict[str, Any], list[Any], str, int, float, bool, None]
-
-def parse_json(data: str) -> JSON:
-    return json.loads(data)
-
-# Generic types
-T = TypeVar('T')
-
-def first(items: list[T]) -> T | None:
-    """Return the first item or None if list is empty."""
-    return items[0] if items else None
-```
-
-### プロトコルベースのダックタイピング
+Use `Protocol` for structural subtyping (duck typing with type hints):
 
 ```python
 from typing import Protocol
 
-class Renderable(Protocol):
-    def render(self) -> str:
-        """Render the object to a string."""
+class Repository(Protocol):
+    def find_by_id(self, id: str) -> dict | None: ...
+    def save(self, entity: dict) -> dict: ...
 
-def render_all(items: list[Renderable]) -> str:
-    """Render all items that implement the Renderable protocol."""
-    return "\n".join(item.render() for item in items)
+# Any class with these methods satisfies the protocol
+class UserRepository:
+    def find_by_id(self, id: str) -> dict | None:
+        # implementation
+        pass
+
+    def save(self, entity: dict) -> dict:
+        # implementation
+        pass
+
+def process_entity(repo: Repository, id: str) -> None:
+    entity = repo.find_by_id(id)
+    # ... process
 ```
 
-## エラーハンドリングパターン
+**Benefits:**
+- Type safety without inheritance
+- Flexible, loosely coupled code
+- Easy testing and mocking
 
-### 特定の例外処理
+## Dataclasses as DTOs
 
-```python
-# Good: Catch specific exceptions
-def load_config(path: str) -> Config:
-    try:
-        with open(path) as f:
-            return Config.from_json(f.read())
-    except FileNotFoundError as e:
-        raise ConfigError(f"Config file not found: {path}") from e
-    except json.JSONDecodeError as e:
-        raise ConfigError(f"Invalid JSON in config: {path}") from e
-
-# Bad: Bare except
-def load_config(path: str) -> Config:
-    try:
-        with open(path) as f:
-            return Config.from_json(f.read())
-    except:
-        return None  # Silent failure!
-```
-
-### 例外の連鎖
-
-```python
-def process_data(data: str) -> Result:
-    try:
-        parsed = json.loads(data)
-    except json.JSONDecodeError as e:
-        # Chain exceptions to preserve the traceback
-        raise ValueError(f"Failed to parse data: {data}") from e
-```
-
-### カスタム例外階層
-
-```python
-class AppError(Exception):
-    """Base exception for all application errors."""
-    pass
-
-class ValidationError(AppError):
-    """Raised when input validation fails."""
-    pass
-
-class NotFoundError(AppError):
-    """Raised when a requested resource is not found."""
-    pass
-
-# Usage
-def get_user(user_id: str) -> User:
-    user = db.find_user(user_id)
-    if not user:
-        raise NotFoundError(f"User not found: {user_id}")
-    return user
-```
-
-## コンテキストマネージャ
-
-### リソース管理
-
-```python
-# Good: Using context managers
-def process_file(path: str) -> str:
-    with open(path, 'r') as f:
-        return f.read()
-
-# Bad: Manual resource management
-def process_file(path: str) -> str:
-    f = open(path, 'r')
-    try:
-        return f.read()
-    finally:
-        f.close()
-```
-
-### カスタムコンテキストマネージャ
-
-```python
-from contextlib import contextmanager
-
-@contextmanager
-def timer(name: str):
-    """Context manager to time a block of code."""
-    start = time.perf_counter()
-    yield
-    elapsed = time.perf_counter() - start
-    print(f"{name} took {elapsed:.4f} seconds")
-
-# Usage
-with timer("data processing"):
-    process_large_dataset()
-```
-
-### コンテキストマネージャクラス
-
-```python
-class DatabaseTransaction:
-    def __init__(self, connection):
-        self.connection = connection
-
-    def __enter__(self):
-        self.connection.begin_transaction()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            self.connection.commit()
-        else:
-            self.connection.rollback()
-        return False  # Don't suppress exceptions
-
-# Usage
-with DatabaseTransaction(conn):
-    user = conn.create_user(user_data)
-    conn.create_profile(user.id, profile_data)
-```
-
-## 内包表記とジェネレータ
-
-### リスト内包表記
-
-```python
-# Good: List comprehension for simple transformations
-names = [user.name for user in users if user.is_active]
-
-# Bad: Manual loop
-names = []
-for user in users:
-    if user.is_active:
-        names.append(user.name)
-
-# Complex comprehensions should be expanded
-# Bad: Too complex
-result = [x * 2 for x in items if x > 0 if x % 2 == 0]
-
-# Good: Use a generator function
-def filter_and_transform(items: Iterable[int]) -> list[int]:
-    result = []
-    for x in items:
-        if x > 0 and x % 2 == 0:
-            result.append(x * 2)
-    return result
-```
-
-### ジェネレータ式
-
-```python
-# Good: Generator for lazy evaluation
-total = sum(x * x for x in range(1_000_000))
-
-# Bad: Creates large intermediate list
-total = sum([x * x for x in range(1_000_000)])
-```
-
-### ジェネレータ関数
-
-```python
-def read_large_file(path: str) -> Iterator[str]:
-    """Read a large file line by line."""
-    with open(path) as f:
-        for line in f:
-            yield line.strip()
-
-# Usage
-for line in read_large_file("huge.txt"):
-    process(line)
-```
-
-## データクラスと名前付きタプル
-
-### データクラス
+Use `dataclass` for data transfer objects and value objects:
 
 ```python
 from dataclasses import dataclass, field
-from datetime import datetime
+from typing import Optional
 
 @dataclass
+class CreateUserRequest:
+    name: str
+    email: str
+    age: Optional[int] = None
+    tags: list[str] = field(default_factory=list)
+
+@dataclass(frozen=True)
 class User:
-    """User entity with automatic __init__, __repr__, and __eq__."""
+    """Immutable user entity"""
     id: str
     name: str
     email: str
-    created_at: datetime = field(default_factory=datetime.now)
-    is_active: bool = True
+```
+
+**Features:**
+- Auto-generated `__init__`, `__repr__`, `__eq__`
+- `frozen=True` for immutability
+- `field()` for complex defaults
+- Type hints for validation
+
+## Context Managers
+
+Use context managers (`with` statement) for resource management:
+
+```python
+from contextlib import contextmanager
+from typing import Generator
+
+@contextmanager
+def database_transaction(db) -> Generator[None, None, None]:
+    """Context manager for database transactions"""
+    try:
+        yield
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
 
 # Usage
-user = User(
-    id="123",
-    name="Alice",
-    email="alice@example.com"
-)
+with database_transaction(db):
+    db.execute("INSERT INTO users ...")
 ```
 
-### バリデーション付きデータクラス
+**Class-based context manager:**
 
 ```python
-@dataclass
-class User:
-    email: str
-    age: int
+class FileProcessor:
+    def __init__(self, filename: str):
+        self.filename = filename
+        self.file = None
 
-    def __post_init__(self):
-        # Validate email format
-        if "@" not in self.email:
-            raise ValueError(f"Invalid email: {self.email}")
-        # Validate age range
-        if self.age < 0 or self.age > 150:
-            raise ValueError(f"Invalid age: {self.age}")
+    def __enter__(self):
+        self.file = open(self.filename, 'r')
+        return self.file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.file:
+            self.file.close()
+        return False  # Don't suppress exceptions
 ```
 
-### 名前付きタプル
+## Generators
+
+Use generators for lazy evaluation and memory-efficient iteration:
 
 ```python
-from typing import NamedTuple
+def read_large_file(filename: str):
+    """Generator for reading large files line by line"""
+    with open(filename, 'r') as f:
+        for line in f:
+            yield line.strip()
 
-class Point(NamedTuple):
-    """Immutable 2D point."""
-    x: float
-    y: float
-
-    def distance(self, other: 'Point') -> float:
-        return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
-
-# Usage
-p1 = Point(0, 0)
-p2 = Point(3, 4)
-print(p1.distance(p2))  # 5.0
+# Memory-efficient processing
+for line in read_large_file('huge.txt'):
+    process(line)
 ```
 
-## デコレータ
-
-### 関数デコレータ
+**Generator expressions:**
 
 ```python
-import functools
+# Instead of list comprehension
+squares = (x**2 for x in range(1000000))  # Lazy evaluation
+
+# Pipeline pattern
+numbers = (x for x in range(100))
+evens = (x for x in numbers if x % 2 == 0)
+squares = (x**2 for x in evens)
+```
+
+## Decorators
+
+### Function Decorators
+
+```python
+from functools import wraps
 import time
 
-def timer(func: Callable) -> Callable:
-    """Decorator to time function execution."""
-    @functools.wraps(func)
+def timing(func):
+    """Decorator to measure execution time"""
+    @wraps(func)
     def wrapper(*args, **kwargs):
-        start = time.perf_counter()
+        start = time.time()
         result = func(*args, **kwargs)
-        elapsed = time.perf_counter() - start
-        print(f"{func.__name__} took {elapsed:.4f}s")
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.2f}s")
         return result
     return wrapper
 
-@timer
+@timing
 def slow_function():
     time.sleep(1)
-
-# slow_function() prints: slow_function took 1.0012s
 ```
 
-### パラメータ化デコレータ
+### Class Decorators
 
 ```python
-def repeat(times: int):
-    """Decorator to repeat a function multiple times."""
-    def decorator(func: Callable) -> Callable:
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            results = []
-            for _ in range(times):
-                results.append(func(*args, **kwargs))
-            return results
-        return wrapper
-    return decorator
+def singleton(cls):
+    """Decorator to make a class a singleton"""
+    instances = {}
 
-@repeat(times=3)
-def greet(name: str) -> str:
-    return f"Hello, {name}!"
+    @wraps(cls)
+    def get_instance(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
 
-# greet("Alice") returns ["Hello, Alice!", "Hello, Alice!", "Hello, Alice!"]
-```
+    return get_instance
 
-### クラスベースのデコレータ
-
-```python
-class CountCalls:
-    """Decorator that counts how many times a function is called."""
-    def __init__(self, func: Callable):
-        functools.update_wrapper(self, func)
-        self.func = func
-        self.count = 0
-
-    def __call__(self, *args, **kwargs):
-        self.count += 1
-        print(f"{self.func.__name__} has been called {self.count} times")
-        return self.func(*args, **kwargs)
-
-@CountCalls
-def process():
+@singleton
+class Config:
     pass
-
-# Each call to process() prints the call count
 ```
 
-## 並行処理パターン
+## Async/Await
 
-### I/Oバウンドタスク用のスレッド
-
-```python
-import concurrent.futures
-import threading
-
-def fetch_url(url: str) -> str:
-    """Fetch a URL (I/O-bound operation)."""
-    import urllib.request
-    with urllib.request.urlopen(url) as response:
-        return response.read().decode()
-
-def fetch_all_urls(urls: list[str]) -> dict[str, str]:
-    """Fetch multiple URLs concurrently using threads."""
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_url = {executor.submit(fetch_url, url): url for url in urls}
-        results = {}
-        for future in concurrent.futures.as_completed(future_to_url):
-            url = future_to_url[future]
-            try:
-                results[url] = future.result()
-            except Exception as e:
-                results[url] = f"Error: {e}"
-    return results
-```
-
-### CPUバウンドタスク用のマルチプロセシング
-
-```python
-def process_data(data: list[int]) -> int:
-    """CPU-intensive computation."""
-    return sum(x ** 2 for x in data)
-
-def process_all(datasets: list[list[int]]) -> list[int]:
-    """Process multiple datasets using multiple processes."""
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        results = list(executor.map(process_data, datasets))
-    return results
-```
-
-### 並行I/O用のAsync/Await
+### Async Functions
 
 ```python
 import asyncio
+from typing import List
 
-async def fetch_async(url: str) -> str:
-    """Fetch a URL asynchronously."""
-    import aiohttp
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.text()
+async def fetch_user(user_id: str) -> dict:
+    """Async function for I/O-bound operations"""
+    await asyncio.sleep(0.1)  # Simulate network call
+    return {"id": user_id, "name": "Alice"}
 
-async def fetch_all(urls: list[str]) -> dict[str, str]:
-    """Fetch multiple URLs concurrently."""
-    tasks = [fetch_async(url) for url in urls]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    return dict(zip(urls, results))
+async def fetch_all_users(user_ids: List[str]) -> List[dict]:
+    """Concurrent execution with asyncio.gather"""
+    tasks = [fetch_user(uid) for uid in user_ids]
+    return await asyncio.gather(*tasks)
+
+# Run async code
+asyncio.run(fetch_all_users(["1", "2", "3"]))
 ```
 
-## パッケージ構成
+### Async Context Managers
 
-### 標準プロジェクトレイアウト
+```python
+class AsyncDatabase:
+    async def __aenter__(self):
+        await self.connect()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.disconnect()
+
+async with AsyncDatabase() as db:
+    await db.query("SELECT * FROM users")
+```
+
+## Type Hints
+
+### Advanced Type Hints
+
+```python
+from typing import TypeVar, Generic, Callable, ParamSpec, Concatenate
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+class Repository(Generic[T]):
+    """Generic repository pattern"""
+    def __init__(self, entity_type: type[T]):
+        self.entity_type = entity_type
+
+    def find_by_id(self, id: str) -> T | None:
+        # implementation
+        pass
+
+# Type-safe decorator
+def log_call(func: Callable[P, T]) -> Callable[P, T]:
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+```
+
+### Union Types (Python 3.10+)
+
+```python
+def process(value: str | int | None) -> str:
+    match value:
+        case str():
+            return value.upper()
+        case int():
+            return str(value)
+        case None:
+            return "empty"
+```
+
+## Dependency Injection
+
+### Constructor Injection
+
+```python
+class UserService:
+    def __init__(
+        self,
+        repository: Repository,
+        logger: Logger,
+        cache: Cache | None = None
+    ):
+        self.repository = repository
+        self.logger = logger
+        self.cache = cache
+
+    def get_user(self, user_id: str) -> User | None:
+        if self.cache:
+            cached = self.cache.get(user_id)
+            if cached:
+                return cached
+
+        user = self.repository.find_by_id(user_id)
+        if user and self.cache:
+            self.cache.set(user_id, user)
+
+        return user
+```
+
+## Package Organization
+
+### Project Structure
 
 ```
-myproject/
+project/
 ├── src/
 │   └── mypackage/
 │       ├── __init__.py
-│       ├── main.py
-│       ├── api/
+│       ├── domain/          # Business logic
 │       │   ├── __init__.py
-│       │   └── routes.py
-│       ├── models/
+│       │   └── models.py
+│       ├── services/        # Application services
 │       │   ├── __init__.py
-│       │   └── user.py
-│       └── utils/
+│       │   └── user_service.py
+│       └── infrastructure/  # External dependencies
 │           ├── __init__.py
-│           └── helpers.py
+│           └── database.py
 ├── tests/
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_api.py
-│   └── test_models.py
+│   ├── unit/
+│   └── integration/
 ├── pyproject.toml
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
-### インポート規約
+### Module Exports
 
 ```python
-# Good: Import order - stdlib, third-party, local
-import os
-import sys
-from pathlib import Path
+# __init__.py
+from .models import User, Product
+from .services import UserService
 
-import requests
-from fastapi import FastAPI
-
-from mypackage.models import User
-from mypackage.utils import format_name
-
-# Good: Use isort for automatic import sorting
-# pip install isort
+__all__ = ['User', 'Product', 'UserService']
 ```
 
-### パッケージエクスポート用の__init__.py
+## Error Handling
+
+### Custom Exceptions
 
 ```python
-# mypackage/__init__.py
-"""mypackage - A sample Python package."""
-
-__version__ = "1.0.0"
-
-# Export main classes/functions at package level
-from mypackage.models import User, Post
-from mypackage.utils import format_name
-
-__all__ = ["User", "Post", "format_name"]
-```
-
-## メモリとパフォーマンス
-
-### メモリ効率化のための__slots__使用
-
-```python
-# Bad: Regular class uses __dict__ (more memory)
-class Point:
-    def __init__(self, x: float, y: float):
-        self.x = x
-        self.y = y
-
-# Good: __slots__ reduces memory usage
-class Point:
-    __slots__ = ['x', 'y']
-
-    def __init__(self, x: float, y: float):
-        self.x = x
-        self.y = y
-```
-
-### 大量データ用のジェネレータ
-
-```python
-# Bad: Returns full list in memory
-def read_lines(path: str) -> list[str]:
-    with open(path) as f:
-        return [line.strip() for line in f]
-
-# Good: Yields lines one at a time
-def read_lines(path: str) -> Iterator[str]:
-    with open(path) as f:
-        for line in f:
-            yield line.strip()
-```
-
-### ループ内での文字列連結を避ける
-
-```python
-# Bad: O(n²) due to string immutability
-result = ""
-for item in items:
-    result += str(item)
-
-# Good: O(n) using join
-result = "".join(str(item) for item in items)
-
-# Good: Using StringIO for building
-from io import StringIO
-
-buffer = StringIO()
-for item in items:
-    buffer.write(str(item))
-result = buffer.getvalue()
-```
-
-## Pythonツール統合
-
-### 基本コマンド
-
-```bash
-# Code formatting
-black .
-isort .
-
-# Linting
-ruff check .
-pylint mypackage/
-
-# Type checking
-mypy .
-
-# Testing
-pytest --cov=mypackage --cov-report=html
-
-# Security scanning
-bandit -r .
-
-# Dependency management
-pip-audit
-safety check
-```
-
-### pyproject.toml設定
-
-```toml
-[project]
-name = "mypackage"
-version = "1.0.0"
-requires-python = ">=3.9"
-dependencies = [
-    "requests>=2.31.0",
-    "pydantic>=2.0.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.0.0",
-    "ruff>=0.1.0",
-    "mypy>=1.5.0",
-]
-
-[tool.black]
-line-length = 88
-target-version = ['py39']
-
-[tool.ruff]
-line-length = 88
-select = ["E", "F", "I", "N", "W"]
-
-[tool.mypy]
-python_version = "3.9"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "--cov=mypackage --cov-report=term-missing"
-```
-
-## クイックリファレンス：Pythonイディオム
-
-| イディオム | 説明 |
-|-------|-------------|
-| EAFP | 許可を求めるより許しを請う方が簡単 |
-| コンテキストマネージャ | リソース管理には`with`を使用 |
-| リスト内包表記 | 簡単な変換用 |
-| ジェネレータ | 遅延評価と大規模データセット用 |
-| 型ヒント | 関数シグネチャへのアノテーション |
-| データクラス | 自動生成メソッド付きデータコンテナ用 |
-| `__slots__` | メモリ最適化用 |
-| f-strings | 文字列フォーマット用（Python 3.6+） |
-| `pathlib.Path` | パス操作用（Python 3.4+） |
-| `enumerate` | ループ内のインデックス-要素ペア用 |
-
-## 避けるべきアンチパターン
-
-```python
-# Bad: Mutable default arguments
-def append_to(item, items=[]):
-    items.append(item)
-    return items
-
-# Good: Use None and create new list
-def append_to(item, items=None):
-    if items is None:
-        items = []
-    items.append(item)
-    return items
-
-# Bad: Checking type with type()
-if type(obj) == list:
-    process(obj)
-
-# Good: Use isinstance
-if isinstance(obj, list):
-    process(obj)
-
-# Bad: Comparing to None with ==
-if value == None:
-    process()
-
-# Good: Use is
-if value is None:
-    process()
-
-# Bad: from module import *
-from os.path import *
-
-# Good: Explicit imports
-from os.path import join, exists
-
-# Bad: Bare except
-try:
-    risky_operation()
-except:
+class DomainError(Exception):
+    """Base exception for domain errors"""
     pass
 
-# Good: Specific exception
-try:
-    risky_operation()
-except SpecificError as e:
-    logger.error(f"Operation failed: {e}")
+class UserNotFoundError(DomainError):
+    """Raised when user is not found"""
+    def __init__(self, user_id: str):
+        self.user_id = user_id
+        super().__init__(f"User {user_id} not found")
+
+class ValidationError(DomainError):
+    """Raised when validation fails"""
+    def __init__(self, field: str, message: str):
+        self.field = field
+        self.message = message
+        super().__init__(f"{field}: {message}")
 ```
 
-**覚えておいてください**: Pythonコードは読みやすく、明示的で、最小の驚きの原則に従うべきです。迷ったときは、巧妙さよりも明確さを優先してください。
+### Exception Groups (Python 3.11+)
+
+```python
+try:
+    # Multiple operations
+    pass
+except* ValueError as eg:
+    # Handle all ValueError instances
+    for exc in eg.exceptions:
+        print(f"ValueError: {exc}")
+except* TypeError as eg:
+    # Handle all TypeError instances
+    for exc in eg.exceptions:
+        print(f"TypeError: {exc}")
+```
+
+## Property Decorators
+
+```python
+class User:
+    def __init__(self, name: str):
+        self._name = name
+        self._email = None
+
+    @property
+    def name(self) -> str:
+        """Read-only property"""
+        return self._name
+
+    @property
+    def email(self) -> str | None:
+        return self._email
+
+    @email.setter
+    def email(self, value: str) -> None:
+        if '@' not in value:
+            raise ValueError("Invalid email")
+        self._email = value
+```
+
+## Functional Programming
+
+### Higher-Order Functions
+
+```python
+from functools import reduce
+from typing import Callable, TypeVar
+
+T = TypeVar('T')
+U = TypeVar('U')
+
+def pipe(*functions: Callable) -> Callable:
+    """Compose functions left to right"""
+    def inner(arg):
+        return reduce(lambda x, f: f(x), functions, arg)
+    return inner
+
+# Usage
+process = pipe(
+    str.strip,
+    str.lower,
+    lambda s: s.replace(' ', '_')
+)
+result = process("  Hello World  ")  # "hello_world"
+```
+
+## When to Use This Skill
+
+- Designing Python APIs and packages
+- Implementing async/concurrent systems
+- Structuring Python projects
+- Writing Pythonic code
+- Refactoring Python codebases
+- Type-safe Python development

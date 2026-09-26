@@ -1,100 +1,100 @@
 ---
-description: İdiomatic desenler, eşzamanlılık güvenliği, hata yönetimi ve güvenlik için kapsamlı Go kod incelemesi. go-reviewer agent'ını çağırır.
+description: 관용적 패턴, 동시성 안전성, 에러 처리, 보안에 대한 포괄적인 Go 코드 리뷰. go-reviewer 에이전트를 호출합니다.
 ---
 
-# Go Code Review
+# Go 코드 리뷰
 
-Bu komut, Go'ya özel kapsamlı kod incelemesi için **go-reviewer** agent'ını çağırır.
+이 커맨드는 **go-reviewer** 에이전트를 호출하여 Go 전용 포괄적 코드 리뷰를 수행합니다.
 
-## Bu Komut Ne Yapar
+## 이 커맨드가 하는 것
 
-1. **Go Değişikliklerini Tanımla**: `git diff` ile değiştirilmiş `.go` dosyalarını bul
-2. **Static Analiz Çalıştır**: `go vet`, `staticcheck` ve `golangci-lint` yürüt
-3. **Güvenlik Taraması**: SQL injection, command injection, race condition'ları kontrol et
-4. **Eşzamanlılık İncelemesi**: Goroutine güvenliğini, channel kullanımını, mutex desenlerini analiz et
-5. **İdiomatic Go Kontrolü**: Kodun Go kurallarına ve en iyi uygulamalara uyduğunu doğrula
-6. **Rapor Oluştur**: Sorunları önem derecesine göre kategorize et
+1. **Go 변경사항 식별**: `git diff`로 수정된 `.go` 파일 찾기
+2. **정적 분석 실행**: `go vet`, `staticcheck`, `golangci-lint` 실행
+3. **보안 스캔**: SQL 인젝션, 커맨드 인젝션, 레이스 컨디션 검사
+4. **동시성 리뷰**: 고루틴 안전성, 채널 사용, 뮤텍스 패턴 분석
+5. **관용적 Go 검사**: Go 컨벤션과 모범 사례 준수 여부 확인
+6. **보고서 생성**: 심각도별 이슈 분류
 
-## Ne Zaman Kullanılır
+## 사용 시점
 
-`/go-review` komutunu şu durumlarda kullanın:
-- Go kodu yazdıktan veya değiştirdikten sonra
-- Go değişikliklerini commit etmeden önce
-- Go kodu içeren pull request'leri incelerken
-- Yeni bir Go kod tabanına adapte olurken
-- İdiomatic Go desenlerini öğrenirken
+`/go-review`를 사용해야 할 때:
+- Go 코드를 작성하거나 수정한 후
+- Go 변경사항을 커밋하기 전
+- Go 코드가 포함된 PR 리뷰 시
+- 새 Go 코드베이스에 온보딩할 때
+- 관용적 Go 패턴 학습 시
 
-## İnceleme Kategorileri
+## 리뷰 카테고리
 
-### KRİTİK (Düzeltilmeli)
-- SQL/Command injection açıklıkları
-- Senkronizasyon olmadan race condition'lar
-- Goroutine sızıntıları
-- Hardcode edilmiş kimlik bilgileri
-- Güvenli olmayan pointer kullanımı
-- Kritik yollarda göz ardı edilen hatalar
+### CRITICAL (반드시 수정)
+- SQL/커맨드 인젝션 취약점
+- 동기화 없는 레이스 컨디션
+- 고루틴 누수
+- 하드코딩된 인증 정보
+- unsafe 포인터 사용
+- 핵심 경로에서 에러 무시
 
-### YÜKSEK (Düzeltilmeli)
-- Bağlamlı hata sarmalama eksikliği
-- Hata dönüşleri yerine panic
-- Context yayılmıyor
-- Deadlock'a neden olan buffersız channel'lar
-- Interface yerine getirilmeme hataları
-- Eksik mutex koruması
+### HIGH (수정 권장)
+- 컨텍스트 없는 에러 래핑 누락
+- 에러 반환 대신 panic 사용
+- 컨텍스트 전파 누락
+- 데드락을 유발하는 버퍼 없는 채널
+- 인터페이스 미충족 에러
+- 뮤텍스 보호 누락
 
-### ORTA (Düşünün)
-- İdiomatic olmayan kod desenleri
-- Export edilen elementlerde eksik godoc yorumları
-- Verimsiz string birleştirme
-- Preallocate edilmemiş slice
-- Table-driven testler kullanılmamış
+### MEDIUM (고려)
+- 비관용적 코드 패턴
+- 공개 항목에 godoc 주석 누락
+- 비효율적인 문자열 연결
+- 슬라이스 사전 할당 누락
+- 테이블 기반 테스트 미사용
 
-## Çalıştırılan Otomatik Kontroller
+## 실행되는 자동 검사
 
 ```bash
-# Static analiz
+# 정적 분석
 go vet ./...
 
-# Gelişmiş kontroller (kuruluysa)
+# 고급 검사 (설치된 경우)
 staticcheck ./...
 golangci-lint run
 
-# Race tespiti
+# 레이스 감지
 go build -race ./...
 
-# Güvenlik açıklıkları
+# 보안 취약점
 govulncheck ./...
 ```
 
-## Örnek Kullanım
+## 사용 예시
 
-```text
-Kullanıcı: /go-review
+````text
+User: /go-review
 
 Agent:
-# Go Kod İnceleme Raporu
+# Go 코드 리뷰 보고서
 
-## İncelenen Dosyalar
-- internal/handler/user.go (değiştirildi)
-- internal/service/auth.go (değiştirildi)
+## 리뷰된 파일
+- internal/handler/user.go (수정됨)
+- internal/service/auth.go (수정됨)
 
-## Static Analiz Sonuçları
-✓ go vet: Sorun yok
-✓ staticcheck: Sorun yok
+## 정적 분석 결과
+✓ go vet: 이슈 없음
+✓ staticcheck: 이슈 없음
 
-## Bulunan Sorunlar
+## 발견된 이슈
 
-[KRİTİK] Race Condition
-Dosya: internal/service/auth.go:45
-Sorun: Paylaşılan map senkronizasyon olmadan erişiliyor
+[CRITICAL] 레이스 컨디션
+파일: internal/service/auth.go:45
+이슈: 동기화 없이 공유 맵에 접근
 ```go
-var cache = map[string]*Session{}  // Eşzamanlı erişim!
+var cache = map[string]*Session{}  // 동시 접근!
 
 func GetSession(id string) *Session {
-    return cache[id]  // Race condition
+    return cache[id]  // 레이스 컨디션
 }
 ```
-Düzeltme: sync.RWMutex veya sync.Map kullan
+수정: sync.RWMutex 또는 sync.Map 사용
 ```go
 var (
     cache   = map[string]*Session{}
@@ -108,41 +108,41 @@ func GetSession(id string) *Session {
 }
 ```
 
-[YÜKSEK] Eksik Hata Bağlamı
-Dosya: internal/handler/user.go:28
-Sorun: Hata bağlam olmadan döndürülüyor
+[HIGH] 에러 컨텍스트 누락
+파일: internal/handler/user.go:28
+이슈: 컨텍스트 없이 에러 반환
 ```go
-return err  // Bağlam yok
+return err  // 컨텍스트 없음
 ```
-Düzeltme: Bağlamla sarmala
+수정: 컨텍스트와 함께 래핑
 ```go
 return fmt.Errorf("get user %s: %w", userID, err)
 ```
 
-## Özet
-- KRİTİK: 1
-- YÜKSEK: 1
-- ORTA: 0
+## 요약
+- CRITICAL: 1
+- HIGH: 1
+- MEDIUM: 0
 
-Öneri: FAIL: KRİTİK sorun düzeltilene kadar merge'i engelle
-```
+권장: FAIL: CRITICAL 이슈가 수정될 때까지 merge 차단
+````
 
-## Onay Kriterleri
+## 승인 기준
 
-| Durum | Koşul |
-|--------|-----------|
-| PASS: Onayla | KRİTİK veya YÜKSEK sorun yok |
-| WARNING: Uyarı | Sadece ORTA sorunlar (dikkatle merge et) |
-| FAIL: Engelle | KRİTİK veya YÜKSEK sorun bulundu |
+| 상태 | 조건 |
+|------|------|
+| PASS: 승인 | CRITICAL 또는 HIGH 이슈 없음 |
+| WARNING: 경고 | MEDIUM 이슈만 있음 (주의하여 merge) |
+| FAIL: 차단 | CRITICAL 또는 HIGH 이슈 발견 |
 
-## Diğer Komutlarla Entegrasyon
+## 다른 커맨드와의 연동
 
-- Testlerin geçtiğinden emin olmak için önce `/go-test` kullanın
-- Build hataları oluşursa `/go-build` kullanın
-- Commit etmeden önce `/go-review` kullanın
-- Go'ya özel olmayan endişeler için `/code-review` kullanın
+- `/go-test`를 먼저 사용하여 테스트 통과 확인
+- `/go-build`를 사용하여 build 에러 발생 시 수정
+- `/go-review`를 커밋 전에 사용
+- `/code-review`를 사용하여 Go 외 일반적인 관심사항 리뷰
 
-## İlgili
+## 관련 항목
 
-- Agent: `agents/go-reviewer.md`
-- Skills: `skills/golang-patterns/`, `skills/golang-testing/`
+- 에이전트: `agents/go-reviewer.md`
+- 스킬: `skills/golang-patterns/`, `skills/golang-testing/`

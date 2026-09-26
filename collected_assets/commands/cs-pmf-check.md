@@ -1,9 +1,15 @@
 ---
-name: "cs-pmf-check"
-description: "/cs:pmf-check — Are you before or after product/market fit? A focused Andreessen-mode interrogation that scores the felt signals + the Sean Ellis 40% gate and issues BEFORE-PMF / APPROACHING-PMF / AFTER-PMF with explicit confidence and a single next move."
+title: "/cs-pmf-check — Slash Command for AI Coding Agents"
+description: "/cs:pmf-check — Are you before or after product/market fit? A focused Andreessen-mode interrogation that scores the felt signals + the Sean Ellis 40%. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:pmf-check — Product/Market Fit Interrogation
+# /cs-pmf-check
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/productivity/andreessen/commands/cs-pmf-check.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs:pmf-check`
 
@@ -47,8 +53,8 @@ python ../skills/andreessen/scripts/pmf_signal_scorer.py \
 
 ## Related
 
-- Agent: [`cs-andreessen`](../agents/cs-andreessen.md)
-- Skill: [`andreessen`](../skills/andreessen/SKILL.md)
+- Agent: [`cs-andreessen`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/agents/cs-andreessen.md)
+- Skill: [`andreessen`](https://github.com/alirezarezvani/claude-skills/tree/main/productivity/andreessen/skills/andreessen/SKILL.md)
 - Parent command: [`/cs:andreessen`](./cs-andreessen.md)
 
 ---

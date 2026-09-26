@@ -1,27 +1,27 @@
 ---
 name: x-api
-description: X/Twitter API integration for posting tweets, threads, reading timelines, search, and analytics. Covers OAuth auth patterns, rate limits, and platform-native content posting. Use when the user wants to interact with X programmatically.
-license: MIT
+description: ツイートの投稿、スレッド、タイムラインの読み取り、検索、分析のためのX/Twitter API統合。OAuth認証パターン、レートリミット、プラットフォームネイティブなコンテンツ投稿をカバーする。ユーザーがプログラムでXと対話したい場合に使用する。
+origin: ECC
 ---
 
 # X API
 
-Programmatic interaction with X (Twitter) for posting, reading, searching, and analytics.
+投稿、読み取り、検索、分析のためにX（Twitter）とプログラムで対話する。
 
-## When to Activate
+## 有効化する場面
 
-- User wants to post tweets or threads programmatically
-- Reading timeline, mentions, or user data from X
-- Searching X for content, trends, or conversations
-- Building X integrations or bots
-- Analytics and engagement tracking
-- User says "post to X", "tweet", "X API", or "Twitter API"
+* ユーザーがプログラムでツイートやスレッドを投稿したい
+* Xのタイムライン、メンション、またはユーザーデータを読み取る
+* X上でコンテンツ、トレンド、または会話を検索する
+* X統合またはボットを構築する
+* 分析とエンゲージメント追跡
+* ユーザーが「Xに投稿する」「ツイートする」「X API」または「Twitter API」と言及している
 
-## Authentication
+## 認証
 
-### OAuth 2.0 Bearer Token (App-Only)
+### OAuth 2.0 Bearerトークン（アプリのみ）
 
-Best for: read-heavy operations, search, public data.
+最適な用途：読み取り集中の操作、検索、公開データ。
 
 ```bash
 # Environment setup
@@ -44,35 +44,33 @@ resp = requests.get(
 tweets = resp.json()
 ```
 
-### OAuth 1.0a (User Context)
+### OAuth 1.0a（ユーザーコンテキスト）
 
-Required for: posting tweets, managing account, DMs, and any write flow.
+以下に必要：ツイートの投稿、アカウント管理、DM。
 
 ```bash
 # Environment setup — source before use
-export X_CONSUMER_KEY="your-consumer-key"
-export X_CONSUMER_SECRET="your-consumer-secret"
+export X_API_KEY="your-api-key"
+export X_API_SECRET="your-api-secret"
 export X_ACCESS_TOKEN="your-access-token"
-export X_ACCESS_TOKEN_SECRET="your-access-token-secret"
+export X_ACCESS_SECRET="your-access-secret"
 ```
-
-Legacy aliases such as `X_API_KEY`, `X_API_SECRET`, and `X_ACCESS_SECRET` may exist in older setups. Prefer the `X_CONSUMER_*` and `X_ACCESS_TOKEN_SECRET` names when documenting or wiring new flows.
 
 ```python
 import os
 from requests_oauthlib import OAuth1Session
 
 oauth = OAuth1Session(
-    os.environ["X_CONSUMER_KEY"],
-    client_secret=os.environ["X_CONSUMER_SECRET"],
+    os.environ["X_API_KEY"],
+    client_secret=os.environ["X_API_SECRET"],
     resource_owner_key=os.environ["X_ACCESS_TOKEN"],
-    resource_owner_secret=os.environ["X_ACCESS_TOKEN_SECRET"],
+    resource_owner_secret=os.environ["X_ACCESS_SECRET"],
 )
 ```
 
-## Core Operations
+## コア操作
 
-### Post a Tweet
+### ツイートを1件投稿する
 
 ```python
 resp = oauth.post(
@@ -83,7 +81,7 @@ resp.raise_for_status()
 tweet_id = resp.json()["data"]["id"]
 ```
 
-### Post a Thread
+### スレッドを投稿する
 
 ```python
 def post_thread(oauth, tweets: list[str]) -> list[str]:
@@ -100,7 +98,7 @@ def post_thread(oauth, tweets: list[str]) -> list[str]:
     return ids
 ```
 
-### Read User Timeline
+### ユーザーのタイムラインを読み取る
 
 ```python
 resp = requests.get(
@@ -113,7 +111,7 @@ resp = requests.get(
 )
 ```
 
-### Search Tweets
+### ツイートを検索する
 
 ```python
 resp = requests.get(
@@ -127,22 +125,7 @@ resp = requests.get(
 )
 ```
 
-### Pull Recent Original Posts for Voice Modeling
-
-```python
-resp = requests.get(
-    "https://api.x.com/2/tweets/search/recent",
-    headers=headers,
-    params={
-        "query": "from:affaanmustafa -is:retweet -is:reply",
-        "max_results": 25,
-        "tweet.fields": "created_at,public_metrics",
-    }
-)
-voice_samples = resp.json()
-```
-
-### Get User by Username
+### ユーザー名でユーザーを取得する
 
 ```python
 resp = requests.get(
@@ -152,7 +135,7 @@ resp = requests.get(
 )
 ```
 
-### Upload Media and Post
+### メディアをアップロードして投稿する
 
 ```python
 # Media upload uses v1.1 endpoint
@@ -171,12 +154,13 @@ resp = oauth.post(
 )
 ```
 
-## Rate Limits
+## レートリミット
 
-X API rate limits vary by endpoint, auth method, and account tier, and they change over time. Always:
-- Check the current X developer docs before hardcoding assumptions
-- Read `x-rate-limit-remaining` and `x-rate-limit-reset` headers at runtime
-- Back off automatically instead of relying on static tables in code
+X APIのレートリミットはエンドポイント、認証方法、アカウントティアによって異なり、時間とともに変化する。常に：
+
+* ハードコードされた仮定を立てる前に現在のX開発者ドキュメントを確認する
+* 実行時に `x-rate-limit-remaining` と `x-rate-limit-reset` ヘッダーを読み取る
+* コード内の静的テーブルに頼らず、自動的にバックオフする
 
 ```python
 import time
@@ -188,7 +172,7 @@ if remaining < 5:
     print(f"Rate limit approaching. Resets in {wait}s")
 ```
 
-## Error Handling
+## エラーハンドリング
 
 ```python
 resp = oauth.post("https://api.x.com/2/tweets", json={"text": content})
@@ -203,28 +187,24 @@ else:
     raise Exception(f"X API error {resp.status_code}: {resp.text}")
 ```
 
-## Security
+## セキュリティ
 
-- **Never hardcode tokens.** Use environment variables or `.env` files.
-- **Never commit `.env` files.** Add to `.gitignore`.
-- **Rotate tokens** if exposed. Regenerate at developer.x.com.
-- **Use read-only tokens** when write access is not needed.
-- **Store OAuth secrets securely** — not in source code or logs.
+* **トークンをハードコードしない。** 環境変数または `.env` ファイルを使用する。
+* **`.env` ファイルをコミットしない。** `.gitignore` に追加する。
+* **トークンが漏洩した場合はローテーションする。** developer.x.comで再生成する。
+* **書き込み権限が不要な場合は読み取り専用トークンを使用する。**
+* **OAuthシークレットを安全に保管する** — ソースコードやログに保存しない。
 
-## Integration with Content Engine
+## コンテンツエンジンとの統合
 
-Use `brand-voice` plus `content-engine` to generate platform-native content, then post via X API:
-1. Pull recent original posts when voice matching matters
-2. Build or reuse a `VOICE PROFILE`
-3. Generate content with `content-engine` in X-native format
-4. Validate length and thread structure
-5. Return the draft for approval unless the user explicitly asked to post now
-6. Post via X API only after approval
-7. Track engagement via public_metrics
+`content-engine` スキルを使用してプラットフォームネイティブなコンテンツを生成し、X API経由で投稿する：
 
-## Related Skills
+1. コンテンツエンジンを使用してコンテンツを生成する（Xプラットフォームフォーマット）
+2. 長さを検証する（ツイート1件あたり280文字）
+3. 上記のパターンを使用してX API経由で投稿する
+4. public\_metricsでエンゲージメントを追跡する
 
-- `brand-voice` — Build a reusable voice profile from real X and site/source material
-- `content-engine` — Generate platform-native content for X
-- `crosspost` — Distribute content across X, LinkedIn, and other platforms
-- `connections-optimizer` — Reorganize the X graph before drafting network-driven outreach
+## 関連スキル
+
+* `content-engine` — X向けのプラットフォームネイティブコンテンツを生成する
+* `crosspost` — X、LinkedIn、その他のプラットフォームでコンテンツを配信する

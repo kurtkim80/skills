@@ -1,34 +1,34 @@
 ---
 name: eval-harness
-description: Formal evaluation framework for Claude Code sessions implementing eval-driven development (EDD) principles. Use when a Claude Code workflow needs a formal eval before it is trusted or changed.
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob
-license: MIT
+description: 평가 주도 개발(EDD) 원칙을 구현하는 Claude Code 세션용 공식 평가 프레임워크
+origin: ECC
+tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
-# Eval Harness Skill
+# 평가 하네스 스킬
 
-A formal evaluation framework for Claude Code sessions, implementing eval-driven development (EDD) principles.
+Claude Code 세션을 위한 공식 평가 프레임워크로, 평가 주도 개발(EDD) 원칙을 구현합니다.
 
-## When to Activate
+## 활성화 시점
 
-- Setting up eval-driven development (EDD) for AI-assisted workflows
-- Defining pass/fail criteria for Claude Code task completion
-- Measuring agent reliability with pass@k metrics
-- Creating regression test suites for prompt or agent changes
-- Benchmarking agent performance across model versions
+- AI 지원 워크플로우에 평가 주도 개발(EDD) 설정 시
+- Claude Code 작업 완료에 대한 합격/불합격 기준 정의 시
+- pass@k 메트릭으로 에이전트 신뢰성 측정 시
+- 프롬프트 또는 에이전트 변경에 대한 회귀 테스트 스위트 생성 시
+- 모델 버전 간 에이전트 성능 벤치마킹 시
 
-## Philosophy
+## 철학
 
-Eval-Driven Development treats evals as the "unit tests of AI development":
-- Define expected behavior BEFORE implementation
-- Run evals continuously during development
-- Track regressions with each change
-- Use pass@k metrics for reliability measurement
+평가 주도 개발은 평가를 "AI 개발의 단위 테스트"로 취급합니다:
+- 구현 전에 예상 동작 정의
+- 개발 중 지속적으로 평가 실행
+- 각 변경 시 회귀 추적
+- 신뢰성 측정을 위해 pass@k 메트릭 사용
 
-## Eval Types
+## 평가 유형
 
-### Capability Evals
-Test if Claude can do something it couldn't before:
+### 기능 평가
+Claude가 이전에 할 수 없었던 것을 할 수 있는지 테스트:
 ```markdown
 [CAPABILITY EVAL: feature-name]
 Task: Description of what Claude should accomplish
@@ -39,8 +39,8 @@ Success Criteria:
 Expected Output: Description of expected result
 ```
 
-### Regression Evals
-Ensure changes don't break existing functionality:
+### 회귀 평가
+변경 사항이 기존 기능을 손상시키지 않는지 확인:
 ```markdown
 [REGRESSION EVAL: feature-name]
 Baseline: SHA or checkpoint name
@@ -51,10 +51,10 @@ Tests:
 Result: X/Y passed (previously Y/Y)
 ```
 
-## Grader Types
+## 채점자 유형
 
-### 1. Code-Based Grader
-Deterministic checks using code:
+### 1. 코드 기반 채점자
+코드를 사용한 결정론적 검사:
 ```bash
 # Check if file contains expected pattern
 grep -q "export function handleAuth" src/auth.ts && echo "PASS" || echo "FAIL"
@@ -66,8 +66,8 @@ npm test -- --testPathPattern="auth" && echo "PASS" || echo "FAIL"
 npm run build && echo "PASS" || echo "FAIL"
 ```
 
-### 2. Model-Based Grader
-Use Claude to evaluate open-ended outputs:
+### 2. 모델 기반 채점자
+Claude를 사용하여 개방형 출력 평가:
 ```markdown
 [MODEL GRADER PROMPT]
 Evaluate the following code change:
@@ -80,8 +80,8 @@ Score: 1-5 (1=poor, 5=excellent)
 Reasoning: [explanation]
 ```
 
-### 3. Human Grader
-Flag for manual review:
+### 3. 사람 채점자
+수동 검토 플래그:
 ```markdown
 [HUMAN REVIEW REQUIRED]
 Change: Description of what changed
@@ -89,23 +89,23 @@ Reason: Why human review is needed
 Risk Level: LOW/MEDIUM/HIGH
 ```
 
-## Metrics
+## 메트릭
 
 ### pass@k
-"At least one success in k attempts"
-- pass@1: First attempt success rate
-- pass@3: Success within 3 attempts
-- Typical target: pass@3 > 90%
+"k번 시도 중 최소 한 번 성공"
+- pass@1: 첫 번째 시도 성공률
+- pass@3: 3번 시도 내 성공
+- 일반적인 목표: pass@3 > 90%
 
 ### pass^k
-"All k trials succeed"
-- Higher bar for reliability
-- pass^3: 3 consecutive successes
-- Use for critical paths
+"k번 시행 모두 성공"
+- 신뢰성에 대한 더 높은 기준
+- pass^3: 3회 연속 성공
+- 핵심 경로에 사용
 
-## Eval Workflow
+## 평가 워크플로우
 
-### 1. Define (Before Coding)
+### 1. 정의 (코딩 전)
 ```markdown
 ## EVAL DEFINITION: feature-xyz
 
@@ -124,10 +124,10 @@ Risk Level: LOW/MEDIUM/HIGH
 - pass^3 = 100% for regression evals
 ```
 
-### 2. Implement
-Write code to pass the defined evals.
+### 2. 구현
+정의된 평가를 통과하기 위한 코드 작성.
 
-### 3. Evaluate
+### 3. 평가
 ```bash
 # Run capability evals
 [Run each capability eval, record PASS/FAIL]
@@ -138,7 +138,7 @@ npm test -- --testPathPattern="existing"
 # Generate report
 ```
 
-### 4. Report
+### 4. 보고서
 ```markdown
 EVAL REPORT: feature-xyz
 ========================
@@ -162,53 +162,53 @@ Metrics:
 Status: READY FOR REVIEW
 ```
 
-## Integration Patterns
+## 통합 패턴
 
-### Pre-Implementation
+### 구현 전
 ```
 /eval define feature-name
 ```
-Creates eval definition file at `.claude/evals/feature-name.md`
+`.claude/evals/feature-name.md`에 평가 정의 파일 생성
 
-### During Implementation
+### 구현 중
 ```
 /eval check feature-name
 ```
-Runs current evals and reports status
+현재 평가를 실행하고 상태 보고
 
-### Post-Implementation
+### 구현 후
 ```
 /eval report feature-name
 ```
-Generates full eval report
+전체 평가 보고서 생성
 
-## Eval Storage
+## 평가 저장소
 
-Store evals in project:
+프로젝트에 평가 저장:
 ```
 .claude/
   evals/
-    feature-xyz.md      # Eval definition
-    feature-xyz.log     # Eval run history
-    baseline.json       # Regression baselines
+    feature-xyz.md      # 평가 정의
+    feature-xyz.log     # 평가 실행 이력
+    baseline.json       # 회귀 베이스라인
 ```
 
-## Best Practices
+## 모범 사례
 
-1. **Define evals BEFORE coding** - Forces clear thinking about success criteria
-2. **Run evals frequently** - Catch regressions early
-3. **Track pass@k over time** - Monitor reliability trends
-4. **Use code graders when possible** - Deterministic > probabilistic
-5. **Human review for security** - Never fully automate security checks
-6. **Keep evals fast** - Slow evals don't get run
-7. **Version evals with code** - Evals are first-class artifacts
+1. **코딩 전에 평가 정의** - 성공 기준에 대한 명확한 사고를 강제
+2. **자주 평가 실행** - 회귀를 조기에 포착
+3. **시간에 따른 pass@k 추적** - 신뢰성 추세 모니터링
+4. **가능하면 코드 채점자 사용** - 결정론적 > 확률적
+5. **보안에는 사람 검토** - 보안 검사를 완전히 자동화하지 말 것
+6. **평가를 빠르게 유지** - 느린 평가는 실행되지 않음
+7. **코드와 함께 평가 버전 관리** - 평가는 일급 산출물
 
-## Example: Adding Authentication
+## 예시: 인증 추가
 
 ```markdown
 ## EVAL: add-authentication
 
-### Phase 1: Define (10 min)
+### Phase 1: 정의 (10분)
 Capability Evals:
 - [ ] User can register with email/password
 - [ ] User can login with valid credentials
@@ -221,16 +221,50 @@ Regression Evals:
 - [ ] API responses unchanged
 - [ ] Database schema compatible
 
-### Phase 2: Implement (varies)
+### Phase 2: 구현 (가변)
 [Write code]
 
-### Phase 3: Evaluate
+### Phase 3: 평가
 Run: /eval check add-authentication
 
-### Phase 4: Report
+### Phase 4: 보고서
 EVAL REPORT: add-authentication
 ==============================
 Capability: 5/5 passed (pass@3: 100%)
 Regression: 3/3 passed (pass^3: 100%)
 Status: SHIP IT
 ```
+
+## 제품 평가 (v1.8)
+
+행동 품질을 단위 테스트만으로 포착할 수 없을 때 제품 평가를 사용하세요.
+
+### 채점자 유형
+
+1. 코드 채점자 (결정론적 어서션)
+2. 규칙 채점자 (정규식/스키마 제약 조건)
+3. 모델 채점자 (LLM 심사위원 루브릭)
+4. 사람 채점자 (모호한 출력에 대한 수동 판정)
+
+### pass@k 가이드
+
+- `pass@1`: 직접 신뢰성
+- `pass@3`: 제어된 재시도 하에서의 실용적 신뢰성
+- `pass^3`: 안정성 테스트 (3회 모두 통과해야 함)
+
+권장 임계값:
+- 기능 평가: pass@3 >= 0.90
+- 회귀 평가: 릴리스 핵심 경로에 pass^3 = 1.00
+
+### 평가 안티패턴
+
+- 알려진 평가 예시에 프롬프트 과적합
+- 정상 경로 출력만 측정
+- 합격률을 쫓으면서 비용과 지연 시간 변동 무시
+- 릴리스 게이트에 불안정한 채점자 허용
+
+### 최소 평가 산출물 레이아웃
+
+- `.claude/evals/<feature>.md` 정의
+- `.claude/evals/<feature>.log` 실행 이력
+- `docs/releases/<version>/eval-summary.md` 릴리스 스냅샷

@@ -1,115 +1,113 @@
 ---
-description: Gereksinimleri yeniden ifade et, riskleri değerlendir ve adım adım uygulama planı oluştur. Herhangi bir koda dokunmadan önce kullanıcı ONAYINI BEKLE.
+description: 요구사항을 재확인하고, 위험을 평가하며, 단계별 구현 계획을 작성합니다. 코드를 건드리기 전에 사용자 확인을 기다립니다.
 ---
 
-# Plan Komutu
+# Plan 커맨드
 
-Bu komut, herhangi bir kod yazmadan önce kapsamlı bir uygulama planı oluşturmak için **planner** agent'ını çağırır.
+이 커맨드는 **planner** 에이전트를 호출하여 코드를 작성하기 전에 포괄적인 구현 계획을 만듭니다.
 
-## Bu Komut Ne Yapar
+## 이 커맨드가 하는 일
 
-1. **Gereksinimleri Yeniden İfade Et** - Neyin inşa edilmesi gerektiğini netleştir
-2. **Riskleri Tanımla** - Potansiyel sorunları ve engelleri ortaya çıkar
-3. **Adım Planı Oluştur** - Uygulamayı fazlara ayır
-4. **Onay Bekle** - İlerlemeden önce kullanıcı onayı alınmalıdır
+1. **요구사항 재확인** - 무엇을 만들어야 하는지 명확히 합니다
+2. **위험 식별** - 잠재적 이슈와 차단 요소를 도출합니다
+3. **단계별 계획 작성** - 구현을 단계별로 분해합니다
+4. **확인 대기** - 진행하기 전에 반드시 사용자 승인을 받아야 합니다
 
-## Ne Zaman Kullanılır
+## 사용 시점
 
-`/plan` komutunu şu durumlarda kullanın:
-- Yeni bir özelliğe başlarken
-- Önemli mimari değişiklikler yaparken
-- Karmaşık refactoring üzerinde çalışırken
-- Birden fazla dosya/component etkilenecekken
-- Gereksinimler belirsiz veya muğlak olduğunda
+`/plan`을 사용해야 할 때:
+- 새 기능을 시작할 때
+- 중요한 아키텍처 변경을 할 때
+- 복잡한 리팩토링 작업을 할 때
+- 여러 파일/컴포넌트에 영향을 미칠 때
+- 요구사항이 불명확하거나 모호할 때
 
-## Nasıl Çalışır
+## 작동 방식
 
-Planner agent'ı şunları yapacaktır:
+planner 에이전트가 수행하는 작업:
 
-1. İsteği **analiz edecek** ve gereksinimleri net şekilde yeniden ifade edecek
-2. Belirli, uygulanabilir adımlarla **fazlara ayıracak**
-3. Componentler arası **bağımlılıkları tanımlayacak**
-4. **Riskleri değerlendirecek** ve potansiyel engelleri belirleyecek
-5. **Karmaşıklığı tahmin edecek** (Yüksek/Orta/Düşük)
-6. **Planı sunacak** ve açık onayınızı bekleyecek
+1. 요청을 **분석**하고 요구사항을 명확한 용어로 재확인합니다
+2. 구체적이고 실행 가능한 단계로 **분해**합니다
+3. 컴포넌트 간 **의존성을 식별**합니다
+4. **위험을 평가**하고 잠재적 차단 요소를 파악합니다
+5. **복잡도를 추정**합니다 (High/Medium/Low)
+6. 계획을 **제시**하고 명시적 확인을 **대기**합니다
 
-## Örnek Kullanım
+## 사용 예시
 
 ```
-Kullanıcı: /plan Piyasalar çözüldüğünde gerçek zamanlı bildirimler eklemeye ihtiyacım var
+User: /plan 마켓이 해결될 때 실시간 알림을 추가해야 합니다
 
 Agent (planner):
-# Uygulama Planı: Gerçek Zamanlı Piyasa Çözüm Bildirimleri
+# 구현 계획: 실시간 마켓 해결 알림
 
-## Gereksinim Yeniden İfadesi
-- Kullanıcılar takip ettikleri piyasalar çözüldüğünde bildirim alsın
-- Birden fazla bildirim kanalını destekle (uygulama içi, e-posta, webhook)
-- Bildirimlerin güvenilir bir şekilde iletilmesini sağla
-- Piyasa sonucunu ve kullanıcının pozisyon sonucunu içer
+## 요구사항 재확인
+- 사용자가 주시 중인 마켓이 해결될 때 알림 전송
+- 다중 알림 채널 지원 (인앱, 이메일, webhook)
+- 알림이 안정적으로 전달되도록 보장
+- 마켓 결과와 사용자의 포지션 결과 포함
 
-## Uygulama Fazları
+## 구현 단계
 
-### Faz 1: Database Şeması
-- Kolonlarla bildirimler tablosu ekle: id, user_id, market_id, type, status, created_at
-- Kanal tercihleri için user_notification_preferences tablosu ekle
-- Performans için user_id ve market_id üzerinde indexler oluştur
+### 1단계: 데이터베이스 스키마
+- id, user_id, market_id, type, status, created_at 컬럼을 가진 notifications 테이블 추가
+- 채널 설정을 위한 user_notification_preferences 테이블 추가
+- 성능을 위해 user_id와 market_id에 인덱스 생성
 
-### Faz 2: Bildirim Servisi
-- lib/notifications.ts'de bildirim servisi oluştur
-- BullMQ/Redis kullanarak bildirim kuyruğu uygula
-- Başarısız teslimatlar için yeniden deneme mantığı ekle
-- Bildirim şablonları oluştur
+### 2단계: 알림 서비스
+- lib/notifications.ts에 알림 서비스 생성
+- BullMQ/Redis를 사용한 알림 큐 구현
+- 전송 실패 시 재시도 로직 추가
+- 알림 템플릿 생성
 
-### Faz 3: Entegrasyon Noktaları
-- Piyasa çözüm mantığına bağlan (durum "resolved" olduğunda)
-- Piyasada pozisyonu olan tüm kullanıcıları sorgula
-- Her kullanıcı için bildirimleri kuyruğa ekle
+### 3단계: 연동 포인트
+- 마켓 해결 로직에 연결 (status가 "resolved"로 변경될 때)
+- 해당 마켓에 포지션을 가진 모든 사용자 조회
+- 각 사용자에 대한 알림 큐에 추가
 
-### Faz 4: Frontend Componentleri
-- Header'da NotificationBell componenti oluştur
-- NotificationList modal'ı ekle
-- Supabase subscriptions ile gerçek zamanlı güncellemeler uygula
-- Bildirim tercihleri sayfası ekle
+### 4단계: 프론트엔드 컴포넌트
+- 헤더에 NotificationBell 컴포넌트 생성
+- NotificationList 모달 추가
+- Supabase subscriptions를 통한 실시간 업데이트 구현
+- 알림 설정 페이지 추가
 
-## Bağımlılıklar
-- Redis (kuyruk için)
-- E-posta servisi (SendGrid/Resend)
-- Supabase real-time subscriptions
+## 의존성
+- Redis (큐용)
+- 이메일 서비스 (SendGrid/Resend)
+- Supabase 실시간 subscriptions
 
-## Riskler
-- YÜKSEK: E-posta teslimatı (SPF/DKIM gerekli)
-- ORTA: Piyasa başına 1000+ kullanıcı ile performans
-- ORTA: Piyasalar sık çözülürse bildirim spam'i
-- DÜŞÜK: Real-time subscription yükü
+## 위험
+- HIGH: 이메일 전달률 (SPF/DKIM 필요)
+- MEDIUM: 마켓당 1000명 이상의 사용자 시 성능
+- MEDIUM: 마켓이 자주 해결될 경우 알림 스팸
+- LOW: 실시간 subscription 오버헤드
 
-## Tahmini Karmaşıklık: ORTA
-- Backend: 4-6 saat
-- Frontend: 3-4 saat
-- Test: 2-3 saat
-- Toplam: 9-13 saat
+## 예상 복잡도: MEDIUM
+- 백엔드: 4-6시간
+- 프론트엔드: 3-4시간
+- 테스트: 2-3시간
+- 합계: 9-13시간
 
-**ONAY BEKLENİYOR**: Bu planla ilerleyelim mi? (evet/hayır/değiştir)
+**확인 대기 중**: 이 계획으로 진행할까요? (yes/no/modify)
 ```
 
-## Önemli Notlar
+## 중요 참고 사항
 
-**KRİTİK**: Planner agent, planı "evet" veya "ilerle" veya benzeri olumlu bir yanıtla açıkça onaylayana kadar herhangi bir kod **YAZMAYACAK**.
+**핵심**: planner 에이전트는 "yes"나 "proceed" 같은 긍정적 응답으로 명시적으로 계획을 확인하기 전까지 코드를 **절대 작성하지 않습니다.**
 
-Değişiklik istiyorsanız, şu şekilde yanıt verin:
-- "değiştir: [değişiklikleriniz]"
-- "farklı yaklaşım: [alternatif]"
-- "faz 2'yi atla ve önce faz 3'ü yap"
+변경을 원하면 다음과 같이 응답하세요:
+- "modify: [변경 사항]"
+- "different approach: [대안]"
+- "skip phase 2 and do phase 3 first"
 
-## Diğer Komutlarla Entegrasyon
+## 다른 커맨드와의 연계
 
-Planlamadan sonra:
-- Test odaklı geliştirme ile uygulamak için `/tdd` kullanın
-- Build hataları oluşursa `/build-fix` kullanın
-- Tamamlanan uygulamayı gözden geçirmek için `/code-review` kullanın
+계획 수립 후:
+- `/tdd`를 사용하여 테스트 주도 개발로 구현
+- 빌드 에러 발생 시 `/build-fix` 사용
+- 완성된 구현을 `/code-review`로 리뷰
 
-## İlgili Agent'lar
+## 관련 에이전트
 
-Bu komut, ECC tarafından sağlanan `planner` agent'ını çağırır.
-
-Manuel kurulumlar için, kaynak dosya şurada bulunur:
-`agents/planner.md`
+이 커맨드는 다음 위치의 `planner` 에이전트를 호출합니다:
+`~/.claude/agents/planner.md`

@@ -1,63 +1,135 @@
 ---
 name: agentic-engineering
-description: 評価ファースト実行、分解、コスト対応モデルルーティングを使用してエージェニックエンジニアとして動作します。
-origin: ECC
+description: >
+  Operate as an agentic engineer using eval-first execution, decomposition,
+  and cost-aware model routing. Use when AI agents perform most implementation
+  work and humans enforce quality and risk controls.
+metadata:
+  origin: ECC
 ---
 
-# エージェニックエンジニアリング
+# Agentic Engineering
 
-AI エージェントがほとんどの実装作業を行い、人間が品質とリスクのコントロールを強制するエンジニアリングワークフローにこのスキルを使用します。
+Use this skill for engineering workflows where AI agents perform most implementation work and humans enforce quality and risk controls.
 
-## 動作原則
+## Operating Principles
 
-1. 実行前に完了基準を定義する。
-2. 作業をエージェントサイズの単位に分解する。
-3. タスクの複雑さによってモデルティアをルーティングする。
-4. 評価とリグレッションチェックで測定する。
+1. Define completion criteria before execution.
+2. Decompose work into agent-sized units.
+3. Route model tiers by task complexity.
+4. Measure with evals and regression checks.
 
-## 評価ファーストループ
+## Eval-First Loop
 
-1. 能力評価とリグレッション評価を定義する。
-2. ベースラインを実行し、障害シグネチャをキャプチャする。
-3. 実装を実行する。
-4. 評価を再実行し、デルタを比較する。
+1. Define capability eval and regression eval.
+2. Run baseline and capture failure signatures.
+3. Execute implementation.
+4. Re-run evals and compare deltas.
 
-## タスク分解
+**Example workflow:**
+```
+1. Write test that captures desired behavior (eval)
+2. Run test → capture baseline failures
+3. Implement feature
+4. Re-run test → verify improvements
+5. Check for regressions in other tests
+```
 
-15 分単位ルールを適用する：
-- 各単位は独立して検証可能であるべき
-- 各単位は単一の主要なリスクを持つべき
-- 各単位は明確な完了条件を持つべき
+## Task Decomposition
 
-## モデルルーティング
+Apply the 15-minute unit rule:
+- Each unit should be independently verifiable
+- Each unit should have a single dominant risk
+- Each unit should expose a clear done condition
 
-- Haiku: 分類、ボイラープレート変換、狭い編集
-- Sonnet: 実装とリファクタリング
-- Opus: アーキテクチャ、根本原因分析、マルチファイル不変条件
+**Good decomposition:**
+```
+Task: Add user authentication
+├─ Unit 1: Add password hashing (15 min, security risk)
+├─ Unit 2: Create login endpoint (15 min, API contract risk)
+├─ Unit 3: Add session management (15 min, state risk)
+└─ Unit 4: Protect routes with middleware (15 min, auth logic risk)
+```
 
-## セッション戦略
+**Bad decomposition:**
+```
+Task: Add user authentication (2 hours, multiple risks)
+```
 
-- 密接に結合した単位にはセッションを継続する。
-- 主要なフェーズ移行後は新しいセッションを開始する。
-- アクティブなデバッグ中ではなく、マイルストーン完了後にコンパクト化する。
+## Model Routing
 
-## AI 生成コードのレビューフォーカス
+Choose model tier based on task complexity:
 
-優先する：
-- 不変条件とエッジケース
-- エラー境界
-- セキュリティと認証の前提
-- 隠れた結合とロールアウトリスク
+- **Haiku**: Classification, boilerplate transforms, narrow edits
+  - Example: Rename variable, add type annotation, format code
 
-自動フォーマット/lint がスタイルを既に強制している場合、スタイルのみの不一致にレビューサイクルを無駄にしない。
+- **Sonnet**: Implementation and refactors
+  - Example: Implement feature, refactor module, write tests
 
-## コスト規律
+- **Opus**: Architecture, root-cause analysis, multi-file invariants
+  - Example: Design system, debug complex issue, review architecture
 
-タスクごとに追跡する：
-- モデル
-- トークン推定値
-- リトライ数
-- ウォールクロック時間
-- 成功/失敗
+**Cost discipline:** Escalate model tier only when lower tier fails with a clear reasoning gap.
 
-低いティアが明確な推論のギャップで失敗した場合のみ、モデルティアをエスカレーションする。
+## Session Strategy
+
+- **Continue session** for closely-coupled units
+  - Example: Implementing related functions in same module
+
+- **Start fresh session** after major phase transitions
+  - Example: Moving from implementation to testing
+
+- **Compact after milestone completion**, not during active debugging
+  - Example: After feature complete, before starting next feature
+
+## Review Focus for AI-Generated Code
+
+Prioritize:
+- Invariants and edge cases
+- Error boundaries
+- Security and auth assumptions
+- Hidden coupling and rollout risk
+
+Do not waste review cycles on style-only disagreements when automated format/lint already enforce style.
+
+**Review checklist:**
+- [ ] Edge cases handled (null, empty, boundary values)
+- [ ] Error handling comprehensive
+- [ ] Security assumptions validated
+- [ ] No hidden coupling between modules
+- [ ] Rollout risk assessed (breaking changes, migrations)
+
+## Cost Discipline
+
+Track per task:
+- Model tier used
+- Token estimate
+- Retries needed
+- Wall-clock time
+- Success/failure outcome
+
+**Example tracking:**
+```
+Task: Implement user login
+Model: Sonnet
+Tokens: ~5k input, ~2k output
+Retries: 1 (initial implementation had auth bug)
+Time: 8 minutes
+Outcome: Success
+```
+
+## When to Use This Skill
+
+- Managing AI-driven development workflows
+- Planning agent task decomposition
+- Optimizing model tier selection
+- Implementing eval-first development
+- Reviewing AI-generated code
+- Tracking development costs
+
+## Integration with Other Skills
+
+- **tdd-workflow**: Combine with eval-first loop for test-driven development
+- **verification-loop**: Use for continuous validation during implementation
+- **search-first**: Apply before implementation to find existing solutions
+- **coding-standards**: Reference during code review phase

@@ -1,9 +1,15 @@
 ---
-description: Company SOP + runbook authoring with 5W2H completeness checks. NOT personal PKM (that's llm-wiki). NOT engineering-specific runbooks. Direct invocation of the knowledge-ops skill.
-argument-hint: "<process / system / incident to document>"
+title: "/cs-knowledge-ops — Slash Command for AI Coding Agents"
+description: "Company SOP + runbook authoring with 5W2H completeness checks. NOT personal PKM (that's llm-wiki). NOT engineering-specific runbooks. Direct. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs:knowledge-ops — Company SOPs + runbooks
+# /cs-knowledge-ops
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/business-operations/commands/cs-knowledge-ops.md">Source</a></span>
+</div>
+
 
 Run the `knowledge-ops` skill on this input:
 

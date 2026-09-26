@@ -1,27 +1,36 @@
 ---
 name: iterative-retrieval
-description: サブエージェントのコンテキスト問題を解決するために、コンテキスト取得を段階的に洗練するパターン
+description: 서브에이전트 컨텍스트 문제를 해결하기 위한 점진적 컨텍스트 검색 개선 패턴
+origin: ECC
 ---
 
-# 反復検索パターン
+# 반복적 검색 패턴
 
-マルチエージェントワークフローにおける「コンテキスト問題」を解決します。サブエージェントは作業を開始するまで、どのコンテキストが必要かわかりません。
+서브에이전트가 작업을 시작하기 전까지 필요한 컨텍스트를 알 수 없는 멀티 에이전트 워크플로우의 "컨텍스트 문제"를 해결합니다.
 
-## 問題
+## 활성화 시점
 
-サブエージェントは限定的なコンテキストで起動されます。以下を知りません:
-- どのファイルに関連するコードが含まれているか
-- コードベースにどのようなパターンが存在するか
-- プロジェクトがどのような用語を使用しているか
+- 사전에 예측할 수 없는 코드베이스 컨텍스트가 필요한 서브에이전트를 생성할 때
+- 컨텍스트가 점진적으로 개선되는 멀티 에이전트 워크플로우를 구축할 때
+- 에이전트 작업에서 "컨텍스트 초과" 또는 "컨텍스트 누락" 실패를 겪을 때
+- 코드 탐색을 위한 RAG 유사 검색 파이프라인을 설계할 때
+- 에이전트 오케스트레이션에서 토큰 사용량을 최적화할 때
 
-標準的なアプローチは失敗します:
-- **すべてを送信**: コンテキスト制限を超える
-- **何も送信しない**: エージェントに重要な情報が不足
-- **必要なものを推測**: しばしば間違い
+## 문제
 
-## 解決策: 反復検索
+서브에이전트는 제한된 컨텍스트로 생성됩니다. 다음을 알 수 없습니다:
+- 관련 코드가 포함된 파일
+- 코드베이스에 존재하는 패턴
+- 프로젝트에서 사용하는 용어
 
-コンテキストを段階的に洗練する4フェーズのループ:
+표준 접근법의 실패:
+- **모든 것을 전송**: 컨텍스트 제한 초과
+- **아무것도 전송하지 않음**: 에이전트가 중요한 정보를 갖지 못함
+- **필요한 것을 추측**: 종종 잘못됨
+
+## 해결책: 반복적 검색
+
+컨텍스트를 점진적으로 개선하는 4단계 루프:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -35,29 +44,29 @@ description: サブエージェントのコンテキスト問題を解決する�
 │   │   LOOP   │─────│  REFINE  │            │
 │   └──────────┘      └──────────┘            │
 │                                             │
-│        最大3サイクル、その後続行              │
+│        Max 3 cycles, then proceed           │
 └─────────────────────────────────────────────┘
 ```
 
-### フェーズ1: DISPATCH
+### 1단계: DISPATCH
 
-候補ファイルを収集する初期の広範なクエリ:
+후보 파일을 수집하기 위한 초기 광범위 쿼리:
 
 ```javascript
-// 高レベルの意図から開始
+// Start with high-level intent
 const initialQuery = {
   patterns: ['src/**/*.ts', 'lib/**/*.ts'],
   keywords: ['authentication', 'user', 'session'],
   excludes: ['*.test.ts', '*.spec.ts']
 };
 
-// 検索エージェントにディスパッチ
+// Dispatch to retrieval agent
 const candidates = await retrieveFiles(initialQuery);
 ```
 
-### フェーズ2: EVALUATE
+### 2단계: EVALUATE
 
-取得したコンテンツの関連性を評価:
+검색된 콘텐츠의 관련성 평가:
 
 ```javascript
 function evaluateRelevance(files, task) {
@@ -70,32 +79,32 @@ function evaluateRelevance(files, task) {
 }
 ```
 
-スコアリング基準:
-- **高(0.8-1.0)**: ターゲット機能を直接実装
-- **中(0.5-0.7)**: 関連するパターンや型を含む
-- **低(0.2-0.4)**: 間接的に関連
-- **なし(0-0.2)**: 関連なし、除外
+점수 기준:
+- **높음 (0.8-1.0)**: 대상 기능을 직접 구현
+- **중간 (0.5-0.7)**: 관련 패턴이나 타입을 포함
+- **낮음 (0.2-0.4)**: 간접적으로 관련
+- **없음 (0-0.2)**: 관련 없음, 제외
 
-### フェーズ3: REFINE
+### 3단계: REFINE
 
-評価に基づいて検索基準を更新:
+평가를 기반으로 검색 기준 업데이트:
 
 ```javascript
 function refineQuery(evaluation, previousQuery) {
   return {
-    // 高関連性ファイルで発見された新しいパターンを追加
+    // Add new patterns discovered in high-relevance files
     patterns: [...previousQuery.patterns, ...extractPatterns(evaluation)],
 
-    // コードベースで見つかった用語を追加
+    // Add terminology found in codebase
     keywords: [...previousQuery.keywords, ...extractKeywords(evaluation)],
 
-    // 確認された無関係なパスを除外
+    // Exclude confirmed irrelevant paths
     excludes: [...previousQuery.excludes, ...evaluation
       .filter(e => e.relevance < 0.2)
       .map(e => e.path)
     ],
 
-    // 特定のギャップをターゲット
+    // Target specific gaps
     focusAreas: evaluation
       .flatMap(e => e.missingContext)
       .filter(unique)
@@ -103,9 +112,9 @@ function refineQuery(evaluation, previousQuery) {
 }
 ```
 
-### フェーズ4: LOOP
+### 4단계: LOOP
 
-洗練された基準で繰り返す(最大3サイクル):
+개선된 기준으로 반복 (최대 3회):
 
 ```javascript
 async function iterativeRetrieve(task, maxCycles = 3) {
@@ -116,13 +125,13 @@ async function iterativeRetrieve(task, maxCycles = 3) {
     const candidates = await retrieveFiles(query);
     const evaluation = evaluateRelevance(candidates, task);
 
-    // 十分なコンテキストがあるか確認
+    // Check if we have sufficient context
     const highRelevance = evaluation.filter(e => e.relevance >= 0.7);
     if (highRelevance.length >= 3 && !hasCriticalGaps(evaluation)) {
       return highRelevance;
     }
 
-    // 洗練して続行
+    // Refine and continue
     query = refineQuery(evaluation, query);
     bestContext = mergeContext(bestContext, highRelevance);
   }
@@ -131,72 +140,72 @@ async function iterativeRetrieve(task, maxCycles = 3) {
 }
 ```
 
-## 実践例
+## 실용적인 예시
 
-### 例1: バグ修正コンテキスト
-
-```
-タスク: "認証トークン期限切れバグを修正"
-
-サイクル1:
-  DISPATCH: src/**で"token"、"auth"、"expiry"を検索
-  EVALUATE: auth.ts(0.9)、tokens.ts(0.8)、user.ts(0.3)を発見
-  REFINE: "refresh"、"jwt"キーワードを追加; user.tsを除外
-
-サイクル2:
-  DISPATCH: 洗練された用語で検索
-  EVALUATE: session-manager.ts(0.95)、jwt-utils.ts(0.85)を発見
-  REFINE: 十分なコンテキスト(2つの高関連性ファイル)
-
-結果: auth.ts、tokens.ts、session-manager.ts、jwt-utils.ts
-```
-
-### 例2: 機能実装
+### 예시 1: 버그 수정 컨텍스트
 
 ```
-タスク: "APIエンドポイントにレート制限を追加"
+Task: "Fix the authentication token expiry bug"
 
-サイクル1:
-  DISPATCH: routes/**で"rate"、"limit"、"api"を検索
-  EVALUATE: マッチなし - コードベースは"throttle"用語を使用
-  REFINE: "throttle"、"middleware"キーワードを追加
+Cycle 1:
+  DISPATCH: Search for "token", "auth", "expiry" in src/**
+  EVALUATE: Found auth.ts (0.9), tokens.ts (0.8), user.ts (0.3)
+  REFINE: Add "refresh", "jwt" keywords; exclude user.ts
 
-サイクル2:
-  DISPATCH: 洗練された用語で検索
-  EVALUATE: throttle.ts(0.9)、middleware/index.ts(0.7)を発見
-  REFINE: ルーターパターンが必要
+Cycle 2:
+  DISPATCH: Search refined terms
+  EVALUATE: Found session-manager.ts (0.95), jwt-utils.ts (0.85)
+  REFINE: Sufficient context (2 high-relevance files)
 
-サイクル3:
-  DISPATCH: "router"、"express"パターンを検索
-  EVALUATE: router-setup.ts(0.8)を発見
-  REFINE: 十分なコンテキスト
-
-結果: throttle.ts、middleware/index.ts、router-setup.ts
+Result: auth.ts, tokens.ts, session-manager.ts, jwt-utils.ts
 ```
 
-## エージェントとの統合
+### 예시 2: 기능 구현
 
-エージェントプロンプトで使用:
+```
+Task: "Add rate limiting to API endpoints"
+
+Cycle 1:
+  DISPATCH: Search "rate", "limit", "api" in routes/**
+  EVALUATE: No matches - codebase uses "throttle" terminology
+  REFINE: Add "throttle", "middleware" keywords
+
+Cycle 2:
+  DISPATCH: Search refined terms
+  EVALUATE: Found throttle.ts (0.9), middleware/index.ts (0.7)
+  REFINE: Need router patterns
+
+Cycle 3:
+  DISPATCH: Search "router", "express" patterns
+  EVALUATE: Found router-setup.ts (0.8)
+  REFINE: Sufficient context
+
+Result: throttle.ts, middleware/index.ts, router-setup.ts
+```
+
+## 에이전트와의 통합
+
+에이전트 프롬프트에서 사용:
 
 ```markdown
-このタスクのコンテキストを取得する際:
-1. 広範なキーワード検索から開始
-2. 各ファイルの関連性を評価(0-1スケール)
-3. まだ不足しているコンテキストを特定
-4. 検索基準を洗練して繰り返す(最大3サイクル)
-5. 関連性が0.7以上のファイルを返す
+When retrieving context for this task:
+1. Start with broad keyword search
+2. Evaluate each file's relevance (0-1 scale)
+3. Identify what context is still missing
+4. Refine search criteria and repeat (max 3 cycles)
+5. Return files with relevance >= 0.7
 ```
 
-## ベストプラクティス
+## 모범 사례
 
-1. **広く開始し、段階的に絞る** - 初期クエリで過度に指定しない
-2. **コードベースの用語を学ぶ** - 最初のサイクルでしばしば命名規則が明らかになる
-3. **不足しているものを追跡** - 明示的なギャップ識別が洗練を促進
-4. **「十分に良い」で停止** - 3つの高関連性ファイルは10個の平凡なファイルより優れている
-5. **確信を持って除外** - 低関連性ファイルは関連性を持つようにならない
+1. **광범위하게 시작하여 점진적으로 좁히기** - 초기 쿼리를 과도하게 지정하지 않기
+2. **코드베이스 용어 학습** - 첫 번째 사이클에서 주로 네이밍 컨벤션이 드러남
+3. **누락된 것 추적** - 명시적 격차 식별이 개선을 주도
+4. **"충분히 좋은" 수준에서 중단** - 관련성 높은 파일 3개가 보통 수준의 파일 10개보다 나음
+5. **자신 있게 제외** - 관련성 낮은 파일은 관련성이 높아지지 않음
 
-## 関連項目
+## 관련 항목
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - サブエージェントオーケストレーションセクション
-- `continuous-learning`スキル - 時間とともに改善するパターン用
-- `~/.claude/agents/`内のエージェント定義
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 서브에이전트 오케스트레이션 섹션
+- `continuous-learning` 스킬 - 시간이 지남에 따라 개선되는 패턴
+- `~/.claude/agents/`의 에이전트 정의
