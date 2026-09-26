@@ -1875,11 +1875,10 @@
     "evaluation-methodology": {
       "name": "evaluation-methodology",
       "type": "skill",
-      "description": "PluginEval quality methodology — dimensions, rubrics, statistical methods, and scoring formulas. Use this skill when understanding how plugin quality is measured, when interpreting a low score on a specific dimension, when deciding how to improve a skill's triggering accuracy or orchestration fitness, when calibrating scoring thresholds for your marketplace, or when explaining quality badges to external partners like Neon.",
+      "description": "PluginEval quality methodology, covering dimensions, rubrics, and scoring formulas. Use this skill when understanding how plugin quality is measured, when interpreting a low score on a specific dimension, when deciding how to improve a skill's triggering accuracy or orchestration fitness, when setting score thresholds for your marketplace, or when explaining quality badges to external partners like Neon.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/skills/evaluation-methodology",
-      "description_ko": "PluginEval 품질 방법론 - 차원, 루브릭, 통계 방법 및 채점 공식. 플러그인 품질 측정 방법을 이해할 때, 특정 차원에서 낮은 점수를 해석할 때, 스킬의 트리거링 정확도 또는 오케스트레이션 적합성을 개선하는 방법을 결정할 때, 마켓플레이스에 대한 점수 임계값을 보정할 때, Neon과 같은 외부 파트너에게 품질 배지를 설명할 때 이 스킬을 사용하세요."
+      "path": "collected_assets/skills/evaluation-methodology"
     },
     "block-no-verify-hook": {
       "name": "block-no-verify-hook",
@@ -30721,6 +30720,14 @@
       "path": "collected_assets/skills/unslop-file",
       "description_ko": "모든 코드 블록, URL, 경로, 명령 및 제목을 정확하게 유지하면서 AI-ism을 제거하고 버스트성을 추가하여 자연어 메모리 파일(CLAUDE.md, todos, 기본 설정, 문서)을 인간화합니다."
     },
+    "traderspy-position-check": {
+      "name": "traderspy-position-check",
+      "type": "skill",
+      "description": "Health-check crypto futures positions the user describes, with TraderSpy data: liquidation and stop distance, multi-timeframe read, funding and top-trader side. Reports only; never tells the user to close or add.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-position-check"
+    },
     "threat-modeling-expert": {
       "name": "threat-modeling-expert",
       "type": "skill",
@@ -30882,6 +30889,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/waf-setup",
       "description_ko": "웹 애플리케이션 방화벽을 배포하고 조정합니다. OWASP에 대한 규칙 구성"
+    },
+    "traderspy-market-briefing": {
+      "name": "traderspy-market-briefing",
+      "type": "skill",
+      "description": "Crypto market briefing from live TraderSpy data: majors, funding, open interest, top-trader lean, fresh AI signals and screener movers. Use for \\\"what's happening in crypto\\\" or a recap.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-market-briefing"
     },
     "github-actions-advanced": {
       "name": "github-actions-advanced",
@@ -32079,6 +32094,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/gcp-cloud-sql",
       "description_ko": "Cloud SQL 및 Spanner 데이터베이스를 프로비저닝합니다. 고가용성을 구성합니다."
+    },
+    "traderspy-market-screener": {
+      "name": "traderspy-market-screener",
+      "type": "skill",
+      "description": "Scan the most-traded crypto futures pairs for up to 3 technical conditions in one TraderSpy call, compare coins, and backtest what followed a condition. Use for \\\"which coins are oversold\\\".",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-market-screener"
     },
     "cloudformation": {
       "name": "cloudformation",
@@ -33582,6 +33605,14 @@
       "path": "collected_assets/skills/odoo-migration-helper",
       "description_ko": "버전 간 Odoo 사용자 정의 모듈 마이그레이션을 위한 단계별 가이드(v14→v15→v16→v17). API 변경 사항, 더 이상 사용되지 않는 메서드 및 보기 마이그레이션을 다룹니다."
     },
+    "traderspy-smart-money": {
+      "name": "traderspy-smart-money",
+      "type": "skill",
+      "description": "Track what top crypto futures traders hold on Binance, Hyperliquid, Bybit and OKX with TraderSpy: elite leaderboard, positions, trader profiles and history. Use for \\\"what are whales doing\\\".",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-smart-money"
+    },
     "gemini-omni-flash-api": {
       "name": "gemini-omni-flash-api",
       "type": "skill",
@@ -34526,6 +34557,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/meme-coin-audit",
       "description_ko": "Meme 코인 및 토큰 보안 감사"
+    },
+    "traderspy-trading-signals": {
+      "name": "traderspy-trading-signals",
+      "type": "skill",
+      "description": "Fetch and explain TraderSpy's AI crypto futures signals: entry, take-profit ladder, stop, triggers, status against the live price, and how recent signals resolved. Use for \\\"latest signals\\\".",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-trading-signals"
     },
     "seo-aeo-blog-writer": {
       "name": "seo-aeo-blog-writer",
@@ -36685,6 +36724,14 @@
       "path": "collected_assets/skills/weather-model-run-discovery",
       "description_ko": "전체 페이로드를 다운로드하지 않고도 제공자 미러 전반에 걸쳐 최신의 완전한 수치 날씨 예측 주기를 확인하고 개체를 예측할 수 있습니다."
     },
+    "traderspy-technical-analysis": {
+      "name": "traderspy-technical-analysis",
+      "type": "skill",
+      "description": "Read one crypto futures pair with TraderSpy: 19 indicators on up to 3 timeframes in one call, key levels, funding, open interest and positioning. Use for \\\"analyse BTC\\\" or \\\"is SOL oversold\\\".",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traderspy-technical-analysis"
+    },
     "brevo-automation": {
       "name": "brevo-automation",
       "type": "skill",
@@ -36895,11 +36942,10 @@
     "unified-ai-gateway": {
       "name": "unified-ai-gateway",
       "type": "skill",
-      "description": "Operate and evaluate Unified AI System through nine governed MCP tools, including provider-free prompt enhancement, while preserving fake-provider, authorization, and evidence boundaries.",
+      "description": "Operate and evaluate Unified AI System through fifteen governed MCP tools, including provider-free prompt enhancement, while preserving fake-provider, authorization, and evidence boundaries.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/unified-ai-gateway",
-      "description_ko": "가짜 공급자, 승인 및 증거 경계를 유지하면서 공급자가 필요 없는 프롬프트 개선을 포함한 9가지 관리형 MCP 도구를 통해 통합 AI 시스템을 운영하고 평가합니다."
+      "path": "collected_assets/skills/unified-ai-gateway"
     },
     "vexor-cli": {
       "name": "vexor-cli",
@@ -38618,6 +38664,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agy-auto",
       "description_ko": "--dangerously-skip-permissions 대신 계층화된 정책 제어를 사용하여 Antigravity CLI(agy)를 무인으로 실행하려면 agy-auto PreToolUse 보안 게이트를 구성합니다."
+    },
+    "electron-drive-skill": {
+      "name": "electron-drive-skill",
+      "type": "skill",
+      "description": "Launch the project's Electron app on a scratch profile and drive it: click, type, screenshot, run renderer or main-process code, read logs. Use to verify UI changes end to end.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/electron-drive-skill"
     },
     "sql-sentinel": {
       "name": "sql-sentinel",
@@ -52419,20 +52473,18 @@
     "verify-receipt": {
       "name": "verify-receipt",
       "type": "command",
-      "description": "Verify a single Ed25519-signed receipt file. Returns exit 0 if valid, 1 if tampered, 2 if malformed.",
+      "description": "Verify a single Ed25519-signed receipt file against the signer's public key. Returns exit 0 if valid, 1 if tampered, 2 if malformed or the key is missing.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/commands/verify-receipt.md",
-      "description_ko": "단일 Ed25519 서명 영수증 파일을 확인합니다. 유효한 경우 종료 0, 변조된 경우 1, 잘못된 형식인 경우 2를 반환합니다."
+      "path": "collected_assets/commands/verify-receipt.md"
     },
     "audit-chain": {
       "name": "audit-chain",
       "type": "command",
-      "description": "Walk the receipt chain in ./receipts/ verifying every signature and hash link. Detects insertions, deletions, and tampering across the entire audit trail.",
+      "description": "Verify every receipt in ./receipts/receipts.jsonl against the signer's public key. Detects tampered or malformed receipts across the audit trail.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/commands/audit-chain.md",
-      "description_ko": "./receipts/의 영수증 체인을 살펴보고 모든 서명과 해시 링크를 확인하세요. 전체 감사 추적에서 삽입, 삭제 및 변조를 탐지합니다."
+      "path": "collected_assets/commands/audit-chain.md"
     },
     "doc-generate": {
       "name": "doc-generate",
@@ -52731,20 +52783,18 @@
     "list-pending": {
       "name": "list-pending",
       "type": "command",
-      "description": "List recent denied review actions from the receipt chain. Shows what the agent tried to do that was blocked by the review-governance policy.",
+      "description": "List the review actions that the review-governance policy blocked in this session. protect-mcp 0.7.4 writes no receipt for a denied call, so the list comes from the session, not from ./review-receipts/.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/commands/list-pending.md",
-      "description_ko": "영수증 체인에서 최근 거부된 검토 작업을 나열합니다. 검토 거버넌스 정책에 의해 차단되었지만 에이전트가 시도한 작업을 보여줍니다."
+      "path": "collected_assets/commands/list-pending.md"
     },
     "approve-review": {
       "name": "approve-review",
       "type": "command",
-      "description": "Open a review-action approval window by creating the ./.review-approved flag file. Takes an optional reason string that is embedded in the receipt chain.",
+      "description": "Open a review-action approval window by creating the ./.review-approved flag file. Takes an optional reason string that is recorded in the flag file and an unsigned approval log.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/commands/approve-review.md",
-      "description_ko": "./.review-approved 플래그 파일을 생성하여 검토 작업 승인 창을 엽니다. 영수증 체인에 포함된 선택적 이유 문자열을 사용합니다."
+      "path": "collected_assets/commands/approve-review.md"
     },
     "promote-checkpoint": {
       "name": "promote-checkpoint",
@@ -57378,11 +57428,10 @@
     "receipt-verifier": {
       "name": "receipt-verifier",
       "type": "agent",
-      "description": "Expert in Ed25519 signed receipts, JCS canonicalization, hash chains, and offline verification. Use when you need to verify receipt authenticity, audit a receipt chain, detect tampering, or explain why verification failed.",
+      "description": "Expert in Ed25519 signed receipts, JCS canonicalization, and offline verification. Use when you need to verify receipt authenticity, audit a receipts file, detect tampering, or explain why verification failed.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/agents/receipt-verifier.md",
-      "description_ko": "Ed25519 서명 영수증, JCS 정규화, 해시 체인 및 오프라인 검증 전문가입니다. 영수증 진위 확인, 영수증 체인 감사, 변조 감지 또는 확인 실패 이유 설명이 필요할 때 사용하세요."
+      "path": "collected_assets/agents/receipt-verifier.md"
     },
     "service-mesh-expert": {
       "name": "service-mesh-expert",
