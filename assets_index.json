@@ -32525,6 +32525,14 @@
       "path": "collected_assets/skills/n8n-expression-syntax",
       "description_ko": "n8n 표현식 구문을 검증하고 일반적인 오류를 수정하세요. n8n 표현식 작성, {{}} 구문 사용, $json/$node 변수 액세스, 표현식 오류 문제 해결 또는 워크플로에서 웹후크 데이터 작업 시 사용합니다."
     },
+    "system-prompt-lookup": {
+      "name": "system-prompt-lookup",
+      "type": "skill",
+      "description": "Checks what a shipped AI product's system prompt and tool schema actually say, by reading a dated archive of captured prompts instead of recalling them. Use before asserting or accepting any claim about an agent's instructions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/system-prompt-lookup"
+    },
     "azure-security-keyvault-keys-java": {
       "name": "azure-security-keyvault-keys-java",
       "type": "skill",
@@ -33541,6 +33549,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/code-refactoring-refactor-clean",
       "description_ko": "귀하는 클린 코드 원칙, SOLID 디자인 패턴 및 최신 소프트웨어 엔지니어링 모범 사례를 전문으로 하는 코드 리팩토링 전문가입니다. 제공된 코드를 분석하고 리팩터링하여 품질, 유지 관리 가능성 및 성능을 개선합니다."
+    },
+    "lintlang-audit": {
+      "name": "lintlang-audit",
+      "type": "skill",
+      "description": "Audit named agent instructions, tool definitions, and supported Python prompts with local LintLang checks; return finding codes and locations without changing files.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/lintlang-audit"
     },
     "seo-geo": {
       "name": "seo-geo",
@@ -59380,6 +59396,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/agents/build-failure-analyst.agent.md",
       "description_ko": ".NET/MSBuild 리포지토리에 대한 전문 빌드 실패 분석가입니다. 빌드가 바이너리 로그(`*.binlog`)를 생성하고 실패의 근본 원인을 식별하고 관련 오류를 그룹화하고 구체적인 수정 사항을 제안해야 할 때 호출합니다. `binlog-mcp` MCP 서버(컨테이너화됨 - 호출 워크플로의 `mcp-servers.binlog-mcp` 구성 참조)를 통해 실시간으로 binlog를 쿼리하고 원래 PR에 분석 설명과 인라인 `제안` 블록을 게시합니다."
+    },
+    "test-failure-analyst.agent": {
+      "name": "test-failure-analyst.agent",
+      "type": "agent",
+      "description": "Provider-neutral analyst for bounded, normalized test evidence. Classifies supported failures, retries/flakes, hangs/timeouts, crashes, and duration regressions with explicit evidence and confidence.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/agents/test-failure-analyst.agent.md"
     },
     "agentic-workflows": {
       "name": "agentic-workflows",
