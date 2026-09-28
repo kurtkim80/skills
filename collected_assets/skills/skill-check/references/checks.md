@@ -1,6 +1,6 @@
 # Skill Quality Checks
 
-Sixteen checks, each rated PASS / WARN / FAIL / N/A.
+Eighteen checks, each rated PASS / WARN / FAIL / N/A.
 
 ---
 
@@ -161,8 +161,8 @@ inputs/outputs, and a direct call pattern such as
 `bash skills/<name>/lib/<script>.sh` or
 `python skills/<name>/lib/<script>.py`.
 
-`authoring:skill-check` extracts its own six mechanical checks (1, 11, 13
-shape, 14, 15, 16) plus the score/verdict arithmetic this way:
+`authoring:skill-check` extracts its own eight mechanical checks (1, 11, 13
+shape, 14, 15, 16, 17, 18) plus the score/verdict arithmetic this way:
 `skills/skill-check/lib/skill_check.sh` — usage, the full I/O contract, and
 exit codes are documented in that script's own header. Invoked from Step 2.
 
@@ -310,3 +310,100 @@ so it lives in a manual harness instead:
 describes is not shipped in this repo — see that file's note). Run it when a
 description is shrunk, when a skill is renamed, or when a competing pair's
 boundary wording changes.
+
+---
+
+## Portability Checks (17–18)
+
+Claude Code installs a whole plugin, so every skill below works there today.
+Other harnesses do not: a Hermes Agent GitHub tap or `npx skills add` copies
+**one skill directory**, and Hermes substitutes only `${HERMES_SKILL_DIR}` /
+`${HERMES_SESSION_ID}` — never `CLAUDE_PLUGIN_ROOT` (dEitY719/authoring-skills#32,
+dEitY719/dotfiles#1829). Both checks are therefore **WARN-only** — a
+Claude-Code-only skill must never FAIL for it — and read-only.
+
+Scan set for both: `SKILL.md` plus every text file under `references/`,
+`lib/`, `scripts/`, minus self-test/fixture files (`*selftest*`,
+`*selfcheck*`, `test_*`, `*_test.*`) exactly as Check 15 excludes them.
+
+### Check 17: Bundle Self-containment
+Extract every relative path token starting with `../` (after a `(`, backtick,
+quote, `=` or whitespace — markdown link targets, quoted/backticked paths,
+`source`/`.`/`bash`/`sh` arguments) that **names a file** (`name.ext`;
+a `#anchor` is dropped). Normalise it as a string against the referencing
+file's own directory — symlinks are never followed, so the result is the
+same on every install. A path that climbs above the skill directory is a
+violation. Two more forms are extracted the same way (dEitY719/authoring-skills#34):
+
+- **Skill-dir variable** — `$SKILL_DIR/../…`, `$HERMES_SKILL_DIR/../…`,
+  `$CLAUDE_SKILL_DIR/../…` (bare, braced, or `${X:-…}`). The variable is the
+  skill directory, so the rest is normalised from the skill root. This is an
+  executed path, not an example: it is checked **inside code fences too**.
+- **Skill-root-relative `../` in `references/`** — many reference files write
+  paths relative to the skill root, as `SKILL.md` does. A `../` path there is
+  also a violation when the file-relative target **does not exist** and the
+  skill-root-relative target escapes. The existence test only looks inside
+  the skill directory, so it stays deterministic; an existing file-relative
+  target (`../SKILL.md` from `references/a.md`) is never flagged.
+
+| Result | Criteria |
+|---|---|
+| PASS | no path escapes the skill directory |
+| WARN | one or more do — the note lists `file:line -> path` (first five, then `+N more`) |
+
+Not violations: plain `../` paths inside a markdown code fence (``` / ~~~ —
+illustrative examples), `http(s)://` URLs, and bare directory talk such as
+`../..` or `../../.git` (no file named). A link to a repo-wide doc
+(`../../../docs/…`) is not a runtime dependency but still breaks after a
+single-skill install, so it WARNs the same.
+
+**How to fix** (report's Next Actions):
+- shared script → vendor it into the skill (`lib/vendor/`, the pattern already
+  in use), with CI proving the copy has not drifted from its source;
+- another skill's `references/` → move the needed part into this skill's own
+  `references/`, or refer by name ("see `<plugin>:<skill>`, section X")
+  instead of by path.
+
+### Check 18: Plugin-root Fallback
+Find every dollar-expansion of `CLAUDE_PLUGIN_ROOT` (braced or bare) that
+would execute: inside a code fence, on a non-comment line of a script, or in
+markdown prose only as a command (`` `bash "${CLAUDE_PLUGIN_ROOT}/…"` ``) — a
+sentence that merely names the variable is not a use. A use is **protected**
+when any of these holds:
+
+- it is a default expansion, `${CLAUDE_PLUGIN_ROOT:-…}`;
+- the same code block (fence; a script file is one block) carries a guard,
+  `[ -n "${CLAUDE_PLUGIN_ROOT…` or `[ -z "${CLAUDE_PLUGIN_ROOT…` (braces,
+  quotes and `[[` optional);
+- the same file tells other harnesses what to do — it contains
+  `other harness`, `다른 하네스`, `그 외 하네스`, `elsewhere export`,
+  `export CLAUDE_PLUGIN_ROOT=` or `HERMES_SKILL_DIR`.
+
+| Result | Criteria |
+|---|---|
+| PASS | every use is protected |
+| WARN | one or more unprotected uses — the note lists `file:line` |
+| N/A | no executing use of `CLAUDE_PLUGIN_ROOT` |
+
+Recommended pattern to quote in the report — tier 1 is Hermes' skill-relative
+dir, tier 2 the guarded plugin root, else `[FAIL]` (canonical shape:
+`dEitY719/harness-skills` `references/plugin-root.md`, tier-1 and Hermes rows):
+
+```sh
+_s=""
+if [ -n "${HERMES_SKILL_DIR}" ]; then _s="${HERMES_SKILL_DIR}/lib/verify-html.sh"
+elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then _s="$CLAUDE_PLUGIN_ROOT/skills/<skill>/lib/verify-html.sh"
+fi
+[ -n "$_s" ] && [ -f "$_s" ] || { printf '[FAIL] plugin root unresolved (tried: %s) — export HERMES_SKILL_DIR=<this skill dir> or CLAUDE_PLUGIN_ROOT=<plugin dir>\n' "${_s:-nothing}" >&2; exit 1; }
+```
+
+Spell it exactly `${HERMES_SKILL_DIR}`: Hermes text-substitutes only that
+token into `SKILL.md`, so `$HERMES_SKILL_DIR` or `${HERMES_SKILL_DIR:+…}` is
+never replaced. It is the skill directory itself, so use it skill-relative —
+never `${HERMES_SKILL_DIR}/../..`, which points above a single-skill install
+(Check 17 WARNs on any file reached that way). The tier-1 arm needs the script vendored inside
+the skill (Check 17).
+
+Executable mirror for both: `skills/skill-check/lib/skill_check.sh` Checks
+17–18, self-tested by `skills/skill-check/lib/selftest.sh`. Keep the rules
+identical between that script and this section.

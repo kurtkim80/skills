@@ -576,6 +576,14 @@
       "path": "collected_assets/skills/spec-miner",
       "description_ko": "기존 코드베이스에서 사양을 추출하는 리버스 엔지니어링 전문가입니다. 레거시 또는 문서화되지 않은 시스템, 상속된 프로젝트 또는 문서가 없는 오래된 코드베이스로 작업할 때 사용합니다. 코드 종속성을 매핑하고, 소스에서 API 문서를 생성하고, 문서화되지 않은 비즈니스 논리를 식별하고, 코드가 수행하는 작업을 파악하거나, 구현에서 아키텍처 문서를 생성하기 위해 호출합니다. 트리거 문구: 리버스 엔지니어링, 오래된 코드베이스, 문서 없음, 문서 없음, 작동 방식 파악, 상속된 프로젝트, 레거시 분석, 코드 고고학, 문서화되지 않은 기능."
     },
+    "django-storages-s3": {
+      "name": "django-storages-s3",
+      "type": "skill",
+      "description": "Use when configuring Django to store static and media files on AWS S3 with django-storages. Invoke when working with the STORAGES setting, S3 buckets, presigned URLs, CloudFront, or boto3-backed file storage in settings.py. Configures the Django 4.2+ STORAGES dict, public/private custom backends, presigned GET/POST URLs, IAM policies, and S3 mocking for tests. Trigger terms: django-storages, S3, boto3, S3Boto3Storage, STORAGES, presigned URL, CloudFront, media files, collectstatic, AWS_STORAGE_BUCKET_NAME.",
+      "source_repo": "https://github.com/farmage/opencode-skills.git",
+      "source_name": "farmage/opencode-skills",
+      "path": "collected_assets/skills/django-storages-s3"
+    },
     "dotnet-core-expert": {
       "name": "dotnet-core-expert",
       "type": "skill",
@@ -13570,15 +13578,6 @@
       "path": "collected_assets/skills/template-smart-defaults",
       "description_ko": ">"
     },
-    "minimal-api-file-upload": {
-      "name": "minimal-api-file-upload",
-      "type": "skill",
-      "description": "File upload endpoints in ASP.NET minimal APIs (.NET 8+)",
-      "source_repo": "https://github.com/dotnet/skills.git",
-      "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/minimal-api-file-upload",
-      "description_ko": "ASP.NET 최소 API(.NET 8+)의 파일 업로드 엔드포인트"
-    },
     "convert-blazor-server-to-webapp": {
       "name": "convert-blazor-server-to-webapp",
       "type": "skill",
@@ -13596,15 +13595,6 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/dotnet-webapi",
       "description_ko": ">"
-    },
-    "configuring-opentelemetry-dotnet": {
-      "name": "configuring-opentelemetry-dotnet",
-      "type": "skill",
-      "description": "Configure OpenTelemetry distributed tracing, metrics, and logging in ASP.NET Core using the .NET OpenTelemetry SDK. Use when adding observability, setting up OTLP exporters, creating custom metrics/spans, or troubleshooting distributed trace correlation.",
-      "source_repo": "https://github.com/dotnet/skills.git",
-      "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/configuring-opentelemetry-dotnet",
-      "description_ko": ".NET OpenTelemetry SDK를 사용하여 ASP.NET Core에서 OpenTelemetry 분산 추적, 메트릭 및 로깅을 구성합니다. 관찰 가능성 추가, OTLP 내보내기 설정, 사용자 정의 지표/범위 생성 또는 분산 추적 상관 관계 문제 해결 시 사용합니다."
     },
     "convert-to-cpm": {
       "name": "convert-to-cpm",
@@ -19809,6 +19799,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/asset-inventory",
       "description_ko": "IT 자산 인벤토리 및 구성 관리 데이터베이스를 유지 관리합니다. 길"
+    },
+    "nsfw-ai-spicyapi": {
+      "name": "nsfw-ai-spicyapi",
+      "type": "skill",
+      "description": "Generate adult (18+) images, image-to-video clips and image edits through the SpicyAPI API, with a cost quote before every paid run and adults-only / consent rules.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nsfw-ai-spicyapi"
     },
     "logic-lens": {
       "name": "logic-lens",
@@ -38159,6 +38157,14 @@
       "path": "collected_assets/skills/monte-carlo-monitoring-advisor",
       "description_ko": "데이터 범위를 분석하고 웨어하우스 테이블 및 AI 에이전트에 대한 모니터를 생성합니다. 적용 범위 격차, 사용 사례 분석, 데이터 모니터 생성 및 에이전트 관찰 가능성을 다룹니다."
     },
+    "serply-search-mcp": {
+      "name": "serply-search-mcp",
+      "type": "skill",
+      "description": "Search Google, Bing, Google News and Google Scholar, and read public pages, with the Serply MCP server. Use when the user chooses Serply or its connected tools for current information and source verification.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/serply-search-mcp"
+    },
     "basecamp-automation": {
       "name": "basecamp-automation",
       "type": "skill",
@@ -39481,6 +39487,15 @@
       "path": "collected_assets/skills/migrating-mvc-validation",
       "description_ko": ">"
     },
+    "analyzing-cross-host-route-ownership": {
+      "name": "analyzing-cross-host-route-ownership",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/skills/analyzing-cross-host-route-ownership",
+      "description_ko": ">"
+    },
     "migrating-mvc-bundling": {
       "name": "migrating-mvc-bundling",
       "type": "skill",
@@ -40120,13 +40135,13 @@
       "path": "collected_assets/skills/typescript-dependencies-upgrade",
       "description_ko": "JavaScript 또는 TypeScript 프로젝트의 npm 종속성을 최신 버전으로 업그레이드하고 주요 변경 사항을 해결하세요. 사용자가 typescript 패키지 자체를 업그레이드하는 경우를 제외하고 모든 패키지를 업그레이드하든 사용자 이름이 지정된 특정 패키지를 업그레이드하든 상관없이 모든 JavaScript 또는 TypeScript 프로젝트(tsconfig.json이 없는 JavaScript 전용 프로젝트 포함)에서 npm 패키지를 업그레이드, 업데이트 또는 현대화하라는 메시지가 표시될 때 이를 사용하세요(대신 typescript-compiler-upgrade 사용)."
     },
-    "framework-migration": {
-      "name": "framework-migration",
+    "jsts-framework-migration": {
+      "name": "jsts-framework-migration",
       "type": "skill",
       "description": "Migrate a JavaScript or TypeScript project from one framework to another while preserving behavior, integrations, build workflows, and validation. Covers application-framework migrations (for example Gatsby to Astro, Create React App to Vite) and tooling/test-framework migrations (for example Karma/Jasmine to Vitest). Use for replacing one framework with another; do not use for upgrading packages within the same framework — use typescript-dependencies-upgrade instead.",
       "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
       "source_name": "microsoft/upgrade-agent-plugins",
-      "path": "collected_assets/skills/framework-migration",
+      "path": "collected_assets/skills/jsts-framework-migration",
       "description_ko": "동작, 통합, 빌드 워크플로 및 유효성 검사를 유지하면서 JavaScript 또는 TypeScript 프로젝트를 한 프레임워크에서 다른 프레임워크로 마이그레이션합니다. 애플리케이션 프레임워크 마이그레이션(예: Gatsby에서 Astro로, Create React App to Vite) 및 도구/테스트 프레임워크 마이그레이션(예: Karma/Jasmine에서 Vitest로)을 다룹니다. 한 프레임워크를 다른 프레임워크로 교체하는 데 사용합니다. 동일한 프레임워크 내에서 패키지를 업그레이드하는 데 사용하지 마십시오. 대신 typescript-dependents-upgrade를 사용하십시오."
     },
     "typescript-compiler-upgrade": {
@@ -49831,11 +49846,10 @@
     "brand-discovery": {
       "name": "brand-discovery",
       "type": "skill",
-      "description": ">-",
+      "description": "Run a structured, resumable multi-session brand identity interview across 8 modules (purpose, positioning, audience, personality, voice, narrative, founder tension) using laddering, 5 Whys, and projective techniques, persisting answers to disk and producing a master brandbook (90_SYNTHESIS.md). Use when creating or repositioning a brand, briefing designers or writers, or making implicit founder knowledge explicit.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/brand-discovery",
-      "description_ko": ">-"
+      "path": "collected_assets/skills/brand-discovery"
     },
     "product-capability": {
       "name": "product-capability",
@@ -49856,11 +49870,10 @@
     "competitive-report-structure": {
       "name": "competitive-report-structure",
       "type": "skill",
-      "description": ">-",
+      "description": "Assemble scored competitor profile cards (from benchmark-methodology) into a decision-grade competitive report with landscape map, competitor tiers, benchmarking matrix, white-space analysis, strategic recommendations, and team alignment trigger questions. Use when presenting competitive findings to leadership or a board, writing a competitive landscape report, or as the final step of the competitive analysis pipeline.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/competitive-report-structure",
-      "description_ko": ">-"
+      "path": "collected_assets/skills/competitive-report-structure"
     },
     "fal-ai-media": {
       "name": "fal-ai-media",
@@ -49890,7 +49903,7 @@
     "benchmark-methodology": {
       "name": "benchmark-methodology",
       "type": "skill",
-      "description": "Use after competitive-platform-analysis has produced a tiered competitor set. Scores each competitor across nine weighted dimensions (positioning, voice, visual craft, offer packaging, evidence, enterprise-readiness, thought leadership, pricing, client's strategic tension) with explicit 1 to 5 rubrics and a tension-plot. Precedes competitive-report-structure.",
+      "description": "Score a scoped competitor set into comparable profile cards: nine weighted dimensions (positioning, voice, visual craft, offer packaging, evidence, enterprise-readiness, thought leadership, pricing, client tension) with 1-5 evidence-anchored rubrics and a tension 2x2 plot. Use when benchmarking or scoring competitors, building a competitive comparison matrix, or grading rival positioning before assembling the report; runs after competitive-platform-analysis and before competitive-report-structure.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/benchmark-methodology"
@@ -49967,20 +49980,18 @@
     "competitive-platform-analysis": {
       "name": "competitive-platform-analysis",
       "type": "skill",
-      "description": ">-",
+      "description": "Use when scoping a competitive landscape — identifying, categorising, and score-filtering a competitor set before any benchmarking begins. Decides who counts as a competitor, which tier they belong to, and which sources to mine. First step in the three-skill competitive pipeline; precedes benchmark-methodology.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/competitive-platform-analysis",
-      "description_ko": ">-"
+      "path": "collected_assets/skills/competitive-platform-analysis"
     },
     "loop-design-check": {
       "name": "loop-design-check",
       "type": "skill",
-      "description": "Design a goal-oriented agent loop, and review it for the ways loops go wrong — spinning and burning tokens, Goodhart-gaming the verifier, or running a wrong answer to completion. Two actions: (1) WRITE a loop — gate whether to build it, define a machine-decidable goal, pick the loop type, pick a skeleton; (2) REVIEW a loop — run it past five failure modes plus decidability, boundaries, fallback, judge independence, and keep-judgment-with-the-human red lines. Use when designing an autonomous agent loop, or when you already have one and worry it will spin, cheat, or run a wrong answer to the end. Complements the mechanism-layer loop skills (autonomous-loops, continuous-agent-loop) by covering the judgment layer they don't. 中文触发：写 loop、设计 loop、做一个 loop、检查 loop 对不对、loop 体检、loop 会不会跑飞、可判定目标、五个崩法、plan build judge。English triggers: design an agent loop, write a loop, check a loop, loop review, prevent a runaway loop, goal-oriented loop, decidable goal, plan/build/judge.",
+      "description": "Design a goal-oriented agent loop or review one for failure modes: spinning, Goodhart-gaming the verifier, or running a wrong answer to completion. Covers machine-decidable goals, loop types, plan/build/judge skeletons, and runaway prevention; mechanism wiring lives in autonomous-loops. Use when designing, writing, or checking an agent loop. 中文触发：写 loop、设计 loop、做一个 loop、检查 loop 对不对、loop 体检、loop 会不会跑飞、可判定目标、五个崩法、plan build judge。",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/loop-design-check",
-      "description_ko": "목표 지향 에이전트 루프를 설계하고 루프가 잘못되는 방식(토큰 회전 및 소각, Goodhart 게임 검증기 또는 완료 시 잘못된 답변 실행)을 검토합니다. 두 가지 작업: (1) 루프 작성 — 루프 구축 여부를 결정하고, 기계가 결정할 수 있는 목표를 정의하고, 루프 유형을 선택하고, 뼈대를 선택합니다. (2) 루프 검토 - 결정 가능성, 경계, 폴백, 판단 독립성 및 인간의 판단 유지 레드 라인과 함께 5가지 실패 모드를 통과하여 실행합니다. 자율 에이전트 루프를 설계할 때 또는 이미 루프가 있고 끝까지 회전하거나 속임수를 쓰거나 잘못된 답변을 실행할 것을 걱정할 때 사용하세요. 그렇지 않은 판단 계층을 포함하여 메커니즘 계층 루프 기술(자율 루프, 연속 에이전트 루프)을 보완합니다. 中文触发：写 loop、设计 loop、做一个 loop、检查 loop 对不对、loop 体检、loop 会不会跑飞、可判determin目标、五个崩법、빌드 판단 계획。영어 트리거: 에이전트 루프 설계, 루프 작성, 루프 확인, 루프 검토, 폭주 루프 방지, 목표 지향 루프, 결정 가능한 목표, 계획/구축/판단."
+      "path": "collected_assets/skills/loop-design-check"
     },
     "kotlin-coroutines-flows": {
       "name": "kotlin-coroutines-flows",
@@ -49994,11 +50005,10 @@
     "frontend-a11y": {
       "name": "frontend-a11y",
       "type": "skill",
-      "description": ">",
+      "description": "Accessibility patterns for React and Next.js — semantic HTML, ARIA attributes, form labeling, keyboard navigation, focus management, and screen reader support. Use when building or reviewing forms, modals, dropdowns, tooltips, or tabs, fixing a11y lint or code-review findings, or wiring up keyboard navigation and focus management.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/frontend-a11y",
-      "description_ko": ">"
+      "path": "collected_assets/skills/frontend-a11y"
     },
     "springboot-verification": {
       "name": "springboot-verification",
@@ -50020,11 +50030,10 @@
     "orch-pipeline": {
       "name": "orch-pipeline",
       "type": "skill",
-      "description": "Shared orchestration engine for the orch-* skill family. Defines the gated Research-Plan-TDD-Review-Commit pipeline, the size classifier, the agent map, and the two human gates that the orch-* operation skills delegate to. Not usually invoked directly. Not usually invoked directly; it applies when an orch-* skill delegates its gated Research-Plan-TDD-Review-Commit pipeline.",
+      "description": "Shared orchestration engine behind the orch-* skill family — the gated Research-Plan-TDD-Review-Commit pipeline, size classifier, agent and command map, and two human gates (plan approval, commit confirmation) that orch-* operation skills delegate to. Use indirectly via orch-add-feature, orch-fix-defect, orch-change-feature, orch-refine-code, or orch-build-mvp; read directly only when adding an orch operation or tuning shared phases.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/orch-pipeline",
-      "description_ko": "orch-* 스킬 계열을 위한 공유 오케스트레이션 엔진입니다. orch-* 작업 기술이 위임하는 게이트형 연구-계획-TDD-검토-커밋 파이프라인, 크기 분류자, 에이전트 맵 및 두 개의 휴먼 게이트를 정의합니다. 일반적으로 직접 호출되지 않습니다. 일반적으로 직접 호출되지 않습니다. orch-* 기술이 게이트된 연구-계획-TDD-검토-커밋 파이프라인을 위임할 때 적용됩니다."
+      "path": "collected_assets/skills/orch-pipeline"
     },
     "springboot-patterns": {
       "name": "springboot-patterns",
@@ -50505,11 +50514,10 @@
     "latency-critical-systems": {
       "name": "latency-critical-systems",
       "type": "skill",
-      "description": "Use for latency-sensitive systems such as realtime dashboards, market data, streaming agents, execution gateways, queues, caches, or HFT-like infrastructure where freshness and p95 latency matter. Use when p95 latency or data freshness matters — realtime dashboards, market data, streaming agents, queues, or caches.",
+      "description": "Optimize and verify latency-sensitive systems — realtime dashboards, market data feeds, streaming agents, execution gateways, queues, and caches — by tracking p50/p95/p99 latency, freshness age, and queue depth, mapping hot paths, and running live readbacks. Use when p95 latency, throughput, or data freshness matters.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/latency-critical-systems",
-      "description_ko": "실시간 대시보드, 시장 데이터, 스트리밍 에이전트, 실행 게이트웨이, 큐, 캐시 또는 최신성과 p95 대기 시간이 중요한 HFT 유사 인프라 등 대기 시간에 민감한 시스템에 사용하세요. 실시간 대시보드, 시장 데이터, 스트리밍 에이전트, 대기열 또는 캐시 등 p95 대기 시간이나 데이터 최신성이 중요한 경우에 사용하세요."
+      "path": "collected_assets/skills/latency-critical-systems"
     },
     "pytorch-patterns": {
       "name": "pytorch-patterns",
@@ -50672,11 +50680,10 @@
     "orch-build-mvp": {
       "name": "orch-build-mvp",
       "type": "skill",
-      "description": "Orchestrate bootstrapping a working MVP from a design or spec document — ingest the doc, plan thin vertical slices, scaffold the first end-to-end slice, then TDD-implement, review, and gated commit. Use to turn an SDD/PRD into a running starting point. Use when a design or spec document must become a running MVP through planned vertical slices.",
+      "description": "Orchestrate bootstrapping a working MVP from a design or spec document — ingest the SDD/PRD, plan thin vertical slices, scaffold the first end-to-end slice, then drive a generator-evaluator build loop with review and gated feat commits. Use when a design or spec document must become a running MVP through planned vertical slices.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/orch-build-mvp",
-      "description_ko": "디자인 또는 사양 문서에서 작동하는 MVP를 부트스트래핑합니다. 문서를 수집하고, 얇은 수직 슬라이스를 계획하고, 첫 번째 엔드투엔드 슬라이스를 스캐폴드한 다음 TDD 구현, 검토 및 게이트 커밋을 수행합니다. SDD/PRD를 실행 시작점으로 전환하는 데 사용됩니다. 디자인 또는 사양 문서가 계획된 수직 조각을 통해 실행 중인 MVP가 되어야 하는 경우에 사용합니다."
+      "path": "collected_assets/skills/orch-build-mvp"
     },
     "prisma-patterns": {
       "name": "prisma-patterns",
@@ -50690,11 +50697,10 @@
     "recursive-decision-ledger": {
       "name": "recursive-decision-ledger",
       "type": "skill",
-      "description": "Use when the user asks for repeated rollouts, marked decision processes, high-dimensional search, stochastic optimization, local-optima exploration, ensemble comparison, or recursive reasoning with a visible evidence trail.",
+      "description": "Run repeated rollouts (\"Prime Gauss\" style recursive prompting) while keeping an append-only decision ledger of trials, marks, coherence checks, and promotion gates, so recursive confidence never auto-approves live trading, deploy, or destructive actions. Use when the user asks for repeated rollouts, marked decision processes, high-dimensional search, stochastic optimization, local-optima exploration, ensemble comparison, or recursive reasoning with a visible evidence trail.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/recursive-decision-ledger",
-      "description_ko": "사용자가 반복적인 롤아웃, 표시된 의사결정 프로세스, 고차원 검색, 확률론적 최적화, 로컬 최적 탐색, 앙상블 비교 또는 가시적인 증거 추적을 통한 재귀적 추론을 요청할 때 사용합니다."
+      "path": "collected_assets/skills/recursive-decision-ledger"
     },
     "orch-add-feature": {
       "name": "orch-add-feature",
@@ -51108,20 +51114,18 @@
     "taste": {
       "name": "taste",
       "type": "skill",
-      "description": "A creative-direction (taste) layer for music videos and short-form edits in the angelcore / cloud-trance / hyperpop visual family. Distills a named-genre aesthetic vocabulary, a mood + color + light system, and a beat-synced editing grammar, then chains ECC's video skills (video-editing, fal-ai-media, remotion-video-creation, motion-*, content-engine) into one production pipeline. Use when the work is not just making a video function but making it feel intentional, when building a music video, a fancam/edit, a moodboard-driven reel, or when choosing a coherent visual direction for AI-generated b-roll.",
+      "description": "Creative-direction layer for music videos and short-form edits in the angelcore / cloud-trance / hyperpop family — a named-genre aesthetic vocabulary, mood + color + light system, beat-synced editing grammar, and a pipeline chaining ECC's video skills from b-roll generation to distribution. Use when a video must feel intentional rather than merely functional — music videos, fancams, moodboard-driven reels, or giving AI-generated b-roll a coherent visual direction.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/taste",
-      "description_ko": "angelcore/cloud-trance/hyperpop 비주얼 계열의 뮤직 비디오 및 짧은 형식 편집을 위한 창의적인 방향(취향) 레이어입니다. 장르별 미적 어휘, 무드 + 색상 + 조명 시스템, 비트 동기화 편집 문법을 추출한 후 ECC의 비디오 기술(비디오 편집, fal-ai-미디어, 원격-비디오 제작, 모션-*, 콘텐츠 엔진)을 하나의 제작 파이프라인으로 연결합니다. 단순히 영상 기능을 만드는 것이 아니라 의도적인 느낌을 주는 작업일 때, 뮤직비디오를 제작할 때, 직캠/편집, 무드보드 기반 릴을 만들 때, AI가 생성한 B롤에 일관된 시각적 방향을 선택할 때 사용하세요."
+      "path": "collected_assets/skills/taste"
     },
     "benchmark-optimization-loop": {
       "name": "benchmark-optimization-loop",
       "type": "skill",
-      "description": "Use when the user asks to make something faster, try many variants, run recursive optimization, benchmark latency/throughput/cost, or choose the best implementation by repeated measured tests.",
+      "description": "Convert 'make it faster' requests into a bounded measured optimization loop — baseline first, generate one-hypothesis variants, benchmark each against a correctness gate, and promote the fastest safe variant with reproducible commands. Use when asked to speed something up, try many variants, run recursive optimization, benchmark latency/throughput/cost, or pick the best implementation by repeated measured tests.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/benchmark-optimization-loop",
-      "description_ko": "사용자가 더 빠른 작업을 요청하거나, 다양한 변형을 시도하거나, 재귀적 최적화를 실행하거나, 대기 시간/처리량/비용을 벤치마킹하거나, 반복 측정 테스트를 통해 최상의 구현을 선택하는 경우에 사용합니다."
+      "path": "collected_assets/skills/benchmark-optimization-loop"
     },
     "kotlin-testing": {
       "name": "kotlin-testing",
@@ -51215,11 +51219,10 @@
     "nasiko-control-plane": {
       "name": "nasiko-control-plane",
       "type": "skill",
-      "description": "Use the experimental Nasiko CLI lifecycle bridge for pinned installation, read-only status, and qualified uninstall with explicit consent and telemetry and secrets boundaries.",
+      "description": "Manage the experimental Nasiko CLI lifecycle through ECC — read-only status checks, consent-gated install of the pinned qualified version with dry-run preview, and ownership-checked uninstall, under explicit telemetry and secrets boundaries. Use when the user asks to install, inspect, or remove the Nasiko CLI or check whether it is present.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/nasiko-control-plane",
-      "description_ko": "고정된 설치, 읽기 전용 상태, 명시적인 동의와 원격 측정 및 비밀 경계를 통한 적격 제거를 위해 실험적인 Nasiko CLI 수명 주기 브리지를 사용하세요."
+      "path": "collected_assets/skills/nasiko-control-plane"
     },
     "react-testing": {
       "name": "react-testing",
@@ -51268,11 +51271,10 @@
     "ecc-recipes": {
       "name": "ecc-recipes",
       "type": "skill",
-      "description": "Map a described workflow to the right ECC command-GROUP with run-order and stop condition, and browse all command-group recipe families. Adds a family-grouping + run-order + when-to-stop layer on top of the flat command catalog. Advisory only. TRIGGER when the user says which commands for X, what command group runs X, show ECC recipes, list ECC pipelines, or how do I run a workflow with ECC. DO NOT TRIGGER when the user wants the task executed directly, wants a single-command deep doc (use ecc-guide), or wants a draft prompt rewritten (use prompt-optimizer).",
+      "description": "Map a described workflow to the right ECC command group with run-order and stop condition, or browse all command-group recipe families read live from the commands directory. Advisory only — never executes. Use when asked which commands run a workflow, the command sequence for a task, or to list ECC pipelines; not for executing the task (route to the command itself), single-command docs (use ecc-guide), or prompt rewrites (use prompt-optimizer).",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/ecc-recipes",
-      "description_ko": "설명된 워크플로를 실행 순서 및 중지 조건을 사용하여 올바른 ECC 명령 그룹에 매핑하고 모든 명령 그룹 레시피 제품군을 찾아보세요. 플랫 명령 카탈로그 위에 제품군 그룹화 + 실행 순서 + 중지 시점 레이어를 추가합니다. 자문만 가능합니다. 사용자가 X에 대한 명령, X를 실행하는 명령 그룹, ECC 레시피 표시, ECC 파이프라인 나열 또는 ECC를 사용하여 워크플로를 실행하는 방법을 말할 때 트리거합니다. 사용자가 작업을 직접 실행하기를 원하거나 단일 명령 심층 문서를 원하거나(ecc-guide 사용) 초안 프롬프트를 다시 작성하기를 원할 때(prompt-optimizer 사용) 트리거하지 마세요."
+      "path": "collected_assets/skills/ecc-recipes"
     },
     "deployment-patterns": {
       "name": "deployment-patterns",
@@ -51466,11 +51468,10 @@
     "growth-log": {
       "name": "growth-log",
       "type": "skill",
-      "description": "Use after a complex task, failure, or when reviewing what was learned. Teaches how to write growth logs that extract reusable patterns — not diary entries.",
+      "description": "Write growth log entries that extract reusable patterns from completed work — root cause, transferable rule, and a recognizable signal — instead of diary-style event narration, with a 4-8 sentence template and merge-duplicates discipline. Use when capturing what was learned after a complex task, debugging session, failure, or rollback, when reviewing progress over a period, or when a delivery gate asks what was learned.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/growth-log",
-      "description_ko": "복잡한 작업, 실패 후 또는 배운 내용을 검토할 때 사용하세요. 일기 항목이 아닌 재사용 가능한 패턴을 추출하는 성장 로그를 작성하는 방법을 가르칩니다."
+      "path": "collected_assets/skills/growth-log"
     },
     "marketing-campaign": {
       "name": "marketing-campaign",
@@ -51760,11 +51761,10 @@
     "team-agent-orchestration": {
       "name": "team-agent-orchestration",
       "type": "skill",
-      "description": "Run team-based orchestration for agent squads using work items, ownership, agent Kanban, merge gates, and control pane handoffs. Use when coordinating an agent squad with work items, ownership, Kanban, and merge gates.",
+      "description": "Run team-based orchestration for agent squads: work items with owners and scope, agent Kanban state, branch isolation, control pane visibility, and merge gates. Use when coordinating multiple agents in parallel across branches or worktrees — multi-agent fan-out, agent Kanban, squad coordination, or merging agent output into one product.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/team-agent-orchestration",
-      "description_ko": "작업 항목, 소유권, 에이전트 Kanban, 병합 게이트 및 제어 창 전달을 사용하여 에이전트 팀에 대한 팀 기반 오케스트레이션을 실행합니다. 작업 항목, 소유권, Kanban 및 병합 게이트로 에이전트 팀을 조정할 때 사용합니다."
+      "path": "collected_assets/skills/team-agent-orchestration"
     },
     "healthcare-phi-compliance": {
       "name": "healthcare-phi-compliance",
@@ -51814,11 +51814,10 @@
     "data-throughput-accelerator": {
       "name": "data-throughput-accelerator",
       "type": "skill",
-      "description": "Use when large data ingestion, backfill, export, ETL, warehouse loading, manifest catch-up, or table synchronization needs to become much faster while preserving data correctness.",
+      "description": "Diagnose and accelerate large data movement — ingestion, backfill, export, ETL, warehouse loading, manifest catch-up, and table synchronization — by isolating the true bottleneck, benchmarking variants, and codifying the fastest path with a hard accounting block proving rows and timestamps cohere. Use when a pipeline or backfill is too slow and must get faster without losing data correctness.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/data-throughput-accelerator",
-      "description_ko": "데이터 정확성을 유지하면서 대규모 데이터 수집, 채우기, 내보내기, ETL, 웨어하우스 로드, 매니페스트 따라잡기 또는 테이블 동기화를 훨씬 더 빠르게 해야 하는 경우에 사용합니다."
+      "path": "collected_assets/skills/data-throughput-accelerator"
     },
     "hexagonal-architecture": {
       "name": "hexagonal-architecture",
@@ -51886,11 +51885,10 @@
     "contract-first": {
       "name": "contract-first",
       "type": "skill",
-      "description": "Use when multiple consumers and providers must evolve an API or event schema without field drift, integration surprises, or one side silently redefining the interface.",
+      "description": "Coordinate frontend/backend or service-to-service work through one authoritative machine-checkable contract (OpenAPI, AsyncAPI, Protocol Buffers, or JSON Schema), with generated consumer types and contract-verified integration. Use when parallel consumer and provider work must evolve an API or event schema without field drift, mock/production shape mismatch, or one side silently redefining the interface.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/contract-first",
-      "description_ko": "여러 소비자와 공급자가 필드 드리프트, 통합 문제 또는 한쪽에서 자동으로 인터페이스를 재정의하지 않고 API 또는 이벤트 스키마를 발전시켜야 하는 경우에 사용합니다."
+      "path": "collected_assets/skills/contract-first"
     },
     "ralphinho-rfc-pipeline": {
       "name": "ralphinho-rfc-pipeline",
@@ -51940,11 +51938,10 @@
     "inherit-legacy-style": {
       "name": "inherit-legacy-style",
       "type": "skill",
-      "description": "Legacy-project style inheritance skill. Use when the user types /inherit-legacy-style, or when onboarding an AI coding agent onto a hand-written legacy project and you need to prevent \"style drift\" (the model imposing its pretrained mainstream idioms onto the project). Language- and framework-agnostic — it aligns meta-architecture only, not syntax. Once run, it becomes a behavioral constraint on all subsequent coding tasks. Do NOT use for pure research or one-off questions unrelated to code-style alignment.",
+      "description": "Prevent AI style drift on legacy projects by scanning the codebase for implicit conventions, resolving conflicts with the operator one at a time, and writing an enforceable .ai-style-rules.md (Golden Files, naming rules, DONTs) plus an optional CLAUDE.md hook. Use when onboarding an AI agent onto a hand-written legacy codebase or extracting a project's unwritten coding rules.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/inherit-legacy-style",
-      "description_ko": "레거시 프로젝트 스타일 상속 스킬. 사용자가 /inherit-legacy-style을 입력하거나 AI 코딩 에이전트를 손으로 작성한 레거시 프로젝트에 온보딩하고 \"스타일 드리프트\"(사전 훈련된 주류 관용구를 프로젝트에 부과하는 모델)를 방지해야 할 때 사용합니다. 언어 및 프레임워크에 구애받지 않으며 구문이 아닌 메타 아키텍처만 정렬합니다. 일단 실행되면 모든 후속 코딩 작업에 대한 동작 제약이 됩니다. 코드 스타일 정렬과 관련 없는 순수 연구나 일회성 질문에는 사용하지 마세요."
+      "path": "collected_assets/skills/inherit-legacy-style"
     },
     "research-ops": {
       "name": "research-ops",
