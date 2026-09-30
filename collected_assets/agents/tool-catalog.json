@@ -3479,7 +3479,13 @@
           "name": "--sort-by",
           "type": "object",
           "required": false,
-          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `id`."
+          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `id` or `available_to_all_workspaces`."
+        },
+        {
+          "name": "--filter",
+          "type": "object",
+          "required": false,
+          "description": "If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`."
         }
       ]
     },
@@ -3524,6 +3530,18 @@
       "auth_required": true,
       "parameters": [
         {
+          "name": "--available-to-all-workspaces",
+          "type": "bool",
+          "required": false,
+          "description": "Allow all workspaces to use this default-workspace Custom Domain."
+        },
+        {
+          "name": "--workspace-id",
+          "type": "int64",
+          "required": false,
+          "description": "Workspace ID (0 for the default workspace)."
+        },
+        {
           "name": "--destination",
           "type": "enum",
           "required": false,
@@ -3560,6 +3578,18 @@
           "type": "int64",
           "required": true,
           "description": "Custom Domain ID."
+        },
+        {
+          "name": "--available-to-all-workspaces",
+          "type": "bool",
+          "required": false,
+          "description": "Allow all workspaces to use this default-workspace Custom Domain."
+        },
+        {
+          "name": "--workspace-id",
+          "type": "int64",
+          "required": false,
+          "description": "Workspace ID (0 for the default workspace)."
         },
         {
           "name": "--destination",
@@ -8089,6 +8119,12 @@
           "description": "Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads."
         },
         {
+          "name": "--use-channel-root",
+          "type": "bool",
+          "required": false,
+          "description": "Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way."
+        },
+        {
           "name": "--from-partner-folder-name",
           "type": "string",
           "required": false,
@@ -8161,6 +8197,12 @@
           "type": "enum",
           "required": false,
           "description": "Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads."
+        },
+        {
+          "name": "--use-channel-root",
+          "type": "bool",
+          "required": false,
+          "description": "Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way."
         },
         {
           "name": "--from-partner-folder-name",
@@ -8273,6 +8315,12 @@
           "description": "Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads."
         },
         {
+          "name": "--use-channel-root",
+          "type": "bool",
+          "required": false,
+          "description": "Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way."
+        },
+        {
           "name": "--from-partner-folder-name",
           "type": "string",
           "required": false,
@@ -8345,6 +8393,12 @@
           "type": "enum",
           "required": false,
           "description": "Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads."
+        },
+        {
+          "name": "--use-channel-root",
+          "type": "bool",
+          "required": false,
+          "description": "Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way."
         },
         {
           "name": "--from-partner-folder-name",
@@ -10324,6 +10378,12 @@
           "description": "Route traffic to outbound on a files-agent"
         },
         {
+          "name": "--custom-domain-id",
+          "type": "int64",
+          "required": false,
+          "description": "Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs."
+        },
+        {
           "name": "--google-cloud-storage-authentication-method",
           "type": "enum",
           "required": false,
@@ -10483,7 +10543,7 @@
           "name": "--server-host-key",
           "type": "string",
           "required": false,
-          "description": "Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts"
+          "description": "Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key."
         },
         {
           "name": "--server-type",
@@ -10850,6 +10910,12 @@
           "description": "Route traffic to outbound on a files-agent"
         },
         {
+          "name": "--custom-domain-id",
+          "type": "int64",
+          "required": false,
+          "description": "Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs."
+        },
+        {
           "name": "--google-cloud-storage-authentication-method",
           "type": "enum",
           "required": false,
@@ -11009,7 +11075,7 @@
           "name": "--server-host-key",
           "type": "string",
           "required": false,
-          "description": "Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts"
+          "description": "Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key."
         },
         {
           "name": "--server-type",
@@ -13098,7 +13164,7 @@
           "name": "--ai-feature-availability",
           "type": "object",
           "required": false,
-          "description": "Availability settings for AI features by user class"
+          "description": "Availability settings for AI features. Each feature requires the site_admins, workspace_admins, folder_admins, and all_users keys. Optional selected_group_members defaults to false; when true, members of at least one group in group_ids get access regardless of the other options. All availability options are additive: any enabled option matching the user grants access. Optional group_ids is an array of integer IDs of active groups on this site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other options. Disabling all AI features overrides these settings."
         },
         {
           "name": "--mcp-dcr-enabled",
@@ -13509,6 +13575,12 @@
           "description": "Is FTP enabled?"
         },
         {
+          "name": "--s3-compatible-endpoint-enabled",
+          "type": "bool",
+          "required": false,
+          "description": "Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access."
+        },
+        {
           "name": "--sftp-enabled",
           "type": "bool",
           "required": false,
@@ -13902,7 +13974,7 @@
           "name": "--uploads-via-email-authentication",
           "type": "bool",
           "required": false,
-          "description": "Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?"
+          "description": "Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?"
         },
         {
           "name": "--bundle-watermark-value",

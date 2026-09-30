@@ -67,7 +67,7 @@ Update Site Settings.
 | `--motd-use-for-sftp` | bool | Show message to users connecting via SFTP |
 | `--left-navigation-visibility` | object | Visibility settings for account navigation |
 | `--disable-all-ai-features` | bool | If true, all AI features are disabled for this site. |
-| `--ai-feature-availability` | object | Availability settings for AI features by user class |
+| `--ai-feature-availability` | object | Availability settings for AI features. Each feature requires the site_admins, workspace_admins, folder_admins, and all_users keys. Optional selected_group_members defaults to false; when true, members of at least one group in group_ids get access regardless of the other options. All availability options are additive: any enabled option matching the user grants access. Optional group_ids is an array of integer IDs of active groups on this site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other options. Disabling all AI features overrides these settings. |
 | `--mcp-dcr-enabled` | bool | Is OAuth DCR (dynamic client registration) for MCP enabled? |
 | `--additional-text-file-types` | []string | Additional extensions that are considered text files |
 | `--bundle-require-note` | bool | Do Bundles require internal notes? |
@@ -136,6 +136,7 @@ Update Site Settings.
 | `--user-requests-notify-admins` | bool | Send email to site admins when a user request is received? |
 | `--dav-enabled` | bool | Is WebDAV enabled? |
 | `--ftp-enabled` | bool | Is FTP enabled? |
+| `--s3-compatible-endpoint-enabled` | bool | Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access. |
 | `--sftp-enabled` | bool | Is SFTP enabled? |
 | `--sftp-finalize-partial-uploads` | bool | Finalize partial SFTP uploads from interrupted connections? Default: true. |
 | `--users-can-create-api-keys` | bool | Allow users to create their own API keys? |
@@ -201,7 +202,7 @@ Update Site Settings.
 | `--ldap-group-exclusion` | string | Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. |
 | `--ldap-group-inclusion` | string | Comma or newline separated list of group names (with optional wildcards) to include when syncing. |
 | `--ldap-base-dn` | string | Base DN for looking up users in LDAP server |
-| `--uploads-via-email-authentication` | bool | Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC? |
+| `--uploads-via-email-authentication` | bool | Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site? |
 | `--bundle-watermark-value` | object | Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value |
 | `--icon16-file` | file | (no description) |
 | `--icon16-delete` | bool | If true, will delete the file stored in icon16 |

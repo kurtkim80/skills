@@ -143,6 +143,7 @@ Create Remote Server.
 | `--files-agent-root` | string | Agent local root path |
 | `--files-agent-version` | string | Files Agent version |
 | `--outbound-agent-id` | int64 | Route traffic to outbound on a files-agent |
+| `--custom-domain-id` | int64 | Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs. |
 | `--google-cloud-storage-authentication-method` | enum | Google Cloud Storage: Authentication method. Can be json, hmac, or oauth. One of: `json`, `hmac`, `oauth`. |
 | `--google-cloud-storage-bucket` | string | Google Cloud Storage: Bucket Name |
 | `--google-cloud-storage-oauth-scope` | string | Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write. |
@@ -169,7 +170,7 @@ Create Remote Server.
 | `--s3-compatible-virtual-hosted-style` | bool | S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs |
 | `--s3-region` | string | S3 region |
 | `--server-certificate` | enum | Remote server certificate. One of: `require_match`, `allow_any`. |
-| `--server-host-key` | string | Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts |
+| `--server-host-key` | string | Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key. |
 | `--server-type` | enum | Remote server type. One of: `ftp`, `sftp`, `s3`, `google_cloud_storage`, `webdav`, `wasabi`, `backblaze_b2`, `one_drive`, `box`, `dropbox`, `google_drive`, `azure`, `sharepoint`, `s3_compatible`, `azure_files`, `files_agent`, `filebase`, `cloudflare`, `linode`, `files_com`. |
 | `--sharepoint-client-id` | string | SharePoint: Microsoft Entra application client ID for app-only authentication. |
 | `--sharepoint-site-url` | string | SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites. |
@@ -242,6 +243,7 @@ Update Remote Server.
 | `--files-agent-root` | string | Agent local root path |
 | `--files-agent-version` | string | Files Agent version |
 | `--outbound-agent-id` | int64 | Route traffic to outbound on a files-agent |
+| `--custom-domain-id` | int64 | Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs. |
 | `--google-cloud-storage-authentication-method` | enum | Google Cloud Storage: Authentication method. Can be json, hmac, or oauth. One of: `json`, `hmac`, `oauth`. |
 | `--google-cloud-storage-bucket` | string | Google Cloud Storage: Bucket Name |
 | `--google-cloud-storage-oauth-scope` | string | Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write. |
@@ -268,7 +270,7 @@ Update Remote Server.
 | `--s3-compatible-virtual-hosted-style` | bool | S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs |
 | `--s3-region` | string | S3 region |
 | `--server-certificate` | enum | Remote server certificate. One of: `require_match`, `allow_any`. |
-| `--server-host-key` | string | Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts |
+| `--server-host-key` | string | Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key. |
 | `--server-type` | enum | Remote server type. One of: `ftp`, `sftp`, `s3`, `google_cloud_storage`, `webdav`, `wasabi`, `backblaze_b2`, `one_drive`, `box`, `dropbox`, `google_drive`, `azure`, `sharepoint`, `s3_compatible`, `azure_files`, `files_agent`, `filebase`, `cloudflare`, `linode`, `files_com`. |
 | `--sharepoint-client-id` | string | SharePoint: Microsoft Entra application client ID for app-only authentication. |
 | `--sharepoint-site-url` | string | SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites. |
