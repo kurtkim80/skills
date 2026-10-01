@@ -12902,6 +12902,14 @@
       "path": "collected_assets/skills/harness-engineering",
       "description_ko": "코딩 에이전트를 위한 저장소 수준 하네스 엔지니어링을 채택합니다. 사용자가 실패를 내구성 있는 지침, 드리프트 검사, 회귀 테스트, 실패 메모리 및 대상 리포지토리에 맞춘 채택 보고서로 전환하여 반복되는 AI 코딩 에이전트 실수를 방지하려는 경우에 사용합니다."
     },
+    "self-managed-context": {
+      "name": "self-managed-context",
+      "type": "skill",
+      "description": "This skill should be used when a model gets read-write control over its own live context window instead of a harness-scheduled compaction policy: the context exposed as an editable file the model rewrites with code tools, model-driven eviction and in-place updates, the harness invariants that keep self-editing safe (pinned prefix, edit gate, edit receipts, budget readouts, rollback on overflow), the prefix-cache cost of mid-context edits, and steering or training the model's own context-editing strategy. Route note content and fixed-threshold summarization to context-compression, cache-stable layout under harness control to context-optimization, file offloading to filesystem-context, and loop governance to self-improvement-loops.",
+      "source_repo": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git",
+      "source_name": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "path": "collected_assets/skills/self-managed-context"
+    },
     "project-development": {
       "name": "project-development",
       "type": "skill",
@@ -13909,6 +13917,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/setup-local-sdk",
       "description_ko": ">"
+    },
+    "msbuild": {
+      "name": "msbuild",
+      "type": "skill",
+      "description": "Use only for MSBuild failure investigation, build-performance analysis, or review of existing build XML/extension contracts. A plan to convert a working legacy/non-SDK project to SDK style or migrate packages.config is a project-system migration, NOT a build-file review: do not activate, even to check scope. Framework/API upgrades are also excluded. Activate for advisory Import/Exists hook and NuGet packed-import questions even without a checkout or failed build; .csproj/.fsproj/.vbproj/.props/.targets conditions; custom-target inputs/outputs; .binlog capture/replay; failing dotnet build/restore/pack/publish or MSBuild-based test builds; slow evaluation, compilation, copying, or no-change builds; and controlled timing comparisons. Exclude SDK installation alone, C# refactoring, runtime profiling, assertions after successful builds, and non-MSBuild builds.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/msbuild"
     },
     "csharp-refactoring": {
       "name": "csharp-refactoring",
@@ -23744,6 +23760,14 @@
       "path": "collected_assets/skills/stitch-design-taste",
       "description_ko": "프리미엄 타이포그래피, 색상, 레이아웃, 모션 의도 및 반제네릭 UI 규칙을 위한 Google Stitch DESIGN.md 시스템을 생성할 때 사용합니다."
     },
+    "deep-research-framework": {
+      "name": "deep-research-framework",
+      "type": "skill",
+      "description": "Framework for deep research reports: define the question and tier sources first, cross-verify, then write conclusion-first reports with explicit uncertainty statements. Use when the user asks for a research report, topic investigation, or competitive analysis.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/deep-research-framework"
+    },
     "hunt-ssrf": {
       "name": "hunt-ssrf",
       "type": "skill",
@@ -24351,6 +24375,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/prototype",
       "description_ko": "상태/비즈니스 논리 질문을 위한 실행 가능한 터미널 앱 또는 하나의 경로에서 토글할 수 있는 근본적으로 다른 여러 UI 변형 등 디자인을 구체화하기 위해 일회용 프로토타입을 구축합니다."
+    },
+    "five-axis-code-review": {
+      "name": "five-axis-code-review",
+      "type": "skill",
+      "description": "Five-axis code review checklist (correctness, security, readability, performance, test coverage) producing actionable comments instead of style nitpicks. Use when the user asks to review code, a diff, or a pull request.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/five-axis-code-review"
     },
     "apify-influencer-discovery": {
       "name": "apify-influencer-discovery",
@@ -24991,6 +25023,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ralph-loop-yylo",
       "description_ko": "다음을 통해 명시적으로 할당된 YYLO Ledger 작업 하나만 실행합니다."
+    },
+    "repo-foundation": {
+      "name": "repo-foundation",
+      "type": "skill",
+      "description": "Implement features, fixes, modules, contract migrations, and resumed work while preserving user edits and authorized public contracts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/repo-foundation"
     },
     "azure-mgmt-weightsandbiases-dotnet": {
       "name": "azure-mgmt-weightsandbiases-dotnet",
@@ -26437,6 +26477,14 @@
       "path": "collected_assets/skills/azure-eventgrid-py",
       "description_ko": "Python용 Azure Event Grid SDK. 이벤트 게시, CloudEvents 처리 및 이벤트 기반 아키텍처에 사용합니다."
     },
+    "meeting-notes": {
+      "name": "meeting-notes",
+      "type": "skill",
+      "description": "Turns raw meeting notes into structured minutes: conclusion first, then decisions / action items / open questions; every action item must have an owner and a deadline. Use when the user pastes meeting transcripts or rough notes and asks for minutes or a summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meeting-notes"
+    },
     "cross-platform-contract-propagation-audit": {
       "name": "cross-platform-contract-propagation-audit",
       "type": "skill",
@@ -26904,6 +26952,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/magic-ui-generator",
       "description_ko": "Magic by 21st.dev를 활용하여 프로덕션에 바로 사용할 수 있는 다양한 UI 구성 요소 변형을 생성, 비교 및 ​​통합합니다."
+    },
+    "idea-to-blueprint": {
+      "name": "idea-to-blueprint",
+      "type": "skill",
+      "description": "Turn a raw product, app, bot or feature idea into one evidence-backed build blueprint (researched stack, epics, Given/When/Then criteria, tests) that coding agents build one epic per session.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/idea-to-blueprint"
     },
     "azure-identity-py": {
       "name": "azure-identity-py",
@@ -28236,6 +28292,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/outreachagent",
       "description_ko": "받은 편지함, 연락처, 템플릿, 속도, 승인, 웹후크 및 배달 지표를 사용하여 AI 에이전트를 위한 회신 인식 콜드 아웃바운드 이메일 워크플로를 운영합니다."
+    },
+    "git-commit-message": {
+      "name": "git-commit-message",
+      "type": "skill",
+      "description": "Generates conventional-commit messages from staged changes: type prefix + English imperative subject (≤50 chars) + optional body explaining why. Use when the user asks to write, generate, or polish a git commit message.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/git-commit-message"
     },
     "docs-guard": {
       "name": "docs-guard",
@@ -30689,6 +30753,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/progressive-estimation",
       "description_ko": "연구 지원 PERT 통계 및 교정 피드백 루프를 통해 AI 지원 및 하이브리드 인간+에이전트 개발 작업을 추정합니다."
+    },
+    "tech-writing-proofread": {
+      "name": "tech-writing-proofread",
+      "type": "skill",
+      "description": "Proofreads English technical writing for typos, grammar, punctuation, terminology consistency, jargon, and structure; returns an itemized Original → Suggestion → Reason list without rewriting the document. Use when asked to proofread or polish a technical doc, README, or blog draft.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/tech-writing-proofread"
     },
     "reverse-engineer": {
       "name": "reverse-engineer",
@@ -33415,6 +33487,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/arm-cortex-expert",
       "description_ko": "ARM Cortex-M 마이크로컨트롤러(Teensy, STM32, nRF52, SAMD)용 펌웨어 및 드라이버 개발을 전문으로 하는 수석 임베디드 소프트웨어 엔지니어입니다."
+    },
+    "repo-native-refactor": {
+      "name": "repo-native-refactor",
+      "type": "skill",
+      "description": "Review diffs without editing, or perform evidence-based cleanup while preserving authorized behavior, public contracts, and domain ownership.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/repo-native-refactor"
     },
     "context-management-context-restore": {
       "name": "context-management-context-restore",
@@ -48892,6 +48972,15 @@
       "path": "collected_assets/skills/product-doc-audit",
       "description_ko": ">-"
     },
+    "env-check": {
+      "name": "env-check",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/env-check",
+      "description_ko": ">-"
+    },
     "skill-eval": {
       "name": "skill-eval",
       "type": "skill",
@@ -49259,6 +49348,15 @@
       "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
       "source_name": "NinjaSln-labs/agent-skills",
       "path": "collected_assets/skills/api-contract-validator",
+      "description_ko": ">-"
+    },
+    "perf-check": {
+      "name": "perf-check",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/perf-check",
       "description_ko": ">-"
     },
     "ddd-discover": {
@@ -60425,6 +60523,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/agents/code-testing-implementer.agent.md",
       "description_ko": ">-"
+    },
+    "msbuild-quality-reviewer.agent": {
+      "name": "msbuild-quality-reviewer.agent",
+      "type": "agent",
+      "description": "Read-only reviewer for changed MSBuild project and infrastructure files. Finds evidence-backed correctness, incremental-build, item/property, target-ordering, NuGet build-extension, maintainability, and credible performance issues.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/agents/msbuild-quality-reviewer.agent.md"
     },
     "build-failure-analyst.agent": {
       "name": "build-failure-analyst.agent",

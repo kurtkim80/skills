@@ -9529,7 +9529,7 @@
           "name": "--sort-by",
           "type": "object",
           "required": false,
-          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`."
+          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`."
         },
         {
           "name": "--filter",
@@ -10543,7 +10543,7 @@
           "name": "--server-host-key",
           "type": "string",
           "required": false,
-          "description": "Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key."
+          "description": "Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin."
         },
         {
           "name": "--server-type",
@@ -11075,7 +11075,7 @@
           "name": "--server-host-key",
           "type": "string",
           "required": false,
-          "description": "Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key."
+          "description": "Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin."
         },
         {
           "name": "--server-type",
@@ -11275,25 +11275,25 @@
           "name": "--earliest-date",
           "type": "datetime",
           "required": true,
-          "description": "Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request."
+          "description": "Restore files or users deleted on or after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request."
         },
         {
           "name": "--prefix",
           "type": "string",
           "required": false,
-          "description": "Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request."
+          "description": "Prefix of the files/folders to restore, or a case-insensitive username prefix for a user restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items of the selected restoration type, specify an empty string (`''`) in the prefix field or omit the field from the request."
         },
         {
           "name": "--restoration-type",
           "type": "enum",
           "required": false,
-          "description": "Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records."
+          "description": "Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records removed as part of deleting those users."
         },
         {
           "name": "--restore-deleted-permissions",
           "type": "bool",
           "required": false,
-          "description": "If true, we will also restore any Permissions that match the same path prefix from the same dates."
+          "description": "If true, restore permissions removed as part of deleting the selected users for a user restore, or permissions matching the selected path prefix and deletion dates for a file restore."
         },
         {
           "name": "--restore-in-place",
@@ -13867,6 +13867,12 @@
           "type": "int64",
           "required": false,
           "description": "SMTP server port"
+        },
+        {
+          "name": "--smtp-ssl",
+          "type": "string",
+          "required": false,
+          "description": "Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address."
         },
         {
           "name": "--ldap-enabled",
