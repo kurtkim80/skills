@@ -5,11 +5,18 @@ description: >-
   users, solution, and success criteria. Use when turning discovery notes into an
   engineering-ready document for a major initiative or feature.
 slug: prd-development
-version: 1.1.0
+version: 1.2.1
 displayName: prd-development
 ---
 
 # PRD Development
+
+## 中文速览（Quick Guide）
+
+- **做什么**：把零散笔记编排成结构化 PRD（问题、用户、方案、成功标准、需求、范围外），跨 2–4 天走完 8 个阶段，交给工程当事实源。
+- **何时用**：启动大功能或产品级项目、跨职能对齐范围、为决策留档、新人上手；小 bug 或已对齐的 trivial feature 不适用。
+- **核心步骤**：①Phase 1 执行摘要 ②Phase 2 带证据的问题陈述 ③Phase 3 目标用户与画像 ④Phase 4 战略背景与「为什么是现在」 ⑤Phase 5 高层方案 ⑥Phase 6 主指标＋护栏指标 ⑦Phase 7 用户故事与验收标准 ⑧Phase 8 范围外与依赖。
+- **国内可达性**：主要输入是本地笔记与 OKR，不依赖在线工具；Phase 4 的竞品评论可取自 G2／Capterra，国内可换成本地竞品或自有的 win/loss 记录。
 
 ## Purpose
 Guide product managers through structured PRD (Product Requirements Document) creation by orchestrating problem framing, user research synthesis, solution definition, and success criteria into a cohesive document. Use this to move from scattered notes and Slack threads to a clear, comprehensive PRD that aligns stakeholders, provides engineering context, and serves as a source of truth—avoiding ambiguity, scope creep, and the "build what's in my head" trap.
@@ -355,8 +362,6 @@ This workflow orchestrates **8 phases** over **2-4 days**, using multiple compon
 - **Format:** List features/requests explicitly excluded
 - **Rationale:** Why not building now?
 
-**Example:**
-
 **Example:** verbatim in [`references/prd-worked-examples.md`](references/prd-worked-examples.md) (§ Phase 8).
 
 **2. Document Dependencies**
@@ -364,16 +369,12 @@ This workflow orchestrates **8 phases** over **2-4 days**, using multiple compon
 - **External dependencies:** Third-party integrations, partnerships
 - **Team dependencies:** Design handoff, data pipeline work
 
-**Example:**
-
-**Example:** verbatim in [`references/prd-worked-examples.md`](references/prd-worked-examples.md) (§ Phase 9).
+**Example:** verbatim in [`references/prd-worked-examples.md`](references/prd-worked-examples.md) (§ Phase 9 — Dependencies & Risks；该参考件把本 Phase 的子项拆成自己的 Phase 9/10 编号).
 
 **3. Document Open Questions**
 - **Unresolved decisions:** Areas requiring discovery or discussion
 
-**Example:**
-
-**Example:** verbatim in [`references/prd-worked-examples.md`](references/prd-worked-examples.md) (§ Phase 10).
+**Example:** verbatim in [`references/prd-worked-examples.md`](references/prd-worked-examples.md) (§ Phase 10 — Open Questions；同上为参考件的独立编号).
 
 ### Outputs from Phase 8
 

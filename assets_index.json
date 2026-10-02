@@ -13929,11 +13929,19 @@
     "csharp-refactoring": {
       "name": "csharp-refactoring",
       "type": "skill",
-      "description": "Performs safe, behavior-preserving refactoring of C#/.NET code, verified with build, tests, and analyzers. USE FOR: rename or move a symbol/type/file; extract a method/type/interface; inline a wrapper/method/local; merge or consolidate near-identical classes or duplicate helpers; split or modernize C# code; generated/partial declarations; public, serialized, friend-assembly, or multi-targeted contracts; and mixed requests where a feature, bug fix, package/framework upgrade, public nullability change, or other behavior/contract change is presented as a refactor and must be separated or declined. DO NOT USE FOR: ordinary feature or bug-fix requests not framed as refactoring; upgrades after reclassification (use dotnet-upgrade); new tests; or formatting-only passes (use dotnet format).",
+      "description": "Safely refactors C#/.NET code without changing behavior. USE FOR any request to refactor, rename, move, extract, inline, merge, consolidate, deduplicate, split, or modernize C# code, including partial/generated declarations, wrappers, public APIs, serialization/reflection/configuration names, friend assemblies, conditional compilation, and multi-targeted projects. Also use when a request calls a feature, bug fix, package/framework upgrade, or public nullability change a refactor and the behavior-changing part must be separated or declined. DO NOT USE FOR ordinary feature or bug fixes not presented as refactoring; standalone upgrades after reclassification (use dotnet-upgrade); adding tests; or formatting-only work.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/csharp-refactoring",
-      "description_ko": "빌드, 테스트 및 분석기를 통해 검증된 C#/.NET 코드의 안전한 동작 보존 리팩토링을 수행합니다. 용도: 기호/유형/파일의 이름을 바꾸거나 이동합니다. 메소드/유형/인터페이스를 추출합니다. 래퍼/메서드/로컬을 인라인합니다. 거의 동일한 클래스 또는 중복 도우미를 병합 또는 통합합니다. C# 코드를 분할하거나 현대화합니다. 생성된/부분 선언; 공개, 연재, 친구 조립 또는 다중 대상 계약; 기능, 버그 수정, 패키지/프레임워크 업그레이드, 공개 null 허용 여부 변경 또는 기타 동작/계약 변경이 리팩터링으로 제시되어 분리되거나 거부되어야 하는 혼합 요청이 있습니다. 사용하지 마십시오: 리팩토링으로 구성되지 않은 일반 기능 또는 버그 수정 요청; 재분류 후 업그레이드(dotnet-upgrade 사용) 새로운 테스트; 또는 서식 전용 패스(dotnet 형식 사용)."
+      "path": "collected_assets/skills/csharp-refactoring"
+    },
+    "winforms-expert": {
+      "name": "winforms-expert",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/winforms-expert",
+      "description_ko": ">-"
     },
     "exp-mock-usage-analysis": {
       "name": "exp-mock-usage-analysis",
@@ -19857,6 +19865,14 @@
       "path": "collected_assets/skills/mathguard",
       "description_ko": "n >= 10^6에 대한 수학이 많은 에스컬레이션 — Bloom, HyperLogLog, Count-Min, MinHash/LSH, FFT, JL 투영, 스윕 라인. 고전적인 O(n log n)이 바닥이고 근사치 또는 수학이 승리할 때 사용합니다."
     },
+    "ai-agent-tool-routing": {
+      "name": "ai-agent-tool-routing",
+      "type": "skill",
+      "description": "Autonomous AI agent tool router register: schema registration, runtime parameter coercion, idempotency keys, and error recovery policies.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-agent-tool-routing"
+    },
     "anti-sleep": {
       "name": "anti-sleep",
       "type": "skill",
@@ -21837,6 +21853,15 @@
       "path": "collected_assets/skills/azure-monitor-ingestion-py",
       "description_ko": "Python용 Azure Monitor 수집 SDK. 로그 수집 API를 통해 Log Analytics 작업 영역으로 사용자 지정 로그를 보내는 데 사용합니다."
     },
+    "cline-pilot": {
+      "name": "cline-pilot",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cline-pilot",
+      "description_ko": ">-"
+    },
     "red-team-tools": {
       "name": "red-team-tools",
       "type": "skill",
@@ -22015,6 +22040,14 @@
       "path": "collected_assets/skills/conductor-revert",
       "description_ko": "논리적 작업 단위(트랙, 단계 또는 작업)별로 Git 인식 실행 취소"
     },
+    "zk-proof-verification-pipeline": {
+      "name": "zk-proof-verification-pipeline",
+      "type": "skill",
+      "description": "Zero-knowledge cryptographic verification pipeline register: proving system, circuit verification keys, public inputs, and gas costs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/zk-proof-verification-pipeline"
+    },
     "credit-cycle-analysis": {
       "name": "credit-cycle-analysis",
       "type": "skill",
@@ -22092,6 +22125,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/user-management",
       "description_ko": "Linux 시스템에서 사용자, 그룹 및 권한을 관리합니다. sudo 구성"
+    },
+    "soroban-contract-audit": {
+      "name": "soroban-contract-audit",
+      "type": "skill",
+      "description": "Soroban smart contract security audit register: authorization checks, panic pathways, integer overflows, and storage footprint verification for Stellar.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soroban-contract-audit"
     },
     "circleci": {
       "name": "circleci",
@@ -22631,6 +22672,14 @@
       "path": "collected_assets/skills/llm-application-dev-langchain-agent",
       "description_ko": "귀하는 LangChain 0.1+ 및 LangGraph를 사용하는 프로덕션급 AI 시스템을 전문으로 하는 전문 LangChain 에이전트 개발자입니다."
     },
+    "soroban-token-minter": {
+      "name": "soroban-token-minter",
+      "type": "skill",
+      "description": "Soroban SEP-41 token contract architecture register: admin control, supply caps, metadata standard, and transfer event emissions on Stellar.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soroban-token-minter"
+    },
     "datadog": {
       "name": "datadog",
       "type": "skill",
@@ -22781,6 +22830,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/conversation-memory",
       "description_ko": "다음을 포함한 LLM 대화를 위한 영구 메모리 시스템"
+    },
+    "aas-discover": {
+      "name": "aas-discover",
+      "type": "skill",
+      "description": "Discover AAS skills for an explicit task and compare their complete instructions without installing them.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/aas-discover"
     },
     "hugging-face-tool-builder": {
       "name": "hugging-face-tool-builder",
@@ -23131,6 +23188,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/scikit-learn",
       "description_ko": "scikit-learn을 사용한 Python의 머신러닝. 분류, 회귀, 클러스터링, 모델 평가 및 ML 파이프라인에 사용합니다."
+    },
+    "web3-rate-limiting-circuit-breaker": {
+      "name": "web3-rate-limiting-circuit-breaker",
+      "type": "skill",
+      "description": "On-chain and relayer rate-limiting circuit breaker register: throughput thresholds, emergency pause triggers, and multi-sig recovery.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/web3-rate-limiting-circuit-breaker"
     },
     "api-documentation-generator": {
       "name": "api-documentation-generator",
@@ -24366,6 +24431,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/swiftui-ui-patterns",
       "description_ko": "탐색, 시트, 비동기 상태 및 재사용 가능한 화면에 검증된 SwiftUI UI 패턴을 적용합니다."
+    },
+    "smart-contract-upgrade-governance": {
+      "name": "smart-contract-upgrade-governance",
+      "type": "skill",
+      "description": "Soroban WASM upgrade governance register: executable bytecode hash, timelocked migration delays, and multi-sig authorization quorum.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/smart-contract-upgrade-governance"
     },
     "prototype": {
       "name": "prototype",
@@ -25978,6 +26051,14 @@
       "path": "collected_assets/skills/iso27001-compliance",
       "description_ko": "ISO 27001 정보 보안 관리 시스템을 구현합니다. 구성"
     },
+    "defi-yield-strategy-allocator": {
+      "name": "defi-yield-strategy-allocator",
+      "type": "skill",
+      "description": "Multi-vault automated yield strategy allocation register: APY benchmarks, impermanent loss risk tiers, and rebalancing triggers.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/defi-yield-strategy-allocator"
+    },
     "yao-meta-skill": {
       "name": "yao-meta-skill",
       "type": "skill",
@@ -26326,6 +26407,14 @@
       "path": "collected_assets/skills/edr-bypass-re",
       "description_ko": "EDR 내부 요소(사용자 모드 후크 테이블, ETW, AMSI)를 리버스 엔지니어링하고 직접 시스템 호출, Hell's Gate 및 호출 스택 스푸핑과 같은 우회 기술을 연구합니다. 연구실 전용 레드팀 연구."
     },
+    "aas-compose-stack": {
+      "name": "aas-compose-stack",
+      "type": "skill",
+      "description": "Preserve the coding agent's explicit AAS skill selection as a validated stack and optional evidence.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/aas-compose-stack"
+    },
     "longbridge-content": {
       "name": "longbridge-content",
       "type": "skill",
@@ -26396,6 +26485,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/closed-loop-delivery",
       "description_ko": "구현, 피드백 검토, 배포 및 런타임 확인 전반에 걸쳐 사용자 재개입을 최소화하면서 명시적인 승인 기준에 따라 코딩 작업을 완료해야 하는 경우에 사용합니다."
+    },
+    "aas-review-stack": {
+      "name": "aas-review-stack",
+      "type": "skill",
+      "description": "Review AAS stack manifests, preview plans and selection evidence in Workbench without applying changes.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/aas-review-stack"
     },
     "party-ledger-reconciliation": {
       "name": "party-ledger-reconciliation",
@@ -27238,6 +27335,14 @@
       "path": "collected_assets/skills/ux-audit",
       "description_ko": "Nielsen의 경험적 방법과 최신 모바일 UX 모범 사례를 사용하여 UX 문제에 대한 감사 화면"
     },
+    "ai-prompt-regression-testing": {
+      "name": "ai-prompt-regression-testing",
+      "type": "skill",
+      "description": "Prompt engineering regression test matrix register: baseline outputs, semantic drift thresholds, judge evaluations, and golden dataset.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-prompt-regression-testing"
+    },
     "prompt-injection-defense": {
       "name": "prompt-injection-defense",
       "type": "skill",
@@ -27853,6 +27958,14 @@
       "path": "collected_assets/skills/openshift",
       "description_ko": "Red Hat OpenShift 클러스터 및 배포를 관리합니다."
     },
+    "soroban-oracle-data-feed-audit": {
+      "name": "soroban-oracle-data-feed-audit",
+      "type": "skill",
+      "description": "DeFi price oracle integration and safety audit register: heartbeat bounds, stale price threshold reversion, and TWAP medianizer validation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soroban-oracle-data-feed-audit"
+    },
     "ghidra-reverse": {
       "name": "ghidra-reverse",
       "type": "skill",
@@ -27960,6 +28073,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/dbos-golang",
       "description_ko": "DBOS 내구성 워크플로를 사용하여 안정적이고 내결함성이 있는 Go 애플리케이션을 구축하기 위한 가이드입니다. 기존 Go 코드에 DBOS를 추가하거나, 워크플로 및 단계를 생성하거나, 동시성 제어를 위해 대기열을 사용할 때 사용합니다."
+    },
+    "dropthehassle-publish": {
+      "name": "dropthehassle-publish",
+      "type": "skill",
+      "description": "Publish a finished static site to a free HTTPS link with DropTheHassle: build it if needed, deploy, hand over the claim link, verify it is live, never spend money.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/dropthehassle-publish"
     },
     "unit-testing-test-generate": {
       "name": "unit-testing-test-generate",
@@ -28675,6 +28796,14 @@
       "path": "collected_assets/skills/systematic-debugging",
       "description_ko": ">-"
     },
+    "cross-chain-relayer-audit": {
+      "name": "cross-chain-relayer-audit",
+      "type": "skill",
+      "description": "Cross-chain relayer bridge audit register: message hash verifications, replay protection nonces, validator quorum, and withdrawal proofs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cross-chain-relayer-audit"
+    },
     "plaid-fintech": {
       "name": "plaid-fintech",
       "type": "skill",
@@ -28915,6 +29044,14 @@
       "path": "collected_assets/skills/google-no-code",
       "description_ko": "이메일 알림, 스프레드시트 로깅, 동적 질문을 위한 Google Forms 및 Wire Apps Script 트리거(onFormSubmit)를 설계하세요. 코드 편집기가 필요하지 않습니다."
     },
+    "soroban-liquidity-pool": {
+      "name": "soroban-liquidity-pool",
+      "type": "skill",
+      "description": "Automated market maker liquidity pool register: constant-product invariant curves, swap fee tiers, and LP token shares for Soroban DeFi.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soroban-liquidity-pool"
+    },
     "computer-vision-expert": {
       "name": "computer-vision-expert",
       "type": "skill",
@@ -29040,6 +29177,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/supabase-postgres-best-practices",
       "description_ko": "Supabase의 Postgres 성능 최적화 및 모범 사례. Postgres 쿼리, 스키마 디자인 또는 데이터베이스 구성을 작성, 검토 또는 최적화할 때 이 기술을 사용하십시오."
+    },
+    "stellar-anchor-integration": {
+      "name": "stellar-anchor-integration",
+      "type": "skill",
+      "description": "Stellar anchor protocol compliance register: SEP-10 web authentication, SEP-24 interactive deposit and withdrawal, and KYC lifecycle.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/stellar-anchor-integration"
     },
     "alumni-re-hire-tracker": {
       "name": "alumni-re-hire-tracker",
@@ -29915,6 +30060,14 @@
       "path": "collected_assets/skills/mac-mini-llm-lab",
       "description_ko": "Mac mini를 원격 액세스가 가능한 안정적인 로컬 LLM 서버로 구성하세요."
     },
+    "stellar-multisig-threshold-coordinator": {
+      "name": "stellar-multisig-threshold-coordinator",
+      "type": "skill",
+      "description": "Multi-signature signer and threshold coordination register: weight configurations, master key locks, and cosigner quorum thresholds for Stellar.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/stellar-multisig-threshold-coordinator"
+    },
     "hunt-spa-api": {
       "name": "hunt-spa-api",
       "type": "skill",
@@ -30575,6 +30728,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/observability-cloud-planning"
+    },
+    "web3-transaction-relayer-pool": {
+      "name": "web3-transaction-relayer-pool",
+      "type": "skill",
+      "description": "Gasless transaction relayer node pool register: fee sponsorship limits, nonce synchronization, and balance replenishment alerts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/web3-transaction-relayer-pool"
     },
     "public-relations": {
       "name": "public-relations",
@@ -32488,6 +32649,14 @@
       "path": "collected_assets/skills/agent-manager-skill",
       "description_ko": "cron 친화적인 예약을 사용하여 tmux 세션(시작/중지/모니터/할당)을 통해 여러 로컬 CLI 에이전트를 관리합니다."
     },
+    "ai-agent-evaluation-benchmarking": {
+      "name": "ai-agent-evaluation-benchmarking",
+      "type": "skill",
+      "description": "Autonomous AI agent benchmark evaluation register: task completion rates, planning accuracy, tool invocation precision, and cost benchmarks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-agent-evaluation-benchmarking"
+    },
     "aws-cloudtrail": {
       "name": "aws-cloudtrail",
       "type": "skill",
@@ -34157,6 +34326,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/indexing-issue-auditor",
       "description_ko": "높은 수준의 기술 SEO 및 사이트 아키텍처 감사자입니다. 인덱싱, 크롤링 예산, 구조적 오류가 있는지 로컬 또는 라이브 환경을 검사하려면 호출하세요."
+    },
+    "stellar-escrow-timelock": {
+      "name": "stellar-escrow-timelock",
+      "type": "skill",
+      "description": "Decentralized conditional escrow and timelock contract register: multi-signature release conditions, clawback expiry, and settlement triggers.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/stellar-escrow-timelock"
     },
     "wifi-wireless": {
       "name": "wifi-wireless",
@@ -36084,6 +36261,14 @@
       "path": "collected_assets/skills/detect-ai-text",
       "description_ko": "언어적 표현과 비산문에 대한 솔직한 기권을 통해 문서의 산문이 AI에 의해 작성되었는지 여부를 추정합니다. 사용자가 에세이, 보고서, CV, 제출물 또는 기사가 AI로 생성되었는지 여부를 묻는 경우 증거가 아닌 선별을 위해 사용합니다."
     },
+    "smart-contract-formal-verification": {
+      "name": "smart-contract-formal-verification",
+      "type": "skill",
+      "description": "Foundry and Soroban formal invariant verification register: state transition rules, boundary invariant properties, and symbolic execution checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/smart-contract-formal-verification"
+    },
     "azure-storage-blob-ts": {
       "name": "azure-storage-blob-ts",
       "type": "skill",
@@ -37478,6 +37663,14 @@
       "path": "collected_assets/skills/fp-async",
       "description_ko": "TaskEither를 사용한 실용적인 비동기 패턴 - 실제 API 예제를 사용하여 try/catch hell 대신 파이프라인 정리"
     },
+    "ai-code-generation-guardrails": {
+      "name": "ai-code-generation-guardrails",
+      "type": "skill",
+      "description": "Autonomous AI code generation safety guardrail register: static AST analysis, forbidden import filters, and zero-day vulnerability checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-code-generation-guardrails"
+    },
     "orchestrate-batch-refactor": {
       "name": "orchestrate-batch-refactor",
       "type": "skill",
@@ -37773,6 +37966,14 @@
       "path": "collected_assets/skills/ecl-harness-engineer",
       "description_ko": "ECL 에이전트 하네스 인프라 생성 또는 감사: AGENTS.md, 변경 사항 추적, 저장소 지침, Lint 검사, CI 게이트 및 에이전트 전달 문서."
     },
+    "stellar-asset-clawback-compliance": {
+      "name": "stellar-asset-clawback-compliance",
+      "type": "skill",
+      "description": "Regulated Stellar asset clawback architecture register: issuer authorization flags, claimable balance revocations, and regulatory audit trail.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/stellar-asset-clawback-compliance"
+    },
     "avalonia-layout-zafiro": {
       "name": "avalonia-layout-zafiro",
       "type": "skill",
@@ -38031,6 +38232,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/idea-autopsy",
       "description_ko": "비즈니스 아이디어를 구축하기 전에 부검하세요. 킬 목록 확인, 5개의 하드 필터, 무료 AI 단일 프롬프트 테스트, 실시간 광고 시장 검증, 킬 패턴이라는 이름의 평결 등이 있습니다."
+    },
+    "soroban-storage-ttl-lifecycle": {
+      "name": "soroban-storage-ttl-lifecycle",
+      "type": "skill",
+      "description": "Soroban ledger state rent and TTL extension register: live state tracking, bump thresholds, rent fee reserves, and archive boundaries.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soroban-storage-ttl-lifecycle"
     },
     "go-rust-reverse": {
       "name": "go-rust-reverse",
@@ -48855,6 +49064,15 @@
       "path": "collected_assets/skills/roadmap-planning",
       "description_ko": ">-"
     },
+    "llm-gateway-ops": {
+      "name": "llm-gateway-ops",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/llm-gateway-ops",
+      "description_ko": ">-"
+    },
     "ddd-subdomains": {
       "name": "ddd-subdomains",
       "type": "skill",
@@ -49249,6 +49467,15 @@
       "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
       "source_name": "NinjaSln-labs/agent-skills",
       "path": "collected_assets/skills/test-data-generation",
+      "description_ko": ">-"
+    },
+    "release-pipeline": {
+      "name": "release-pipeline",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/release-pipeline",
       "description_ko": ">-"
     },
     "electron-best-practices": {
@@ -51946,15 +52173,6 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/video-editing"
     },
-    "everything-claude-code": {
-      "name": "everything-claude-code",
-      "type": "skill",
-      "description": "Development conventions and patterns for everything-claude-code. JavaScript project with conventional commits.",
-      "source_repo": "https://github.com/affaan-m/ECC.git",
-      "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/everything-claude-code",
-      "description_ko": "Everything-claude-code에 대한 개발 규칙 및 패턴. 기존 커밋을 사용하는 JavaScript 프로젝트입니다."
-    },
     "competitive-platform-analysis": {
       "name": "competitive-platform-analysis",
       "type": "skill",
@@ -51962,6 +52180,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/competitive-platform-analysis"
+    },
+    "ecc-conventions": {
+      "name": "ecc-conventions",
+      "type": "skill",
+      "description": "Development conventions and patterns for ECC. JavaScript project with conventional commits.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/ecc-conventions"
     },
     "loop-design-check": {
       "name": "loop-design-check",
@@ -53697,11 +53923,10 @@
     "feature-development": {
       "name": "feature-development",
       "type": "command",
-      "description": "Workflow command scaffold for feature-development in everything-claude-code.",
+      "description": "Workflow command scaffold for feature-development in ECC.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/commands/feature-development.md",
-      "description_ko": "everything-claude-code의 기능 개발을 위한 워크플로 명령 스캐폴드입니다."
+      "path": "collected_assets/commands/feature-development.md"
     },
     "c4-architecture": {
       "name": "c4-architecture",
@@ -57873,20 +58098,18 @@
     "add-language-rules": {
       "name": "add-language-rules",
       "type": "command",
-      "description": "Workflow command scaffold for add-language-rules in everything-claude-code.",
+      "description": "Workflow command scaffold for add-language-rules in ECC.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/commands/add-language-rules.md",
-      "description_ko": "everything-claude-code의 추가 언어 규칙을 위한 워크플로 명령 스캐폴드입니다."
+      "path": "collected_assets/commands/add-language-rules.md"
     },
     "database-migration": {
       "name": "database-migration",
       "type": "command",
-      "description": "Workflow command scaffold for database-migration in everything-claude-code.",
+      "description": "Workflow command scaffold for database-migration in ECC.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/commands/database-migration.md",
-      "description_ko": "everything-claude-code의 데이터베이스 마이그레이션을 위한 워크플로 명령 스캐폴드입니다."
+      "path": "collected_assets/commands/database-migration.md"
     },
     "verify": {
       "name": "verify",
