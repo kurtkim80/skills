@@ -21626,6 +21626,14 @@
       "path": "collected_assets/skills/obsidian-bases",
       "description_ko": "보기, 필터, 수식 및 요약이 포함된 Obsidian Bases(.base 파일)를 만들고 편집하세요. .base 파일로 작업할 때, 데이터베이스와 같은 노트 보기를 생성할 때, 또는 사용자가 Obsidian에서 베이스, 테이블 보기, 카드 보기, 필터 또는 수식을 언급할 때 사용하세요."
     },
+    "cloudish": {
+      "name": "cloudish",
+      "type": "skill",
+      "description": "Deploy a Dockerfile, source folder, or existing image to Cloudish as a running container at a live URL, built server-side with no local Docker, with confirmation before spending credits.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cloudish"
+    },
     "azure-monitor-query-java": {
       "name": "azure-monitor-query-java",
       "type": "skill",
@@ -33979,6 +33987,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/haskell-pro",
       "description_ko": "고급 유형 시스템을 전문으로 하는 전문 Haskell 엔지니어, 순수"
+    },
+    "browser-extension-launch": {
+      "name": "browser-extension-launch",
+      "type": "skill",
+      "description": "Builds, tests, packages, and prepares Chrome extensions for store launch from a plain-language idea; use for new extensions, fixes, releases, and submission recovery.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/browser-extension-launch"
     },
     "changelog-updates": {
       "name": "changelog-updates",
