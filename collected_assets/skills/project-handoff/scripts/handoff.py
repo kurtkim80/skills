@@ -320,9 +320,8 @@ def echo_back(st: Store, entry_id: str, label: str = "回读") -> None:
                 for k in ("topic", "status", "domain", "supersedes"):
                     if fm.get(k):
                         print(f"      {k}: {str(fm[k])[:160]}")
-                _body = f.read_text(encoding="utf-8").split("---", 2)
-                tail = _body[2] if len(_body) > 2 else ""
-                tail = tail.strip().splitlines()
+                _fm_text, _bd, _ok = _fm_split(f.read_text(encoding="utf-8"))
+                tail = (_bd if _ok else "").strip().splitlines()
                 if tail:
                     print(f"      body: {' '.join(tail)[:160]}"
                           f"{'…（已截断，全文见文件）' if len(' '.join(tail)) > 160 else ''}")
@@ -1514,16 +1513,35 @@ def _render(st: Store) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _frontmatter(path: Path) -> dict:
+def _fm_split(text: str) -> tuple[str | None, str, bool]:
+    """frontmatter 切分的**本件唯一实现**（停手条件②：本脚本随技能分发、装进别仓时不能
+    import 宿主仓的 `scripts/frontmatter.py`，所以认它**自己目录内**的单源 1 处）。
+
+    边界语义与仓内单源一致：**按行**找闭合 `---`（正文里的水平线不参与切分）、不认 YAML
+    文档结束符 `...`、开括号必须是整行 `---`。此前本件里有三套走法（正则 `\n---` 非贪婪、
+    `content.find("\\n---", 3)`、`text.split("---", 2)`），对 CRLF 与畸形开括号的反应各不相同
+    ⇒ 同一个决策文件在不同命令里被解析成不同结果。现只此一处。"""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None, text, False
+    close = next((i for i, l in enumerate(lines[1:], 1) if l.strip() == "---"), None)
+    if close is None:
+        return None, text, False
+    return "\n".join(lines[1:close]), "\n".join(lines[close + 1:]), True
+
+
+def _fm_parse(fm_text: str | None) -> dict:
+    """在**已切出**的 frontmatter 原文上取字段（`key: value` 单层，本件不引 YAML 依赖）。"""
     out: dict = {}
-    text = path.read_text(encoding="utf-8")
-    m = re.match(r"^---\n(.*?)\n---", text, re.S)
-    if m:
-        for ln in m.group(1).splitlines():
-            if ":" in ln:
-                k, v = ln.split(":", 1)
-                out[k.strip()] = v.strip()
+    for ln in (fm_text or "").splitlines():
+        if ":" in ln:
+            k, v = ln.split(":", 1)
+            out[k.strip()] = v.strip()
     return out
+
+
+def _frontmatter(path: Path) -> dict:
+    return _fm_parse(_fm_split(path.read_text(encoding="utf-8"))[0])
 
 
 def cmd_view(st: Store, a) -> int:
@@ -1927,17 +1945,9 @@ def _reset_store(st: Store):
 
 
 def _fm_fields(content: str) -> dict:
-    if not content.startswith("---"):
-        return {}
-    end = content.find("\n---", 3)
-    if end < 0:
-        return {}
-    out = {}
-    for ln in content[3:end].splitlines():
-        if ":" in ln:
-            k, v = ln.split(":", 1)
-            out[k.strip()] = v.strip()
-    return out
+    """字符串入口（`import` 预校验、`supersedes` 扫描拿的是内容而非路径）。
+    切分与取字段都走本件唯一实现 `_fm_split`／`_fm_parse`，不再另起一套边界判定。"""
+    return _fm_parse(_fm_split(content)[0])
 
 
 def _prevalidate_import(recs, today_: str):
@@ -3108,6 +3118,22 @@ def cmd_selftest(st: Store, a) -> int:
         run("set", "status", "--file", "-", inp=same)      # 再用 CLI 覆写同样字节
         rc2, out2 = run("check", "--no-log")
         expect("补手续（同字节覆写）被写前旁证抓到", rc2 != 0 and "写入**之前**发现" in out2)
+
+        # ---- frontmatter 切分单源（停手条件②：自包含分发件认自己目录内 1 处）----
+        # 为什么钉在 selftest：统一前三套走法对**同一个文件**给出不同结果——CRLF 的决策件在
+        # `_frontmatter`（`view --id`／回读走它）里读成空、在 `_fm_fields`（`import` 预校验／
+        # `supersedes` 扫描走它）里却读得到；开括号多一横的畸形件被后者**假解析出字段**。
+        # 三套并成一套后，这两面各钉一条断言，另加一条「正文水平线不参与切分」的负控。
+        _crlf = "---\r\nid: d1\nstatus: accepted\r\n---\r\n# t\r\n"
+        expect("切分单源：CRLF 决策件读得出字段（旧正则那套在此返回空）",
+               _fm_parse(_fm_split(_crlf)[0]).get("id") == "d1")
+        _bad_open = "----\nid: d2\n---\nbody\n"
+        expect("切分单源：开括号多一横＝不是 frontmatter（旧 find 那套会假解析出 id）",
+               _fm_split(_bad_open)[2] is False and _fm_parse(_fm_split(_bad_open)[0]) == {})
+        _hr = "---\nid: d3\n---\n# h\n\ntext\n\n---\n\nmore\n"
+        _fm3, _bd3, _ok3 = _fm_split(_hr)
+        expect("切分单源：正文里的水平线不参与切分（正文完整、字段照读）",
+               _ok3 and _bd3.count("---") == 1 and _fm_parse(_fm3).get("id") == "d3")
 
     if fails:
         print(f"handoff selftest: FAIL（{len(fails)} 项：{', '.join(fails)}）")

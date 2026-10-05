@@ -7577,6 +7577,18 @@
           "description": "Path"
         },
         {
+          "name": "--token",
+          "type": "string",
+          "required": false,
+          "description": "Lock token. With expected_token, use the same value to refresh or a different value to replace the existing token."
+        },
+        {
+          "name": "--expected-token",
+          "type": "string",
+          "required": false,
+          "description": "Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace."
+        },
+        {
           "name": "--allow-access-by-any-user",
           "type": "bool",
           "required": false,
@@ -7593,6 +7605,12 @@
           "type": "bool",
           "required": false,
           "description": "Does lock apply to subfolders?"
+        },
+        {
+          "name": "--owner",
+          "type": "string",
+          "required": false,
+          "description": "Arbitrary descriptive label for the lock. Does not change the lock creator or permissions."
         },
         {
           "name": "--timeout",
@@ -8584,7 +8602,7 @@
           "name": "--sort-by",
           "type": "object",
           "required": false,
-          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`."
+          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`."
         },
         {
           "name": "--filter",
@@ -15422,6 +15440,12 @@
           "type": "int64",
           "required": false,
           "description": "User ID. If provided, will return uses for this user."
+        },
+        {
+          "name": "--sort-by",
+          "type": "object",
+          "required": false,
+          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`."
         }
       ]
     },

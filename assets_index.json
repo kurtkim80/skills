@@ -2025,11 +2025,10 @@
     "file-conversion": {
       "name": "file-conversion",
       "type": "skill",
-      "description": "Convert files between formats — PDF to Word, HEIC to JPG, MP4 to MP3, CSV to JSON, EPUB to MOBI, and 999 total routes across images, video, audio, documents, data, fonts, ebooks, and archives. Free via changethisfile.com, no API key or signup. Use when the user needs a file converted to a different format.",
+      "description": "Use when the user needs a local file converted between common image, audio, video, document, or data formats. Select installed tools, preserve originals, and verify the output.",
       "source_repo": "https://github.com/wshobson/agents.git",
       "source_name": "wshobson/agents",
-      "path": "collected_assets/skills/file-conversion",
-      "description_ko": "PDF에서 Word로, HEIC에서 JPG로, MP4에서 MP3로, CSV에서 JSON으로, EPUB에서 MOBI로, 이미지, 비디오, 오디오, 문서, 데이터, 글꼴, 전자책 및 아카이브에 걸쳐 총 999개의 경로로 파일을 변환합니다. Changethisfile.com을 통해 무료이며 API 키나 가입이 필요하지 않습니다. 사용자가 다른 형식으로 변환된 파일이 필요할 때 사용합니다."
+      "path": "collected_assets/skills/file-conversion"
     },
     "workflow-patterns": {
       "name": "workflow-patterns",
@@ -13750,11 +13749,10 @@
     "including-generated-files": {
       "name": "including-generated-files",
       "type": "skill",
-      "description": "Fix MSBuild targets that generate files during the build but those files are missing from compilation or output. USE FOR: generated source files not compiling (CS0246 for a type that should exist), custom build tasks that create files but they are invisible to subsequent targets, globs not capturing build-generated files because they expand at evaluation time before execution creates them, ensuring generated files are cleaned by the Clean target. Covers correct BeforeTargets timing (CoreCompile, BeforeBuild, AssignTargetPaths), adding to Compile/FileWrites item groups, using $(IntermediateOutputPath) instead of hardcoded obj/ paths. DO NOT USE FOR: C# source generators that already work via the Roslyn pipeline, T4 design-time generation that runs in Visual Studio, non-MSBuild build systems.",
+      "description": "Own MSBuild generated-artifact integration. USE FOR: a target that creates or should create source, Content, None, or another physical file but the artifact is missing from compilation or output; target timing; evaluation-time glob misses; $(IntermediateOutputPath) placement; and FileWrites clean tracking. The prompt may describe the generated artifact without naming the producing task. DO NOT USE when the primary defect is general Include/Remove/Update semantics, item metadata or batching, duplicate/overlapping declarations, or a generated-item identity relationship; use item-management. Exclude Roslyn source-generator internals and non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/including-generated-files",
-      "description_ko": "빌드 중에 파일을 생성하지만 해당 파일이 컴파일 또는 출력에서 ​​누락되는 MSBuild 대상을 수정합니다. 사용 대상: 생성된 소스 파일이 컴파일되지 않음(존재해야 하는 유형의 경우 CS0246), 파일을 생성하지만 후속 대상에 표시되지 않는 사용자 지정 빌드 작업, 실행이 생성되기 전에 평가 시 확장되기 때문에 빌드 생성 파일을 캡처하지 않는 glob, 생성된 파일이 Clean 대상에 의해 정리되도록 보장합니다. 하드코딩된 obj/ 경로 대신 $(IntermediateOutputPath)를 사용하여 Compile/FileWrites 항목 그룹에 추가하여 올바른 BeforeTargets 타이밍(CoreCompile, BeforeBuild, AssignTargetPaths)을 다룹니다. 사용하지 마십시오: Roslyn 파이프라인을 통해 이미 작동하는 C# 소스 생성기, Visual Studio에서 실행되는 T4 디자인 타임 생성, 비MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/including-generated-files"
     },
     "incremental-build": {
       "name": "incremental-build",
@@ -13768,20 +13766,18 @@
     "build-perf-baseline": {
       "name": "build-perf-baseline",
       "type": "skill",
-      "description": "Establish build performance baselines and apply systematic optimization techniques. USE FOR: diagnosing slow builds, establishing before/after measurements (cold, warm, no-op scenarios), applying optimization strategies like static graph builds, artifacts output, and dependency graph trimming. Start here before diving into build-perf-diagnostics, incremental-build, or build-parallelism. DO NOT USE FOR: non-MSBuild build systems, detailed bottleneck analysis (use build-perf-diagnostics after baselining).",
+      "description": "Establish MSBuild/.NET build performance baselines before optimizing. USE FOR: a .NET build or solution that is slow or has build-performance concerns; cold, warm, incremental, or no-op measurements; before/after comparisons; CI build output caching; static graph build decisions; artifacts output; and dependency graph trimming. Start here before build-perf-diagnostics, incremental-build, or build-parallelism. DO NOT USE for webpack, npm, JavaScript bundlers, or other non-MSBuild build systems. For detailed target/task/analyzer bottleneck analysis after baselining, use build-perf-diagnostics.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/build-perf-baseline",
-      "description_ko": "빌드 성능 기준을 설정하고 체계적인 최적화 기술을 적용합니다. 사용 대상: 느린 빌드 진단, 측정 전/후 설정(콜드, 웜, 무작동 시나리오), 정적 그래프 빌드, 아티팩트 출력, 종속성 그래프 트리밍과 같은 최적화 전략 적용. 빌드 성능 진단, 증분 빌드 또는 빌드 병렬 처리에 대해 알아보기 전에 여기에서 시작하세요. 사용하지 마십시오: MSBuild 이외의 빌드 시스템, 세부 병목 현상 분석(기준 설정 후 빌드 성능 진단 사용)"
+      "path": "collected_assets/skills/build-perf-baseline"
     },
     "build-parallelism": {
       "name": "build-parallelism",
       "type": "skill",
-      "description": "Diagnose and fix under-parallelized MSBuild builds. USE WHEN a multi-project solution build is slower than expected, doesn't speed up when you add cores, pegs a single core while others idle, or you want to know why `-m` isn't helping. Note: `/maxcpucount` default is 1 (sequential) — always pass `-m` for parallel builds. Covers finding the critical path (longest serial ProjectReference chain), graph build (`/graph`), BuildInParallel, and solution filters (`.slnf`). DO NOT USE FOR: single-project builds, incremental issues (use incremental-build), compilation slowness inside one project (use build-perf-diagnostics), non-MSBuild build systems.",
+      "description": "Analyze an MSBuild solution, solution filter, or Build.proj that schedules multiple project files. USE FOR: measured idle worker nodes, `-m` that does not scale, a serial ProjectReference critical path, graph builds, or an MSBuild task that builds a Projects list. Requires at least two distinct project files whose scheduling or throughput must be analyzed. DO NOT USE for non-MSBuild build systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/build-parallelism",
-      "description_ko": "병렬화되지 않은 MSBuild 빌드를 진단하고 수정합니다. 다중 프로젝트 솔루션 빌드가 예상보다 느리거나, 코어를 추가할 때 속도가 빨라지지 않거나, 다른 코어가 유휴 상태일 때 단일 코어를 고정하거나, `-m`이 도움이 되지 않는 이유를 알고 싶을 때 사용하십시오. 참고: `/maxcpucount` 기본값은 1(순차)입니다. 병렬 빌드의 경우 항상 `-m`을 전달하세요. 주요 경로(가장 긴 직렬 ProjectReference 체인), 그래프 빌드(`/graph`), BuildInParallel 및 솔루션 필터(`.slnf`) 찾기를 다룹니다. 사용하지 마십시오: 단일 프로젝트 빌드, 증분 문제(incremental-build 사용), 한 프로젝트 내의 컴파일 속도 저하(build-perf-diagnostics 사용), 비MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/build-parallelism"
     },
     "binlog-failure-analysis": {
       "name": "binlog-failure-analysis",
@@ -13795,11 +13791,10 @@
     "property-patterns": {
       "name": "property-patterns",
       "type": "skill",
-      "description": "MSBuild property definition patterns: conditional defaults, composition/concatenation, path normalization, trailing-slash handling, TFM detection helpers, and evaluation order. USE FOR: diagnosing and fixing property definition issues and shared-property anti-patterns in .props/.csproj; DefineConstants or NoWarn overwritten instead of appended; unconditional assignments that block project-level overrides; unquoted conditions that fail on empty properties; hardcoded paths that break cross-platform builds; setting overridable defaults; property evaluation order and last-write-wins semantics. DO NOT USE FOR: props vs targets placement (use directory-build-organization), item operations (use item-management), target structure (use target-authoring), general anti-patterns (use msbuild-antipatterns), non-MSBuild build systems.",
+      "description": "Diagnose and fix concrete MSBuild property defects in projects and existing shared-file hierarchies. USE FOR: conditions, defaults, append versus overwrite, last-write-wins values, OS/TFM checks, portable paths, normalization, and reviews centered on those property defects. Property defects in Directory.Build.* remain in scope, including overwritten values across parent/child imports and conditions that run before TargetFramework is set, even when the fix changes import order or moves a property group to .targets. DO NOT USE FOR: placement-only or import-only requests with no concrete property defect, such as discovering shared files or choosing which file owns a target or customization (use directory-build-organization); item operations; target structure; broad reviews without a concrete property defect; non-MSBuild work.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/property-patterns",
-      "description_ko": "MSBuild 속성 정의 패턴: 조건부 기본값, 구성/연결, 경로 정규화, 후행 슬래시 처리, TFM 감지 도우미 및 평가 순서. 용도: .props/.csproj의 속성 정의 문제와 공유 속성 안티패턴을 진단하고 해결합니다. DefineConstants 또는 NoWarn을 추가하는 대신 덮어씁니다. 프로젝트 수준 재정의를 차단하는 무조건 할당 빈 속성에서는 따옴표가 없는 조건이 실패합니다. 크로스 플랫폼 빌드를 중단시키는 하드코딩된 경로; 재정의 가능한 기본값 설정; 속성 평가 순서 및 마지막 쓰기 승리 의미 체계. 사용하지 마세요: 소품 대 대상 배치(디렉터리 빌드 조직 사용), 항목 작업(항목 관리 사용), 대상 구조(대상 작성 사용), 일반 안티 패턴(msbuild-안티패턴 사용), MSBuild가 아닌 빌드 시스템."
+      "path": "collected_assets/skills/property-patterns"
     },
     "resolve-project-references": {
       "name": "resolve-project-references",
@@ -13813,11 +13808,10 @@
     "extension-points": {
       "name": "extension-points",
       "type": "skill",
-      "description": "Guide for MSBuild extensibility: CustomBefore/CustomAfter hooks, wildcard imports with alphabetic ordering, import gating with control properties, NuGet package build extension layout (build/buildTransitive), and the MicrosoftCommonPropsHasBeenImported guard. USE FOR: diagnosing and fixing MSBuild import and hook patterns, reviewing and fixing extension point anti-patterns in Directory.Build files, fixing missing Exists() guards on imports that break fresh clones, fixing NuGet package hooks being silently dropped instead of appended, making build targets extensible for other projects, injecting custom logic into the build pipeline, creating NuGet packages that extend the build, conditionally disabling imports. DO NOT USE FOR: target authoring patterns (use target-authoring), props vs targets placement (use directory-build-organization), general anti-patterns (use msbuild-antipatterns), non-MSBuild build systems.",
+      "description": "Own MSBuild import and hook discovery. USE FOR: CustomBefore/CustomAfter hooks, ordered wildcard and NuGet auto-imports, control properties, build/buildTransitive packed layout, package ID and file-name matching, per-TFM forwarders, and tracing why assets or hooks are missing, broken, or replaced. An import guard remains in scope when it is one defect in a broader hook/import flow. DO NOT USE for a focused safety verdict on whether one specific Import needs Exists or is an intentionally unguarded package contract; use msbuild-antipatterns. NEVER INVOKE when imports and hook placement already work and the request is only target Inputs/Outputs, incremental skipping, or FileWrites clean tracking; use incremental-build or target-authoring. Exclude props-versus-targets placement and non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/extension-points",
-      "description_ko": "MSBuild 확장성 가이드: CustomBefore/CustomAfter 후크, 알파벳 순서를 사용한 와일드카드 가져오기, 컨트롤 속성이 있는 가져오기 게이팅, NuGet 패키지 빌드 확장 레이아웃(build/buildTransitive) 및 MicrosoftCommonPropsHasBeenImported 가드. 사용 대상: MSBuild 가져오기 및 후크 패턴 진단 및 수정, Directory.Build 파일의 확장 지점 안티 패턴 검토 및 수정, 새로운 복제본을 손상시키는 가져오기에서 누락된 Exists() 가드 수정, 추가되는 대신 자동으로 삭제되는 NuGet 패키지 후크 수정, 다른 프로젝트에 대해 빌드 대상을 확장 가능하게 만들기, 빌드 파이프라인에 사용자 지정 논리 삽입, 빌드를 확장하는 NuGet 패키지 만들기, 조건에 따라 가져오기 비활성화. 사용하지 마세요: 대상 작성 패턴(대상 작성 사용), 소품 대 대상 배치(디렉터리 빌드 조직 사용), 일반 안티 패턴(msbuild-안티패턴 사용), 비MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/extension-points"
     },
     "build-perf-diagnostics": {
       "name": "build-perf-diagnostics",
@@ -13831,29 +13825,26 @@
     "binlog-generation": {
       "name": "binlog-generation",
       "type": "skill",
-      "description": "Generate MSBuild binary logs (binlogs) for build diagnostics and analysis. USE FOR: adding /bl:{} to any dotnet build, test, pack, publish, or restore command to capture a full build execution trace, prerequisite for binlog-failure-analysis and build-perf-diagnostics skills, enabling post-build investigation of errors or performance. Requires MSBuild 17.8+ / .NET 8 SDK+ for {} placeholder; PowerShell needs -bl:{{}}. DO NOT USE FOR: non-MSBuild build systems (npm, Maven, CMake), analyzing an existing binlog (use binlog-failure-analysis instead).",
+      "description": "Generate MSBuild binary logs (binlogs) for build diagnostics and analysis. USE FOR: adding /bl:{} to any dotnet build, test, pack, publish, or restore command to capture a full build execution trace, prerequisite for binlog-failure-analysis and build-perf-diagnostics skills, enabling post-build investigation of errors or performance. Requires MSBuild 17.8+ / .NET 8 SDK+ for {} placeholder; PowerShell must quote the complete switch as '-bl:{}'. DO NOT USE FOR: non-MSBuild build systems (npm, Maven, CMake), analyzing an existing binlog (use binlog-failure-analysis instead).",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/binlog-generation",
-      "description_ko": "빌드 진단 및 분석을 위해 MSBuild 이진 로그(binlogs)를 생성합니다. 사용 대상: dotnet 빌드, 테스트, 팩, 게시 또는 복원 명령에 /bl:{}을 추가하여 전체 빌드 실행 추적을 캡처합니다. binlog-failure-analytic 및 빌드-성능-진단 기술에 대한 전제 조건이며, 오류 또는 성능에 대한 빌드 후 조사가 가능합니다. {} 자리표시자에는 MSBuild 17.8+ / .NET 8 SDK+가 필요합니다. PowerShell에는 -bl:{{}}가 필요합니다. 사용하지 마십시오: MSBuild가 아닌 빌드 시스템(npm, Maven, CMake), 기존 binlog 분석(대신 binlog-failure-analytic 사용)."
+      "path": "collected_assets/skills/binlog-generation"
     },
     "msbuild-antipatterns": {
       "name": "msbuild-antipatterns",
       "type": "skill",
-      "description": "Detect and fix MSBuild anti-patterns in project and build files. USE WHEN asked to review, audit, lint, clean up, or code-review a .csproj/.vbproj/.fsproj/.props/.targets/.proj (or Directory.Build.props/.targets) file, when asked 'is this project file correct?' or 'what's wrong with my build file?', or when hunting subtle build bugs caused by how a project is authored. Each anti-pattern has a symptom and a concrete BAD→GOOD fix. DO NOT USE FOR: non-MSBuild build systems (npm, Maven, CMake), or migrating a project to SDK-style (use msbuild-modernization).",
+      "description": "DO NOT INVOKE when the primary request explicitly asks to convert, migrate, modernize, or rewrite a legacy/old-style project to SDK style; use msbuild-modernization. Migration prompts often mention ToolsVersion, explicit Compile/Reference entries, packages.config, or Microsoft.CSharp.targets, but merely reviewing or auditing a file that contains those patterns remains in scope here. USE FOR broad review, audit, lint, or maintainability/correctness checks of project/build files, including custom targets; prioritized cross-cutting findings; discrete anti-patterns; F# ordering/FS0039; cross-platform paths; and focused Import safety verdicts. Review/audit is analysis-only unless fixes are requested. For concrete property/item defects use property-patterns/item-management; use target-authoring for implementation and extension-points for NuGet auto-import/layout discovery. Exclude non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/msbuild-antipatterns",
-      "description_ko": "프로젝트 및 빌드 파일에서 MSBuild 안티 패턴을 감지하고 수정합니다. '이 프로젝트 파일이 맞습니까?'라는 질문이 있을 때 .csproj/.vbproj/.fsproj/.props/.targets/.proj(또는 Directory.Build.props/.targets) 파일을 검토, 감사, 린트, 정리 또는 코드 검토하라는 메시지가 표시될 때 사용하세요. 또는 '내 빌드 파일에 무슨 문제가 있나요?' 또는 프로젝트 작성 방식으로 인해 발생하는 미묘한 빌드 버그를 찾을 때. 각 안티패턴에는 증상이 있으며 구체적인 BAD→GOOD 수정이 있습니다. 사용하지 마십시오: MSBuild가 아닌 빌드 시스템(npm, Maven, CMake) 또는 프로젝트를 SDK 스타일로 마이그레이션(msbuild-modernization 사용)."
+      "path": "collected_assets/skills/msbuild-antipatterns"
     },
     "msbuild-modernization": {
       "name": "msbuild-modernization",
       "type": "skill",
-      "description": "Guide for modernizing and migrating MSBuild project files to SDK-style format. USE FOR: converting legacy .csproj/.vbproj with verbose XML to SDK-style, migrating packages.config to PackageReference, removing Properties/AssemblyInfo.cs in favor of auto-generation, eliminating explicit <Compile Include> lists via implicit globbing, consolidating shared settings into Directory.Build.props. Indicators of legacy projects: ToolsVersion attribute, <Import Project=\\\"$(MSBuildToolsPath)\\\">, .csproj files > 50 lines for simple projects. DO NOT USE FOR: projects already in SDK-style format, non-.NET build systems (npm, Maven, CMake), .NET Framework projects that cannot move to SDK-style.",
+      "description": "Guide for modernizing and migrating MSBuild project files to SDK-style format. USE FOR: converting legacy .csproj/.vbproj with verbose XML to SDK-style, migrating packages.config to PackageReference, removing Properties/AssemblyInfo.cs in favor of auto-generation, eliminating explicit Compile Include lists via implicit globbing, consolidating shared settings into Directory.Build.props. Indicators of legacy projects: ToolsVersion attribute, an Import of Microsoft.CSharp.targets via $(MSBuildToolsPath), .csproj files over 50 lines for simple projects. DO NOT USE FOR: projects already in SDK-style format, non-.NET build systems (npm, Maven, CMake), .NET Framework projects that cannot move to SDK-style.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/msbuild-modernization",
-      "description_ko": "MSBuild 프로젝트 파일을 SDK 스타일 형식으로 현대화하고 마이그레이션하기 위한 가이드입니다. 사용 대상: 자세한 XML이 포함된 레거시 .csproj/.vbproj를 SDK 스타일로 변환, packages.config를 PackageReference로 마이그레이션, 자동 생성을 위해 Properties/AssemblyInfo.cs 제거, 암시적 글로빙을 통해 명시적인 <Compile 포함> 목록 제거, 공유 설정을 Directory.Build.props로 통합. 레거시 프로젝트 표시기: ToolsVersion 특성, <Import Project=\\\"$(MSBuildToolsPath)\\\">, .csproj 파일 > 간단한 프로젝트의 경우 50줄. 사용하지 마세요: 이미 SDK 스타일 형식의 프로젝트, .NET이 아닌 빌드 시스템(npm, Maven, CMake), SDK 스타일로 이동할 수 없는 .NET Framework 프로젝트."
+      "path": "collected_assets/skills/msbuild-modernization"
     },
     "check-bin-obj-clash": {
       "name": "check-bin-obj-clash",
@@ -13867,11 +13858,10 @@
     "item-management": {
       "name": "item-management",
       "type": "skill",
-      "description": "Patterns for managing MSBuild item groups: Include/Remove/Update semantics, item metadata, batching with %(Metadata), transforms, per-item filtering, and cross-product batching pitfalls. USE FOR: diagnosing and fixing item group anti-patterns in .csproj files, reviewing item management for correctness, fixing CS2002 duplicate file warnings from SDK globbing, fixing targets that run more times than expected due to cross-product batching, fixing Include vs Update misuse on SDK-globbed items, fixing FileWrites registration for generated file clean support, moving generated files to IntermediateOutputPath. DO NOT USE FOR: target chain architecture (use target-authoring), property patterns (use property-patterns), incrementality (use incremental-build), general anti-patterns (use msbuild-antipatterns), non-MSBuild build systems.",
+      "description": "Own concrete MSBuild ItemGroup and item-expression questions. USE FOR: Include, Remove, Update, item identity and metadata, transforms, filtering, batching, duplicate or overlapping items, and reviews that verify whether those operations are correct. Generated items stay in scope when the central defect is item identity, metadata, batching, duplicate declarations, or glob/Remove/Update semantics. For a generated artifact missing from compilation or output, wrong target timing/path, or FileWrites clean tracking without a broader item-semantics defect, use including-generated-files. The item operation may be broken, suspected, or already correct. Exclude property-only issues, general incrementality with no item question, broad reviews with no concrete item concern, and non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/item-management",
-      "description_ko": "MSBuild 항목 그룹 관리 패턴: 의미 체계 포함/제거/업데이트, 항목 메타데이터, %(메타데이터)를 사용한 일괄 처리, 변환, 항목별 필터링 및 제품 간 일괄 처리 함정. 사용 대상: .csproj 파일의 항목 그룹 안티 패턴 진단 및 수정, 항목 관리의 정확성 검토, SDK 글로빙의 CS2002 중복 파일 경고 수정, 제품 간 일괄 처리로 인해 예상보다 더 많이 실행되는 대상 수정, SDK 글로브 항목의 포함 및 업데이트 오용 수정, 생성된 파일 정리 지원을 위한 FileWrites 등록 수정, 생성된 파일을 IntermediateOutputPath로 이동. 사용하지 마십시오: 대상 체인 아키텍처(대상 작성 사용), 속성 패턴(속성 패턴 사용), 증분성(증분 빌드 사용), 일반 안티 패턴(msbuild-antipatterns 사용), 비 MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/item-management"
     },
     "target-authoring": {
       "name": "target-authoring",
@@ -13894,11 +13884,10 @@
     "directory-build-organization": {
       "name": "directory-build-organization",
       "type": "skill",
-      "description": "Guide for organizing MSBuild infrastructure with Directory.Build.props, Directory.Build.targets, Directory.Packages.props, and Directory.Build.rsp. USE FOR: structuring multi-project repos, centralizing build settings, implementing NuGet Central Package Management (CPM) with ManagePackageVersionsCentrally, consolidating duplicated properties across .csproj files, setting up multi-level Directory.Build hierarchy with GetPathOfFileAbove, understanding evaluation order (Directory.Build.props → SDK .props → .csproj → SDK .targets → Directory.Build.targets). Critical pitfall: $(TargetFramework) conditions in .props silently fail for single-targeting projects — must use .targets. DO NOT USE FOR: non-MSBuild build systems, migrating legacy projects to SDK-style (use msbuild-modernization), single-project solutions with no shared settings.",
+      "description": "USE ONLY for (1) two or more projects with repeated MSBuild policy, targets, or package versions, or (2) an existing Directory.Build.props/targets/rsp hierarchy with an import, placement, or layering defect. A one-project repo without an existing Directory.Build file is outside scope; do not load this skill. Covers centralizing shared policy and targets, Directory.Packages.props across projects, parent hierarchy/import structure, props-versus-targets placement, and folder/project exceptions. An existing hierarchy defect remains in scope when only one project is affected. For property value or condition semantics use property-patterns. Exclude legacy-to-SDK migration and non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/directory-build-organization",
-      "description_ko": "Directory.Build.props, Directory.Build.targets, Directory.Packages.props 및 Directory.Build.rsp를 사용하여 MSBuild 인프라를 구성하기 위한 가이드입니다. 사용 대상: 다중 프로젝트 저장소 구성, 빌드 설정 중앙 집중화, ManagePackageVersionsCentrally를 사용하여 NuGet 중앙 패키지 관리(CPM) 구현, .csproj 파일 전체에서 중복된 속성 통합, GetPathOfFileAbove를 사용하여 다중 레벨 Directory.Build 계층 구조 설정, 평가 순서 이해(Directory.Build.props → SDK .props → .csproj → SDK .targets → Directory.Build.targets). 중요한 함정: .props의 $(TargetFramework) 조건은 단일 타겟팅 프로젝트에 대해 자동으로 실패합니다. .targets를 사용해야 합니다. 사용하지 마십시오: 비 MSBuild 빌드 시스템, 레거시 프로젝트를 SDK 스타일로 마이그레이션(msbuild-modernization 사용), 공유 설정이 없는 단일 프로젝트 솔루션."
+      "path": "collected_assets/skills/directory-build-organization"
     },
     "eval-performance": {
       "name": "eval-performance",
@@ -15011,6 +15000,30 @@
       "path": "collected_assets/skills/text-normalization",
       "description_ko": "다른 것이 문서를 측정하기 전에 문서를 제거하고 구문 분석하고 분할합니다. 가까운 토큰이 구분 기호를 방출하지 않기 때문에 두 개의 블록을 하나의 단어로 융합하는 정규화기, 서로 다른 잔여물에서 실패하는 두 개의 메트릭 클래스 — 남은 구문으로 인해 부풀려진 문자 기반의 것(읽기 시간, 토큰 예산, 크기 제한), 스트립이 삽입되지 않은 경계로 인해 손상된 단어 기반의 것(단어 수, 가독성) — 노멀라이저를 완전히 건너뛰는 형제 소비자, 구문을 자동으로 재분류하는 파서 사전 설정, 섹션 축소되어 상위 항목으로 이중 계산되는 고유하지 않은 제목 키로 그룹화되고 다음 독자가 버그로 착각하는 의도적인 손실이 발생합니다. 마크다운/HTML 스트리퍼, 일반 텍스트 추출기, 섹션 또는 단락 분할기, 읽기 시간/단어 수/가독성/토큰 수 기능, 산문으로 구축된 중복 제거 키 또는 체크섬 또는 검색 색인 전처리 단계를 작성하거나 검토할 때 사용합니다."
     },
+    "interaction-states": {
+      "name": "designing-interaction-states",
+      "type": "skill",
+      "description": "Designs the states screens actually spend their time in — first-run and empty states, loading and skeletons, inline validation and error messages, success feedback, destructive confirmations, and the microcopy for each — so a product feels finished instead of only working on the happy path. Use when building a form, list, dashboard, upload, checkout or settings screen, adding an async action, writing error or empty-state copy, or reviewing a UI that shows blank pages, raw errors or spinners forever.",
+      "source_repo": "https://github.com/wdm0006/python-skills.git",
+      "source_name": "wdm0006/python-skills",
+      "path": "collected_assets/skills/interaction-states"
+    },
+    "accessible-interfaces": {
+      "name": "building-accessible-interfaces",
+      "type": "skill",
+      "description": "Makes web and app UIs usable by keyboard, screen-reader, low-vision and motion-sensitive users — semantic HTML before ARIA, labelled controls, visible focus, WCAG AA contrast measured rather than eyeballed, touch targets, reduced motion, and automated axe checks plus a manual keyboard pass in CI or before every UI PR. Use when building or restyling a screen, adding a form, modal, menu or custom control, choosing colors, or reviewing a UI change.",
+      "source_repo": "https://github.com/wdm0006/python-skills.git",
+      "source_name": "wdm0006/python-skills",
+      "path": "collected_assets/skills/accessible-interfaces"
+    },
+    "marketing-pages": {
+      "name": "designing-marketing-pages",
+      "type": "skill",
+      "description": "Designs landing, pricing, comparison and product pages that explain the product fast and convert honestly — one-sentence value proposition above the fold, a single primary call to action, real product screenshots instead of stock art, proof, a clear pricing table, fast responsive pages, and no dark patterns. Use when building or redesigning a landing page, marketing site, pricing or comparison page, app store–style product page, or reviewing why a product's public pages feel dated or don't convert.",
+      "source_repo": "https://github.com/wdm0006/python-skills.git",
+      "source_name": "wdm0006/python-skills",
+      "path": "collected_assets/skills/marketing-pages"
+    },
     "reproducing-ci-locally": {
       "name": "reproducing-ci-locally",
       "type": "skill",
@@ -15046,6 +15059,14 @@
       "source_name": "wdm0006/python-skills",
       "path": "collected_assets/skills/concurrent-branches",
       "description_ko": "동시에 하나의 저장소에 대해 여러 브랜치가 열려 있는 경우 충돌 및 병합을 해결합니다. 변경 시마다 수정해야 하는 핫스팟 파일(레지스트리 매니페스트, 단일 버전 필드, 공유 도구 구성, 하나의 집계된 테스트 모듈, 추적된 빌드 출력), 세 가지 다른 올바른 해상도로 Union-vs-recompute-vs-rebuild, 절대 병합해서는 안 되는 생성된 아티팩트, 모든 브랜치 충돌을 일으키는 비결정적 직렬화, Git이 표시할 수 없는 번호가 다시 매겨진 식별자 및 그 이유 깨끗한 자동 병합은 합격 테스트가 아닙니다. 수명이 긴 브랜치를 리베이스하거나 병합할 때, 충돌 표시를 해결하고, 병합 커밋을 검토할 때, 리포지토리가 커밋해야 할 것과 생성할 것을 결정하거나, 병렬 기여를 할 리포지토리를 설정할 때 사용하세요."
+    },
+    "ui-design": {
+      "name": "designing-interfaces",
+      "type": "skill",
+      "description": "Makes a product's UI look deliberate and current instead of dated or improvised — auditing a screen against hierarchy, type scale, spacing scale, color tokens, layout and component consistency; introducing design tokens before restyling anything; and verifying every change visually with before/after screenshots. Use when building or restyling any web or app screen, reviewing a UI that looks old, cluttered or inconsistent, starting a design system for an existing app, or planning a design-improvement issue.",
+      "source_repo": "https://github.com/wdm0006/python-skills.git",
+      "source_name": "wdm0006/python-skills",
+      "path": "collected_assets/skills/ui-design"
     },
     "rendering-untrusted-content": {
       "name": "rendering-untrusted-content",
@@ -18762,11 +18783,10 @@
     "sqldbconfig-review": {
       "name": "sqldbconfig-review",
       "type": "skill",
-      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 29 checks (B1–B29) across five categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), and surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, or sys.server_principals.",
+      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 32 checks (B1–B32) across six categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), and surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, or sys.server_principals.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqldbconfig-review",
-      "description_ko": "입증된 DBA 모범 사례를 기준으로 SQL Server 인스턴스 및 데이터베이스 구성 드리프트를 분석합니다. 병렬 처리 조정(MAXDOP, 병렬 처리를 위한 비용 임계값, 임시 작업 부하 최적화), 메모리 구성(최대 서버 메모리, 메모리의 페이지 잠금), 데이터베이스 수준 설정(자동 축소, 자동 닫기, 호환성 수준, RCSI, 페이지 확인, 통계, 신뢰할 수 있음, DB 간 연결), 파일 및 저장소 구성(VLF 수, 자동 증가 비율, 즉시 파일 초기화, TempDB 파일 수) 및 노출 영역 노출(CLR, OLE 자동화, 임시 분산 쿼리, 서비스-SID 시스템 관리자 멤버십). 변경 후 서버가 비정상적으로 작동하거나, 새 인스턴스에 구성 감사가 필요하거나, 자동 구성 오류가 성능 또는 안정성 문제의 근본 원인으로 의심되는 경우 이 기술을 사용하십시오. sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info 또는 sys.server_principals의 출력을 붙여넣을 때 트리거됩니다."
+      "path": "collected_assets/skills/sqldbconfig-review"
     },
     "sqlmigration-objects-review": {
       "name": "sqlmigration-objects-review",
@@ -18843,11 +18863,10 @@
     "sqlerrorlog-review": {
       "name": "sqlerrorlog-review",
       "type": "skill",
-      "description": "Analyzes SQL Server ERRORLOG files for operational issues, availability group failures, memory pressure, I/O subsystem warnings, and security events. Use this skill whenever a SQL Server instance has experienced unexpected behavior, an AG failover, memory warnings, I/O latency alerts, or abnormal shutdown, and you need a structured timeline of what SQL Server recorded. Applies 33 checks (E1–E33) covering AG health, memory/resource pressure, I/O and storage, startup/shutdown, connectivity, configuration signals, and SQL 2019/2022 modern feature events.",
+      "description": "Analyzes SQL Server ERRORLOG files for operational issues, availability group failures, memory pressure, I/O subsystem warnings, and security events. Use this skill whenever a SQL Server instance has experienced unexpected behavior, an AG failover, memory warnings, I/O latency alerts, or abnormal shutdown, and you need a structured timeline of what SQL Server recorded. Applies 34 checks (E1–E34) covering AG health, memory/resource pressure, I/O and storage, startup/shutdown, connectivity, configuration signals, SQL 2019/2022 modern feature events, and stack or memory dumps.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlerrorlog-review",
-      "description_ko": "운영 문제, 가용성 그룹 오류, 메모리 부족, I/O 하위 시스템 경고 및 보안 이벤트에 대해 SQL Server ERRORLOG 파일을 분석합니다. SQL Server 인스턴스에 예기치 않은 동작, AG 장애 조치(failover), 메모리 경고, I/O 대기 시간 경고 또는 비정상적인 종료가 발생하고 SQL Server가 기록한 내용에 대한 구조화된 타임라인이 필요할 때마다 이 기술을 사용하세요. AG 상태, 메모리/리소스 부족, I/O 및 스토리지, 시작/종료, 연결, 구성 신호, SQL 2019/2022 최신 기능 이벤트를 다루는 33가지 검사(E1~E33)를 적용합니다."
+      "path": "collected_assets/skills/sqlerrorlog-review"
     },
     "sqlmigration-security-review": {
       "name": "sqlmigration-security-review",
@@ -18951,11 +18970,10 @@
     "sqlblocking-review": {
       "name": "sqlblocking-review",
       "type": "skill",
-      "description": "Analyze SQL Server lock blocking from sys.dm_exec_requests, sys.dm_exec_sessions, sys.dm_os_waiting_tasks, sys.dm_tran_locks, open-transaction DMVs, blocked process reports, index operational stats, Query Store lock waits, and community tool output such as sp_WhoIsActive, sp_BlitzWho and sp_HumanEvents. Applies 54 checks (BL1–BL54) covering blocking chain topology and head-blocker identification, head-blocker state classification against the six documented blocking scenarios, lock-level evidence such as escalation and Sch-M and key-range locks, transaction and isolation-level design faults, historical and aggregate blocking evidence when nobody was watching, structural engine-level causes such as statistics updates and lock partitioning, and client, tooling and platform patterns. Use this skill whenever sessions are blocked, applications report lock timeouts, LCK_M waits dominate, or a DBA pastes blocking chain output and asks who is blocking whom. Trigger when blocked_session_id, blocking_session_id, blocked process report XML, sp_WhoIsActive or sp_who2 BlkBy output is present.",
+      "description": "Analyze SQL Server lock blocking from sys.dm_exec_requests, sys.dm_exec_sessions, sys.dm_os_waiting_tasks, sys.dm_tran_locks, open-transaction DMVs, blocked process reports, index operational stats, Query Store lock waits, and community tool output such as sp_WhoIsActive, sp_BlitzWho and sp_HumanEvents. Applies 55 checks (BL1–BL55) covering blocking chain topology and head-blocker identification, head-blocker state classification against the six documented blocking scenarios, lock-level evidence such as escalation and Sch-M and key-range locks, transaction and isolation-level design faults, historical and aggregate blocking evidence when nobody was watching, structural engine-level causes such as statistics updates and lock partitioning, client, tooling and platform patterns, and workload co-occurrence patterns such as a same-statement pileup that resembles blocking but is not. Use this skill whenever sessions are blocked, applications report lock timeouts, LCK_M waits dominate, or a DBA pastes blocking chain output and asks who is blocking whom. Trigger when blocked_session_id, blocking_session_id, blocked process report XML, sp_WhoIsActive or sp_who2 BlkBy output is present.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlblocking-review",
-      "description_ko": "sys.dm_exec_requests, sys.dm_exec_sessions, sys.dm_os_waiting_tasks, sys.dm_tran_locks, 오픈 트랜잭션 DMV, 차단된 프로세스 보고서, 인덱스 작업 통계, 쿼리 저장소 잠금 대기 및 커뮤니티 도구 출력(예: sp_WhoIsActive, sp_BlitzWho 및 sp_HumanEvents)에서 차단되는 SQL Server 잠금을 분석합니다. 차단 체인 토폴로지 및 헤드 차단기 식별, 문서화된 6개의 차단 시나리오에 대한 헤드 차단기 상태 분류, 에스컬레이션 및 Sch-M 및 키 범위 잠금과 같은 잠금 수준 증거, 트랜잭션 및 격리 수준 설계 오류, 아무도 보고 있지 않을 때 기록 및 집계 차단 증거, 통계 업데이트 및 잠금 파티셔닝과 같은 구조적 엔진 수준 원인, 클라이언트, 도구 및 플랫폼 패턴을 다루는 54개 검사(BL1–BL54)를 적용합니다. 세션이 차단되거나, 애플리케이션이 잠금 시간 초과를 보고하거나, LCK_M 대기가 지배적이거나, DBA가 차단 체인 출력을 붙여넣고 누가 누구를 차단하는지 물어볼 때마다 이 기술을 사용하세요. Blocked_session_id, Blocking_session_id, 차단된 프로세스 보고서 XML, sp_WhoIsActive 또는 sp_who2 BlkBy 출력이 존재할 때 트리거됩니다."
+      "path": "collected_assets/skills/sqlblocking-review"
     },
     "sqlquerystore-review": {
       "name": "sqlquerystore-review",
@@ -20273,6 +20291,14 @@
       "path": "collected_assets/skills/itil-expert",
       "description_ko": "AI 기반 거버넌스, 지속 가능성 및 가치 공동 창출을 전문으로 하는 ITIL 4 및 ITIL 5(2026 디지털 제품 패러다임) 전문 고문입니다."
     },
+    "repurpose-into-a-post": {
+      "name": "repurpose-into-a-post",
+      "type": "skill",
+      "description": "Turn an article, newsletter, transcript or video into a Twitter/X or LinkedIn post that stands on its own. Use when someone wants to repurpose, share or promote content they already made.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/repurpose-into-a-post"
+    },
     "skill-gap-analysis": {
       "name": "skill-gap-analysis",
       "type": "skill",
@@ -20603,6 +20629,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-mgmt-fabric-py",
       "description_ko": "Python용 Azure 패브릭 관리 SDK. Microsoft Fabric 용량 및 리소스를 관리하는 데 사용합니다."
+    },
+    "turn-this-into-a-thread": {
+      "name": "turn-this-into-a-thread",
+      "type": "skill",
+      "description": "Turn a long idea, transcript, article or draft into a Twitter/X thread where every tweet stands alone. Use when someone asks for a thread or to break long writing into tweets.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/turn-this-into-a-thread"
     },
     "content-marketer": {
       "name": "content-marketer",
@@ -21204,6 +21238,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/emblemai-crypto-wallet",
       "description_ko": "EmblemAI Agent Hustle API를 통해 7개 블록체인에 걸쳐 암호화폐 지갑을 관리합니다. Solana, Ethereum, Base, BSC, Polygon, Hedera 및 Bitcoin에 대한 잔액 확인, 토큰 스왑, 포트폴리오 분석 및 거래 실행."
+    },
+    "why-did-this-post-flop": {
+      "name": "why-did-this-post-flop",
+      "type": "skill",
+      "description": "Diagnose why one Twitter/X or LinkedIn post underperformed: not seen, seen and skipped, or read and ignored. Use when someone asks why a post did badly or got no engagement.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/why-did-this-post-flop"
     },
     "docker-compose": {
       "name": "docker-compose",
@@ -22791,6 +22833,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hunt-nodejs",
       "description_ko": "Node.js 특정 취약점 사냥"
+    },
+    "axonx": {
+      "name": "axonx",
+      "type": "skill",
+      "description": "Develop AxonX research plugins and operate quantitative research tasks through CLI or MCP, inspecting execution status, logs, artifacts, and lineage.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/axonx"
     },
     "company-email-accounts": {
       "name": "company-email-accounts",
@@ -26162,6 +26212,14 @@
       "path": "collected_assets/skills/fp-ts-pragmatic",
       "description_ko": "fp-ts 함수형 프로그래밍에 대한 실용적이고 전문 용어 없는 가이드 - 학술적인 부담 없이 결과를 얻는 80/20 접근 방식입니다. fp-ts 라이브러리로 TypeScript를 작성할 때 사용합니다."
     },
+    "fxmacrodata": {
+      "name": "fxmacrodata",
+      "type": "skill",
+      "description": "Query FXMacroData for official-source macro indicators, release calendars, central-bank policy rates, FX rates and CFTC positioning across 22 currencies.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/fxmacrodata"
+    },
     "issues": {
       "name": "issues",
       "type": "skill",
@@ -27570,6 +27628,14 @@
       "path": "collected_assets/skills/azure-keyvault-keys-ts",
       "description_ko": "JavaScript용 Azure Key Vault Keys SDK(@azure/keyvault-keys)를 사용하여 암호화 키를 관리합니다. 키를 생성, 암호화/복호화, 서명 또는 순환할 때 사용합니다."
     },
+    "supercov": {
+      "name": "supercov",
+      "type": "skill",
+      "description": "Measure line, branch and MC/DC coverage of a project's existing tests with the supercov CLI, then write small, focused tests for the code no test reaches.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/supercov"
+    },
     "openclaw-security-hardening": {
       "name": "openclaw-security-hardening",
       "type": "skill",
@@ -28536,11 +28602,10 @@
     "onboarding-psychologist": {
       "name": "onboarding-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Design first-use and onboarding experiences that bring an early win, cut setup friction, build ownership and form habits through stable cues. Use when onboarding loses users early, time-to-value is long, or the first session should build confidence, momentum and a lasting habit.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/onboarding-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/onboarding-psychologist"
     },
     "ask-questions-if-underspecified": {
       "name": "ask-questions-if-underspecified",
@@ -29432,11 +29497,10 @@
     "jobs-to-be-done-analyst": {
       "name": "jobs-to-be-done-analyst",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Uncover the functional, emotional and social jobs a customer hires a product to do: progress state, hiring trigger, alternatives, success criteria, JTBD map. Use when you need to understand why users buy, switch or churn, or to anchor positioning, messaging and onboarding in real jobs.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/jobs-to-be-done-analyst",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/jobs-to-be-done-analyst"
     },
     "hig-components-layout": {
       "name": "hig-components-layout",
@@ -30274,6 +30338,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/clarity-gate",
       "description_ko": ">"
+    },
+    "get-seen-in-replies": {
+      "name": "get-seen-in-replies",
+      "type": "skill",
+      "description": "Write a reply to someone else's tweet that is worth reading on its own. Use when someone asks what to reply, wants to grow by replying on Twitter/X, or says their replies go nowhere.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/get-seen-in-replies"
     },
     "docusign-automation": {
       "name": "docusign-automation",
@@ -32017,6 +32089,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/slack-bot-builder",
       "description_ko": "Python 전반에 걸쳐 Bolt 프레임워크를 사용하여 Slack 앱을 구축하고,"
+    },
+    "draft-my-comments": {
+      "name": "draft-my-comments",
+      "type": "skill",
+      "description": "Write a LinkedIn comment that adds something the post did not have, not agreement. Use when someone asks what to comment, wants to engage with creators, or says their comments go nowhere.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/draft-my-comments"
     },
     "scientific-writing": {
       "name": "scientific-writing",
@@ -34745,6 +34825,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ax-extract-workflow",
       "description_ko": "로컬 도끼 세션/커밋/기술/도구 추적을 사용하여 과거 코딩 에이전트 아티팩트 뒤에 있는 워크플로를 재구성합니다. X가 어떻게 만들어졌는지 물었을 때 사용하세요."
+    },
+    "write-in-my-voice": {
+      "name": "write-in-my-voice",
+      "type": "skill",
+      "description": "Draft a Twitter/X or LinkedIn post that sounds like the person asking, from posts they already wrote. Use when someone asks for a post or rewrite in their voice, or asks if text sounds like them.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/write-in-my-voice"
     },
     "using-superpowers": {
       "name": "using-superpowers",
@@ -37493,6 +37581,14 @@
       "path": "collected_assets/skills/tdd-workflows",
       "description_ko": "tdd 워크플로 tdd 주기(tdd-workflows-tdd-cycle의 별칭)로 작업할 때 사용합니다."
     },
+    "define-my-content-pillars": {
+      "name": "define-my-content-pillars",
+      "type": "skill",
+      "description": "Find the three to five subjects someone can post about repeatedly, from what they have published and know first-hand. Use when someone asks what to post about or has run out of ideas.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/define-my-content-pillars"
+    },
     "weather-data-reproducibility": {
       "name": "weather-data-reproducibility",
       "type": "skill",
@@ -37501,6 +37597,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/weather-data-reproducibility",
       "description_ko": "객체 ID, 선택 항목, 소프트웨어 버전, 변환 및 해시를 포함하여 날씨 데이터 입력 및 파생 아티팩트에 대한 출처 매니페스트를 기록하고 확인합니다."
+    },
+    "same-idea-both-platforms": {
+      "name": "same-idea-both-platforms",
+      "type": "skill",
+      "description": "Write one idea as a Twitter/X post and a LinkedIn post that read as written separately, not pasted twice. Use when someone wants to cross-post or adapt a post for the other platform.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/same-idea-both-platforms"
     },
     "tune-monitor": {
       "name": "tune-monitor",
@@ -39346,6 +39450,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/expo-api-routes",
       "description_ko": "EAS 호스팅을 사용하는 Expo Router에서 API 경로를 생성하기 위한 지침"
+    },
+    "byagent": {
+      "name": "byagent",
+      "type": "skill",
+      "description": "Publish agent-written Markdown or HTML as a shareable link with the byagent CLI, then read readers' line comments back, edit, republish to the same link and resolve them.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/byagent"
     },
     "osint-methodology": {
       "name": "osint-methodology",
@@ -49497,6 +49609,24 @@
       "path": "collected_assets/skills/skill-fit",
       "description_ko": ">-"
     },
+    "agent-dispatch": {
+      "name": "agent-dispatch",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/agent-dispatch",
+      "description_ko": ">-"
+    },
+    "pipeline-0to1": {
+      "name": "pipeline-0to1",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/NinjaSln-labs/agent-skills.git",
+      "source_name": "NinjaSln-labs/agent-skills",
+      "path": "collected_assets/skills/pipeline-0to1",
+      "description_ko": ">-"
+    },
     "stage-gate": {
       "name": "stage-gate",
       "type": "skill",
@@ -51062,6 +51192,15 @@
       "path": "collected_assets/skills/enforce-slsa",
       "description_ko": ">-"
     },
+    "fme-rollout-pipeline": {
+      "name": "fme-rollout-pipeline",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/fme-rollout-pipeline",
+      "description_ko": ">-"
+    },
     "debug-pipeline": {
       "name": "debug-pipeline",
       "type": "skill",
@@ -51096,6 +51235,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/configure-agent-pr-attestation",
+      "description_ko": ">-"
+    },
+    "cleanup-feature-flags": {
+      "name": "cleanup-feature-flags",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/cleanup-feature-flags",
       "description_ko": ">-"
     },
     "gitops-status": {
@@ -60818,6 +60966,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/agents/build-failure-analyst.agent.md",
       "description_ko": ".NET/MSBuild 리포지토리에 대한 전문 빌드 실패 분석가입니다. 빌드가 바이너리 로그(`*.binlog`)를 생성하고 실패의 근본 원인을 식별하고 관련 오류를 그룹화하고 구체적인 수정 사항을 제안해야 할 때 호출합니다. `binlog-mcp` MCP 서버(컨테이너화됨 - 호출 워크플로의 `mcp-servers.binlog-mcp` 구성 참조)를 통해 실시간으로 binlog를 쿼리하고 원래 PR에 분석 설명과 인라인 `제안` 블록을 게시합니다."
+    },
+    "unskip-closed-tests.agent": {
+      "name": "unskip-closed-tests.agent",
+      "type": "agent",
+      "description": "Selects only source-bound, deterministically eligible .NET Ignore sites for trusted revalidation and test execution.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/agents/unskip-closed-tests.agent.md"
     },
     "test-failure-analyst.agent": {
       "name": "test-failure-analyst.agent",
