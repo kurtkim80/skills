@@ -18771,19 +18771,26 @@
       "path": "collected_assets/skills/storytelling-viz",
       "description_ko": "로컬 검토 아티팩트를 사용하여 데이터세트를 세련된 대화형 시각화로 전환하는 스토리 우선 Plotly 워크플로입니다. 사용자가 웹사이트 게시 작업 없이 최종 `index.html` 및 `preview.html`과 함께 명확한 요약이 포함된 간결하고 직관적인 차트를 원할 때 이 기술을 사용하세요."
     },
+    "sqlperfmon-review": {
+      "name": "sqlperfmon-review",
+      "type": "skill",
+      "description": "Analyze Windows Performance Monitor counter data for a SQL Server host to establish whether the operating system itself is the bottleneck and which process is responsible. Applies 14 checks (PM1-PM14) covering SQL process CPU saturation, non-SQL CPU competition, privileged/kernel time, page life expectancy, virtual address space growth, OS memory exhaustion, logical disk latency, hot volumes masked by the _Total instance, compilation and recompilation rates expressed against batch throughput, plan cache object growth, batch request baseline shifts, client cancellation rate, and counter collection integrity. Use this skill when a .blg or relog CSV is supplied, when sys.dm_os_performance_counters output is pasted, when CPU is high but no query explains it, when the host is suspected rather than the database, or when asked whether SQL Server or something else on the server is consuming the machine.",
+      "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
+      "source_name": "vanterx/mssql-performance-skills",
+      "path": "collected_assets/skills/sqlperfmon-review"
+    },
     "sqlplan-review": {
       "name": "sqlplan-review",
       "type": "skill",
-      "description": "Analyze SQL Server execution plans for performance anti-patterns, bottleneck identification, and actionable fix recommendations. Applies 111 checks (S1–S38 statement-level, N1–N73 node-level) covering memory grants, parallelism, cardinality errors, spills, scans, index usage, IQP/PSP features, ADR, CE feedback, hidden UDF cost, and in-plan wait stats. Use this skill whenever a user pastes a .sqlplan file or XML, shares an SSMS execution plan, asks why a query is slow or regressed after a deployment or stats update, mentions a specific operator (Key Lookup, Hash Match, Sort, Nested Loops, Scan), asks about memory grants, spills, compile timeout, parameter sniffing, or plan shape. Also trigger when the user uploads a .sqlplan file, describes a plan tree verbally, or asks for execution plan review, plan analysis, or query tuning help.",
+      "description": "Analyze SQL Server execution plans for performance anti-patterns, bottleneck identification, and actionable fix recommendations. Applies 112 checks (S1–S38 statement-level, N1–N74 node-level) covering memory grants, parallelism, cardinality errors, spills, scans, index usage, IQP/PSP features, ADR, CE feedback, hidden UDF cost, and in-plan wait stats. Use this skill whenever a user pastes a .sqlplan file or XML, shares an SSMS execution plan, asks why a query is slow or regressed after a deployment or stats update, mentions a specific operator (Key Lookup, Hash Match, Sort, Nested Loops, Scan), asks about memory grants, spills, compile timeout, parameter sniffing, or plan shape. Also trigger when the user uploads a .sqlplan file, describes a plan tree verbally, or asks for execution plan review, plan analysis, or query tuning help.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlplan-review",
-      "description_ko": "성능 방지 패턴, 병목 현상 식별 및 실행 가능한 수정 권장 사항에 대한 SQL Server 실행 계획을 분석합니다. 메모리 부여, 병렬 처리, 카디널리티 오류, 유출, 스캔, 인덱스 사용, IQP/PSP 기능, ADR, CE 피드백, 숨겨진 UDF 비용 및 계획 내 대기 통계를 다루는 111개 검사(S1~S38 문 수준, N1~N73 노드 수준)를 적용합니다. 사용자가 .sqlplan 파일 또는 XML을 붙여넣고, SSMS 실행 계획을 공유하고, 배포 또는 통계 업데이트 후 쿼리가 느리거나 회귀되는 이유를 묻고, 특정 연산자(키 조회, 해시 일치, 정렬, 중첩 루프, 스캔)를 언급하고, 메모리 부여, 유출, 컴파일 시간 초과, 매개 변수 스니핑 또는 계획 형태에 대해 물을 때마다 이 기술을 사용하세요. 또한 사용자가 .sqlplan 파일을 업로드하거나, 계획 트리를 구두로 설명하거나, 실행 계획 검토, 계획 분석 또는 쿼리 튜닝 도움을 요청할 때 트리거됩니다."
+      "path": "collected_assets/skills/sqlplan-review"
     },
     "sqldbconfig-review": {
       "name": "sqldbconfig-review",
       "type": "skill",
-      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 32 checks (B1–B32) across six categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), and surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, or sys.server_principals.",
+      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 37 checks (B1–B37) across seven categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership), and host and licensing capacity (Common Criteria compliance overhead, scheduler count below OS CPU count, access check cache overrides, Windows power plan, non-Microsoft modules loaded in the SQL Server process). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, sys.server_principals, sys.dm_os_loaded_modules, or powercfg /getactivescheme.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
       "path": "collected_assets/skills/sqldbconfig-review"
@@ -18943,11 +18950,10 @@
     "sqlwait-review": {
       "name": "sqlwait-review",
       "type": "skill",
-      "description": "Analyze SQL Server wait statistics to identify why the server or a session is slow. Applies 44 checks (V1–V44) covering I/O, locks, parallelism, memory, CPU, TempDB, log I/O, network, latch contention, log space exhaustion, poison/throttle waits, backup I/O, insert hotspots, cumulative skew detection, multi-snapshot trend analysis, In-Memory OLTP, Columnstore, Query Store, Transaction/DTC, Service Broker, Full Text Search, Parallel Redo, forced memory grants, grant timeouts, stolen memory, file I/O latency, SQL 2019/2022 IQP/PSP/ADR feature waits, and TempDB memory-optimized metadata contention. Based on community wait statistics methodology. Use when pasting sys.dm_os_wait_stats or sys.dm_exec_requests output.",
+      "description": "Analyze SQL Server wait statistics to identify why the server or a session is slow. Applies 45 checks (V1–V45) covering I/O, locks, parallelism, memory, CPU, TempDB, log I/O, network, latch contention, log space exhaustion, poison/throttle waits, backup I/O, insert hotspots, cumulative skew detection, multi-snapshot trend analysis, In-Memory OLTP, Columnstore, Query Store, Transaction/DTC, Service Broker, Full Text Search, Parallel Redo, forced memory grants, grant timeouts, stolen memory, file I/O latency, SQL 2019/2022 IQP/PSP/ADR feature waits, TempDB memory-optimized metadata contention, and spinlock contention that is invisible to wait statistics. Based on community wait statistics methodology. Use when pasting sys.dm_os_wait_stats or sys.dm_exec_requests output.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlwait-review",
-      "description_ko": "SQL Server 대기 통계를 분석하여 서버 또는 세션이 느린 이유를 식별합니다. I/O, 잠금, 병렬 처리, 메모리, CPU, TempDB, 로그 I/O, 네트워크, 래치 경합, 로그 공간 소모, 포이즌/스로틀 대기, 백업 I/O, 핫스팟 삽입, 누적 편향 감지, 다중 스냅샷 추세 분석, 메모리 내 OLTP, Columnstore, 쿼리 저장소, 트랜잭션/DTC, Service Broker, 전체 텍스트 검색, 병렬을 다루는 44개 검사(V1–V44) 적용 다시 실행, 강제 메모리 부여, 부여 시간 초과, 도난당한 메모리, 파일 I/O 대기 시간, SQL 2019/2022 IQP/PSP/ADR 기능 대기 및 TempDB 메모리 최적화 메타데이터 경합. 커뮤니티 대기 통계 방법론을 기반으로 합니다. sys.dm_os_wait_stats 또는 sys.dm_exec_requests 출력을 붙여넣을 때 사용합니다."
+      "path": "collected_assets/skills/sqlwait-review"
     },
     "sqlindex-advisor": {
       "name": "sqlindex-advisor",
@@ -20790,6 +20796,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/browser-act",
       "description_ko": "인증된 브라우저 자동화, JS 렌더링 추출, 스크린샷, 병렬 세션, 확인 처리 및 인간 핸드오프를 위해 BrowserAct를 사용하십시오."
+    },
+    "shark": {
+      "name": "shark",
+      "type": "skill",
+      "description": "Pitch a business idea to a Shark Tank-style panel of Claude sub-agent investors who grill it, hear a founder agent answer, and each go IN or OUT with a practice offer.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/shark"
     },
     "marketplace-rbac-audit": {
       "name": "marketplace-rbac-audit",
@@ -23547,6 +23561,14 @@
       "path": "collected_assets/skills/new-rails-project",
       "description_ko": "새로운 레일스 프로젝트 생성"
     },
+    "court": {
+      "name": "court",
+      "type": "skill",
+      "description": "Put an idea on trial: a prosecutor and a defense Claude argue, 12 juror sub-agents vote independently, and a judge reads the verdict and the changes that would flip it.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/court"
+    },
     "remotion-docs": {
       "name": "remotion-docs",
       "type": "skill",
@@ -24512,6 +24534,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/smart-contract-upgrade-governance"
+    },
+    "darkmoon-pentest": {
+      "name": "darkmoon-pentest",
+      "type": "skill",
+      "description": "Start, follow and triage authorized autonomous AI pentest runs on a self-hosted Darkmoon Pro instance through its MCP server.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/darkmoon-pentest"
     },
     "prototype": {
       "name": "prototype",
@@ -28491,6 +28521,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/review-swarm",
       "description_ko": "현재 git diff 또는 명시적 파일 범위에 대한 병렬 읽기 전용 다중 에이전트 검토를 통해 동작 회귀, 보안 또는 개인 정보 보호 위험, 성능 또는 안정성 문제, 계약 또는 테스트 적용 범위 격차를 찾습니다."
+    },
+    "scarf-single-cell": {
+      "name": "scarf-single-cell",
+      "type": "skill",
+      "description": "Analyze single-cell RNA-seq at million-cell scale with Scarf: out-of-core Zarr stores on disk or object storage, provenance-tracked artifacts, audited QC, clustering, markers and donor comparisons.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/scarf-single-cell"
     },
     "technical-change-tracker": {
       "name": "technical-change-tracker",
@@ -32732,6 +32770,14 @@
       "path": "collected_assets/skills/sast-scanning",
       "description_ko": "Semgrep과 같은 도구를 사용하여 정적 애플리케이션 보안 테스트를 수행합니다."
     },
+    "lognorm": {
+      "name": "lognorm",
+      "type": "skill",
+      "description": "Work a site's SEO and AI-visibility (GEO) backlog through the hosted LogNorm MCP server: audits, fixes, content, AI-answer tracking.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/lognorm"
+    },
     "crossframe-critical": {
       "name": "crossframe-critical",
       "type": "skill",
@@ -36251,6 +36297,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/autonomous-agent-patterns",
       "description_ko": "[Cline](https://github.com/cline/cline) 및 [OpenAI Codex](https://github.com/openai/codex)에서 영감을 받아 자율 코딩 에이전트를 구축하기 위한 설계 패턴입니다."
+    },
+    "session-handoff": {
+      "name": "session-handoff",
+      "type": "skill",
+      "description": "Use when context approaches capacity, before /clear or /compact, when switching tasks, or when ending a coding session: produces a structured handoff artifact for the next session.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/session-handoff"
     },
     "youtube-seo-optimizer": {
       "name": "youtube-seo-optimizer",
@@ -50850,6 +50904,15 @@
       "path": "collected_assets/skills/create-environment",
       "description_ko": ">-"
     },
+    "choose-metric": {
+      "name": "choose-metric",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/choose-metric",
+      "description_ko": ">-"
+    },
     "chaos-dr-test": {
       "name": "chaos-dr-test",
       "type": "skill",
@@ -50902,6 +50965,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/create-policy",
+      "description_ko": ">-"
+    },
+    "create-metric": {
+      "name": "create-metric",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/create-metric",
       "description_ko": ">-"
     },
     "deployment-readiness": {
@@ -51039,6 +51111,15 @@
       "path": "collected_assets/skills/security-report",
       "description_ko": "MCP를 통해 Harness SCS 및 STO를 사용하여 보안 규정 준수 보고서를 생성합니다. 취약점, SBOM을 분석하고 면제를 관리합니다. 사용자가 \"보안 보고서\", \"취약성\", \"SBOM\", \"보안 검사\", \"규정 준수 확인\"이라고 말하거나 애플리케이션 보안에 대해 질문할 때 사용합니다."
     },
+    "instrument-metric": {
+      "name": "instrument-metric",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/instrument-metric",
+      "description_ko": ">-"
+    },
     "manage-supply-chain": {
       "name": "manage-supply-chain",
       "type": "skill",
@@ -51102,6 +51183,15 @@
       "path": "collected_assets/skills/create-agent-template",
       "description_ko": ">-"
     },
+    "fme-pipeline": {
+      "name": "fme-pipeline",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/fme-pipeline",
+      "description_ko": ">-"
+    },
     "analyze-costs": {
       "name": "analyze-costs",
       "type": "skill",
@@ -51147,6 +51237,15 @@
       "path": "collected_assets/skills/configure-secret-scan",
       "description_ko": ">-"
     },
+    "create-experiment": {
+      "name": "create-experiment",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/create-experiment",
+      "description_ko": ">-"
+    },
     "create-connector": {
       "name": "create-connector",
       "type": "skill",
@@ -51190,15 +51289,6 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/enforce-slsa",
-      "description_ko": ">-"
-    },
-    "fme-rollout-pipeline": {
-      "name": "fme-rollout-pipeline",
-      "type": "skill",
-      "description": ">-",
-      "source_repo": "https://github.com/harness/harness-skills.git",
-      "source_name": "harness/harness-skills",
-      "path": "collected_assets/skills/fme-rollout-pipeline",
       "description_ko": ">-"
     },
     "debug-pipeline": {
@@ -51280,6 +51370,24 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/manage-iacm",
+      "description_ko": ">-"
+    },
+    "review-experiment-results": {
+      "name": "review-experiment-results",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/review-experiment-results",
+      "description_ko": ">-"
+    },
+    "explain-flag": {
+      "name": "explain-flag",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/explain-flag",
       "description_ko": ">-"
     },
     "manage-idp": {
