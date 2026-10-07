@@ -22222,6 +22222,14 @@
       "path": "collected_assets/skills/circleci",
       "description_ko": "지속적인 통합을 위해 CircleCI 워크플로우 및 오브를 구성하고"
     },
+    "shipvela-publish": {
+      "name": "shipvela-publish",
+      "type": "skill",
+      "description": "Publish an explicitly selected website through the user's connected Shipvela MCP account, track the exact deployment, and return its live HTTPS URL after success.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/shipvela-publish"
+    },
     "feature-flags": {
       "name": "feature-flags",
       "type": "skill",
@@ -25824,6 +25832,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/dev-to-hashnode",
       "description_ko": "사용자가 Dev.to, Hashnode 또는 기타 개발자 블로그 플랫폼에 게시하려는 경우. 트리거 문구에는 \"Dev.to\", \"Hashnode\", \"개발자 블로그\", \"교차 게시\", \"기술 블로깅\", \"표준 URL\" 또는 \"개발자 콘텐츠 플랫폼\"이 포함됩니다."
+    },
+    "linkdigest-social-link-reader": {
+      "name": "linkdigest-social-link-reader",
+      "type": "skill",
+      "description": "Read one public Xiaohongshu, Douyin, TikTok, YouTube, X or WeChat article link into text an agent can use (transcript, image text, key points) via the LinkDigest API or MCP server.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/linkdigest-social-link-reader"
     },
     "access-matrix": {
       "name": "access-matrix",
@@ -29486,6 +29502,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/issue-grievance-tracker"
+    },
+    "agent-reels": {
+      "name": "agent-reels",
+      "type": "skill",
+      "description": "Find animation and video references on 1human, consult a human-agent shared library, and contribute public creations only with prior owner permission.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agent-reels"
     },
     "azure-ai-language-conversations-py": {
       "name": "azure-ai-language-conversations-py",
@@ -34747,6 +34771,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/google-drive-automation",
       "description_ko": "독립형 OAuth 인증과 경량 Google 드라이브 통합. MCP 서버가 필요하지 않습니다. 전체 읽기/쓰기 액세스."
+    },
+    "email-marketing-bible": {
+      "name": "email-marketing-bible",
+      "type": "skill",
+      "description": "Data-backed email marketing for AI agents: automation flows, deliverability triage, copy de-slopping, AI email design, ESP control via MCP with send gates and compliance.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/email-marketing-bible"
     },
     "azure-ai-voicelive-dotnet": {
       "name": "azure-ai-voicelive-dotnet",
@@ -42957,11 +42989,10 @@
     "foundry-hosted-agent-copilotkit": {
       "name": "foundry-hosted-agent-copilotkit",
       "type": "skill",
-      "description": "Ongoing development guidance for agentic web apps that pair a CopilotKit frontend with Microsoft Agent Framework agents on Azure AI Foundry hosted agents over the AG-UI protocol - add and gate agent tools, wire human-in-the-loop approvals, build generative UI and shared state, debug the event stream, upgrade pre-1.0 packages safely, and deploy hosted agent updates.",
+      "description": "Build and evolve agentic web apps that pair a CopilotKit React frontend with a Microsoft Agent Framework agent running as a Microsoft Foundry hosted agent, connected over the AG-UI protocol. Covers choosing the wiring, using Foundry-native primitives instead of hand-rolled plumbing, agent tools, human-in-the-loop approvals, generative UI and shared state, local run and azd deploy, debugging the event stream, and safe upgrades.",
       "source_repo": "https://github.com/github/awesome-copilot.git",
       "source_name": "github/awesome-copilot",
-      "path": "collected_assets/skills/foundry-hosted-agent-copilotkit",
-      "description_ko": "AG-UI 프로토콜을 통해 CopilotKit 프런트엔드를 Azure AI Foundry 호스팅 에이전트의 Microsoft Agent Framework 에이전트와 연결하는 에이전트 웹 앱에 대한 지속적인 개발 지침 - 에이전트 도구 추가 및 게이트, Human-In-The-Loop 승인 연결, 생성 UI 및 공유 상태 구축, 이벤트 스트림 디버깅, 1.0 이전 패키지를 안전하게 업그레이드, 호스팅 에이전트 업데이트 배포."
+      "path": "collected_assets/skills/foundry-hosted-agent-copilotkit"
     },
     "appinsights-instrumentation": {
       "name": "appinsights-instrumentation",
@@ -43698,6 +43729,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/react19-source-patterns",
       "description_ko": "API 변경, 참조 처리, 컨텍스트 업데이트를 포함한 React 19 소스 파일 마이그레이션 패턴에 대한 참조입니다."
+    },
+    "make-blog-post": {
+      "name": "make-blog-post",
+      "type": "skill",
+      "description": "Turn code from the current session into a blog post written in the voice of its author. Covers one function, script, class, or tool as a focused walkthrough with a generalized sample and a usage example, learns tone and structure from existing posts or writing samples by the same author, takes the destination from what the user names or the blog repository in use instead of assumed folders, and saves no file until the draft is approved. Use when asked to write, draft, or turn code into a blog post, article, tutorial, or gist, or when invoked as /make-blog-post at the end of a turn.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/make-blog-post"
     },
     "sql-server-table-reconciliation": {
       "name": "sql-server-table-reconciliation",
@@ -50886,6 +50925,15 @@
       "path": "collected_assets/skills/enforce-sbom",
       "description_ko": ">-"
     },
+    "instrument-feature-flag": {
+      "name": "instrument-feature-flag",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/instrument-feature-flag",
+      "description_ko": ">-"
+    },
     "create-pipeline": {
       "name": "create-pipeline",
       "type": "skill",
@@ -51003,6 +51051,15 @@
       "path": "collected_assets/skills/approve-exempt",
       "description_ko": ">-"
     },
+    "feature-flag-onboarding": {
+      "name": "feature-flag-onboarding",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/feature-flag-onboarding",
+      "description_ko": ">-"
+    },
     "create-service": {
       "name": "create-service",
       "type": "skill",
@@ -51048,6 +51105,15 @@
       "path": "collected_assets/skills/ai-operations",
       "description_ko": ">-"
     },
+    "manage-experiments": {
+      "name": "manage-experiments",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/manage-experiments",
+      "description_ko": ">-"
+    },
     "pr-analysis": {
       "name": "pr-analysis",
       "type": "skill",
@@ -51083,15 +51149,6 @@
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/create-trigger",
       "description_ko": "자동화된 파이프라인 실행을 위한 하네스 트리거 YAML을 생성하고 MCP를 통해 생성합니다. 사용자가 \"트리거 생성\", \"웹훅 트리거\", \"크론 트리거\", \"예약된 빌드\", \"아티팩트 트리거\"라고 말하거나 파이프라인이 자동으로 실행되기를 원하는 경우에 사용합니다."
-    },
-    "manage-feature-flags": {
-      "name": "manage-feature-flags",
-      "type": "skill",
-      "description": ">-",
-      "source_repo": "https://github.com/harness/harness-skills.git",
-      "source_name": "harness/harness-skills",
-      "path": "collected_assets/skills/manage-feature-flags",
-      "description_ko": ">-"
     },
     "verify-sign": {
       "name": "verify-sign",
@@ -51147,6 +51204,15 @@
       "path": "collected_assets/skills/manage-delegates",
       "description_ko": ">-"
     },
+    "create-feature-flag": {
+      "name": "create-feature-flag",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/create-feature-flag",
+      "description_ko": ">-"
+    },
     "manage-cde": {
       "name": "manage-cde",
       "type": "skill",
@@ -51163,6 +51229,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/template-usage",
+      "description_ko": ">-"
+    },
+    "manage-flag-lifecycle": {
+      "name": "manage-flag-lifecycle",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/manage-flag-lifecycle",
       "description_ko": ">-"
     },
     "manage-slos": {
@@ -51219,6 +51294,15 @@
       "path": "collected_assets/skills/manage-freeze-windows",
       "description_ko": ">-"
     },
+    "manage-segments": {
+      "name": "manage-segments",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/manage-segments",
+      "description_ko": ">-"
+    },
     "configure-dast-scan": {
       "name": "configure-dast-scan",
       "type": "skill",
@@ -51262,6 +51346,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/sei-analytics",
+      "description_ko": ">-"
+    },
+    "discover-feature-flags": {
+      "name": "discover-feature-flags",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/discover-feature-flags",
       "description_ko": ">-"
     },
     "audit-report": {
@@ -51370,6 +51463,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/manage-iacm",
+      "description_ko": ">-"
+    },
+    "update-flag-targeting": {
+      "name": "update-flag-targeting",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/update-flag-targeting",
       "description_ko": ">-"
     },
     "review-experiment-results": {
