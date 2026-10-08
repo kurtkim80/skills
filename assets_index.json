@@ -14094,14 +14094,22 @@
       "path": "collected_assets/skills/coverage-analysis",
       "description_ko": ">"
     },
+    "code-testing": {
+      "name": "code-testing",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/code-testing",
+      "description_ko": ">-"
+    },
     "assertion-quality": {
       "name": "assertion-quality",
       "type": "skill",
-      "description": "Analyze assertion quality, depth, variety, and false confidence in existing tests. ALWAYS USE when asked about weak, shallow, trivial, always-true, self-referential, assertion-free, presence/truthiness-only, or insufficiently diverse assertions, including MSTest, Jest, pytest, and Go. DO NOT USE for direct fixes: writing-mstest-tests owns supplied MSTest assertions; code-testing-agent owns new cases. Use test-gap-analysis when asked whether tests would catch a production change, and test-anti-patterns for general severity-ranked audits.",
+      "description": "Analyze assertion quality, depth, variety, and false confidence in existing tests. ALWAYS USE when asked about weak, shallow, trivial, always-true, self-referential, assertion-free, presence/truthiness-only, or insufficiently diverse assertions, including MSTest, Jest, pytest, and Go. DO NOT USE for direct fixes: writing-mstest-tests owns supplied MSTest assertions; code-testing owns new cases. Use test-gap-analysis when asked whether tests would catch a production change, and test-anti-patterns for general severity-ranked audits.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/assertion-quality",
-      "description_ko": "기존 테스트의 어설션 품질, 깊이, 다양성 및 잘못된 신뢰도를 분석합니다. MSTest, Jest, pytest 및 Go를 포함하여 약하고, 얕고, 사소하고, 항상 참이고, 자기 참조적이고, 주장이 없고, 존재/진실만 있거나, 불충분하게 다양한 주장에 대해 질문을 받을 때 항상 사용하세요. 직접 수정에는 사용하지 마십시오. writing-mstest-tests는 제공된 MSTest 어설션을 소유합니다. 코드 테스트 에이전트는 새로운 케이스를 소유합니다. 테스트가 프로덕션 변경 사항을 포착할 것인지 묻는 질문에는 테스트 갭 분석을 사용하고, 일반 심각도 순위 감사에는 테스트 안티 패턴을 사용합니다."
+      "path": "collected_assets/skills/assertion-quality"
     },
     "grade-tests": {
       "name": "grade-tests",
@@ -14286,11 +14294,10 @@
     "create-skill-test": {
       "name": "create-skill-test",
       "type": "skill",
-      "description": "Scaffolds eval.yaml evaluation specs for agent skills in the dotnet/skills repository. Use when creating skill tests, writing evaluation stimuli, defining graders and rubrics, sizing an eval for statistical power, or setting up test fixture files. Handles the Vally eval.yaml schema, fixture organization, and overfitting avoidance. Do not use for running or debugging existing evals (use improve-skill-quality) nor for skills authoring (use create-skill).",
+      "description": "Scaffolds eval.yaml evaluation specs for skills, custom agents, and redistributable gh-aw workflow packages in the dotnet/skills repository. Use when creating skill or workflow-package tests, writing evaluation stimuli, defining graders and rubrics, sizing an eval for statistical power, or setting up test fixture files. Handles the Vally eval.yaml schema, fixture organization, and overfitting avoidance. Do not use for running or debugging existing evals (use improve-skill-quality) nor for skills authoring (use create-skill).",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/create-skill-test",
-      "description_ko": "dotnet/skills 리포지토리의 에이전트 기술에 대한 스캐폴드 eval.yaml 평가 사양입니다. 기술 테스트 생성, 평가 자극 작성, 채점 및 루브릭 정의, 통계적 검정력을 위한 평가 크기 조정 또는 테스트 픽스처 파일 설정 시 사용합니다. Vally eval.yaml 스키마, 설비 구성 및 과적합 방지를 처리합니다. 기존 평가 실행 또는 디버깅(improv-skill-quality 사용)이나 기술 작성(create-skill 사용)에는 사용하지 마십시오."
+      "path": "collected_assets/skills/create-skill-test"
     },
     "create-custom-agent": {
       "name": "create-custom-agent",
@@ -16126,6 +16133,14 @@
       "path": "collected_assets/skills/balanced",
       "description_ko": "아첨을 피하는 건설적인 증거 기반 대화 모드입니다. 이 기술은 사용자가 균형 잡힌 다각적 분석, 비판적 피드백 또는 아이디어에 대한 엄격한 도전을 원할 때 사용해야 합니다. \"/균형\" 또는 정직/비판/균형 피드백 요청을 트리거합니다. 패시브, 인터랙티브, tldr, steelman 및 결정 모드를 지원합니다."
     },
+    "open-knowledge-vault": {
+      "name": "open-knowledge-vault",
+      "type": "skill",
+      "description": "Create, maintain, audit, or adapt portable knowledge vaults from notes, transcripts, research, or learning material using Open Knowledge Format, with optional Obsidian and Dataview setup. Use for ongoing source-grounded knowledge curation and linked vault structure.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/open-knowledge-vault"
+    },
     "retrospective": {
       "name": "retrospective",
       "type": "skill",
@@ -16795,11 +16810,10 @@
     "learning-vault": {
       "name": "learning-vault",
       "type": "skill",
-      "description": "Generate a dedicated Obsidian learning vault for any certification, course, or study goal. Creates structured notes with domains, concepts, lessons, scenarios, MoCs, dataview queries, action items, and multiple navigation paths. Inspired by the genome vault pattern. Use when the user wants to create a study vault, learning vault, certification prep vault, or structured knowledge base for a learning goal.",
+      "description": "Create or maintain a portable learning vault for any certification, course, or study goal. Creates or updates domains, concepts, lessons, scenarios, maps, review tasks, and optional Dataview views using an Open Knowledge Format profile. Inspired by the genome vault pattern. Use when the user wants to create a study vault, learning vault, certification prep vault, or structured knowledge base for a learning goal.",
       "source_repo": "https://github.com/glebis/claude-skills.git",
       "source_name": "glebis/claude-skills",
-      "path": "collected_assets/skills/learning-vault",
-      "description_ko": "모든 인증, 강좌 또는 학습 목표를 위한 전용 Obsidian 학습 저장소를 생성하세요. 도메인, 개념, 강의, 시나리오, MoC, 데이터 보기 쿼리, 작업 항목 및 여러 탐색 경로가 포함된 구조화된 노트를 생성합니다. 게놈 볼트(Vault) 패턴에서 영감을 받았습니다. 사용자가 학습 목표를 위해 학습 볼트, 학습 볼트, 인증 준비 볼트 또는 구조화된 지식 베이스를 생성하려는 경우에 사용합니다."
+      "path": "collected_assets/skills/learning-vault"
     },
     "trail-checkin": {
       "name": "trail-checkin",
@@ -33186,6 +33200,14 @@
       "path": "collected_assets/skills/gcp-cloud-sql",
       "description_ko": "Cloud SQL 및 Spanner 데이터베이스를 프로비저닝합니다. 고가용성을 구성합니다."
     },
+    "assay": {
+      "name": "assay",
+      "type": "skill",
+      "description": "Run assay on a web page you just wrote or changed. It opens the page in a real browser, drives every control, and reports where the page contradicts itself. Deterministic, no API key, no network.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/assay"
+    },
     "traderspy-market-screener": {
       "name": "traderspy-market-screener",
       "type": "skill",
@@ -36016,6 +36038,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/laravel-development-workflow",
       "description_ko": "근본 원인 진단, 저장소 기반 구현, 회귀 적용 범위 및 위험 기반 검증을 통해 기존 Laravel 애플리케이션을 구축하고 수정합니다."
+    },
+    "looot": {
+      "name": "looot",
+      "type": "skill",
+      "description": "Search, price and run 2,500+ data API endpoints (work emails, company search, SERP, web pages) from one prepaid balance via the looot MCP server.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/looot"
     },
     "hugo-to-markdown": {
       "name": "hugo-to-markdown",
@@ -39598,6 +39628,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/remotion-create",
       "description_ko": "새 Remotion 비디오 만들기"
+    },
+    "telegram-channel-ads": {
+      "name": "telegram-channel-ads",
+      "type": "skill",
+      "description": "Vet and price ad posts in Telegram channels: reach benchmarks by size, topic and language, ad-network and channel-age checks, CPM and deletion-window math.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/telegram-channel-ads"
     },
     "liuguang-banlan-ui": {
       "name": "liuguang-banlan-ui",
@@ -61115,6 +61153,15 @@
       "path": "collected_assets/agents/testability-migration.agent.md",
       "description_ko": ">-"
     },
+    "test-engineer.agent": {
+      "name": "test-engineer.agent",
+      "type": "agent",
+      "description": ">-",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/agents/test-engineer.agent.md",
+      "description_ko": ">-"
+    },
     "code-testing-linter.agent": {
       "name": "code-testing-linter.agent",
       "type": "agent",
@@ -61131,15 +61178,6 @@
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/agents/code-testing-builder.agent.md",
-      "description_ko": ">-"
-    },
-    "code-testing-generator.agent": {
-      "name": "code-testing-generator.agent",
-      "type": "agent",
-      "description": ">-",
-      "source_repo": "https://github.com/dotnet/skills.git",
-      "source_name": "dotnet/skills",
-      "path": "collected_assets/agents/code-testing-generator.agent.md",
       "description_ko": ">-"
     },
     "code-testing-planner.agent": {
