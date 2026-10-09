@@ -13089,6 +13089,14 @@
       "path": "collected_assets/skills/mjml-email-templates",
       "description_ko": "MJML 마크업 언어를 사용하여 반응형 이메일 템플릿을 구축합니다. Outlook, Gmail 및 Apple Mail에서 작동하는 클라이언트 간 HTML로 컴파일합니다. 템플릿 렌더러, 레이아웃 패턴 및 변수 대체가 포함됩니다."
     },
+    "cscheck": {
+      "name": "cscheck",
+      "type": "skill",
+      "description": "Write and simplify C# property-based, model-based, and executable specification tests with CsCheck. Use for generators, shrinking, stateful command sequences, Spec guards and rules, implementation conformance, or replaying generated failures.",
+      "source_repo": "https://github.com/Aaronontheweb/dotnet-skills.git",
+      "source_name": "Aaronontheweb/dotnet-skills",
+      "path": "collected_assets/skills/cscheck"
+    },
     "akka-aspire-configuration": {
       "name": "akka-net-aspire-configuration",
       "type": "skill",
@@ -13914,6 +13922,15 @@
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/msbuild"
+    },
+    "csharp-expert": {
+      "name": "csharp-expert",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/csharp-expert",
+      "description_ko": ">-"
     },
     "csharp-refactoring": {
       "name": "csharp-refactoring",
@@ -23556,6 +23573,14 @@
       "path": "collected_assets/skills/n8n-validation-expert",
       "description_ko": "n8n 검증 오류 해석 및 수정을 위한 전문가 가이드."
     },
+    "url-to-markdown": {
+      "name": "url-to-markdown",
+      "type": "skill",
+      "description": "Fetch a public webpage as clean Markdown for an agent: read, summarize, quote, or cite the page while preserving its source URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/url-to-markdown"
+    },
     "skill-rails-upgrade": {
       "name": "skill-rails-upgrade",
       "type": "skill",
@@ -25926,6 +25951,14 @@
       "path": "collected_assets/skills/debugging-toolkit-smart-debug",
       "description_ko": "디버깅 툴킷 스마트 디버그 작업 시 사용"
     },
+    "jet-browser": {
+      "name": "jet-browser",
+      "type": "skill",
+      "description": "Verify or integrate Jet Browser when a project needs isolated WPE WebKit sessions, native input, screenshots, ordered JSONL automation, or reproducible runtime checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/jet-browser"
+    },
     "azure-ai-voicelive-java": {
       "name": "azure-ai-voicelive-java",
       "type": "skill",
@@ -26757,6 +26790,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/odoo-shopify-integration",
       "description_ko": "Shopify와 Odoo 연결: Shopify API와 Odoo의 외부 API 또는 커넥터 모듈을 사용하여 제품, 재고, 주문 및 고객을 동기화합니다."
+    },
+    "tastegate": {
+      "name": "tastegate",
+      "type": "skill",
+      "description": "Build or fix a frontend so it looks designed, not AI-generated, then prove it in a real browser: renders at phone and desktop width and fails on overlap, low contrast and AI-slop defaults.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/tastegate"
     },
     "gcp-cloud-functions": {
       "name": "gcp-cloud-functions",
@@ -27828,6 +27869,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/expo-tailwind-setup",
       "description_ko": "범용 스타일링을 위해 반응 네이티브 CSS 및 NativeWind v5를 사용하여 Expo에서 Tailwind CSS v4 설정"
+    },
+    "what-could-break": {
+      "name": "what-could-break",
+      "type": "skill",
+      "description": "Find what a change breaks outside its own diff, then prove the one fact that makes it safe by running real code. Use before any multi-file edit or an edit to a shared path.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/what-could-break"
     },
     "feature-tracking": {
       "name": "feature-tracking",
@@ -28940,6 +28989,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/doubt-driven-development",
       "description_ko": "중요하지 않은 모든 결정은 결정이 내리기 전에 새로운 맥락의 적대적 검토를 거칩니다."
+    },
+    "ask-human-expert": {
+      "name": "ask-human-expert",
+      "type": "skill",
+      "description": "Ask real executives and domain experts a question through Instant Expert for a written answer or short call: practitioner knowledge, customer discovery. Free test mode; live sends need approval.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ask-human-expert"
     },
     "azure-devops": {
       "name": "azure-devops",
@@ -30316,6 +30373,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-ai-contentunderstanding-py",
       "description_ko": "Python용 Azure AI 콘텐츠 이해 SDK. 문서, 이미지, 오디오 및 비디오에서 다중 모드 콘텐츠 추출에 사용합니다."
+    },
+    "equibles": {
+      "name": "equibles",
+      "type": "skill",
+      "description": "Query Equibles for US stock market data: SEC filing search, XBRL financial statements, earnings call transcripts, insider and 13F holdings, and daily prices.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/equibles"
     },
     "fal-upscale": {
       "name": "fal-upscale",
@@ -45398,11 +45463,10 @@
     "python-mcp-server-generator": {
       "name": "python-mcp-server-generator",
       "type": "skill",
-      "description": "Generate a complete MCP server project in Python with tools, resources, and proper configuration",
+      "description": "Use this skill when the user wants to create a new Model Context Protocol (MCP) server in Python. Also use it to expose Python functions, an API, or a database to AI clients as MCP tools. The skill makes a uv project with the MCP Python SDK v2 (MCPServer), typed tools, in-memory tests, and client configuration. Do not use it for an MCP client or for a server in another language.",
       "source_repo": "https://github.com/github/awesome-copilot.git",
       "source_name": "github/awesome-copilot",
-      "path": "collected_assets/skills/python-mcp-server-generator",
-      "description_ko": "도구, 리소스 및 적절한 구성을 사용하여 Python에서 완전한 MCP 서버 프로젝트 생성"
+      "path": "collected_assets/skills/python-mcp-server-generator"
     },
     "planning-oracle-to-postgres-migration-integration-testing": {
       "name": "planning-oracle-to-postgres-migration-integration-testing",
