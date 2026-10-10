@@ -13115,6 +13115,14 @@
       "path": "collected_assets/skills/local-tools",
       "description_ko": "개발 환경과 CI/CD 파이프라인 전체에서 일관된 도구를 사용하기 위해 dotnet-tools.json을 사용하여 로컬 .NET 도구를 관리합니다."
     },
+    "sdk-container-publishing": {
+      "name": "sdk-container-publishing",
+      "type": "skill",
+      "description": "Publish .NET services as container images with the built-in SDK tooling (dotnet publish /t:PublishContainer, Microsoft.NET.Build.Containers) - no Dockerfile required. Covers the MSBuild property surface, base-image inference, self-contained and AOT implications, and CI/CD publishing.",
+      "source_repo": "https://github.com/Aaronontheweb/dotnet-skills.git",
+      "source_name": "Aaronontheweb/dotnet-skills",
+      "path": "collected_assets/skills/sdk-container-publishing"
+    },
     "project-structure": {
       "name": "project-structure",
       "type": "skill",
@@ -24333,6 +24341,14 @@
       "path": "collected_assets/skills/multi-tenant-llm-hosting",
       "description_ko": "테넌트 격리를 통해 안전한 다중 테넌트 LLM 호스팅 플랫폼을 설계합니다."
     },
+    "datacircle": {
+      "name": "datacircle",
+      "type": "skill",
+      "description": "Look up LinkedIn profiles by URL through Datacircle (Up2Data or HarvestAPI, no markup), over its hosted MCP server or REST API, with the user's yes before each paid call.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/datacircle"
+    },
     "auto-research": {
       "name": "auto-research",
       "type": "skill",
@@ -28092,6 +28108,14 @@
       "path": "collected_assets/skills/file-uploads",
       "description_ko": "파일 업로드 및 클라우드 스토리지 처리 전문가입니다. S3 커버,"
     },
+    "uxkin-research": {
+      "name": "uxkin-research",
+      "type": "skill",
+      "description": "Research how real products handle a screen, flow or visual style before designing it: search UXKIN's real iOS screens, user journeys and website design systems, compare several and report what they share.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/uxkin-research"
+    },
     "testing-patterns": {
       "name": "testing-patterns",
       "type": "skill",
@@ -28287,6 +28311,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/dbos-golang",
       "description_ko": "DBOS 내구성 워크플로를 사용하여 안정적이고 내결함성이 있는 Go 애플리케이션을 구축하기 위한 가이드입니다. 기존 Go 코드에 DBOS를 추가하거나, 워크플로 및 단계를 생성하거나, 동시성 제어를 위해 대기열을 사용할 때 사용합니다."
+    },
+    "qrx": {
+      "name": "qrx",
+      "type": "skill",
+      "description": "Make branded, print-ready art QR codes that always scan with QRX (qrx.codes). Use when a link needs a QR code that looks like artwork or matches a brand for print, packaging, signs, slides or event badges, and to list or re-point QRX codes. Not for plain QR codes the agent makes locally.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/qrx"
     },
     "dropthehassle-publish": {
       "name": "dropthehassle-publish",
@@ -32292,6 +32324,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/vllm-server",
       "description_ko": "높은 처리량의 LLM 추론을 위해 vLLM을 배포하고 관리합니다. 연속 구성"
+    },
+    "reverse-engineer-anything": {
+      "name": "reverse-engineer-anything",
+      "type": "skill",
+      "description": "Use REA to investigate shipped apps, binaries, packages, and runtimes; trace features with evidence, compare versions, or guide reconstruction. Skip ordinary source-code analysis.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/reverse-engineer-anything"
     },
     "rclone-cli": {
       "name": "rclone-cli",
@@ -41730,6 +41770,15 @@
       "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
       "source_name": "microsoft/upgrade-agent-plugins",
       "path": "collected_assets/skills/building-projects",
+      "description_ko": ">"
+    },
+    "migrating-inprocess-background-jobs": {
+      "name": "migrating-inprocess-background-jobs",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/skills/migrating-inprocess-background-jobs",
       "description_ko": ">"
     },
     "converting-to-sdk-style": {
@@ -51662,6 +51711,14 @@
       "path": "collected_assets/skills/unified-memory",
       "description_ko": "로컬 ECC Memory Vault를 통해 Claude, Codex, Hermes, Cursor, OpenCode 및 기타 에이전트 간에 내구성 있고 검사 가능한 컨텍스트와 핸드오프를 공유합니다. 상담원이 작업 상태를 저장하고, 컨텍스트를 전송하고, 다른 상담원의 작업을 재개하거나, 공유 프로젝트 지식을 검색해야 하는 경우에 사용하세요."
     },
+    "mcp-dependency-review": {
+      "name": "mcp-dependency-review",
+      "type": "skill",
+      "description": "Statically review MCP configuration for mutable package references before approval or CI, without executing discovered MCP servers. Use when reviewing .mcp.json, Cursor, VS Code, Claude, Windsurf, or other repo-scoped MCP config.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/mcp-dependency-review"
+    },
     "investor-materials": {
       "name": "investor-materials",
       "type": "skill",
@@ -51720,6 +51777,14 @@
       "path": "collected_assets/skills/springboot-patterns",
       "description_ko": "Spring Boot 아키텍처 패턴, REST API 디자인, 계층형 서비스, 데이터 액세스, 캐싱, 비동기 처리 및 로깅. Java Spring Boot 백엔드 작업에 사용합니다."
     },
+    "docs-governance": {
+      "name": "docs-governance",
+      "type": "skill",
+      "description": "Route broad documentation-governance requests to existing ECC skills and run an opt-in, read-only audit of mapped documentation roles, links, ADR indexes, and evidence references. Use when a user asks for documentation governance, project-knowledge organization, documentation integrity, or a deterministic docs audit without naming a narrower skill.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/docs-governance"
+    },
     "angular-developer": {
       "name": "angular-developer",
       "type": "skill",
@@ -51762,6 +51827,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/quarkus-patterns"
+    },
+    "mybatis-patterns": {
+      "name": "mybatis-patterns",
+      "type": "skill",
+      "description": "MyBatis and MyBatis-Spring patterns for mapper design, XML and annotation SQL, result mapping, dynamic SQL safety, transactions, batching, pagination, and query performance. Use when building or reviewing Java persistence code with MyBatis, Spring Boot, MyBatis-Spring, or MyBatis-based legacy applications.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/mybatis-patterns"
     },
     "fastapi-patterns": {
       "name": "fastapi-patterns",
@@ -51881,6 +51954,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/api-connector-builder",
       "description_ko": "타게트 리포지트리의 既存統합파탄에 수정하기 위해 새로운 API 코네크타마타히프로바이더を構築しまс。2 番目のA-키테크챠を発메이메이메이게페니、1つ以上の統合を追加을 사용하는 것이 좋습니다."
+    },
+    "bengali-nlp": {
+      "name": "bengali-nlp",
+      "type": "skill",
+      "description": "Bengali (Bangla) text processing patterns including Unicode normalization, script detection, tokenization, conjunct handling, and Bangla-specific NLP best practices for AI applications.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/bengali-nlp"
     },
     "kotlin-patterns": {
       "name": "kotlin-patterns",
@@ -52272,6 +52353,14 @@
       "path": "collected_assets/skills/postgres-patterns",
       "description_ko": ">"
     },
+    "agent-security-hardening": {
+      "name": "agent-security-hardening",
+      "type": "skill",
+      "description": "Security hardening guidance for AI agent frameworks that process untrusted content, invoke tools, write workspace files, manage runtime identifiers, or handle credentials. Use when building or reviewing an agent runtime, autonomous worker, tool gateway, memory service, or multi-tenant agent deployment. Do not use for general web application security or offensive testing.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/agent-security-hardening"
+    },
     "backend-patterns": {
       "name": "backend-patterns",
       "type": "skill",
@@ -52502,6 +52591,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/product-lens",
       "description_ko": "日本語翻訳：이것들은 product-lens 用の日本語翻訳が必要입니다"
+    },
+    "conventional-commit-review": {
+      "name": "conventional-commit-review",
+      "type": "skill",
+      "description": "Reviews staged changes and drafts a Conventional Commits-compliant commit message with the right type, scope, and length. Use before committing, or when the user asks to write, fix, or review a commit message.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/conventional-commit-review"
     },
     "data-throughput-accelerator": {
       "name": "data-throughput-accelerator",
@@ -52981,6 +53078,14 @@
       "path": "collected_assets/skills/config-gc",
       "description_ko": "Claude Code 구성에 대한 가비지 수집입니다. ~/.claude(기술, 메모리, 후크, 권한, MCP 서버, 캐시)에서 중복, 오래되거나 분리되거나 가치가 낮은 항목을 주기적으로 검색한 다음 삭제 확인 정리 과정을 사용자에게 안내합니다. 사용자가 \"내 구성 정리\", \"구성 GC\", \"기술이 너무 많습니다\", \"내 설정 감사\", \"내 .claude가 너무 커졌습니다\"라고 말하거나 주기적인 구성 검토를 요청할 때 사용하세요."
     },
+    "osint-investigation": {
+      "name": "osint-investigation",
+      "type": "skill",
+      "description": "Sparse-clue OSINT investigation methodology for extracting overlooked leads, connecting fragmented evidence, and testing explanations across sources. Use for multi-step CTF challenges, image/video geolocation, event reconstruction, public-account and entity verification, artifact interpretation, infrastructure research, or stalled investigations.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/osint-investigation"
+    },
     "windows-desktop-e2e": {
       "name": "windows-desktop-e2e",
       "type": "skill",
@@ -52990,6 +53095,14 @@
       "path": "collected_assets/skills/windows-desktop-e2e",
       "description_ko": "pywinauto 및 Windows UI 자동화를 사용하여 Windows 기본 데스크톱 앱(WPF, WinForms, Win32/MFC, Qt)에 대한 E2E 테스트."
     },
+    "token-card": {
+      "name": "token-card",
+      "type": "skill",
+      "description": "Render a token-usage stat card from local Claude Code, Codex, Gemini CLI, and OpenCode session logs and commit it into the repository as a file. Use when someone wants a current usage figure in a README, or asks for a shareable card of their coding-agent activity.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/token-card"
+    },
     "autonomous-loops": {
       "name": "autonomous-loops",
       "type": "skill",
@@ -52997,6 +53110,15 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/autonomous-loops"
+    },
+    "prompt-caching-strategy": {
+      "name": "prompt-caching-strategy",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/prompt-caching-strategy",
+      "description_ko": ">-"
     },
     "claude-devfleet": {
       "name": "claude-devfleet",
@@ -53480,11 +53602,10 @@
     "tinystruct-patterns": {
       "name": "tinystruct-patterns",
       "type": "skill",
-      "description": "tinystructフレームワークでアプリケーションモジュールまたはマイクロサービスを開発する際に使用。ルーティング、コンテキスト管理、BuilderによるJSON処理、CLI/HTTPデュアルモードのパターンをカバー。",
+      "description": "tinystruct Java フレームワークで開発する際の専門ガイダンス。tinystruct コードベース、または tinystruct 上に構築されたあらゆるプロジェクトで作業する際に使用します — プロジェクトに存在しない場合の bin/dispatcher・bin/dispatcher.cmd 起動スクリプトの生成、Application クラスの作成、@Action によるルート定義、ユニットテスト、ActionRegistry、HTTP/CLI デュアルモード対応、組み込み HTTP サーバー、イベントシステム、Builder/Builders による JSON 処理、AbstractData によるデータベース永続化、POJO 生成、Server-Sent Events (SSE)、ファイルアップロード、アウトバウンド HTTP 通信を含みます。",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/tinystruct-patterns",
-      "description_ko": "Tinystruct 프레임 워크에서 앱리케이션 모쥬르마타 마이 크로서비스를 사용하여 콘텐츠를 만드는 데 사용됩니다.루팅,컨텐츠관리,Builder에 의한 JSON리리,CLI/HTTP듀아르모드의 파탄카바입니다."
+      "path": "collected_assets/skills/tinystruct-patterns"
     },
     "ck": {
       "name": "ck",
@@ -53802,11 +53923,10 @@
     "agent-payment-x402": {
       "name": "agent-payment-x402",
       "type": "skill",
-      "description": "タスクごとのバジェット、支出コントロール、ノンカストディアルウォレットを備えた x402 決済実行を AI エージェントに追加します。agentwallet-sdk を通じて Base をサポートし、OKX Payments / OKX エージェント決済プロトコルを通じて X Layer をサポートします。",
+      "description": "タスクごとのバジェット、支出コントロール、ノンカストディアルウォレットを備えた x402 決済実行を AI エージェントに追加します。agentwallet-sdk を通じて Base を、OKX Payments / OKX エージェント決済プロトコルを通じて X Layer を、アップストリームの x402 パッケージとファシリテーターベースの決済を通じて Solana とマルチネットワーク EVM をサポートします。",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/agent-payment-x402",
-      "description_ko": "Taskごとの바젯, 支takecontro-r, noncastdiarworettを備えた x402 決済実行を AI eigentに追加しまс。agentwallet-sdk を通じて Baseを사포트시、OKX Payments / OKX 에이젠트決済프로트코르를 사용하면 X Layer를 사용할 수 있습니다."
+      "path": "collected_assets/skills/agent-payment-x402"
     },
     "ralphinho-rfc-pipeline": {
       "name": "ralphinho-rfc-pipeline",
@@ -58478,6 +58598,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/commands/epic-decompose.md",
       "description_ko": "작업 분기를 만들지 않고 서사시를 작업 하위 항목으로 나눕니다."
+    },
+    "token-card": {
+      "name": "token-card",
+      "type": "command",
+      "description": "Render a token-usage stat card from local agent session logs and commit it to the repo. Invokes the token-card skill.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/commands/token-card.md"
     },
     "orch-review": {
       "name": "orch-review",
@@ -64488,6 +64616,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/agents/opensource-forker.md"
     },
+    "bengali-reviewer": {
+      "name": "bengali-reviewer",
+      "type": "agent",
+      "description": "Reviews code handling Bengali (Bangla) text for Unicode correctness, proper normalization, script-aware processing, and internationalization best practices. Use when code processes, displays, or stores Bengali text.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/agents/bengali-reviewer.md"
+    },
     "network-config-reviewer": {
       "name": "network-config-reviewer",
       "type": "agent",
@@ -64697,6 +64833,14 @@
       "path": "collected_assets/agents/java-build-resolver.json",
       "description_ko": "{"
     },
+    "commit-reviewer": {
+      "name": "commit-reviewer",
+      "type": "agent",
+      "description": "Reviews a staged diff and drafts a Conventional Commits-compliant message matching the repository's actual history norms. Use before committing, or when asked to write or check a commit message.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/agents/commit-reviewer.md"
+    },
     "comment-analyzer": {
       "name": "comment-analyzer",
       "type": "agent",
@@ -64835,6 +64979,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/agents/swift-build-resolver.md",
       "description_ko": "Swift/Xcode빌드, 컨파일, 依存関係에라解決스페샤리스트.swift빌드에라, Xcodebil د障害、SPM依存関係の問題、code署nameの問題を最小限の変更ded修正しまс。Swiftbild는 시간에 맞춰 사용되었습니다."
+    },
+    "ruby-reviewer": {
+      "name": "ruby-reviewer",
+      "type": "agent",
+      "description": "Expert Ruby and Rails code reviewer specializing in idiomatic Ruby, Active Record query safety, Rails security defaults, and RSpec/Minitest quality. Use for all Ruby code changes. MUST BE USED for Ruby and Rails projects.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/agents/ruby-reviewer.md"
     },
     "seo-specialist": {
       "name": "seo-specialist",
