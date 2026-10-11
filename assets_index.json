@@ -15165,11 +15165,10 @@
     "verifying-external-behavior": {
       "name": "verifying-external-behavior",
       "type": "skill",
-      "description": "Confirms what a third-party library, remote API, build backend, or scraped document actually does before writing code that depends on it — throwaway probes that run in seconds, permissive clients that forward wrong arguments instead of rejecting them, per-endpoint docs that don't generalize, response shapes that make a \"fast path\" always-false, fakes that encode your assumption rather than the service's behavior, and dry-runs that skip the step that fails. Use when integrating a new dependency or endpoint, writing a tolerated-status or error branch, choosing a client argument name, testing against a fake, or reviewing code that asserts an upstream contract.",
+      "description": "Confirms what a third-party library, remote API, build backend, or scraped document actually does before writing code that depends on it — throwaway probes that run in seconds, permissive clients that forward wrong arguments instead of rejecting them, per-endpoint docs that don't generalize, response shapes that make a \"fast path\" always-false, fakes that encode your assumption rather than the service's behavior, dry-runs that skip the step that fails, and large inputs that were silently read only in part. Use when integrating a new dependency or endpoint, writing a tolerated-status or error branch, choosing a client argument name, testing against a fake, or reviewing code that asserts an upstream contract.",
       "source_repo": "https://github.com/wdm0006/python-skills.git",
       "source_name": "wdm0006/python-skills",
-      "path": "collected_assets/skills/verifying-external-behavior",
-      "description_ko": "타사 라이브러리, 원격 API, 빌드 백엔드 또는 스크랩된 문서가 이에 의존하는 코드를 작성하기 전에 실제로 수행하는 작업을 확인합니다. 몇 초 안에 실행되는 일회용 프로브, 잘못된 인수를 거부하는 대신 전달하는 허용 클라이언트, 일반화하지 않는 엔드포인트별 문서, \"빠른 경로\"를 항상 거짓으로 만드는 응답 형태, 서비스 동작이 아닌 가정을 인코딩하는 가짜, 실패한 단계를 건너뛰는 테스트 실행 등이 있습니다. 새로운 종속성 또는 엔드포인트를 통합하거나, 허용되는 상태 또는 오류 분기를 작성하거나, 클라이언트 인수 이름을 선택하거나, 가짜에 대해 테스트하거나, 업스트림 계약을 주장하는 코드를 검토할 때 사용합니다."
+      "path": "collected_assets/skills/verifying-external-behavior"
     },
     "fastapi-clean-architecture": {
       "name": "fastapi-clean-architecture",
@@ -24344,7 +24343,7 @@
     "datacircle": {
       "name": "datacircle",
       "type": "skill",
-      "description": "Look up LinkedIn profiles by URL through Datacircle (Up2Data or HarvestAPI, no markup), over its hosted MCP server or REST API, with the user's yes before each paid call.",
+      "description": "Look up LinkedIn profiles by URL through Datacircle (Up2Data, HarvestAPI or Fetchin, no markup), over its hosted MCP server or REST API, with the user's yes before each paid call.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/datacircle"
@@ -29295,6 +29294,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/sleep-analyzer",
       "description_ko": "分析睡眠数据、识别睡眠模式、评估睡眠质weight，并提供个性化睡眠改善建议."
+    },
+    "skeleton-first": {
+      "name": "skeleton-first",
+      "type": "skill",
+      "description": "Prove a data/AI/agent workflow end to end on a tiny sample, find cheap wins, then scale in cost-gated steps within budget.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/skeleton-first"
     },
     "google-no-code": {
       "name": "google-no-code",
@@ -36231,6 +36238,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hunt-captcha-bypass",
       "description_ko": "CAPTCHA 우회 헌트"
+    },
+    "kernel-prompt": {
+      "name": "kernel-prompt",
+      "type": "skill",
+      "description": "Use when composing or improving an LLM prompt or agent instruction. Asks one round of questions, then returns only the prompt; never performs the task.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/kernel-prompt"
     },
     "wgm": {
       "name": "wgm",
@@ -52161,6 +52176,14 @@
       "path": "collected_assets/skills/kubernetes-patterns",
       "description_ko": "프로덕션 등급 배포를 위한 Kubernetes 워크로드 패턴, 리소스 관리, RBAC, 프로브, 자동 크기 조정, ConfigMap/Secret 처리 및 kubectl 디버깅. Kubernetes 매니페스트를 작성 또는 검토하거나 프로브, RBAC, 자동 크기 조정 또는 리소스 제한을 디버깅할 때 사용합니다."
     },
+    "test-collaboration": {
+      "name": "test-collaboration",
+      "type": "skill",
+      "description": "Inventory and govern a project's test assets. Connect requirements, business rules, risks, bugs, and cross-boundary contracts to stable TEST-IDs and executable evidence in the repository's existing test registry or TESTS.md. Use for test inventory, test gap analysis, unit/integration/contract/E2E/smoke classification, bug-to-test regression protection, consumer/provider contract testing, test-necessity review, and pre-delivery evidence review.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/test-collaboration"
+    },
     "java-coding-standards": {
       "name": "java-coding-standards",
       "type": "skill",
@@ -52177,6 +52200,15 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/python-testing",
       "description_ko": ">"
+    },
+    "change-impact": {
+      "name": "change-impact",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/change-impact",
+      "description_ko": ">-"
     },
     "liquid-glass-design": {
       "name": "liquid-glass-design",
@@ -52326,6 +52358,15 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/react-native-patterns",
       "description_ko": "React Native 및 Expo 앱 패턴 — Expo 라우터 탐색, 상태 분리(서버/클라이언트/경로/양식), Zod를 사용한 TanStack 쿼리 데이터 가져오기, 성능 목록, NativeWind/StyleSheet 스타일링, 기본 API 및 보안 저장소. React Native/Expo 화면, 구성요소, 탐색 또는 데이터 레이어를 구축하거나 편집할 때 사용합니다."
+    },
+    "context-and-decisions": {
+      "name": "context-and-decisions",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/context-and-decisions",
+      "description_ko": ">-"
     },
     "quarkus-security": {
       "name": "quarkus-security",
@@ -52510,6 +52551,15 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/laravel-verification"
+    },
+    "module-regression": {
+      "name": "module-regression",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/module-regression",
+      "description_ko": ">-"
     },
     "motion-patterns": {
       "name": "motion-patterns",
@@ -52785,6 +52835,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/video-editing"
     },
+    "skill-host-compat": {
+      "name": "skill-host-compat",
+      "type": "skill",
+      "description": "Lint ECC skills for Codex/Cursor-safe frontmatter and Claude-only substitutions before a skill PR.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/skill-host-compat"
+    },
     "competitive-platform-analysis": {
       "name": "competitive-platform-analysis",
       "type": "skill",
@@ -52906,6 +52964,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/openclaw-persona-forge",
       "description_ko": "为 OpenClaw AI 에이전트 锻造完整的龙虾灵魂方案。根据用户偏好或随机抽卡，输当前环境提供已审核的生图Skill，可自动生成统一风格头image图文。 当用户需要创建、设计或定容 OpenClaw 龙虾灵魂时使用。 不适用于：微调已有 SOUL.md、non OpenClaw平台的角color设计、纯工具型无性格 Agent。 触发词：龙虾灵魂、虾魂、OpenClaw 灵魂、养虾灵魂、龙虾角color、龙虾灵魂、龙虾剧本杀角color、龙虾游戏角color、龙虾 NPC、龙虾性格、龙虾背景故事、랍스터 소울、랍스터 캐릭터、抽卡、随机龙虾、龙虾 SOUL、gacha。"
+    },
+    "brownfield-retrospective": {
+      "name": "brownfield-retrospective",
+      "type": "skill",
+      "description": "Run the ECC engineering process retroactively against an existing project slice. Audit current state, reconstruct past decisions, produce a four-axis gap register (thinking, coding practice, missing features, technology selection), then execute fixes forward through the plan-TDD-review pipeline. Use when adopting ECC mid-project, taking over an inherited codebase, or asking what was missed and what would have been built differently from day one.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/brownfield-retrospective"
     },
     "hookify-rules": {
       "name": "hookify-rules",
@@ -53607,6 +53673,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/tinystruct-patterns"
     },
+    "story-lifecycle": {
+      "name": "story-lifecycle",
+      "type": "skill",
+      "description": "Manage a file-based epic → story → sprint development loop without requiring an external project management tool. Creates and tracks epics, breaks them into user stories, assigns them to sprints, and drives implementation story by story. Use when starting a new feature initiative or when the team has no Jira/Linear/Taiga but needs structured delivery tracking.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/story-lifecycle"
+    },
     "ck": {
       "name": "ck",
       "type": "skill",
@@ -53795,6 +53869,14 @@
       "path": "collected_assets/skills/terminal-opener",
       "description_ko": "테스트 실행, JSON, 기능 감지, 분리 폴백 및 독립 실행형 복구 모드를 갖춘 재사용 가능한 셸 없는 실행 계획을 통해 표시되는 터미널 창에서 실행 파일과 해당 인수 배열을 엽니다. Codex가 새 호스트 터미널에서 대화형 CLI, SSH 세션, 로컬 개발 프로세스, 샌드박스 또는 기타 argv 기반 명령을 열어야 할 때 사용합니다. 지원되는 터미널이 사용 가능한지 진단합니다. 또는 요청한 터미널이 지원되지 않는 경우 실행 가능한 계획을 제공합니다."
     },
+    "deepseek-harness-setup": {
+      "name": "deepseek-harness-setup",
+      "type": "skill",
+      "description": "Install and operate Everything Claude Code (ECC) on the DeepSeek Harness (DSH): native skill roots (~/.dsh/skills, .agents/skills), the @deepseek-ai/dsh-hooks-claude-code bridge for command hooks, bare-insert patch mounting, generator usage, event-support limits, and update workflow. Use when setting up ECC on DeepSeek Harness, wiring ECC hooks into a DSH profile, or debugging why ECC skills or hooks do not appear in a DSH session.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/deepseek-harness-setup"
+    },
     "search-first": {
       "name": "search-first",
       "type": "skill",
@@ -53945,6 +54027,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/network-bgp-diagnostics",
       "description_ko": "日本語翻訳：이것 은 network-bgp-diagnostics 사용 の日本語翻訳が必要 입니다"
+    },
+    "agent-runtime-gateway-smoke-test": {
+      "name": "agent-runtime-gateway-smoke-test",
+      "type": "skill",
+      "description": "Verify a local agent API, temporary gateway tunnel, and remote sandbox callback with a tool-free task, then restore the original app connection.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/agent-runtime-gateway-smoke-test"
     },
     "remotion-video-creation": {
       "name": "remotion-video-creation",
@@ -58296,6 +58386,14 @@
       "path": "collected_assets/commands/epic-review.md",
       "description_ko": "서사적 검토를 요청, 승인 또는 변경 요청으로 표시합니다."
     },
+    "astra-review": {
+      "name": "astra-review",
+      "type": "command",
+      "description": "Claude が書いたコードを GPT-6-Astra（ChatGPT、Codex CLI 経由）に渡して独立したクロスプロバイダーレビューを受け、指摘を修正します。",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/commands/astra-review.md"
+    },
     "setup-pm": {
       "name": "setup-pm",
       "type": "command",
@@ -58384,6 +58482,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/commands/multi-frontend.md"
+    },
+    "skill-host-compat": {
+      "name": "skill-host-compat",
+      "type": "command",
+      "description": "Lint ECC skills for Codex/Cursor-safe frontmatter and Claude-only substitutions before a skill PR.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/commands/skill-host-compat.md"
     },
     "rust-build": {
       "name": "rust-build",

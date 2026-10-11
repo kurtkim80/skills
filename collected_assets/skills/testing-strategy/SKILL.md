@@ -409,6 +409,37 @@ revert them one at a time and record which test fails for each. "Deleting only
 the `bool` short-circuit fails exactly one test" is a checked statement; "the
 suite covers this" is not. A part whose removal leaves the suite green is a gap.
 
+## Edge-Case Tests That Pass on the Unfixed Code
+
+When a fix adds explicit guards for degenerate inputs (empty query, blank text,
+zero-length sequence), the natural tests — "empty input returns 0" — often pass
+on the **original buggy code too**, because some other layer already produced the
+same answer: `list.count("")` is `0`, a character-based estimator returns `0.0`
+for whitespace, `sum([])` is `0`. Such a test is green before and after, so it
+looks like coverage for the guard and guards nothing about the bug.
+
+```python
+# Passes on the buggy matcher AND the fixed one — the old path did `tokens.count("")`.
+def test_empty_keyword_has_zero_density():
+    assert density("some text", "") == 0
+
+# Only these fail on the original: they exercise the behavior the fix changed.
+def test_phrase_requires_contiguous_tokens():
+    assert density("artificial methods improve intelligence", "artificial intelligence") == 0
+```
+
+- **Run each new test against the pre-fix code** (revert the fix, or extract the
+  base commit into a temp dir) and record which ones go red. Only those are the
+  regression tests; the rest are documentation of edge behavior and should be
+  named that way.
+- **Mutate the explicit guards separately** from the core change. Deleting just
+  the `if not tokens: return 0` guard is the only mutation the empty-input test
+  can catch — and only if the core change no longer yields `0` there on its own.
+- **The bug and the plausible wrong fix need different fixtures.** Reinstating
+  first-token matching is caught by a text containing only the phrase's first
+  word; an "all words present anywhere" rewrite is caught only by a text that
+  contains both words *apart*. One fixture set rarely covers both.
+
 ## Pick Fixture Values That Separate the Bug From the Fix
 
 A test survives mutation most often because its *data* cannot tell the two
@@ -535,6 +566,34 @@ uv run python -c "from mypkg import readability; \
 Size the tolerance against the bug's own gap rather than your confidence: if the
 buggy and fixed paths differ by ~29 points, `pytest.approx(42.80, abs=1.0)` is
 both a real value assertion and tolerant of a dependency bump.
+
+### Tiny nonzero results need relative tolerance
+
+A fixed absolute tolerance can hide total underflow: an expected `1e-200` and
+an incorrect `0.0` differ by less than `1e-6`. Even `pytest.approx`'s default
+absolute tolerance accepts zero at that scale. Disable the absolute allowance
+when a nonzero result must retain its magnitude:
+
+```python
+@pytest.mark.parametrize("magnitude", [1e-200, 1e200])
+def test_power_norm_preserves_single_value(magnitude):
+    # For a one-element vector, the norm is |x| at either exponent.
+    for exponent in (3, 4):
+        result = power_norm([magnitude], exponent)
+        assert math.isfinite(result)
+        assert result == pytest.approx(magnitude, rel=1e-12, abs=0.0)
+```
+
+These fixtures distinguish two failures in an unscaled power sum: tiny terms
+underflow to zero, while large terms overflow even though the final norm is
+representable. Keep a separate exact-zero case; relative error is undefined
+when the expected value is zero. Use an absolute allowance only when it reflects
+an intentional error budget near zero.
+
+To verify this regression test, temporarily restore the unscaled accumulation
+and confirm a named test fails. Also check that replacing the result with zero
+fails the tiny-value assertion; a passing assertion there means the tolerance
+has erased the behavior the test claims to protect.
 
 **To quote the "before" number in the test's comment, load the old module
 directly** — you do not need to check out the old tree:
