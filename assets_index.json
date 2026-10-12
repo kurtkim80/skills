@@ -13546,6 +13546,15 @@
       "path": "collected_assets/skills/migrate-dotnet8-to-dotnet9",
       "description_ko": ">"
     },
+    "process-api-net11": {
+      "name": "process-api-net11",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/process-api-net11",
+      "description_ko": ">"
+    },
     "system-text-json-net11": {
       "name": "system-text-json-net11",
       "type": "skill",
@@ -14068,11 +14077,10 @@
     "optimizing-ef-core-queries": {
       "name": "optimizing-ef-core-queries",
       "type": "skill",
-      "description": "Optimize and improve the performance of slow Entity Framework Core (EF Core) queries: make them generate less SQL, make fewer database round-trips, and return results faster. Use whenever an EF Core or DbContext query or data-access path is slow or should be made faster — whether or not EF Core owns the database schema. For EF Core, not Dapper or raw ADO.NET.",
+      "description": "Review and optimize application data access that uses Entity Framework Core (EF Core). Use for EF Core performance and correctness reviews of services, repositories, imports, and background jobs: slow or memory-heavy queries, excessive round-trips, hidden SaveChanges, premature materialization, dynamic query construction, result-graph tracking, bulk writes, DbContext lifetime or overlapping operations, search semantics, paging, raw SQL, and model/index coverage. Use whether or not EF Core owns the schema. For EF Core, not Dapper or raw ADO.NET.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/optimizing-ef-core-queries",
-      "description_ko": "느린 EF Core(Entity Framework Core) 쿼리의 성능을 최적화하고 개선합니다. SQL 생성을 줄이고 데이터베이스 왕복 횟수를 줄이며 결과를 더 빠르게 반환합니다. EF Core가 데이터베이스 스키마를 소유하는지 여부에 관계없이 EF Core 또는 DbContext 쿼리 또는 데이터 액세스 경로가 느리거나 더 빨라야 할 때마다 사용하세요. EF Core의 경우 Dapper 또는 원시 ADO.NET이 아닙니다."
+      "path": "collected_assets/skills/optimizing-ef-core-queries"
     },
     "create-datadriven-aspnetcore": {
       "name": "create-datadriven-aspnetcore",
@@ -19757,11 +19765,10 @@
     "customer-psychographic-profiler": {
       "name": "customer-psychographic-profiler",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Build an evidence-grounded customer profile of motivations, fears, identity, and trust barriers before positioning, copywriting, or funnel design.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/customer-psychographic-profiler",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/customer-psychographic-profiler"
     },
     "outlook-automation": {
       "name": "outlook-automation",
@@ -19901,11 +19908,10 @@
     "subject-line-psychologist": {
       "name": "subject-line-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Draft email subject lines and notification copy matched to audience and sequence position when earning attention requires clarity and truthful curiosity.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/subject-line-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/subject-line-psychologist"
     },
     "asset-inventory": {
       "name": "asset-inventory",
@@ -20632,11 +20638,10 @@
     "ux-persuasion-engineer": {
       "name": "ux-persuasion-engineer",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Audit decision friction and propose clear, accessible UX flows when layout, defaults, or sequencing obstruct informed action.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ux-persuasion-engineer",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/ux-persuasion-engineer"
     },
     "extract-document-data": {
       "name": "extract-document-data",
@@ -20717,6 +20722,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/deployment-procedures",
       "description_ko": "프로덕션 배포 원칙 및 의사 결정. 안전한 배포 워크플로, 롤백 전략 및 검증. 대본이 아닌 사고를 가르칩니다."
+    },
+    "ui-from-screenshot": {
+      "name": "ui-from-screenshot",
+      "type": "skill",
+      "description": "Turn a screenshot or mockup into matching UI with the project's own components, then compare the result side by side with the image and fix the differences.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-from-screenshot"
     },
     "okta-attack": {
       "name": "okta-attack",
@@ -21486,6 +21499,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ask-copilot",
       "description_ko": "비대화형 모드에서 GitHub Copilot CLI를 사용하여 수동 상호작용 없이 질문하고, 코드를 검토하고, 스니펫을 생성하세요."
+    },
+    "write-design-md": {
+      "name": "write-design-md",
+      "type": "skill",
+      "description": "Write or update a project's DESIGN.md from the colors, type, spacing and components it really uses, with rules agents follow so new screens match.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/write-design-md"
     },
     "planning-with-files": {
       "name": "planning-with-files",
@@ -23253,11 +23274,10 @@
     "brand-perception-psychologist": {
       "name": "brand-perception-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Audit visual, verbal, and behavioral brand signals and propose alignment changes when market perception differs from the intended position.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/brand-perception-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/brand-perception-psychologist"
     },
     "zod-validation-expert": {
       "name": "zod-validation-expert",
@@ -24428,6 +24448,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/film-crew",
       "description_ko": "한 줄짜리 AI 비디오 아이디어를 영화 제작진(감독, DP, 감독, 편집자, 대본 감독자)을 통해 장면 목록과 장면별 모델 준비 프롬프트로 전환합니다. 또한 실패한 비디오 프롬프트를 수정하고 다시 롤하기 전에 잘못된 클립을 진단합니다. Wan, LTX, Kling, Veo, Seedance, Hailuo, Runway와 함께 작동합니다."
+    },
+    "invokely-statistics": {
+      "name": "invokely-statistics",
+      "type": "skill",
+      "description": "Use Invokely MCP to find official statistics, retrieve values and series, compare or rank places, and report each figure with its period, unit, and source citation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/invokely-statistics"
     },
     "hunt-dispatch": {
       "name": "hunt-dispatch",
@@ -25663,6 +25691,14 @@
       "path": "collected_assets/skills/azure-compute-batch-java",
       "description_ko": "Java용 Azure Batch SDK. 풀, 작업, 태스크 및 컴퓨팅 노드를 사용하여 대규모 병렬 및 HPC 배치 작업을 실행합니다."
     },
+    "ai-headshot-studio": {
+      "name": "ai-headshot-studio",
+      "type": "skill",
+      "description": "Install and use the official AI Headshot Generator package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-headshot-studio"
+    },
     "azure-cosmos-java": {
       "name": "azure-cosmos-java",
       "type": "skill",
@@ -25782,11 +25818,10 @@
     "sequence-psychologist": {
       "name": "sequence-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Plan email nurture and multi-touch communication sequences when each message should build trust and prepare the next decision.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/sequence-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/sequence-psychologist"
     },
     "dwarf-expert": {
       "name": "dwarf-expert",
@@ -25872,11 +25907,10 @@
     "emotional-arc-designer": {
       "name": "emotional-arc-designer",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Map the emotional progression of a narrative, page, or campaign when content needs a coherent path from attention to action.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/emotional-arc-designer",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/emotional-arc-designer"
     },
     "dev-to-hashnode": {
       "name": "dev-to-hashnode",
@@ -26090,6 +26124,14 @@
       "path": "collected_assets/skills/seaborn",
       "description_ko": "Seaborn은 출판 품질의 통계 그래픽을 생성하기 위한 Python 시각화 라이브러리입니다. 데이터세트 중심의 플로팅, 다변량 분석, 자동 통계 추정 및 최소한의 코드를 사용한 복잡한 다중 패널 수치에 이 기술을 사용하십시오."
     },
+    "cockney": {
+      "name": "cockney",
+      "type": "skill",
+      "description": "Cheeky Cockney coding mode: terse replies, the smallest correct change, plain English for anything risky.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cockney"
+    },
     "neon-postgres": {
       "name": "neon-postgres",
       "type": "skill",
@@ -26129,11 +26171,10 @@
     "price-psychology-strategist": {
       "name": "price-psychology-strategist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Design pricing presentation, anchors, and tiers when an offer needs clearer value and fairness without misleading comparisons.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/price-psychology-strategist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/price-psychology-strategist"
     },
     "code-audit": {
       "name": "code-audit",
@@ -27177,11 +27218,10 @@
     "social-proof-architect": {
       "name": "social-proof-architect",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Select and place genuine testimonials, case studies, and other proof when an audience needs evidence at specific trust barriers.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/social-proof-architect",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/social-proof-architect"
     },
     "calc": {
       "name": "calc",
@@ -27262,6 +27302,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/idea-to-blueprint"
+    },
+    "tokenleak": {
+      "name": "tokenleak",
+      "type": "skill",
+      "description": "Token-lean rules for coding agents: cut the context re-sent on every later call (big reads, noisy logs, re-reads, serial calls) without losing correctness.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/tokenleak"
     },
     "azure-identity-py": {
       "name": "azure-identity-py",
@@ -27667,11 +27715,10 @@
     "scarcity-urgency-psychologist": {
       "name": "scarcity-urgency-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Design honest scarcity and urgency messaging when verified inventory, capacity, or deadlines justify a timely decision.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/scarcity-urgency-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/scarcity-urgency-psychologist"
     },
     "industrial-brutalist-ui": {
       "name": "industrial-brutalist-ui",
@@ -27764,11 +27811,10 @@
     "copywriting-psychologist": {
       "name": "copywriting-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Write or revise conversion copy using audience awareness, motivations, and credible proof when ads, landing pages, or sales messages feel generic.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/copywriting-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/copywriting-psychologist"
     },
     "hyperexecute-skill": {
       "name": "hyperexecute-skill",
@@ -29241,6 +29287,14 @@
       "path": "collected_assets/skills/trpc-fullstack",
       "description_ko": "tRPC(라우터, 프로시저, 미들웨어, 구독 및 Next.js/React 통합 패턴)를 사용하여 유형이 안전한 엔드투엔드 API를 구축하세요."
     },
+    "ios-screens": {
+      "name": "ios-screens",
+      "type": "skill",
+      "description": "Build iPhone app screens that feel native: navigation, sheets, Dynamic Type, dark mode, permissions and paywalls, checked on small and large iPhones.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ios-screens"
+    },
     "context-manager": {
       "name": "context-manager",
       "type": "skill",
@@ -30665,11 +30719,10 @@
     "identity-mirror": {
       "name": "identity-mirror",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Map an audience's current and aspirational identity into credible messaging when copy needs stronger personal relevance.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/identity-mirror",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/identity-mirror"
     },
     "elk-stack": {
       "name": "elk-stack",
@@ -32646,11 +32699,10 @@
     "loss-aversion-designer": {
       "name": "loss-aversion-designer",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Compare gain and loss framing and describe credible costs of inaction when an offer needs urgency without fearmongering.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/loss-aversion-designer",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/loss-aversion-designer"
     },
     "viboscope": {
       "name": "viboscope",
@@ -33177,6 +33229,14 @@
       "path": "collected_assets/skills/spec-driven-loop",
       "description_ko": "중대형 Codex 작업 전에 PRD, 기술 설계 및 승인 기준을 동결합니다. 명시적인 소유권으로 에이전트를 조정한 다음 차이점, 테스트 및 증거를 바탕으로 전달을 판단합니다."
     },
+    "arcmira-find-quotes": {
+      "name": "arcmira-find-quotes",
+      "type": "skill",
+      "description": "Search indexed YouTube and podcast transcripts for quotes, speakers and clip boundaries with timestamped source links using Arcmira.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/arcmira-find-quotes"
+    },
     "minimalist-ui": {
       "name": "minimalist-ui",
       "type": "skill",
@@ -33471,6 +33531,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/apple-container",
       "description_ko": "Apple의 오픈 소스 컨테이너 CLI를 사용하여 Apple-silicon macOS에서 경량 컨테이너별 VM으로 OCI/Linux 컨테이너를 구축, 실행 및 관리합니다. Docker 데몬은 필요하지 않습니다."
+    },
+    "ui-states": {
+      "name": "ui-states",
+      "type": "skill",
+      "description": "Design and build the UI states agents forget: first use, empty, loading, error, offline, no results, long content, permission denied and success.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-states"
     },
     "database-migrations-sql-migrations": {
       "name": "database-migrations-sql-migrations",
@@ -33924,6 +33992,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/react-native-skills",
       "description_ko": "반응 네이티브 기술 작업 또는 워크플로 작업 시 사용"
+    },
+    "build-ui": {
+      "name": "build-ui",
+      "type": "skill",
+      "description": "Step-by-step workflow for UI work: read the project, follow the plan for the job (new screen, dashboard, polish, simplify, review), then render, fix and check again.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/build-ui"
     },
     "aws-serverless-eda": {
       "name": "aws-serverless-eda",
@@ -36801,11 +36877,10 @@
     "visual-emotion-engineer": {
       "name": "visual-emotion-engineer",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Create a visual direction brief for color, typography, imagery, and hierarchy when design must support a defined emotion, culture, and accessibility needs.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/visual-emotion-engineer",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/visual-emotion-engineer"
     },
     "policy-acknowledgement": {
       "name": "policy-acknowledgement",
@@ -37293,11 +37368,10 @@
     "headline-psychologist": {
       "name": "headline-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Draft and compare audience-aware headlines when copy needs clearer relevance and curiosity without clickbait or unsupported promises.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/headline-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/headline-psychologist"
     },
     "startup-business-analyst-market-opportunity": {
       "name": "startup-business-analyst-market-opportunity",
@@ -37381,11 +37455,10 @@
     "pitch-psychologist": {
       "name": "pitch-psychologist",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Structure pitches, decks, and talk tracks around audience beliefs, proof, and a clear decision when presentations need stronger progression.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/pitch-psychologist",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/pitch-psychologist"
     },
     "computer-use-agents": {
       "name": "computer-use-agents",
@@ -38613,11 +38686,10 @@
     "awareness-stage-mapper": {
       "name": "awareness-stage-mapper",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Map audience awareness stages to messaging strategy when planning a campaign, offer, or persuasion sequence.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/awareness-stage-mapper",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/awareness-stage-mapper"
     },
     "idea-autopsy": {
       "name": "idea-autopsy",
@@ -38843,11 +38915,10 @@
     "trust-calibrator": {
       "name": "trust-calibrator",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Diagnose audience trust barriers and calibrate proof, certainty, and credibility signals when messaging overclaims or fails to reassure.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/trust-calibrator",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/trust-calibrator"
     },
     "bash-pro": {
       "name": "bash-pro",
@@ -38924,11 +38995,10 @@
     "objection-preemptor": {
       "name": "objection-preemptor",
       "type": "skill",
-      "description": "One sentence - what this skill does and when to invoke it",
+      "description": "Map customer objections and address them with evidence and choice-preserving language when a funnel, sales page, or pitch encounters recurring hesitation.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/objection-preemptor",
-      "description_ko": "한 문장 - 이 스킬의 기능과 호출 시기"
+      "path": "collected_assets/skills/objection-preemptor"
     },
     "clickup-automation": {
       "name": "clickup-automation",
