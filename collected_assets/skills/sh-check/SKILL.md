@@ -6,8 +6,6 @@ description: >-
   use for SKILL.md (authoring:skill-check) or AGENTS.md (harness:ai-context).
 compatibility:
   tools: Read, Glob, Grep, Bash
-  # Check 15: lib/ network hits are the linter's own detection regex and selftest fixtures — sh_check.sh never opens a connection
-  network: none
 metadata:
   model_recommendation:
     tier: haiku

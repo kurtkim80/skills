@@ -1,6 +1,6 @@
 # Skill Quality Checks
 
-Eighteen checks, each rated PASS / WARN / FAIL / N/A.
+Nineteen checks, each rated PASS / WARN / FAIL / N/A.
 
 ---
 
@@ -20,10 +20,10 @@ Look for: `name` present, `description` present, only known attributes present.
 Known attributes: `name`, `description`, `allowed-tools`, `compatibility`,
 `metadata`, `user-invocable`, `argument-hint`, `disable-model-invocation`, `license`,
 `allowed_domains`.
-**`allowed_domains`**: a list of literal hostnames (no wildcards, no URLs) that
-scopes the skill's outbound network access; it pairs with
-`compatibility.network: required`. Security scanners read it from frontmatter,
-so never recommend moving it into body prose.
+**`allowed_domains`**: a non-empty list of literal hostnames (no wildcards, URLs,
+ports or whitespace; IDNs in punycode) that scopes the skill's outbound network
+access; it pairs with `compatibility.network: required`. Security scanners read
+it from frontmatter, so never recommend moving it into body prose.
 **Naming**: read `references/naming-convention.md` — `category:action` colon
 form is the SSOT convention and reports as PASS, not WARN. Folder/name
 kebab-vs-colon mismatch is also PASS when folder is the kebab form of the
@@ -79,7 +79,10 @@ FAIL — emoji present AND the skill's allowlist key is NOT in
 `references/allowed-emoji-skills.txt`
 N/A — the key IS in the allowlist (`[N/A] allowlisted in references/allowed-emoji-skills.txt`)
 WARN — allowlist file missing, or an allowlist entry resolves to nothing in the
-audited scope (see "Stale entries" below). Degrade rather than block;
+audited scope (see "Stale entries" below), or a symlinked dir or `*.md` file under
+`references/` went unscanned (see "Symlinks" under Checks 17–18;
+it turns a PASS into WARN; an allowlisted N/A stays N/A with the note).
+Degrade rather than block;
 authoring:skill-check stays read-only.
 
 Rationale: CLAUDE.md "No emojis anywhere" policy with one exception — the
@@ -203,15 +206,35 @@ the declared `tier`.
 (`/gh-*`, `gh:*`, `Skill(<name> ...)` patterns), build a 1-depth Sub-skill Model
 Plan — read each sub-skill's declared `tier`, mark missing ones `unknown` (WARN),
 and report it **separately from this skill's own tier** (see report-template.md).
-Recursion is 1-depth by default; `--recursive` opts into deeper traversal.
+Recursion is 1-depth by default; `--deep-subskills` opts into deeper traversal
+(it was `--recursive` before that flag came to mean multi-repo batch mode).
 
 ---
 
-## Security & Policy Alignment Checks (14–15)
+## Security & Policy Alignment Checks (14–15, 19)
 
-These two checks pre-empt findings that external security scanners (e.g. an
-org's AgentToolbox scanner) raise against published skills. Both are
+These three checks pre-empt findings that external security scanners (e.g. an
+org's AgentToolbox scanner) raise against published skills. All are
 **read-only — they flag a policy gap, never edit files** (audit-only invariant).
+Check 19 is numbered after the portability checks so ids 1–18 stay stable.
+
+**Why a single LOW finding matters — the scanner's verdict rule.** A scanner
+built on the public `cisco-ai-skill-scanner` maps a skill's findings to one
+verdict:
+
+| Findings | Verdict |
+|---|---|
+| any CRITICAL / HIGH | `failed` |
+| any MEDIUM / LOW | `flagged` (no Verified badge) |
+| none, or INFO only | `verified` |
+
+Only per-skill findings count; cross-skill findings (e.g.
+`CROSS_SKILL_SHARED_URL`) do not affect the verdict. So one LOW or MEDIUM
+finding is enough to block Verified, and one HIGH fails the skill outright.
+These checks approximate a few of the scanner's rules; they are not a copy of
+its signature lists, which drift with scanner versions. The scanner itself is
+the source of truth — `references/report-template.md` Next Actions shows how
+to run it.
 
 ### Check 14: License Declaration
 Cross-check frontmatter `license` against the repo-root `LICENSE` file.
@@ -228,12 +251,27 @@ On WARN, recommend a concrete SPDX identifier when the LICENSE is recognizable
 (e.g. `license: MIT`), else `license: <SPDX>`.
 
 ### Check 15: Capability Declaration Consistency
-Scan the skill's executable helpers across both the current `lib/` SSOT and
-legacy `scripts/` layouts, plus any `*.sh`/`*.py` shipped beside the SKILL.md,
-for network-capability signals and compare against the
-`compatibility.network` declaration. 1st-scope is **network only** — the
+Scan every `*.sh` / `*.py` anywhere under the skill directory, recursively —
+`lib/`, legacy `scripts/`, top-level files, and package directories such as
+`<pkg>/constants.py` alike — for network-capability signals and compare against
+the `compatibility.network` declaration. Skipped: `tests/`, `__pycache__/`,
+`.git/`, `node_modules/` and virtualenv (`.venv/`, `venv/`, `site-packages/`)
+directories, plus self-test/fixture files
+(`*selftest*`, `*selfcheck*`, `test_*`, `*_test.*`). 1st-scope is **network only** — the
 capability the external scanner actually flags
 (`TOOL_ABUSE_UNDECLARED_NETWORK`).
+
+**Undeclared destinations.** Every literal `http(s)://<host>` in those helpers
+must also be named somewhere in the skill's own SKILL.md (body prose, or the
+`allowed_domains` frontmatter list — Check 3) — the scanner reports an unnamed
+one as `UNDECLARED_NETWORK_DESTINATION` (LOW). Loopback (`localhost`,
+numeric `127.x.x.x` and `0.0.0.0`) and the reserved `example.com` /
+`example.org` / `example.net` domains (and their subdomains) are not
+destinations and are ignored, as are dotless placeholders such as
+`https://host/...` in a comment. Only a numeric `127.` host is loopback:
+`127.evil.io` is a real host and is checked.
+A host counts as named only as a whole host token: `sub.acme.io` or
+`notacme.io` in SKILL.md does not name `acme.io`.
 
 Network signals: imports of `requests` / `httpx` / `urllib` / `http.client` /
 `socket` / `aiohttp`, or explicit MCP/HTTP call patterns (e.g. `curl`, `wget`,
@@ -241,8 +279,8 @@ Network signals: imports of `requests` / `httpx` / `urllib` / `http.client` /
 
 | Result | Criteria |
 |---|---|
-| PASS | no network signal found, OR network is used AND `compatibility.network` is declared |
-| WARN | network signal present BUT no `compatibility.network` declaration → suggest "scripts use the network — declare `compatibility.network: required`" |
+| PASS | no network signal found, OR network is used AND `compatibility.network` is declared — and every literal helper host is named in SKILL.md |
+| WARN | network signal present BUT no `compatibility.network` declaration → suggest "scripts use the network — declare `compatibility.network: required`"; OR a helper host is not named in SKILL.md → the note lists each host with the first helper file it appears in; suggest documenting the destination in SKILL.md (or dropping the call); OR a symlinked dir, or a symlinked `*.sh`/`*.py` file, in the skill went unscanned — this turns a PASS or N/A into WARN (see "Symlinks" under Checks 17–18) |
 | N/A | skill ships no executable scripts (pure-prompt skill — nothing to scan) |
 
 Extension note: filesystem-write and subprocess capabilities follow the same
@@ -250,6 +288,30 @@ detect-vs-declare pattern; 1st scope is intentionally network-only because that
 is what the scanner flags today. `CROSS_SKILL_SHARED_URL` (multiple skills
 sharing one external domain) is **out of scope** — it requires cross-file
 analysis, while `authoring:skill-check` audits a single SKILL.md.
+
+### Check 19: Credential-to-Network Flow
+Model-judged, **WARN-only**. Read the same helper set Check 15 scans and trace
+whether a secret value — read from the environment, a config file, or a
+credentials file (names like `TOKEN`, `KEY`, `SECRET`, `PASSWORD`, `PAT`) —
+reaches a network call's headers, body, or URL. The scanner reports that as
+`CORRELATED_SENSITIVE_NETWORK_FLOW` (HIGH), which on its own makes the skill
+`failed`. Give extra weight to a plain `http://` destination: there the
+credential leaves the machine unencrypted.
+
+| Result | Criteria |
+|---|---|
+| PASS | helpers make network calls, and no credential value reaches one — or each such flow is necessary, sent only on the call that needs it, over TLS with verification on, to a destination named in SKILL.md |
+| WARN | a credential reaches a network call it is not needed for (e.g. a reachability probe), over plain `http://`, with TLS verification disabled, or to a destination SKILL.md does not name — the note names `file:line` and the credential source |
+| N/A | no helper makes a network call: Check 15 found no network signal or no helpers, or every signal line, read in full, is not a call (e.g. a detection regex or a comment). A URL, import, or command string later run indirectly (`eval`, `subprocess`, a wrapper) still counts as a call. A `compatibility.network: none` declaration is neither required nor sufficient |
+
+**How to fix**: send the credential only on the call that requires it (drop
+it from health or reachability probes), keep TLS verification on, and name the
+destination in SKILL.md. Fix the flow itself; never restructure code merely to
+stop a scanner from recognising it.
+
+`skill_check.sh` cannot decide this — it takes the result as the eleventh
+judgment (`j19`), rejects `FAIL` for it, and rejects the pre-Check-19
+ten-result form (exit 2) instead of shifting results onto the wrong check.
 
 ---
 
@@ -327,9 +389,28 @@ Other harnesses do not: a Hermes Agent GitHub tap or `npx skills add` copies
 dEitY719/dotfiles#1829). Both checks are therefore **WARN-only** — a
 Claude-Code-only skill must never FAIL for it — and read-only.
 
-Scan set for both: `SKILL.md` plus every text file under `references/`,
-`lib/`, `scripts/`, minus self-test/fixture files (`*selftest*`,
-`*selfcheck*`, `test_*`, `*_test.*`) exactly as Check 15 excludes them.
+Scan set for both: `SKILL.md` plus every text file anywhere under the skill
+directory, recursively (dEitY719/authoring-skills#87) — with the same pruned
+directories (`tests/`, `__pycache__/`, `.git/`, `node_modules/`, virtualenvs)
+and the same self-test/fixture exclusions (`*selftest*`, `*selfcheck*`,
+`test_*`, `*_test.*`) as Check 15, so both checks agree on what the bundle is.
+
+**Symlinks (Checks 11, 15, 17, 18).** A scan never follows a
+symlink inside the skill (issue #32 keeps results deterministic),
+but it never skips one silently either (dEitY719/authoring-skills#77, #98): every
+symlinked dir a scan met and did not enter, and every symlink to a regular
+file that the check's own file filter selects (`*.md` for Check 11,
+`*.sh`/`*.py` for Check 15, any bundle file for Checks 17/18 — a link's
+unread target cannot show whether it is text), is named in that check's note
+(`symlink(s) not followed, unscanned: <path>`), and a PASS or N/A (Check 11's allowlisted N/A excepted)
+becomes WARN — content an installer that follows links would ship went
+unread. A dir link whose target lies inside a directory the same scan already
+walks (`lib/current -> v2`) is not reported: that content was read under its
+real path. A file link is likewise not reported when its target is itself a
+file the scan read (`lib/alias.sh -> run.sh`); a target the filter passed over
+(`lib/net.py -> ../data/net.txt`, a self-test name) was never read, so its link
+is reported. So is a dir link whose target sits under a pruned directory
+(`lib/fx -> ../tests/fx`, Checks 15, 17, 18): the scan never read it. The audited skill directory itself is still dereferenced (Check 15).
 
 ### Check 17: Bundle Self-containment
 Extract every relative path token starting with `../` (after a `(`, backtick,
@@ -354,7 +435,7 @@ violation. Two more forms are extracted the same way (dEitY719/authoring-skills#
 | Result | Criteria |
 |---|---|
 | PASS | no path escapes the skill directory |
-| WARN | one or more do — the note lists `file:line -> path` (first five, then `+N more`) |
+| WARN | one or more do — the note lists `file:line -> path` (first five, then `+N more`); OR a symlinked dir or file in the scan set went unscanned (see "Symlinks" above) |
 
 Not violations: plain `../` paths inside a markdown code fence (``` / ~~~ —
 illustrative examples), `http(s)://` URLs, and bare directory talk such as
@@ -387,8 +468,8 @@ when any of these holds:
 | Result | Criteria |
 |---|---|
 | PASS | every use is protected |
-| WARN | one or more unprotected uses — the note lists `file:line` |
-| N/A | no executing use of `CLAUDE_PLUGIN_ROOT` |
+| WARN | one or more unprotected uses — the note lists `file:line`; OR a symlinked dir or file in the scan set went unscanned (see "Symlinks" above) |
+| N/A | no executing use of `CLAUDE_PLUGIN_ROOT`, and no symlinked dir or file went unscanned |
 
 Recommended pattern to quote in the report — tier 1 is Hermes' skill-relative
 dir, tier 2 the guarded plugin root, else `[FAIL]` (canonical shape:

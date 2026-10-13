@@ -9737,11 +9737,10 @@
     "senior-fullstack": {
       "name": "senior-fullstack",
       "type": "skill",
-      "description": "Complete toolkit for senior fullstack with modern tools and best practices.",
+      "description": "Coordinate full-stack implementation across interface, service, database and delivery boundaries using the existing project stack and verified checks.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/senior-fullstack",
-      "description_ko": "최신 도구와 모범 사례를 갖춘 수석 풀스택을 위한 완벽한 도구 키트입니다."
+      "path": "collected_assets/skills/senior-fullstack"
     },
     "red-team": {
       "name": "red-team",
@@ -12868,11 +12867,10 @@
     "advanced-evaluation": {
       "name": "advanced-evaluation",
       "type": "skill",
-      "description": "This skill should be used when the user asks to \"implement LLM-as-judge\", \"compare model outputs\", \"create evaluation rubrics\", \"mitigate evaluation bias\", or mentions direct scoring, pairwise comparison, position bias, evaluation pipelines, or automated quality assessment.",
+      "description": "Design LLM-as-judge rubrics, direct scores and pairwise comparisons. Use for judge models, evals, position bias and calibration against human labels.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/advanced-evaluation",
-      "description_ko": "이 기술은 사용자가 \"판사로서 LLM 구현\", \"모델 출력 비교\", \"평가 루브릭 생성\", \"평가 편향 완화\"를 요청하거나 직접 채점, 쌍별 비교, 위치 편향, 평가 파이프라인 또는 자동화된 품질 평가를 언급할 때 사용해야 합니다."
+      "path": "collected_assets/skills/advanced-evaluation"
     },
     "bdi-mental-states": {
       "name": "bdi-mental-states",
@@ -14250,6 +14248,15 @@
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/run-tests",
+      "description_ko": ">-"
+    },
+    "test-value-evidence": {
+      "name": "test-value-evidence",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/test-value-evidence",
       "description_ko": ">-"
     },
     "migrate-static-to-wrapper": {
@@ -19171,6 +19178,15 @@
       "path": "collected_assets/skills/web-security-testing",
       "description_ko": "삽입, XSS, 인증 결함 및 액세스 제어 문제를 포함한 OWASP 상위 10개 취약점에 대한 웹 애플리케이션 보안 테스트 워크플로입니다."
     },
+    "threat-modeling-expert": {
+      "name": "threat-modeling-expert",
+      "type": "skill",
+      "description": "Expert in threat modeling methodologies, security architecture review, and risk assessment. Masters STRIDE, PASTA, attack trees, and security requirement extraction. Use PROACTIVELY for security architecture reviews, threat identification, or building secure-by-design systems.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/threat-modeling-expert",
+      "description_ko": "위협 모델링 방법론, 보안 아키텍처 검토 및 위험 평가 전문가입니다. 마스터 STRIDE, PASTA, 공격 트리 및 보안 요구 사항 추출. 보안 아키텍처 검토, 위협 식별 또는 보안 기반 설계 시스템 구축을 위해 적극적으로 사용하세요."
+    },
     "ethical-hacking-methodology": {
       "name": "ethical-hacking-methodology",
       "type": "skill",
@@ -19179,6 +19195,15 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ethical-hacking-methodology",
       "description_ko": "정찰부터 보고까지 전체 침투 테스트 수명주기를 마스터하세요. 이 기술은 윤리적 해킹 방법론, 필수 도구, 공격 기술, 승인된 보안 평가를 위한 전문 보고의 5단계를 다룹니다."
+    },
+    "skill-security-audit": {
+      "name": "skill-security-audit",
+      "type": "skill",
+      "description": "Audit an Agent Skill, MCP server, connector, or desktop extension before installation by tracing code, dependencies, permissions, credentials, data flow, and irreversible actions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/skill-security-audit",
+      "description_ko": "코드, 종속성, 권한, 자격 증명, 데이터 흐름 및 되돌릴 수 없는 작업을 추적하여 설치 전에 에이전트 기술, MCP 서버, 커넥터 또는 데스크톱 확장을 감사합니다."
     },
     "api-security-testing": {
       "name": "api-security-testing",
@@ -19288,6 +19313,22 @@
       "path": "collected_assets/skills/tailwind-patterns",
       "description_ko": "Tailwind CSS v4 원칙. CSS 우선 구성, 컨테이너 쿼리, 최신 패턴, 디자인 토큰 아키텍처."
     },
+    "ui-states": {
+      "name": "ui-states",
+      "type": "skill",
+      "description": "Design and build the UI states agents forget: first use, empty, loading, error, offline, no results, long content, permission denied and success.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-states"
+    },
+    "build-ui": {
+      "name": "build-ui",
+      "type": "skill",
+      "description": "Step-by-step workflow for UI work: read the project, follow the plan for the job (new screen, dashboard, polish, simplify, review), then render, fix and check again.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/build-ui"
+    },
     "ui-a11y": {
       "name": "ui-a11y",
       "type": "skill",
@@ -19305,6 +19346,15 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/frontend-developer",
       "description_ko": "React 구성 요소를 구축하고, 반응형 레이아웃을 구현하고, 클라이언트 측 상태 관리를 처리합니다. Masters React 19, Next.js 15 및 최신 프런트엔드 아키텍처."
+    },
+    "frontend-api-integration-patterns": {
+      "name": "frontend-api-integration-patterns",
+      "type": "skill",
+      "description": "Production-ready patterns for integrating frontend applications with backend APIs, including race condition handling, request cancellation, retry strategies, error normalization, and UI state management.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/frontend-api-integration-patterns",
+      "description_ko": "경합 상태 처리, 요청 취소, 재시도 전략, 오류 정규화, UI 상태 관리 등 프런트엔드 애플리케이션을 백엔드 API와 통합하기 위한 프로덕션 준비 패턴입니다."
     },
     "shadcn": {
       "name": "shadcn",
@@ -19358,6 +19408,15 @@
       "path": "collected_assets/skills/analytics-product",
       "description_ko": "제품 분석 — PostHog, Mixpanel, 이벤트, 퍼널, 집단, retencao, North Star 메트릭, OKR 및 제품 대시보드."
     },
+    "agent-evaluation-reporting": {
+      "name": "agent-evaluation-reporting",
+      "type": "skill",
+      "description": "Use when summarizing agent evaluations where autonomous, assisted, failed, timed-out, or invalid outcomes must remain distinct and comparable.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agent-evaluation-reporting",
+      "description_ko": "자율, 지원, 실패, 시간 초과 또는 유효하지 않은 결과가 뚜렷하고 비교 가능한 상태로 유지되어야 하는 상담사 평가를 요약할 때 사용합니다."
+    },
     "llm-app-patterns": {
       "name": "llm-app-patterns",
       "type": "skill",
@@ -19402,6 +19461,15 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/incident-responder",
       "description_ko": "신속한 문제 해결, 현대적인 관찰 가능성 및 포괄적인 사고 관리를 전문으로 하는 전문 SRE 사고 대응자입니다."
+    },
+    "product-marketing-context": {
+      "name": "product-marketing-context",
+      "type": "skill",
+      "description": "Create or update a reusable product marketing context document with positioning, audience, ICP, use cases, and messaging. Use at the start of a project to avoid repeating core marketing context across tasks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/product-marketing-context",
+      "description_ko": "포지셔닝, 대상, ICP, 사용 사례 및 메시징을 포함하여 재사용 가능한 제품 마케팅 컨텍스트 문서를 생성하거나 업데이트합니다. 작업 전반에 걸쳐 핵심 마케팅 컨텍스트가 반복되는 것을 방지하려면 프로젝트 시작 시 사용하세요."
     },
     "seo-content-planner": {
       "name": "seo-content-planner",
@@ -19484,6 +19552,15 @@
       "path": "collected_assets/skills/python-patterns",
       "description_ko": ">"
     },
+    "api-rate-limit-handler": {
+      "name": "api-rate-limit-handler",
+      "type": "skill",
+      "description": "Implement bounded, idempotency-aware API throttling, backoff, and retry handling for 429 and transient 5xx responses.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/api-rate-limit-handler",
+      "description_ko": "429 및 일시적 5xx 응답에 대한 제한된 멱등성 인식 API 제한, 백오프 및 재시도 처리를 구현합니다."
+    },
     "django-pro": {
       "name": "django-pro",
       "type": "skill",
@@ -19492,6 +19569,32 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/django-pro",
       "description_ko": "비동기 뷰, DRF, Celery 및 Django 채널을 갖춘 마스터 Django 5.x입니다. 적절한 아키텍처, 테스트 및 배포를 통해 확장 가능한 웹 애플리케이션을 구축하세요."
+    },
+    "api-security-best-practices": {
+      "name": "api-security-best-practices",
+      "type": "skill",
+      "description": "Implement secure API design patterns including authentication, authorization, input validation, rate limiting, and protection against common API vulnerabilities",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/api-security-best-practices",
+      "description_ko": "인증, 권한 부여, 입력 유효성 검사, 속도 제한, 일반적인 API 취약점에 대한 보호 등 보안 API 설계 패턴을 구현합니다."
+    },
+    "deprecation-and-migration": {
+      "name": "deprecation-and-migration",
+      "type": "skill",
+      "description": "Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when deciding whether to maintain or sunset existing code.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/deprecation-and-migration",
+      "description_ko": "지원 중단 및 마이그레이션을 관리합니다. 오래된 시스템, API 또는 기능을 제거할 때 사용합니다. 한 구현에서 다른 구현으로 사용자를 마이그레이션할 때 사용합니다. 기존 코드를 유지할지, 종료할지 결정할 때 사용합니다."
+    },
+    "api-contract-testing": {
+      "name": "api-contract-testing",
+      "type": "skill",
+      "description": "Design and review API contract tests across providers and consumers. Use for schema changes, compatibility regressions and client integration failures.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/api-contract-testing"
     },
     "api-patterns": {
       "name": "api-patterns",
@@ -19538,15 +19641,6 @@
       "path": "collected_assets/skills/backend-architect",
       "description_ko": "확장 가능한 API 설계, 마이크로서비스 아키텍처 및 분산 시스템을 전문으로 하는 전문 백엔드 설계자입니다."
     },
-    "api-security-best-practices": {
-      "name": "api-security-best-practices",
-      "type": "skill",
-      "description": "Implement secure API design patterns including authentication, authorization, input validation, rate limiting, and protection against common API vulnerabilities",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/api-security-best-practices",
-      "description_ko": "인증, 권한 부여, 입력 유효성 검사, 속도 제한, 일반적인 API 취약점에 대한 보호 등 보안 API 설계 패턴을 구현합니다."
-    },
     "hunt-open-redirect": {
       "name": "hunt-open-redirect",
       "type": "skill",
@@ -19591,6 +19685,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/junit-5-skill",
       "description_ko": "Java로 프로덕션 수준의 JUnit 5 단위 및 통합 테스트를 생성합니다. 어설션, 매개변수화된 테스트, 수명 주기 후크, Mockito를 사용한 모의 및 중첩 테스트를 다룹니다. 사용자가 \\\"JUnit\\\", \\\"JUnit 5\\\", \\\"@Test\\\", \\\"assertEquals\\\", \\\"Assertions\\\", \\\"Java 단위 테스트\\\"를 언급할 때 사용합니다."
+    },
+    "mcd-secret-menu-lab": {
+      "name": "mcd-secret-menu-lab",
+      "type": "skill",
+      "description": "Plan McDonald's China recipe combinations using an authorized MCP connection for current store menus, prices and nutrition. Use for recreating food hacks or exploring combinations within a budget.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/mcd-secret-menu-lab"
     },
     "ruby-pro": {
       "name": "ruby-pro",
@@ -20821,15 +20923,6 @@
       "path": "collected_assets/skills/codebase-cleanup-deps-audit",
       "description_ko": "귀하는 취약성 검색, 라이센스 준수 및 공급망 보안을 전문으로 하는 종속성 보안 전문가입니다. 알려진 취약점, 라이선스 문제, 오래된 패키지에 대한 프로젝트 종속성을 분석하고 실행 가능한 해결 전략을 제공합니다."
     },
-    "product-marketing-context": {
-      "name": "product-marketing-context",
-      "type": "skill",
-      "description": "Create or update a reusable product marketing context document with positioning, audience, ICP, use cases, and messaging. Use at the start of a project to avoid repeating core marketing context across tasks.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/product-marketing-context",
-      "description_ko": "포지셔닝, 대상, ICP, 사용 사례 및 메시징을 포함하여 재사용 가능한 제품 마케팅 컨텍스트 문서를 생성하거나 업데이트합니다. 작업 전반에 걸쳐 핵심 마케팅 컨텍스트가 반복되는 것을 방지하려면 프로젝트 시작 시 사용하세요."
-    },
     "ilya-sutskever": {
       "name": "ilya-sutskever",
       "type": "skill",
@@ -21627,11 +21720,10 @@
     "riffkit": {
       "name": "riffkit",
       "type": "skill",
-      "description": "Riff a winning TikTok into your own short video — study a proven video's emotion formula and regenerate it with your product, character, and language (9 supported). Also makes UGC ad creative.",
+      "description": "Create short videos with Riffkit: Adapt a source formula, Swap approved footage, or generate from an idea. Use for UGC ads and localized video; requires an account and render approval.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/riffkit",
-      "description_ko": "성공적인 TikTok을 자신만의 짧은 동영상으로 재구성하세요. 검증된 동영상의 감정 공식을 연구하고 이를 제품, 캐릭터 및 언어로 재생성하세요(9개 지원). 또한 UGC 광고를 창의적으로 만듭니다."
+      "path": "collected_assets/skills/riffkit"
     },
     "lookdev": {
       "name": "lookdev",
@@ -27390,15 +27482,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/json-schema-manual"
     },
-    "deprecation-and-migration": {
-      "name": "deprecation-and-migration",
-      "type": "skill",
-      "description": "Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when deciding whether to maintain or sunset existing code.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/deprecation-and-migration",
-      "description_ko": "지원 중단 및 마이그레이션을 관리합니다. 오래된 시스템, API 또는 기능을 제거할 때 사용합니다. 한 구현에서 다른 구현으로 사용자를 마이그레이션할 때 사용합니다. 기존 코드를 유지할지, 종료할지 결정할 때 사용합니다."
-    },
     "oral-health-analyzer": {
       "name": "oral-health-analyzer",
       "type": "skill",
@@ -31886,15 +31969,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/traderspy-position-check"
     },
-    "threat-modeling-expert": {
-      "name": "threat-modeling-expert",
-      "type": "skill",
-      "description": "Expert in threat modeling methodologies, security architecture review, and risk assessment. Masters STRIDE, PASTA, attack trees, and security requirement extraction. Use PROACTIVELY for security architecture reviews, threat identification, or building secure-by-design systems.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/threat-modeling-expert",
-      "description_ko": "위협 모델링 방법론, 보안 아키텍처 검토 및 위험 평가 전문가입니다. 마스터 STRIDE, PASTA, 공격 트리 및 보안 요구 사항 추출. 보안 아키텍처 검토, 위협 식별 또는 보안 기반 설계 시스템 구축을 위해 적극적으로 사용하세요."
-    },
     "startup-business-analyst-financial-projections": {
       "name": "startup-business-analyst-financial-projections",
       "type": "skill",
@@ -32847,15 +32921,6 @@
       "path": "collected_assets/skills/project-skill-audit",
       "description_ko": "프로젝트를 감사하고 추가하거나 업데이트할 가장 가치 있는 기술을 추천합니다."
     },
-    "api-rate-limit-handler": {
-      "name": "api-rate-limit-handler",
-      "type": "skill",
-      "description": "Implement bounded, idempotency-aware API throttling, backoff, and retry handling for 429 and transient 5xx responses.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/api-rate-limit-handler",
-      "description_ko": "429 및 일시적 5xx 응답에 대한 제한된 멱등성 인식 API 제한, 백오프 및 재시도 처리를 구현합니다."
-    },
     "anti-deception": {
       "name": "anti-deception",
       "type": "skill",
@@ -33532,14 +33597,6 @@
       "path": "collected_assets/skills/apple-container",
       "description_ko": "Apple의 오픈 소스 컨테이너 CLI를 사용하여 Apple-silicon macOS에서 경량 컨테이너별 VM으로 OCI/Linux 컨테이너를 구축, 실행 및 관리합니다. Docker 데몬은 필요하지 않습니다."
     },
-    "ui-states": {
-      "name": "ui-states",
-      "type": "skill",
-      "description": "Design and build the UI states agents forget: first use, empty, loading, error, offline, no results, long content, permission denied and success.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ui-states"
-    },
     "database-migrations-sql-migrations": {
       "name": "database-migrations-sql-migrations",
       "type": "skill",
@@ -33587,11 +33644,10 @@
     "google-calendar-automation": {
       "name": "google-calendar-automation",
       "type": "skill",
-      "description": "Lightweight Google Calendar integration with standalone OAuth authentication. No MCP server required.",
+      "description": "Plan and perform authorized Google Calendar workflows through an existing authenticated integration; inspect events, draft changes and verify results.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/google-calendar-automation",
-      "description_ko": "독립형 OAuth 인증과 경량 Google 캘린더 통합. MCP 서버가 필요하지 않습니다."
+      "path": "collected_assets/skills/google-calendar-automation"
     },
     "mobile-security-coder": {
       "name": "mobile-security-coder",
@@ -33992,14 +34048,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/react-native-skills",
       "description_ko": "반응 네이티브 기술 작업 또는 워크플로 작업 시 사용"
-    },
-    "build-ui": {
-      "name": "build-ui",
-      "type": "skill",
-      "description": "Step-by-step workflow for UI work: read the project, follow the plan for the job (new screen, dashboard, polish, simplify, review), then render, fix and check again.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/build-ui"
     },
     "aws-serverless-eda": {
       "name": "aws-serverless-eda",
@@ -35677,15 +35725,6 @@
       "path": "collected_assets/skills/block-storage",
       "description_ko": "블록 스토리지 볼륨 및 LVM을 관리합니다. 클라우드 블록 스토리지를 구성하고"
     },
-    "frontend-api-integration-patterns": {
-      "name": "frontend-api-integration-patterns",
-      "type": "skill",
-      "description": "Production-ready patterns for integrating frontend applications with backend APIs, including race condition handling, request cancellation, retry strategies, error normalization, and UI state management.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/frontend-api-integration-patterns",
-      "description_ko": "경합 상태 처리, 요청 취소, 재시도 전략, 오류 정규화, UI 상태 관리 등 프런트엔드 애플리케이션을 백엔드 API와 통합하기 위한 프로덕션 준비 패턴입니다."
-    },
     "codebase-audit-pre-push": {
       "name": "codebase-audit-pre-push",
       "type": "skill",
@@ -35865,15 +35904,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/c4-context",
       "description_ko": "전문가 C4 컨텍스트 수준 문서 전문가. 높은 수준의 시스템 컨텍스트 다이어그램, 문서 페르소나, 사용자 여정, 시스템 기능 및 외부 종속성을 생성합니다."
-    },
-    "agent-evaluation-reporting": {
-      "name": "agent-evaluation-reporting",
-      "type": "skill",
-      "description": "Use when summarizing agent evaluations where autonomous, assisted, failed, timed-out, or invalid outcomes must remain distinct and comparable.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/agent-evaluation-reporting",
-      "description_ko": "자율, 지원, 실패, 시간 초과 또는 유효하지 않은 결과가 뚜렷하고 비교 가능한 상태로 유지되어야 하는 상담사 평가를 요약할 때 사용합니다."
     },
     "360-feedback-system": {
       "name": "360-feedback-system",
@@ -38290,15 +38320,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/wjttc-builder",
       "description_ko": "모든 프로젝트에 대해 WJTTC(챔피언십 등급) 테스트 스위트를 계획하고 생성합니다. 코드베이스를 분석하고, WJTTC 5개 계층(브레이크 · 엔진 · 에어로 · 타이어 · 피트)에 걸쳐 구성요소를 분류하고, 계층화된 테스트 계획을 작성하고, 실행 가능한 테스트 파일을 스캐폴드합니다."
-    },
-    "skill-security-audit": {
-      "name": "skill-security-audit",
-      "type": "skill",
-      "description": "Audit an Agent Skill, MCP server, connector, or desktop extension before installation by tracing code, dependencies, permissions, credentials, data flow, and irreversible actions.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/skill-security-audit",
-      "description_ko": "코드, 종속성, 권한, 자격 증명, 데이터 흐름 및 되돌릴 수 없는 작업을 추적하여 설치 전에 에이전트 기술, MCP 서버, 커넥터 또는 데스크톱 확장을 감사합니다."
     },
     "animejs-animation": {
       "name": "animejs-animation",
@@ -42387,6 +42408,14 @@
       "path": "collected_assets/skills/tm7-threat-model",
       "description_ko": "Microsoft Threat Modeling Tool v7.3+와 호환되는 유효한 Microsoft Threat Modeling Tool(.tm7) 파일을 생성합니다. .tm7 위협 모델 파일을 생성, 생성 또는 수정하라는 요청을 받을 때마다 또는 Microsoft 위협 모델링 도구에서 깨끗하게 열리는 .tm7 파일을 출력해야 하는 STRIDE 위협 모델링을 수행할 때 이 기술을 사용합니다."
     },
+    "cypress-flake-fixer": {
+      "name": "cypress-flake-fixer",
+      "type": "skill",
+      "description": "Find and fix flake-prone anti-patterns in an existing Cypress suite, and APIs removed in Cypress 12 to 16. Bundles a zero-dependency scanner for fixed cy.wait() delays, assigned command return values, async/await, force: true, chaining after actions, one-shot expect() inside .then(), conditional testing, and removed APIs such as Cypress.env(), cy.exec(), cy.server()/cy.route(). Use when asked to fix flaky Cypress tests, remove cy.wait, stabilize or harden a Cypress suite, audit Cypress specs, debug \"detached from the DOM\" errors, or prepare an upgrade to Cypress 15 or 16.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/cypress-flake-fixer"
+    },
     "landing-page-conversion-audit": {
       "name": "landing-page-conversion-audit",
       "type": "skill",
@@ -46051,6 +46080,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/cosmosdb-datamodeling",
       "description_ko": "NoSQL 사용 사례에 대한 주요 애플리케이션 요구 사항을 캡처하고 모범 사례 및 일반 패턴을 사용하여 Azure Cosmos DB 데이터 NoSQL 모델 설계를 생성하기 위한 단계별 가이드,artifacts_produced: \"cosmosdb_requirements.md\" 파일 및 \"cosmosdb_data_model.md\" 파일"
+    },
+    "rebase-current-branch": {
+      "name": "rebase-current-branch",
+      "type": "skill",
+      "description": "Rebase the currently checked out feature branch onto the latest upstream default branch. Use when asked to update a branch with main or master, rebase the current branch onto the default branch, or sync a feature branch before review. Detects whether the repository uses main or master and guides safe conflict handling.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/rebase-current-branch"
     },
     "react-audit-grep-patterns": {
       "name": "react-audit-grep-patterns",

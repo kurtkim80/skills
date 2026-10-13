@@ -1,16 +1,19 @@
 #!/bin/sh
 # skill_check.sh -- the mechanical half of authoring:skill-check.
 #
-# Usage: skill_check.sh <SKILL.md-path> [j2 j3 j4 j5 j6 j7 j8 j9 j10 j12]
-#   j2..j12 are the auditor's own calls for the ten checks no grep can decide
-#   -- 2 Progressive Disclosure, 3 Frontmatter Validity (naming judgment),
-#   4 References Directory Usage, 5 Output Report Defined, 6 Help Flag Pattern
-#   (verbatim-ness), 7 Step Structure, 8 Options Documentation, 9 Verdict
-#   Output, 10 Next-action Hint, 12 Executable Procedure Extraction -- each
-#   PASS | WARN | FAIL | N/A, in that check-id order. Pass all ten or none.
+# Usage: skill_check.sh <SKILL.md-path> [j2 j3 j4 j5 j6 j7 j8 j9 j10 j12 j19]
+#   j2..j19 are the auditor's own calls for the eleven checks no grep can
+#   decide -- 2 Progressive Disclosure, 3 Frontmatter Validity (naming
+#   judgment), 4 References Directory Usage, 5 Output Report Defined, 6 Help
+#   Flag Pattern (verbatim-ness), 7 Step Structure, 8 Options Documentation,
+#   9 Verdict Output, 10 Next-action Hint, 12 Executable Procedure
+#   Extraction, 19 Credential-to-Network Flow -- each PASS | WARN | FAIL |
+#   N/A (19 is WARN-only: PASS | WARN | N/A), in that check-id order. Pass
+#   all eleven or none. The pre-Check-19 ten-result form is rejected (exit 2)
+#   rather than silently shifting each result onto the wrong check.
 #
 # stdout: check<TAB>result<TAB>note, one row per decided check, ascending id.
-#         With the ten judgments it also emits every row plus a final
+#         With the eleven judgments it also emits every row plus a final
 #         score<TAB><pass>/<effective-total><TAB><VERDICT>
 #         computed per references/report-template.md verdict thresholds.
 # exit:   0 report written | 2 bad usage or unreadable file
@@ -31,12 +34,9 @@
 # scope for this audit run -- that judgment call stays with the auditor; this
 # script only ever emits FAIL (key absent) or N/A (key present), never the
 # stale-entry WARN.
-# ponytail: $scan_files/$scripts/$port_files are built via unquoted word-splitting, so a
-# path containing a space would break them. Every skill/file name in this
-# repo's marketplace convention is kebab-case with no spaces (naming-
-# convention.md), so this is accepted rather than reworked into a POSIX-sh
-# array substitute. Upgrade path if that convention ever breaks: switch to
-# NUL-delimited `find -print0` and a `while IFS= read -r -d ''` loop.
+# File lists ($scan_files, $scripts, $port_files) are newline-delimited and
+# consumed either by a `while IFS= read -r` loop or by `IFS=<newline>; set -f;
+# set -- $list` (issue #85), so a path containing a space stays one path.
 
 set -eu
 
@@ -46,7 +46,7 @@ file=${1:-}
 
 case $file in
   -h|--help|help)
-    echo "usage: skill_check.sh <SKILL.md-path> [j2 j3 j4 j5 j6 j7 j8 j9 j10 j12]"
+    echo "usage: skill_check.sh <SKILL.md-path> [j2 j3 j4 j5 j6 j7 j8 j9 j10 j12 j19]"
     exit 0
     ;;
   '')
@@ -57,20 +57,26 @@ esac
 
 [ -r "$file" ] || { echo "skill_check: cannot read '$file'" >&2; exit 2; }
 
-j2='' j3='' j4='' j5='' j6='' j7='' j8='' j9='' j10='' j12=''
-if [ "$#" -eq 11 ]; then
+j2='' j3='' j4='' j5='' j6='' j7='' j8='' j9='' j10='' j12='' j19=''
+if [ "$#" -eq 12 ]; then
   shift
-  j2=$1 j3=$2 j4=$3 j5=$4 j6=$5 j7=$6 j8=$7 j9=$8 j10=$9 j12=${10}
+  # An empty result would drop its row yet still count in the denominator.
+  for j; do [ -n "$j" ] || { echo "skill_check: judgment results must not be empty" >&2; exit 2; }; done
+  j2=$1 j3=$2 j4=$3 j5=$4 j6=$5 j7=$6 j8=$7 j9=$8 j10=$9 j12=${10} j19=${11}
+elif [ "$#" -eq 11 ]; then
+  echo "skill_check: got ten judgment results -- the pre-Check-19 form; append j19 (Credential-to-Network Flow) as the eleventh" >&2
+  exit 2
 elif [ "$#" -ne 1 ]; then
-  echo "skill_check: pass the ten judgment results (j2 j3 j4 j5 j6 j7 j8 j9 j10 j12) or none" >&2
+  echo "skill_check: pass the eleven judgment results (j2 j3 j4 j5 j6 j7 j8 j9 j10 j12 j19) or none" >&2
   exit 2
 fi
-for j in "$j2" "$j3" "$j4" "$j5" "$j6" "$j7" "$j8" "$j9" "$j10" "$j12"; do
+for j in "$j2" "$j3" "$j4" "$j5" "$j6" "$j7" "$j8" "$j9" "$j10" "$j12" "$j19"; do
   case $j in
     ''|PASS|WARN|FAIL|N/A) ;;
     *) echo "skill_check: judgment must be PASS|WARN|FAIL|N/A, got '$j'" >&2; exit 2 ;;
   esac
 done
+[ "$j19" != FAIL ] || { echo "skill_check: Check 19 is WARN-only -- j19 must be PASS|WARN|N/A" >&2; exit 2; }
 
 dir=$(cd "$(dirname "$file")" && pwd)
 refdir="$dir/references"
@@ -100,6 +106,151 @@ find_upward() {
   done
 }
 
+# scan_tree [-H] <root> <find-expr>... -- the one file lister for Checks 11,
+# 15 and 17/18 (issues #77, #98). Prints `F<TAB>path` for each regular file
+# the expression selects (it must include `-type f`, and may lead with a
+# `( names ) -prune -o`), and `L<TAB>path` for each link it met and did not
+# follow: a symlinked directory, or a symlink to a regular file that the same
+# expression would have selected were it a plain file (its `-type f` read as
+# `-type l`, with a `test -f` appended after the caller's own filters, so a
+# link they reject costs no process). Contract this rewrite relies on: `-type`
+# appears only as a primary, and nothing is `-o`-joined after `-type f` at the
+# top level (group alternatives in `( )`). Links are never followed (issue
+# #32), so a scan
+# reports them rather than skipping them silently. -H dereferences <root>
+# only; without it a symlinked <root> is itself reported as skipped.
+scan_tree() {
+  st_h=''
+  [ "$1" = -H ] && { st_h=-H; shift; }
+  st_root=$1; shift
+  if [ -z "$st_h" ] && [ -L "$st_root" ]; then
+    [ -d "$st_root" ] && printf 'L\t%s\n' "$st_root"
+    return 0
+  fi
+  [ -d "$st_root" ] || return 0
+  # Two copies of the expression go into one find: the caller's ("$1".."$n")
+  # selects plain files, and its link twin -- appended after it, each
+  # `-type f` swapped for `-type l` and one `-exec test -f {} ;` added last --
+  # selects file links.
+  # POSIX sh has no arrays, so each copy is a string of quoted positional
+  # references ("$1" "$2" ...) that eval expands, never the words themselves.
+  st_n=$# st_i=0 st_f='' st_l='' st_ty='' st_tf=''
+  for st_a in "$@"; do
+    st_i=$((st_i + 1)); st_f="$st_f \"\${$st_i}\""
+    if [ -n "$st_ty" ]; then
+      st_ty=''
+      if [ "$st_a" = f ]; then set -- "$@" -type l; st_tf=1
+      else set -- "$@" -type "$st_a"; fi
+    elif [ "$st_a" = -type ]; then st_ty=1; continue
+    else set -- "$@" "$st_a"; fi
+  done
+  [ -z "$st_ty" ] || set -- "$@" -type
+  [ -z "$st_tf" ] || set -- "$@" -exec test -f '{}' ';'
+  st_i=$st_n
+  while [ "$st_i" -lt $# ]; do st_i=$((st_i + 1)); st_l="$st_l \"\${$st_i}\""; done
+  # shellcheck disable=SC2086 # $st_h is empty or -H; unquoted so empty drops out
+  eval "find \$st_h \"\$st_root\" -mindepth 1 \\( $st_f -exec printf 'F\\t%s\\n' {} + \\) \\
+    -o \\( $st_l -exec printf 'L\\t%s\\n' {} + \\) \\
+    -o \\( -type l -exec test -d {} \\; -exec printf 'L\\t%s\\n' {} + \\)" || true
+}
+# No 2>/dev/null above: a find that cannot run (unsupported primary, unreadable
+# dir) must say so on stderr rather than leave an empty, silently-PASSing scan.
+
+# scanned <scan_tree-output> -- the selected files, one per line.
+scanned() {
+  printf '%s\n' "$1" | awk -F'\t' '$1 == "F" { print $2 }'
+}
+
+# real <dir> -- its physical path, empty when it does not resolve.
+real() { (cd -P -- "$1" 2>/dev/null && pwd -P); }
+
+# real_target <link> -- the physical path a skipped link points at: real for a
+# dir, and for a file link its final target's real dir plus its name (the
+# chain is walked by readlink, at most 40 hops -- a loop resolves to nothing).
+# Only the path is resolved; the target is never opened (issue #98).
+real_target() {
+  [ -d "$1" ] && { real "$1"; return; }
+  rt_p=$1 rt_i=0
+  while [ -L "$rt_p" ]; do
+    rt_i=$((rt_i + 1)); [ "$rt_i" -le 40 ] || return 0
+    rt_t=$(readlink -- "$rt_p") || return 0
+    case $rt_t in /*) rt_p=$rt_t ;; *) rt_p=$(dirname -- "$rt_p")/$rt_t ;; esac
+  done
+  rt_d=$(real "$(dirname -- "$rt_p")") && [ -n "$rt_d" ] &&
+    printf '%s/%s\n' "$rt_d" "$(basename -- "$rt_p")"
+}
+
+# bundle_scan <root> [find-expr]... -- scan_tree over a skill's shipped
+# bundle, shared by Check 15 and Checks 17/18 (issue #87) so both agree on
+# what it is: test trees, caches and vendored deps are pruned, self-test and
+# fixture files excluded. Extra primaries (Check 15's script-type filter)
+# narrow the selected files. The pruned names are bundle_prune_names, the one
+# list both the find expression and bundle_prune_re are built from.
+bundle_prune_names='tests __pycache__ .git node_modules .venv venv site-packages'
+bundle_scan() {
+  bs_root=$1; shift
+  bs_prune=''
+  for bs_n in $bundle_prune_names; do bs_prune="$bs_prune -o -name $bs_n"; done
+  # shellcheck disable=SC2086 # split on purpose: one find word per token, no glob chars
+  scan_tree -H "$bs_root" \( ${bs_prune# -o } \) -prune \
+    -o -type f "$@" ! -iname '*selftest*' ! -iname '*selfcheck*' ! -iname 'test_*' ! -iname '*_test.*'
+}
+# The same names as an awk ERE (bracketed dots, not backslashes: awk -v would
+# eat the escape).
+# shellcheck disable=SC2086 # split on purpose, as in bundle_scan
+bundle_prune_re=$(printf '%s\n' $bundle_prune_names | sed 's/[.]/[.]/g' | paste -sd '|' -)
+
+# skipped [-p] <scan_tree-output> <prefix> [root]... -- the skipped links as one
+# comma-separated list, <prefix> stripped, sorted (find walks in readdir
+# order, which differs across filesystems); empty when none. A link already
+# covered is dropped: a dir link whose target lies inside one of the scan's own
+# non-symlink <root>s (`lib/current -> v2`), and a file link whose target is
+# itself one of the scan's `F` files (`lib/alias.sh -> run.sh`) -- that content
+# was read under its real path. A file target the filter did not select
+# (`lib/net.py -> ../data/net.txt`, a self-test name, a pruned dir) was never
+# read, so its link is still reported.
+# -p: the scan was a bundle_scan, so a dir target under a pruned dir (`tests/`)
+# was never read and its link is still reported.
+skipped() {
+  sk_re=''
+  [ "$1" = -p ] && { sk_re="/($bundle_prune_re)/"; shift; }
+  sk_out=$1 sk_pre=$2; shift 2
+  sk_roots=''
+  for sk_r in "$@"; do
+    [ -L "$sk_r" ] && continue # a symlinked root was itself skipped, covers nothing
+    sk_r=$(real "$sk_r") && [ -n "$sk_r" ] && sk_roots="$sk_roots$sk_r
+"
+  done
+  sk_files='' sk_fdone=''
+  printf '%s\n' "$sk_out" | awk -F'\t' '$1 == "L" { print $2 }' | while IFS= read -r sk_l; do
+    sk_t=$(real_target "$sk_l") || sk_t=''
+    if [ -d "$sk_l" ]; then
+      printf '%s' "$sk_roots" | awk -v t="$sk_t/" -v re="$sk_re" '
+        index(t, $0 "/") == 1 && (re == "" || substr(t, length($0) + 1) !~ re) { f = 1 }
+        END { exit !f }' && continue
+    elif [ -n "$sk_t" ]; then
+      # The scanned files' physical paths, resolved once, on the first file link.
+      [ -n "$sk_fdone" ] || {
+        # `|| :` -- under set -e a failed lookup must not end this loop early.
+        sk_files=$(scanned "$sk_out" | while IFS= read -r sk_f; do
+          [ -z "$sk_f" ] || real_target "$sk_f" || :; done)
+        sk_fdone=1
+      }
+      printf '%s\n' "$sk_files" | grep -qxF -- "$sk_t" && continue
+    fi
+    printf '%s\n' "${sk_l#"$sk_pre"}"
+  done | LC_ALL=C sort | awk '{ s = s (s == "" ? "" : ", ") $0 } END { print s }'
+}
+
+# flag_skipped <result> <note> <links> -- sets fr/fn: a PASS or N/A becomes
+# WARN and the note names the links, so a skipped dir or file is never silent.
+flag_skipped() {
+  fr=$1 fn=$2
+  [ -n "$3" ] || return 0
+  case $fr in PASS|N/A) fr=WARN ;; esac
+  fn="$fn; symlink(s) not followed, unscanned: $3"
+}
+
 # ---------- Check 1: Line Count ----------
 lines=$(wc -l < "$file" | tr -d ' ')
 if [ "$lines" -le 100 ]; then
@@ -119,12 +270,12 @@ fm=$(awk '
 ' "$file")
 
 # ---------- Check 11: No Emojis ----------
-scan_files="$file"
-if [ -d "$refdir" ]; then
-  # find, not a bare */*.md glob -- also catches emoji in nested reference
-  # subdirectories (codex PR #16 FOLLOW-UP).
-  scan_files="$scan_files $(find "$refdir" -type f -name '*.md' 2>/dev/null)"
-fi
+# find, not a bare */*.md glob -- also catches emoji in nested reference
+# subdirectories (codex PR #16 FOLLOW-UP).
+ref_scan=$(scan_tree "$refdir" -type f -name '*.md')
+scan_files="$file
+$(scanned "$ref_scan")"
+ref_links=$(skipped "$ref_scan" "$dir/" "$refdir")
 # Portable (non-PCRE) stand-in for grep -P '[\x{1F000}-\x{1FAFF}\x{FE0F}]':
 # BSD/POSIX grep ships no -P at all, and GNU grep needs a PCRE build that
 # isn't guaranteed either (agy PR #16 BLOCKER). UTF-8 encodes the whole
@@ -137,12 +288,16 @@ fi
 emoji_lead=$(printf '\360\237')
 emoji_vs16=$(printf '\357\270\217')
 emoji_hits=0
-for f in $scan_files; do
+# Newline-split, not word-split, so a reference file with a space in its path is still scanned.
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
   # -o (occurrences), not -c (matching lines) -- a line with two glyphs must
   # count as two, not one (agy PR #16 BLOCKER, round 2).
   c=$( { LC_ALL=C grep -oF -e "$emoji_lead" -e "$emoji_vs16" "$f" 2>/dev/null || true; } | wc -l | tr -d ' ')
   emoji_hits=$((emoji_hits + c))
-done
+done <<EOF
+$scan_files
+EOF
 if [ "$emoji_hits" -eq 0 ]; then
   r11=PASS; n11='no emoji glyphs in body or references'
 else
@@ -167,6 +322,8 @@ else
     r11=FAIL; n11="$emoji_hits emoji glyph(s), key '$key' not in allowed-emoji-skills.txt"
   fi
 fi
+# An allowlisted skill stays N/A: emoji behind the link could not FAIL it anyway.
+flag_skipped "$r11" "$n11" "$ref_links"; [ "$r11" = N/A ] || r11=$fr; n11=$fn
 
 # ---------- Check 13: Model Recommendation Metadata (shape validation) ----------
 # Scoped to the metadata: block specifically -- searching the whole
@@ -225,23 +382,84 @@ fi
 # the file by eye, which is what this check replaced; worst case is a WARN,
 # not a FAIL, and the note always names the file for a human to re-check).
 net_pattern='requests|httpx|urllib|http\.client|socket|aiohttp|curl|wget|fetch\(|https?://'
-scripts=''
-for d in "$dir/lib" "$dir/scripts"; do
-  [ -d "$d" ] && scripts="$scripts $(find "$d" -type f \( -name '*.sh' -o -name '*.py' \) ! -iname '*selftest*' ! -iname 'test_*' ! -iname '*_test.*' 2>/dev/null)"
-done
-scripts="$scripts $(find "$dir" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.py' \) ! -iname '*selftest*' ! -iname 'test_*' ! -iname '*_test.*' 2>/dev/null)"
-# Self-test/fixture files are excluded above -- they exercise capability
-# words in synthetic examples, not the skill's own runtime surface.
+# Every *.sh / *.py anywhere under the skill dir (issue #61): network code in
+# a package dir (<pkg>/constants.py) is still shipped and still scanned by
+# external scanners. Test trees, caches and vendored deps are pruned, and
+# self-test/fixture files are excluded -- they exercise capability words in
+# synthetic examples, not the skill's own runtime surface.
+# -mindepth 1: a skill dir itself named e.g. `tests` must not prune its own root.
+# -H: $dir is a logical path, often a symlinked skill dir; plain find would not enter it.
+# Only that root is dereferenced; links inside the skill stay unfollowed (issue #32)
+# and are named in the note instead (issue #77).
+# selftest.sh runs Check 15 on this very skill: keep URLs and signal words out of comments here.
+helper_scan=$(bundle_scan "$dir" \( -name '*.sh' -o -name '*.py' \))
+scripts=$(scanned "$helper_scan")
 net_hit=0
-for s in $scripts; do
+hosts=''
+# Newline-split, not word-split, so a helper path with a space is still scanned.
+while IFS= read -r s; do
   [ -f "$s" ] || continue
   # Exclude lines that assign a *_pattern = variable, spaced or not (this
   # file's own net_pattern definition line included) -- a helper quoting the
   # signal words as documentation, not calling them, must not self-trip
   # (agy PR #16 BLOCKER: the old exact-string '_pattern=' missed spaced
   # variants like '_pattern =').
-  grep -vE '_pattern[[:space:]]*=' "$s" 2>/dev/null | grep -qE "$net_pattern" && net_hit=1
+  body=$(grep -vE '_pattern[[:space:]]*=' "$s" 2>/dev/null || true)
+  printf '%s\n' "$body" | grep -qE "$net_pattern" && net_hit=1
+  # Skip any user[:token]@ so the host, not the user name, is what gets checked.
+  # Two passes, both kept: RFC 3986 allows , ; ( ) in userinfo, so a URL such
+  # as scheme://u,p@evil.io really goes to evil.io (pass 1 must not miss it),
+  # yet in code those same characters usually end the URL, and a later
+  # 'u@b.io' argument must not hide the URL's own host (pass 2, #68). Pass 2
+  # allows only unreserved characters, % (of pct-encoding) and : (#79), so any
+  # other character ends it; whatever it skips is userinfo under any reading.
+  # Quotes end the userinfo in both. Reporting both trades an occasional false
+  # WARN for never missing a destination. (No literal URL here: this file is
+  # itself a Check 15 helper, and one would make skill-check flag itself.)
+  for ui in "[^/?#@[:space:]\"']" '[A-Za-z0-9._~%:-]'; do
+    hosts="$hosts
+$(printf '%s\n' "$body" | grep -oiE "https?://($ui*@)?[A-Za-z0-9._-]+" | sed -E 's|^[A-Za-z]+://||; s|^.*@||')"
+  done
+done <<EOF
+$scripts
+EOF
+# Literal hosts the SKILL.md never names (scanner UNDECLARED_NETWORK_DESTINATION).
+# Loopback, the RFC 2606 example.{com,org,net} domains and dotless
+# placeholders (a URL whose host is just `host`, in a comment) are not destinations.
+# SKILL.md names a host only as a whole host-shaped token, so neither
+# `notacme.io` nor `sub.acme.io` counts as naming `acme.io`. A host may carry
+# an underscore inside (my_svc.acme.io), but markdown `_emphasis_` wraps a
+# token in underscores that are not part of it, so wrapping ones are
+# stripped like a sentence-final dot.
+named=$(grep -oE '[A-Za-z0-9_][A-Za-z0-9._-]*' "$file" | sed -E 's/^_+//; s/[._]+$//' | tr '[:upper:]' '[:lower:]')
+undeclared=''
+# Trailing underscores are emphasis and trailing dots are a sentence end or an
+# ellipsis (`host...`), not host -- stripped as on the named side above.
+for h in $(printf '%s\n' "$hosts" | tr '[:upper:]' '[:lower:]' | sed -E 's/[._]+$//' | sort -u); do
+  case $h in
+    *.*) ;;
+    *) continue ;;
+  esac
+  case $h in
+    0.0.0.0|example.com|example.org|example.net|*.example.com|*.example.org|*.example.net) continue ;;
+    127.*[!0-9.]*) ;; # 127.evil.com is a real host, not loopback
+    127.*) continue ;;
+  esac
+  printf '%s\n' "$named" | grep -qxF -e "$h" && continue
+  # Name the first helper (sorted, so stable across filesystems) carrying the
+  # host as a URL host -- after the scheme's // or a userinfo @, and ending
+  # at a non-host character -- so sub.<host>, a /<host>/ path segment or a
+  # bare mention elsewhere does not get the blame.
+  hre=$(printf '%s' "$h" | sed 's/\./\\./g')
+  # One grep over every helper: $scripts is split on newline only (IFS is a
+  # newline, globbing off) so a spaced path stays one argument.
+  # shellcheck disable=SC2086 # split on newline on purpose, see above
+  src=$(IFS='
+'; set -f; set -- $scripts; [ "$#" -gt 0 ] || exit 0
+    grep -liE -e "(//|@)${hre}[._]*([^a-z0-9._-]|\$)" "$@" 2>/dev/null | sort | head -n 1)
+  undeclared="$undeclared $h${src:+ (${src#"$dir"/})}"
 done
+undeclared=${undeclared# }
 # The compatibility: block only -- checking "network:" against the whole
 # frontmatter let an unrelated top-level field or prose mention falsely
 # satisfy the declaration (codex PR #16 BLOCKER).
@@ -259,6 +477,11 @@ elif printf '%s\n' "$compat_block" | grep -qE '^[[:space:]]*network:'; then
 else
   r15=WARN; n15='network signal present, compatibility.network not declared'
 fi
+if [ -n "$undeclared" ]; then
+  if [ "$r15" = WARN ]; then n15="$n15; "; else n15=''; fi
+  r15=WARN; n15="${n15}helper host(s) not named in SKILL.md: $undeclared"
+fi
+flag_skipped "$r15" "$n15" "$(skipped -p "$helper_scan" "$dir/" "$dir")"; r15=$fr n15=$fn
 
 # ---------- Check 16: Description Length ----------
 # Fold a `description:` value -- inline or a `>`/`>-`/`>+`/`|`/`|-`/`|+`
@@ -314,26 +537,37 @@ else
 fi
 
 # ---------- shared scan set for Checks 17, 18 ----------
-# SKILL.md plus every text file under references/, lib/, scripts/ -- the
-# bundle a single-skill install (Hermes tap, `npx skills add`) copies.
+# SKILL.md plus every text file anywhere under the skill dir -- the bundle a
+# single-skill install (Hermes tap, `npx skills add`) copies. Discovery is
+# recursive with Check 15's prune list (issue #87), so the two checks agree on
+# what the bundle is: a helper at <pkg>/run.sh is seen by both.
 # Self-test/fixture files are excluded as in Check 15: they spell out `../`
 # and CLAUDE_PLUGIN_ROOT as synthetic examples, not as the skill's own
 # runtime surface. Paths are printed relative to the skill dir.
-port_files=$(
-  cd "$dir" && {
-    echo SKILL.md
-    for d in references lib scripts; do
-      [ -d "$d" ] && find "$d" -type f ! -iname '*selftest*' ! -iname '*selfcheck*' ! -iname 'test_*' ! -iname '*_test.*'
-    done
-  } | while IFS= read -r f; do grep -Iq . "$f" 2>/dev/null && printf '%s\n' "$f"; done | sort
+port_scan_out=$(
+  cd "$dir" && bundle_scan . ! -path ./SKILL.md |
+    awk -F'\t' -v OFS='\t' '{ sub(/^\.\//, "", $2); print }'
 )
+# Text files only: grep -Il over the list rather than a grep per file. The list
+# goes NUL-separated through xargs, so a spaced path stays one argument and a
+# large skill cannot overflow ARG_MAX; it is never empty (SKILL.md heads it).
+# A file grep cannot read says so on stderr, as scan_tree's find does.
+port_files=$(
+  cd "$dir" && printf 'SKILL.md\n%s\n' "$(scanned "$port_scan_out")" | awk 'NF' |
+    tr '\n' '\0' | xargs -0 grep -Il -e . -- | sort
+)
+# SKILL.md heads the read set but not the scan, so it is added as an `F` file:
+# a file link to it was read and is not reported.
+port_links=$(cd "$dir" && skipped -p "$(printf 'F\tSKILL.md\n%s' "$port_scan_out")" "" .)
 
 # port_scan <mode> -- one awk pass over $port_files, run from $dir.
 #   mode=escape: print `file:line -> path` for every `../` token (after a
 #     `(`, backtick, quote, `=` or whitespace) that names a file (ends in
 #     `name.ext`; `#anchor` dropped) and that, normalised as a string
 #     against the referencing file's own directory, climbs above the skill
-#     dir. Symlinks are never followed (issue #32 decision: deterministic).
+#     dir. Symlinks are never followed (issue #32 decision: deterministic);
+#     a symlinked dir or file the scan set skipped is reported, not hidden
+#     (#77, #98).
 #     Also (issue #34): a skill-dir variable + `/../` path, resolved from the
 #     skill root and checked even inside fences; and, in references/, a `../`
 #     path whose file-relative target is missing but whose skill-root-relative
@@ -350,8 +584,12 @@ port_files=$(
 # same file -- sibling skills put it in the prose paragraph or section
 # around the fence, rarely in the same blank-line paragraph.
 port_scan() {
-  # shellcheck disable=SC2086 # $port_files is word-split on purpose (see header ponytail)
-  (cd "$dir" && awk -v mode="$1" '
+  ps_mode=$1
+  # $port_files is split on newline only (IFS is a newline, globbing off) so a
+  # spaced path reaches awk as one file name.
+  # shellcheck disable=SC2086 # split on newline on purpose, see above
+  (cd "$dir" && IFS='
+' && set -f && set -- $port_files && awk -v mode="$ps_mode" '
     # Only a path naming a file (`name.ext`; callers drop `#anchor`) is a
     # bundle dependency; a bare `../..` or `../../.git` in prose is shell talk.
     function isfile(t) { return t ~ /[^.\/]\.[A-Za-z0-9]+$/ }
@@ -427,7 +665,7 @@ port_scan() {
       }
     }
     END { if (mode == "root") { flush(); if (uses) print "USES" } }
-  ' $port_files)
+  ' "$@")
 }
 
 # summarize <hits> -- first five hits joined by "; ", plus "(+N more)".
@@ -454,6 +692,8 @@ case $roots in
     r18=WARN; n18="$(printf '%s\n' "$unprot" | grep -c .) CLAUDE_PLUGIN_ROOT use(s) with no fallback: $(summarize "$unprot")"
     ;;
 esac
+flag_skipped "$r17" "$n17" "$port_links"; r17=$fr n17=$fn
+flag_skipped "$r18" "$n18" "$port_links"; r18=$fr n18=$fn
 
 # ---------- Report ----------
 pass=0 fail=0 na=0
@@ -486,10 +726,11 @@ out 15 "$r15" "$n15"
 out 16 "$r16" "$n16"
 out 17 "$r17" "$n17"
 out 18 "$r18" "$n18"
+out 19 "$j19" 'auditor judgment'
 
 [ -n "$j2" ] || exit 0
 
-total=$((18 - na))
+total=$((19 - na))
 if [ "$total" -le 0 ]; then
   verdict='N/A'
 elif [ "$pass" -eq "$total" ]; then
