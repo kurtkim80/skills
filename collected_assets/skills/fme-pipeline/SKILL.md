@@ -14,6 +14,7 @@ metadata:
   author: Harness
   version: 1.2.2
   mcp-server: harness-mcp
+  summary: Generate FME pipelines for rollout scenarios, gates, and flag lifecycle
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -26,7 +27,7 @@ Compose Harness pipelines with FmeFlag* / FmeSegment* steps for flag rollout sce
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -50,7 +51,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Restate: `Working in org=..., project=...`
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Restate: `Working in org=..., project=...`
 
 ### Phase 2: Choose mode
 
@@ -97,7 +98,7 @@ For L2: **List rollout statuses**. For approvals: **List user groups**. For tick
 
 ### Phase 6: Present plan and wait
 
-Before any write, show: scenario(s) and rationale, environment promotion order, stage table (stage | environment | steps | gates | notes), pipeline variables (flag name as `<+input>`, treatments as variables — treatment `<+input>` directly in allocation is rejected), prerequisites (project/flag/approvers/connectors exist — for L1, project/traffic-type instead of flag), rollback path (`FmeFlagKill` when `pipelineStatus: Failure`), current vs planned state. Run [experiment check](../../references/fme/write-safety.md#experiment-check) with **List experiments** if targeting steps can invalidate experiments or for the L2 retirement-preparation scenario; link and confirm acknowledgement. For L2, also state explicitly that the generated pipeline stops short of archiving and that `/manage-flag-lifecycle` must re-verify readiness (staleness, dependents, active/paused experiments) at execution time before archiving. **Do not proceed until user confirms.**
+Before any write, show: scenario(s) and rationale, environment promotion order, stage table (stage | environment | steps | gates | notes), pipeline variables (flag name as `<+input>`, treatments as variables — treatment `<+input>` directly in allocation is rejected), prerequisites (project/flag/approvers/connectors exist — for L1, project/traffic-type instead of flag), rollback path (`FmeFlagKill` when `pipelineStatus: Failure`), current vs planned state. Run [experiment check](../../../references/fme/write-safety.md#experiment-check) with **List experiments** if targeting steps can invalidate experiments or for the L2 retirement-preparation scenario; link and confirm acknowledgement. For L2, also state explicitly that the generated pipeline stops short of archiving and that `/manage-flag-lifecycle` must re-verify readiness (staleness, dependents, active/paused experiments) at execution time before archiving. **Do not proceed until user confirms.**
 
 ### Phase 7: Generate YAML
 
@@ -105,11 +106,11 @@ Compose from [blueprints.md](references/blueprints.md) and [building-blocks.md](
 
 ### Phase 8: Create or update (after confirmation)
 
-Follow [write-safety.md](../../references/fme/write-safety.md). Verify project (**Get project**), then **Create pipeline** or **Update pipeline** (YAML as string). On validation errors, read message, fix, retry. Do **not** run; point to `/run-pipeline`.
+Follow [write-safety.md](../../../references/fme/write-safety.md). Verify project (**Get project**), then **Create pipeline** or **Update pipeline** (YAML as string). On validation errors, read message, fix, retry. Do **not** run; point to `/run-pipeline`.
 
 ### Phase 9: Summary
 
-Follow [operation-summary.md](../../templates/operation-summary.md): operation, scope, pipeline ID, what each stage does, what was confirmed, rollback path, how to run, follow-up.
+Follow [operation-summary.md](../../../templates/operation-summary.md): operation, scope, pipeline ID, what each stage does, what was confirmed, rollback path, how to run, follow-up.
 
 ## Not covered
 
@@ -126,7 +127,7 @@ Triggers (use `/create-trigger`), scheduled launches, CD/CI coupling (use `/crea
 
 ## Performance Notes
 
-- **One fully paginated definition inventory** covers the environments, not one call. MCP definition lists ignore `size`: set `filters.limit: 100` and advance `filters.offset` until a short page. Follow [pagination](../../references/fme/tool-map.md#pagination) for environment inventories too; incomplete reads cannot establish that a definition is missing or an environment is safe to target.
+- **One fully paginated definition inventory** covers the environments, not one call. MCP definition lists ignore `size`: set `filters.limit: 100` and advance `filters.offset` until a short page. Follow [pagination](../../../references/fme/tool-map.md#pagination) for environment inventories too; incomplete reads cannot establish that a definition is missing or an environment is safe to target.
 - **Design mode avoids writes** — fastest for brainstorming.
 - **Large multi-env pipelines**: propose incremental delivery (staging first, prod follow-up).
 

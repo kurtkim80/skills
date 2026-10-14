@@ -13,6 +13,7 @@ metadata:
   author: Harness
   version: 1.3.2
   mcp-server: harness-mcp
+  summary: Explain one flag's purpose, treatments, and per-environment targeting, flagging inconsistencies (read-only)
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -23,7 +24,7 @@ Answer "what does this flag do right now" for one named flag: its purpose, what 
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -39,7 +40,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 
 Get `org_id` + `project_id` if not already known. Don't use the deprecated `workspace_id`: the Step 4 definition list is Harness-native only.
 
-**List environments** up front, since Step 4 needs every environment. Complete the inventory per [pagination](../../references/fme/tool-map.md#pagination), using explicit MCP `filters.limit: 100`; a full page whose `total` equals its length can be a fallback, so fetch another page — one call is not guaranteed to return all environments, and an environment you never fetched is **unseen**, not confirmed **nonexistent**; don't diff Step 4 against a partial list. Keep the full list with each environment's `isProduction`: Step 4 diffs against it for missing definitions, and Step 6 labels production environments ("is X on" questions almost always mean "in production").
+**List environments** up front, since Step 4 needs every environment. Complete the inventory per [pagination](../../../references/fme/tool-map.md#pagination), using explicit MCP `filters.limit: 100`; a full page whose `total` equals its length can be a fallback, so fetch another page — one call is not guaranteed to return all environments, and an environment you never fetched is **unseen**, not confirmed **nonexistent**; don't diff Step 4 against a partial list. Keep the full list with each environment's `isProduction`: Step 4 diffs against it for missing definitions, and Step 6 labels production environments ("is X on" questions almost always mean "in production").
 
 ### Step 2: Find the flag, disambiguating if needed
 
@@ -134,9 +135,9 @@ If the question was scoped ("is X on in prod?"), answer it in that case too rath
 | `isKilled` disagrees with what the default treatment looks like | Trust `isKilled` - a flag can default to `off` without being killed | Report `isKilled` as "is this live here" and the default rule/treatment separately |
 | The definition list is empty for every environment | The flag exists (Step 3 succeeded) but was never configured anywhere, typical for flags created ahead of rollout planning | Say so; don't treat it as an error or retry |
 
-Generic errors: see [tool-map.md](../../references/fme/tool-map.md#common-errors).
+Generic errors: see [tool-map.md](../../../references/fme/tool-map.md#common-errors).
 
 ## References
 
-- [tool-map.md](../../references/fme/tool-map.md) — tool names, params, common errors
-- [concepts.md](../../references/fme/concepts.md) — treatments, evaluation order, killed state
+- [tool-map.md](../../../references/fme/tool-map.md) — tool names, params, common errors
+- [concepts.md](../../../references/fme/concepts.md) — treatments, evaluation order, killed state

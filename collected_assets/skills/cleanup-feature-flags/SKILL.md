@@ -11,6 +11,7 @@ metadata:
   author: Harness
   version: 1.2.2
   mcp-server: harness-mcp
+  summary: Remove a launched FME flag from code and open a PR; archive is handed to manage-flag-lifecycle
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -23,22 +24,22 @@ Related: `discover-feature-flags` finds candidates (stale audit); `manage-flag-l
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
 | List environments | `harness_list` · `fme_environment` · `compact: false` | `harness list fme_environment --json` |
 | Get flag | `harness_get` · `fme_feature_flag` · `params: { feature_flag_name }` | `harness get feature_flag <flag> --json` |
 | List flag definitions | `harness_list` · `fme_feature_flag_definition` · `params: { feature_flag_name }` · `filters: { offset: 0, limit: 100 }` · `compact: false` | `harness list feature_flag:definition <flag> --json` |
-| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <flag> --status ACTIVE --json`, then again with `--status PAUSED` |
+| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <flag> --status ACTIVE --json`, then again with `--status PAUSED` |
 
 ## Instructions
 
-Load [readiness.md](references/readiness.md) before giving a verdict. Load [sdk-patterns.md](../../references/fme/sdk-patterns.md) before searching code.
+Load [readiness.md](references/readiness.md) before giving a verdict. Load [sdk-patterns.md](../../../references/fme/sdk-patterns.md) before searching code.
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Fully paginate **List environments** per [pagination](../../references/fme/tool-map.md#pagination) before confirming the critical environments: by default those with `isProduction`, plus any the user adds. The critical set must be non-empty and explicitly confirmed back to the user before any later phase. If no environment is marked `isProduction` and the user hasn't named any, STOP and ask which environments are critical — do not treat an empty critical set as vacuously ready.
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Fully paginate **List environments** per [pagination](../../../references/fme/tool-map.md#pagination) before confirming the critical environments: by default those with `isProduction`, plus any the user adds. The critical set must be non-empty and explicitly confirmed back to the user before any later phase. If no environment is marked `isProduction` and the user hasn't named any, STOP and ask which environments are critical — do not treat an empty critical set as vacuously ready.
 
 ### Phase 2: Pick the flag
 
@@ -47,14 +48,14 @@ If the user named a flag, **Get flag** to confirm it exists and note its `status
 ### Phase 3: Forward treatment and verdict
 
 1. Fully paginate **List flag definitions** for the flag with explicit MCP `filters.limit: 100` and advancing `filters.offset` until a short page (`size` is ignored). Incomplete coverage stops code removal; it cannot establish a missing definition or the live forward treatment. Resolve the forward treatment for each critical environment per [readiness.md](references/readiness.md#forward-treatment-per-environment). If any call site uses `WithConfig`, also resolve and compare each critical environment's `configurations` value for that treatment — identical treatment names with differing configs are **blocked**, not ready.
-2. Run the [experiment check](../../references/fme/write-safety.md#experiment-check) with **List experiments**, covering every page of ACTIVE and PAUSED results before a verdict. An incomplete scan stops code removal. Here ACTIVE means **blocked**: code removal ends the experiment. PAUSED means **caution**.
+2. Run the [experiment check](../../../references/fme/write-safety.md#experiment-check) with **List experiments**, covering every page of ACTIVE and PAUSED results before a verdict. An incomplete scan stops code removal. Here ACTIVE means **blocked**: code removal ends the experiment. PAUSED means **caution**.
 3. Give the verdict per [readiness.md](references/readiness.md#verdict). Stop on **blocked**.
 
 Never infer the forward treatment from the code's default or fallback value.
 
 ### Phase 4: Find call sites
 
-In the application repo, identify the SDK and search for the flag key, batch calls, flag sets, config-file entries and tests per [sdk-patterns.md](../../references/fme/sdk-patterns.md). For each hit, record `file:line`, which branch is the forward one, and any side effects (tracking, metrics, logging).
+In the application repo, identify the SDK and search for the flag key, batch calls, flag sets, config-file entries and tests per [sdk-patterns.md](../../../references/fme/sdk-patterns.md). For each hit, record `file:line`, which branch is the forward one, and any side effects (tracking, metrics, logging).
 
 - If you find **dynamic keys** (`"prefix-" + id`, `` `flag-${id}` ``), the verdict is **blocked**. Stop and ask the user how to proceed; automated removal can't be complete.
 - If you find no hits, the flag may live in another repo or only in a flag set. That is **caution**.

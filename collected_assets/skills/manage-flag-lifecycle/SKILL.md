@@ -15,6 +15,7 @@ metadata:
   author: Harness
   version: 1.2.1
   mcp-server: harness-mcp
+  summary: Flag metadata, archive readiness, archive/unarchive, and delete
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -25,7 +26,7 @@ Manage metadata, archive readiness, archive/unarchive, and deletion for Harness 
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -39,12 +40,12 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 | Archive flag | `harness_execute` · `fme_feature_flag` · `action="archive"` · `params.feature_flag_name` · `body: { comment?, title? }` | `harness execute feature_flag:archive <name> --comment "..." --title "..."` |
 | Unarchive flag | `harness_execute` · `fme_feature_flag` · `action="unarchive"` · `params.feature_flag_name` · `body: { comment?, title? }` | `harness execute feature_flag:unarchive <name> --comment "..."` |
 | Delete flag | `harness_delete` · `fme_feature_flag` · `params.feature_flag_name` | `harness delete feature_flag <name>` |
-| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, environment_id?, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <name> --status ACTIVE --json`, then again with `--status PAUSED` |
+| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, environment_id?, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <name> --status ACTIVE --json`, then again with `--status PAUSED` |
 | List rollout statuses | `harness_list` · `fme_rollout_status` · `compact: false` | `harness list rollout_status --json` |
 
 ## Output
 
-Structured summary per [operation-summary.md](../../templates/operation-summary.md):
+Structured summary per [operation-summary.md](../../../templates/operation-summary.md):
 - **Metadata:** before → after for changed fields
 - **Archive readiness:** verdict (ready / caution / blocked), per-env `impressions.lastImpressionAt`, active experiments, dependents (if checked)
 - **Archive/unarchive/delete:** verification result (status or 404), per-env impact
@@ -52,11 +53,11 @@ Structured summary per [operation-summary.md](../../templates/operation-summary.
 
 ## Instructions
 
-Follow [write-safety.md](../../references/fme/write-safety.md) for all writes. Concepts are in [concepts.md](../../references/fme/concepts.md).
+Follow [write-safety.md](../../../references/fme/write-safety.md) for all writes. Concepts are in [concepts.md](../../../references/fme/concepts.md).
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Restate scope before proceeding.
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Restate scope before proceeding.
 
 ### Phase 2: Collect inputs
 
@@ -64,47 +65,47 @@ Ask for flag name(s) and the operation. For metadata updates, ask which fields t
 
 ### Phase 3: Read current state
 
-**Get flag** metadata. For archive/unarchive/delete operations, also **list definitions** through every page using explicit MCP `filters.limit: 100`; `size` does not control this list. Follow [pagination](../../references/fme/tool-map.md#pagination) for definitions, environments and experiments; incomplete inventories stop readiness/deletion checks. Report current metadata (description, tags, owners, rolloutStatus, status) and per-env definition summary (environment ID/name, impressions.lastImpressionAt, isKilled, defaultTreatment).
+**Get flag** metadata. For archive/unarchive/delete operations, also **list definitions** through every page using explicit MCP `filters.limit: 100`; `size` does not control this list. Follow [pagination](../../../references/fme/tool-map.md#pagination) for definitions, environments and experiments; incomplete inventories stop readiness/deletion checks. Report current metadata (description, tags, owners, rolloutStatus, status) and per-env definition summary (environment ID/name, impressions.lastImpressionAt, isKilled, defaultTreatment).
 
 ### Phase 4: Metadata update
 
 If updating **rollout status**, **list rollout statuses** first, resolve the user's name to the UUID, then show the resolved name. Tags and owners are arrays and replaced whole in a merge patch. Read first, merge the user's change, and send the full new array.
 
-Present the plan: `<flag> metadata update — <reason>`. Show before → after for each changed field. STOP and confirm per [write-safety.md](../../references/fme/write-safety.md).
+Present the plan: `<flag> metadata update — <reason>`. Show before → after for each changed field. STOP and confirm per [write-safety.md](../../../references/fme/write-safety.md).
 
 **Update flag** with rolloutStatus as `{id: "<uuid>"}`. **Verify** and confirm fields match the plan.
 
 ### Phase 5: Archive readiness gate
 
-Run **every time** before archive, even if checked earlier. Four checks gather data, then present the verdict per [concepts.md](../../references/fme/concepts.md#staleness-and-readiness) and [write-safety.md](../../references/fme/write-safety.md#experiment-check):
+Run **every time** before archive, even if checked earlier. Four checks gather data, then present the verdict per [concepts.md](../../../references/fme/concepts.md#staleness-and-readiness) and [write-safety.md](../../../references/fme/write-safety.md#experiment-check):
 
 1. **Impressions per environment:** **List definitions** for the flag. Record `impressions.lastImpressionAt` (ISO-8601; `null` = never evaluated; absent = unknown) for each environment and note whether it's production.
 
-2. **Experiment check:** **List experiments** for this flag across all environments with status ACTIVE and PAUSED, applying the shared pagination completeness checks (both status queries on CLI); a full page with a page-length `total` still needs another request. An incomplete scan stops the write. ACTIVE → **blocked** (STOP). PAUSED → **caution** (warn, require explicit acknowledgment per [write-safety.md](../../references/fme/write-safety.md#experiment-check)). COMPLETED → ignore.
+2. **Experiment check:** **List experiments** for this flag across all environments with status ACTIVE and PAUSED, applying the shared pagination completeness checks (both status queries on CLI); a full page with a page-length `total` still needs another request. An incomplete scan stops the write. ACTIVE → **blocked** (STOP). PAUSED → **caution** (warn, require explicit acknowledgment per [write-safety.md](../../../references/fme/write-safety.md#experiment-check)). COMPLETED → ignore.
 
-3. **Dependent flags:** Opt-in scan per [tool-map.md](../../references/fme/tool-map.md#reverse-lookup-scans). If declined, mark `dependents: unchecked`.
+3. **Dependent flags:** Opt-in scan per [tool-map.md](../../../references/fme/tool-map.md#reverse-lookup-scans). If declined, mark `dependents: unchecked`.
 
 4. **Already archived:** Check the flag's status field. If ARCHIVED, report it and skip archive (no-op).
 
-Present the verdict (**ready** / **caution** / **blocked**) per [concepts.md](../../references/fme/concepts.md#staleness-and-readiness), with every reason. **blocked** stops the archive; **caution** needs explicit acknowledgment. Recommend `cleanup-feature-flags` first if any production environment has recent traffic. STOP here if the user asked "is this safe to archive".
+Present the verdict (**ready** / **caution** / **blocked**) per [concepts.md](../../../references/fme/concepts.md#staleness-and-readiness), with every reason. **blocked** stops the archive; **caution** needs explicit acknowledgment. Recommend `cleanup-feature-flags` first if any production environment has recent traffic. STOP here if the user asked "is this safe to archive".
 
 ### Phase 6: Archive
 
 Run the readiness gate (Phase 5). If **blocked**, STOP. If **caution**, require explicit acknowledgment. Explain: "Archiving `<flag>` affects **all** environments. SDKs will return `control`."
 
-Confirm per [write-safety.md](../../references/fme/write-safety.md): "This archives `<flag>` in **all** environments. SDKs will return `control`. Archive?"
+Confirm per [write-safety.md](../../../references/fme/write-safety.md): "This archives `<flag>` in **all** environments. SDKs will return `control`. Archive?"
 
 **Archive flag** with audit comment and title. On 409 (OPA governance): report it, never bypass, never delete instead. STOP. **Verify:** status field is ARCHIVED.
 
 ### Phase 7: Unarchive
 
-Read the flag and all definitions first (Phase 3). Targeting resumes as it was when the flag was archived. Confirm per [write-safety.md](../../references/fme/write-safety.md): "Unarchiving `<flag>` will resume the previous targeting. <per-env summary>. Unarchive?"
+Read the flag and all definitions first (Phase 3). Targeting resumes as it was when the flag was archived. Confirm per [write-safety.md](../../../references/fme/write-safety.md): "Unarchiving `<flag>` will resume the previous targeting. <per-env summary>. Unarchive?"
 
 **Unarchive flag** with audit comment and title. On 409 (dependents block it): report the error. STOP. **Verify:** status field is ACTIVE.
 
 ### Phase 8: Delete definition (one environment)
 
-**List environments** to check isProduction. **List experiments** for the flag (ACTIVE and PAUSED) scoped to this environment, completing every page per the [experiment check](../../references/fme/write-safety.md#experiment-check). **ACTIVE → blocked: STOP; acknowledgement cannot permit definition deletion. PAUSED → caution: warn and require explicit acknowledgement. COMPLETED → ignore.** An incomplete or failed experiment scan also stops deletion. Do not pause/complete an experiment automatically to bypass the block; resolving its lifecycle is a separate approved workflow followed by a fresh check. Read the current definition and report its live `defaultTreatment` and whether it's killed, so the confirmation names what's being removed, not just the environment. Explain: "Deleting the `<flag>` definition in `<env>` (currently serving `<defaultTreatment>`) means SDKs in that environment will get `control`." Only after the gate passes, confirm per [write-safety.md](../../references/fme/write-safety.md).
+**List environments** to check isProduction. **List experiments** for the flag (ACTIVE and PAUSED) scoped to this environment, completing every page per the [experiment check](../../../references/fme/write-safety.md#experiment-check). **ACTIVE → blocked: STOP; acknowledgement cannot permit definition deletion. PAUSED → caution: warn and require explicit acknowledgement. COMPLETED → ignore.** An incomplete or failed experiment scan also stops deletion. Do not pause/complete an experiment automatically to bypass the block; resolving its lifecycle is a separate approved workflow followed by a fresh check. Read the current definition and report its live `defaultTreatment` and whether it's killed, so the confirmation names what's being removed, not just the environment. Explain: "Deleting the `<flag>` definition in `<env>` (currently serving `<defaultTreatment>`) means SDKs in that environment will get `control`." Only after the gate passes, confirm per [write-safety.md](../../../references/fme/write-safety.md).
 
 **Delete definition.** **Verify** with a 404 on get. Expect 404. If still present, report failure.
 
@@ -131,7 +132,7 @@ For discovering candidates across a project, route to `discover-feature-flags`. 
 ## Performance Notes
 
 - One fully paginated definition inventory covers a flag's environments; it can require multiple requests. Never treat a page as the complete set.
-- Dependent flag scan cost: one paginated definition inventory per flag in the project. Offer it as opt-in per [tool-map.md](../../references/fme/tool-map.md#reverse-lookup-scans).
+- Dependent flag scan cost: one paginated definition inventory per flag in the project. Offer it as opt-in per [tool-map.md](../../../references/fme/tool-map.md#reverse-lookup-scans).
 - Bulk operations (≤ 20): readiness checks are parallel reads; writes are sequential.
 
 ## Troubleshooting
@@ -145,4 +146,4 @@ For discovering candidates across a project, route to `discover-feature-flags`. 
 | Rollout status name not found | List rollout statuses; show available names to user |
 | `impressions.lastImpressionAt` missing | Treat as unknown (not "unused"); recommend caution and require ack before archive |
 
-See [tool-map.md](../../references/fme/tool-map.md#common-errors) for generic errors.
+See [tool-map.md](../../../references/fme/tool-map.md#common-errors) for generic errors.

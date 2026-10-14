@@ -16,6 +16,7 @@ metadata:
   author: Harness
   version: 2.1.2
   mcp-server: harness-mcp
+  summary: Explain experiment results, including winner, significance, guardrail impact, and data-quality caveats
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -31,7 +32,7 @@ changes), [choose-metric](../choose-metric/SKILL.md) (metric selection).
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -44,13 +45,13 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 ## Instructions
 
 ### Phase 1: Establish scope
-Follow [scope-establishment.md](../../references/scope-establishment.md).
+Follow [scope-establishment.md](../../../references/scope-establishment.md).
 
 ### Step 1: Resolve the experiment
 
 If the user gives an exact experiment ID, **Get experiment** directly - skip list. Otherwise **List experiments** for parent type FEATURE_FLAG (or AI_CONFIG if user specified), with name substring match if provided (MCP: `match_type: "contains"`). Default parent type: FEATURE_FLAG.
 
-If user didn't specify status, list ACTIVE, PAUSED, COMPLETED, **and ARCHIVED** - a finished or archived experiment is exactly the kind a results question is usually about, so never default to active-only here. Fully paginate all selected statuses per [pagination](../../references/fme/tool-map.md#pagination) before deciding uniqueness or absence; CLI needs a separate paginated query per status. More than one match or no name given → ask which experiment. If a scan is incomplete, report that instead of silently selecting a first-page match.
+If user didn't specify status, list ACTIVE, PAUSED, COMPLETED, **and ARCHIVED** - a finished or archived experiment is exactly the kind a results question is usually about, so never default to active-only here. Fully paginate all selected statuses per [pagination](../../../references/fme/tool-map.md#pagination) before deciding uniqueness or absence; CLI needs a separate paginated query per status. More than one match or no name given → ask which experiment. If a scan is incomplete, report that instead of silently selecting a first-page match.
 
 ### Step 2: Fetch experiment definition
 
@@ -68,7 +69,7 @@ Fields to carry forward: `significanceThreshold` (not always 0.05), `multipleCom
 
 ### Step 4: Fetch evaluated results
 
-**List results** for the experiment, optionally narrowed to specific comparison treatments. List-only (no single-result get, no per-environment filter). Returns latest calculation run only, as one row per (metric, comparison treatment) pair, plus top-level `calculatedAt` (`null` if never calculated). If narrowing to specific treatments, filter the returned rows on each item's `comparison` (see [tool-map.md](../../references/fme/tool-map.md)).
+**List results** for the experiment, optionally narrowed to specific comparison treatments. List-only (no single-result get, no per-environment filter). Returns latest calculation run only, as one row per (metric, comparison treatment) pair, plus top-level `calculatedAt` (`null` if never calculated). If narrowing to specific treatments, filter the returned rows on each item's `comparison` (see [tool-map.md](../../../references/fme/tool-map.md)).
 
 Per-row fields: `category` (`KEY`, `SUPPORTING`, `GUARDRAIL`, or `ALERT`), `comparison` (comparison treatment this row is for), `metricId.id` / `metricId.name` (`name` can be `null`; resolve in Step 5), `metricResultState` (stats engine verdict; `null` if none yet), `pvalue`, `impactLower`/`impactUpper`, `value`, `errorMargin`, `baselineMean`/`comparisonMean` (each with `Lower`/`Upper`), `baselineSampleSize`/`comparisonSampleSize`, `varianceReduction`, `positive` (metric's configured `isPositive`, not observed outcome; non-null even when numeric fields are `null`).
 
@@ -88,7 +89,7 @@ Resolve every distinct metric ID from returned rows **and** configured metrics m
 
 ### Step 6: Classify each result
 
-Map each `metricResultState` to `desired`, `undesired`, `inconclusive`, or `needs_more_data` using [state-classification.md](./references/state-classification.md). For `needs_more_data` results, compare `baselineSampleSize`/`comparisonSampleSize` to `minimumSampleSize` so readout can say how far along collection is.
+Map each `metricResultState` to `desired`, `undesired`, `inconclusive`, or `needs_more_data` using [state-classification.md](references/state-classification.md). For `needs_more_data` results, compare `baselineSampleSize`/`comparisonSampleSize` to `minimumSampleSize` so readout can say how far along collection is.
 
 ### Step 7: Determine the verdict
 
@@ -115,7 +116,7 @@ Modifiers (attach to any verdict):
 
 ### Step 8: Explain the results
 
-Default to plain language. Link [concepts.md](../../references/fme/concepts.md#experiments-and-metrics) for SRM and peeking caveats. Lead with verdict, then why. Describe trade-offs, not business decision. `DATA_QUALITY_CONCERN`: say so plainly, and call out any duplicate/conflicting rows or missing metric×treatment combinations Step 4 found. `WINNER` or `MIXED`: add one line: SRM isn't exposed through API; check experiment's results page in Harness UI before acting. Fixed-horizon + before review period: say readout is preliminary - if the verdict is `WINNER`, report it as `WINNER (preliminary)` in the Output Format and don't call it actionable until the review period ends or the test type is `SEQUENTIAL`. Inconclusive but not significance-tested: say why (e.g. `ACROSS` metric). `calculatedAt` non-null: include timestamp. `pvalue` null (e.g. `WAITING_NORMALITY`): don't quote `value`/impact as confident. `GUARDRAIL_BREACH` + `MIXED`: lead with breach. Guardrail or supporting metrics with data (any category present in Step 4's reconciled rows) must appear in the Metric Impact table - never omit a row just because it isn't KEY. If `multipleComparisonCorrection` is `NONE` and the experiment has more than one key metric, add one line flagging the false-positive risk. Stats detail: add p-value, CI, sample sizes, `significanceThreshold`, `multipleComparisonCorrection`, settings `source` when question uses statistical terms or user asks. No stats detail: close with one-line note that stats available on request.
+Default to plain language. Link [concepts.md](../../../references/fme/concepts.md#experiments-and-metrics) for SRM and peeking caveats. Lead with verdict, then why. Describe trade-offs, not business decision. `DATA_QUALITY_CONCERN`: say so plainly, and call out any duplicate/conflicting rows or missing metric×treatment combinations Step 4 found. `WINNER` or `MIXED`: add one line: SRM isn't exposed through API; check experiment's results page in Harness UI before acting. Fixed-horizon + before review period: say readout is preliminary - if the verdict is `WINNER`, report it as `WINNER (preliminary)` in the Output Format and don't call it actionable until the review period ends or the test type is `SEQUENTIAL`. Inconclusive but not significance-tested: say why (e.g. `ACROSS` metric). `calculatedAt` non-null: include timestamp. `pvalue` null (e.g. `WAITING_NORMALITY`): don't quote `value`/impact as confident. `GUARDRAIL_BREACH` + `MIXED`: lead with breach. Guardrail or supporting metrics with data (any category present in Step 4's reconciled rows) must appear in the Metric Impact table - never omit a row just because it isn't KEY. If `multipleComparisonCorrection` is `NONE` and the experiment has more than one key metric, add one line flagging the false-positive risk. Stats detail: add p-value, CI, sample sizes, `significanceThreshold`, `multipleComparisonCorrection`, settings `source` when question uses statistical terms or user asks. No stats detail: close with one-line note that stats available on request.
 
 ## Output Format
 
@@ -167,7 +168,7 @@ condition is met.
 | An experiment operation fails | Report error and stop |
 | Step 2 404s but Steps 3/4 succeed | Without Step 2 there are no treatment or key-metric definitions; tell user full readout isn't possible for this experiment |
 | Experiment still ACTIVE or PAUSED | If verdict is NEED_MORE_DATA or NO_WINNER, ask whether user wants preliminary readout (caveated) or would rather wait; use `endAt` (and `reviewPeriod`) to say how much longer it's configured to run |
-| Unrecognized or null `metricResultState` | Treat as `needs_more_data`; don't guess a direction; see [state-classification.md](./references/state-classification.md) |
+| Unrecognized or null `metricResultState` | Treat as `needs_more_data`; don't guess a direction; see [state-classification.md](references/state-classification.md) |
 | Duplicate or conflicting rows for the same metric + comparison | Treat that combination as `needs_more_data`; note the conflict; never pick one row arbitrarily |
 | Expected metric×treatment combination missing from results | Treat as `needs_more_data`; never report `WINNER` from partial coverage |
 | Results are empty and experiment's `rule` is `default` or another label with no traffic | Results only count impressions whose label matches the experiment's `rule`; offer to update the experiment's `rule` to `"default rule"` via [manage-experiments](../manage-experiments/SKILL.md) |

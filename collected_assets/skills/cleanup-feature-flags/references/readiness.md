@@ -1,10 +1,10 @@
 # Code removal readiness
 
-Rules for deciding which branch of the code to keep and whether it's safe to remove the flag from code. The source of truth is the flag's live definitions in FME — never the default or fallback written in the code. Field names are the definition fields from [concepts.md](../../../references/fme/concepts.md#definition-state-checklist).
+Rules for deciding which branch of the code to keep and whether it's safe to remove the flag from code. The source of truth is the flag's live definitions in FME — never the default or fallback written in the code. Field names are the definition fields from [concepts.md](../../../../references/fme/concepts.md#definition-state-checklist).
 
 **Critical environments** default to every environment marked `isProduction`. The user may add others. **The critical set must be non-empty and must be explicitly stated back to the user before any verdict is given.** If **List environments** returns no environment marked `isProduction` and the user hasn't named any critical environments, STOP: do not default to "ready" or treat an empty critical set as vacuously safe. Ask the user which environments are critical (production, or the closest equivalent) before proceeding.
 
-Before any verdict, complete the relevant environment, flag-definition and ACTIVE/PAUSED experiment inventories per [pagination](../../../references/fme/tool-map.md#pagination). Definition lists need explicit MCP `filters.limit` because `size` is ignored; experiment checks must apply the shared completeness rules, including another request when a full page has only a page-length `total`. An incomplete or failed scan stops code removal. A first-page miss is not proof a definition or experiment is absent.
+Before any verdict, complete the relevant environment, flag-definition and ACTIVE/PAUSED experiment inventories per [pagination](../../../../references/fme/tool-map.md#pagination). Definition lists need explicit MCP `filters.limit` because `size` is ignored; experiment checks must apply the shared completeness rules, including another request when a full page has only a page-length `total`. An incomplete or failed scan stops code removal. A first-page miss is not proof a definition or experiment is absent.
 
 ## Forward treatment (per environment)
 
@@ -17,7 +17,7 @@ Work out what each critical environment actually serves today:
 | Not killed, `trafficAllocation` is 100 (or absent), no `rules`, no individual targets, and `defaultRule` is a single treatment at 100 | That treatment |
 | Anything else (allocation across multiple treatments, rules, targets, traffic allocation below 100) | None: the environment is still mixed |
 
-If the code reads the treatment config (the `WithConfig` calls in [sdk-patterns.md](../../../references/fme/sdk-patterns.md)), resolve and compare **both** the forward treatment name **and** that treatment's `configurations` value across every critical environment. Two critical environments that agree on the treatment name but carry different `configurations` are NOT the same forward state — hardcoding one environment's config value into the code would silently change behavior in the other. Treat a name match with a configuration mismatch as **blocked** (same severity as a treatment-name mismatch), not caution. Only hardcode the config value once the name and the configuration are identical across every critical environment.
+If the code reads the treatment config (the `WithConfig` calls in [sdk-patterns.md](../../../../references/fme/sdk-patterns.md)), resolve and compare **both** the forward treatment name **and** that treatment's `configurations` value across every critical environment. Two critical environments that agree on the treatment name but carry different `configurations` are NOT the same forward state — hardcoding one environment's config value into the code would silently change behavior in the other. Treat a name match with a configuration mismatch as **blocked** (same severity as a treatment-name mismatch), not caution. Only hardcode the config value once the name and the configuration are identical across every critical environment.
 
 ## Verdict
 

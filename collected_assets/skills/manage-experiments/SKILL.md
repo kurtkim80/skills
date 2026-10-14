@@ -14,6 +14,7 @@ metadata:
   author: Harness
   version: 2.1.0
   mcp-server: harness-mcp
+  summary: Feature-flag experiment design/lifecycle; delegates metrics and states CLI update limitations
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -32,7 +33,7 @@ Related: [choose-metric](../choose-metric/SKILL.md) (metric selection),
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -47,7 +48,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 ## Instructions
 
 ### Phase 1: Establish scope
-Follow [scope-establishment.md](../../references/scope-establishment.md).
+Follow [scope-establishment.md](../../../references/scope-establishment.md).
 
 ### Phase 2: Choose operation
 
@@ -70,15 +71,15 @@ Default parent type: `FEATURE_FLAG`. If flag doesn't exist, route to [create-fea
 
 **Get definition** for the flag in the chosen environment. 404 = no definition; route to [update-flag-targeting](../update-flag-targeting/SKILL.md) to initialize it, then return here.
 
-Read `treatments[].name`. Experiment's `baselineTreatment` and `comparisonTreatments` must match real treatment names. Default baseline = definition's `baselineTreatment`, but confirm with user. Fewer than 2 treatments → stop (see [stop-conditions.md](./references/stop-conditions.md)).
+Read `treatments[].name`. Experiment's `baselineTreatment` and `comparisonTreatments` must match real treatment names. Default baseline = definition's `baselineTreatment`, but confirm with user. Fewer than 2 treatments → stop (see [stop-conditions.md](references/stop-conditions.md)).
 
 Check traffic readiness: `isKilled: false`, `trafficAllocation > 0`, baseline and each comparison treatment have `size > 0` in `defaultRule` buckets (or in the targeting rule the experiment will use). If any check fails, warn and ask whether to proceed. Fixing it requires [update-flag-targeting](../update-flag-targeting/SKILL.md).
 
-**List experiments** for the parent flag and environment, with ACTIVE and PAUSED status. Apply the [experiment check](../../references/fme/write-safety.md#experiment-check): ACTIVE means confirm the user wants a second experiment; PAUSED means warn and require explicit acknowledgement.
+**List experiments** for the parent flag and environment, with ACTIVE and PAUSED status. Apply the [experiment check](../../../references/fme/write-safety.md#experiment-check): ACTIVE means confirm the user wants a second experiment; PAUSED means warn and require explicit acknowledgement.
 
 #### Step 3: Hypothesis
 
-Get hypothesis: *"if [change], then [metric] will increase/decrease because [reasoning]"* (max 500 chars). Link [concepts.md](../../references/fme/concepts.md#experiments-and-metrics). Missing or non-causal hypothesis → stop (see [stop-conditions.md](./references/stop-conditions.md)).
+Get hypothesis: *"if [change], then [metric] will increase/decrease because [reasoning]"* (max 500 chars). Link [concepts.md](../../../references/fme/concepts.md#experiments-and-metrics). Missing or non-causal hypothesis → stop (see [stop-conditions.md](references/stop-conditions.md)).
 
 #### Step 4: Metrics
 
@@ -90,7 +91,7 @@ Hand off to [choose-metric](../choose-metric/SKILL.md) to select key and support
 
 #### Step 6: Draft and confirm
 
-Present full payload: parent (type, name), name (2-250 chars, unique), description, hypothesis, startAt/endAt (ISO-8601), baselineTreatment, comparisonTreatments, keyMetrics, supportingMetrics, rule (set to `"default rule"` unless the user wants results from a specific targeting rule label; results only count impressions whose label matches the experiment's `rule`), owners, tags. Link [write-safety.md](../../references/fme/write-safety.md). Do not send `assignmentSource` (400 if present).
+Present full payload: parent (type, name), name (2-250 chars, unique), description, hypothesis, startAt/endAt (ISO-8601), baselineTreatment, comparisonTreatments, keyMetrics, supportingMetrics, rule (set to `"default rule"` unless the user wants results from a specific targeting rule label; results only count impressions whose label matches the experiment's `rule`), owners, tags. Link [write-safety.md](../../../references/fme/write-safety.md). Do not send `assignmentSource` (400 if present).
 
 CLI only: `--env <env-id>` is a required flag even when using `-f` - it sets the `environment_id` query param, which the request body never carries. `rule` and `owners` have no dedicated create flags (only `--parent-type`, `--parent-name`/`--parent-id`, `--description`, `--hypothesis`, `--start-at`, `--end-at`, `--baseline-treatment`, `--comparison-treatment`, `--key-metric`, `--supporting-metric` exist) - put them in the `-f experiment.json` body instead; don't invent flags for them. **STOP HERE.** Wait for explicit confirmation.
 
@@ -114,7 +115,7 @@ If given an exact ID, **Get experiment** directly. Otherwise fully paginate name
 
 Ask what to update: description, hypothesis, dates, baseline/comparison treatments, metrics, status, rule, owners, tags. For metrics, route to [choose-metric](../choose-metric/SKILL.md) if selecting new ones.
 
-When updating `baselineTreatment` or `comparisonTreatments`, verify the treatments exist in the flag definition for the experiment's environment (**Get definition** for that environment and check `treatments[].name`, same as create Step 2). See [stop-conditions.md](./references/stop-conditions.md).
+When updating `baselineTreatment` or `comparisonTreatments`, verify the treatments exist in the flag definition for the experiment's environment (**Get definition** for that environment and check `treatments[].name`, same as create Step 2). See [stop-conditions.md](references/stop-conditions.md).
 
 Valid `status` values: `ACTIVE`, `PAUSED`, `COMPLETED`, `ARCHIVED` (null never allowed). The backend enforces which transitions are actually legal - don't assume a fixed chain (e.g. `ACTIVE` → `PAUSED` → `COMPLETED`); send the requested target status and let a 400 reveal an invalid transition. `ARCHIVED` is a status value here, not a substitute for delete. Changing metrics or dates on ACTIVE experiment → explicit warning.
 
@@ -124,7 +125,7 @@ CLI gap: the CLI's `update experiment` has no `-f`/file-body option and no mutab
 
 #### Step 3: Confirm and update
 
-Show diff (current vs. new). Link [write-safety.md](../../references/fme/write-safety.md). If ACTIVE experiment and changing key fields, add explicit warning.
+Show diff (current vs. new). Link [write-safety.md](../../../references/fme/write-safety.md). If ACTIVE experiment and changing key fields, add explicit warning.
 
 **Update experiment** with merge patch body. 409 = duplicate name. 400 = invalid field, null on non-clearable, or an illegal status transition.
 
@@ -142,7 +143,7 @@ Resolve exact ID or fully paginated name/status discovery as in Update Step 1. R
 
 #### Step 2: Confirm delete
 
-Hard delete = permanent, no archive/restore. Stricter confirmation required. Offer status update to `COMPLETED` instead (update operation). Link [write-safety.md](../../references/fme/write-safety.md).
+Hard delete = permanent, no archive/restore. Stricter confirmation required. Offer status update to `COMPLETED` instead (update operation). Link [write-safety.md](../../../references/fme/write-safety.md).
 
 #### Step 3: Delete
 
@@ -170,7 +171,7 @@ Hard delete = permanent, no archive/restore. Stricter confirmation required. Off
 | Experiment needs workspace guardrail metric | Guardrails apply automatically; never set via keyMetrics/supportingMetrics |
 | 400 on update with null | Field is non-clearable; omit it to leave unchanged |
 | Empty keyMetrics on create | Allowed but no winner criterion; warn and confirm before Step 6 draft |
-| ACTIVE experiment blocks targeting change | See [write-safety.md](../../references/fme/write-safety.md#experiment-check); require explicit acknowledgement |
+| ACTIVE experiment blocks targeting change | See [write-safety.md](../../../references/fme/write-safety.md#experiment-check); require explicit acknowledgement |
 | User wants to change `rule` or `name` via CLI | Not supported - CLI `update experiment` has no field/`-f` for either; use MCP or say so |
 | Parent is `AI_CONFIG` | Mutation validation is unsupported here; stop and request a supported AI Config workflow. Do not use the feature-flag definition route |
 | 400 on status update | Transition not allowed by the backend for the experiment's current status; report the error, don't retry with a guessed intermediate status |

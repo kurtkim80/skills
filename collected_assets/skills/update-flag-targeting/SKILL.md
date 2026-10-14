@@ -14,6 +14,7 @@ metadata:
   author: Harness
   version: 1.2.2
   mcp-server: harness-mcp
+  summary: Ramp, rules, individual targets, allocation, treatments, kill/restore, env-to-env copy, and initializing definitions
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -22,11 +23,11 @@ compatibility: Requires the Harness MCP server or the Harness CLI
 
 Change how an existing Harness FME feature flag serves traffic in one or more environments. **Always read the current definition first**, then merge-patch only what changes. Show a diff of just what changed and use plain-language before/after to describe who gets what.
 
-Related: Segment membership changes are `/manage-segments`; deep flag analysis (impact, dependencies, single-flag state) is `/explain-flag`. Reverse-lookup scans (dependents, segment usage) are in [tool-map.md](../../references/fme/tool-map.md#reverse-lookup-scans).
+Related: Segment membership changes are `/manage-segments`; deep flag analysis (impact, dependencies, single-flag state) is `/explain-flag`. Reverse-lookup scans (dependents, segment usage) are in [tool-map.md](../../../references/fme/tool-map.md#reverse-lookup-scans).
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -40,15 +41,15 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 | Restore flag | `harness_execute` · `fme_feature_flag` · `action="restore"` · `params: { feature_flag_name, environment_id }` · `body: { comment?, title? }?` | `harness execute feature_flag:restore <flag> --env <env-id> --comment <text>` |
 | Get segment metadata (all types) | `harness_get` · `fme_segment` · `params: { segment_name, segment_type }` | `harness get segment <segment> --segment-type <type> --json` |
 | Get STANDARD segment definition | `harness_get` · `fme_segment_definition` · `params: { segment_name, environment_id }` | `harness get segment:definition <segment> --env <env-id> --json` |
-| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, environment_id, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <flag> --env <env-id> --status ACTIVE --json`, then again with `--status PAUSED` |
+| List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, environment_id, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` (apply [pagination completeness checks](../../../references/fme/tool-map.md#pagination)) · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <flag> --env <env-id> --status ACTIVE --json`, then again with `--status PAUSED` |
 
 ## Instructions
 
-See [concepts.md](../../references/fme/concepts.md) for FME evaluation order, killed state, treatments vs control, and round-tripping shapes. See [write-safety.md](../../references/fme/write-safety.md) for the confirm-before-write protocol; this skill links to it and does not duplicate it.
+See [concepts.md](../../../references/fme/concepts.md) for FME evaluation order, killed state, treatments vs control, and round-tripping shapes. See [write-safety.md](../../../references/fme/write-safety.md) for the confirm-before-write protocol; this skill links to it and does not duplicate it.
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Ask for `org_id` and `project_id` if not already known. Restate: `Working in org=..., project=...`
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Ask for `org_id` and `project_id` if not already known. Restate: `Working in org=..., project=...`
 
 ### Phase 2: Gather intent
 
@@ -59,7 +60,7 @@ Ask only for what's missing:
 
 ### Phase 3: Read current state
 
-Always fully paginate **List flag definitions** for the flag before planning changes in the target environments: explicitly set MCP `filters.limit: 100`, advance `filters.offset`, and stop only on a short page. `size` is ignored for this list. Incomplete inventory is not evidence a definition is missing; stop rather than initialize from a first-page miss. Follow [pagination](../../references/fme/tool-map.md#pagination) for environment and experiment lookups too. Never compose rules, targets, or matchers from memory — copy shapes from the live definition or another flag in the project that already uses that shape. If no example exists, warn that the shape is unverified, try it in a non-production env first, and let the API's 400 messages guide you (see [schema-validation-loop.md](../../references/schema-validation-loop.md)).
+Always fully paginate **List flag definitions** for the flag before planning changes in the target environments: explicitly set MCP `filters.limit: 100`, advance `filters.offset`, and stop only on a short page. `size` is ignored for this list. Incomplete inventory is not evidence a definition is missing; stop rather than initialize from a first-page miss. Follow [pagination](../../../references/fme/tool-map.md#pagination) for environment and experiment lookups too. Never compose rules, targets, or matchers from memory — copy shapes from the live definition or another flag in the project that already uses that shape. If no example exists, warn that the shape is unverified, try it in a non-production env first, and let the API's 400 messages guide you (see [schema-validation-loop.md](../../../references/schema-validation-loop.md)).
 
 Note per environment from the definition:
 - `isKilled` (boolean), `defaultTreatment`, `treatments` (case-sensitive; read them, don't guess)
@@ -77,12 +78,12 @@ Run these checks before composing the plan. Stop at the first failure and report
 
 | Check | How | What to report |
 |-------|-----|----------------|
-| **Experiment** | **List experiments** for the flag (and environment), filtering to ACTIVE and PAUSED. Apply the [experiment check](../../references/fme/write-safety.md#experiment-check) protocol | ACTIVE: explicit acknowledgement required; PAUSED: warn + acknowledgement; COMPLETED: ignore |
+| **Experiment** | **List experiments** for the flag (and environment), filtering to ACTIVE and PAUSED. Apply the [experiment check](../../../references/fme/write-safety.md#experiment-check) protocol | ACTIVE: explicit acknowledgement required; PAUSED: warn + acknowledgement; COMPLETED: ignore |
 | **Segment reference** | For every new/changed rule matcher or treatment membership, resolve STANDARD/LARGE/RULE_BASED metadata and verify the target-env definition through [that type's workflow](../manage-segments/SKILL.md#phase-3-execute-operation). The listed definition endpoint is STANDARD-only | Distinguish confirmed missing from unverified because the current tool lacks the operation. Stop the dependent write until verified; never use a STANDARD lookup for LARGE/RULE_BASED or silently switch to legacy scope |
 | **Flag dependency (IN_SPLIT)** | For each `depends: {splitName, treatment}` in a new or updated rule, **Get parent flag definition** and verify the treatment exists in `treatments` | "Flag `<parent>` has no definition (or treatment `<treatment>` doesn't exist) in `<env>`." |
 | **Treatment reference** | Every treatment in rules, defaultRule, individual targets, and `defaultTreatment` must exist in the `treatments` array | "Treatment `<treatment>` not found. Add it to `treatments` first." |
 | **Bucket sum** | The `size` fields across all `{treatment, size}` buckets in `defaultRule` or a rule must sum to 100 | "Bucket sizes sum to `<sum>`, not 100. Fix the treatment allocation." |
-| **Killed flag** | Write/read back approved targeting while killed, then separately confirm restore and re-run the [experiment check](../../references/fme/write-safety.md#experiment-check). Inspect the entire patch first: changing `defaultTreatment`, removing/renaming it, or changing its configuration affects killed traffic immediately | Name the current served treatment/config and any immediate change. Only promise unchanged traffic if that pair remains unchanged; never restore stale targeting first |
+| **Killed flag** | Write/read back approved targeting while killed, then separately confirm restore and re-run the [experiment check](../../../references/fme/write-safety.md#experiment-check). Inspect the entire patch first: changing `defaultTreatment`, removing/renaming it, or changing its configuration affects killed traffic immediately | Name the current served treatment/config and any immediate change. Only promise unchanged traffic if that pair remains unchanged; never restore stale targeting first |
 
 ### Phase 5: Plan the change
 
@@ -107,15 +108,15 @@ Show a **diff** of just the fields that changed and state the **before/after in 
 
 ### Phase 6: Confirm and execute
 
-Follow [write-safety.md](../../references/fme/write-safety.md) for the protocol (present plan → STOP → explicit confirmation → execute non-prod first → production). Comment format: `"update-flag-targeting: <what> — <why>"`, e.g. `"update-flag-targeting: ramp new-checkout to 25% in staging — FME-123"`.
+Follow [write-safety.md](../../../references/fme/write-safety.md) for the protocol (present plan → STOP → explicit confirmation → execute non-prod first → production). Comment format: `"update-flag-targeting: <what> — <why>"`, e.g. `"update-flag-targeting: ramp new-checkout to 25% in staging — FME-123"`.
 
-On errors: 400 (read API error, fix field, retry once per [schema-validation-loop.md](../../references/schema-validation-loop.md)); 404 (re-check identifiers, never create to fill); 409 (report as-is, stop).
+On errors: 400 (read API error, fix field, retry once per [schema-validation-loop.md](../../../references/schema-validation-loop.md)); 404 (re-check identifiers, never create to fill); 409 (report as-is, stop).
 
 ### Phase 7: Verify and restate
 
 Re-read each changed environment's definition, then describe the **live** behavior in the same plain-language form. If it doesn't match the plan, stop.
 
-Summarize per [operation-summary.md](../../templates/operation-summary.md): operation, environments changed, before/after, what was confirmed, verification, risks, UI link.
+Summarize per [operation-summary.md](../../../templates/operation-summary.md): operation, environments changed, before/after, what was confirmed, verification, risks, UI link.
 
 ## Examples
 
@@ -142,14 +143,14 @@ Summarize per [operation-summary.md](../../templates/operation-summary.md): oper
 | 409 governance/approval | OPA policy blocked the write or turned it into a pending approval | Report the response as-is. Never retry around it or try another route. |
 | Concurrent edit detected | Another user or process modified the definition between your read and write | Stop and re-plan from the new state |
 
-Generic errors: see [tool-map.md](../../references/fme/tool-map.md#common-errors).
+Generic errors: see [tool-map.md](../../../references/fme/tool-map.md#common-errors).
 
 ## References
 
 - [targeting-recipes.md](references/targeting-recipes.md) — per-operation shape details
-- [concepts.md](../../references/fme/concepts.md) — FME evaluation order, treatments, killed state
-- [tool-map.md](../../references/fme/tool-map.md) — tool names, params, common errors
-- [write-safety.md](../../references/fme/write-safety.md) — confirm-before-write protocol, experiment check
-- [scope-establishment.md](../../references/scope-establishment.md) — org/project scope rules
-- [schema-validation-loop.md](../../references/schema-validation-loop.md) — validation error recovery
-- [operation-summary.md](../../templates/operation-summary.md) — structured completion summary
+- [concepts.md](../../../references/fme/concepts.md) — FME evaluation order, treatments, killed state
+- [tool-map.md](../../../references/fme/tool-map.md) — tool names, params, common errors
+- [write-safety.md](../../../references/fme/write-safety.md) — confirm-before-write protocol, experiment check
+- [scope-establishment.md](../../../references/scope-establishment.md) — org/project scope rules
+- [schema-validation-loop.md](../../../references/schema-validation-loop.md) — validation error recovery
+- [operation-summary.md](../../../templates/operation-summary.md) — structured completion summary

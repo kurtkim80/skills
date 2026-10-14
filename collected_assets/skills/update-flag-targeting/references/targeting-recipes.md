@@ -16,7 +16,7 @@ Rules for every patch:
 - Keep untouched rules byte-for-byte as read, including fields not shown here (such as `negate`).
 - Treatment names come from the live `treatments` array and are case-sensitive. In every `defaultRule` and rule, the bucket `size`s sum to 100.
 
-Semantics (evaluation order, `defaultTreatment`, `control`) are in [concepts.md](../../../references/fme/concepts.md).
+Semantics (evaluation order, `defaultTreatment`, `control`) are in [concepts.md](../../../../references/fme/concepts.md).
 
 Operations:
 
@@ -43,7 +43,7 @@ Serialize `patch` as MCP `body` or CLI `patch.json`. **Never send a standalone r
 
 ## (c) Add, edit, remove, or reorder rules
 
-A rule is `{ buckets: [{treatment, size}], condition: { combiner: "AND"|"OR", matchers: [{ type, attribute, ... }] } }`. Documented matcher types are listed in [concepts.md](../../../references/fme/concepts.md#rule-and-target-shapes-round-trip-dont-compose-from-memory). The example below is **one rule entry, not a request body**: insert it at the approved position in the complete retained `rules` array and submit the top-level `rules` patch as in (b).
+A rule is `{ buckets: [{treatment, size}], condition: { combiner: "AND"|"OR", matchers: [{ type, attribute, ... }] } }`. Documented matcher types are listed in [concepts.md](../../../../references/fme/concepts.md#rule-and-target-shapes-round-trip-dont-compose-from-memory). The example below is **one rule entry, not a request body**: insert it at the approved position in the complete retained `rules` array and submit the top-level `rules` patch as in (b).
 
 ```json
 { "buckets": [ { "treatment": "on", "size": 100 } ],
@@ -127,5 +127,5 @@ These are execute actions, not patches. Use the commands in the SKILL.md Tools t
 - **Restore is not the first step when the goal is to change targeting on a killed flag.** Restoring immediately resumes whatever targeting was live *before* the kill, which is very often exactly the traffic pattern the kill was meant to stop. Safe order:
   1. Inspect the full patch. Killed traffic stays unchanged only if `defaultTreatment` and its configuration remain unchanged; recipes (e), (g) or (h) may affect everyone immediately. Disclose and explicitly approve that impact. Apply the approved targeting/allocation/rule changes while still killed.
   2. **Verify** the new definition is live (re-read it) before touching kill state at all.
-  3. Only then, as a separate confirmed step, run the [experiment check](../../../references/fme/write-safety.md#experiment-check) again (restoring resumes live traffic, same risk class as any production targeting write) and **Restore**.
+  3. Only then, as a separate confirmed step, run the [experiment check](../../../../references/fme/write-safety.md#experiment-check) again (restoring resumes live traffic, same risk class as any production targeting write) and **Restore**.
   4. Describe what resumes from the definition read in step 2, not from memory of the pre-kill state — the whole point of step 1 is that it's no longer the pre-kill state.

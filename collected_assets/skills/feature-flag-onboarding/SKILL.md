@@ -19,6 +19,7 @@ metadata:
   author: Harness
   version: 1.0.1
   mcp-server: harness-mcp
+  summary: Set up and verify a first feature flag in an existing project; resume partial onboarding
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI, plus local application code access and (for live proof) runtime/build access; guidance-only or partial if application/runtime access is unavailable
 ---
@@ -29,7 +30,7 @@ Orchestrate a new application's first end-to-end FME setup: confirm scope, pick 
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md). All writes are delegated to the linked skills — this skill only reads.
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md). All writes are delegated to the linked skills — this skill only reads.
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -42,7 +43,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 
 ### Phase 1: Scope and account check
 
-Follow [scope-establishment.md](../../references/scope-establishment.md), separating confirmed account/org/project from the application repository. Establish the supported CLI or MCP transport per [mcp-setup.md](../../references/mcp-setup.md) before API calls; CLI users need not configure MCP. This workflow starts with an existing FME-enabled account/project. Verify the needed read capability in that scope. A 401/403, missing tool or empty inventory does not by itself prove missing entitlement: diagnose the actual error without changing scope/transport to bypass it. Missing account/project/enablement prerequisites go to the authorized user/admin, not automatic provisioning.
+Follow [scope-establishment.md](../../../references/scope-establishment.md), separating confirmed account/org/project from the application repository. Establish the supported CLI or MCP transport per [mcp-setup.md](../../../references/mcp-setup.md) before API calls; CLI users need not configure MCP. This workflow starts with an existing FME-enabled account/project. Verify the needed read capability in that scope. A 401/403, missing tool or empty inventory does not by itself prove missing entitlement: diagnose the actual error without changing scope/transport to bypass it. Missing account/project/enablement prerequisites go to the authorized user/admin, not automatic provisioning.
 
 ### Phase 2: Resume check (no checkpoint file)
 
@@ -52,11 +53,11 @@ Track transport, environment, SDK/configuration, flag/definition, app integratio
 
 ### Phase 3: Select one non-production environment
 
-Reuse a complete **List environments** inventory and verify the explicitly selected environment's ID and `isProduction: false`; do not ask again when selection is already clear. Otherwise recommend an isolated/test environment and confirm it. Follow [pagination](../../references/fme/tool-map.md#pagination) before concluding none exist. With no non-production environment, stop for an admin handoff—never create one or silently use production.
+Reuse a complete **List environments** inventory and verify the explicitly selected environment's ID and `isProduction: false`; do not ask again when selection is already clear. Otherwise recommend an isolated/test environment and confirm it. Follow [pagination](../../../references/fme/tool-map.md#pagination) before concluding none exist. With no non-production environment, stop for an admin handoff—never create one or silently use production.
 
 ### Phase 4: Detect the codebase, then clarify
 
-Make this sequence visible: **detect → clarify → delegate the wrapper plan.** Do a light detection pass per [language-guidance.md](../../references/fme/language-guidance.md#phase-1-detect-before-asking) (language/framework/runtime, monorepo layout, existing FME/OpenFeature/Classic-FF usage) — enough to pick the target app and know whether `/instrument-feature-flag` will find an existing wrapper. If the installed flag system can't be identified (Classic FF only, or an unverified OpenFeature provider), stop and resolve that before delegating. Summarize what was detected, then ask only for unresolved choices: target app/service, purpose and candidate gating point, evaluation identity/traffic type, intended treatment outcomes/fallback and customer extension needs. Existing definitions constrain valid treatment names; for a new flag, propose names such as `on`/`off` only for explicit confirmation, never silently assume them. Do not design the wrapper, SDK recipe, or treatment mapping here — that belongs entirely to `/instrument-feature-flag` in Phase 6. Carry every confirmed fact forward so delegated skills never re-ask them.
+Make this sequence visible: **detect → clarify → delegate the wrapper plan.** Do a light detection pass per [language-guidance.md](../../../references/fme/language-guidance.md#phase-1-detect-before-asking) (language/framework/runtime, monorepo layout, existing FME/OpenFeature/Classic-FF usage) — enough to pick the target app and know whether `/instrument-feature-flag` will find an existing wrapper. If the installed flag system can't be identified (Classic FF only, or an unverified OpenFeature provider), stop and resolve that before delegating. Summarize what was detected, then ask only for unresolved choices: target app/service, purpose and candidate gating point, evaluation identity/traffic type, intended treatment outcomes/fallback and customer extension needs. Existing definitions constrain valid treatment names; for a new flag, propose names such as `on`/`off` only for explicit confirmation, never silently assume them. Do not design the wrapper, SDK recipe, or treatment mapping here — that belongs entirely to `/instrument-feature-flag` in Phase 6. Carry every confirmed fact forward so delegated skills never re-ask them.
 
 ### Phase 5: Agree the onboarding contract
 
@@ -76,13 +77,13 @@ Read the current definition. If a change is needed, load [update-flag-targeting]
 
 ### Phase 8: Prove treatment B live
 
-Repeat Phase 7's read/approve-change/readback/observe sequence for B using the **same flag, environment, app revision and evaluation identity**, so the results are comparable. Reuse already-valid evidence instead of repeating a mutation. If interrupted or verification fails, report the actual current state and pending cleanup; do not kill or restore a snapshot automatically. Follow [write-safety.md](../../references/fme/write-safety.md) for every pending mutation.
+Repeat Phase 7's read/approve-change/readback/observe sequence for B using the **same flag, environment, app revision and evaluation identity**, so the results are comparable. Reuse already-valid evidence instead of repeating a mutation. If interrupted or verification fails, report the actual current state and pending cleanup; do not kill or restore a snapshot automatically. Follow [write-safety.md](../../../references/fme/write-safety.md) for every pending mutation.
 
 ### Phase 9: Agree final state and summarize
 
 Re-read current state and reconcile it with Phase 5's agreed final state, including temporary test targeting. Delegate only the necessary changes under a fresh approved diff, preserving concurrent unrelated changes; never restore an entire old definition snapshot. Verify final readback. If the user declines or cleanup cannot complete, report what remains and keep onboarding partial.
 
-Summarize per [operation-summary.md](../../templates/operation-summary.md): configuration readback; code tests (passed/failed/not run); observed live A/B behavior (verified/unverified with evidence); final state/cleanup; and the next incomplete phase. Full completion requires valid app tests, both real outcomes and verified agreed final state. Supply this non-secret progress summary for resume, not a mandatory repository checkpoint file.
+Summarize per [operation-summary.md](../../../templates/operation-summary.md): configuration readback; code tests (passed/failed/not run); observed live A/B behavior (verified/unverified with evidence); final state/cleanup; and the next incomplete phase. Full completion requires valid app tests, both real outcomes and verified agreed final state. Supply this non-secret progress summary for resume, not a mandatory repository checkpoint file.
 
 ## Examples
 
@@ -95,7 +96,7 @@ Summarize per [operation-summary.md](../../templates/operation-summary.md): conf
 
 ## Performance Notes
 
-- Tools-table list rows fetch pages, not full inventories. Reuse confirmed IDs and follow [pagination](../../references/fme/tool-map.md#pagination), including CLI `--offset`/`--limit`, before absence claims. Remote flag existence cannot establish SDK, code-test or runtime completion.
+- Tools-table list rows fetch pages, not full inventories. Reuse confirmed IDs and follow [pagination](../../../references/fme/tool-map.md#pagination), including CLI `--offset`/`--limit`, before absence claims. Remote flag existence cannot establish SDK, code-test or runtime completion.
 - Delegated phases (6-9) carry their own confirm/approval and audit protocol; this skill sequences them, it doesn't duplicate them.
 - Treat Phases 7 and 8 as two separate approvals even when back-to-back — a single confirmation doesn't cover both.
 
@@ -111,8 +112,8 @@ Summarize per [operation-summary.md](../../templates/operation-summary.md): conf
 
 ## References
 
-- [language-guidance.md](../../references/fme/language-guidance.md) — detect-before-ask, wrapper reuse, SDK/provider contracts (owned by `/instrument-feature-flag`, read here for orchestration awareness only)
-- [write-safety.md](../../references/fme/write-safety.md) and [concepts.md](../../references/fme/concepts.md) — kill/restore ordering, experiment checks
-- [mcp-setup.md](../../references/mcp-setup.md) — MCP/CLI transport selection
-- [operation-summary.md](../../templates/operation-summary.md) — structured completion summary
-- [tool-map.md](../../references/fme/tool-map.md#common-errors) — tool names, params, generic Harness API errors
+- [language-guidance.md](../../../references/fme/language-guidance.md) — detect-before-ask, wrapper reuse, SDK/provider contracts (owned by `/instrument-feature-flag`, read here for orchestration awareness only)
+- [write-safety.md](../../../references/fme/write-safety.md) and [concepts.md](../../../references/fme/concepts.md) — kill/restore ordering, experiment checks
+- [mcp-setup.md](../../../references/mcp-setup.md) — MCP/CLI transport selection
+- [operation-summary.md](../../../templates/operation-summary.md) — structured completion summary
+- [tool-map.md](../../../references/fme/tool-map.md#common-errors) — tool names, params, generic Harness API errors

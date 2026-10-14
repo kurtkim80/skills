@@ -17,8 +17,9 @@ description: >-
   pipeline rollouts (fme-pipeline), or code removal (cleanup-feature-flags).
 metadata:
   author: Harness
-  version: 1.3.0
+  version: 1.3.1
   mcp-server: harness-mcp
+  summary: Inventory, targeting-pattern search, promotion-aware rollout report, and stale-flag audit (read-only)
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -29,7 +30,7 @@ Audit Harness FME feature flags across a project: list all flags with metadata, 
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -41,7 +42,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 | List segments | `harness_list` · `fme_segment` · `filters: { segment_type, status?, offset: 0, limit: 100 }` · `compact: false` | `harness list segment --segment-type <STANDARD\|LARGE\|RULE_BASED> --json`; cover ACTIVE and ARCHIVED with declared status filters |
 | List experiments | `harness_list` · `fme_experiment` · `filters: { parent_type: "FEATURE_FLAG", parent_name, status: ["ACTIVE", "PAUSED"], offset: 0, limit: 100 }` · `compact: false` | `harness list experiment --parent-type FEATURE_FLAG --parent-name <name> --status ACTIVE --json`, then again with `--status PAUSED` |
 
-For each filter: apply it server-side if declared by the installed transport (verify via `--help`); otherwise fetch the complete inventory and filter client-side. Paginate every list to completion per [tool-map.md](../../references/fme/tool-map.md#pagination).
+For each filter: apply it server-side if declared by the installed transport (verify via `--help`); otherwise fetch the complete inventory and filter client-side. Paginate every list to completion per [tool-map.md](../../../references/fme/tool-map.md#pagination).
 
 ## Output
 
@@ -53,7 +54,7 @@ Fixed shape per mode:
 
 **Stale audit:** `| Flag | Bucket | Last Impression Per Env | Config | Next Step |` (buckets: stale / active / unknown / never evaluated; verdicts: ready / caution / blocked)
 
-**Pattern search:** `| Flag | Env | Rule # | Combiner | Negated | Matcher type | Predicate match | Status | Notes |` (coverage footer: matched N / no-match M / unparsed P / unchecked U; see [rule-patterns.md](references/rule-patterns.md))
+**Pattern search:** `| Flag | Env | Rule # | Combiner | Negated | Matcher type | Predicate match | Status | Notes |` (coverage footer: matched N / no-match M / unparsed P / unchecked U; see [rule-patterns.md](../../../references/fme/rule-patterns.md))
 
 Summary: counts per class, truncation line if paginated, hand-offs to sibling skills.
 
@@ -61,7 +62,7 @@ Summary: counts per class, truncation line if paginated, hand-offs to sibling sk
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Restate: `Working in org=..., project=...`.
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Restate: `Working in org=..., project=...`.
 
 ### Phase 2: Collect inputs
 
@@ -69,29 +70,29 @@ Ask only for missing items relevant to the user's goal:
 - **Mode:** inventory (default) / rollout-report / stale-audit / pattern-search. Infer from prompt.
 - **Filters:** name substring, tag, rollout status name, traffic type, status (ACTIVE / ARCHIVED), owner — apply server-side where declared; client-side otherwise on the complete inventory.
 - **Environment subset** (rollout-report / stale-audit / pattern-search): default all.
-- **Staleness threshold** (stale-audit only): default 30 days per [concepts.md](../../references/fme/concepts.md#staleness-and-readiness).
-- **Pattern-search predicates:** collect per [rule-patterns.md §Clarification](references/rule-patterns.md#clarification-protocol).
+- **Staleness threshold** (stale-audit only): default 30 days per [concepts.md](../../../references/fme/concepts.md#staleness-and-readiness).
+- **Pattern-search predicates:** collect per [rule-patterns.md §Clarification](../../../references/fme/rule-patterns.md#clarification-protocol).
 - **Promotion check:** both the environment sequence and intended target treatment must be confirmed before promotion classifications; otherwise show neutral differences. See [promotion-check.md §Inputs](references/promotion-check.md#required-inputs).
 
 ### Phase 3: List environments and rollout statuses
 
-List environments through every page: ID → `{ name, isProduction }`. Default display order: non-production first, production last. **The environment sequence for promotion checks must be confirmed explicitly by the user — do not derive order from `isProduction` alone.** List rollout statuses through every page: name → ID. Apply pagination completeness checks from [tool-map.md](../../references/fme/tool-map.md#pagination).
+List environments through every page: ID → `{ name, isProduction }`. Default display order: non-production first, production last. **The environment sequence for promotion checks must be confirmed explicitly by the user — do not derive order from `isProduction` alone.** List rollout statuses through every page: name → ID. Apply pagination completeness checks from [tool-map.md](../../../references/fme/tool-map.md#pagination).
 
 ### Phase 4: List flags
 
 Apply declared server-side filters (name, tags, rollout_status_id); handle remaining filters client-side on the complete inventory. Page through every offset to a short page. **Inventory mode stops here.** Skip to Phase 6.
 
-**Cost guard (rollout-report / stale-audit / pattern-search):** If >50 flags after filtering, STOP: "This will fetch N paginated definition inventories. Narrow by tag, name, rollout status, or status, or confirm to proceed." See [tool-map.md](../../references/fme/tool-map.md#reverse-lookup-scans).
+**Cost guard (rollout-report / stale-audit / pattern-search):** If >50 flags after filtering, STOP: "This will fetch N paginated definition inventories. Narrow by tag, name, rollout status, or status, or confirm to proceed." See [tool-map.md](../../../references/fme/tool-map.md#reverse-lookup-scans).
 
 ### Phase 5: List and classify definitions
 
 For each flag, list definitions (all pages, `filters.limit: 100`, advance offset). Failed or skipped pages → incomplete; never label unseen definitions missing.
 
-**Rollout-report:** Classify each (flag, env) cell per [concepts.md](../../references/fme/concepts.md): killed → no definition → allocation < 100 → rules/targets present → defaultRule shape. For the confirmed promotion sequence, apply [promotion-check.md](references/promotion-check.md) to produce the Promotion column. Archived flags (global `status: ARCHIVED`): include in table as `archived` row; exclude from stalled/divergence alerts.
+**Rollout-report:** Classify each (flag, env) cell per [concepts.md](../../../references/fme/concepts.md): killed → no definition → allocation < 100 → rules/targets present → defaultRule shape. For the confirmed promotion sequence, apply [promotion-check.md](references/promotion-check.md) to produce the Promotion column. Archived flags (global `status: ARCHIVED`): include in table as `archived` row; exclude from stalled/divergence alerts.
 
-**Stale-audit:** Buckets per [concepts.md §Staleness](../../references/fme/concepts.md#staleness-and-readiness). `impressions.lastImpressionAt`: ISO-8601 (`null` = never evaluated; absent = unknown). For ready/caution candidates, run the experiment check (ACTIVE and PAUSED) per [write-safety.md](../../references/fme/write-safety.md#experiment-check). Next Step: hand off to `cleanup-feature-flags` (code) or `manage-flag-lifecycle` (archive).
+**Stale-audit:** Buckets per [concepts.md §Staleness](../../../references/fme/concepts.md#staleness-and-readiness). `impressions.lastImpressionAt`: ISO-8601 (`null` = never evaluated; absent = unknown). For ready/caution candidates, run the experiment check (ACTIVE and PAUSED) per [write-safety.md](../../../references/fme/write-safety.md#experiment-check). Next Step: hand off to `cleanup-feature-flags` (code) or `manage-flag-lifecycle` (archive).
 
-**Pattern-search:** Apply structural rule matching per [rule-patterns.md](references/rule-patterns.md). To resolve a segment name to its type, list that segment type's metadata via List segments (one complete paginated inventory per type; reuse across all flags). Killed flag definitions: scan rules but annotate matches `inactive (killed)`. Archived flags included by the requested status filter: retain structural matches and annotate `inactive (archived)`; do not imply live exposure.
+**Pattern-search:** Apply structural rule matching per [rule-patterns.md](../../../references/fme/rule-patterns.md). To resolve a segment name to its type, list that segment type's metadata via List segments (one complete paginated inventory per type; reuse across all flags). Killed flag definitions: scan rules but annotate matches `inactive (killed)`. Archived flags included by the requested status filter: retain structural matches and annotate `inactive (archived)`; do not imply live exposure.
 
 ### Phase 6: Output
 
@@ -118,7 +119,7 @@ Present the fixed table for the mode. Summary counts per class or bucket. Pagina
 - **Stale-audit experiment check:** Run only for ready/caution candidates, not every flag. Paginate ACTIVE and PAUSED separately.
 - **Pattern-search segment resolution:** List each needed segment type once; reuse across all flags.
 - **Parallelizing definition reads:** Batch list-definitions calls where the client supports parallel calls.
-- **Pagination:** See [tool-map.md](../../references/fme/tool-map.md#pagination).
+- **Pagination:** See [tool-map.md](../../../references/fme/tool-map.md#pagination).
 
 ## Troubleshooting
 
@@ -127,7 +128,7 @@ Present the fixed table for the mode. Summary counts per class or bucket. Pagina
 | `impressions.lastImpressionAt` absent | Treat as `unknown` bucket; never infer "unused" |
 | Definitions call fails with 404 | Re-list flags; confirm exact name (case-sensitive) |
 | "Too many requests" or timeout | Narrow by tag, rollout status, or name; or process in batches |
-| Pattern-search returns unparsed rows | See [rule-patterns.md §Unparsed Shapes](references/rule-patterns.md#unparsed-shapes) |
+| Pattern-search returns unparsed rows | See [rule-patterns.md §Unparsed Shapes](../../../references/fme/rule-patterns.md#unparsed-shapes) |
 | Promotion check cannot compare | Confirm env IDs, sequence, and intended treatment per [promotion-check.md](references/promotion-check.md) |
 
-See [tool-map.md](../../references/fme/tool-map.md#common-errors) for generic errors.
+See [tool-map.md](../../../references/fme/tool-map.md#common-errors) for generic errors.

@@ -32,4 +32,4 @@ A 409 means the payload you just got confirmed collided with an existing metric.
 | 400 "Owners cannot be empty" | Owners are required until the deprecation ships | Ask for a `USER` email or `GROUP` identifier (not display name) |
 | 400 on `name` with no field named | `^[A-Za-z][-_A-Za-z0-9]*$` pattern violation (no spaces/leading digit) | Suggest a valid `name` and confirm before retrying |
 | Metric created but never computes | `baseEventTypes[].eventTypeId` is a typo or not-yet-instrumented event (existence isn't validated at create time) | Check event type via **Get event type**; route to `/instrument-metric` |
-| Need to remove a metric | Hard delete, no undo | Check metric usage first (see [tool-map.md](../../../references/fme/tool-map.md#reverse-lookup-scans)); confirm explicitly before **Delete metric** |
+| Need to remove a metric | Hard delete, no undo | Check metric usage first (see [tool-map.md](../../../../references/fme/tool-map.md#reverse-lookup-scans)); confirm explicitly before **Delete metric** |

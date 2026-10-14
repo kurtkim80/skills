@@ -18,6 +18,7 @@ metadata:
   author: Harness
   version: 1.2.2
   mcp-server: harness-mcp
+  summary: Create an FME flag that follows project conventions, with safe-default definitions
 license: Apache-2.0
 compatibility: Requires the Harness MCP server or the Harness CLI
 ---
@@ -28,7 +29,7 @@ Create a new Harness FME feature flag and optionally its per-environment definit
 
 ## Tools
 
-Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../references/fme/tool-map.md).
+Works through the Harness MCP server or the Harness CLI; names are from [tool-map.md](../../../references/fme/tool-map.md).
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -44,7 +45,7 @@ Works through the Harness MCP server or the Harness CLI; names are from [tool-ma
 
 ### Phase 1: Scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Restate: `Working in org=..., project=...`.
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Restate: `Working in org=..., project=...`.
 
 ### Phase 2: Explore conventions
 
@@ -55,7 +56,7 @@ Follow [scope-establishment.md](../../references/scope-establishment.md). Restat
 Based on conventions and user's purpose, propose. When delegated, preserve the caller's confirmed traffic type, treatments/config/safe default, purpose and description/ticket; verify them against live prerequisites instead of replacing them with convention-derived defaults:
 - **Name:** Follow the convention (let API validate; don't invent character rules).
 - **Traffic type:** Must exist in traffic types list.
-- **Treatments:** Default `on`/`off` or user-specified. Never `control` (reserved; see [concepts.md](../../references/fme/concepts.md)).
+- **Treatments:** Default `on`/`off` or user-specified. Never `control` (reserved; see [concepts.md](../../../references/fme/concepts.md)).
 - **Safe default:** See [targeting-recipes.md](../update-flag-targeting/references/targeting-recipes.md#i-initialize-a-definition-where-none-exists) for the definition body.
 - **Environments to initialize:** Default = all non-production. Production only if asked. **Delegated integration:** `/instrument-feature-flag` and `/feature-flag-onboarding` must supply one confirmed environment; initialize only that environment. If selection is missing, STOP and ask—never fall back to all non-production on the caller's behalf.
 - **Tags, description:** Follow the convention. Include linked ticket if provided.
@@ -65,7 +66,7 @@ Based on conventions and user's purpose, propose. When delegated, preserve the c
 
 ### Phase 4: Plan and confirm
 
-Follow [write-safety.md](../../references/fme/write-safety.md). Show the plan:
+Follow [write-safety.md](../../../references/fme/write-safety.md). Show the plan:
 ```
 Plan: Create feature flag `<name>` — <purpose>
 Flag metadata: name, traffic type, description, tags, owners
@@ -80,7 +81,7 @@ STOP and wait for explicit confirmation.
 
 **Create flag.** Then **create definition** for each environment (non-production first). Audit comment: `"create-feature-flag: initial definition with safe default — <ticket or purpose>"`.
 
-If a definition create fails partway through, report exactly which environments succeeded and which failed — don't assume state; **get flag** and **get definition** for each target environment to read back what's actually live. Resume from that live state: create only the missing/failed definitions, don't delete and restart the whole flag. Only offer to delete the flag if the user asks for a clean restart. On 400 validation error, fix per [schema-validation-loop.md](../../references/schema-validation-loop.md).
+If a definition create fails partway through, report exactly which environments succeeded and which failed — don't assume state; **get flag** and **get definition** for each target environment to read back what's actually live. Resume from that live state: create only the missing/failed definitions, don't delete and restart the whole flag. Only offer to delete the flag if the user asks for a clean restart. On 400 validation error, fix per [schema-validation-loop.md](../../../references/schema-validation-loop.md).
 
 ### Phase 6: Verify
 
@@ -106,7 +107,7 @@ This skill creates flag metadata and definitions only — it does not touch appl
 
 - Convention inference: ~3–5 read-only calls (flags list, traffic types, environments, optional definitions sample, collision check).
 - Write calls: 1 flag create + N definition creates (sequential, not parallel).
-- Pagination: See [tool-map.md](../../references/fme/tool-map.md#pagination).
+- Pagination: See [tool-map.md](../../../references/fme/tool-map.md#pagination).
 
 ## Troubleshooting
 
@@ -116,4 +117,4 @@ This skill creates flag metadata and definitions only — it does not touch appl
 | 400 "invalid name" or "invalid traffic type" | Use the API message to correct. Don't invent character rules. |
 | User wants to update existing flag | STOP. Route to `/update-flag-targeting`. |
 
-See [tool-map.md](../../references/fme/tool-map.md#common-errors) for generic errors.
+See [tool-map.md](../../../references/fme/tool-map.md#common-errors) for generic errors.

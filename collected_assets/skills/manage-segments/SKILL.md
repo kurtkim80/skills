@@ -13,8 +13,9 @@ description: >-
   replace segment keys, segment definition, check segment usage, delete segment.
 metadata:
   author: Harness
-  version: 1.3.0
+  version: 1.3.1
   mcp-server: harness-mcp
+  summary: Segment metadata, STANDARD membership, and RULE_BASED editor workflows with mandatory pre-write reference checks
 license: Apache-2.0
 compatibility: Requires Harness MCP or CLI; RULE_BASED rule changes use the Harness rule editor
 ---
@@ -25,7 +26,7 @@ Manage metadata for **STANDARD**, **LARGE**, and **RULE_BASED** segments, STANDA
 
 ## Tools
 
-Works through Harness MCP or CLI with equivalent scope, confirmation and verification requirements. Discover exact CLI action syntax through command help; use [tool-map.md](../../references/fme/tool-map.md#segment-type-capabilities) for mappings. `STANDARD` in metadata examples stands for the selected type; definition/key rows apply only to STANDARD.
+Works through Harness MCP or CLI with equivalent scope, confirmation and verification requirements. Discover exact CLI action syntax through command help; use [tool-map.md](../../../references/fme/tool-map.md#segment-type-capabilities) for mappings. `STANDARD` in metadata examples stands for the selected type; definition/key rows apply only to STANDARD.
 
 | Operation | MCP | CLI |
 |-----------|-----|-----|
@@ -51,12 +52,12 @@ Works through Harness MCP or CLI with equivalent scope, confirmation and verific
 ## Instructions
 
 Load references on demand:
-- [concepts.md](../../references/fme/concepts.md) — segments section explains STANDARD vs LARGE vs RULE_BASED and how flags reference segments
-- [write-safety.md](../../references/fme/write-safety.md) — confirm-before-write protocol (production gates, verify before/after)
+- [concepts.md](../../../references/fme/concepts.md) — segments section explains STANDARD vs LARGE vs RULE_BASED and how flags reference segments
+- [write-safety.md](../../../references/fme/write-safety.md) — confirm-before-write protocol (production gates, verify before/after)
 
 ### Phase 1: Establish scope
 
-Follow [scope-establishment.md](../../references/scope-establishment.md). Ask for the org and project if missing. Restate: `Working in org=..., project=...`
+Follow [scope-establishment.md](../../../references/scope-establishment.md). Ask for the org and project if missing. Restate: `Working in org=..., project=...`
 
 ### Phase 2: Discover intent and segment context
 
@@ -69,7 +70,7 @@ Ask only for what is missing:
 
 ### Phase 3: Execute operation
 
-Resolve exact name **and type**, then choose the workflow below. Before **every mutation**, including metadata creation, definition provisioning and key additions, complete the [usage check](#usage-check), present its impact with the plan, and obtain [production-aware approval](../../references/fme/write-safety.md). Incomplete checks block writes; approval never waives coverage. Discover the selected operation's exact schema before execution and preserve native org/project scope.
+Resolve exact name **and type**, then choose the workflow below. Before **every mutation**, including metadata creation, definition provisioning and key additions, complete the [usage check](#usage-check), present its impact with the plan, and obtain [production-aware approval](../../../references/fme/write-safety.md). Incomplete checks block writes; approval never waives coverage. Discover the selected operation's exact schema before execution and preserve native org/project scope.
 
 | Type | Membership model | Workflow |
 |------|------------------|----------|
@@ -81,7 +82,7 @@ Resolve exact name **and type**, then choose the workflow below. Before **every 
 
 - **Without segment name:** fully paginate all three metadata types and merge; report actual coverage, not a fixed call count.
 - **With segment name:** resolve type and get metadata. For STANDARD, inspect environment definitions and fully paginate keys. For RULE_BASED, inspect authoritative rule-editor configuration, not an observed sample of matching keys. For LARGE, report metadata and references only. Prefer counts or redacted samples over raw user keys.
-- For MCP segment metadata, STANDARD segment definitions and flag definitions, `size` is ignored: explicitly set `filters.limit: 100`, advance `filters.offset`, and continue until a short page. Their `total` is page length, not inventory size. Follow [pagination](../../references/fme/tool-map.md#pagination) for the other resources; failed/skipped pages cannot establish absence or no usage.
+- For MCP segment metadata, STANDARD segment definitions and flag definitions, `size` is ignored: explicitly set `filters.limit: 100`, advance `filters.offset`, and continue until a short page. Their `total` is page length, not inventory size. Follow [pagination](../../../references/fme/tool-map.md#pagination) for the other resources; failed/skipped pages cannot establish absence or no usage.
 
 #### Create
 
@@ -98,7 +99,7 @@ Follow [standard-membership.md](references/standard-membership.md) for parsing, 
 
 #### Usage check
 
-Follow [usage-check.md](references/usage-check.md) before every mutation. Scan **all ACTIVE and ARCHIVED project flags and all environments**, including rule matchers, treatment memberships and indirect RULE_BASED dependencies. Above 50 flags, obtain cost approval **before** definition reads; do not narrow a write's safety scan. Failed, skipped or unparsed coverage blocks the write. References require an explicit impact review; deletion is blocked until dependencies are separately resolved and the gate rerun.
+Follow [usage-check.md](../../../references/fme/usage-check.md) before every mutation. Scan **all ACTIVE and ARCHIVED project flags and all environments**, including rule matchers, treatment memberships and indirect RULE_BASED dependencies. Above 50 flags, obtain cost approval **before** definition reads; do not narrow a write's safety scan. Failed, skipped or unparsed coverage blocks the write. References require an explicit impact review; deletion is blocked until dependencies are separately resolved and the gate rerun.
 
 #### Replace All Keys (STANDARD, Destructive)
 
@@ -134,7 +135,7 @@ Follow [Replace all keys](references/standard-membership.md#replace-all-keys): f
 
 ### Phase 4: Output
 
-Summarize per [operation-summary.md](../../templates/operation-summary.md): operation, exact name/type, environments, approved change, usage coverage and direct/indirect references, verification evidence (metadata, STANDARD membership, saved RULE_BASED configuration or confirmed deletion), and remaining work. Label incomplete checks as blocking and distinguish user-confirmed editor evidence from direct readback. Include a returned Harness UI link when available.
+Summarize per [operation-summary.md](../../../templates/operation-summary.md): operation, exact name/type, environments, approved change, usage coverage and direct/indirect references, verification evidence (metadata, STANDARD membership, saved RULE_BASED configuration or confirmed deletion), and remaining work. Label incomplete checks as blocking and distinguish user-confirmed editor evidence from direct readback. Include a returned Harness UI link when available.
 
 ## Examples
 
@@ -164,4 +165,4 @@ Summarize per [operation-summary.md](../../templates/operation-summary.md): oper
 | `keys max 10000` | Request too large | Batch additive/removal operations only; stop oversized replacements |
 | Usage coverage is incomplete or unparsed | A page, rule shape or dependency chain is unresolved | Stop the write; obtain the missing configuration/coverage and rerun the gate |
 
-Generic errors: see [tool-map.md](../../references/fme/tool-map.md#common-errors).
+Generic errors: see [tool-map.md](../../../references/fme/tool-map.md#common-errors).
