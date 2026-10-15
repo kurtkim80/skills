@@ -971,6 +971,14 @@
       "path": "collected_assets/skills/spark-training-gotchas",
       "description_ko": "NVIDIA DGX Spark에서 ML 훈련에 대해 알려진 10가지 실패 모드를 사전 실행하고 진단합니다. DGX Spark에서 훈련 실행이 시작되지 않거나, OOM이 128GB 제한 미만이거나, 실행 중간에 속도가 느려지거나, GB10에서 여러 시간 훈련 작업이 시작되기 전에 사용합니다."
     },
+    "social-evidence-research": {
+      "name": "social-evidence-research",
+      "type": "skill",
+      "description": "Research public discussion on social platforms and keep every report claim tied to the source material that supports it. Use when researching or comparing how a product, event, or topic is discussed across social platforms or supplied social exports, when turning search results into a cited report, or when auditing a social research report for discovery-only evidence, double-counted reposts, misattributed comments, claims that go beyond the sample, or hidden access gaps.",
+      "source_repo": "https://github.com/wshobson/agents.git",
+      "source_name": "wshobson/agents",
+      "path": "collected_assets/skills/social-evidence-research"
+    },
     "visual-edit-precision": {
       "name": "visual-edit-precision",
       "type": "skill",
@@ -18815,7 +18823,7 @@
     "sqlperfmon-review": {
       "name": "sqlperfmon-review",
       "type": "skill",
-      "description": "Analyze Windows Performance Monitor counter data for a SQL Server host to establish whether the operating system itself is the bottleneck and which process is responsible. Applies 14 checks (PM1-PM14) covering SQL process CPU saturation, non-SQL CPU competition, privileged/kernel time, page life expectancy, virtual address space growth, OS memory exhaustion, logical disk latency, hot volumes masked by the _Total instance, compilation and recompilation rates expressed against batch throughput, plan cache object growth, batch request baseline shifts, client cancellation rate, and counter collection integrity. Use this skill when a .blg or relog CSV is supplied, when sys.dm_os_performance_counters output is pasted, when CPU is high but no query explains it, when the host is suspected rather than the database, or when asked whether SQL Server or something else on the server is consuming the machine.",
+      "description": "Analyze Windows Performance Monitor counter data for a SQL Server host to establish whether the operating system itself is the bottleneck and which process is responsible. Applies 15 checks (PM1-PM15) covering SQL process CPU saturation, non-SQL CPU competition, privileged/kernel time, page life expectancy, virtual address space growth, OS memory exhaustion, logical disk latency, hot volumes masked by the _Total instance, compilation and recompilation rates expressed against batch throughput, plan cache object growth, batch request baseline shifts, client cancellation rate, and counter collection integrity. Use this skill when a .blg or relog CSV is supplied, when sys.dm_os_performance_counters output is pasted, when CPU is high but no query explains it, when the host is suspected rather than the database, or when asked whether SQL Server or something else on the server is consuming the machine.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
       "path": "collected_assets/skills/sqlperfmon-review"
@@ -18831,7 +18839,7 @@
     "sqldbconfig-review": {
       "name": "sqldbconfig-review",
       "type": "skill",
-      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 37 checks (B1–B37) across seven categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership), and host and licensing capacity (Common Criteria compliance overhead, scheduler count below OS CPU count, access check cache overrides, Windows power plan, non-Microsoft modules loaded in the SQL Server process). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, sys.server_principals, sys.dm_os_loaded_modules, or powercfg /getactivescheme.",
+      "description": "Analyze SQL Server instance and database configuration drift against proven DBA best practices. Applies 38 checks (B1–B38) across seven categories: parallelism tuning (MAXDOP, Cost Threshold for Parallelism, Optimize for Ad Hoc Workloads), memory configuration (Max Server Memory, Lock Pages in Memory), database-level settings (auto-shrink, auto-close, compatibility level, RCSI, page verification, statistics, Trustworthy, cross-DB chaining), file and storage configuration (VLF count, percent auto-growth, Instant File Initialization, TempDB file count), surface area exposure (CLR, OLE Automation, Ad Hoc Distributed Queries, service-SID sysadmin membership), and host and licensing capacity (Common Criteria compliance overhead, scheduler count below OS CPU count, access check cache overrides, Windows power plan, non-Microsoft modules loaded in the SQL Server process). Use this skill when the server behaves erratically after changes, a new instance needs a configuration audit, or silent misconfiguration is suspected as a root cause of performance or stability problems. Trigger when pasting output from sp_configure, sys.databases, sys.master_files, sys.dm_os_sys_info, sys.dm_db_log_info, sys.server_principals, sys.dm_os_loaded_modules, or powercfg /getactivescheme.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
       "path": "collected_assets/skills/sqldbconfig-review"
@@ -18979,14 +18987,21 @@
       "path": "collected_assets/skills/mssql-performance-review",
       "description_ko": "엔드투엔드 SQL Server 성능 검토를 위한 에이전트 오프라인 오케스트레이터입니다. 아티팩트 또는 증상에서 가설을 형성하고 전문 검토 기술(tsql-review, sqlplan-review, sqlwait-review, sqlstats-review, sqltrace-review, sqlquerystore-review, sqlprocstats-review, sqldeadlock-review, sqlblocking-review, sqlhadr-review, sqlag-review, sqlclusterlog-review, sqlerrorlog-review, sqlspn-review, sqlplan-compare, sqlindex-advisor, sqlplan-batch, sqlmemory-review, sqldiskio-review, sqlencryption-review, sqldbconfig-review, sqlbootstraplog-review, ssrstracelog-review), 주요 근본 원인에 대해 적대적 검사를 실행하고 명시적인 통합 수정 우선순위를 생성합니다. 각 권장 사항에 대한 증거 체인, 위험 및 롤백. 사용자에게 SQL Server 아티팩트(.sqlplan, .sql, 통계 출력, 추적 데이터, 대기 통계, 차단 체인 출력, 교착 상태 XML, AG/클러스터/ERRORLOG, setspn 출력, 쿼리 저장소, procstats, 메모리 클럭, 파일 I/O 통계, 암호화 감사, sp_configure 출력, 설정 부트스트랩 로그, SSRS 보고서 서버 추적 로그, AG 카탈로그 뷰 출력)가 혼합되어 있고 어떤 전문 기술을 실행할지 확실하지 않거나 사용자가 언제 실행할지 확실하지 않을 때마다 이 기술을 사용하십시오. 증상(\"CPU가 높음\", \"세션이 차단됨\", \"AG 장애 조치\", \"이 쿼리가 느림\", \"SSRS가 시간 초과를 보고함\", \"보조에서 AG 백업 실패\")을 설명하고 그에 대한 분석이 라우팅되어야 합니다. /mssql-performance-review, /mssql-perf-review, /mssql-full-review, /sql-triage, 전체 SQL Server에서 트리거"
     },
+    "sqlworkload-compare": {
+      "name": "sqlworkload-compare",
+      "type": "skill",
+      "description": "Compare two SQL Server workload captures — a baseline and a current period, a fast day and a slow day, before and after an upgrade or configuration change, or production against test — to find what regressed and why. Applies 14 checks (WC1–WC14) covering capture comparability, per-query regressions and improvements matched by query_hash, new and disappeared heavy queries, systemic versus isolated regression, regression class (CPU-, reads- or wait-driven), execution-volume shifts, sp_configure, server property, database option and database-scoped configuration differences, and wait-profile shifts. Use this skill when someone says \"it was fast last week\", \"it got slow after the upgrade\", \"compare these two traces\", \"what changed between Monday and Tuesday\", or pastes two Query Store, trace or DMV captures and asks what is different. Trigger whenever the question is a comparison between two periods or two servers rather than a review of one capture.",
+      "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
+      "source_name": "vanterx/mssql-performance-skills",
+      "path": "collected_assets/skills/sqlworkload-compare"
+    },
     "sqltrace-review": {
       "name": "sqltrace-review",
       "type": "skill",
-      "description": "Analyze SQL Server trace files and Extended Events output to identify workload-level performance patterns. Applies 25 checks (X1–X12 event-level, X13–X25 workload aggregate) covering long-running queries, high-frequency N+1 patterns, parameter sniffing signals, recompilations, lock timeouts, hash/sort warnings, top resource consumers, and SQL 2019/2022 modern feature events. Use when a user provides Profiler trace output, sys.fn_trace_gettable() results, or Extended Events session data.",
+      "description": "Analyze SQL Server trace files and Extended Events output to identify workload-level performance patterns. Applies 27 checks (X1–X12 event-level, X13–X27 workload aggregate) covering long-running queries, high-frequency N+1 patterns, parameter sniffing signals, recompilations, lock timeouts, hash/sort warnings, top resource consumers, and SQL 2019/2022 modern feature events. Use when a user provides Profiler trace output, sys.fn_trace_gettable() results, or Extended Events session data.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqltrace-review",
-      "description_ko": "SQL Server 추적 파일과 확장 이벤트 출력을 분석하여 워크로드 수준 성능 패턴을 식별합니다. 장기 실행 쿼리, 빈도가 높은 N+1 패턴, 매개변수 스니핑 신호, 재컴파일, 잠금 시간 초과, 해시/정렬 경고, 상위 리소스 소비자 및 SQL 2019/2022 최신 기능 이벤트를 다루는 25개 검사(X1~X12 이벤트 수준, X13~X25 워크로드 집계)를 적용합니다. 사용자가 프로파일러 추적 출력, sys.fn_trace_gettable() 결과 또는 확장 이벤트 세션 데이터를 제공할 때 사용합니다."
+      "path": "collected_assets/skills/sqltrace-review"
     },
     "sqlwait-review": {
       "name": "sqlwait-review",
@@ -19034,20 +19049,18 @@
     "sqlag-review": {
       "name": "sqlag-review",
       "type": "skill",
-      "description": "Audits SQL Server Always On Availability Group configuration correctness across all layers — prerequisites, replica design, listener architecture, backup strategy, endpoint security, distributed AG topology, Basic and Contained AG constraints, and application integration readiness. Use this skill when setting up a new AG, reviewing an existing AG design before a DR test, preparing for a failover, or investigating connection failures, listener misconfigurations, backup failures on secondaries, or endpoint certificate expiry. Applies 37 checks (F1–F37) across 7 categories. Trigger for questions about AG prerequisites, session timeout, failure condition level, read-only routing configuration, MultiSubnetFailover, backup preferred replica, distributed AG setup, Basic AG limits, Contained AG, endpoint encryption, or automatic seeding mode during a manual-restore workflow. Companion to /sqlhadr-review (runtime health) and /sqlclusterlog-review (WSFC events).",
+      "description": "Audits SQL Server Always On Availability Group configuration correctness across all layers — prerequisites, replica design, listener architecture, backup strategy, endpoint security, distributed AG topology, Basic and Contained AG constraints, and application integration readiness. Use this skill when setting up a new AG, reviewing an existing AG design before a DR test, preparing for a failover, or investigating connection failures, listener misconfigurations, backup failures on secondaries, or endpoint certificate expiry. Applies 38 checks (F1–F38) across 7 categories. Trigger for questions about AG prerequisites, session timeout, failure condition level, read-only routing configuration, MultiSubnetFailover, backup preferred replica, distributed AG setup, Basic AG limits, Contained AG, endpoint encryption, or automatic seeding mode during a manual-restore workflow. Companion to /sqlhadr-review (runtime health) and /sqlclusterlog-review (WSFC events).",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlag-review",
-      "description_ko": "필수 구성 요소, 복제본 디자인, 수신기 아키텍처, 백업 전략, 엔드포인트 보안, 분산 AG 토폴로지, 기본 및 포함된 AG 제약 조건, 애플리케이션 통합 준비 상태 등 모든 계층에서 SQL Server Always On 가용성 그룹 구성의 정확성을 감사합니다. 새 AG를 설정하거나, DR 테스트 전에 기존 AG 설계를 검토하거나, 장애 조치(failover)를 준비하거나, 연결 실패, 수신기 구성 오류, 보조 데이터베이스의 백업 실패 또는 엔드포인트 인증서 만료를 조사할 때 이 기술을 사용하세요. 7개 범주에 걸쳐 37개 검사(F1~F37)를 적용합니다. 수동 복원 워크플로 중에 AG 전제 조건, 세션 시간 초과, 오류 조건 수준, 읽기 전용 라우팅 구성, MultiSubnetFailover, 백업 기본 복제본, 분산 AG 설정, 기본 AG 제한, 포함된 AG, 엔드포인트 암호화 또는 자동 시드 모드에 대한 질문을 트리거합니다. /sqlhadr-review(런타임 상태) 및 /sqlclusterlog-review(WSFC 이벤트)와 동반됩니다."
+      "path": "collected_assets/skills/sqlag-review"
     },
     "sqlbootstraplog-review": {
       "name": "sqlbootstraplog-review",
       "type": "skill",
-      "description": "Analyze SQL Server Setup Bootstrap log files to diagnose failed installations, failed Cumulative Update or Service Pack patching, failed cluster node operations, and risky setup-time configuration. Parses Summary.txt, Detail.txt, MSI/MSP logs, ConfigurationFile.ini, and SystemConfigurationCheck_Report content from the Setup Bootstrap Log folder. Applies 24 checks (U1–U24) covering final-result failure and exit-code extraction, failed setup rules (pending reboot, disk space, account permissions, prerequisites, cluster rules), Detail.txt exception forensics, MSI \"Return value 3\" patterns, and ConfigurationFile.ini review (service accounts, instant file initialization, TempDB layout, mixed authentication, feature sprawl, directory placement). Use this skill whenever SQL Server setup, an in-place upgrade, a patch, or add/remove node fails, or when a user pastes Summary.txt, Detail.txt, or ConfigurationFile.ini content.",
+      "description": "Analyze SQL Server Setup Bootstrap log files to diagnose failed installations, failed Cumulative Update or Service Pack patching, failed cluster node operations, and risky setup-time configuration. Parses Summary.txt, Detail.txt, MSI/MSP logs, ConfigurationFile.ini, and SystemConfigurationCheck_Report content from the Setup Bootstrap Log folder. Applies 25 checks (U1–U25) covering final-result failure and exit-code extraction, failed setup rules (pending reboot, disk space, account permissions, prerequisites, cluster rules), Detail.txt exception forensics, MSI \"Return value 3\" patterns, missing Windows Installer cache packages, and ConfigurationFile.ini review (service accounts, instant file initialization, TempDB layout, mixed authentication, feature sprawl, directory placement). Use this skill whenever SQL Server setup, an in-place upgrade, a patch, or add/remove node fails, or when a user pastes Summary.txt, Detail.txt, or ConfigurationFile.ini content.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
-      "path": "collected_assets/skills/sqlbootstraplog-review",
-      "description_ko": "SQL Server 설치 부트스트랩 로그 파일을 분석하여 실패한 설치, 실패한 누적 업데이트 또는 서비스 팩 패치, 실패한 클러스터 노드 작업 및 위험한 설치 시간 구성을 진단합니다. Setup Bootstrap Log 폴더에서 Summary.txt, Detail.txt, MSI/MSP 로그, ConfigurationFile.ini 및 SystemConfigurationCheck_Report 콘텐츠를 구문 분석합니다. 최종 결과 실패 및 종료 코드 추출, 실패한 설정 규칙(재부팅 보류 중, 디스크 공간, 계정 권한, 전제 조건, 클러스터 규칙), Detail.txt 예외 포렌식, MSI \"반환 값 3\" 패턴 및 ConfigurationFile.ini 검토(서비스 계정, 인스턴트 파일 초기화, TempDB 레이아웃, 혼합 인증, 기능 확장, 디렉터리 배치)를 다루는 24개 검사(U1–U24)를 적용합니다. SQL Server 설정, 전체 업그레이드, 패치 또는 노드 추가/제거가 실패할 때마다 또는 사용자가 Summary.txt, Detail.txt 또는 ConfigurationFile.ini 콘텐츠를 붙여넣을 때 이 기술을 사용하세요."
+      "path": "collected_assets/skills/sqlbootstraplog-review"
     },
     "sqlprocstats-review": {
       "name": "sqlprocstats-review",
@@ -45553,6 +45566,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/gtm-0-to-1-launch",
       "description_ko": "아이디어부터 첫 번째 고객까지 새로운 제품을 출시하세요. 제품 출시, 얼리 어답터 찾기, 출시 주간 플레이북 구축, 채택이 지연되는 이유 진단, 언론 보도가 성장과 같지 않음을 학습할 때 사용하세요. 3단계 진단, 2주간의 실험 주기, 노출수 50,000회, 가입 12회를 달성한 출시가 포함됩니다."
+    },
+    "batch-script-progress": {
+      "name": "batch-script-progress",
+      "type": "skill",
+      "description": "Design and verify runtime output when creating or modifying Python, PowerShell, or Node.js scripts that process multiple files, records, or API requests. Use for batch scripts, bulk operations, silent long-running loops, progress reporting, per-item failures, final counts, stdout separation, or exit-status consistency. Not for UI progress bars, monitoring infrastructure, or progress updates in the AI conversation.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/batch-script-progress"
     },
     "python-mcp-server-generator": {
       "name": "python-mcp-server-generator",
