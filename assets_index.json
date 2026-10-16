@@ -13782,6 +13782,14 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/including-generated-files"
     },
+    "eliminate-redundant-restores": {
+      "name": "eliminate-redundant-restores",
+      "type": "skill",
+      "description": "Remove repeated NuGet restores from multi-step .NET builds safely. USE FOR: build/test/publish steps that each restore, Directory.Build.rsp with -restore, safe restore suppression, NETSDK1004/NETSDK1047 after --no-restore. DO NOT USE FOR: slow first restore, only one restore, version or lock errors, unranked build slowness (use build-perf-baseline).",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/eliminate-redundant-restores"
+    },
     "incremental-build": {
       "name": "incremental-build",
       "type": "skill",
@@ -13794,7 +13802,7 @@
     "build-perf-baseline": {
       "name": "build-perf-baseline",
       "type": "skill",
-      "description": "Establish MSBuild/.NET build performance baselines before optimizing. USE FOR: a .NET build or solution that is slow or has build-performance concerns; cold, warm, incremental, or no-op measurements; before/after comparisons; CI build output caching; static graph build decisions; artifacts output; and dependency graph trimming. Start here before build-perf-diagnostics, incremental-build, or build-parallelism. DO NOT USE for webpack, npm, JavaScript bundlers, or other non-MSBuild build systems. For detailed target/task/analyzer bottleneck analysis after baselining, use build-perf-diagnostics.",
+      "description": "Establish MSBuild/.NET build performance baselines before optimizing. USE FOR: unranked slow builds; cold, warm, incremental or no-op measurements; before/after comparisons; CI output caching; static graph, artifacts output and dependency graph trimming. Start here before build-perf-diagnostics, incremental-build or build-parallelism. DO NOT USE FOR: known repeated-restore fixes (use eliminate-redundant-restores), non-MSBuild builds. For measured target/task/analyzer bottlenecks, use build-perf-diagnostics.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/build-perf-baseline"
@@ -13844,11 +13852,10 @@
     "build-perf-diagnostics": {
       "name": "build-perf-diagnostics",
       "type": "skill",
-      "description": "Diagnose MSBuild build performance bottlenecks using binary log analysis. USE FOR: identifying why builds are slow by analyzing binlog performance summaries, detecting ResolveAssemblyReference (RAR) taking >5s, Roslyn analyzers consuming >30% of Csc time, single targets dominating >50% of build time, node utilization below 80%, excessive Copy tasks, NuGet restore running every build. Covers timeline analysis, Target/Task Performance Summary interpretation, and 7 common bottleneck categories. Use after build-perf-baseline has established measurements. DO NOT USE FOR: establishing initial baselines (use build-perf-baseline first), fixing incremental build issues (use incremental-build), parallelism tuning (use build-parallelism), non-MSBuild build systems.",
+      "description": "Diagnose MSBuild bottlenecks from binlog timelines and Target/Task Performance Summaries after build-perf-baseline establishes measurements. USE FOR: unknown build slowness, RAR >5s, analyzers >30% of Csc, one target >50% of build time, node utilization <80%, excessive Copy tasks, finding restore overhead. DO NOT USE FOR: known repeated-restore fixes (use eliminate-redundant-restores), initial baselines (use build-perf-baseline), incremental rebuilds (use incremental-build), parallelism tuning (use build-parallelism), non-MSBuild builds.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/build-perf-diagnostics",
-      "description_ko": "이진 로그 분석을 사용하여 MSBuild 빌드 성능 병목 현상을 진단합니다. 사용 대상: binlog 성능 요약을 분석하고, 5초 이상 걸리는 RAR(ResolveAssemblyReference) 감지, Csc 시간의 30%를 초과하는 Roslyn 분석기, 빌드 시간의 50%를 초과하는 단일 대상, 80% 미만의 노드 사용률, 과도한 복사 작업, 모든 빌드를 실행하는 NuGet 복원을 통해 빌드가 느린 이유를 식별합니다. 타임라인 분석, 대상/작업 성과 요약 해석 및 7가지 일반적인 병목 현상 범주를 다룹니다. build-perf-baseline이 측정을 설정한 후에 사용합니다. 사용하지 마십시오: 초기 기준 설정(먼저 빌드 성능 기준 사용), 증분 빌드 문제 해결(증분 빌드 사용), 병렬 처리 조정(빌드 병렬 처리 사용), 비 MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/build-perf-diagnostics"
     },
     "binlog-generation": {
       "name": "binlog-generation",
@@ -19006,7 +19013,7 @@
     "sqlwait-review": {
       "name": "sqlwait-review",
       "type": "skill",
-      "description": "Analyze SQL Server wait statistics to identify why the server or a session is slow. Applies 45 checks (V1–V45) covering I/O, locks, parallelism, memory, CPU, TempDB, log I/O, network, latch contention, log space exhaustion, poison/throttle waits, backup I/O, insert hotspots, cumulative skew detection, multi-snapshot trend analysis, In-Memory OLTP, Columnstore, Query Store, Transaction/DTC, Service Broker, Full Text Search, Parallel Redo, forced memory grants, grant timeouts, stolen memory, file I/O latency, SQL 2019/2022 IQP/PSP/ADR feature waits, TempDB memory-optimized metadata contention, and spinlock contention that is invisible to wait statistics. Based on community wait statistics methodology. Use when pasting sys.dm_os_wait_stats or sys.dm_exec_requests output.",
+      "description": "Analyze SQL Server wait statistics to identify why the server or a session is slow. Applies 45 checks (V1–V45) covering I/O, locks, parallelism, memory, CPU, TempDB, log I/O, network, latch contention, log space exhaustion, poison/throttle waits, backup I/O, insert hotspots, cumulative skew detection, multi-snapshot trend analysis, In-Memory OLTP, Columnstore, Query Store, Transaction/DTC, Service Broker, Full Text Search, Parallel Redo, forced memory grants, grant timeouts, stolen memory, file I/O latency, SQL 2019/2022 IQP/PSP/ADR feature waits, TempDB memory-optimized metadata contention, and spinlock contention that is invisible to wait statistics. Based on the Waits and Queues methodology (Paul Randal, SQLskills; Brent Ozar First Responder Kit). Use when pasting sys.dm_os_wait_stats or sys.dm_exec_requests output.",
       "source_repo": "https://github.com/vanterx/mssql-performance-skills.git",
       "source_name": "vanterx/mssql-performance-skills",
       "path": "collected_assets/skills/sqlwait-review"
@@ -21547,6 +21554,14 @@
       "path": "collected_assets/skills/weaviate",
       "description_ko": "공식 스크립트 및 참조를 사용하여 데이터를 검색, 쿼리, 검사, 생성하고 Weaviate 벡터 데이터베이스 컬렉션으로 가져옵니다."
     },
+    "obtain-coupons-all-in-one": {
+      "name": "obtain-coupons-all-in-one",
+      "type": "skill",
+      "description": "All-in-one coupon fetcher supporting takeout (Meituan, Ele.me, JD), parcel/courier (SF, ZTO, YTO, etc.), travel (DiDi, Ctrip), and movie tickets (Taopiaopiao, Maoyan) coupons with one-click access to all discounts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/obtain-coupons-all-in-one"
+    },
     "hunt-session": {
       "name": "hunt-session",
       "type": "skill",
@@ -22029,6 +22044,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agy-delegate",
       "description_ko": "다음과 같은 경우에만 코딩 작업을 Google Antigravity CLI(`agy`)에 위임하세요."
+    },
+    "logo-to-stickers": {
+      "name": "logo-to-stickers",
+      "type": "skill",
+      "description": "Turn a brand mark or existing IP into consistent, playful paper stickers with small visual stories and separate transparent images. Use for brand characters and website sticker sets.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/logo-to-stickers"
     },
     "pricing": {
       "name": "pricing",
@@ -22576,6 +22599,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/sendgrid-automation",
       "description_ko": "Composio의 SendGrid 툴킷을 통해 마케팅 캠페인(단일 전송), 연락처 및 목록 관리, 보낸 사람 신원 설정, 이메일 분석을 포함한 SendGrid 이메일 전달 워크플로우를 자동화합니다."
+    },
+    "parcel-coupon": {
+      "name": "parcel-coupon",
+      "type": "skill",
+      "description": "Call parcel/courier coupon API to fetch one-stop logistics service coupons, including smart shipping and smart price matching. Returns coupon links and QR code images for users to redeem via WeChat.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/parcel-coupon"
     },
     "freshservice-automation": {
       "name": "freshservice-automation",
@@ -23858,6 +23889,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/crossframe-org",
       "description_ko": "CrossFrame Suite가 팀, 프로젝트, 조직, 책임 사슬, 피드백 쓰기 저장, 수리 또는 회고에 대한 명시적인 중국어 분석을 라우팅할 때 사용합니다."
+    },
+    "healthcare-job-search": {
+      "name": "healthcare-job-search",
+      "type": "skill",
+      "description": "Find open US healthcare jobs (nursing, CNA, allied health, therapy, imaging, pharmacy, physicians) and the hourly pay employers post, via CareJobs.Now's free MCP server or JSON endpoints.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/healthcare-job-search"
     },
     "robius-event-action": {
       "name": "robius-event-action",
@@ -26783,6 +26822,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/threejs-loaders",
       "description_ko": "Three.js 자산 로딩 - GLTF, 텍스처, 이미지, 모델, 비동기 패턴. 3D 모델, 텍스처, HDR 환경을 로드하거나 로드 진행 상황을 관리할 때 사용합니다."
+    },
+    "agentic-test-audit": {
+      "name": "agentic-test-audit",
+      "type": "skill",
+      "description": "Audit a pytest suite: surviving mutants and untested code, flaky, order-dependent and slow tests, and removal candidates checked on held-out mutants. Report-only.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agentic-test-audit"
     },
     "antigravity-maintainer-batch-release": {
       "name": "antigravity-maintainer-batch-release",
@@ -31297,6 +31344,14 @@
       "path": "collected_assets/skills/postgres-best-practices",
       "description_ko": "Supabase의 Postgres 성능 최적화 및 모범 사례. Postgres 쿼리, 스키마 디자인 또는 데이터베이스 구성을 작성, 검토 또는 최적화할 때 이 기술을 사용하십시오."
     },
+    "moltnode-chain-reader": {
+      "name": "moltnode-chain-reader",
+      "type": "skill",
+      "description": "Read 31 blockchains over keyless JSON-RPC with MoltNode (balances, blocks, contract calls) and get Chord swap quotes with an unsigned transaction and simulation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/moltnode-chain-reader"
+    },
     "tailwind-patterns": {
       "name": "tailwind-patterns",
       "type": "skill",
@@ -31976,6 +32031,14 @@
       "path": "collected_assets/skills/azure-storage-blob-py",
       "description_ko": "Python용 Azure Blob Storage SDK. Blob 업로드, 다운로드, 나열, 컨테이너 관리 및 Blob 수명 주기에 사용합니다."
     },
+    "openhook": {
+      "name": "openhook",
+      "type": "skill",
+      "description": "Creates private callback inboxes with Openhook. Use when an agent needs to wait for a webhook, inspect received HTTP/email/DNS events, or verify a test callback's contents.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/openhook"
+    },
     "azure-monitor-ingestion-java": {
       "name": "azure-monitor-ingestion-java",
       "type": "skill",
@@ -32427,6 +32490,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/shader-programming-glsl",
       "description_ko": "구문, 유니폼 및 일반 효과를 다루는 웹 및 게임 엔진을 위한 효율적인 GLSL 셰이더(정점/조각) 작성을 위한 전문가 가이드입니다."
+    },
+    "obsess": {
+      "name": "obsess",
+      "type": "skill",
+      "description": "Perfectionist mode for one target: checked attempts on a UI detail or hot path, keeps the best version, stops on a budget. Only on explicit /obsess.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/obsess"
     },
     "ai-dev-jobs-mcp": {
       "name": "ai-dev-jobs-mcp",
@@ -33621,6 +33692,14 @@
       "path": "collected_assets/skills/polars",
       "description_ko": "RAM에 맞는 데이터세트를 위한 빠른 인메모리 DataFrame 라이브러리입니다. Pandas가 너무 느리지만 데이터가 여전히 메모리에 맞는 경우에 사용하세요. 지연 평가, 병렬 실행, Apache Arrow 백엔드. 1~100GB 데이터 세트, ETL 파이프라인, 더 빠른 Pandas 교체에 가장 적합합니다. RAM보다 큰 데이터의 경우 dask 또는 vaex를 사용하십시오."
     },
+    "takeout-coupon": {
+      "name": "takeout-coupon",
+      "type": "skill",
+      "description": "Call takeout coupon API to fetch hidden coupon lists, red packets and aggregated redemption pages for platforms (Meituan, Taobao Flash/Ele.me, JD.com). Returns coupon codes and redemption instructions for users to copy and redeem in corresponding apps.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/takeout-coupon"
+    },
     "wellally-tech": {
       "name": "wellally-tech",
       "type": "skill",
@@ -34416,6 +34495,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/production-audit",
       "description_ko": "日本語翻訳：이것 은 생산 감사 용 の日本語翻訳が必要 입니다"
+    },
+    "chord-onchain-trading": {
+      "name": "chord-onchain-trading",
+      "type": "skill",
+      "description": "Read DEX market data and prepare best-route swap quotes and unsigned swap transactions on eight EVM chains with the Chord API. Never signs or moves funds.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/chord-onchain-trading"
     },
     "yann-lecun-tecnico": {
       "name": "yann-lecun-tecnico",
@@ -35891,6 +35978,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/business-email-template"
     },
+    "altorank": {
+      "name": "altorank",
+      "type": "skill",
+      "description": "Run AltoRank through its hosted MCP server: readiness audits, Search Console, keyword research, and SEO drafts into a review queue.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/altorank"
+    },
     "architecture": {
       "name": "architecture",
       "type": "skill",
@@ -36102,6 +36197,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/pci-dss-compliance",
       "description_ko": "결제 카드 데이터에 대한 PCI DSS 요구 사항을 구현합니다. 카드홀더 구성"
+    },
+    "agentic-verify": {
+      "name": "agentic-verify",
+      "type": "skill",
+      "description": "Check that a Python change is caught by tests: run every mutant of the changed lines and write tests until they catch them. Reports evidence instead of a diff to read.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agentic-verify"
     },
     "frontend-architecture": {
       "name": "frontend-architecture",
@@ -39408,6 +39511,14 @@
       "path": "collected_assets/skills/semgrep-rule-creator",
       "description_ko": "보안 취약점, 버그 패턴 및 코드 패턴을 탐지하기 위한 사용자 지정 Semgrep 규칙을 만듭니다. Semgrep 규칙을 작성하거나 사용자 정의 정적 분석 탐지를 구축할 때 사용합니다."
     },
+    "apify-reddit-scraper": {
+      "name": "apify-reddit-scraper",
+      "type": "skill",
+      "description": "Scrape Reddit posts, comments, subreddits and users with the harshmaur/reddit-scraper Apify Actor. No Reddit API key. Keyword search, date windows, full threads.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-reddit-scraper"
+    },
     "emil-design-eng": {
       "name": "emil-design-eng",
       "type": "skill",
@@ -39523,6 +39634,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/redis-cli",
       "description_ko": "Redis 명령줄 인터페이스(redis-cli) 참조 및 사용 가이드입니다. 사용자가 redis-cli, Redis CLI 또는 명령줄에서 Redis 쿼리, 검사, 디버깅 또는 관리와 관련된 작업을 언급할 때마다 이 기술을 사용하세요."
+    },
+    "trip-coupon": {
+      "name": "trip-coupon",
+      "type": "skill",
+      "description": "Call trip/travel coupon API to fetch travel coupons including DiDi ride-hailing gift packages and hotel coupon bundles. Returns coupon links and QR code images for users to redeem via WeChat.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/trip-coupon"
     },
     "huggingface-local-models": {
       "name": "huggingface-local-models",
@@ -39980,6 +40099,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/swiftui-liquid-glass",
       "description_ko": "올바른 대체 및 수정자 순서를 사용하여 SwiftUI Liquid Glass API를 구현하거나 검토하세요."
+    },
+    "movie-coupon": {
+      "name": "movie-coupon",
+      "type": "skill",
+      "description": "Fetch movie ticket coupons from platforms like Taopiaopiao and Maoyan. Returns coupon links and QR code images for users to redeem via WeChat.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/movie-coupon"
     },
     "ai-agent-security": {
       "name": "ai-agent-security",
@@ -42595,6 +42722,14 @@
       "path": "collected_assets/skills/mcp-create-declarative-agent",
       "description_ko": "mcp-create-declarative-agent.prompt.md에서 변환된 스킬"
     },
+    "java-upgrade": {
+      "name": "java-upgrade",
+      "type": "skill",
+      "description": "Upgrade a Java project to a newer JDK (11 to 17, 17 to 21, 21 to 25) and adopt the new language and library features. Detects the current Java version from the build files, then loads only the matching per-version guide. Use when the user asks to upgrade Java, modernize Java code, or adopt records, sealed classes, pattern matching, virtual threads or other new Java features. For automated end-to-end upgrades see the modernize-java plugin.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/java-upgrade"
+    },
     "typespec-create-agent": {
       "name": "typespec-create-agent",
       "type": "skill",
@@ -42999,6 +43134,14 @@
       "path": "collected_assets/skills/finnish-humanizer",
       "description_ko": "핀란드어 텍스트에서 AI 생성 마커를 감지하고 제거하여 핀란드어 원어민이 쓴 것처럼 들리게 만듭니다. 핀란드어 텍스트에서 \"인간화\", \"자연화\" 또는 \"AI 느낌 제거\"를 요청하거나 핀란드어 콘텐츠가 포함된 .md/.txt 파일을 편집할 때 사용합니다. 26개의 패턴(핀란드 전용 12개 + 범용 14개)과 4개의 스타일 마커를 식별합니다."
     },
+    "quarkus-dev-services-and-testing": {
+      "name": "quarkus-dev-services-and-testing",
+      "type": "skill",
+      "description": "Quarkus Dev Services and testing: zero-config containers, @QuarkusTest, @QuarkusIntegrationTest, test resources, RestAssured, @InjectMock, profiles and continuous testing. Use when writing or fixing tests in a Quarkus project.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/quarkus-dev-services-and-testing"
+    },
     "legacy-circuit-mockups": {
       "name": "legacy-circuit-mockups",
       "type": "skill",
@@ -43128,11 +43271,10 @@
     "javax-to-jakarta-migration": {
       "name": "javax-to-jakarta-migration",
       "type": "skill",
-      "description": "Migrate Java code from javax.* to jakarta.* namespace. Use when upgrading to Tomcat 11, Jakarta EE 10, or when javax imports are detected in the codebase.",
+      "description": "Migrate Java code from javax.* to jakarta.* namespace. Use only when the user explicitly asks for a javax to jakarta namespace or framework migration (for example to Tomcat 10+/11 or Jakarta EE), or when java-upgrade or spring-boot-4-migration delegates it. Finding javax imports alone does not authorize a migration.",
       "source_repo": "https://github.com/github/awesome-copilot.git",
       "source_name": "github/awesome-copilot",
-      "path": "collected_assets/skills/javax-to-jakarta-migration",
-      "description_ko": "Java 코드를 javax.*에서 jakarta.* 네임스페이스로 마이그레이션합니다. Tomcat 11, Jakarta EE 10으로 업그레이드할 때 또는 코드베이스에서 javax 가져오기가 감지될 때 사용합니다."
+      "path": "collected_assets/skills/javax-to-jakarta-migration"
     },
     "breakdown-feature-implementation": {
       "name": "breakdown-feature-implementation",
@@ -43169,6 +43311,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/flowstudio-power-automate-debug",
       "description_ko": ">-"
+    },
+    "create-quarkus-project": {
+      "name": "create-quarkus-project",
+      "type": "skill",
+      "description": "Create a new Quarkus project (Maven or Gradle) with the Quarkus CLI, code.quarkus.io API or Maven plugin, choose extensions, and run it in dev mode. Use when asked to scaffold, bootstrap or start a Quarkus application or REST API.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/create-quarkus-project"
     },
     "github-release": {
       "name": "github-release",
@@ -44722,6 +44872,14 @@
       "path": "collected_assets/skills/spring-boot-testing",
       "description_ko": "Junit 6 및 AssertJ를 사용하여 상황에 가장 적합한 Spring Boot 테스트 기술을 선택하는 전문 Spring Boot 4 테스트 전문가입니다."
     },
+    "quarkus-native-and-container": {
+      "name": "quarkus-native-and-container",
+      "type": "skill",
+      "description": "Build Quarkus native executables (Mandrel/GraalVM), fix native failures with reflection registration, test the native binary, and produce container images and Kubernetes/OpenShift manifests. Use for native, Docker, Jib or Kubernetes work in a Quarkus project.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/quarkus-native-and-container"
+    },
     "exam-ready": {
       "name": "exam-ready",
       "type": "skill",
@@ -44901,6 +45059,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/integrate-context-matic",
       "description_ko": "컨텍스트 기반 MCP 서버를 사용하여 타사 API를 검색하고 통합합니다. 'fetch_api'를 사용하여 사용 가능한 API SDK를 찾고, 'ask'를 사용하여 통합 지침을 찾고, 'model_search' 및 'endpoint_search'를 사용하여 SDK 세부정보를 확인하세요. 사용자가 타사 API 통합, API 클라이언트 추가, 외부 API로 기능 구현, 타사 API 또는 SDK 사용을 요청할 때 사용합니다."
+    },
+    "quarkus-application-development": {
+      "name": "quarkus-application-development",
+      "type": "skill",
+      "description": "Write Quarkus application code: REST with Quarkus REST, validation, exception mappers, OpenAPI, configuration, CDI (ArC), Hibernate ORM with Panache, Mutiny and virtual threads, Reactive Messaging with Kafka, OIDC security, health, metrics, OpenTelemetry, fault tolerance, REST Client, scheduler and cache. Use when implementing or changing features in an existing Quarkus project.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/quarkus-application-development"
     },
     "fabric-lakehouse": {
       "name": "fabric-lakehouse",
