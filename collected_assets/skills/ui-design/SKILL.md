@@ -13,6 +13,7 @@ the system first (tokens, scales), then the screens fall into line.
 ## Contents
 - Step 1 — Look before you touch anything
 - Step 2 — Audit against the six fundamentals
+- Match the visual language to the product
 - Step 3 — Tokens first, restyle second
 - Step 4 — Components and states
 - Step 5 — Verify visually
@@ -48,10 +49,12 @@ Score each screen; the lowest scores are where the work is.
    (4, 8, 12, 16, 24, 32, 48, 64). Related things sit closer together than
    unrelated things (proximity *is* grouping). Generous whitespace reads as quality;
    cramped reads as old.
-4. **Color** — a neutral ramp (8–10 greys, one slightly tinted family), one brand
-   accent, and semantic colors (success, warning, danger, info). Accent is for
-   interactive and primary elements only. Text meets contrast (4.5:1 body, 3:1
-   large text and UI borders) — see the `building-accessible-interfaces` skill.
+4. **Color** — for a utility interface, start with a neutral ramp (8–10 greys,
+   one slightly tinted family), one brand accent, and semantic colors (success,
+   warning, danger, info). Games and playful consumer/social apps can use several
+   saturated accents with stable roles; see "Match the visual language to the
+   product" below. Text meets contrast (4.5:1 body, 3:1 large text and UI borders)
+   — see the `building-accessible-interfaces` skill.
 5. **Layout** — a max content width (≈ 1100–1280px for apps, ≈ 680–720px for
    reading), a consistent grid or column structure, alignment to shared edges, and
    a layout that reflows at phone width rather than shrinking.
@@ -59,6 +62,29 @@ Score each screen; the lowest scores are where the work is.
    role, one card style, one input style, one icon set at one stroke weight, one
    corner radius scale (e.g. 4/8/12/999). Inconsistency is the main thing that
    makes an app look assembled rather than designed.
+
+## Match the visual language to the product
+
+Choose the intended feel before choosing tokens. A restrained utility palette is
+one starting point, not a universal definition of quality. Games should feel
+playable; consumer/social apps built around fun should carry that energy in their
+visual language.
+
+- Use saturated accents for distinct roles (primary action, play surface, reward),
+  rather than adding unrelated colors per component. Keep warning/danger meanings
+  distinct from decorative or reward colors.
+- Pair a playful display face for short headings with a readable body face; keep
+  dense controls and data in the body face.
+- Make game controls feel pressable with chunky shapes, consistent outlines and
+  solid offset shadows. Show a pressed state by reducing the shadow and moving the
+  control toward it; preserve the visible keyboard focus ring.
+- Use drawn vector icons from one coherent set instead of emoji for game controls;
+  emoji rendering varies by platform and weakens the shared visual language.
+
+For example, a game can give its board a saturated background, its main action a
+contrasting fill and offset shadow, and its score a reward accent while keeping
+instructions on a quiet, readable surface. Hierarchy still needs one obvious
+primary action. Expressiveness changes styling, not features or product scope.
 
 ## Step 3 — Tokens first, restyle second
 
@@ -128,6 +154,7 @@ finish and can't be reviewed.
 - Restyling screen by screen without tokens, which recreates the inconsistency.
 - Swapping CSS frameworks as a "design fix" — it changes the plumbing, not the design.
 - Gradients, shadows and animation added to compensate for weak hierarchy.
+- A thick colored stripe down one edge of every card, alert or panel to signal category or state. It is the most recognizable generic-template tell. Keep one uniform border (or none) on every card and carry state with a dot, chip, icon or text label — which also survives for color-blind users.
 - Light grey text on white to look "clean" (it fails contrast and reads as disabled).
 - Centering everything; long centered paragraphs are hard to read.
 - Designing only the happy path at desktop width.

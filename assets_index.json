@@ -16570,6 +16570,14 @@
       "path": "collected_assets/skills/wow-digest",
       "description_ko": "뉴스레터와 텔레그램 채널에서 정말 놀라운 항목 3~7개를 매일 요약합니다. 관련성뿐만 아니라 인식론적 마찰에 대한 콘텐츠의 점수를 매깁니다. 일일 메모에 추가됩니다. 사용자가 \"/wow-digest\", \"wow 다이제스트 실행\", \"오늘 놀라운 일\", \"아침 독서\" 또는 \"내 뉴스레터 요약\"이라고 말할 때 사용하세요."
     },
+    "palmier-reels": {
+      "name": "palmier-reels",
+      "type": "skill",
+      "description": "This skill should be used when creating a vertical narrative reel (Instagram/Telegram, 1080×1920) from scratch in Palmier Pro through its local MCP — turning a script, quotes or lesson notes into a beat-cut timeline with editable typography, word-by-word text, generated art, card transitions, film jitter and ElevenLabs sound — in any visual style (bundled presets or a project's design tokens). Triggers on \"make a reel in Palmier\", \"reel from these quotes\", \"Godard-style text animation\", \"apply our design tokens to the reel\", \"export the reel for Telegram\".",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/palmier-reels"
+    },
     "name-audition": {
       "name": "name-audition",
       "type": "skill",
