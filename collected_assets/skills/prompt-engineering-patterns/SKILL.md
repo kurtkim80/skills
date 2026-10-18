@@ -7,7 +7,19 @@ description: Master advanced prompt engineering techniques to maximize LLM perfo
 
 Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability.
 
-## When to Use This Skill
+## Do not use this skill when
+
+- The task is unrelated to prompt engineering patterns
+- You need a different domain or tool outside this scope
+
+## Instructions
+
+- Clarify goals, constraints, and required inputs.
+- Apply relevant best practices and validate outcomes.
+- Provide actionable steps and verification.
+- If detailed examples are required, open `resources/implementation-playbook.md`.
+
+## Use this skill when
 
 - Designing complex prompts for production LLM applications
 - Optimizing prompt performance and consistency
@@ -20,7 +32,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 ## Core Capabilities
 
 ### 1. Few-Shot Learning
-
 - Example selection strategies (semantic similarity, diversity sampling)
 - Balancing example count with context window constraints
 - Constructing effective demonstrations with input-output pairs
@@ -28,7 +39,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 - Handling edge cases through strategic example selection
 
 ### 2. Chain-of-Thought Prompting
-
 - Step-by-step reasoning elicitation
 - Zero-shot CoT with "Let's think step by step"
 - Few-shot CoT with reasoning traces
@@ -36,7 +46,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 - Verification and validation steps
 
 ### 3. Prompt Optimization
-
 - Iterative refinement workflows
 - A/B testing prompt variations
 - Measuring prompt performance metrics (accuracy, consistency, latency)
@@ -44,7 +53,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 - Handling edge cases and failure modes
 
 ### 4. Template Systems
-
 - Variable interpolation and formatting
 - Conditional prompt sections
 - Multi-turn conversation templates
@@ -52,7 +60,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 - Modular prompt components
 
 ### 5. System Prompt Design
-
 - Setting model behavior and constraints
 - Defining output formats and structure
 - Establishing role and expertise
@@ -64,7 +71,6 @@ Master advanced prompt engineering techniques to maximize LLM performance, relia
 ```python
 from prompt_optimizer import PromptTemplate, FewShotSelector
 
-
 # Define a structured prompt template
 template = PromptTemplate(
     system="You are an expert SQL developer. Generate efficient, secure SQL queries.",
@@ -73,14 +79,12 @@ template = PromptTemplate(
     output_format="SQL code block with explanatory comments"
 )
 
-
 # Configure few-shot learning
 selector = FewShotSelector(
     examples_db="sql_examples.jsonl",
     selection_strategy="semantic_similarity",
     max_examples=3
 )
-
 
 # Generate optimized prompt
 prompt = template.render(
@@ -92,7 +96,6 @@ prompt = template.render(
 ## Key Patterns
 
 ### Progressive Disclosure
-
 Start with simple prompts, add complexity only when needed:
 
 1. **Level 1**: Direct instruction
@@ -108,15 +111,12 @@ Start with simple prompts, add complexity only when needed:
    - Include 2-3 example summaries with input-output pairs
 
 ### Instruction Hierarchy
-
 ```
 [System Context] → [Task Instruction] → [Examples] → [Input Data] → [Output Format]
 ```
 
 ### Error Recovery
-
 Build prompts that gracefully handle failures:
-
 - Include fallback instructions
 - Request confidence scores
 - Ask for alternative interpretations when uncertain
@@ -143,28 +143,22 @@ Build prompts that gracefully handle failures:
 ## Integration Patterns
 
 ### With RAG Systems
-
 ```python
 # Combine retrieved context with prompt engineering
 prompt = f"""Given the following context:
 {retrieved_context}
 
-
 {few_shot_examples}
 
-
 Question: {user_question}
-
 
 Provide a detailed answer based solely on the context above. If the context doesn't contain enough information, explicitly state what's missing."""
 ```
 
 ### With Validation
-
 ```python
 # Add self-verification step
 prompt = f"""{main_task_prompt}
-
 
 After generating your response, verify it meets these criteria:
 1. Answers the question directly
@@ -172,30 +166,37 @@ After generating your response, verify it meets these criteria:
 3. Cites specific sources
 4. Acknowledges any uncertainty
 
-
 If verification fails, revise your response."""
 ```
 
 ## Performance Optimization
 
 ### Token Efficiency
-
 - Remove redundant words and phrases
 - Use abbreviations consistently after first definition
 - Consolidate similar instructions
 - Move stable content to system prompts
 
 ### Latency Reduction
-
 - Minimize prompt length without sacrificing quality
 - Use streaming for long-form outputs
 - Cache common prompt prefixes
 - Batch similar requests when possible
 
+## Resources
+
+- **references/few-shot-learning.md**: Deep dive on example selection and construction
+- **references/chain-of-thought.md**: Advanced reasoning elicitation techniques
+- **references/prompt-optimization.md**: Systematic refinement workflows
+- **references/prompt-templates.md**: Reusable template patterns
+- **references/system-prompts.md**: System-level prompt design
+- **assets/prompt-template-library.md**: Battle-tested prompt templates
+- **assets/few-shot-examples.json**: Curated example datasets
+- **scripts/optimize-prompt.py**: Automated prompt optimization tool
+
 ## Success Metrics
 
 Track these KPIs for your prompts:
-
 - **Accuracy**: Correctness of outputs
 - **Consistency**: Reproducibility across similar inputs
 - **Latency**: Response time (P50, P95, P99)

@@ -93,6 +93,53 @@ public class VectorSearchService
     }
 
     /// <summary>
+    /// 커스텀 추가 스킬 삭제
+    /// </summary>
+    public bool RemoveCustomItem(string id)
+    {
+        var target = _customItems.FirstOrDefault(x => x.Id.Equals(id, StringComparison.OrdinalIgnoreCase) || x.Source.Equals(id, StringComparison.OrdinalIgnoreCase));
+        if (target != null)
+        {
+            _customItems.Remove(target);
+            _items.Remove(target);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// GitHub Pages 배포본의 최신 정적 데이터(skills.json 및 embeddings.bin)를 캐시 우회하여 재로딩
+    /// (HobbyCollector의 ReloadLatestData 방식 벤치마킹)
+    /// </summary>
+    public async Task ReloadCatalogAsync(Action<string>? onProgress = null)
+    {
+        _isCatalogLoaded = false;
+        _isVectorsLoaded = false;
+        _catalogLoadingTask = null;
+        _vectorsLoadingTask = null;
+
+        var preservedCustom = _customItems.ToList();
+        _items.Clear();
+        _customItems.Clear();
+
+        long cacheBuster = DateTime.UtcNow.Ticks;
+        onProgress?.Invoke("원격 GitHub 최신 스킬 데이터베이스 동기화 중...");
+        var items = await _http.GetFromJsonAsync<List<SkillItem>>($"data/skills.json?t={cacheBuster}");
+        _items = items ?? new List<SkillItem>();
+        _isCatalogLoaded = true;
+
+        MergeCustomItems(preservedCustom);
+
+        onProgress?.Invoke("최신 AI 시맨틱 벡터 데이터베이스 동기화 중...");
+        var bytes = await _http.GetByteArrayAsync($"embeddings.bin?t={cacheBuster}");
+        _embeddings = new float[bytes.Length / sizeof(float)];
+        Buffer.BlockCopy(bytes, 0, _embeddings, 0, bytes.Length);
+        _isVectorsLoaded = true;
+
+        onProgress?.Invoke($"✅ 최신 동기화 완료! ({_items.Count:N0}개 에셋)");
+    }
+
+    /// <summary>
     /// 2단계: 9.5MB AI 벡터 데이터베이스(embeddings.bin) 백그라운드 비동기 로딩
     /// </summary>
     public Task EnsureVectorsLoadedAsync(Action<string>? onProgress = null)
@@ -186,18 +233,22 @@ public class VectorSearchService
 
         for (int i = 0; i < _items.Count; i++)
         {
-            int offset = i * Dimension;
-            if (offset + Dimension <= _embeddings.Length)
+            var item = _items[i];
+            if (item.Embedding != null && item.Embedding.Length == Dimension)
             {
-                ReadOnlySpan<float> candidateSpan = _embeddings.AsSpan(offset, Dimension);
-                _items[i].AiScore = TensorPrimitives.CosineSimilarity(querySpan, candidateSpan);
+                item.AiScore = TensorPrimitives.CosineSimilarity(querySpan, item.Embedding);
             }
             else
             {
-                // 새로 추가된 커스텀 스킬의 경우 (임베딩이 아직 바이너리에 없는 경우 기본 점수 부여)
-                if (_items[i].AiScore <= 0f)
+                int offset = i * Dimension;
+                if (offset + Dimension <= _embeddings.Length)
                 {
-                    _items[i].AiScore = 0.5f;
+                    ReadOnlySpan<float> candidateSpan = _embeddings.AsSpan(offset, Dimension);
+                    item.AiScore = TensorPrimitives.CosineSimilarity(querySpan, candidateSpan);
+                }
+                else if (item.AiScore <= 0f)
+                {
+                    item.AiScore = 0.5f;
                 }
             }
         }

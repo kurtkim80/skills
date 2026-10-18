@@ -1,9 +1,8 @@
 ---
 name: azure-resource-manager-postgresql-dotnet
-description: Azure PostgreSQL Flexible Server SDK for .NET. Database management for PostgreSQL Flexible Server deployments.
-risk: critical
-source: community
-date_added: '2026-02-27'
+description: |
+  Azure PostgreSQL Flexible Server SDK for .NET. Database management for PostgreSQL Flexible Server deployments. Use for creating servers, databases, firewall rules, configurations, backups, and high availability. Triggers: "PostgreSQL", "PostgreSqlFlexibleServer", "PostgreSQL Flexible Server", "Azure Database for PostgreSQL", "PostgreSQL database management", "PostgreSQL firewall", "PostgreSQL backup", "Postgres".
+package: Azure.ResourceManager.PostgreSql
 ---
 
 # Azure.ResourceManager.PostgreSql (.NET)
@@ -60,7 +59,6 @@ Subscription
 ### 1. Create PostgreSQL Flexible Server
 
 ```csharp
-using System;
 using Azure.ResourceManager.PostgreSql.FlexibleServers;
 using Azure.ResourceManager.PostgreSql.FlexibleServers.Models;
 
@@ -75,7 +73,7 @@ PostgreSqlFlexibleServerData data = new PostgreSqlFlexibleServerData(AzureLocati
 {
     Sku = new PostgreSqlFlexibleServerSku("Standard_D2ds_v4", PostgreSqlFlexibleServerSkuTier.GeneralPurpose),
     AdministratorLogin = "pgadmin",
-    AdministratorLoginPassword = Environment.GetEnvironmentVariable("POSTGRES_ADMIN_PASSWORD") ?? throw new InvalidOperationException("POSTGRES_ADMIN_PASSWORD is required"),
+    AdministratorLoginPassword = "YourSecurePassword123!",
     Version = PostgreSqlFlexibleServerVersion.Ver16,
     Storage = new PostgreSqlFlexibleServerStorage
     {
@@ -432,11 +430,3 @@ string connectionString = $"Host={server.Data.FullyQualifiedDomainName};" +
 | API Reference | https://learn.microsoft.com/dotnet/api/azure.resourcemanager.postgresql |
 | Product Documentation | https://learn.microsoft.com/azure/postgresql/flexible-server/ |
 | GitHub Source | https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/postgresql/Azure.ResourceManager.PostgreSql |
-
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

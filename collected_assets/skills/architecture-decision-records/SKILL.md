@@ -1,179 +1,441 @@
 ---
 name: architecture-decision-records
-description: コーディングセッション中にアーキテクチャ決定を構造化ADRとして記録し、自動的に決定の瞬間を検出し、コンテキスト、検討された代替案、根拠を記録します。今後の開発者がコードベースの形成理由を理解するためのADRログを維持します。
-origin: ECC
+description: Write and maintain Architecture Decision Records (ADRs) following best practices for technical decision documentation. Use when documenting significant technical decisions, reviewing past architectural choices, or establishing decision processes.
 ---
 
-# アーキテクチャ決定記録
+# Architecture Decision Records
 
-コーディングセッション中にアーキテクチャ決定を構造化ドキュメントとして記録します。決定がSlackスレッド、PRコメント、または誰かの記憶にのみ存在する代わりに、このスキルはコードと並行して存在する構造化ADRドキュメントを生成します。
+Comprehensive patterns for creating, maintaining, and managing Architecture Decision Records (ADRs) that capture the context and rationale behind significant technical decisions.
 
-## アクティベーション時期
+## Use this skill when
 
-- ユーザーが明示的に「この決定を記録しよう」または「このADRを作成しよう」と言う
-- 重要な代替案の選択（フレームワーク、ライブラリ、パターン、データベース、API設計）
-- ユーザーが「私たちは...を選択した」または「YではなくXをしている理由は...です」と言う
-- ユーザーが「なぜXを選んだのか」と尋ねる（既存のADRを読む）
-- アーキテクチャ上のトレードオフが検討される計画段階
+- Making significant architectural decisions
+- Documenting technology choices
+- Recording design trade-offs
+- Onboarding new team members
+- Reviewing historical decisions
+- Establishing decision-making processes
 
-## ADR形式
+## Do not use this skill when
 
-Michael Nygardによって提案されたADR形式を、AI支援開発向けに調整したものを使用します：
+- You only need to document small implementation details
+- The change is a minor patch or routine maintenance
+- There is no architectural decision to capture
+
+## Instructions
+
+1. Capture the decision context, constraints, and drivers.
+2. Document considered options with tradeoffs.
+3. Record the decision, rationale, and consequences.
+4. Link related ADRs and update status over time.
+
+## Core Concepts
+
+### 1. What is an ADR?
+
+An Architecture Decision Record captures:
+- **Context**: Why we needed to make a decision
+- **Decision**: What we decided
+- **Consequences**: What happens as a result
+
+### 2. When to Write an ADR
+
+| Write ADR | Skip ADR |
+|-----------|----------|
+| New framework adoption | Minor version upgrades |
+| Database technology choice | Bug fixes |
+| API design patterns | Implementation details |
+| Security architecture | Routine maintenance |
+| Integration patterns | Configuration changes |
+
+### 3. ADR Lifecycle
+
+```
+Proposed → Accepted → Deprecated → Superseded
+              ↓
+           Rejected
+```
+
+## Templates
+
+### Template 1: Standard ADR (MADR Format)
 
 ```markdown
-# ADR-NNNN: [決定タイトル]
+# ADR-0001: Use PostgreSQL as Primary Database
 
-**Date**: YYYY-MM-DD
-**Status**: proposed | accepted | deprecated | superseded by ADR-NNNN
-**Deciders**: [関係者]
+## Status
+
+Accepted
 
 ## Context
 
-この決定または変更を促すどのような問題や状況が見られるのか？
+We need to select a primary database for our new e-commerce platform. The system
+will handle:
+- ~10,000 concurrent users
+- Complex product catalog with hierarchical categories
+- Transaction processing for orders and payments
+- Full-text search for products
+- Geospatial queries for store locator
 
-[2～5文で状況、制約条件、作用する力について説明]
+The team has experience with MySQL, PostgreSQL, and MongoDB. We need ACID
+compliance for financial transactions.
+
+## Decision Drivers
+
+* **Must have ACID compliance** for payment processing
+* **Must support complex queries** for reporting
+* **Should support full-text search** to reduce infrastructure complexity
+* **Should have good JSON support** for flexible product attributes
+* **Team familiarity** reduces onboarding time
+
+## Considered Options
+
+### Option 1: PostgreSQL
+- **Pros**: ACID compliant, excellent JSON support (JSONB), built-in full-text
+  search, PostGIS for geospatial, team has experience
+- **Cons**: Slightly more complex replication setup than MySQL
+
+### Option 2: MySQL
+- **Pros**: Very familiar to team, simple replication, large community
+- **Cons**: Weaker JSON support, no built-in full-text search (need
+  Elasticsearch), no geospatial without extensions
+
+### Option 3: MongoDB
+- **Pros**: Flexible schema, native JSON, horizontal scaling
+- **Cons**: No ACID for multi-document transactions (at decision time),
+  team has limited experience, requires schema design discipline
 
 ## Decision
 
-提案または実施する変更は何か？
+We will use **PostgreSQL 15** as our primary database.
 
-[決定を明確に述べる1～3文]
+## Rationale
 
-## Alternatives Considered（検討された代替案）
+PostgreSQL provides the best balance of:
+1. **ACID compliance** essential for e-commerce transactions
+2. **Built-in capabilities** (full-text search, JSONB, PostGIS) reduce
+   infrastructure complexity
+3. **Team familiarity** with SQL databases reduces learning curve
+4. **Mature ecosystem** with excellent tooling and community support
 
-### Alternative 1: [名前]
-- **Pros**: [利点]
-- **Cons**: [欠点]
-- **Why not**: [この選択肢が拒否された特定の理由]
+The slight complexity in replication is outweighed by the reduction in
+additional services (no separate Elasticsearch needed).
 
-### Alternative 2: [名前]
-- **Pros**: [利点]
-- **Cons**: [欠点]
-- **Why not**: [この選択肢が拒否された特定の理由]
-
-## Consequences（結果）
-
-この変更により、何がより簡単になり、何がより難しくなるか？
+## Consequences
 
 ### Positive
-- [利点1]
-- [利点2]
+- Single database handles transactions, search, and geospatial queries
+- Reduced operational complexity (fewer services to manage)
+- Strong consistency guarantees for financial data
+- Team can leverage existing SQL expertise
 
 ### Negative
-- [トレードオフ1]
-- [トレードオフ2]
+- Need to learn PostgreSQL-specific features (JSONB, full-text search syntax)
+- Vertical scaling limits may require read replicas sooner
+- Some team members need PostgreSQL-specific training
 
 ### Risks
-- [リスクと軽減策]
+- Full-text search may not scale as well as dedicated search engines
+- Mitigation: Design for potential Elasticsearch addition if needed
+
+## Implementation Notes
+
+- Use JSONB for flexible product attributes
+- Implement connection pooling with PgBouncer
+- Set up streaming replication for read replicas
+- Use pg_trgm extension for fuzzy search
+
+## Related Decisions
+
+- ADR-0002: Caching Strategy (Redis) - complements database choice
+- ADR-0005: Search Architecture - may supersede if Elasticsearch needed
+
+## References
+
+- [PostgreSQL JSON Documentation](https://www.postgresql.org/docs/current/datatype-json.html)
+- [PostgreSQL Full Text Search](https://www.postgresql.org/docs/current/textsearch.html)
+- Internal: Performance benchmarks in `/docs/benchmarks/database-comparison.md`
 ```
 
-## ワークフロー
+### Template 2: Lightweight ADR
 
-### 新しいADRをキャプチャする
+```markdown
+# ADR-0012: Adopt TypeScript for Frontend Development
 
-決定の瞬間が検出されたとき：
+**Status**: Accepted
+**Date**: 2024-01-15
+**Deciders**: @alice, @bob, @charlie
 
-1. **初期化（初回のみ）** — `docs/adr/`が存在しない場合、ユーザーの確認を得た上でディレクトリ、インデックステーブルヘッダーでシードされた`README.md`（下記のADRインデックス形式を参照）、手動使用用の空白の`template.md`を作成します。明示的な同意なしにファイルを作成しないでください。
-2. **決定を特定する** — 行われている中核的なアーキテクチャの選択を抽出する
-3. **コンテキストを収集する** — この問題を起こした背景は？存在する制約条件は？
-4. **代替案をドキュメント化する** — どの他のオプションが検討されたか？ なぜ拒否されたか？
-5. **結果を述べる** — トレードオフは何か？何がより簡単/難しくなるか？
-6. **番号を割り当てる** — `docs/adr/`内の既存のADRをスキャンして増分する
-7. **確認して書き込む** — レビュー用のドラフトADRをユーザーに提示します。明示的な承認後にのみ`docs/adr/NNNN-decision-title.md`に書き込みます。ユーザーが辞退した場合、ファイルを書き込まずにドラフトを破棄します。
-8. **インデックスを更新する** — `docs/adr/README.md`に追記する
+## Context
 
-### 既存のADRを読む
+Our React codebase has grown to 50+ components with increasing bug reports
+related to prop type mismatches and undefined errors. PropTypes provide
+runtime-only checking.
 
-ユーザーが「なぜXを選んだのか」と尋ねたとき：
+## Decision
 
-1. `docs/adr/`が存在するかチェック — 存在しない場合、「このプロジェクトでADRが見つかりません。アーキテクチャ決定の記録を始めたいですか？」と応答
-2. 存在する場合、関連エントリの`docs/adr/README.md`インデックスをスキャン
-3. 一致するADRファイルを読み、ContextとDecisionセクションを表示
-4. 一致が見つからない場合、「その決定についてのADRが見つかりません。今すぐ記録しますか？」と応答
+Adopt TypeScript for all new frontend code. Migrate existing code incrementally.
 
-### ADRディレクトリ構造
+## Consequences
+
+**Good**: Catch type errors at compile time, better IDE support, self-documenting
+code.
+
+**Bad**: Learning curve for team, initial slowdown, build complexity increase.
+
+**Mitigations**: TypeScript training sessions, allow gradual adoption with
+`allowJs: true`.
+```
+
+### Template 3: Y-Statement Format
+
+```markdown
+# ADR-0015: API Gateway Selection
+
+In the context of **building a microservices architecture**,
+facing **the need for centralized API management, authentication, and rate limiting**,
+we decided for **Kong Gateway**
+and against **AWS API Gateway and custom Nginx solution**,
+to achieve **vendor independence, plugin extensibility, and team familiarity with Lua**,
+accepting that **we need to manage Kong infrastructure ourselves**.
+```
+
+### Template 4: ADR for Deprecation
+
+```markdown
+# ADR-0020: Deprecate MongoDB in Favor of PostgreSQL
+
+## Status
+
+Accepted (Supersedes ADR-0003)
+
+## Context
+
+ADR-0003 (2021) chose MongoDB for user profile storage due to schema flexibility
+needs. Since then:
+- MongoDB's multi-document transactions remain problematic for our use case
+- Our schema has stabilized and rarely changes
+- We now have PostgreSQL expertise from other services
+- Maintaining two databases increases operational burden
+
+## Decision
+
+Deprecate MongoDB and migrate user profiles to PostgreSQL.
+
+## Migration Plan
+
+1. **Phase 1** (Week 1-2): Create PostgreSQL schema, dual-write enabled
+2. **Phase 2** (Week 3-4): Backfill historical data, validate consistency
+3. **Phase 3** (Week 5): Switch reads to PostgreSQL, monitor
+4. **Phase 4** (Week 6): Remove MongoDB writes, decommission
+
+## Consequences
+
+### Positive
+- Single database technology reduces operational complexity
+- ACID transactions for user data
+- Team can focus PostgreSQL expertise
+
+### Negative
+- Migration effort (~4 weeks)
+- Risk of data issues during migration
+- Lose some schema flexibility
+
+## Lessons Learned
+
+Document from ADR-0003 experience:
+- Schema flexibility benefits were overestimated
+- Operational cost of multiple databases was underestimated
+- Consider long-term maintenance in technology decisions
+```
+
+### Template 5: Request for Comments (RFC) Style
+
+```markdown
+# RFC-0025: Adopt Event Sourcing for Order Management
+
+## Summary
+
+Propose adopting event sourcing pattern for the order management domain to
+improve auditability, enable temporal queries, and support business analytics.
+
+## Motivation
+
+Current challenges:
+1. Audit requirements need complete order history
+2. "What was the order state at time X?" queries are impossible
+3. Analytics team needs event stream for real-time dashboards
+4. Order state reconstruction for customer support is manual
+
+## Detailed Design
+
+### Event Store
+
+```
+OrderCreated { orderId, customerId, items[], timestamp }
+OrderItemAdded { orderId, item, timestamp }
+OrderItemRemoved { orderId, itemId, timestamp }
+PaymentReceived { orderId, amount, paymentId, timestamp }
+OrderShipped { orderId, trackingNumber, timestamp }
+```
+
+### Projections
+
+- **CurrentOrderState**: Materialized view for queries
+- **OrderHistory**: Complete timeline for audit
+- **DailyOrderMetrics**: Analytics aggregation
+
+### Technology
+
+- Event Store: EventStoreDB (purpose-built, handles projections)
+- Alternative considered: Kafka + custom projection service
+
+## Drawbacks
+
+- Learning curve for team
+- Increased complexity vs. CRUD
+- Need to design events carefully (immutable once stored)
+- Storage growth (events never deleted)
+
+## Alternatives
+
+1. **Audit tables**: Simpler but doesn't enable temporal queries
+2. **CDC from existing DB**: Complex, doesn't change data model
+3. **Hybrid**: Event source only for order state changes
+
+## Unresolved Questions
+
+- [ ] Event schema versioning strategy
+- [ ] Retention policy for events
+- [ ] Snapshot frequency for performance
+
+## Implementation Plan
+
+1. Prototype with single order type (2 weeks)
+2. Team training on event sourcing (1 week)
+3. Full implementation and migration (4 weeks)
+4. Monitoring and optimization (ongoing)
+
+## References
+
+- [Event Sourcing by Martin Fowler](https://martinfowler.com/eaaDev/EventSourcing.html)
+- [EventStoreDB Documentation](https://www.eventstore.com/docs)
+```
+
+## ADR Management
+
+### Directory Structure
 
 ```
 docs/
-└── adr/
-    ├── README.md              ← すべてのADRのインデックス
-    ├── 0001-use-nextjs.md
-    ├── 0002-postgres-over-mongo.md
-    ├── 0003-rest-over-graphql.md
-    └── template.md            ← 手動使用用の空白テンプレート
+├── adr/
+│   ├── README.md           # Index and guidelines
+│   ├── template.md         # Team's ADR template
+│   ├── 0001-use-postgresql.md
+│   ├── 0002-caching-strategy.md
+│   ├── 0003-mongodb-user-profiles.md  # [DEPRECATED]
+│   └── 0020-deprecate-mongodb.md      # Supersedes 0003
 ```
 
-### ADRインデックス形式
+### ADR Index (README.md)
 
 ```markdown
 # Architecture Decision Records
 
+This directory contains Architecture Decision Records (ADRs) for [Project Name].
+
+## Index
+
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
-| [0001](0001-use-nextjs.md) | Use Next.js as frontend framework | accepted | 2026-01-15 |
-| [0002](0002-postgres-over-mongo.md) | PostgreSQL over MongoDB for primary datastore | accepted | 2026-01-20 |
-| [0003](0003-rest-over-graphql.md) | REST API over GraphQL | accepted | 2026-02-01 |
+| [0001](0001-use-postgresql.md) | Use PostgreSQL as Primary Database | Accepted | 2024-01-10 |
+| [0002](0002-caching-strategy.md) | Caching Strategy with Redis | Accepted | 2024-01-12 |
+| [0003](0003-mongodb-user-profiles.md) | MongoDB for User Profiles | Deprecated | 2023-06-15 |
+| [0020](0020-deprecate-mongodb.md) | Deprecate MongoDB | Accepted | 2024-01-15 |
+
+## Creating a New ADR
+
+1. Copy `template.md` to `NNNN-title-with-dashes.md`
+2. Fill in the template
+3. Submit PR for review
+4. Update this index after approval
+
+## ADR Status
+
+- **Proposed**: Under discussion
+- **Accepted**: Decision made, implementing
+- **Deprecated**: No longer relevant
+- **Superseded**: Replaced by another ADR
+- **Rejected**: Considered but not adopted
 ```
 
-## 決定検出シグナル
+### Automation (adr-tools)
 
-会話の中でアーキテクチャ決定を示すこれらのパターンに注意：
+```bash
+# Install adr-tools
+brew install adr-tools
 
-**明示的なシグナル**
-- 「Xにしよう」
-- 「YではなくXを使うべき」
-- 「トレードオフは...だから価値がある」
-- 「このをADRとして記録して」
+# Initialize ADR directory
+adr init docs/adr
 
-**暗黙的なシグナル**（ADRの記録を提案する — ユーザーの確認なしに自動作成しない）
-- 2つのフレームワークまたはライブラリを比較して結論に達する
-- 述べられた根拠を持つデータベーススキーマ設計の選択をする
-- アーキテクチャパターン（モノリス対マイクロサービス、REST対GraphQL）の間で選択する
-- 認証/認可戦略を決定する
-- 代替案を評価した後、デプロイインフラストラクチャを選択する
+# Create new ADR
+adr new "Use PostgreSQL as Primary Database"
 
-## 良いADRとは
+# Supersede an ADR
+adr new -s 3 "Deprecate MongoDB in Favor of PostgreSQL"
 
-### すること
-- **具体的に** — 「ORMを使う」ではなく「Prisma ORMを使う」
-- **根拠を記録する** — 根拠は何よりも重要です
-- **拒否された代替案を含める** — 将来の開発者は何が検討されたかを知る必要があります
-- **結果を正直に述べる** — すべての決定にはトレードオフがあります
-- **短く保つ** — ADRは2分で読めるべき
-- **現在時制を使う** — 「Xを使う」ではなく「私たちはXを使う」
+# Generate table of contents
+adr generate toc > docs/adr/README.md
 
-### しないこと
-- 些細な決定を記録する — 変数名またはフォーマット選択はADRを必要としません
-- エッセイを書く — contextセクションが10行を超える場合は長すぎます
-- 代替案を省略する — 「単に選んだ」は有効な根拠ではありません
-- マーキングなしでバックフィルする — 過去の決定を記録する場合は元の日付を注記
-- ADRを古い状態にする — 置き換えられた決定は置き換えを参照する必要があります
-
-## ADRライフサイクル
-
-```
-proposed → accepted → [deprecated | superseded by ADR-NNNN]
+# Link related ADRs
+adr link 2 "Complements" 1 "Is complemented by"
 ```
 
-- **proposed**: 決定が検討中であり、まだコミットされていない
-- **accepted**: 決定が有効であり、フォローされている
-- **deprecated**: 決定は関連性がなくなった（例：機能が削除された）
-- **superseded**: 新しいADRがこれを置き換える（常に置き換えをリンク）
+## Review Process
 
-## 記録する価値のある決定カテゴリ
+```markdown
+## ADR Review Checklist
 
-| Category | Examples |
-|----------|---------|
-| **Technology choices** | フレームワーク、言語、データベース、クラウドプロバイダ |
-| **Architecture patterns** | モノリス対マイクロサービス、イベント駆動、CQRS |
-| **API design** | REST対GraphQL、バージョニング戦略、auth機構 |
-| **Data modeling** | スキーマ設計、正規化決定、キャッシング戦略 |
-| **Infrastructure** | デプロイメントモデル、CI/CDパイプライン、監視スタック |
-| **Security** | Auth戦略、暗号化アプローチ、シークレット管理 |
-| **Testing** | テストフレームワーク、カバレッジ対象、E2E対統合のバランス |
-| **Process** | ブランチング戦略、レビュープロセス、リリースケーデンス |
+### Before Submission
+- [ ] Context clearly explains the problem
+- [ ] All viable options considered
+- [ ] Pros/cons balanced and honest
+- [ ] Consequences (positive and negative) documented
+- [ ] Related ADRs linked
 
-## 他のスキルとの統合
+### During Review
+- [ ] At least 2 senior engineers reviewed
+- [ ] Affected teams consulted
+- [ ] Security implications considered
+- [ ] Cost implications documented
+- [ ] Reversibility assessed
 
-- **Planner エージェント**: プランナーがアーキテクチャ変更を提案するとき、ADRの作成を提案
-- **Code reviewer エージェント**: 対応するADRなしでアーキテクチャ変更を導入するPRにフラグを立てる
+### After Acceptance
+- [ ] ADR index updated
+- [ ] Team notified
+- [ ] Implementation tickets created
+- [ ] Related documentation updated
+```
+
+## Best Practices
+
+### Do's
+- **Write ADRs early** - Before implementation starts
+- **Keep them short** - 1-2 pages maximum
+- **Be honest about trade-offs** - Include real cons
+- **Link related decisions** - Build decision graph
+- **Update status** - Deprecate when superseded
+
+### Don'ts
+- **Don't change accepted ADRs** - Write new ones to supersede
+- **Don't skip context** - Future readers need background
+- **Don't hide failures** - Rejected decisions are valuable
+- **Don't be vague** - Specific decisions, specific consequences
+- **Don't forget implementation** - ADR without action is waste
+
+## Resources
+
+- [Documenting Architecture Decisions (Michael Nygard)](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
+- [MADR Template](https://adr.github.io/madr/)
+- [ADR GitHub Organization](https://adr.github.io/)
+- [adr-tools](https://github.com/npryce/adr-tools)

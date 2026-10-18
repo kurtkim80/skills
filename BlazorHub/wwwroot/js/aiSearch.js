@@ -43,6 +43,10 @@ window.vectorizeQuery = async function (text, statusCallbackObj) {
   return Array.from(out.data);
 };
 
+window.vectorizeText = async function (text, statusCallbackObj) {
+  return window.vectorizeQuery(text, statusCallbackObj);
+};
+
 window.copyToClipboard = async function (text) {
   try {
     await navigator.clipboard.writeText(text);

@@ -40,6 +40,9 @@ public class SkillItem
     [JsonPropertyName("doc")]
     public string Doc { get; set; } = string.Empty;
 
+    [JsonPropertyName("embedding")]
+    public float[]? Embedding { get; set; }
+
     [JsonIgnore]
     public float AiScore { get; set; } = 0f;
 }

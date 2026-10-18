@@ -1,6 +1,7 @@
 @page "/"
 @inject HttpClient Http
 @inject VectorSearchService SearchService
+@inject WasmSkillCollectorService Collector
 @inject IJSRuntime JS
 
 <!-- Apple Global Navigation -->
@@ -84,6 +85,22 @@
         }
     </div>
 </div>
+
+@if (SearchService.CustomItems.Count > 0)
+{
+    <div class="user-custom-bar" style="margin: 0 auto 16px auto; max-width: 1400px; padding: 10px 16px; background: var(--card-bg, rgba(255,255,255,0.7)); border: 1px solid var(--border-color, rgba(0,0,0,0.1)); border-radius: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 12px; font-weight: 600; color: var(--apple-blue); display: flex; align-items: center; gap: 4px;">
+            ⭐ 내 커스텀 스킬 (@SearchService.CustomItems.Count)
+        </span>
+        @foreach (var c in SearchService.CustomItems)
+        {
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--segment-bg, #f1f5f9); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 16px; font-size: 12px;">
+                <span style="cursor: pointer; font-weight: 500;" @onclick="() => OpenModal(c)">⚡ @c.Name</span>
+                <span style="cursor: pointer; opacity: 0.6; margin-left: 2px;" title="삭제" @onclick="() => DeleteCustomSkill(c)">✕</span>
+            </div>
+        }
+    </div>
+}
 
 <!-- Main Content Area -->
 <main class="main">
@@ -569,14 +586,11 @@
 
         try
         {
-            var encoded = Uri.EscapeDataString(query.Trim());
-            var apiUrl = $"https://api.github.com/search/repositories?q={encoded}&sort=stars&order=desc&per_page=15";
-
-            var response = await Http.GetFromJsonAsync<GitHubSearchResult>(apiUrl);
-            if (response != null && response.Items.Count > 0)
+            var results = await Collector.SearchGitHubAsync(query, 15);
+            if (results.Count > 0)
             {
-                _githubResults = response.Items;
-                _githubStatusMessage = $"'{query}' 검색 결과: 총 {response.TotalCount:N0}개 중 상위 {_githubResults.Count}개 표시";
+                _githubResults = results;
+                _githubStatusMessage = $"'{query}' 검색 결과: 상위 {_githubResults.Count}개 저장소 표시";
             }
             else
             {
@@ -587,7 +601,7 @@
         catch (Exception ex)
         {
             _githubResults.Clear();
-            _githubStatusMessage = $"GitHub 검색 중 오류가 발생했습니다: {ex.Message}";
+            _githubStatusMessage = $"GitHub 검색 중 오류: {ex.Message}";
         }
         finally
         {
@@ -603,38 +617,57 @@
 
         try
         {
-            var (catId, catLabel) = VectorSearchService.ClassifyCategory(repo.Name, repo.Description);
-            var newItem = new SkillItem
+            // 1. WASM 수집기를 통해 GitHub에서 SKILL.md 직접 수신 및 파싱
+            var extracted = await Collector.ExtractSkillsFromRepoAsync(repo.FullName, repo.Description);
+            if (extracted.Count == 0)
             {
-                Id = repo.Name,
-                Name = repo.Name,
-                Type = "skill",
-                CatId = catId,
-                CatLabel = catLabel,
-                Desc = string.IsNullOrEmpty(repo.Description) ? $"GitHub에서 추가된 스킬 저장소: {repo.FullName}" : repo.Description,
-                Source = repo.FullName,
-                RepoUrl = repo.HtmlUrl,
-                Install = $"mkdir -p ~/.config/opencode/skills/{repo.Name} && curl -fsSL https://raw.githubusercontent.com/{repo.FullName}/main/SKILL.md -o ~/.config/opencode/skills/{repo.Name}/SKILL.md",
-                Doc = $"https://raw.githubusercontent.com/{repo.FullName}/main/SKILL.md"
-            };
+                throw new Exception("해당 저장소에서 스킬 정보를 추출하지 못했습니다.");
+            }
 
-            // 1. 메모리 카탈로그 DB에 추가
-            SearchService.AddItem(newItem);
+            int addedCount = 0;
+            foreach (var item in extracted)
+            {
+                if (SearchService.IsItemInCatalog(item.Source) || SearchService.IsItemInCatalog(item.Id))
+                    continue;
+
+                // 2. 인브라우저 Transformers.js를 통해 384차원 AI 시맨틱 벡터 실시간 생성 (50ms)
+                try
+                {
+                    string textToEmbed = $"{item.Name} {item.Desc}";
+                    var vec = await JS.InvokeAsync<float[]>("vectorizeText", textToEmbed, _dotNetRef);
+                    if (vec != null && vec.Length == 384)
+                    {
+                        item.Embedding = vec;
+                    }
+                }
+                catch (Exception vecEx)
+                {
+                    Console.WriteLine($"[WASM] 벡터화 알림: {vecEx.Message}");
+                }
+
+                // 3. 메모리 카탈로그 DB에 추가
+                SearchService.AddItem(item);
+                addedCount++;
+            }
+
             repo.IsAdded = true;
 
-            // 2. 브라우저 localStorage에 영구 저장
+            // 4. 브라우저 localStorage에 영구 저장 (임베딩 벡터 포함)
             var json = System.Text.Json.JsonSerializer.Serialize(SearchService.CustomItems);
             await JS.InvokeVoidAsync("saveCustomSkills", json);
 
-            // 3. 로컬 서버(server.py) 모드일 경우 sources.json 동기화 API 호출 시도
-            try
+            // 5. 로컬 서버(server.py) 모드일 경우 sources.json 동기화 시도 (백그라운드)
+            _ = Task.Run(async () =>
             {
-                var addSourcePayload = new { repo = repo.CloneUrl, name = repo.Name };
-                await Http.PostAsJsonAsync("/api/add-source", addSourcePayload);
-            }
-            catch { }
+                try
+                {
+                    var addSourcePayload = new { repo = repo.CloneUrl, name = repo.Name };
+                    await Http.PostAsJsonAsync("/api/add-source", addSourcePayload);
+                }
+                catch { }
+            });
 
-            // 4. 메인 화면 뷰 갱신
+            // 6. 메인 화면 뷰 갱신
             if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
             {
                 _displayItems = SearchService.GetFilteredSearchResults(_selectedCategory);
@@ -644,7 +677,7 @@
                 _displayItems = SearchService.GetCategoryItems(_selectedCategory);
             }
 
-            await ShowToast($"'{repo.FullName}'이(가) 내 카탈로그 DB에 추가되었습니다!");
+            await ShowToast($"'{repo.FullName}' ({addedCount}개 스킬) 브라우저 카탈로그 DB에 즉시 등록 완료!");
         }
         catch (Exception ex)
         {
@@ -711,31 +744,83 @@
         await JS.InvokeVoidAsync("setAppTheme", _currentTheme);
     }
 
-    private async Task TriggerSync()
+    private async Task DeleteCustomSkill(SkillItem item)
     {
-        _isSyncing = true;
-        StateHasChanged();
-        try
+        if (SearchService.RemoveCustomItem(item.Id))
         {
-            var res = await Http.PostAsync("/api/sync", null);
-            if (res.IsSuccessStatusCode)
+            var json = System.Text.Json.JsonSerializer.Serialize(SearchService.CustomItems);
+            await JS.InvokeVoidAsync("saveCustomSkills", json);
+
+            if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
             {
-                await ShowToast("수집 및 동기화 완료! 페이지를 새로고침합니다.");
-                await Task.Delay(1500);
-                await JS.InvokeVoidAsync("location.reload");
+                _displayItems = SearchService.GetFilteredSearchResults(_selectedCategory);
             }
             else
             {
-                await ShowToast("수집 실패. 서버 로그를 확인하세요.");
+                _displayItems = SearchService.GetCategoryItems(_selectedCategory);
             }
+
+            await ShowToast($"'{item.Name}' 스킬을 삭제했습니다.");
+            StateHasChanged();
         }
-        catch
+    }
+
+    private async Task TriggerSync()
+    {
+        _isSyncing = true;
+        _showStatusBar = true;
+        _isAiWorking = true;
+        _statusText = "🔄 최신 데이터 동기화 진행 중...";
+        StateHasChanged();
+
+        try
         {
-            await ShowToast("❌ 로컬 서버(server.py) 모드에서만 수집 버튼을 사용할 수 있습니다.");
+            // 1. 로컬 개발 서버(server.py)가 실행 중인 경우 로컬 동기화 시도 (백그라운드)
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await Http.PostAsync("/api/sync", null);
+                }
+                catch { }
+            });
+
+            // 2. GitHub Pages / 정적 환경의 최신 data/skills.json & embeddings.bin 캐시 우회 로드
+            await SearchService.ReloadCatalogAsync(msg =>
+            {
+                _statusText = msg;
+                InvokeAsync(StateHasChanged);
+            });
+
+            // 3. 브라우저 localStorage에 저장된 커스텀 스킬 목록 복원
+            var customJson = await JS.InvokeAsync<string>("getCustomSkills");
+            if (!string.IsNullOrWhiteSpace(customJson) && customJson != "[]")
+            {
+                var savedCustom = System.Text.Json.JsonSerializer.Deserialize<List<SkillItem>>(customJson);
+                SearchService.MergeCustomItems(savedCustom);
+            }
+
+            // 4. 화면 목록 갱신
+            if (_isSearchActive && !string.IsNullOrWhiteSpace(_searchQuery))
+            {
+                _displayItems = SearchService.GetFilteredSearchResults(_selectedCategory);
+            }
+            else
+            {
+                _displayItems = SearchService.GetCategoryItems(_selectedCategory);
+            }
+
+            await ShowToast($"✅ 최신 동기화 완료! 현재 총 {SearchService.AllItems.Count:N0}개 에셋이 로드되었습니다.");
+        }
+        catch (Exception ex)
+        {
+            await ShowToast($"동기화 안내: {ex.Message}");
         }
         finally
         {
             _isSyncing = false;
+            _isAiWorking = false;
+            _showStatusBar = false;
             StateHasChanged();
         }
     }

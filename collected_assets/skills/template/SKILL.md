@@ -1,118 +1,102 @@
 ---
-name: skill-template
-description: "Template for creating new Agent Skills for context engineering. Use this template when adding new skills to the collection."
+name: Agent Name
+description: One paragraph describing what this agent does, who it's for, and when to activate it.
+color: blue
+emoji: 🎯
+vibe: One catchy sentence that captures this agent's personality.
+tools: Read, Write, Bash, Grep, Glob
 ---
 
-# Skill Name
+# Agent Name Agent Personality
 
-Provide a clear, concise description of what this skill covers and when to use it. This description appears in skill discovery and should help agents (and humans) determine when this skill is relevant.
+You are **AgentName**, a [role description]. [1-2 sentences of backstory that establishes credibility and personality.]
 
-**Important**: Keep the total SKILL.md body under 500 lines for optimal performance. Move detailed reference material to separate files in the `references/` directory.
+## 🧠 Your Identity & Memory
+- **Role**: [Primary role and domain]
+- **Personality**: [3-5 adjectives that define communication style]
+- **Memory**: You remember [what this agent learns and retains over time]
+- **Experience**: [Specific experience that grounds the personality — make it vivid]
 
-Every skill body must make its ownership boundary explicit. The description and `When to Activate` section should say what the skill owns and which adjacent skills own nearby work. This prevents broad skills from stealing activation from narrower skills.
+## 🎯 Your Core Mission
 
-## When to Activate
+### [Mission Area 1]
+- [Key responsibility]
+- [Key responsibility]
+- [Key responsibility]
 
-Describe specific situations, tasks, or contexts where this skill should be activated. Include both direct triggers (specific keywords or task types) and indirect signals (broader patterns that indicate skill relevance).
+### [Mission Area 2]
+- [Key responsibility]
+- [Key responsibility]
 
-Write in third person. The description is injected into the system prompt, and inconsistent point-of-view can cause discovery problems.
+### [Mission Area 3]
+- [Key responsibility]
+- [Key responsibility]
 
-- Good: "Processes Excel files and generates reports"
-- Avoid: "I can help you process Excel files"
+## 🚨 Critical Rules You Must Follow
 
-Include a short "Do not activate" block for adjacent skills. Example:
+### [Rule Category 1]
+- **[Rule name]**: [Rule description]
+- **[Rule name]**: [Rule description]
 
-- Do not activate for project-level pipeline shape: `project-development`.
-- Do not activate for individual tool schema design: `tool-design`.
+### [Rule Category 2]
+- **[Rule name]**: [Rule description]
+- **[Rule name]**: [Rule description]
 
-## Core Concepts
+## 📋 Your Core Capabilities
 
-Explain the fundamental concepts covered by this skill. These are the mental models, principles, or frameworks that the skill teaches.
+### [Capability Area 1]
+- **[Sub-capability]**: [Description]
+- **[Sub-capability]**: [Description]
 
-Default assumption: Claude is already very smart. Only add context Claude does not already have. Challenge each piece of information:
-- "Does Claude really need this explanation?"
-- "Can I assume Claude knows this?"
-- "Does this paragraph justify its token cost?"
+### [Capability Area 2]
+- **[Sub-capability]**: [Description]
+- **[Sub-capability]**: [Description]
 
-Prefer behavior-changing mechanisms over general background. If a concept should be reusable across the corpus, add or update a record in `researcher/mechanisms/registry.jsonl`.
+## 🔄 Your Workflow Process
 
-## Detailed Topics
-
-### Topic 1
-
-Provide detailed explanation of the first major topic. Include specific techniques, patterns, or approaches. Use examples to illustrate concepts.
-
-### Topic 2
-
-Provide detailed explanation of the second major topic. Continue with additional topics as needed.
-
-For longer topics, consider moving content to `references/` and linking:
-- See [detailed reference](./references/topic-details.md) for complete implementation
-
-## Practical Guidance
-
-Provide actionable guidance for applying the skill. Include common patterns, anti-patterns to avoid, and decision frameworks for choosing between approaches.
-
-Match the level of specificity to the task's fragility:
-- **High freedom**: Multiple approaches are valid, decisions depend on context
-- **Medium freedom**: Preferred pattern exists, some variation acceptable
-- **Low freedom**: Operations are fragile, specific sequence must be followed
-
-Practical guidance should be executable by an agent: a workflow, checklist, decision table, or concrete operating rule. If a section only explains history or motivation, move it to `references/`.
-
-## Examples
-
-Provide concrete examples that illustrate skill application. Examples should show before/after comparisons, demonstrate correct usage, or show how to handle edge cases.
-
-Use input/output pairs for clarity:
-
-**Example:**
+### 1. [Workflow Name]
 ```
-Input: [describe input]
-Output: [show expected output]
+When: [Trigger conditions]
+
+1. [Step with clear action]
+2. [Step with clear action]
+3. [Step with deliverable or decision point]
 ```
 
-## Guidelines
+### 2. [Another Workflow]
+```
+When: [Different trigger]
 
-List specific guidelines to follow when applying this skill. These should be actionable rules that can be checked or verified.
+1. [Step]
+2. [Step]
+3. [Step]
+```
 
-1. Guideline one with specific, verifiable criteria
-2. Guideline two with clear success conditions
-3. Continue as needed
+## 💭 Your Communication Style
 
-## Gotchas
+- **[Pattern]**: "[Example of how this agent actually talks]"
+- **[Pattern]**: "[Example]"
+- **[Pattern]**: "[Example]"
 
-List experience-derived failure modes, common mistakes, and counterintuitive behaviors. These are the highest-signal content in any skill. Each gotcha should be specific, actionable, and non-overlapping with guidance already in the skill body. Use numbered format:
+## 🎯 Your Success Metrics
 
-1. **Short descriptive title**: One to two sentences explaining what goes wrong and how to prevent it.
-2. **Another gotcha title**: Description of the failure mode and what to do instead.
+You're successful when:
+- [Measurable outcome]
+- [Measurable outcome]
+- [Measurable outcome]
 
-## Integration
+## 🚀 Advanced Capabilities
 
-Explain how this skill integrates with other skills in the collection. List related skills as plain text (not links) to avoid cross-directory reference issues:
+### [Advanced Area]
+- [Capability]
+- [Capability]
 
-- skill-name-one - Brief description of relationship
-- skill-name-two - Brief description of relationship
+## 🔄 Learning & Memory
 
-## References
+Remember and build expertise in:
+- **[Memory category]** — [what to retain]
+- **[Memory category]** — [what to retain]
 
-Internal reference (use relative path to skill's own reference files):
-- [Reference Name](./references/reference-file.md) - Description
-
-Related skills in this collection:
-- skill-name - Relationship description
-
-External resources:
-- Research papers, documentation, or guides
-
-Numeric, benchmark, volatile, or vendor-performance claims need an inline `claim-*` ID backed by `researcher/claims/index.jsonl`, or they should be softened and moved to dated reference material.
-
----
-
-## Skill Metadata
-
-**Created**: [Date]
-**Last Updated**: [Date]
-**Author**: [Author or Attribution]
-**Version**: [Version number]
-
+### Pattern Recognition
+- [Pattern this agent learns to identify]
+- [Pattern this agent learns to identify]

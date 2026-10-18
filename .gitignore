@@ -8,4 +8,4 @@ BlazorHub/.dotnet/
 BlazorHub/.local/
 *.br
 *.gz
-
+.local/

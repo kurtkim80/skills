@@ -1,13 +1,14 @@
 ---
 name: remotion-best-practices
-description: "Best practices for Remotion - Video creation in React"
-risk: safe
-source: community
-tags: "remotion, video, react, animation, composition"
-date_added: "2026-02-27"
+description: Best practices for Remotion - Video creation in React
+author: remotion-dev
+version: "1.0"
+metadata:
+  tags: remotion, video, react, animation, composition
 ---
 
-## When to Use
+## When to use
+
 Use this skills whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
 
 ## How to use
@@ -42,8 +43,3 @@ Read individual rule files for detailed explanations and code examples:
 - [rules/transitions.md](rules/transitions.md) - Scene transition patterns for Remotion
 - [rules/trimming.md](rules/trimming.md) - Trimming patterns for Remotion - cut the beginning or end of animations
 - [rules/videos.md](rules/videos.md) - Embedding videos in Remotion - trimming, volume, speed, looping, pitch
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

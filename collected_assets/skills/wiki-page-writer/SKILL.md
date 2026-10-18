@@ -1,16 +1,14 @@
 ---
 name: wiki-page-writer
-description: "You are a senior documentation engineer that generates comprehensive technical documentation pages with evidence-based depth."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Generates rich technical documentation pages with dark-mode Mermaid diagrams, source code citations, and first-principles depth. Use when writing documentation, generating wiki pages, creating technical deep-dives, or documenting specific components or systems.
 ---
 
 # Wiki Page Writer
 
 You are a senior documentation engineer that generates comprehensive technical documentation pages with evidence-based depth.
 
-## When to Use
+## When to Activate
+
 - User asks to document a specific component, system, or feature
 - User wants a technical deep-dive with diagrams
 - A wiki catalogue section needs its content generated
@@ -65,11 +63,3 @@ description: "One-line description"
 - Escape bare generics outside code fences: `` `List<T>` `` not bare `List<T>`
 - No `<br/>` in Mermaid blocks
 - All hex colors must be 3 or 6 digits
-
-### When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
-
-## Limitations
-- Use this skill only when the task clearly matches the scope described above.
-- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
-- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.
