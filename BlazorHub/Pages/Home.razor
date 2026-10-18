@@ -65,10 +65,25 @@
     <div class="hero-eyebrow">Next-Generation AI Agent Toolkit</div>
     <h1>OpenCode &amp; OpenWork Hub</h1>
     <p>인터넷과 GitHub의 최고 성능 AI 코딩 에이전트 스킬, 커맨드, 페르소나를 한 곳에서 탐색하고 원클릭으로 설치하세요.</p>
-    <div>
+    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
         <button @onclick="OpenGithubModal" class="btn-apple" style="border-color: var(--apple-blue-border); color: var(--apple-blue); font-size: 13px; padding: 7px 20px; box-shadow: 0 4px 14px rgba(0, 113, 227, 0.15);">
             🌐 찾으시는 스킬이 없나요? GitHub에서 실시간 검색 &amp; DB 추가하기 →
         </button>
+    </div>
+
+    <!-- 🔥 실시간 인기 GitHub 테마 검색 추천 칩 바 -->
+    <div class="trending-themes-wrap">
+        <span class="trending-label">🔥 인기 테마:</span>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("reverse-engineer-anything")'>🔍 REA 역공학 (315k★)</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("superpowers")'>⚡ Superpowers (290k★)</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("browser-use web automation")'>🌐 Browser-Use (60k★)</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("claude-code terminal agent")'>🤖 Claude Code</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("mcp server model context protocol")'>🔌 MCP 서버</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("deepseek r1 reasoning")'>🧠 DeepSeek R1</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("openhands autonomous coder")'>💻 OpenHands</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("rag vector embedding semantic search")'>🎯 RAG &amp; 시맨틱 검색</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("kubernetes devops cloud")'>☁️ 쿠버네티스</button>
+        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("ui ux frontend design system")'>🎨 UI/UX 디자인</button>
     </div>
 </section>
 
@@ -277,14 +292,18 @@
                 </div>
 
                 <div class="github-pill-suggestions">
-                    <span style="font-size: 11px; color: var(--text-muted); align-self: center;">추천 검색어:</span>
+                    <span style="font-size: 11px; color: var(--text-muted); align-self: center;">🔥 인기 GitHub 테마:</span>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("REA: Reverse Engineer Anything")'>#REA (315k★)</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("morluto/rea")'>#morluto/rea</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("obra/superpowers")'>#superpowers (290k★)</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("browser-use")'>#browser-use (60k★)</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude-code")'>#claude-code</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("modelcontextprotocol servers")'>#mcp-servers</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("deepseek-ai")'>#deepseek</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("OpenHands")'>#openhands</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude-context")'>#claude-context</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("kubernetes skills")'>#kubernetes</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("drawio-skill")'>#drawio</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("langchain agent skills")'>#langchain</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("mcp server")'>#mcp</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("opencode skills")'>#opencode</button>
                 </div>
 
                 @if (_isSearchingGithub)
@@ -538,6 +557,12 @@
             _isAiWorking = false;
             StateHasChanged();
         }
+    }
+
+    private async Task ExecuteQuickSearch(string keyword)
+    {
+        _searchQuery = keyword;
+        await TriggerSearch();
     }
 
     [JSInvokable]
