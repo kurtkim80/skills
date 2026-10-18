@@ -519,7 +519,7 @@
             if (qVec != null && qVec.Length == 384)
             {
                 var simdSw = System.Diagnostics.Stopwatch.StartNew();
-                _displayItems = await SearchService.SearchAsync(qVec, _selectedCategory, limit: 80);
+                _displayItems = await SearchService.SearchAsync(qVec, _searchQuery, _selectedCategory, limit: 80);
                 simdSw.Stop();
 
                 _statusText = $"⚡ {SearchService.AllItems.Count:N0}개 에셋 C# SIMD 시맨틱 비교 완료 (C# SIMD: {simdSw.Elapsed.TotalMilliseconds:F1}ms, 임베딩: {sw.ElapsedMilliseconds}ms)";

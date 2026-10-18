@@ -84,72 +84,101 @@ def main():
         except Exception:
             pass
 
-    items = []
-    idx = 0
+    # 커스텀 RAG 스킬 추가 확인 (build_embeddings.py와 일치 보장)
+    custom_rag = BASE_DIR / "rag-search-optimizer" / "SKILL.md"
+    if custom_rag.exists() and "rag-search-optimizer" not in assets_data.get("skills", {}):
+        assets_data.setdefault("skills", {})["rag-search-optimizer"] = {
+            "name": "rag-search-optimizer",
+            "type": "skill",
+            "description": "RAG(Retrieval-Augmented Generation) 시스템의 검색 정확도 향상, 하이브리드 검색, 리랭킹, 청킹 전략, Contextual Retrieval 등 검색 파이프라인 최적화",
+            "description_ko": "RAG(Retrieval-Augmented Generation) 시스템의 검색 정확도 향상, 하이브리드 검색, 리랭킹, 청킹 전략, Contextual Retrieval 등 검색 파이프라인 최적화",
+            "source_repo": "local/custom",
+            "source_name": "local-custom",
+            "path": "rag-search-optimizer"
+        }
+
+    # embeddings_meta.json의 ID 순서를 기준으로 정렬하여 벡터 DB와의 1:1 오프셋 일치 보장
+    ordered_ids = []
+    if meta_file.exists():
+        try:
+            with open(meta_file, "r", encoding="utf-8") as mf:
+                ordered_ids = json.load(mf).get("ids", [])
+        except Exception:
+            pass
+
+    asset_map = {}
     for section in ["skills", "commands", "agents"]:
         for key, item in assets_data.get(section, {}).items():
-            name = item.get("name", key)
-            item_type = item.get("type", section[:-1])
-            desc_en = item.get("description", "")
-            desc_ko = item.get("description_ko") or trans_cache.get(desc_en) or desc_en
-            cat_id, cat_label = classify_category(name, desc_ko, item_type)
+            asset_map[key] = (section, item)
 
-            candidates = []
-            if item_type == "skill":
-                candidates += [
-                    f"collected_assets/skills/{key}/SKILL.md",
-                    f"collected_assets/skills/{name}/SKILL.md",
-                    f"collected_assets/skills/{key}",
-                    f"collected_skills/{key}/SKILL.md",
-                    f"{key}/SKILL.md",
-                ]
-            elif item_type == "command":
-                candidates += [
-                    f"collected_assets/commands/{key}.md",
-                    f"collected_assets/commands/{name}.md",
-                    f"collected_assets/commands/{key}.yaml",
-                    f"collected_assets/commands/{name}.yaml",
-                ]
-            else:
-                candidates += [
-                    f"collected_assets/agents/{key}.md",
-                    f"collected_assets/agents/{name}.md",
-                    f"collected_assets/agents/{key}.yaml",
-                    f"collected_assets/agents/{name}.yaml",
-                    f"collected_assets/agents/{key}.json",
-                    f"collected_assets/agents/{name}.json",
-                ]
+    target_keys = ordered_ids if (ordered_ids and len(ordered_ids) == len(asset_map)) else list(asset_map.keys())
 
-            doc_path = ""
-            for cand in candidates:
-                cand_path = BASE_DIR / cand
-                if cand_path.is_file():
-                    doc_path = cand
-                    break
+    items = []
+    for idx, key in enumerate(target_keys):
+        if key not in asset_map:
+            continue
+        section, item = asset_map[key]
+        name = item.get("name", key)
+        item_type = item.get("type", section[:-1])
+        desc_en = item.get("description", "")
+        desc_ko = item.get("description_ko") or trans_cache.get(desc_en) or desc_en
+        cat_id, cat_label = classify_category(name, desc_ko, item_type)
 
-            if item_type == "skill":
-                install_cmd = f"mkdir -p ~/.config/opencode/skills/{name} && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/skills/{name}/SKILL.md -o ~/.config/opencode/skills/{name}/SKILL.md"
-            elif item_type == "command":
-                ext = ".yaml" if doc_path.endswith(".yaml") else ".md"
-                install_cmd = f"mkdir -p ~/.config/opencode/commands && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/commands/{name}{ext} -o ~/.config/opencode/commands/{name}{ext}"
-            else:
-                ext = ".yaml" if doc_path.endswith(".yaml") else (".json" if doc_path.endswith(".json") else ".md")
-                install_cmd = f"mkdir -p ~/.config/opencode/agents && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/agents/{name}{ext} -o ~/.config/opencode/agents/{name}{ext}"
+        candidates = []
+        if item_type == "skill":
+            candidates += [
+                f"collected_assets/skills/{key}/SKILL.md",
+                f"collected_assets/skills/{name}/SKILL.md",
+                f"collected_assets/skills/{key}",
+                f"collected_skills/{key}/SKILL.md",
+                f"{key}/SKILL.md",
+            ]
+        elif item_type == "command":
+            candidates += [
+                f"collected_assets/commands/{key}.md",
+                f"collected_assets/commands/{name}.md",
+                f"collected_assets/commands/{key}.yaml",
+                f"collected_assets/commands/{name}.yaml",
+            ]
+        else:
+            candidates += [
+                f"collected_assets/agents/{key}.md",
+                f"collected_assets/agents/{name}.md",
+                f"collected_assets/agents/{key}.yaml",
+                f"collected_assets/agents/{name}.yaml",
+                f"collected_assets/agents/{key}.json",
+                f"collected_assets/agents/{name}.json",
+            ]
 
-            items.append({
-                "idx": idx,
-                "id": key,
-                "name": name,
-                "type": item_type,
-                "catId": cat_id,
-                "catLabel": cat_label,
-                "desc": desc_ko,
-                "source": item.get("source_repo", item.get("source_name", "community")),
-                "repoUrl": item.get("source_url", ""),
-                "install": install_cmd,
-                "doc": doc_path,
-            })
-            idx += 1
+        doc_path = ""
+        for cand in candidates:
+            cand_path = BASE_DIR / cand
+            if cand_path.is_file():
+                doc_path = cand
+                break
+
+        if item_type == "skill":
+            install_cmd = f"mkdir -p ~/.config/opencode/skills/{name} && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/skills/{name}/SKILL.md -o ~/.config/opencode/skills/{name}/SKILL.md"
+        elif item_type == "command":
+            ext = ".yaml" if doc_path.endswith(".yaml") else ".md"
+            install_cmd = f"mkdir -p ~/.config/opencode/commands && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/commands/{name}{ext} -o ~/.config/opencode/commands/{name}{ext}"
+        else:
+            ext = ".yaml" if doc_path.endswith(".yaml") else (".json" if doc_path.endswith(".json") else ".md")
+            install_cmd = f"mkdir -p ~/.config/opencode/agents && curl -fsSL https://raw.githubusercontent.com/kurtkim80/skills/main/collected_assets/agents/{name}{ext} -o ~/.config/opencode/agents/{name}{ext}"
+
+        items.append({
+            "idx": idx,
+            "id": key,
+            "name": name,
+            "type": item_type,
+            "catId": cat_id,
+            "catLabel": cat_label,
+            "desc": desc_ko,
+            "source": item.get("source_repo", item.get("source_name", "community")),
+            "repoUrl": item.get("source_url", ""),
+            "install": install_cmd,
+            "doc": doc_path,
+        })
 
     skills_json_path = BASE_DIR / "data" / "skills.json"
     skills_json_path.parent.mkdir(parents=True, exist_ok=True)

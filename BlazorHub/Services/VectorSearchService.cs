@@ -215,9 +215,9 @@ public class VectorSearchService
     }
 
     /// <summary>
-    /// C# SIMD 가속 코사인 유사도 검색
+    /// C# SIMD 가속 하이브리드 검색 (AI 시맨틱 코사인 유사도 + 키워드/이름 매칭 가산점)
     /// </summary>
-    public async Task<List<SkillItem>> SearchAsync(float[] queryVector, string catId = "all", int limit = 80)
+    public async Task<List<SkillItem>> SearchAsync(float[] queryVector, string rawQuery = "", string catId = "all", int limit = 80)
     {
         if (!_isVectorsLoaded)
         {
@@ -230,13 +230,17 @@ public class VectorSearchService
         }
 
         ReadOnlySpan<float> querySpan = queryVector;
+        string cleanRaw = (rawQuery ?? "").Trim().ToLowerInvariant();
+        var rawTokens = cleanRaw.Split(new[] { ' ', ':', '-', '_', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         for (int i = 0; i < _items.Count; i++)
         {
             var item = _items[i];
+            float sim = 0f;
+
             if (item.Embedding != null && item.Embedding.Length == Dimension)
             {
-                item.AiScore = TensorPrimitives.CosineSimilarity(querySpan, item.Embedding);
+                sim = TensorPrimitives.CosineSimilarity(querySpan, item.Embedding);
             }
             else
             {
@@ -244,13 +248,48 @@ public class VectorSearchService
                 if (offset + Dimension <= _embeddings.Length)
                 {
                     ReadOnlySpan<float> candidateSpan = _embeddings.AsSpan(offset, Dimension);
-                    item.AiScore = TensorPrimitives.CosineSimilarity(querySpan, candidateSpan);
+                    sim = TensorPrimitives.CosineSimilarity(querySpan, candidateSpan);
                 }
                 else if (item.AiScore <= 0f)
                 {
-                    item.AiScore = 0.5f;
+                    sim = 0.5f;
                 }
             }
+
+            // 하이브리드 키워드 부스트: 스킬 이름, ID, 설명에 키워드가 직접 매칭되면 가산점 부여
+            float boost = 0f;
+            if (!string.IsNullOrEmpty(cleanRaw))
+            {
+                string nameLower = item.Name.ToLowerInvariant();
+                string idLower = item.Id.ToLowerInvariant();
+                string descLower = item.Desc.ToLowerInvariant();
+
+                if (nameLower == cleanRaw || idLower == cleanRaw)
+                {
+                    boost += 1.0f; // 완전 일치 시 최우선 노출
+                }
+                else if (nameLower.Contains(cleanRaw) || idLower.Contains(cleanRaw))
+                {
+                    boost += 0.5f; // 이름/ID에 검색어 포함 시 강력 추천
+                }
+                else
+                {
+                    int matched = 0;
+                    foreach (var tok in rawTokens)
+                    {
+                        if (tok.Length >= 2 && (nameLower.Contains(tok) || idLower.Contains(tok) || descLower.Contains(tok)))
+                        {
+                            matched++;
+                        }
+                    }
+                    if (rawTokens.Length > 0 && matched > 0)
+                    {
+                        boost += 0.35f * ((float)matched / rawTokens.Length);
+                    }
+                }
+            }
+
+            item.AiScore = sim + boost;
         }
 
         return _items
