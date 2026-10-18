@@ -1,40 +1,45 @@
 ---
 name: code-review-excellence
-description: Master effective code review practices to provide constructive feedback, catch bugs early, and foster knowledge sharing while maintaining team morale. Use when reviewing pull requests, establishing review standards, or mentoring developers.
+description: Review code changes for correctness, regressions, security, maintainability, performance, tests, and operational impact, or help evaluate review feedback. Use for pull requests, diffs, patches, or review standards; prioritize actionable findings over summaries.
 ---
 
 # Code Review Excellence
 
-Transform code reviews from gatekeeping to knowledge sharing through constructive feedback, systematic analysis, and collaborative improvement.
+Review the actual change in its repository context and report issues that could materially affect users, operators, security, or future maintenance.
 
-## Use this skill when
+## Establish Scope
 
-- Reviewing pull requests and code changes
-- Establishing code review standards
-- Mentoring developers through review feedback
-- Auditing for correctness, security, or performance
+Inspect the diff, surrounding code, tests, call sites, configuration, and project guidance needed to understand behavior. Identify the stated goal and avoid redesigning unrelated areas.
 
-## Do not use this skill when
+## Review Order
 
-- There are no code changes to review
-- The task is a design-only discussion without code
-- You need to implement fixes instead of reviewing
+1. **Correctness:** logic, invariants, edge cases, state transitions, concurrency, and error handling.
+2. **Security and privacy:** authorization, validation, injection, secrets, data exposure, trust boundaries, and unsafe defaults.
+3. **Regression risk:** compatibility, migration, callers, persisted data, APIs, and platform behavior.
+4. **Reliability and operations:** timeouts, retries, idempotency, cleanup, observability, rollout, and recovery.
+5. **Performance:** only when the change creates a plausible or measured impact.
+6. **Maintainability:** clarity, duplication, contracts, coupling, and fit with established conventions.
+7. **Tests:** whether changed behavior and important failure paths are meaningfully protected.
 
-## Instructions
+Do not report speculative issues without a concrete failure mode. Do not bury important findings under style preferences already handled by tooling.
 
-- Read context, requirements, and test signals first.
-- Review for correctness, security, performance, and maintainability.
-- Provide actionable feedback with severity and rationale.
-- Ask clarifying questions when intent is unclear.
-- If detailed checklists are required, open `resources/implementation-playbook.md`.
+## Finding Format
 
-## Output Format
+For each issue include:
 
-- High-level summary of findings
-- Issues grouped by severity (blocking, important, minor)
-- Suggestions and questions
-- Test and coverage notes
+- severity proportional to impact and likelihood;
+- precise file and location;
+- the triggering condition;
+- observed or likely consequence;
+- why existing safeguards do not prevent it;
+- a focused remediation direction.
 
-## Resources
+Keep one issue per finding. If there are no material findings, say so and note meaningful verification gaps rather than inventing concerns.
 
-- `resources/implementation-playbook.md` for detailed review patterns and templates.
+## Evaluating Feedback
+
+When reviewing comments received from another reviewer, verify each claim against code and tests. Accept sound feedback, challenge incorrect assumptions with evidence, and ask for clarification when the desired behavior is ambiguous. Do not agree performatively or dismiss feedback without investigation.
+
+## Verification
+
+Run proportionate read-only checks when allowed and relevant. Distinguish checks actually performed from recommended checks. A clean build or lint run does not prove behavioral correctness.

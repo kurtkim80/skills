@@ -14432,6 +14432,14 @@
       "path": "collected_assets/skills/dotnet-tooling",
       "description_ko": ".NET SDK 설치(dotnet-install, 워크로드), 프로젝트 설정(.slnx, Directory.Build.props, CPM), MSBuild 작성, 빌드 최적화, 성능(Span, ArrayPool, stackalloc), 프로파일링(dotnet-counters, dotnet-trace), 기본 AOT/트리밍, GC 튜닝, CLI 앱(System.CommandLine, Spectre.Console, Terminal.Gui), ILSpy를 관리합니다. 디컴파일, VS Code 디버그 구성(launch.json, coreclr, 원격), C# LSP(csharp-ls, OmniSharp) 및 버전 감지/업그레이드. 34개 주제 영역에 걸쳐 있습니다. UI 구현이나 API 보안 설계에는 사용하지 마세요."
     },
+    "dotnet-library-docs": {
+      "name": "dotnet-library-docs",
+      "type": "skill",
+      "description": "Fetches current, version-accurate documentation and code examples for NuGet packages and third-party libraries (Polly, MediatR, Serilog, Npgsql, MassTransit, etc.) through the Context7 HTTP API with curl - one library search, then one topic fetch - replacing the Context7 MCP server. Do not use for official .NET/ASP.NET/Azure reference (Microsoft Learn MCP) or for writing project documentation.",
+      "source_repo": "https://github.com/novotnyllc/dotnet-artisan.git",
+      "source_name": "novotnyllc/dotnet-artisan",
+      "path": "collected_assets/skills/dotnet-library-docs"
+    },
     "dotnet-devops": {
       "name": "dotnet-devops",
       "type": "skill",
@@ -16748,6 +16756,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/sorted",
       "description_ko": "프리랜서 송장 발행, 비용 추적 및 독일 세금 제출(VAT, ZM, 연간 신고서)을 위해 getSorted.de(Sorted)를 자동화합니다. Chrome 베타 + 에이전트 브라우저를 통해 실제 브라우저 자동화를 사용합니다. \"송장 생성\", \"송장 정렬\", \"송장 다운로드\", \"VAT 제출\", \"세금 보고서\", \"비용 정렬\", \"/정렬\" 또는 모든 getSorted.de 상호 작용을 트리거합니다."
+    },
+    "firecrawl-api": {
+      "name": "firecrawl-api",
+      "type": "skill",
+      "description": "Standalone Python script for the Firecrawl API (search, scrape, extract, map, plus Alexandria structured-data tools: discover, contract, run) that reads FIRECRAWL_API_KEY from SOPS with env fallback. Use when the official firecrawl CLI is unavailable or broken, or for scripted pipelines that need a plain Python dependency-light client. For normal web work prefer the official `firecrawl` CLI skill. Never use beautifulsoup.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/firecrawl-api"
     },
     "cull-release-recover": {
       "name": "cull-release-recover",
@@ -20392,6 +20408,14 @@
       "path": "collected_assets/skills/frontend-observability",
       "description_ko": "모든 React 또는 React Native 앱을 위한 이식 가능하고 프레임워크에 구애받지 않는 현장 관찰 시스템입니다."
     },
+    "outreachgenie-list-audit": {
+      "name": "outreachgenie-list-audit",
+      "type": "skill",
+      "description": "Audit saved OutreachGenie prospect lists against an outreach flow for missing template values, text limits and incomplete collection, using read-only MCP snapshots and local reports.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/outreachgenie-list-audit"
+    },
     "admin-access-register": {
       "name": "admin-access-register",
       "type": "skill",
@@ -21233,6 +21257,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/robius-app-architecture",
       "description_ko": "|"
+    },
+    "krexa": {
+      "name": "krexa",
+      "type": "skill",
+      "description": "Turn a trading idea, post or video into fixed rules, backtest and paper-trade them, and request a user-approved live agent through Krexa's MCP server. Cannot move funds.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/krexa"
     },
     "wiki-builder": {
       "name": "wiki-builder",
@@ -25199,6 +25231,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/aws-ecs-fargate",
       "description_ko": "ECS 및 Fargate에 컨테이너를 배포합니다. 작업 정의, 서비스 구성,"
+    },
+    "pangolinfo-amazon-data-research": {
+      "name": "pangolinfo-amazon-data-research",
+      "type": "skill",
+      "description": "Plan and run read-only Amazon product, review, category, seller, and market research through Pangolinfo's documented MCP bridge.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pangolinfo-amazon-data-research"
     },
     "skyvern-browser-automation": {
       "name": "skyvern-browser-automation",
@@ -30271,6 +30311,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/makepad-reference"
     },
+    "aident-loadout": {
+      "name": "aident-loadout",
+      "type": "skill",
+      "description": "Run multi-step work across apps the user connected in Aident Loadout: live action schemas, connection checks, cost preflight, and approval before side effects.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/aident-loadout"
+    },
     "formik-patterns": {
       "name": "formik-patterns",
       "type": "skill",
@@ -33478,6 +33526,14 @@
       "path": "collected_assets/skills/hugging-face-datasets",
       "description_ko": "Hugging Face Hub에서 데이터세트를 생성하고 관리하세요. 저장소 초기화, 구성/시스템 프롬프트 정의, 스트리밍 행 업데이트, SQL 기반 데이터 세트 쿼리/변환을 지원합니다. 포괄적인 데이터 세트 워크플로를 위해 HF MCP 서버와 함께 작동하도록 설계되었습니다."
     },
+    "curlshot": {
+      "name": "curlshot",
+      "type": "skill",
+      "description": "Capture web page screenshots, PDFs and scrolling videos, or render HTML/Markdown to images, with the hosted CurlShot API.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/curlshot"
+    },
     "documentation-and-adrs": {
       "name": "documentation-and-adrs",
       "type": "skill",
@@ -34097,6 +34153,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/muapi-media",
       "description_ko": "키, 폴링 및 출력 다운로드를 보호하면서 MuAPI의 스키마 기반 비동기 미디어 API를 사용하여 이미지와 비디오를 생성합니다."
+    },
+    "solidping": {
+      "name": "solidping",
+      "type": "skill",
+      "description": "Run SolidPing uptime monitoring through its hosted MCP server: list and diagnose checks, read results and incidents, create checks across 40+ types, and manage status pages.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/solidping"
     },
     "check-identity-pack": {
       "name": "check-identity-pack",
@@ -39526,6 +39590,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/apify-reddit-scraper"
+    },
+    "project-memory-log": {
+      "name": "project-memory-log",
+      "type": "skill",
+      "description": "Maintain one operation log and one deduplicated document catalog for long-running projects. Use when resuming project work or tracing durable document changes across sessions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/project-memory-log"
     },
     "emil-design-eng": {
       "name": "emil-design-eng",

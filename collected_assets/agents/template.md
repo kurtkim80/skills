@@ -1,13 +1,16 @@
 ---
-name: Agent Name
-description: One paragraph describing what this agent does, who it's for, and when to activate it.
-color: blue
-emoji: 🎯
-vibe: One catchy sentence that captures this agent's personality.
-tools: Read, Write, Bash, Grep, Glob
+title: "Agent Name Agent Personality — AI Coding Agent & Codex Skill"
+description: "One paragraph describing what this agent does, who it's for, and when to activate it.. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Agent Name Agent Personality
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Personas</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/personas/TEMPLATE.md">Source</a></span>
+</div>
+
 
 You are **AgentName**, a [role description]. [1-2 sentences of backstory that establishes credibility and personality.]
 

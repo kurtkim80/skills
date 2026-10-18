@@ -7,7 +7,7 @@ description: Build Retrieval-Augmented Generation (RAG) systems for LLM applicat
 
 Master Retrieval-Augmented Generation (RAG) to build LLM applications that provide accurate, grounded responses using external knowledge sources.
 
-## Use this skill when
+## When to Use This Skill
 
 - Building Q&A systems over proprietary documents
 - Creating chatbots with current, factual information
@@ -17,30 +17,14 @@ Master Retrieval-Augmented Generation (RAG) to build LLM applications that provi
 - Building documentation assistants
 - Creating research tools with source citation
 
-## Do not use this skill when
-
-- You only need purely generative writing without retrieval
-- The dataset is too small to justify embeddings
-- You cannot store or process the source data safely
-
-## Instructions
-
-1. Define the corpus, update cadence, and evaluation targets.
-2. Choose embedding models and vector store based on scale.
-3. Build ingestion, chunking, and retrieval with reranking.
-4. Evaluate with grounded QA metrics and monitor drift.
-
-## Safety
-
-- Redact sensitive data and enforce access controls.
-- Avoid exposing source documents in responses when restricted.
-
 ## Core Components
 
 ### 1. Vector Databases
+
 **Purpose**: Store and retrieve document embeddings efficiently
 
 **Options:**
+
 - **Pinecone**: Managed, scalable, fast queries
 - **Weaviate**: Open-source, hybrid search
 - **Milvus**: High performance, on-premise
@@ -49,17 +33,21 @@ Master Retrieval-Augmented Generation (RAG) to build LLM applications that provi
 - **FAISS**: Meta's library, local deployment
 
 ### 2. Embeddings
+
 **Purpose**: Convert text to numerical vectors for similarity search
 
 **Models:**
+
 - **text-embedding-ada-002** (OpenAI): General purpose, 1536 dims
 - **all-MiniLM-L6-v2** (Sentence Transformers): Fast, lightweight
 - **e5-large-v2**: High quality, multilingual
 - **Instructor**: Task-specific instructions
-- **bge-large-en-v1.5**: SOTA performance
+- **bge-large-en-v1.5**: Candidate model; benchmark it against current alternatives on the target corpus
 
 ### 3. Retrieval Strategies
+
 **Approaches:**
+
 - **Dense Retrieval**: Semantic similarity via embeddings
 - **Sparse Retrieval**: Keyword matching (BM25, TF-IDF)
 - **Hybrid Search**: Combine dense + sparse
@@ -67,9 +55,11 @@ Master Retrieval-Augmented Generation (RAG) to build LLM applications that provi
 - **HyDE**: Generate hypothetical documents
 
 ### 4. Reranking
+
 **Purpose**: Improve retrieval quality by reordering results
 
 **Methods:**
+
 - **Cross-Encoders**: BERT-based reranking
 - **Cohere Rerank**: API-based reranking
 - **Maximal Marginal Relevance (MMR)**: Diversity + relevance
@@ -85,9 +75,11 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
+
 # 1. Load documents
 loader = DirectoryLoader('./docs', glob="**/*.txt")
 documents = loader.load()
+
 
 # 2. Split into chunks
 text_splitter = RecursiveCharacterTextSplitter(
@@ -97,9 +89,11 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 chunks = text_splitter.split_documents(documents)
 
+
 # 3. Create embeddings and vector store
 embeddings = OpenAIEmbeddings()
 vectorstore = Chroma.from_documents(chunks, embeddings)
+
 
 # 4. Create retrieval chain
 qa_chain = RetrievalQA.from_chain_type(
@@ -108,6 +102,7 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=vectorstore.as_retriever(search_kwargs={"k": 4}),
     return_source_documents=True
 )
+
 
 # 5. Query
 result = qa_chain({"query": "What are the main features?"})
@@ -118,15 +113,19 @@ print(result['source_documents'])
 ## Advanced RAG Patterns
 
 ### Pattern 1: Hybrid Search
+
 ```python
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
+
 
 # Sparse retriever (BM25)
 bm25_retriever = BM25Retriever.from_documents(chunks)
 bm25_retriever.k = 5
 
+
 # Dense retriever (embeddings)
 embedding_retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
+
 
 # Combine with weights
 ensemble_retriever = EnsembleRetriever(
@@ -136,8 +135,10 @@ ensemble_retriever = EnsembleRetriever(
 ```
 
 ### Pattern 2: Multi-Query Retrieval
+
 ```python
 from langchain.retrievers.multi_query import MultiQueryRetriever
+
 
 # Generate multiple query perspectives
 retriever = MultiQueryRetriever.from_llm(
@@ -145,37 +146,46 @@ retriever = MultiQueryRetriever.from_llm(
     llm=OpenAI()
 )
 
+
 # Single query → multiple variations → combined results
 results = retriever.get_relevant_documents("What is the main topic?")
 ```
 
 ### Pattern 3: Contextual Compression
+
 ```python
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
 
+
 compressor = LLMChainExtractor.from_llm(llm)
+
 
 compression_retriever = ContextualCompressionRetriever(
     base_compressor=compressor,
     base_retriever=vectorstore.as_retriever()
 )
 
+
 # Returns only relevant parts of documents
 compressed_docs = compression_retriever.get_relevant_documents("query")
 ```
 
 ### Pattern 4: Parent Document Retriever
+
 ```python
 from langchain.retrievers import ParentDocumentRetriever
 from langchain.storage import InMemoryStore
 
+
 # Store for parent documents
 store = InMemoryStore()
+
 
 # Small chunks for retrieval, large chunks for context
 child_splitter = RecursiveCharacterTextSplitter(chunk_size=400)
 parent_splitter = RecursiveCharacterTextSplitter(chunk_size=2000)
+
 
 retriever = ParentDocumentRetriever(
     vectorstore=vectorstore,
@@ -188,8 +198,10 @@ retriever = ParentDocumentRetriever(
 ## Document Chunking Strategies
 
 ### Recursive Character Text Splitter
+
 ```python
 from langchain.text_splitters import RecursiveCharacterTextSplitter
+
 
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
@@ -200,8 +212,10 @@ splitter = RecursiveCharacterTextSplitter(
 ```
 
 ### Token-Based Splitting
+
 ```python
 from langchain.text_splitters import TokenTextSplitter
+
 
 splitter = TokenTextSplitter(
     chunk_size=512,
@@ -210,8 +224,10 @@ splitter = TokenTextSplitter(
 ```
 
 ### Semantic Chunking
+
 ```python
 from langchain.text_splitters import SemanticChunker
+
 
 splitter = SemanticChunker(
     embeddings=OpenAIEmbeddings(),
@@ -220,8 +236,10 @@ splitter = SemanticChunker(
 ```
 
 ### Markdown Header Splitter
+
 ```python
 from langchain.text_splitters import MarkdownHeaderTextSplitter
+
 
 headers_to_split_on = [
     ("#", "Header 1"),
@@ -229,36 +247,46 @@ headers_to_split_on = [
     ("###", "Header 3"),
 ]
 
+
 splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
 ```
 
 ## Vector Store Configurations
 
 ### Pinecone
+
 ```python
 import pinecone
 from langchain.vectorstores import Pinecone
 
+
 pinecone.init(api_key="your-api-key", environment="us-west1-gcp")
 
+
 index = pinecone.Index("your-index-name")
+
 
 vectorstore = Pinecone(index, embeddings.embed_query, "text")
 ```
 
 ### Weaviate
+
 ```python
 import weaviate
 from langchain.vectorstores import Weaviate
 
+
 client = weaviate.Client("http://localhost:8080")
+
 
 vectorstore = Weaviate(client, "Document", "content", embeddings)
 ```
 
 ### Chroma (Local)
+
 ```python
 from langchain.vectorstores import Chroma
+
 
 vectorstore = Chroma(
     collection_name="my_collection",
@@ -270,6 +298,7 @@ vectorstore = Chroma(
 ## Retrieval Optimization
 
 ### 1. Metadata Filtering
+
 ```python
 # Add metadata during indexing
 chunks_with_metadata = []
@@ -281,6 +310,7 @@ for i, chunk in enumerate(chunks):
     }
     chunks_with_metadata.append(chunk)
 
+
 # Filter during retrieval
 results = vectorstore.similarity_search(
     "query",
@@ -290,6 +320,7 @@ results = vectorstore.similarity_search(
 ```
 
 ### 2. Maximal Marginal Relevance
+
 ```python
 # Balance relevance with diversity
 results = vectorstore.max_marginal_relevance_search(
@@ -301,17 +332,22 @@ results = vectorstore.max_marginal_relevance_search(
 ```
 
 ### 3. Reranking with Cross-Encoder
+
 ```python
 from sentence_transformers import CrossEncoder
 
+
 reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+
 
 # Get initial results
 candidates = vectorstore.similarity_search("query", k=20)
 
+
 # Rerank
 pairs = [[query, doc.page_content] for doc in candidates]
 scores = reranker.predict(pairs)
+
 
 # Sort by score and take top k
 reranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)[:5]
@@ -320,37 +356,49 @@ reranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)[:5]
 ## Prompt Engineering for RAG
 
 ### Contextual Prompt
+
 ```python
 prompt_template = """Use the following context to answer the question. If you cannot answer based on the context, say "I don't have enough information."
+
 
 Context:
 {context}
 
+
 Question: {question}
+
 
 Answer:"""
 ```
 
 ### With Citations
+
 ```python
 prompt_template = """Answer the question based on the context below. Include citations using [1], [2], etc.
+
 
 Context:
 {context}
 
+
 Question: {question}
+
 
 Answer (with citations):"""
 ```
 
 ### With Confidence
+
 ```python
 prompt_template = """Answer the question using the context. Provide a confidence score (0-100%) for your answer.
+
 
 Context:
 {context}
 
+
 Question: {question}
+
 
 Answer:
 Confidence:"""
@@ -366,12 +414,15 @@ def evaluate_rag_system(qa_chain, test_cases):
         'groundedness': []
     }
 
+
     for test in test_cases:
         result = qa_chain({"query": test['question']})
+
 
         # Check if answer matches expected
         accuracy = calculate_accuracy(result['result'], test['expected'])
         metrics['accuracy'].append(accuracy)
+
 
         # Check if relevant docs were retrieved
         retrieval_quality = evaluate_retrieved_docs(
@@ -380,6 +431,7 @@ def evaluate_rag_system(qa_chain, test_cases):
         )
         metrics['retrieval_quality'].append(retrieval_quality)
 
+
         # Check if answer is grounded in context
         groundedness = check_groundedness(
             result['result'],
@@ -387,19 +439,9 @@ def evaluate_rag_system(qa_chain, test_cases):
         )
         metrics['groundedness'].append(groundedness)
 
+
     return {k: sum(v)/len(v) for k, v in metrics.items()}
 ```
-
-## Resources
-
-- **references/vector-databases.md**: Detailed comparison of vector DBs
-- **references/embeddings.md**: Embedding model selection guide
-- **references/retrieval-strategies.md**: Advanced retrieval techniques
-- **references/reranking.md**: Reranking methods and when to use them
-- **references/context-window.md**: Managing context limits
-- **assets/vector-store-config.yaml**: Configuration templates
-- **assets/retriever-pipeline.py**: Complete RAG pipeline
-- **assets/embedding-models.md**: Model comparison and benchmarks
 
 ## Best Practices
 

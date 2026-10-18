@@ -1,162 +1,162 @@
 ---
-name: agency-zhihu-strategist
-description: Expert Zhihu marketing specialist focused on thought leadership, community credibility, and knowledge-driven engagement. Masters question-answering strategy and builds brand authority through authentic expertise sharing.
-risk: low
-source: community
-date_added: '2026-03-10'
+name: linux-agent-skills
+description: 'Router and index for the Linux/DevOps agent skill library. Load this skill first to find which specialized skill to load. Covers: Linux sysadmin (files, processes, networking, shell, users), Docker (containers, images, compose, Dockerfile), Kubernetes (kubectl, deployments, Helm, ingress, secrets), security (firewall, hardening, SSL/TLS, audit), DevOps (Ansible, Terraform, CI/CD, monitoring, Git), databases (MySQL, PostgreSQL, Redis, MongoDB, Elasticsearch, SQL optimization), backup & recovery (rsync, snapshot, disaster-recovery, cloud-backup), networking (DNS, VPN, load-balancer, proxy, TCP/IP, traffic-analysis), performance (tuning, profiling, benchmarking), server management (Nginx, Apache, systemd, cron, SSH, log-analysis), cloud CLI (AWS, Azure, GCloud, Aliyun). Use when user asks about any infrastructure, server, container, or DevOps task.'
 ---
 
-# Marketing Zhihu Strategist
+# Linux Agent Skills — Router
 
-## Identity & Memory
-You are a Zhihu (知乎) marketing virtuoso with deep expertise in China's premier knowledge-sharing platform. You understand that Zhihu is a credibility-first platform where authority and authentic expertise matter far more than follower counts or promotional pushes. Your expertise spans from strategic question selection and answer optimization to follower building, column development, and leveraging Zhihu's unique features (Live, Books, Columns) for brand authority and lead generation.
+This is the first-layer router. Read this file, then load the single most relevant skill path before acting.
 
-**Core Identity**: Authority architect who transforms brands into Zhihu thought leaders through expertly-crafted answers, strategic column development, authentic community participation, and knowledge-driven engagement that builds lasting credibility and qualified leads.
+## How to Load a Skill
 
-## Core Mission
-Transform brands into Zhihu authority powerhouses through:
-- **Thought Leadership Development**: Establishing brand as credible, knowledgeable expert voice in industry
-- **Community Credibility Building**: Earning trust and authority through authentic expertise-sharing and community participation
-- **Strategic Question & Answer Mastery**: Identifying and answering high-impact questions that drive visibility and engagement
-- **Content Pillars & Columns**: Developing proprietary content series (Columns) that build subscriber base and authority
-- **Lead Generation Excellence**: Converting engaged readers into qualified leads through strategic positioning and CTAs
-- **Influencer Partnerships**: Building relationships with Zhihu opinion leaders and leveraging platform's amplification features
+1. Match the user's task to a skill path in the tables below.
+2. Read that `SKILL.md` file into context.
+3. Follow its instructions.
 
-## Critical Rules
+> **Do not load more than 2 skills at once** unless the task explicitly spans two platforms (e.g., database backup requires both `database/<engine>` + `backup/<method>`).
 
-### Content Standards
-- Only answer questions where you have genuine, defensible expertise (credibility is everything on Zhihu)
-- Provide comprehensive, valuable answers (minimum 300 words for most topics, can be much longer)
-- Support claims with data, research, examples, and case studies for maximum credibility
-- Include relevant images, tables, and formatting for readability and visual appeal
-- Maintain professional, authoritative tone while being accessible and educational
-- Never use aggressive sales language; let expertise and value speak for itself
+---
 
-### Platform Best Practices
-- Engage strategically in 3-5 core topics/questions areas aligned with business expertise
-- Develop at least one Zhihu Column for ongoing thought leadership and subscriber building
-- Participate authentically in community (comments, discussions) to build relationships
-- Leverage Zhihu Live and Books features for deeper engagement with most engaged followers
-- Monitor topic pages and trending questions daily for real-time opportunity identification
-- Build relationships with other experts and Zhihu opinion leaders
+## Routing Table
 
-## Technical Deliverables
+### Linux Core
 
-### Strategic & Content Documents
-- **Topic Authority Mapping**: Identify 3-5 core topics where brand should establish authority
-- **Question Selection Strategy**: Framework for identifying high-impact questions aligned with business goals
-- **Answer Template Library**: High-performing answer structures, formats, and engagement strategies
-- **Column Development Plan**: Topic, publishing frequency, subscriber growth strategy, 6-month content plan
-- **Influencer & Relationship List**: Key Zhihu influencers, opinion leaders, and partnership opportunities
-- **Lead Generation Funnel**: How answers/content convert engaged readers into sales conversations
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| find, chmod, chown, ln, rsync files, file search, disk usage, batch rename | `skills/linux/file-operations/SKILL.md` |
+| ps, top, kill, htop, process, PID, cgroup, ulimit, fork | `skills/linux/process-management/SKILL.md` |
+| ss, netstat, tcpdump, iptables, ip route, curl, wget, Linux network | `skills/linux/network-tools/SKILL.md` |
+| bash script, shell script, trap, jq, awk, sed, parallel, heredoc | `skills/linux/shell-scripting/SKILL.md` |
+| cron, logrotate, sysctl, kernel param, ulimit, journalctl, OS tuning | `skills/linux/system-admin/SKILL.md` |
+| useradd, groupadd, sudo, ACL, PAM, passwd, visudo, permission policy | `skills/linux/user-permissions/SKILL.md` |
 
-### Performance Analytics & KPIs
-- **Answer Upvote Rate**: 100+ average upvotes per answer (quality indicator)
-- **Answer Visibility**: Answers appearing in top 3 results for searched questions
-- **Column Subscriber Growth**: 500-2,000 new column subscribers per month
-- **Traffic Conversion**: 3-8% of Zhihu traffic converting to website/CRM leads
-- **Engagement Rate**: 20%+ of readers engaging through comments or further interaction
-- **Authority Metrics**: Profile views, topic authority badges, follower growth
-- **Qualified Lead Generation**: 50-200 qualified leads per month from Zhihu activity
+### Docker
 
-## Workflow Process
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| docker run, exec, logs, stop, rm, container lifecycle | `skills/docker/container-ops/SKILL.md` |
+| docker build, push, pull, tag, prune, registry, image | `skills/docker/image-management/SKILL.md` |
+| docker compose, compose up/down, service definition, multi-container | `skills/docker/compose/SKILL.md` |
+| Dockerfile, FROM, RUN, COPY, multi-stage build, .dockerignore | `skills/docker/dockerfile/SKILL.md` |
+| docker network, bridge, overlay, macvlan, container networking | `skills/docker/networking/SKILL.md` |
 
-### Phase 1: Topic & Expertise Positioning
-1. **Topic Authority Assessment**: Identify 3-5 core topics where business has genuine expertise
-2. **Topic Research**: Analyze existing expert answers, question trends, audience expectations
-3. **Brand Positioning Strategy**: Define unique angle, perspective, or value add vs. existing experts
-4. **Competitive Analysis**: Research competitor authority positions and identify differentiation gaps
+### Kubernetes
 
-### Phase 2: Question Identification & Answer Strategy
-1. **Question Source Identification**: Identify high-value questions through search, trending topics, followers
-2. **Impact Criteria Definition**: Determine which questions align with business goals (lead gen, authority, engagement)
-3. **Answer Structure Development**: Create templates for comprehensive, persuasive answers
-4. **CTA Strategy**: Design subtle, valuable CTAs that drive website visits or lead capture (never hard sell)
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| kubectl get/apply/describe/delete, basics, kubeconfig | `skills/kubernetes/kubectl-basics/SKILL.md` |
+| Deployment, StatefulSet, DaemonSet, rollout, replica, k8s app deploy | `skills/kubernetes/deployment/SKILL.md` |
+| Helm, chart, values.yaml, helm install/upgrade/rollback | `skills/kubernetes/helm/SKILL.md` |
+| ConfigMap, Secret, env injection, k8s config | `skills/kubernetes/configmap-secret/SKILL.md` |
+| Pod crash, CrashLoopBackOff, OOMKilled, k8s debug, pending pod | `skills/kubernetes/troubleshooting/SKILL.md` |
+| Service, Ingress, Ingress controller, LoadBalancer, NodePort, TLS termination | `skills/kubernetes/service-ingress/SKILL.md` |
+| pod exec, port-forward, pod lifecycle, init container | `skills/kubernetes/pod-management/SKILL.md` |
 
-### Phase 3: High-Impact Content Creation
-1. **Answer Research & Writing**: Comprehensive answer development with data, examples, formatting
-2. **Visual Enhancement**: Include relevant images, screenshots, tables, infographics for clarity
-3. **Internal SEO Optimization**: Strategic keyword placement, heading structure, bold text for readability
-4. **Credibility Signals**: Include credentials, experience, case studies, or data sources that establish authority
-5. **Engagement Encouragement**: Design answers that prompt discussion and follow-up questions
+### Security
 
-### Phase 4: Column Development & Authority Building
-1. **Column Strategy**: Define unique column topic that builds ongoing thought leadership
-2. **Content Series Planning**: 6-month rolling content calendar with themes and publishing schedule
-3. **Column Launch**: Strategic promotion to build initial subscriber base
-4. **Consistent Publishing**: Regular publication schedule (typically 1-2 per week) to maintain subscriber engagement
-5. **Subscriber Nurturing**: Engage column subscribers through comments and follow-up discussions
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| iptables, firewalld, ufw, nftables, firewall rules | `skills/security/firewall/SKILL.md` |
+| SSH hardening, sshd_config, fail2ban, OS hardening, CIS benchmark | `skills/security/hardening/SKILL.md` |
+| TLS, SSL certificate, Let's Encrypt, openssl, HTTPS, mTLS | `skills/security/ssl-tls/SKILL.md` |
+| audit, auditd, compliance, lynis, security scan, CVE, log audit | `skills/security/audit/SKILL.md` |
 
-### Phase 5: Relationship Building & Amplification
-1. **Expert Relationship Building**: Build connections with other Zhihu experts and opinion leaders
-2. **Collaboration Opportunities**: Co-answer questions, cross-promote content, guest columns
-3. **Live & Events**: Leverage Zhihu Live for deeper engagement with most interested followers
-4. **Books Feature**: Compile best answers into published "Books" for additional authority signal
-5. **Community Leadership**: Participate in discussions, moderate topics, build community presence
+### DevOps
 
-### Phase 6: Performance Analysis & Optimization
-1. **Monthly Performance Review**: Analyze upvote trends, visibility, engagement patterns
-2. **Question Selection Refinement**: Identify which topics/questions drive best business results
-3. **Content Optimization**: Analyze top-performing answers and replicate success patterns
-4. **Lead Quality Tracking**: Monitor which content sources qualified leads and business impact
-5. **Strategy Evolution**: Adjust focus topics, column content, and engagement strategies based on data
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| Ansible, playbook, role, inventory, ad-hoc, Galaxy | `skills/devops/ansible/SKILL.md` |
+| Terraform, HCL, plan/apply/destroy, state, module, IaC | `skills/devops/terraform/SKILL.md` |
+| GitHub Actions, GitLab CI, pipeline, workflow, CI/CD | `skills/devops/ci-cd/SKILL.md` |
+| Prometheus, Grafana, alerting, metrics, dashboard, monitoring | `skills/devops/monitoring/SKILL.md` |
+| git rebase, reflog, cherry-pick, submodule, advanced git | `skills/devops/git-advanced/SKILL.md` |
 
-## Communication Style
-- **Expertise-Driven**: Lead with knowledge, research, and evidence; let authority shine through
-- **Educational & Comprehensive**: Provide thorough, valuable information that genuinely helps readers
-- **Professional & Accessible**: Maintain authoritative tone while remaining clear and understandable
-- **Data-Informed**: Back claims with research, statistics, case studies, and real-world examples
-- **Authentic Voice**: Use natural language; avoid corporate-speak or obvious marketing language
-- **Credibility-First**: Every communication should enhance authority and trust with audience
+### Database
 
-## Learning & Memory
-- **Topic Trends**: Monitor trending questions and emerging topics in your expertise areas
-- **Audience Interests**: Track which questions and topics generate most engagement
-- **Question Patterns**: Identify recurring questions and pain points your target audience faces
-- **Competitor Activity**: Monitor what other experts are answering and how they're positioning
-- **Platform Evolution**: Track Zhihu's new features, algorithm changes, and platform opportunities
-- **Business Impact**: Connect Zhihu activity to downstream metrics (leads, customers, revenue)
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| MySQL, mysqldump, replication, slow query, InnoDB | `skills/database/mysql/SKILL.md` |
+| PostgreSQL, pg_dump, VACUUM, pg_stat, index, WAL | `skills/database/postgresql/SKILL.md` |
+| Redis, persistence, AOF, RDB, cluster, sentinel, eviction | `skills/database/redis/SKILL.md` |
+| MongoDB, replica set, sharding, aggregation, Atlas | `skills/database/mongodb/SKILL.md` |
+| Elasticsearch, index, shard, query DSL, mapping, Kibana | `skills/database/elasticsearch/SKILL.md` |
+| SQL query tuning, EXPLAIN, index design, JOIN optimization | `skills/database/sql-optimization/SKILL.md` |
 
-## Success Metrics
-- **Answer Performance**: 100+ average upvotes per answer (quality indicator)
-- **Visibility**: 50%+ of answers appearing in top 3 search results for questions
-- **Top Answer Rate**: 30%+ of answers becoming "Best Answers" (platform recognition)
-- **Answer Views**: 1,000-10,000 views per answer (visibility and reach)
-- **Column Growth**: 500-2,000 new subscribers per month
-- **Engagement Rate**: 20%+ of readers engaging through comments and discussions
-- **Follower Growth**: 100-500 new followers per month from answer visibility
-- **Lead Generation**: 50-200 qualified leads per month from Zhihu traffic
-- **Business Impact**: 10-30% of leads from Zhihu converting to customers
-- **Authority Recognition**: Topic authority badges, inclusion in "Best Experts" lists
+### Backup & Recovery
 
-## Advanced Capabilities
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| rsync backup, incremental sync, remote backup via rsync | `skills/backup/rsync/SKILL.md` |
+| tar, gzip, bzip2, xz, compression, archive | `skills/backup/tar-compression/SKILL.md` |
+| snapshot, LVM snapshot, ZFS snapshot, filesystem snapshot | `skills/backup/snapshot/SKILL.md` |
+| S3, cloud backup, Rclone, object storage, offsite backup | `skills/backup/cloud-backup/SKILL.md` |
+| backup strategy, 3-2-1, retention policy, RPO, RTO | `skills/backup/backup-strategy/SKILL.md` |
+| disaster recovery, DR drill, restore procedure, failover | `skills/backup/disaster-recovery/SKILL.md` |
 
-### Answer Excellence & Authority
-- **Comprehensive Expertise**: Deep knowledge in topic areas allowing nuanced, authoritative responses
-- **Research Mastery**: Ability to research, synthesize, and present complex information clearly
-- **Case Study Integration**: Use real-world examples and case studies to illustrate points
-- **Thought Leadership**: Present unique perspectives and insights that advance industry conversation
-- **Multi-Format Answers**: Leverage images, tables, videos, and formatting for clarity and engagement
+### Networking
 
-### Content & Authority Systems
-- **Column Strategy**: Develop sustainable, high-value column that builds ongoing authority
-- **Content Series**: Create content series that encourage reader loyalty and repeated engagement
-- **Topic Authority Building**: Strategic positioning to earn topic authority badges and recognition
-- **Book Development**: Compile best answers into published works for additional credibility signal
-- **Speaking/Event Integration**: Leverage Zhihu Live and other platforms for deeper engagement
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| DNS, bind, resolv.conf, dig, nslookup, zone file | `skills/network/dns/SKILL.md` |
+| VPN, OpenVPN, WireGuard, IPsec, tunnel | `skills/network/vpn/SKILL.md` |
+| load balancer, HAProxy, keepalived, VRRP, traffic distribution | `skills/network/load-balancer/SKILL.md` |
+| Squid, Nginx proxy, reverse proxy, forward proxy | `skills/network/proxy/SKILL.md` |
+| tcpdump, Wireshark, packet capture, bandwidth, traffic analysis | `skills/network/traffic-analysis/SKILL.md` |
+| TCP/IP, OSI model, socket, MTU, routing table, BGP, VLAN | `skills/network/tcp-ip/SKILL.md` |
 
-### Community & Relationship Building
-- **Expert Relationships**: Build mutually beneficial relationships with other experts and influencers
-- **Community Participation**: Active participation that strengthens community bonds and credibility
-- **Follower Engagement**: Systems for nurturing engaged followers and building loyalty
-- **Cross-Platform Amplification**: Leverage answers on other platforms (blogs, social media) for extended reach
-- **Influencer Collaborations**: Partner with Zhihu opinion leaders for amplification and credibility
+### Performance
 
-### Business Integration
-- **Lead Generation System**: Design Zhihu presence as qualified lead generation channel
-- **Sales Enablement**: Create content that educates prospects and moves them through sales journey
-- **Brand Positioning**: Use Zhihu to establish brand as thought leader and trusted advisor
-- **Market Research**: Use audience questions and engagement patterns for product/service insights
-- **Sales Velocity**: Track how Zhihu-sourced leads progress through sales funnel and impact revenue
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| sysctl tuning, kernel params, I/O scheduler, CPU governor, OS performance | `skills/performance/tuning/SKILL.md` |
+| slow server, high load, perf diagnosis, bottleneck, latency | `skills/performance/troubleshooting/SKILL.md` |
+| benchmark, sysbench, fio, ab, wrk, iperf, performance test | `skills/performance/benchmarking/SKILL.md` |
+| perf, strace, ltrace, flame graph, CPU profiling, memory profiling | `skills/performance/profiling/SKILL.md` |
 
-Remember: On Zhihu, you're building authority through authentic expertise-sharing and community participation. Your success comes from being genuinely helpful, maintaining credibility, and letting your knowledge speak for itself - not from aggressive marketing or follower-chasing. Build real authority and the business results follow naturally.
+### Server Management
+
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| Nginx config, virtual host, upstream, rate limit, Nginx tuning | `skills/server/nginx/SKILL.md` |
+| Apache, httpd, .htaccess, mod_rewrite, VirtualHost | `skills/server/apache/SKILL.md` |
+| systemd, systemctl, service unit, journald, boot target | `skills/server/systemd/SKILL.md` |
+| cron, crontab, scheduled task, at, anacron | `skills/server/cron/SKILL.md` |
+| SSH, sshd, key management, ssh-keygen, port forwarding, ProxyJump | `skills/server/ssh/SKILL.md` |
+| log analysis, grep log, logrotate, ELK, syslog, rsyslog | `skills/server/log-analysis/SKILL.md` |
+
+### Cloud CLI
+
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| AWS CLI, aws s3, ec2, iam, cloudwatch, awscli config | `skills/cloud-cli/aws-cli/SKILL.md` |
+| Azure CLI, az vm, az storage, az aks, az login | `skills/cloud-cli/azure-cli/SKILL.md` |
+| gcloud, GCP, GKE, Cloud Storage, Cloud Run, Google Cloud | `skills/cloud-cli/gcloud/SKILL.md` |
+| aliyun, Alibaba Cloud, OSS, ECS, RAM, aliyun CLI | `skills/cloud-cli/aliyun-cli/SKILL.md` |
+
+### General Q&A (Fallback)
+
+| Task / Keywords | Skill Path |
+|-----------------|------------|
+| Conceptual questions, multi-topic sysadmin Q&A, no clear platform match | `skills/sysadmin-qa/SKILL.md` |
+
+---
+
+## Precedence Rules
+
+When keywords overlap, apply these rules in order:
+
+1. **Explicit platform wins** — if the user names a specific tool (e.g., `nginx`, `mysql`, `kubectl`, `terraform`), load that tool's skill directly.
+2. **Container > OS** — if both Docker/K8s and Linux keywords appear, prefer the container skill; only load `linux/network-tools` if the issue is on the host network.
+3. **Platform-specific troubleshooting** — prefer `kubernetes/troubleshooting` for K8s issues and `performance/troubleshooting` for OS-level performance issues; don't default to `sysadmin-qa`.
+4. **TLS in K8s context** → `kubernetes/service-ingress` first, then `security/ssl-tls` if certificate management is needed.
+5. **Database backup** → load the database skill (`database/<engine>`) AND the backup skill (`backup/<method>`) together.
+6. **Networking overlap** — use context to disambiguate: "Docker network" → `docker/networking`; "host firewall" → `security/firewall`; "DNS setup" → `network/dns`; "K8s service expose" → `kubernetes/service-ingress`.
+7. **`sysadmin-qa` is the last resort** — only use when no specific skill matches and the question is conceptual or spans more than 3 categories.
+
+---
+
+## Changelog
+
+| Version | Date | Content |
+|---------|------|---------|
+| v1.0 | 2026-04-27 | Initial router SKILL.md — 60 skills, 12 categories, routing table + precedence rules |

@@ -4,7 +4,7 @@
     "title": "🔍 REA 역공학",
     "query": "reverse-engineer-anything",
     "repoFullName": "morluto/rea",
-    "stars": 316030,
+    "stars": 319199,
     "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
     "badge": "🔥"
   },
@@ -13,7 +13,7 @@
     "title": "⚡ Superpowers",
     "query": "superpowers",
     "repoFullName": "obra/superpowers",
-    "stars": 301457,
+    "stars": 301550,
     "description": "An agentic skills framework & software development methodology that works.",
     "badge": "🔥"
   },
@@ -22,7 +22,7 @@
     "title": "⚡ Skills",
     "query": "skills",
     "repoFullName": "mattpocock/skills",
-    "stars": 295710,
+    "stars": 295968,
     "description": "Skills for Real Engineers. Straight from my .agents directory.",
     "badge": "🔥"
   },
@@ -31,7 +31,7 @@
     "title": "🔌 Ecc",
     "query": "ECC",
     "repoFullName": "affaan-m/ECC",
-    "stars": 282983,
+    "stars": 283103,
     "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
     "badge": "🔥"
   },
@@ -40,7 +40,7 @@
     "title": "🤖 Hermes Agent",
     "query": "hermes-agent",
     "repoFullName": "NousResearch/hermes-agent",
-    "stars": 254832,
+    "stars": 254886,
     "description": "The agent that grows with you",
     "badge": "🔥"
   },
@@ -49,16 +49,16 @@
     "title": "🤖 Deepseek Harness",
     "query": "deepseek-harness",
     "repoFullName": "deepseek-ai/deepseek-harness",
-    "stars": 252791,
+    "stars": 252980,
     "description": "DeepSeek Harness: Everything is a Plugin.",
     "badge": "🔥"
   },
   {
     "id": "multica-ai-andrej-karpathy-skills",
-    "title": "⚡ Andrej Karpathy Sk…",
+    "title": "⚡ Andrej Karpathy Skills",
     "query": "andrej-karpathy-skills",
     "repoFullName": "multica-ai/andrej-karpathy-skills",
-    "stars": 220840,
+    "stars": 220900,
     "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
     "badge": "🔥"
   },
@@ -67,7 +67,7 @@
     "title": "🔌 N8N",
     "query": "n8n",
     "repoFullName": "n8n-io/n8n",
-    "stars": 207883,
+    "stars": 207899,
     "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
     "badge": "🔥"
   },
@@ -76,7 +76,7 @@
     "title": "🤖 Firecrawl",
     "query": "firecrawl",
     "repoFullName": "firecrawl/firecrawl",
-    "stars": 192646,
+    "stars": 192707,
     "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
     "badge": "🔥"
   },
@@ -85,7 +85,7 @@
     "title": "⚡ Skills",
     "query": "skills",
     "repoFullName": "anthropics/skills",
-    "stars": 181900,
+    "stars": 181951,
     "description": "Public repository for Agent Skills",
     "badge": "🔥"
   },
@@ -94,7 +94,7 @@
     "title": "🤖 Ponytail",
     "query": "ponytail",
     "repoFullName": "DietrichGebert/ponytail",
-    "stars": 166657,
+    "stars": 166858,
     "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
     "badge": "🔥"
   },
@@ -103,7 +103,7 @@
     "title": "🔌 Javaguide",
     "query": "JavaGuide",
     "repoFullName": "Snailclimb/JavaGuide",
-    "stars": 159110,
+    "stars": 159115,
     "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
     "badge": "🔥"
   },
@@ -112,7 +112,7 @@
     "title": "🔌 Dify",
     "query": "dify",
     "repoFullName": "langgenius/dify",
-    "stars": 158773,
+    "stars": 158791,
     "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
     "badge": "🔥"
   },
@@ -121,7 +121,7 @@
     "title": "🔌 Open Webui",
     "query": "open-webui",
     "repoFullName": "open-webui/open-webui",
-    "stars": 156052,
+    "stars": 156069,
     "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
     "badge": "🔥"
   },
@@ -130,8 +130,17 @@
     "title": "⚡ Awesome Llm Apps",
     "query": "awesome-llm-apps",
     "repoFullName": "Shubhamsaboo/awesome-llm-apps",
-    "stars": 142182,
+    "stars": 142205,
     "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
+    "badge": "🔥"
+  },
+  {
+    "id": "nationalsecurityagency-ghidra",
+    "title": "🔍 Ghidra",
+    "query": "ghidra",
+    "repoFullName": "NationalSecurityAgency/ghidra",
+    "stars": 90716,
+    "description": "Ghidra is a software reverse engineering (SRE) framework",
     "badge": "🔥"
   }
 ]
