@@ -1,0 +1,137 @@
+[
+  {
+    "id": "morluto-rea",
+    "title": "🔍 REA 역공학",
+    "query": "reverse-engineer-anything",
+    "repoFullName": "morluto/rea",
+    "stars": 316030,
+    "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+    "badge": "🔥"
+  },
+  {
+    "id": "obra-superpowers",
+    "title": "⚡ Superpowers",
+    "query": "superpowers",
+    "repoFullName": "obra/superpowers",
+    "stars": 301457,
+    "description": "An agentic skills framework & software development methodology that works.",
+    "badge": "🔥"
+  },
+  {
+    "id": "mattpocock-skills",
+    "title": "⚡ Skills",
+    "query": "skills",
+    "repoFullName": "mattpocock/skills",
+    "stars": 295710,
+    "description": "Skills for Real Engineers. Straight from my .agents directory.",
+    "badge": "🔥"
+  },
+  {
+    "id": "affaan-m-ecc",
+    "title": "🔌 Ecc",
+    "query": "ECC",
+    "repoFullName": "affaan-m/ECC",
+    "stars": 282983,
+    "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+    "badge": "🔥"
+  },
+  {
+    "id": "nousresearch-hermes-agent",
+    "title": "🤖 Hermes Agent",
+    "query": "hermes-agent",
+    "repoFullName": "NousResearch/hermes-agent",
+    "stars": 254832,
+    "description": "The agent that grows with you",
+    "badge": "🔥"
+  },
+  {
+    "id": "deepseek-ai-deepseek-harness",
+    "title": "🤖 Deepseek Harness",
+    "query": "deepseek-harness",
+    "repoFullName": "deepseek-ai/deepseek-harness",
+    "stars": 252791,
+    "description": "DeepSeek Harness: Everything is a Plugin.",
+    "badge": "🔥"
+  },
+  {
+    "id": "multica-ai-andrej-karpathy-skills",
+    "title": "⚡ Andrej Karpathy Sk…",
+    "query": "andrej-karpathy-skills",
+    "repoFullName": "multica-ai/andrej-karpathy-skills",
+    "stars": 220840,
+    "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
+    "badge": "🔥"
+  },
+  {
+    "id": "n8n-io-n8n",
+    "title": "🔌 N8N",
+    "query": "n8n",
+    "repoFullName": "n8n-io/n8n",
+    "stars": 207883,
+    "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+    "badge": "🔥"
+  },
+  {
+    "id": "firecrawl-firecrawl",
+    "title": "🤖 Firecrawl",
+    "query": "firecrawl",
+    "repoFullName": "firecrawl/firecrawl",
+    "stars": 192646,
+    "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+    "badge": "🔥"
+  },
+  {
+    "id": "anthropics-skills",
+    "title": "⚡ Skills",
+    "query": "skills",
+    "repoFullName": "anthropics/skills",
+    "stars": 181900,
+    "description": "Public repository for Agent Skills",
+    "badge": "🔥"
+  },
+  {
+    "id": "dietrichgebert-ponytail",
+    "title": "🤖 Ponytail",
+    "query": "ponytail",
+    "repoFullName": "DietrichGebert/ponytail",
+    "stars": 166657,
+    "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+    "badge": "🔥"
+  },
+  {
+    "id": "snailclimb-javaguide",
+    "title": "🔌 Javaguide",
+    "query": "JavaGuide",
+    "repoFullName": "Snailclimb/JavaGuide",
+    "stars": 159110,
+    "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
+    "badge": "🔥"
+  },
+  {
+    "id": "langgenius-dify",
+    "title": "🔌 Dify",
+    "query": "dify",
+    "repoFullName": "langgenius/dify",
+    "stars": 158773,
+    "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+    "badge": "🔥"
+  },
+  {
+    "id": "open-webui-open-webui",
+    "title": "🔌 Open Webui",
+    "query": "open-webui",
+    "repoFullName": "open-webui/open-webui",
+    "stars": 156052,
+    "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+    "badge": "🔥"
+  },
+  {
+    "id": "shubhamsaboo-awesome-llm-apps",
+    "title": "⚡ Awesome Llm Apps",
+    "query": "awesome-llm-apps",
+    "repoFullName": "Shubhamsaboo/awesome-llm-apps",
+    "stars": 142182,
+    "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
+    "badge": "🔥"
+  }
+]

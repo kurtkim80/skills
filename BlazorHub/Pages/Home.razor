@@ -1,7 +1,9 @@
 @page "/"
+@implements IDisposable
 @inject HttpClient Http
 @inject VectorSearchService SearchService
 @inject WasmSkillCollectorService Collector
+@inject TrendingThemeService TrendingService
 @inject IJSRuntime JS
 
 <!-- Apple Global Navigation -->
@@ -71,19 +73,24 @@
         </button>
     </div>
 
-    <!-- 🔥 실시간 인기 GitHub 테마 검색 추천 칩 바 -->
+    <!-- 🔥 실시간 인기 GitHub 테마 검색 추천 칩 바 (자동 갱신) -->
     <div class="trending-themes-wrap">
-        <span class="trending-label">🔥 인기 테마:</span>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("reverse-engineer-anything")'>🔍 REA 역공학 (315k★)</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("superpowers")'>⚡ Superpowers (290k★)</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("browser-use web automation")'>🌐 Browser-Use (60k★)</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("claude-code terminal agent")'>🤖 Claude Code</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("mcp server model context protocol")'>🔌 MCP 서버</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("deepseek r1 reasoning")'>🧠 DeepSeek R1</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("openhands autonomous coder")'>💻 OpenHands</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("rag vector embedding semantic search")'>🎯 RAG &amp; 시맨틱 검색</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("kubernetes devops cloud")'>☁️ 쿠버네티스</button>
-        <button class="trending-pill" @onclick='() => ExecuteQuickSearch("ui ux frontend design system")'>🎨 UI/UX 디자인</button>
+        <span class="trending-label">
+            🔥 실시간 인기 테마:
+            @if (TrendingService.IsRefreshing)
+            {
+                <span class="ai-spinner" style="width: 12px; height: 12px; border-width: 2px; margin-left: 4px;" title="최신 깃허브 트렌드 자동 감지 중..."></span>
+            }
+        </span>
+        @foreach (var theme in TrendingService.Themes)
+        {
+            <button class="trending-pill" @onclick="() => ExecuteQuickSearch(theme.Query)" title="@theme.Description (@theme.RepoFullName)">
+                @theme.DisplayLabel
+            </button>
+        }
+        <button class="trending-pill" @onclick="() => TrendingService.AutoRefreshTrendingAsync(true)" style="opacity: 0.75; font-size: 11px;" title="최신 GitHub 트렌드 즉시 새로고침">
+            🔄 새로고침
+        </button>
     </div>
 </section>
 
@@ -292,18 +299,16 @@
                 </div>
 
                 <div class="github-pill-suggestions">
-                    <span style="font-size: 11px; color: var(--text-muted); align-self: center;">🔥 인기 GitHub 테마:</span>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("REA: Reverse Engineer Anything")'>#REA (315k★)</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("obra/superpowers")'>#superpowers (290k★)</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("browser-use")'>#browser-use (60k★)</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude-code")'>#claude-code</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("modelcontextprotocol servers")'>#mcp-servers</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("deepseek-ai")'>#deepseek</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("OpenHands")'>#openhands</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude-context")'>#claude-context</button>
+                    <span style="font-size: 11px; color: var(--text-muted); align-self: center;">🔥 실시간 인기 저장소:</span>
+                    @foreach (var theme in TrendingService.Themes.Take(12))
+                    {
+                        var starsDisplay = theme.Stars >= 1000 ? $"{(theme.Stars / 1000.0):0.#}k★" : $"{theme.Stars}★";
+                        <button class="github-pill" @onclick="() => SetQueryAndSearch(theme.RepoFullName)" title="@theme.Description">
+                            #@theme.RepoFullName (@starsDisplay)
+                        </button>
+                    }
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("kubernetes skills")'>#kubernetes</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("drawio-skill")'>#drawio</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("langchain agent skills")'>#langchain</button>
                 </div>
 
                 @if (_isSearchingGithub)
@@ -434,6 +439,7 @@
     protected override async Task OnInitializedAsync()
     {
         _dotNetRef = DotNetObjectReference.Create(this);
+        TrendingService.OnThemesChanged += OnThemesUpdated;
 
         // 1단계: 초경량 4.8MB 카탈로그 먼저 로드하여 즉시 화면 렌더링
         await SearchService.LoadCatalogAsync();
@@ -452,7 +458,14 @@
 
         _displayItems = SearchService.GetCategoryItems(_selectedCategory);
 
-        // 3단계: 9.5MB AI 벡터 DB는 백그라운드에서 비동기로 조용히 로드 (화면 블로킹 없음)
+        // 3단계: 트렌딩 테마 초기 로드 & 백그라운드 자동 갱신 시작
+        await TrendingService.LoadInitialThemesAsync();
+        _ = Task.Run(async () =>
+        {
+            await TrendingService.AutoRefreshTrendingAsync();
+        });
+
+        // 4단계: 9.5MB AI 벡터 DB는 백그라운드에서 비동기로 조용히 로드 (화면 블로킹 없음)
         _ = Task.Run(async () =>
         {
             await SearchService.EnsureVectorsLoadedAsync();
@@ -564,6 +577,12 @@
         _searchQuery = keyword;
         await TriggerSearch();
     }
+
+    private void OnThemesUpdated()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
 
     [JSInvokable]
     public void OnModelDownloadProgress(int progress)
@@ -852,6 +871,7 @@
 
     public void Dispose()
     {
+        TrendingService.OnThemesChanged -= OnThemesUpdated;
         _dotNetRef?.Dispose();
     }
 }

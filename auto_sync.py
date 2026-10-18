@@ -30,8 +30,12 @@ def main():
     print("🤖 OpenCode & OpenWork Hub Auto-Sync Engine")
     print("=" * 80)
 
+    # 0. GitHub 최신 트렌딩 토픽 & 고스타 에셋 테마 자동 갱신
+    print("\n=== [0/5] GitHub 실시간 인기 트렌딩 테마 동기화 ===")
+    run_cmd([sys.executable, "update_trending.py"])
+
     # 1. 원격 저장소들로부터 최신 에셋 동기화
-    print("\n=== [1/4] GitHub 저장소들로부터 최신 에셋 동기화 시작 ===")
+    print("\n=== [1/5] GitHub 저장소들로부터 최신 에셋 동기화 시작 ===")
     sync_res = run_cmd([sys.executable, "skill_collector.py", "sync"])
     if sync_res.returncode != 0:
         print("❌ skill_collector.py sync 실패")
