@@ -267,7 +267,7 @@
                 <div class="github-search-input-wrap">
                     <input class="github-search-input"
                            type="text"
-                           placeholder="GitHub 저장소/스킬 검색 (예: kubernetes, langchain, drawio, agentic, mcp)"
+                           placeholder="GitHub 저장소/스킬 검색 (예: REA, morluto/rea, reverse engineer, kubernetes, langchain)"
                            value="@_githubQuery"
                            @oninput='(e) => _githubQuery = e.Value?.ToString() ?? ""'
                            @onkeydown="OnGithubSearchKeyDown" />
@@ -278,13 +278,13 @@
 
                 <div class="github-pill-suggestions">
                     <span style="font-size: 11px; color: var(--text-muted); align-self: center;">추천 검색어:</span>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("REA: Reverse Engineer Anything")'>#REA (315k★)</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("morluto/rea")'>#morluto/rea</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("kubernetes skills")'>#kubernetes</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("drawio-skill")'>#drawio-skill</button>
+                    <button class="github-pill" @onclick='() => SetQueryAndSearch("drawio-skill")'>#drawio</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("langchain agent skills")'>#langchain</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("rag skills")'>#rag</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("mcp server")'>#mcp</button>
                     <button class="github-pill" @onclick='() => SetQueryAndSearch("opencode skills")'>#opencode</button>
-                    <button class="github-pill" @onclick='() => SetQueryAndSearch("claude skills")'>#claude</button>
                 </div>
 
                 @if (_isSearchingGithub)

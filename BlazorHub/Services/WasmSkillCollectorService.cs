@@ -23,9 +23,70 @@ public class WasmSkillCollectorService
     /// </summary>
     public async Task<List<GitHubRepoItem>> SearchGitHubAsync(string query, int limit = 20)
     {
-        var clean = Uri.EscapeDataString(query.Trim());
-        string url = $"https://api.github.com/search/repositories?q={clean}+skills&sort=stars&order=desc&per_page={limit}";
+        if (string.IsNullOrWhiteSpace(query)) return new List<GitHubRepoItem>();
 
+        // 1. owner/repo 또는 github.com URL 직접 입력인 경우 Direct Lookup 우선 수행
+        var (owner, repo) = ParseOwnerAndRepo(query);
+        if (!string.IsNullOrEmpty(owner) && !string.IsNullOrEmpty(repo))
+        {
+            var direct = await GetSingleRepoAsync(owner, repo);
+            if (direct != null)
+            {
+                return new List<GitHubRepoItem> { direct };
+            }
+        }
+
+        // 2. 검색어 문법 정제 (콜론 및 GitHub Search API 예약 특수문자 안전화)
+        var sanitized = SanitizeGitHubQuery(query);
+        var clean = Uri.EscapeDataString(sanitized);
+
+        // 3. 1차 시도: 사용자가 입력한 검색어 그대로 정밀 검색
+        string url = $"https://api.github.com/search/repositories?q={clean}&sort=stars&order=desc&per_page={limit}";
+
+        try
+        {
+            var items = await FetchSearchResultsAsync(url);
+            if (items.Count > 0)
+            {
+                return items;
+            }
+
+            // 4. 검색 결과가 없고 키워드에 skills/agent/mcp가 없으면 폴백 확장 검색 시도
+            if (!sanitized.Contains("skill", StringComparison.OrdinalIgnoreCase) &&
+                !sanitized.Contains("agent", StringComparison.OrdinalIgnoreCase) &&
+                !sanitized.Contains("mcp", StringComparison.OrdinalIgnoreCase))
+            {
+                string fallbackUrl = $"https://api.github.com/search/repositories?q={clean}+skills&sort=stars&order=desc&per_page={limit}";
+                items = await FetchSearchResultsAsync(fallbackUrl);
+                return items;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[WASM] GitHub Search 오류: {ex.Message}");
+        }
+
+        return new List<GitHubRepoItem>();
+    }
+
+    private async Task<List<GitHubRepoItem>> FetchSearchResultsAsync(string url)
+    {
+        using var req = new HttpRequestMessage(HttpMethod.Get, url);
+        req.Headers.Add("User-Agent", "Blazor-WASM-SkillHub");
+        req.Headers.Add("Accept", "application/vnd.github.v3+json");
+
+        var res = await _http.SendAsync(req);
+        if (res.IsSuccessStatusCode)
+        {
+            var result = await res.Content.ReadFromJsonAsync<GitHubSearchResult>();
+            return result?.Items ?? new List<GitHubRepoItem>();
+        }
+        return new List<GitHubRepoItem>();
+    }
+
+    private async Task<GitHubRepoItem?> GetSingleRepoAsync(string owner, string repo)
+    {
+        string url = $"https://api.github.com/repos/{owner}/{repo}";
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, url);
@@ -35,16 +96,47 @@ public class WasmSkillCollectorService
             var res = await _http.SendAsync(req);
             if (res.IsSuccessStatusCode)
             {
-                var result = await res.Content.ReadFromJsonAsync<GitHubSearchResult>();
-                return result?.Items ?? new List<GitHubRepoItem>();
+                return await res.Content.ReadFromJsonAsync<GitHubRepoItem>();
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[WASM] GitHub Search 오류: {ex.Message}");
+            Console.WriteLine($"[WASM] Direct repo 조회 오류 ({owner}/{repo}): {ex.Message}");
+        }
+        return null;
+    }
+
+    private static string SanitizeGitHubQuery(string query)
+    {
+        var tokens = query.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var validQualifiers = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "user", "org", "repo", "language", "topic", "stars", "forks", "in"
+        };
+
+        var cleanedTokens = new List<string>();
+        foreach (var token in tokens)
+        {
+            var colonIdx = token.IndexOf(':');
+            if (colonIdx > 0)
+            {
+                var prefix = token[..colonIdx];
+                if (!validQualifiers.Contains(prefix))
+                {
+                    // 예: "REA: Reverse" -> "REA Reverse"
+                    cleanedTokens.Add(token.Replace(':', ' '));
+                    continue;
+                }
+            }
+            else if (token == ":")
+            {
+                continue;
+            }
+
+            cleanedTokens.Add(token);
         }
 
-        return new List<GitHubRepoItem>();
+        return string.Join(" ", string.Join(" ", cleanedTokens).Split(' ', StringSplitOptions.RemoveEmptyEntries));
     }
 
     /// <summary>
@@ -88,50 +180,70 @@ public class WasmSkillCollectorService
             return results;
         }
 
-        // 2. 루트 SKILL.md가 없는 경우 GitHub Contents API로 skills/ 디렉토리 탐색 시도
-        try
+        // 2. 루트 SKILL.md가 없는 경우 다양한 스킬 디렉토리 탐색 (.agents/skills, skills, .claude/skills 등)
+        var possibleDirs = new[] { ".agents/skills", "skills", ".claude/skills", ".github/skills", "skill-src" };
+        foreach (var dir in possibleDirs)
         {
-            using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/contents/skills");
-            req.Headers.Add("User-Agent", "Blazor-WASM-SkillHub");
-            req.Headers.Add("Accept", "application/vnd.github.v3+json");
-
-            var res = await _http.SendAsync(req);
-            if (res.IsSuccessStatusCode)
+            try
             {
-                var json = await res.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.ValueKind == JsonValueKind.Array)
-                {
-                    foreach (var item in doc.RootElement.EnumerateArray())
-                    {
-                        var name = item.TryGetProperty("name", out var n) ? n.GetString() : null;
-                        var type = item.TryGetProperty("type", out var t) ? t.GetString() : null;
+                using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/contents/{dir}");
+                req.Headers.Add("User-Agent", "Blazor-WASM-SkillHub");
+                req.Headers.Add("Accept", "application/vnd.github.v3+json");
 
-                        if (type == "dir" && !string.IsNullOrEmpty(name))
+                var res = await _http.SendAsync(req);
+                if (res.IsSuccessStatusCode)
+                {
+                    var json = await res.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var item in doc.RootElement.EnumerateArray())
                         {
-                            var skillDocUrl = $"https://raw.githubusercontent.com/{owner}/{repo}/main/skills/{name}/SKILL.md";
-                            var (catId, catLabel) = VectorSearchService.ClassifyCategory(name, customDesc);
-                            results.Add(new SkillItem
+                            var name = item.TryGetProperty("name", out var n) ? n.GetString() : null;
+                            var type = item.TryGetProperty("type", out var t) ? t.GetString() : null;
+
+                            if (type == "dir" && !string.IsNullOrEmpty(name))
                             {
-                                Id = $"{repo}:{name}",
-                                Name = name,
-                                Type = "skill",
-                                CatId = catId,
-                                CatLabel = catLabel,
-                                Desc = $"{repo}에서 수집된 서브 스킬: {name}",
-                                Source = $"{owner}/{repo}",
-                                RepoUrl = $"https://github.com/{owner}/{repo}",
-                                Install = $"mkdir -p ~/.config/opencode/skills/{name} && curl -fsSL {skillDocUrl} -o ~/.config/opencode/skills/{name}/SKILL.md",
-                                Doc = skillDocUrl
-                            });
+                                var skillDocUrl = $"https://raw.githubusercontent.com/{owner}/{repo}/main/{dir}/{name}/SKILL.md";
+                                string? rawContent = null;
+                                try
+                                {
+                                    rawContent = await _http.GetStringAsync(skillDocUrl);
+                                }
+                                catch { }
+
+                                if (!string.IsNullOrEmpty(rawContent))
+                                {
+                                    var parsed = ParseSkillMarkdown(rawContent, owner, repo, "main", $"{dir}/{name}/SKILL.md", customDesc);
+                                    results.Add(parsed);
+                                }
+                                else
+                                {
+                                    var (catId, catLabel) = VectorSearchService.ClassifyCategory(name, customDesc);
+                                    results.Add(new SkillItem
+                                    {
+                                        Id = $"{repo}:{name}",
+                                        Name = name,
+                                        Type = "skill",
+                                        CatId = catId,
+                                        CatLabel = catLabel,
+                                        Desc = $"{repo}에서 수집된 서브 스킬: {name}",
+                                        Source = $"{owner}/{repo}",
+                                        RepoUrl = $"https://github.com/{owner}/{repo}",
+                                        Install = $"mkdir -p ~/.config/opencode/skills/{name} && curl -fsSL {skillDocUrl} -o ~/.config/opencode/skills/{name}/SKILL.md",
+                                        Doc = skillDocUrl
+                                    });
+                                }
+                            }
                         }
+                        if (results.Count > 0) break;
                     }
                 }
             }
+            catch { }
         }
-        catch { }
 
-        // 3. skills/ 디렉토리도 없으면 저장소 메타데이터 기반 기본 스킬 생성
+        // 3. 디렉토리에서도 못 찾으면 저장소 메타데이터 기반 기본 스킬 생성
         if (results.Count == 0)
         {
             var (catId, catLabel) = VectorSearchService.ClassifyCategory(repo, customDesc);
