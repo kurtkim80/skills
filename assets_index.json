@@ -16760,7 +16760,7 @@
     "firecrawl-api": {
       "name": "firecrawl-api",
       "type": "skill",
-      "description": "Standalone Python script for the Firecrawl API (search, scrape, extract, map, plus Alexandria structured-data tools: discover, contract, run) that reads FIRECRAWL_API_KEY from SOPS with env fallback. Use when the official firecrawl CLI is unavailable or broken, or for scripted pipelines that need a plain Python dependency-light client. For normal web work prefer the official `firecrawl` CLI skill. Never use beautifulsoup.",
+      "description": "This skill should be used for scripted Firecrawl API access from a dependency-light Python script (search, scrape, extract, map) and for Firecrawl Alexandria structured-data tools (discover, inspect contract, run with a spend ceiling), including a local catalog of all Alexandria providers and tools. Use it when the official `firecrawl` CLI skill is unavailable or broken, when a pipeline needs a plain Python client, or when browsing the Alexandria catalog offline. The API key is read from SOPS with env fallback. For ordinary interactive web work prefer the official `firecrawl` CLI skill. Never use beautifulsoup.",
       "source_repo": "https://github.com/glebis/claude-skills.git",
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/firecrawl-api"
@@ -23218,6 +23218,14 @@
       "path": "collected_assets/skills/bumblebee",
       "description_ko": "macOS/Linux에서 Bumblebee 공급망 인벤토리 및 노출 스캔을 실행하여 손상된 패키지, 확장 프로그램 및 MCP 호스트 구성을 감지합니다."
     },
+    "story-bible-continuity": {
+      "name": "story-bible-continuity",
+      "type": "skill",
+      "description": "Deterministic continuity check for long manuscripts against a story bible: name drift, age arithmetic, era anachronisms, unpaid foreshadowing, POV leaks. Use for continuity checks on novels or serials.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/story-bible-continuity"
+    },
     "nfs-storage": {
       "name": "nfs-storage",
       "type": "skill",
@@ -24116,6 +24124,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/spec-driven-development",
       "description_ko": "코딩하기 전에 사양을 만듭니다. 새 프로젝트, 기능 또는 중요한 변경을 시작할 때 사용하며 아직 사양이 없습니다. 요구사항이 불분명하거나 모호하거나 모호한 아이디어로만 존재하는 경우에 사용합니다."
+    },
+    "keenable-search-mcp": {
+      "name": "keenable-search-mcp",
+      "type": "skill",
+      "description": "Search the public web with site and date filters, and read pages with an extraction prompt, through Keenable's keyless MCP server. Use when the user chooses Keenable or its connected tools.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keenable-search-mcp"
     },
     "data-engineer": {
       "name": "data-engineer",
@@ -26882,11 +26898,10 @@
     "antigravity-maintainer-batch-release": {
       "name": "antigravity-maintainer-batch-release",
       "type": "skill",
-      "description": "Run protected AAS maintainer sweeps, PR merge batches, canonical sync, Core preview checks, and scripted releases. Use for repository maintenance, main alignment, CLI/MCP/Workbench changes, or release work; not ordinary contribution tasks.",
+      "description": "Run protected AAS maintainer sweeps, PR merge batches, resumable review, immutable distribution, Core checks, and scripted releases. Use for repository maintenance, main alignment, CLI/MCP/Workbench changes, or release work; not ordinary contribution tasks.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/antigravity-maintainer-batch-release",
-      "description_ko": "보호된 AAS 관리자 스윕, PR 병합 배치, 정식 동기화, 코어 미리보기 확인 및 스크립트 릴리스를 실행합니다. 저장소 유지 관리, 기본 정렬, CLI/MCP/Workbench 변경 또는 릴리스 작업에 사용합니다. 일반적인 기여 업무가 아닙니다."
+      "path": "collected_assets/skills/antigravity-maintainer-batch-release"
     },
     "azure-eventgrid-py": {
       "name": "azure-eventgrid-py",
@@ -39997,6 +40012,14 @@
       "path": "collected_assets/skills/agent-harness-fault-injection",
       "description_ko": "에이전트 워크플로에 샌드박스, MCP/도구, 작업자, 체크포인트, 메모리 또는 오케스트레이션 오류에 대한 결정적 복구 증거가 필요한 경우 사용합니다."
     },
+    "ppl-personal-crm": {
+      "name": "ppl-personal-crm",
+      "type": "skill",
+      "description": "Uses the ppl personal CRM over MCP to prepare for conversations, recall facts about people, log interactions and manage relationship follow-ups.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ppl-personal-crm"
+    },
     "remotion-create": {
       "name": "remotion-create",
       "type": "skill",
@@ -40950,6 +40973,14 @@
       "path": "collected_assets/skills/antigravity-agent-manager",
       "description_ko": "독립형 Antigravity 2.0 Agent Manager 및 Antigravity IDE를 사용하여 병렬 에이전트를 구성하고 조정합니다."
     },
+    "taasky": {
+      "name": "taasky",
+      "type": "skill",
+      "description": "Negotiate terms with another person or their agent through the hosted Taasky MCP server: meeting times, prices, dates. The human confirms every accept, reject or withdraw.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/taasky"
+    },
     "claude-in-chrome-troubleshooting": {
       "name": "claude-in-chrome-troubleshooting",
       "type": "skill",
@@ -41084,6 +41115,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
+    },
+    "goal-instruction-writer": {
+      "name": "goal-instruction-writer",
+      "type": "skill",
+      "description": "Preview, draft, refine, or audit durable agent Goals with acceptance evidence, drift controls, proportional verification, and bounded waiting. Use for multi-stage work, not one-shot prompts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/goal-instruction-writer"
     },
     "anywrite": {
       "name": "anywrite",

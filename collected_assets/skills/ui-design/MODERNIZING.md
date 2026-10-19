@@ -3,6 +3,7 @@
 ## Contents
 - What "old" usually means
 - The order of operations
+- Trace the cascade before restyling
 - Slicing it into PRs
 - Server-rendered apps
 - What not to do
@@ -45,6 +46,50 @@ tokens exist) produces one pretty page and a new inconsistency.
    (landing/home, the core journey, settings), adding empty/loading/error states.
 7. **Polish.** Icons from one set, dark mode via token overrides, subtle motion
    (respecting `prefers-reduced-motion`).
+
+## Trace the cascade before restyling
+
+Repeated design passes can leave the same selector defined several times. Editing
+an earlier block may do nothing because a later declaration wins. Before changing
+a component, search for every definition and inspect the browser's matched rules
+and computed value on the actual element:
+
+```bash
+rg -n '\.result-card|\.settings-input' web/ --glob '*.css'
+```
+
+```css
+/* Earlier block: changing this border alone has no visible effect. */
+.result-card { border: 1px solid var(--color-border); }
+/* Later block with equal specificity wins in the same cascade layer. */
+.result-card { border: 1px solid var(--color-accent); }
+```
+
+Consolidate overlapping declarations for the component you are touching into one
+base rule plus explicit state and responsive overrides. Repeated selectors are
+not automatically redundant: media queries, theme scopes, cascade layers and
+pseudo-classes can give them different jobs. Preserve those conditions and check
+which declaration wins before moving or deleting a block. Avoid appending another
+override or adding `!important` just to defeat an earlier design pass.
+
+Verify the consolidation with before/after screenshots at desktop and phone
+widths, including affected focus, hover, checked and theme states. A cleanup
+should preserve the computed appearance; then apply the intended restyle to the
+rule that actually owns the property.
+
+Screenshots miss states and sub-pixel differences, so back a pure deduplication with
+a computed-style diff. Drive the page in a headless browser at one fixed width, in
+each theme, with animations and transitions disabled. For every element (and its
+`::before`/`::after` when they have `content`), dump `getComputedStyle` into JSON,
+once on the base commit and once on the branch, and diff the files. Repeat across
+each screen state (first-run, populated, running, error) and with hover, focus,
+disabled and invalid forced on representative elements. An empty diff means the
+cleanup changed nothing; any entry is a block that was not redundant. Also run a
+structural scan of the stylesheet (for example with a CSS parser) and confirm that
+no selector is still defined twice within the same at-rule context.
+
+Do not pixel-diff regions that show live data such as clocks or countdowns; they
+differ even between two runs of the same commit.
 
 ## Slicing it into PRs
 
