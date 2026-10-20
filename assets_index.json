@@ -13818,11 +13818,10 @@
     "binlog-failure-analysis": {
       "name": "binlog-failure-analysis",
       "type": "skill",
-      "description": "Analyze MSBuild binary logs to diagnose build failures. USE FOR: build errors that are unclear from console output, diagnosing cascading failures across multi-project builds, tracing MSBuild target execution order, and generally any MSBuild build issues. Requires an existing .binlog file. DO NOT USE FOR: generating binlogs (use binlog-generation), non-MSBuild build systems.",
+      "description": "Analyze MSBuild binary logs to diagnose build failures. USE FOR: build errors that are unclear from console output, diagnosing cascading failures across multi-project builds, tracing MSBuild target execution order, and generally any MSBuild build issues. Requires an existing .binlog file. DO NOT USE FOR: generating binlogs (use binlog-generation), binlog MCP startup or connection failures (use troubleshoot-binlog-mcp), non-MSBuild build systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/binlog-failure-analysis",
-      "description_ko": "MSBuild 이진 로그를 분석하여 빌드 오류를 진단합니다. 사용 대상: 콘솔 출력에서 ​​명확하지 않은 빌드 오류, 다중 프로젝트 빌드 전반의 연쇄 오류 진단, MSBuild 대상 실행 순서 추적 및 일반적으로 모든 MSBuild 빌드 문제. 기존 .binlog 파일이 필요합니다. 사용하지 마십시오: binlog 생성(binlog-generation 사용), 비 MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/binlog-failure-analysis"
     },
     "property-patterns": {
       "name": "property-patterns",
@@ -13860,7 +13859,7 @@
     "binlog-generation": {
       "name": "binlog-generation",
       "type": "skill",
-      "description": "Generate MSBuild binary logs (binlogs) for build diagnostics and analysis. USE FOR: adding /bl:{} to any dotnet build, test, pack, publish, or restore command to capture a full build execution trace, prerequisite for binlog-failure-analysis and build-perf-diagnostics skills, enabling post-build investigation of errors or performance. Requires MSBuild 17.8+ / .NET 8 SDK+ for {} placeholder; PowerShell must quote the complete switch as '-bl:{}'. DO NOT USE FOR: non-MSBuild build systems (npm, Maven, CMake), analyzing an existing binlog (use binlog-failure-analysis instead).",
+      "description": "Generate MSBuild binary logs (binlogs) for build diagnostics and analysis. USE FOR: adding /bl:{} to any dotnet build, test, pack, publish, or restore command to capture a full build execution trace, prerequisite for binlog-failure-analysis and build-perf-diagnostics skills, enabling post-build investigation of errors or performance. Requires MSBuild 17.8+ / .NET 8 SDK+ for {} placeholder; PowerShell must quote the complete switch as '-bl:{}'. DO NOT USE FOR: non-MSBuild build systems (npm, Maven, CMake), analyzing an existing binlog (use binlog-failure-analysis instead), binlog MCP startup failures (use troubleshoot-binlog-mcp).",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/binlog-generation"
@@ -13897,6 +13896,14 @@
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/item-management"
+    },
+    "troubleshoot-binlog-mcp": {
+      "name": "troubleshoot-binlog-mcp",
+      "type": "skill",
+      "description": "Diagnose dotnet-msbuild binlog MCP startup failures. USE FOR: CONNECTION_CLOSED, binlog server won't connect, missing binlog tools, Microsoft.AITools.BinlogMcp not found, dnx launch errors. Checks workspace SDK, feeds, and source mapping without bypassing policy. DO NOT USE FOR: errors inside a binlog (use binlog-failure-analysis), capturing binlogs (use binlog-generation), unrelated MCP servers.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/troubleshoot-binlog-mcp"
     },
     "target-authoring": {
       "name": "target-authoring",
@@ -19991,6 +19998,14 @@
       "path": "collected_assets/skills/anti-sleep",
       "description_ko": "장기간의 빌드, 다운로드 또는 감독 자동화 실행 중에 카페인을 사용하여 Mac을 깨우십시오."
     },
+    "apify-tiktok-scraper": {
+      "name": "apify-tiktok-scraper",
+      "type": "skill",
+      "description": "Research TikTok videos, profiles, hashtags, comments and followers with engagement statistics through the harshmaur/tiktok-scraper Apify Actor. No TikTok login.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-tiktok-scraper"
+    },
     "jev-use": {
       "name": "jev-use",
       "type": "skill",
@@ -24439,7 +24454,7 @@
     "datacircle": {
       "name": "datacircle",
       "type": "skill",
-      "description": "Look up LinkedIn profiles by URL through Datacircle (Up2Data, HarvestAPI or Fetchin, no markup), over its hosted MCP server or REST API, with the user's yes before each paid call.",
+      "description": "Every GTM API plan on datacircle.dev, as one file you download and query. Use it to compare or price a GTM data API.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/datacircle"
@@ -25202,6 +25217,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/lambda-lang",
       "description_ko": "컴팩트 다중 에이전트 메시징을 위한 기본 에이전트 간 언어입니다. 공유 언어 에이전트는 번역 레이어가 아닌 직접 말합니다. 7개 도메인에 걸쳐 340개 이상의 원자; 자연어보다 3배 작습니다."
+    },
+    "design-token-contrast": {
+      "name": "design-token-contrast",
+      "type": "skill",
+      "description": "Checks WCAG 2.2 contrast between the color tokens of a project (light and dark theme) and suggests the closest passing color that keeps the hue.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/design-token-contrast"
     },
     "open-source-marketing": {
       "name": "open-source-marketing",
@@ -27017,6 +27040,14 @@
       "path": "collected_assets/skills/expo-animation",
       "description_ko": "Expo Animation을 위한 엄선된 업스트림 지침 워크플로가 사용자 목표와 일치할 때 사용합니다."
     },
+    "unpaid-intern": {
+      "name": "unpaid-intern",
+      "type": "skill",
+      "description": "A free second brain for work in plain markdown files the user owns. Turns transcripts, docs, and tickets into briefings, meeting prep, debriefs, follow-ups, and status tables.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/unpaid-intern"
+    },
     "burpsuite-project-parser": {
       "name": "burpsuite-project-parser",
       "type": "skill",
@@ -28772,6 +28803,14 @@
       "path": "collected_assets/skills/technical-change-tracker",
       "description_ko": "구조화된 JSON 레코드, 상태 머신 적용, 봇 연속성을 위한 AI 세션 핸드오프를 통해 코드 변경 사항을 추적합니다."
     },
+    "deed-page": {
+      "name": "deed-page",
+      "type": "skill",
+      "description": "Publish an HTML file or static folder to a permanent public https://<slug>.deed.page/ URL with one curl request. No account; the first publish returns a token for updates.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/deed-page"
+    },
     "dbos-typescript": {
       "name": "dbos-typescript",
       "type": "skill",
@@ -30103,6 +30142,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/monthly-closing-statements"
+    },
+    "apify-linkedin-jobs-scraper": {
+      "name": "apify-linkedin-jobs-scraper",
+      "type": "skill",
+      "description": "Search and export LinkedIn job postings with salary, seniority, recruiter and company fields using the harshmaur/linkedin-jobs-scraper Apify Actor. No LinkedIn login.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-linkedin-jobs-scraper"
     },
     "agent-evals": {
       "name": "agent-evals",
@@ -36338,6 +36385,14 @@
       "path": "collected_assets/skills/quant-analyst",
       "description_ko": "재무 모델을 구축하고, 거래 전략을 백테스트하고, 시장 데이터를 분석하세요. 위험 지표, 포트폴리오 최적화 및 통계 차익거래를 구현합니다."
     },
+    "taasky": {
+      "name": "taasky",
+      "type": "skill",
+      "description": "Negotiate terms with another person or their agent through the hosted Taasky MCP server: meeting times, prices, dates. The human confirms every accept, reject or withdraw.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/taasky"
+    },
     "cloudflare-pages": {
       "name": "cloudflare-pages",
       "type": "skill",
@@ -38692,6 +38747,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/events-activities"
     },
+    "apify-facebook-ads-library-scraper": {
+      "name": "apify-facebook-ads-library-scraper",
+      "type": "skill",
+      "description": "Research Meta Ad Library ads by advertiser or keyword with creative links, dates and disclosed reach or spend through the harshmaur/facebook-ads-library-scraper Apify Actor.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-facebook-ads-library-scraper"
+    },
     "sbom-supply-chain": {
       "name": "sbom-supply-chain",
       "type": "skill",
@@ -39862,6 +39925,14 @@
       "path": "collected_assets/skills/longbridge-quant",
       "description_ko": "Longbridge Quant에 대한 엄선된 업스트림 지침; 워크플로가 사용자 목표와 일치할 때 사용합니다."
     },
+    "uiverify-triage-visual-changes": {
+      "name": "uiverify-triage-visual-changes",
+      "type": "skill",
+      "description": "Triage a UI Verify visual regression build from your coding agent over MCP: sort changed screenshots into regressions, intended changes and noise, then accept baselines.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/uiverify-triage-visual-changes"
+    },
     "jenkins": {
       "name": "jenkins",
       "type": "skill",
@@ -39975,6 +40046,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/debug-buttercup",
       "description_ko": "모든 포드는 네임스페이스 crs에서 실행됩니다. crs 네임스페이스의 Pod가 CrashLoopBackOff, OOMKilled 또는 다시 시작 중이거나 여러 서비스가 동시에 다시 시작되거나(계단 실패) Redis가 응답하지 않거나 AOF 경고를 표시하는 경우에 사용합니다."
+    },
+    "goal-instruction-writer": {
+      "name": "goal-instruction-writer",
+      "type": "skill",
+      "description": "Preview, draft, refine, or audit durable agent Goals with acceptance evidence, drift controls, proportional verification, and bounded waiting. Use for multi-stage work, not one-shot prompts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/goal-instruction-writer"
     },
     "graphql-schema": {
       "name": "graphql-schema",
@@ -40642,6 +40721,14 @@
       "path": "collected_assets/skills/gemini-deep-research",
       "description_ko": "Google의 Gemini Deep Research Agent를 사용하여 자율적인 다단계 연구를 실행하세요. 쿼리를 시작하고, 진행 상황을 조사하고, 시장 분석 또는 문헌 검토를 위해 인용 보고서를 수집합니다."
     },
+    "agy-powerline": {
+      "name": "agy-powerline",
+      "type": "skill",
+      "description": "Install, check and restyle the agy-powerline statusline for Antigravity CLI (agy): quotas, model, context window and git on agy's status bar.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/agy-powerline"
+    },
     "mock-hunter": {
       "name": "mock-hunter",
       "type": "skill",
@@ -40874,6 +40961,14 @@
       "path": "collected_assets/skills/macos-screen-recorder",
       "description_ko": "ScreenCaptureKit을 통해 메인 디스플레이와 시스템 오디오를 캡처하는 macOS 화면 레코더 — 블랙홀/루프백 드라이버 없음, sudo 없음, 표준 화면 녹화 권한만 제공됩니다. CLI 기반; 시스템 사운드로 헤드리스 화면 녹화 공백을 채울 수 없습니다. QuickTime과 `screencapture -v`는 할 수 없습니다."
     },
+    "neverapply": {
+      "name": "neverapply",
+      "type": "skill",
+      "description": "Find matching jobs, tailor resumes, prepare for interviews and apply to jobs with the user's approval through NeverApply's hosted MCP server (OAuth sign-in).",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/neverapply"
+    },
     "codex-fable5": {
       "name": "codex-fable5",
       "type": "skill",
@@ -40972,14 +41067,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/antigravity-agent-manager",
       "description_ko": "독립형 Antigravity 2.0 Agent Manager 및 Antigravity IDE를 사용하여 병렬 에이전트를 구성하고 조정합니다."
-    },
-    "taasky": {
-      "name": "taasky",
-      "type": "skill",
-      "description": "Negotiate terms with another person or their agent through the hosted Taasky MCP server: meeting times, prices, dates. The human confirms every accept, reject or withdraw.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/taasky"
     },
     "claude-in-chrome-troubleshooting": {
       "name": "claude-in-chrome-troubleshooting",
@@ -41115,14 +41202,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
-    },
-    "goal-instruction-writer": {
-      "name": "goal-instruction-writer",
-      "type": "skill",
-      "description": "Preview, draft, refine, or audit durable agent Goals with acceptance evidence, drift controls, proportional verification, and bounded waiting. Use for multi-stage work, not one-shot prompts.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/goal-instruction-writer"
     },
     "anywrite": {
       "name": "anywrite",
