@@ -6814,13 +6814,13 @@
       "description_ko": "승인 게이트, 보안 검사, 배포 조정을 통해 다단계 CI/CD 파이프라인을 설계합니다. 배포 워크플로를 설계하거나 지속적인 업데이트를 설정하거나 GitOps 방식을 구현할 때 사용하세요."
     },
     "README": {
-      "name": "README",
+      "name": "readme",
       "type": "skill",
-      "description": "Pre-configured agent personas with curated skill loadouts, workflows, and distinct personalities.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
+      "description": "When the user wants to create or update a README.md file for a project. Also use when the user says 'write readme,' 'create readme,' 'document this project,' 'project documentation,' or asks for help with README.md. This skill creates absurdly thorough documentation covering local setup, architecture, and deployment.",
+      "source_repo": "https://github.com/MK-ORGANIZATION-1/AGENTS-COLLECTION.git",
+      "source_name": "MK-ORGANIZATION-1/AGENTS-COLLECTION",
       "path": "collected_assets/skills/README",
-      "description_ko": "선별된 스킬 로드아웃, 워크플로 및 독특한 성격을 갖춘 사전 구성된 상담원 페르소나입니다."
+      "description_ko": "사용자가 프로젝트에 대한 README.md 파일을 생성하거나 업데이트하려는 경우. 또한 사용자가 'readme 쓰기', 'readme 만들기', '이 프로젝트 문서화', '프로젝트 문서화'라고 말하거나 README.md에 대한 도움을 요청할 때도 사용합니다. 이 기술은 로컬 설정, 아키텍처 및 배포를 다루는 터무니없이 철저한 문서를 생성합니다."
     },
     "LANGFUSE": {
       "name": "langfuse",
@@ -8743,11 +8743,10 @@
     "capacity-planner": {
       "name": "capacity-planner",
       "type": "skill",
-      "description": "Use when an ops leader (Director of CX, Head of Support, VP Ops, Head of BizOps, Head of IT ops, Head of Finance ops) is sizing ops capacity, building a headcount plan, modeling utilization risk, planning Q3 capacity or annual support capacity, or designing CS coverage — and needs Erlang-C queueing math, P90 demand sizing, shrinkage-adjusted FTE, manager-trigger thresholds, and a quarterly hiring sequence with ramp + attrition. Apply when sustained team utilization is above 80% or when the team is growing >50% in 12 months. Run before committing the headcount budget. This is NOT engineering capacity (see vpe-advisor for DORA + cycle time) and NOT strategic 3-year workforce planning (see chro-advisor).",
+      "description": "Use when an ops leader (Director of CX, Head of Support, VP Ops, Head of BizOps, Head of IT ops, Head of Finance ops) is sizing ops capacity, building a headcount plan, modeling utilization risk, planning Q3 capacity or annual support capacity, or designing CS coverage — and needs Erlang-C queueing math, P90 demand sizing, shrinkage-adjusted FTE, manager-trigger thresholds, and a quarterly hiring sequence with ramp + attrition. Apply when sustained team utilization is above 80% or when the team is growing more than 50% in 12 months. Run before committing the headcount budget. This is NOT engineering capacity (see vpe-advisor for DORA + cycle time) and NOT strategic 3-year workforce planning (see chro-advisor).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/capacity-planner",
-      "description_ko": "운영 리더(CX 이사, 지원 책임자, VP Ops, BizOps 책임자, IT 운영 책임자, 재무 운영 책임자)가 운영 용량 규모 조정, 인원수 계획 수립, 활용 위험 모델링, Q3 용량 또는 연간 지원 용량 계획, CS 적용 범위 설계 등을 수행할 때 Erlang-C 대기열 계산, P90 수요 규모 조정, 축소 조정 FTE, 관리자 트리거 임계값 및 분기별 고용 순서가 필요한 경우에 사용합니다. 램프 + 소모. 지속적인 팀 활용도가 80% 이상이거나 팀이 12개월 동안 50% 이상 성장하는 경우 적용하세요. 인원수 예산을 커밋하기 전에 실행하세요. 이는 엔지니어링 역량(DORA + 주기 시간에 대한 vpe-advisor 참조)이나 전략적 3년 인력 계획(chro-advisor 참조)이 아닙니다."
+      "path": "collected_assets/skills/capacity-planner"
     },
     "vendor-management": {
       "name": "vendor-management",
@@ -8869,20 +8868,18 @@
     "cs-onboard": {
       "name": "cs-onboard",
       "type": "skill",
-      "description": "Founder onboarding interview that captures company context across 7 dimensions. Invoke with /cs:setup for initial interview or /cs:update for quarterly refresh. Generates ~/.claude/company-context.md used by all C-suite advisor skills. Use when setting up the C-suite advisors for the first time, or when company context is missing or more than 90 days old — e.g. after a fundraise or pivot.",
+      "description": "Founder onboarding interview that captures company context across 7 dimensions. Invoke with /cs-onboard setup for initial interview or /cs-onboard update for quarterly refresh. Generates ~/.claude/company-context.md used by all C-suite advisor skills. Use when setting up the C-suite advisors for the first time, or when company context is missing or more than 90 days old — e.g. after a fundraise or pivot.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cs-onboard",
-      "description_ko": "7차원에 걸쳐 회사 상황을 포착하는 창업자 온보딩 인터뷰입니다. 초기 인터뷰의 경우 /cs:setup을 호출하고 분기별 새로 고침의 경우 /cs:update를 사용하여 호출합니다. 모든 C-suite Advisor 기술에 사용되는 ~/.claude/company-context.md를 생성합니다. C-suite Advisors를 처음으로 설정할 때 또는 회사 상황이 누락되었거나 90일이 넘은 경우에 사용합니다. 모금 또는 피벗 후."
+      "path": "collected_assets/skills/cs-onboard"
     },
     "context-engine": {
       "name": "context-engine",
       "type": "skill",
-      "description": "Loads and manages company context for all C-suite advisor skills. Reads ~/.claude/company-context.md, detects stale context (>90 days), enriches context during conversations, and enforces privacy/anonymization rules before external API calls. Use when starting any C-suite advisor session, when context looks stale or missing, or before sending company data to an external service.",
+      "description": "Loads and manages company context for all C-suite advisor skills. Reads ~/.claude/company-context.md, detects stale context (older than 90 days), enriches context during conversations, and enforces privacy/anonymization rules before external API calls. Use when starting any C-suite advisor session, when context looks stale or missing, or before sending company data to an external service.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/context-engine",
-      "description_ko": "모든 최고 경영진 자문 기술에 대한 회사 상황을 로드하고 관리합니다. ~/.claude/company-context.md를 읽고, 오래된 컨텍스트(>90일)를 감지하고, 대화 중 컨텍스트를 강화하고, 외부 API 호출 전에 개인정보 보호/익명화 규칙을 시행합니다. C-suite Advisor 세션을 시작할 때, 컨텍스트가 오래되었거나 누락된 것처럼 보일 때, 회사 데이터를 외부 서비스로 보내기 전에 사용합니다."
+      "path": "collected_assets/skills/context-engine"
     },
     "culture-architect": {
       "name": "culture-architect",
@@ -8986,11 +8983,10 @@
     "decision-logger": {
       "name": "decision-logger",
       "type": "skill",
-      "description": "Two-layer memory architecture for board meeting decisions. Manages raw transcripts (Layer 1) and approved decisions (Layer 2). Use when logging decisions after a board meeting, reviewing past decisions with /cs:decisions, or checking overdue action items with /cs:review. Invoked automatically by the board-meeting skill after Phase 5 founder approval.",
+      "description": "Two-layer memory architecture for board meeting decisions. Manages raw transcripts (Layer 1) and approved decisions (Layer 2). Use when logging decisions after a board meeting, reviewing past decisions with /decision-logger decisions, or checking overdue action items with /decision-logger review. Invoked automatically by the board-meeting skill after Phase 5 founder approval.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/decision-logger",
-      "description_ko": "이사회 회의 결정을 위한 2계층 메모리 아키텍처. 원시 성적표(계층 1) 및 승인된 결정(계층 2)을 관리합니다. 이사회 회의 후 결정 사항을 기록하거나 /cs:decisions를 사용하여 과거 결정을 검토하거나 /cs:review를 사용하여 기한이 지난 작업 항목을 확인할 때 사용합니다. 5단계 창립자 승인 후 이사회 스킬에 의해 자동으로 호출됩니다."
+      "path": "collected_assets/skills/decision-logger"
     },
     "internal-narrative": {
       "name": "internal-narrative",
@@ -9103,11 +9099,10 @@
     "board-meeting": {
       "name": "board-meeting",
       "type": "skill",
-      "description": "Multi-agent board meeting protocol for strategic decisions. Runs a structured 6-phase deliberation: context loading, independent C-suite contributions (isolated, no cross-pollination), critic analysis, synthesis, founder review, and decision extraction. Use when the user invokes /cs:boardroom, calls a board meeting, or wants structured multi-perspective executive deliberation on a strategic question.",
+      "description": "Multi-agent board meeting protocol for strategic decisions. Runs a structured 6-phase deliberation: context loading, independent C-suite contributions (isolated, no cross-pollination), critic analysis, synthesis, founder review, and decision extraction. Use when the user invokes /c-level-agents:boardroom, calls a board meeting, or wants structured multi-perspective executive deliberation on a strategic question.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/board-meeting",
-      "description_ko": "전략적 결정을 위한 다중 에이전트 이사회 회의 프로토콜입니다. 컨텍스트 로딩, 독립적인 최고 경영진 기여(격리, 교차 수분 없음), 비판 분석, 종합, 창립자 검토 및 의사 결정 추출 등 구조화된 6단계 심의를 실행합니다. 사용자가 /cs:boardroom을 호출하거나, 이사회를 소집하거나, 전략적 질문에 대해 구조화된 다각적 임원 심의를 원할 때 사용합니다."
+      "path": "collected_assets/skills/board-meeting"
     },
     "coo-advisor": {
       "name": "coo-advisor",
@@ -9130,11 +9125,10 @@
     "soc2-audit-prep": {
       "name": "soc2-audit-prep",
       "type": "skill",
-      "description": "/cs:soc2-audit-prep <scope> — SOC 2 Type II readiness 6-question forcing interrogation. Observation-period focused. Use before Type II observation begins, mid-period checkpoint, or pre-field-test month-10 readiness.",
+      "description": "/compliance-os:soc2-audit-prep [scope] — SOC 2 Type II readiness 6-question forcing interrogation. Observation-period focused. Use before Type II observation begins, mid-period checkpoint, or pre-field-test month-10 readiness.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/soc2-audit-prep",
-      "description_ko": "/cs:soc2-audit-prep <scope> — SOC 2 Type II 준비 6-질문 강제 심문. 관찰기간 중심. Type II 관찰이 시작되기 전, 중간 점검 시점 또는 사전 현장 테스트 10개월 준비 전에 사용합니다."
+      "path": "collected_assets/skills/soc2-audit-prep"
     },
     "compliance-os": {
       "name": "compliance-os",
@@ -9148,65 +9142,58 @@
     "aims-audit": {
       "name": "aims-audit",
       "type": "skill",
-      "description": "/cs:aims-audit <scope> — ISO/IEC 42001 AIMS internal-audit 6-question forcing interrogation. Use before certification stage 1, before annual internal audit cycles, or when onboarding a new AI system into an existing AIMS.",
+      "description": "/compliance-os:aims-audit [scope] — ISO/IEC 42001 AIMS internal-audit 6-question forcing interrogation. Use before certification stage 1, before annual internal audit cycles, or when onboarding a new AI system into an existing AIMS.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/aims-audit",
-      "description_ko": "/cs:aims-audit <범위> — ISO/IEC 42001 AIMS 내부 감사 6개 질문 강제 심문. 인증 1단계 이전, 연간 내부 감사 주기 이전 또는 기존 AIMS에 새 AI 시스템을 온보딩할 때 사용합니다."
+      "path": "collected_assets/skills/aims-audit"
     },
     "compliance-readiness": {
       "name": "compliance-readiness",
       "type": "skill",
-      "description": "/cs:compliance-readiness <program> — Multi-framework compliance officer 6-question forcing interrogation of any compliance program. Use before starting a new framework, planning the annual audit calendar, or preparing for certification stage 1.",
+      "description": "/compliance-os:compliance-readiness [program] — Multi-framework compliance officer 6-question forcing interrogation of any compliance program. Use before starting a new framework, planning the annual audit calendar, or preparing for certification stage 1.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/compliance-readiness",
-      "description_ko": "/cs:compliance-readiness <프로그램> — 모든 규정 준수 프로그램에 대한 심문을 강제하는 다중 프레임워크 규정 준수 담당자 6개 질문입니다. 새로운 프레임워크를 시작하거나, 연간 감사 일정을 계획하거나, 인증 1단계를 준비하기 전에 사용하세요."
+      "path": "collected_assets/skills/compliance-readiness"
     },
     "iso27001-audit-prep": {
       "name": "iso27001-audit-prep",
       "type": "skill",
-      "description": "/cs:iso27001-audit-prep <scope> — ISO 27001 ISMS audit readiness 6-question forcing interrogation. Use before annual Clause 9.2 internal audit, surveillance audit prep, or stage 1 certification readiness.",
+      "description": "/compliance-os:iso27001-audit-prep [scope] — ISO 27001 ISMS audit readiness 6-question forcing interrogation. Use before annual Clause 9.2 internal audit, surveillance audit prep, or stage 1 certification readiness.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/iso27001-audit-prep",
-      "description_ko": "/cs:iso27001-audit-prep <범위> — ISO 27001 ISMS 감사 준비 6가지 질문 강제 심문. 연간 조항 9.2 내부 감사, 감시 감사 준비 또는 1단계 인증 준비 전에 사용하십시오."
+      "path": "collected_assets/skills/iso27001-audit-prep"
     },
     "gdpr-audit-prep": {
       "name": "gdpr-audit-prep",
       "type": "skill",
-      "description": "/cs:gdpr-audit-prep <scope> — GDPR audit 6-question Article-cited forcing interrogation. Use before annual internal GDPR review, post-breach internal audit, DPA investigation readiness, or acquisition due diligence.",
+      "description": "/compliance-os:gdpr-audit-prep [scope] — GDPR audit 6-question Article-cited forcing interrogation. Use before annual internal GDPR review, post-breach internal audit, DPA investigation readiness, or acquisition due diligence.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/gdpr-audit-prep",
-      "description_ko": "/cs:gdpr-audit-prep <scope> — GDPR 감사 6개 질문 기사 인용 강제 심문. 연간 내부 GDPR 검토, 위반 후 내부 감사, DPA 조사 준비 또는 인수 실사 전에 사용하세요."
+      "path": "collected_assets/skills/gdpr-audit-prep"
     },
     "ai-act-readiness": {
       "name": "ai-act-readiness",
       "type": "skill",
-      "description": "/cs:ai-act-readiness <system> — EU AI Act 6-question forcing interrogation. Use during AI-system intake, before EU deployment, or during annual compliance refresh as Article 113 obligations phase in (2025-02-02 / 2025-08-02 / 2026-08-02 / 2027-08-02).",
+      "description": "/compliance-os:ai-act-readiness [system] — EU AI Act 6-question forcing interrogation. Use during AI-system intake, before EU deployment, or during annual compliance refresh as Article 113 obligations phase in (2025-02-02 / 2025-08-02 / 2026-08-02 / 2027-08-02).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/ai-act-readiness",
-      "description_ko": "/cs:ai-act-readiness <system> — 심문을 강제하는 EU AI Act 6 질문입니다. AI 시스템 도입 중, EU 배포 전 또는 113조 의무 단계(2025-02-02 / 2025-08-02 / 2026-08-02 / 2027-08-02)에 따른 연간 규정 준수 갱신 중에 사용합니다."
+      "path": "collected_assets/skills/ai-act-readiness"
     },
     "iso13485-audit-prep": {
       "name": "iso13485-audit-prep",
       "type": "skill",
-      "description": "/cs:iso13485-audit-prep <scope> — ISO 13485 QMS audit 6-question forcing interrogation. Design controls + CAPA + post-market focused. Use before Clause 8.2.4 internal audit, MDR / FDA QSR alignment review, or product-launch DHF closure audit.",
+      "description": "/compliance-os:iso13485-audit-prep [scope] — ISO 13485 QMS audit 6-question forcing interrogation. Design controls + CAPA + post-market focused. Use before Clause 8.2.4 internal audit, MDR / FDA QSR alignment review, or product-launch DHF closure audit.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/iso13485-audit-prep",
-      "description_ko": "/cs:iso13485-audit-prep <scope> — ISO 13485 QMS 감사 6-질문 강제 심문. 디자인 제어 + CAPA + 포스트 마켓 중심. 조항 8.2.4 내부 감사, MDR/FDA QSR 정렬 ​​검토 또는 제품 출시 DHF 종결 감사 전에 사용하십시오."
+      "path": "collected_assets/skills/iso13485-audit-prep"
     },
     "fda-qsr-audit-prep": {
       "name": "fda-qsr-audit-prep",
       "type": "skill",
-      "description": "/cs:fda-qsr-audit-prep <scope> — FDA 21 CFR 820 (QSR / QMSR) audit 6-question forcing interrogation. Post-Feb 2026 substantially harmonized with ISO 13485. Use before annual internal QSR audit, pre-FDA-inspection readiness, or Form 483 response.",
+      "description": "/compliance-os:fda-qsr-audit-prep [scope] — FDA 21 CFR 820 (QSR / QMSR) audit 6-question forcing interrogation. Post-Feb 2026 substantially harmonized with ISO 13485. Use before annual internal QSR audit, pre-FDA-inspection readiness, or Form 483 response.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/fda-qsr-audit-prep",
-      "description_ko": "/cs:fda-qsr-audit-prep <범위> — FDA 21 CFR 820(QSR/QMSR) 감사 6가지 질문 강제 심문. 2026년 2월 이후 ISO 13485와 실질적으로 조화를 이룹니다. 연간 내부 QSR 감사, FDA 사전 검사 준비 또는 Form 483 응답 전에 사용하세요."
+      "path": "collected_assets/skills/fda-qsr-audit-prep"
     },
     "grade-iterate": {
       "name": "grade-iterate",
@@ -9873,6 +9860,14 @@
       "path": "collected_assets/skills/senior-prompt-engineer",
       "description_ko": "사용자가 프롬프트 최적화, 프롬프트 템플릿 설계, 평가 세트로 LLM 출력 평가, RAG 검색 품질 측정, 에이전트/도구 구성 검증, 토큰 사용 분석 또는 구조화된 출력 계약 설계를 요청할 때 사용합니다. 세 가지 stdlib Python 도구를 사용하여 평가 기반 프롬프트 반복, RAG 지표(관련성, 충실도, 적용 범위), 에이전트 워크플로 검증 및 토큰/비용 예산 책정을 다룹니다. 모두 모델에 구애받지 않습니다."
     },
+    "red-green-proof": {
+      "name": "red-green-proof",
+      "type": "skill",
+      "description": "Turns a suspected bug into a proven one. Verify the cause against reality before claiming it, write a test that FAILS on the current code, apply the fix, watch it pass — then revert the fix and confirm the test goes red again, because a test that passes both ways proves nothing. Invoked bare after a debugging conversation, it takes the target from context rather than asking. Use when fixing a bug, investigating an incident, hardening a flaky area, or when asked to \"add tests that reveal the bug\". Triggers on \"/red-green-proof\", \"prove the bug\", \"red-green\", \"make the test fail first\", \"is that test load-bearing\", \"reveal the bug with a test\".",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/red-green-proof"
+    },
     "senior-devops": {
       "name": "senior-devops",
       "type": "skill",
@@ -9963,6 +9958,14 @@
       "path": "collected_assets/skills/business-investment-advisor",
       "description_ko": "사업 투자 분석 및 자본 배분 자문. 장비, 부동산, 신규 사업, 고용, 기술 또는 자본 지출에 대한 투자 여부를 평가할 때 사용하십시오. 또한 ROI 계산, IRR, NPV, 투자 회수 기간, 구축 및 구매 결정, 임대 및 구매 분석, 공급업체 평가 또는 최대 수익을 위해 제한된 예산을 어디에 할당할지 결정하는 데에도 사용됩니다."
     },
+    "month-end-close": {
+      "name": "month-end-close",
+      "type": "skill",
+      "description": "Use when running, planning or speeding up a month-end (or quarter-end) close — building or reviewing the close checklist and calendar, reconciling a bank statement or sub-ledger to the general ledger, writing or reviewing flux (variance) explanations, or finding why the close takes too many days. Orders close tasks by dependency and finds the critical path, proves each reconciliation and ages what is left, and refuses to sign off material fluctuations explained with boilerplate.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/month-end-close"
+    },
     "saas-metrics-coach": {
       "name": "saas-metrics-coach",
       "type": "skill",
@@ -9975,11 +9978,10 @@
     "finance-skills": {
       "name": "finance-skills",
       "type": "skill",
-      "description": "Router/index for the 2 finance skills bundled in this plugin: financial-analyst (ratio analysis, DCF valuation, budget variance, rolling forecasts) and saas-metrics-coach (ARR/MRR, churn, CAC/LTV, NRR, quick ratio). Use when a finance request doesn't obviously match one skill and you need to pick the right one (e.g., 'analyze these financials', 'how healthy are my SaaS metrics').",
+      "description": "Router/index for the finance skills bundled in this plugin: financial-analyst (ratio analysis, DCF valuation, budget variance, rolling forecasts), saas-metrics-coach (ARR/MRR, churn, CAC/LTV, NRR, quick ratio) and month-end-close (close calendar, reconciliations, flux review). Use when a finance request doesn't obviously match one skill and you need to pick the right one (e.g., 'analyze these financials', 'how healthy are my SaaS metrics').",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/finance-skills",
-      "description_ko": "이 플러그인에 번들로 포함된 2가지 재무 기술에 대한 라우터/인덱스: 재무 분석가(비율 분석, DCF 평가, 예산 차이, 롤링 예측) 및 saas-metrics-coach(ARR/MRR, 이탈, CAC/LTV, NRR, 빠른 비율). 재무 요청이 하나의 기술과 명확하게 일치하지 않고 올바른 기술을 선택해야 할 때 사용합니다(예: '이러한 재무 분석', '내 SaaS 지표가 얼마나 건전한지')."
+      "path": "collected_assets/skills/finance-skills"
     },
     "financial-analyst": {
       "name": "financial-analyst",
@@ -9998,6 +10000,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/stock-analysis",
       "description_ko": "인도(NSE/BSE) 또는 미국/글로벌 등 상장 회사에 대한 엄격한 부문별 다중 요소 기본 분석을 생성합니다. 사용자가 주식, 주식, 상장 회사에 대한 분석, 연구, 평가 또는 가치 평가를 요청할 때 사용합니다. 사업이 근본적으로 강한지, 저렴한지, 비싼지 묻습니다. 기업이나 벤치마크를 해당 부문과 비교합니다. 또는 OPM, ROCE, ROE, ROIC, P/E, EV/EBITDA, 잉여현금흐름, NIM, GNPA, CASA, 발기인 보유 또는 약속을 언급합니다. 회계 품질 및 포렌식 질문(\"이익은 실제입니까?\", \"이익은 증가하지만 현금은 증가하지 않는 이유\", 감사자 자격, 관련 당사자 문제(포렌식 전용 모드로 라우팅) 및 IPO 및 아직 상장되지 않은 기업의 경우 \"이 IPO에 적용해야 할까요?\", DRHP/RHP 또는 S-1 질문, 가격대, 그레이 마켓 프리미엄(IPO 모드로 라우팅)에 사용합니다. 요청이 별 것 아닌 것처럼 들리는 경우에도 사용하세요(\"Infosys가 좋은가요?\"). 개인화된 투자 조언, 포트폴리오 할당 또는 거래 신호를 위해 사용하지 마십시오."
+    },
+    "passive-deal-screener": {
+      "name": "passive-deal-screener",
+      "type": "skill",
+      "description": "Screens private investment opportunities from the passive LP (limited-partner) perspective — equity syndications, preferred equity, hard money / bridge funds, and private credit — pasted from any source (an investment platform listing, a direct GP email, raw terms). Produces a deal snapshot, stress-tests returns against public benchmarks, deconstructs the fee stack to a gross-to-net drag, surfaces severity-ranked red flags and missing disclosures, assesses GP alignment, and generates prioritized GP questions with bad-answer signals. Use whenever asked to analyze, evaluate, screen, or review a real-estate or private-market deal, syndication, offering, or investment opportunity — e.g. 'is this deal worth pursuing', 'what should I ask the GP', 'analyze this offering memo'. LP lens only; not operator-side underwriting (acquisition/development/asset-management). For corporate-finance DCF/ratio work use financial-analyst.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/passive-deal-screener"
     },
     "meeting-analyzer": {
       "name": "meeting-analyzer",
@@ -10128,155 +10138,138 @@
     "boardroom": {
       "name": "boardroom",
       "type": "skill",
-      "description": "/cs:boardroom <brief> — 6-phase multi-role deliberation across the C-suite with Phase 2 isolation, critic pre-screen, and synthesis. Outputs a board memo. Use when a decision spans multiple executive domains — e.g. a pricing change touching finance, positioning, and product, or a raise-vs-cut runway call.",
+      "description": "/c-level-agents:boardroom [brief] — 6-phase multi-role deliberation across the C-suite with Phase 2 isolation, critic pre-screen, and synthesis. Outputs a board memo. Use when a decision spans multiple executive domains — e.g. a pricing change touching finance, positioning, and product, or a raise-vs-cut runway call.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/boardroom",
-      "description_ko": "/cs:boardroom <brief> — 2단계 격리, 비평가 사전 심사 및 종합을 통해 최고 경영진 전반에 걸쳐 6단계 다중 역할 심의. 보드 메모를 출력합니다. 의사결정이 여러 경영진 영역에 걸쳐 있을 때 사용합니다. 재무, 포지셔닝 및 제품에 영향을 미치는 가격 변경 또는 인상 대 삭감 활주로 호출."
+      "path": "collected_assets/skills/boardroom"
     },
     "onboard": {
       "name": "onboard",
       "type": "skill",
-      "description": "/cs:onboard — Founder interview that populates ~/.claude/company-context.md using the canonical 7-dimension cs-onboard schema. The first command to run when starting with c-level-agents. Use when setting up the virtual C-suite for a new company, or when advisors lack company context — e.g. before a first /cs:boardroom or after a fundraise changes the numbers.",
+      "description": "/cs-onboard — Founder interview that populates ~/.claude/company-context.md using the canonical 7-dimension cs-onboard schema. The first command to run when starting with c-level-agents. Use when setting up the virtual C-suite for a new company, or when advisors lack company context — e.g. before a first /c-level-agents:boardroom or after a fundraise changes the numbers.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/onboard",
-      "description_ko": "/cs:onboard — 표준 7차원 cs-onboard 스키마를 사용하여 ~/.claude/company-context.md를 채우는 창립자 인터뷰입니다. c-level-agents로 시작할 때 실행하는 첫 번째 명령입니다. 새로운 회사를 위한 가상 최고 경영진을 설정할 때 또는 고문에게 회사 상황이 부족한 경우에 사용합니다. 첫 번째 /cs:boardroom 이전 또는 모금 활동 이후에 숫자가 변경됩니다."
+      "path": "collected_assets/skills/onboard"
     },
     "cmo-review": {
       "name": "cmo-review",
       "type": "skill",
-      "description": "/cs:cmo-review <plan> — Narrative-first interrogation of positioning, ICP, message house, and channel mix. Use when launching a campaign or repositioning, or when CAC is rising and the one-sentence positioning test fails.",
+      "description": "/c-level-agents:cmo-review [plan] — Narrative-first interrogation of positioning, ICP, message house, and channel mix. Use when launching a campaign or repositioning, or when CAC is rising and the one-sentence positioning test fails.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmo-review",
-      "description_ko": "/cs:cmo-review <plan> — 포지셔닝, ICP, 메시지 하우스 및 채널 믹스에 대한 서술 우선 심문입니다. 캠페인을 시작하거나 위치를 변경할 때 또는 CAC가 상승하고 한 문장 위치 지정 테스트에 실패할 때 사용합니다."
+      "path": "collected_assets/skills/cmo-review"
     },
     "execute": {
       "name": "execute",
       "type": "skill",
-      "description": "/cs:execute <decision> — Generate a 90-day execution plan with weekly milestones, DRIs, and check-in cadence from an approved decision. Use when a logged decision needs to become an operating plan — e.g. turning an approved market-entry call into weekly milestones with DRIs.",
+      "description": "/c-level-agents:execute [decision] — Generate a 90-day execution plan with weekly milestones, DRIs, and check-in cadence from an approved decision. Use when a logged decision needs to become an operating plan — e.g. turning an approved market-entry call into weekly milestones with DRIs.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/execute",
-      "description_ko": "/cs:execute <decision> — 승인된 결정에서 주간 마일스톤, DRI 및 체크인 주기를 포함하는 90일 실행 계획을 생성합니다. 기록된 결정이 운영 계획이 되어야 할 때 사용합니다. 승인된 시장 진입 요청을 DRI를 통해 주간 이정표로 전환합니다."
+      "path": "collected_assets/skills/execute"
     },
     "freeze": {
       "name": "freeze",
       "type": "skill",
-      "description": "/cs:freeze <decision> <days> — Lock a strategic decision for a cooldown period to prevent impulse reversal. Mirrors gstack's safety primitives for the business layer. Use when an irreversible decision was made under pressure — e.g. a layoff plan or multi-year contract — and deserves a cooling-off lock before execution.",
+      "description": "/c-level-agents:freeze [decision] [days] — Lock a strategic decision for a cooldown period to prevent impulse reversal. Mirrors gstack's safety primitives for the business layer. Use when an irreversible decision was made under pressure — e.g. a layoff plan or multi-year contract — and deserves a cooling-off lock before execution.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/freeze",
-      "description_ko": "/cs:freeze <결정> <일> — 충동 반전을 방지하기 위해 휴지 기간 동안 전략적 결정을 잠급니다. 비즈니스 계층에 대한 gstack의 안전 기본 요소를 미러링합니다. 압력을 받아 되돌릴 수 없는 결정이 내려졌을 때 사용합니다. 해고 계획 또는 다년 계약 - 실행 전에 냉각 잠금을 받을 자격이 있습니다."
+      "path": "collected_assets/skills/freeze"
     },
     "post-mortem": {
       "name": "post-mortem",
       "type": "skill",
-      "description": "/cs:post-mortem <decision> — Honest retrospective on an executed decision, scored against original assumptions and dissent. Closes the strategic sprint loop. Use when a decision hits its 90-day review checkpoint or its kill criteria trigger — e.g. scoring last quarter's pricing change against its pre-committed success metrics.",
+      "description": "/c-level-agents:post-mortem [decision] — Honest retrospective on an executed decision, scored against original assumptions and dissent. Closes the strategic sprint loop. Use when a decision hits its 90-day review checkpoint or its kill criteria trigger — e.g. scoring last quarter's pricing change against its pre-committed success metrics.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/post-mortem",
-      "description_ko": "/cs:post-mortem <decision> — 실행된 결정에 대한 정직한 회고, 원래의 가정과 반대 의견에 대해 점수를 매김. 전략적 스프린트 루프를 닫습니다. 결정이 90일 검토 체크포인트에 도달하거나 종료 기준 트리거에 도달할 때 사용합니다. 사전 약속된 성공 지표를 기준으로 지난 분기의 가격 변동을 평가합니다."
+      "path": "collected_assets/skills/post-mortem"
     },
     "cfo-review": {
       "name": "cfo-review",
       "type": "skill",
-      "description": "/cs:cfo-review <plan> — Numerate-skeptic interrogation of any plan that touches money. Unit economics, runway, dilution, capital allocation. Use when a plan commits meaningful spend — e.g. a hiring wave, a fundraise decision, or a new channel budget.",
+      "description": "/c-level-agents:cfo-review [plan] — Numerate-skeptic interrogation of any plan that touches money. Unit economics, runway, dilution, capital allocation. Use when a plan commits meaningful spend — e.g. a hiring wave, a fundraise decision, or a new channel budget.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cfo-review",
-      "description_ko": "/cs:cfo-review <plan> — 돈과 관련된 모든 계획에 대해 숫자에 회의적인 심문을 합니다. 단위 경제학, 활주로, 희석, 자본 배분. 계획이 의미 있는 지출을 할 때 사용합니다. 채용 물결, 모금 결정, 새로운 채널 예산 등이 있습니다."
+      "path": "collected_assets/skills/cfo-review"
     },
     "cross-eval": {
       "name": "cross-eval",
       "type": "skill",
-      "description": "/cs:cross-eval <memo> — Multi-model consensus on a board memo or strategy brief. Claude + Codex + Gemini cross-review with graceful degradation. Use when a high-stakes memo needs an independent sanity check before the boardroom — e.g. a bet-the-company pivot or fundraise terms.",
+      "description": "/c-level-agents:cross-eval [memo] — Multi-model consensus on a board memo or strategy brief. Claude + Codex + Gemini cross-review with graceful degradation. Use when a high-stakes memo needs an independent sanity check before the boardroom — e.g. a bet-the-company pivot or fundraise terms.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cross-eval",
-      "description_ko": "/cs:cross-eval <memo> — 보드 메모 또는 전략 개요에 대한 다중 모델 합의입니다. Claude + Codex + Gemini 교차 검토를 통해 우아한 저하가 발생합니다. 중요한 메모가 이사회에 앞서 독립적인 온전성 점검이 필요할 때 사용합니다. 회사에 베팅하는 피벗 또는 모금 조건."
+      "path": "collected_assets/skills/cross-eval"
     },
     "c-level-agents": {
       "name": "c-level-agents",
       "type": "skill",
-      "description": "Founder-mode executive team. 13 cs-* C-suite agents (CFO, CMO, CRO, CPO, COO, CHRO, CISO, GC, CDO, CAIO, CCO, VPE, Chief of Staff) and 21 /cs:* slash commands for forcing-question office hours, multi-role boardroom deliberation, strategic sprint pipeline, and meta routing. Use when the founder needs a virtual executive team, when invoking /cs:* commands, or when orchestrating multi-role decisions.",
+      "description": "Founder-mode executive team. 13 cs-* C-suite agents (CFO, CMO, CRO, CPO, COO, CHRO, CISO, GC, CDO, CAIO, CCO, VPE, Chief of Staff) and 21 /c-level-agents:* slash commands for forcing-question office hours, multi-role boardroom deliberation, strategic sprint pipeline, and meta routing. Use when the founder needs a virtual executive team, when invoking /c-level-agents:* commands, or when orchestrating multi-role decisions.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/c-level-agents",
-      "description_ko": "창립자 모드 경영진. 13개의 cs-* 최고 경영진 에이전트(CFO, CMO, CRO, CPO, COO, CHRO, CISO, GC, CDO, CAIO, CCO, VPE, Chief of Staff) 및 21개의 /cs:* 슬래시 명령으로 근무 시간 강제 질문, 다중 역할 이사회 심의, 전략적 스프린트 파이프라인 및 메타 라우팅을 수행합니다. 창립자가 가상 ​​경영진이 필요할 때, /cs:* 명령을 호출할 때 또는 다중 역할 결정을 조정할 때 사용합니다."
+      "path": "collected_assets/skills/c-level-agents"
     },
     "gc-review": {
       "name": "gc-review",
       "type": "skill",
-      "description": "/cs:gc-review <plan> — General Counsel interrogation of contracts, IP, regulatory, term sheets, and employment-law surface. Use when reviewing a term sheet before signing, redlining a customer MSA, or checking IP assignment and regulatory exposure on a new product.",
+      "description": "/c-level-agents:gc-review [plan] — General Counsel interrogation of contracts, IP, regulatory, term sheets, and employment-law surface. Use when reviewing a term sheet before signing, redlining a customer MSA, or checking IP assignment and regulatory exposure on a new product.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/gc-review",
-      "description_ko": "/cs:gc-review <계획> — 법률 고문의 계약, IP, 규제, 계약 조건 및 고용법 표면에 대한 심문. 서명하기 전에 용어 시트를 검토하거나, 고객 MSA를 수정하거나, 신제품에 대한 IP 할당 및 규제 노출을 확인할 때 사용합니다."
+      "path": "collected_assets/skills/gc-review"
     },
     "cco-review": {
       "name": "cco-review",
       "type": "skill",
-      "description": "/cs:cco-review <plan> — Retention-obsessed Chief Customer Officer interrogation of any plan that touches customer retention, segmentation, CS team sizing, or CS team hiring. Use when gross retention is slipping, before approving CSM headcount, or when deciding which customer segments to keep or fire.",
+      "description": "/c-level-agents:cco-review [plan] — Retention-obsessed Chief Customer Officer interrogation of any plan that touches customer retention, segmentation, CS team sizing, or CS team hiring. Use when gross retention is slipping, before approving CSM headcount, or when deciding which customer segments to keep or fire.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cco-review",
-      "description_ko": "/cs:cco-review <계획> — 고객 유지에 집착하는 최고 고객 책임자(CCO)는 고객 유지, 세분화, CS 팀 규모 조정 또는 CS 팀 채용과 관련된 모든 계획을 심문합니다. 총 유지율이 낮아지는 경우, CSM 인원수를 승인하기 전, 유지하거나 해고할 고객 세그먼트를 결정할 때 사용하세요."
+      "path": "collected_assets/skills/cco-review"
     },
     "founder-mode": {
       "name": "founder-mode",
       "type": "skill",
-      "description": "/cs:founder-mode <question> — Auto-routes any founder question to the right C-role advisor or to /cs:boardroom for multi-role topics. The single-command entry point. Use when a founder asks any strategic question without knowing which advisor or command fits — e.g. 'runway pressure' routes to the CFO, 'gross retention dropped' routes to the CCO.",
+      "description": "/c-level-agents:founder-mode [question] — Auto-routes any founder question to the right C-role advisor or to /c-level-agents:boardroom for multi-role topics. The single-command entry point. Use when a founder asks any strategic question without knowing which advisor or command fits — e.g. 'runway pressure' routes to the CFO, 'gross retention dropped' routes to the CCO.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/founder-mode",
-      "description_ko": "/cs:founder-mode <question> — 창립자의 질문을 올바른 C 역할 고문 또는 다중 역할 주제의 경우 /cs:boardroom으로 자동 라우팅합니다. 단일 명령 진입점. 창업자가 어떤 조언이나 명령이 적합한지 알지 못한 채 전략적 질문을 할 때 사용합니다. '활주로 압력'은 CFO로 전달되고, '총체적 보유 감소'는 CCO로 전달됩니다."
+      "path": "collected_assets/skills/founder-mode"
     },
     "ciso-review": {
       "name": "ciso-review",
       "type": "skill",
-      "description": "/cs:ciso-review <plan> — Risk-paranoid interrogation of any plan that touches data, compliance, or production access. Use when launching features that handle customer data, before a SOC 2 / ISO audit, or after any incident or near-miss.",
+      "description": "/c-level-agents:ciso-review [plan] — Risk-paranoid interrogation of any plan that touches data, compliance, or production access. Use when launching features that handle customer data, before a SOC 2 / ISO audit, or after any incident or near-miss.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/ciso-review",
-      "description_ko": "/cs:ciso-review <plan> — 데이터, 규정 준수 또는 프로덕션 액세스와 관련된 모든 계획에 대한 위험 편집증 심문입니다. 고객 데이터를 처리하는 기능을 시작할 때, SOC 2/ISO 감사 전, 사고 또는 거의 실수한 후에 사용합니다."
+      "path": "collected_assets/skills/ciso-review"
     },
     "vpe-review": {
       "name": "vpe-review",
       "type": "skill",
-      "description": "/cs:vpe-review <plan> — Throughput-first VP of Engineering interrogation of any plan that touches delivery, eng hiring, team structure, or production discipline. Use when cycle time balloons, DORA metrics slide, or before committing to an eng hiring wave or a reorg.",
+      "description": "/c-level-agents:vpe-review [plan] — Throughput-first VP of Engineering interrogation of any plan that touches delivery, eng hiring, team structure, or production discipline. Use when cycle time balloons, DORA metrics slide, or before committing to an eng hiring wave or a reorg.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/vpe-review",
-      "description_ko": "/cs:vpe-review <계획> — 처리량 우선 엔지니어링 부사장은 납품, 엔지니어링 채용, 팀 구조 또는 생산 규율과 관련된 모든 계획을 심문합니다. 주기 시간이 늘어나거나 DORA 지표 슬라이드가 나올 때 또는 엔지니어링 채용 웨이브나 조직 개편을 시작하기 전에 사용하세요."
+      "path": "collected_assets/skills/vpe-review"
     },
     "cpo-review": {
       "name": "cpo-review",
       "type": "skill",
-      "description": "/cs:cpo-review <plan> — JTBD-driven interrogation of product roadmap, PMF signal, and portfolio focus. Use when committing a quarter's roadmap, deciding whether to kill a feature, or claiming PMF without a retention curve.",
+      "description": "/c-level-agents:cpo-review [plan] — JTBD-driven interrogation of product roadmap, PMF signal, and portfolio focus. Use when committing a quarter's roadmap, deciding whether to kill a feature, or claiming PMF without a retention curve.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cpo-review",
-      "description_ko": "/cs:cpo-review <plan> — 제품 로드맵, PMF 신호 및 포트폴리오 초점에 대한 JTBD 기반 심문입니다. 분기 로드맵을 확정하거나, 기능 종료 여부를 결정하거나, 유지 곡선 없이 PMF를 청구할 때 사용하세요."
+      "path": "collected_assets/skills/cpo-review"
     },
     "decide": {
       "name": "decide",
       "type": "skill",
-      "description": "/cs:decide <memo> — Log a decision to two-layer memory via decision-logger. Approved memo becomes durable; raw transcripts kept for reference. Use when the founder has approved a boardroom memo and the decision must become durable company memory — e.g. right after /cs:boardroom concludes.",
+      "description": "/c-level-agents:decide [memo] — Log a decision to two-layer memory via decision-logger. Approved memo becomes durable; raw transcripts kept for reference. Use when the founder has approved a boardroom memo and the decision must become durable company memory — e.g. right after /c-level-agents:boardroom concludes.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/decide",
-      "description_ko": "/cs:decide <memo> — 결정 로거를 통해 2계층 메모리에 결정을 기록합니다. 승인된 메모는 내구성이 있습니다. 참조용으로 보관된 원시 성적표. 창업자가 이사회 메모를 승인했고 그 결정이 회사의 지속적인 기억이 되어야 할 때 사용합니다. /cs:boardroom이 끝난 직후."
+      "path": "collected_assets/skills/decide"
     },
     "cto-review": {
       "name": "cto-review",
       "type": "skill",
-      "description": "/cs:cto-review <plan> — Architecture and scaling interrogation. Tech debt, scaling cliffs, team scaling, build-vs-buy. Use when committing to an architecture, planning for 10x load, or weighing a rebuild against a vendor.",
+      "description": "/c-level-agents:cto-review [plan] — Architecture and scaling interrogation. Tech debt, scaling cliffs, team scaling, build-vs-buy. Use when committing to an architecture, planning for 10x load, or weighing a rebuild against a vendor.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cto-review",
-      "description_ko": "/cs:cto-review <plan> — 아키텍처 및 확장 심문. 기술 부채, 절벽 확장, 팀 확장, 구축 대 구매. 아키텍처를 확정하거나, 10배의 로드를 계획하거나, 공급업체를 기준으로 재구축을 평가할 때 사용하세요."
+      "path": "collected_assets/skills/cto-review"
     },
     "office-hours": {
       "name": "office-hours",
@@ -10290,47 +10283,42 @@
     "cro-review": {
       "name": "cro-review",
       "type": "skill",
-      "description": "/cs:cro-review <plan> — Pipeline-paranoid interrogation of revenue, win rate, NRR, and ramp time. Use when the forecast misses pipeline coverage, win rates drop, or before scaling the sales team.",
+      "description": "/c-level-agents:cro-review [plan] — Pipeline-paranoid interrogation of revenue, win rate, NRR, and ramp time. Use when the forecast misses pipeline coverage, win rates drop, or before scaling the sales team.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cro-review",
-      "description_ko": "/cs:cro-review <plan> — 수익, 승률, NRR 및 램프 시간에 대한 파이프라인 편집증 심문. 예측이 파이프라인 적용 범위를 놓치거나, 성사율이 떨어지거나, 영업팀을 확장하기 전인 경우에 사용하세요."
+      "path": "collected_assets/skills/cro-review"
     },
     "brief": {
       "name": "brief",
       "type": "skill",
-      "description": "/cs:brief <topic> — Generate a one-page strategy brief from an office-hours intake. First step in the strategic sprint pipeline. Use when a strategic question needs to be framed before boardroom deliberation — e.g. locking options, assumptions, and success criteria for a pricing change or a market-entry decision.",
+      "description": "/c-level-agents:brief [topic] — Generate a one-page strategy brief from an office-hours intake. First step in the strategic sprint pipeline. Use when a strategic question needs to be framed before boardroom deliberation — e.g. locking options, assumptions, and success criteria for a pricing change or a market-entry decision.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/brief",
-      "description_ko": "/cs:brief <topic> — 업무 시간 접수에서 한 페이지 분량의 전략 개요를 생성합니다. 전략적 스프린트 파이프라인의 첫 번째 단계. 이사회 심의 전에 전략적인 질문을 구성해야 할 때 사용합니다. 가격 변경 또는 시장 진입 결정에 대한 잠금 옵션, 가정 및 성공 기준."
+      "path": "collected_assets/skills/brief"
     },
     "cdo-review": {
       "name": "cdo-review",
       "type": "skill",
-      "description": "/cs:cdo-review <plan> — Decision-driven Chief Data Officer interrogation of any plan that touches training data, data architecture, data productization, or data team hiring. Use when validating training-data rights before model work, choosing warehouse vs lakehouse vs mesh, or valuing data assets for productization or M&A.",
+      "description": "/c-level-agents:cdo-review [plan] — Decision-driven Chief Data Officer interrogation of any plan that touches training data, data architecture, data productization, or data team hiring. Use when validating training-data rights before model work, choosing warehouse vs lakehouse vs mesh, or valuing data assets for productization or M&A.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cdo-review",
-      "description_ko": "/cs:cdo-review <계획> — 교육 데이터, 데이터 아키텍처, 데이터 제품화 또는 데이터 팀 채용과 관련된 모든 계획에 대한 의사결정 중심의 최고 데이터 책임자(CIO)를 심문합니다. 모델 작업 전에 훈련 데이터 권한을 검증할 때, 웨어하우스, 레이크하우스, 메시를 선택하거나 제품화 또는 M&A를 위한 데이터 자산의 가치를 평가할 때 사용하세요."
+      "path": "collected_assets/skills/cdo-review"
     },
     "caio-review": {
       "name": "caio-review",
       "type": "skill",
-      "description": "/cs:caio-review <plan> — Eval-demanding Chief AI Officer interrogation of any plan that involves AI: model selection, risk classification, cost economics, or AI hiring. Use when shipping an AI feature without an eval set, choosing between API, fine-tune, and self-hosted, or classifying a use case under the EU AI Act.",
+      "description": "/c-level-agents:caio-review [plan] — Eval-demanding Chief AI Officer interrogation of any plan that involves AI: model selection, risk classification, cost economics, or AI hiring. Use when shipping an AI feature without an eval set, choosing between API, fine-tune, and self-hosted, or classifying a use case under the EU AI Act.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/caio-review",
-      "description_ko": "/cs:caio-review <계획> — AI와 관련된 모든 계획(모델 선택, 위험 분류, 비용 경제성 또는 AI 채용)에 대해 최고 AI 책임자의 심문을 평가해야 합니다. 평가 세트 없이 AI 기능을 제공할 때, API, 미세 조정, 자체 호스팅 중에서 선택하거나 EU AI Act에 따라 사용 사례를 분류할 때 사용합니다."
+      "path": "collected_assets/skills/caio-review"
     },
     "weekly-review": {
       "name": "weekly-review",
       "type": "skill",
-      "description": "Use when someone wants to run a weekly review, close open loops, audit stalled projects and commitments, get their system back to trusted, restart a lapsed review habit, or says \"/cs:weekly-review\". Walks David Allen's three-phase loop — GET CLEAR, GET CURRENT, GET CREATIVE — with deterministic scripts that inventory open loops, gate the checklist with named gaps, and score commitment health 0-100.",
+      "description": "Use when someone wants to run a weekly review, close open loops, audit stalled projects and commitments, get their system back to trusted, restart a lapsed review habit, or says \"/cs-weekly-review\". Walks David Allen's three-phase loop — GET CLEAR, GET CURRENT, GET CREATIVE — with deterministic scripts that inventory open loops, gate the checklist with named gaps, and score commitment health 0-100.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/weekly-review",
-      "description_ko": "누군가가 주간 검토를 실행하고, 열린 루프를 닫고, 중단된 프로젝트 및 약속을 감사하고, 시스템을 다시 신뢰할 수 있게 만들고, 지난 검토 습관을 다시 시작하거나 \"/cs:weekly-review\"라고 말하고 싶을 때 사용하세요. David Allen의 3단계 루프(GET CLEAR, GET CURRENT, GET CREATIVE)를 개방형 루프 목록화, 명명된 간격으로 체크리스트의 게이트 처리, 약속 상태 점수 0-100으로 평가하는 결정적 스크립트를 사용하여 진행합니다."
+      "path": "collected_assets/skills/weekly-review"
     },
     "fable-goal": {
       "name": "fable-goal",
@@ -10389,11 +10377,10 @@
     "meetings": {
       "name": "meetings",
       "type": "skill",
-      "description": "Use when someone wants to decide whether a meeting is worth calling, price a meeting in dollars, build a timeboxed agenda with desired outcomes, or turn messy meeting notes into owned action items — or says \"should this be a meeting\", \"/cs:meeting-prep\", or \"/cs:meeting-actions\". Runs a cost gate (ASYNC / NOT-READY / MEET), builds a decision-first agenda, and extracts an owner + due-date checklist that flags every orphan.",
+      "description": "Use when someone wants to decide whether a meeting is worth calling, price a meeting in dollars, build a timeboxed agenda with desired outcomes, or turn messy meeting notes into owned action items — or says \"should this be a meeting\", \"/cs-meeting-prep\", or \"/cs-meeting-actions\". Runs a cost gate (ASYNC / NOT-READY / MEET), builds a decision-first agenda, and extracts an owner + due-date checklist that flags every orphan.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/meetings",
-      "description_ko": "누군가가 회의를 소집할 가치가 있는지 결정하고, 회의 비용을 달러로 책정하고, 원하는 결과가 포함된 시간 제한 안건을 작성하고, 지저분한 회의 메모를 고유한 작업 항목으로 바꾸고 싶을 때 사용합니다. 또는 \"이것이 회의여야 할까요?\", \"/cs:meeting-prep\" 또는 \"/cs:meeting-actions\"라고 말합니다. 비용 게이트(ASYNC / NOT-READY / MEET)를 실행하고, 의사결정 우선 안건을 작성하고, 모든 고아를 표시하는 소유자 + 기한 체크리스트를 추출합니다."
+      "path": "collected_assets/skills/meetings"
     },
     "roast": {
       "name": "roast",
@@ -10655,6 +10642,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/pricing-strategy",
       "description_ko": "가치, 고객 지불 의향 및 성장 목표를 기반으로 가격 책정, 패키징 및 수익화 전략을 설계합니다."
+    },
+    "ai-decision-authority": {
+      "name": "ai-decision-authority",
+      "type": "skill",
+      "description": "Routes marketing and GTM decisions into three AI governance zones (AI-Primary, Collaborative, Human-Primary) by stakes and reversibility. Use when deciding which AI outputs need human review, whether an agent may act autonomously on a task, why AI adoption is collapsing under review requirements, or when auditing a list of workflows for safe autonomy. Triggers on 'should a human review this', 'can the agent just do this', 'AI governance policy', 'human in the loop'.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/ai-decision-authority"
     },
     "marketing-skills": {
       "name": "marketing-skills",
@@ -11046,20 +11041,18 @@
     "md-review": {
       "name": "md-review",
       "type": "skill",
-      "description": "Converts a markdown PR writeup or code review (one with ```diff fenced blocks and severity-tagged > [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] callouts) into a single-file 2-column HTML review — unified-diff on the left, severity-tagged annotation cards on the right, top jump-nav listing every finding, mandatory named reviewer footer. Triggers when the markdown-html-orchestrator classifies an input as REVIEW, or when invoked directly via /cs:md-review. Refuses without explicit --reviewer (a code review must name a human), refuses if no diff hunks present (route to md-document instead), and refuses to encode severity in color only (every badge ships color + icon + aria-label per WCAG 1.4.1). Use after orchestrator routing.",
+      "description": "Converts a markdown PR writeup or code review (one with ```diff fenced blocks and severity-tagged GFM callouts [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] callouts) into a single-file 2-column HTML review — unified-diff on the left, severity-tagged annotation cards on the right, top jump-nav listing every finding, mandatory named reviewer footer. Triggers when the markdown-html-orchestrator classifies an input as REVIEW, or when invoked directly via /cs-md-review. Refuses without explicit --reviewer (a code review must name a human), refuses if no diff hunks present (route to md-document instead), and refuses to encode severity in color only (every badge ships color + icon + aria-label per WCAG 1.4.1). Use after orchestrator routing.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/md-review",
-      "description_ko": "마크다운 PR 기록 또는 코드 검토(``diff 울타리 블록 및 심각도 태그가 지정된 것 > [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] 콜아웃 포함)를 단일 파일 2열 HTML 검토로 변환합니다. 왼쪽에는 통합 diff, 오른쪽에는 심각도 태그가 지정된 주석 카드, 모든 결과를 나열하는 상단 점프 탐색, 필수 명명된 검토자 바닥글이 있습니다. markdown-html-orchestrator가 입력을 REVIEW로 분류하거나 /cs:md-review를 통해 직접 호출할 때 트리거됩니다. 명시적인 --reviewer 없이 거부하고(코드 검토에서는 사람의 이름을 지정해야 함), 차이점이 없으면 거부하고(대신 md-document로 경로 지정) 심각도를 색상으로만 인코딩하는 것을 거부합니다(모든 배지는 WCAG 1.4.1에 따라 색상 + 아이콘 + aria 라벨을 제공합니다). 오케스트레이터 라우팅 후에 사용합니다."
+      "path": "collected_assets/skills/md-review"
     },
     "md-document": {
       "name": "md-document",
       "type": "skill",
-      "description": "Converts long-form markdown (specs, RFCs, reports, plans, explainers) into a single-file, lightly-interactive HTML document with sticky TOC, scrollspy, search filter, code-copy buttons, and design-system-driven brand tokens. Triggers when the markdown-html-orchestrator classifies an input as DOCUMENT, or when invoked directly via /cs:md-document. Reads the design-system config via config_loader.py and inlines the user's 12 derived CSS custom properties; refuses to render if onboarding hasn't run. Single-file output — Google Fonts + Prism.js CDN are the only externals; no framework runtime, no build step. Use after orchestrator routing or after design-system onboarding is confirmed.",
+      "description": "Converts long-form markdown (specs, RFCs, reports, plans, explainers) into a single-file, lightly-interactive HTML document with sticky TOC, scrollspy, search filter, code-copy buttons, and design-system-driven brand tokens. Triggers when the markdown-html-orchestrator classifies an input as DOCUMENT, or when invoked directly via /cs-md-document. Reads the design-system config via config_loader.py and inlines the user's 12 derived CSS custom properties; refuses to render if onboarding hasn't run. Single-file output — Google Fonts + Prism.js CDN are the only externals; no framework runtime, no build step. Use after orchestrator routing or after design-system onboarding is confirmed.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/md-document",
-      "description_ko": "긴 형식의 마크다운(사양, RFC, 보고서, 계획, 설명자)을 고정 TOC, 스크롤스파이, 검색 필터, 코드 복사 버튼 및 디자인 시스템 기반 브랜드 토큰을 포함하는 간단한 대화형 HTML 문서로 단일 파일로 변환합니다. markdown-html-orchestrator가 입력을 DOCUMENT로 분류하거나 /cs:md-document를 통해 직접 호출할 때 트리거됩니다. config_loader.py를 통해 디자인 시스템 구성을 읽고 사용자의 파생 CSS 사용자 정의 속성 12개를 인라인합니다. 온보딩이 실행되지 않은 경우 렌더링을 거부합니다. 단일 파일 출력 — Google Fonts + Prism.js CDN이 유일한 외부 출력입니다. 프레임워크 런타임도 없고 빌드 단계도 없습니다. 오케스트레이터 라우팅 후 또는 디자인 시스템 온보딩이 확인된 후 사용하세요."
+      "path": "collected_assets/skills/md-document"
     },
     "md-slides": {
       "name": "md-slides",
@@ -11091,11 +11084,10 @@
     "zero-hallucination-coder": {
       "name": "zero-hallucination-coder",
       "type": "skill",
-      "description": "Runs a disciplined Discuss -> Map -> Decompose -> Execute -> Verify loop that grounds code in verified structure — no invented APIs, no assumed imports, no placeholder code — with a lazy-senior-dev YAGNI ladder that deletes unnecessary code before it is written. Use when a coding task is high-stakes, complex, or spans existing code (auth, databases, migrations, multi-file features), or when the user explicitly asks to plan carefully before coding, avoid hallucinated code, or work rigorously. Not for trivial edits, typos, or throwaway one-off scripts — those do not need the full loop.",
+      "description": "Runs a disciplined Discuss → Map → Decompose → Execute → Verify loop that grounds code in verified structure — no invented APIs, no assumed imports, no placeholder code — with a lazy-senior-dev YAGNI ladder that deletes unnecessary code before it is written. Use when a coding task is high-stakes, complex, or spans existing code (auth, databases, migrations, multi-file features), or when the user explicitly asks to plan carefully before coding, avoid hallucinated code, or work rigorously. Not for trivial edits, typos, or throwaway one-off scripts — those do not need the full loop.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/zero-hallucination-coder",
-      "description_ko": "작성되기 전에 불필요한 코드를 삭제하는 게으른 수석 개발자 YAGNI 래더를 사용하여 검증된 구조의 코드를 기반으로 하는 규율 있는 토론 -> 맵 -> 분해 -> 실행 -> 검증 루프를 실행합니다. 즉, 발명된 API도 없고 가정된 가져오기도 없고 자리 표시자 코드도 없습니다. 코딩 작업이 위험도가 높거나 복잡하거나 기존 코드(인증, 데이터베이스, 마이그레이션, 다중 파일 기능)에 걸쳐 있거나 사용자가 코딩하기 전에 신중하게 계획하거나 환각적인 코드를 피하거나 엄격하게 작업하도록 명시적으로 요청하는 경우에 사용합니다. 사소한 편집, 오타 또는 일회성 스크립트에는 적합하지 않으며 전체 루프가 필요하지 않습니다."
+      "path": "collected_assets/skills/zero-hallucination-coder"
     },
     "llm-wiki": {
       "name": "llm-wiki",
@@ -11178,6 +11170,14 @@
       "path": "collected_assets/skills/agenthub",
       "description_ko": "Git 작업 트리 격리를 통해 동일한 작업에서 경쟁하는 N개의 병렬 하위 에이전트를 생성하는 다중 에이전트 협업 플러그인입니다. 에이전트는 독립적으로 작업하고 결과는 측정 기준 또는 LLM 심사위원에 의해 평가되며 가장 좋은 분기가 병합됩니다. 사용 시기: 사용자가 코드 최적화, 콘텐츠 변형, 연구 탐색 또는 병렬 경쟁의 이점을 얻는 모든 작업 등 여러 접근 방식을 병렬로 시도하기를 원합니다. 요구사항: git repo."
     },
+    "hub-run": {
+      "name": "hub-run",
+      "type": "skill",
+      "description": "One-shot lifecycle command that chains init → baseline → spawn → eval → merge in a single invocation. Use when the user runs /hub:hub-run or asks to execute a full AgentHub competition end-to-end.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/hub-run"
+    },
     "board": {
       "name": "board",
       "type": "skill",
@@ -11213,15 +11213,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/eval",
       "description_ko": "AgentHub 세션에 대한 메트릭 또는 LLM 판단을 기준으로 상담원 결과를 평가하고 순위를 매깁니다. 사용자가 /hub:eval을 실행하거나 완료된 AgentHub 에이전트 중에서 점수를 매기고 비교하거나 승자를 선택하도록 요청할 때 사용합니다."
-    },
-    "run": {
-      "name": "run",
-      "type": "skill",
-      "description": "Run a single experiment iteration. Edit the target file, evaluate, keep or discard. Use when the user runs /ar:run or asks for one manual autoresearch iteration.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/run",
-      "description_ko": "단일 실험 반복을 실행합니다. 대상 파일을 편집하고, 평가하고, 유지하거나 폐기합니다. 사용자가 /ar:run을 실행하거나 수동 자동 검색 반복을 한 번 요청할 때 사용합니다."
     },
     "hub-status": {
       "name": "hub-status",
@@ -11304,14 +11295,21 @@
       "path": "collected_assets/skills/kubernetes-operator",
       "description_ko": "CRD 상태를 조정하는 사용자 정의 컨트롤러인 Kubernetes Operator를 구축할 때 사용합니다. \"연산자 빌드\", \"CRD 디자인\", \"루프 조정\", \"controller-runtime\", \"kubebuilder\", \"operator-sdk\", \"metacontroller\", \"KOPF\", \"연산자 기능 수준\" 또는 \"사용자 정의 리소스\"에서 트리거됩니다. CRD 유효성 검사기, 조정 루프 린터 및 OperatorHub 기능 감사자(모두 stdlib Python), 연산자 패턴 + CRD 설계 + 조정 패턴 + 도구 환경에 대한 참조 4개 및 /operator-audit 슬래시 명령을 제공합니다. 일반적인 k8s 기술이 아닙니다. 특히 Operator 패턴입니다."
     },
+    "agent-regression-evals": {
+      "name": "agent-regression-evals",
+      "type": "skill",
+      "description": "Use when an agent, prompt, model or tool change needs proof it did not make the agent worse — setting up a regression eval suite, deciding whether a pass-rate drop is real or noise, grading tool-call trajectories, finding flaky eval cases, or wiring an eval gate into CI that blocks the merge. Runs repeated trials, reports pass@k and pass^k, compares candidate to baseline with paired statistics, and refuses to pass a dropped case, a critical-case regression, or a forbidden tool call.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/agent-regression-evals"
+    },
     "skillopt-sleep": {
       "name": "skillopt-sleep",
       "type": "skill",
-      "description": "Use when the user wants their Claude agent to self-improve from past usage, asks about a nightly/offline 'sleep' or 'dream' cycle, memory/skill consolidation, or says things like 'make my agent better the more I use it', 'review my past sessions', 'learn my preferences', 'consolidate what you learned', 'run the sleep cycle', or wants to schedule offline self-optimization. Drives the skillopt_sleep engine: harvest past sessions -> mine recurring tasks -> replay offline -> consolidate validated CLAUDE.md and SKILL.md behind a held-out gate.",
+      "description": "Use when the user wants their Claude agent to self-improve from past usage, asks about a nightly/offline 'sleep' or 'dream' cycle, memory/skill consolidation, or says things like 'make my agent better the more I use it', 'review my past sessions', 'learn my preferences', 'consolidate what you learned', 'run the sleep cycle', or wants to schedule offline self-optimization. Drives the skillopt_sleep engine: harvest past sessions → mine recurring tasks → replay offline → consolidate validated CLAUDE.md and SKILL.md behind a held-out gate.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skillopt-sleep",
-      "description_ko": "사용자가 Claude 에이전트가 과거 사용에서 자체 개선하기를 원하거나 야간/오프라인 '수면' 또는 '꿈' 주기, 기억/기술 통합에 대해 묻거나 '사용할수록 내 에이전트를 더 좋게 만들어줘', '과거 세션 검토', '내 선호도 알아보기', '학습한 내용 통합', '수면 주기 실행'과 같은 말을 하거나 오프라인 자체 최적화를 예약하려는 경우에 사용하세요. Skillopt_sleep 엔진을 구동합니다. 과거 세션 수집 -> 반복 작업 마이닝 -> 오프라인 재생 -> 검증된 CLAUDE.md 및 SKILL.md를 홀드아웃 게이트 뒤에 통합합니다."
+      "path": "collected_assets/skills/skillopt-sleep"
     },
     "human-gate": {
       "name": "human-gate",
@@ -11366,6 +11364,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/slo-architect",
       "description_ko": "SLO/SLI/오류 예산을 정의, 검토, 운영할 때 사용합니다. 'SLO 정의', 'SLO는 무엇이어야 하는가', '오류 예산', '소진율', 'SLI', '서비스 수준 목표', 'Google SRE 통합 문서', '다중 창 소진율 경고' 또는 안정성 목표 질문에 대해 트리거됩니다. SLO 디자이너, 다중 창 소모율 임계값이 있는 오류 예산 계산기, 일반적인 버그(대상이 너무 공격적, 기간이 너무 짧음, SLO 충돌, SLI 정의 없음)를 포착하는 SLO 검토자가 제공됩니다. SLO 원칙에 대한 참고 자료 4개 + SLI 설계 + 오류 예산 수학 + 기능 플래그 아키텍처/카오스 엔지니어링/kubernetes-운영자를 사용한 구성. 일반적인 관찰 기술이 아닙니다. 특히 SLO 분야입니다."
+    },
+    "coding-agent-rollout": {
+      "name": "coding-agent-rollout",
+      "type": "skill",
+      "description": "Use when rolling Claude Code out to a team or organization, or auditing a rollout already under way — writing or reviewing shared and managed settings.json permissions, deciding which MCP servers, plugins and marketplaces to approve, cleaning up layered CLAUDE.md files, or measuring whether the team actually uses it. Lints settings across scopes, inventories every MCP server and plugin against an approved list, resolves CLAUDE.md layers and imports, and turns local session data into privacy-safe adoption counts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/coding-agent-rollout"
     },
     "agent-harness": {
       "name": "agent-harness",
@@ -11736,6 +11742,14 @@
       "path": "collected_assets/skills/minimalist",
       "description_ko": "사용자가 코드를 효율적으로 작성하고, 과도한 엔지니어링을 피하고, 종속성을 줄이거나, 불필요한 추상화를 방지하도록 요청할 때 사용합니다. 새로운 코드를 작성하기 전에 YAGNI, 재사용, stdlib, 기본 플랫폼, 기존 deps 등 엄격한 효율성 사다리를 적용합니다."
     },
+    "ar-run": {
+      "name": "ar-run",
+      "type": "skill",
+      "description": "Run a single experiment iteration. Edit the target file, evaluate, keep or discard. Use when the user runs /ar:ar-run or asks for one manual autoresearch iteration.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/ar-run"
+    },
     "loop": {
       "name": "loop",
       "type": "skill",
@@ -11910,11 +11924,10 @@
     "litreview": {
       "name": "litreview",
       "type": "skill",
-      "description": "Academic literature orientation skill that searches papers via free keyless APIs (PubMed E-utilities + OpenAlex) by default — with the Consensus MCP as an optional enhancement lane when connected — builds a strategic search plan using PICO (default) or SPIDER / Decomposition / hybrid as fallbacks, and synthesizes findings into a formatted Word (.docx) research guide. Grill-me intake (research question specificity + framework hint + tentative depth) before the recon search; a second forcing checkpoint after Phase 2 confirms framework + sub-areas + depth before searches consume budget. Configurable depth (5/10/20 queries) controls coverage vs. speed. Output is a 'launching pad' — an orientation guide that lets a researcher dive in confidently, not a finished review. Use when the user starts literature-oriented research (e.g., 'litreview on [topic]', 'literature review on [topic]', 'I'm starting a literature review on X', 'I'm writing a paper on X', 'help me research X', 'I'm doing research on X', 'can you help me research X'). Do NOT use for single one-off paper searches wanting a quick list — that's a plain PubMed/OpenAlex (or Consensus) query.",
+      "description": "Searches academic literature through free, keyless PubMed and OpenAlex APIs, optionally augments results with Consensus MCP when connected, builds a PICO, SPIDER, decomposition, or hybrid search plan, and produces a formatted Word research-orientation guide. Uses brief intake and post-reconnaissance checkpoints to confirm the framework, sub-areas, and depth (5, 10, or 20 queries) before spending the search budget. The output is a launching pad, not a finished review. Use when the user requests a literature review, starts a paper or literature-oriented research project, or needs structured research on a topic. Do NOT use for a single paper lookup or a quick paper list; use a plain PubMed, OpenAlex, or Consensus query instead.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/litreview",
-      "description_ko": "기본적으로 무료 키리스 API(PubMed E-utilities + OpenAlex)를 통해 논문을 검색하는 학술 문헌 오리엔테이션 기술(연결 시 Consensus MCP를 선택적 향상 레인으로 사용)은 PICO(기본값) 또는 SPIDER/분해/하이브리드를 폴백으로 사용하여 전략적 검색 계획을 구축하고 결과를 형식화된 Word(.docx) 연구 가이드로 종합합니다. 정찰 검색 전 Grill-me 섭취(연구 질문 특이성 + 프레임워크 힌트 + 잠정적 깊이) 2단계 이후 두 번째 강제 체크포인트는 검색이 예산을 소비하기 전에 프레임워크 + 하위 영역 + 깊이를 확인합니다. 구성 가능한 깊이(5/10/20 쿼리)는 범위와 속도를 제어합니다. 산출물은 '발사대'입니다. 즉, 연구자가 완성된 검토가 아니라 자신있게 시작할 수 있게 해주는 오리엔테이션 가이드입니다. 사용자가 문학 중심 연구를 시작할 때 사용합니다(예: '[주제]에 대한 문헌 검토', '[주제]에 대한 문헌 검토', 'X에 대한 문헌 검토를 시작하고 있습니다', 'X에 대한 논문을 쓰고 있습니다', 'X에 대한 연구를 도와주세요', 'X에 대한 연구를 하고 있습니다', 'X에 대한 연구를 도와주실 수 있나요'). 빠른 목록을 원하는 일회성 문서 검색에는 사용하지 마십시오. 이는 일반 PubMed/OpenAlex(또는 Consensus) 쿼리입니다."
+      "path": "collected_assets/skills/litreview"
     },
     "grants": {
       "name": "grants",
@@ -11973,20 +11986,26 @@
     "cmd-cs-aeo": {
       "name": "cs-aeo",
       "type": "skill",
-      "description": "/cs:aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude, Gemini, Mistral). Optimize content in 3 modes (conservative/balanced/aggressive). Track which LLMs cite which pages via local ledger. Industry-aware thresholds (8 industries with YMYL calibration). Distinct from SEO — refuses to optimize one at expense of the other.",
+      "description": "/cs-aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude, Gemini, Mistral). Optimize content in 3 modes (conservative/balanced/aggressive). Track which LLMs cite which pages via local ledger. Industry-aware thresholds (8 industries with YMYL calibration). Distinct from SEO — refuses to optimize one at expense of the other.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmd-cs-aeo",
-      "description_ko": "/cs:aeo — 응답 엔진 최적화 작업 흐름. LLM 인용을 유도하는 E-E-A-T + 구조 신호에 대한 감사 콘텐츠(ChatGPT, Perplexity, Claude, Gemini, Mistral). 3가지 모드(보수적/균형적/공격적)로 콘텐츠를 최적화합니다. 로컬 원장을 통해 어떤 LLM이 어떤 페이지를 인용하는지 추적하세요. 업계 인식 임계값(YMYL 보정을 사용하는 8개 업계) SEO와 구별됨 - 다른 하나를 희생시키면서 하나를 최적화하는 것을 거부합니다."
+      "path": "collected_assets/skills/cmd-cs-aeo"
     },
     "cs-backend-engineer": {
       "name": "cs-backend-engineer",
       "type": "skill",
-      "description": "Backend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (read/write ratio + QPS, tenancy, sync vs async, data sensitivity, pattern, RPO/RTO, SLO), picks the language + pattern profile, forks into specialists (api-design-reviewer, database-designer, migration-architect, observability-designer, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs:backend-review or Agent({subagent_type:\"cs-backend-engineer\",...}).",
+      "description": "Backend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (read/write ratio + QPS, tenancy, sync vs async, data sensitivity, pattern, RPO/RTO, SLO), picks the language + pattern profile, forks into specialists (api-design-reviewer, database-designer, migration-architect, observability-designer, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs-backend-review or Agent({subagent_type:\"cs-backend-engineer\",...}).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cs-backend-engineer",
-      "description_ko": "백엔드 엔지니어링 오케스트레이터. 7가지 Matt Pocock 강제 질문(읽기/쓰기 비율 + QPS, 테넌시, 동기화 대 비동기, 데이터 민감도, 패턴, RPO/RTO, SLO)을 살펴보고, 언어 + 패턴 프로필을 선택하고, 범위를 다시 구현하는 대신 전문가(API 디자인 검토자, 데이터베이스 디자이너, 마이그레이션 아키텍처, 관찰 가능성 디자이너, 슬로 아키텍처 - 알파벳순으로 나열됨, 워크플로 순서는 종속성 기반)에 문의합니다. 자신의 컨텍스트를 포크합니다. /cs:backend-review 또는 에이전트({subagent_type:\"cs-backend-engineer\",...})를 통해 호출합니다."
+      "path": "collected_assets/skills/cs-backend-engineer"
+    },
+    "skills-coding-agent-rollout": {
+      "name": "coding-agent-rollout",
+      "type": "skill",
+      "description": "Use when rolling Claude Code out to a team or organization, or auditing a rollout already under way — writing or reviewing shared and managed settings.json permissions, deciding which MCP servers, plugins and marketplaces to approve, cleaning up layered CLAUDE.md files, or measuring whether the team actually uses it. Lints settings across scopes, inventories every MCP server and plugin against an approved list, resolves CLAUDE.md layers and imports, and turns local session data into privacy-safe adoption counts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/skills-coding-agent-rollout"
     },
     "linkedin-profile": {
       "name": "linkedin-profile",
@@ -12086,6 +12105,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/user-story",
       "description_ko": "수용 기준 및 스프린트 계획을 통해 사용자 스토리를 생성합니다. 사용법: /user-story <생성|스프린트> [옵션]"
+    },
+    "skills-month-end-close": {
+      "name": "month-end-close",
+      "type": "skill",
+      "description": "Use when running, planning or speeding up a month-end (or quarter-end) close — building or reviewing the close checklist and calendar, reconciling a bank statement or sub-ledger to the general ledger, writing or reviewing flux (variance) explanations, or finding why the close takes too many days. Orders close tasks by dependency and finds the critical path, proves each reconciliation and ages what is left, and refuses to sign off material fluctuations explained with boilerplate.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/skills-month-end-close"
     },
     "skills-iso42001-specialist": {
       "name": "iso42001-specialist",
@@ -12207,11 +12234,10 @@
     "cs-frontend-engineer": {
       "name": "cs-frontend-engineer",
       "type": "skill",
-      "description": "Frontend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design system, WCAG), picks the framework/rendering profile, forks into specialists (a11y-audit, apple-hig-expert, epic-design, performance-profiler, playwright-pro — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs:frontend-review or Agent({subagent_type:\"cs-frontend-engineer\",...}).",
+      "description": "Frontend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design system, WCAG), picks the framework/rendering profile, forks into specialists (a11y-audit, apple-hig-expert, epic-design, performance-profiler, playwright-pro — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs-frontend-review or Agent({subagent_type:\"cs-frontend-engineer\",...}).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cs-frontend-engineer",
-      "description_ko": "프런트엔드 엔지니어링 오케스트레이터. 7가지 Matt Pocock 강제 질문(장치, LCP 대상, 렌더링, 번들 예산, SEO 대 인증, 디자인 시스템, WCAG)을 살펴보고, 프레임워크/렌더링 프로필을 선택하고, 범위를 다시 구현하는 대신 전문가(a11y-audit, apple-hig-expert, epic-design, 성능 프로파일러, 극작가-pro - 알파벳순으로 나열됨, 워크플로 순서는 종속성 중심)에 문의합니다. 자신의 컨텍스트를 포크합니다. /cs:frontend-review 또는 에이전트({subagent_type:\"cs-frontend-engineer\",...})를 통해 호출합니다."
+      "path": "collected_assets/skills/cs-frontend-engineer"
     },
     "cs-ceo-advisor": {
       "name": "cs-ceo-advisor",
@@ -12239,6 +12265,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cs-agile-product-owner",
       "description_ko": "대규모 분석, 스프린트 계획, 백로그 개선 및 INVEST 준수 사용자 스토리 생성을 위한 민첩한 제품 소유자 에이전트입니다. 개발 팀을 위한 작업을 준비할 때 사용합니다. 예를 들어 대규모 서사시를 승인 기준에 따라 INVEST 호환 스토리로 분해하거나 스프린트 계획에 앞서 지저분한 백로그를 다듬습니다."
+    },
+    "skills-agent-regression-evals": {
+      "name": "agent-regression-evals",
+      "type": "skill",
+      "description": "Use when an agent, prompt, model or tool change needs proof it did not make the agent worse — setting up a regression eval suite, deciding whether a pass-rate drop is real or noise, grading tool-call trajectories, finding flaky eval cases, or wiring an eval gate into CI that blocks the merge. Runs repeated trials, reports pass@k and pass^k, compares candidate to baseline with paired statistics, and refuses to pass a dropped case, a critical-case regression, or a forbidden tool call.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/skills-agent-regression-evals"
     },
     "skills-kubernetes-operator": {
       "name": "kubernetes-operator",
@@ -12294,6 +12328,14 @@
       "path": "collected_assets/skills/linkedin-content",
       "description_ko": "누군가가 LinkedIn 게시물(스토리, 노하우, 의견, 캐러셀 스크립트, 비디오 스크립트 또는 여론 조사)을 작성, 편집 또는 린트하려고 하거나 기사, 강연 또는 녹취록을 게시물로 재활용하려는 경우에 사용하세요. \"LinkedIn 게시물 작성\", \"이 후크가 유용한가요?\", \"내 게시물 검토\", \"LinkedIn 게시물로 전환\", \"캐러셀\", \"이 형식은 무엇이어야 하나요?\"에 대해 트리거됩니다. Lints는 역학, 후크, 무결성 및 접근성에 대해 0-100을 게시합니다. 자료가 실제로 지원하는 형식을 선택합니다. 재사용 원장을 사용하여 긴 소스를 독립형 단위로 분할합니다."
     },
+    "interview-mapper": {
+      "name": "interview-mapper",
+      "type": "skill",
+      "description": "Maps a single interview transcript into a verbatim-grounded, lens-coded structure and checks whether analytic conclusions hold across independent re-runs. Use when the user wants to code, map, interpret, or make sense of an interview transcript, depth interview, custdev/JTBD/expert/usability/exit/win-loss/focus-group session, or wants cross-interview synthesis (insight cards, patterns) built up from coded transcripts — even if they don't name a method. Every conclusion must carry a verbatim quote verified against the source text; unstable conclusions are flagged for a human, never resolved by a single silent pass. Not for generating new interviews, not for plain audio transcription, and not for research-method or sample-size planning above the transcript (see product-research).",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/interview-mapper"
+    },
     "skills-chaos-engineering": {
       "name": "chaos-engineering",
       "type": "skill",
@@ -12329,15 +12371,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/wiki-lint",
       "description_ko": "LLM Wiki 저장소에서 상태 검사를 실행합니다. 기계적 검사(고아, 끊어진 링크, 오래된 페이지, 본문 누락, 로그 간격, 중복)와 의미 체계 검사(모순, 상호 참조 간격, 자체 페이지 누락 개념)를 수행합니다. 제안된 작업이 포함된 마크다운 보고서를 출력합니다. 사용법 /wiki-lint [--stale-days N] [--log-gap-days N]"
-    },
-    "skills-run": {
-      "name": "run",
-      "type": "skill",
-      "description": "One-shot lifecycle command that chains init → baseline → spawn → eval → merge in a single invocation. Use when the user runs /hub:run or asks to execute a full AgentHub competition end-to-end.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-run",
-      "description_ko": "단일 호출로 init → 기준선 → 생성 → 평가 → 병합을 연결하는 일회성 수명 주기 명령입니다. 사용자가 /hub:run을 실행하거나 전체 AgentHub 경쟁을 엔드투엔드로 실행하도록 요청할 때 사용합니다."
     },
     "linkedin-engagement": {
       "name": "linkedin-engagement",
@@ -12504,11 +12537,10 @@
     "cs-webinar": {
       "name": "cs-webinar",
       "type": "skill",
-      "description": "/cs:webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose numbers disappointed (score the funnel, fix the broken stage), or turn a past webinar into an evergreen on-demand lead engine. Covers the full funnel: registration, promotion runway, show-up, live engagement, live-to-close, and segmented follow-up. Treats a webinar as a funnel, not an event.",
+      "description": "/cs-webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose numbers disappointed (score the funnel, fix the broken stage), or turn a past webinar into an evergreen on-demand lead engine. Covers the full funnel: registration, promotion runway, show-up, live engagement, live-to-close, and segmented follow-up. Treats a webinar as a funnel, not an event.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cs-webinar",
-      "description_ko": "/cs:webinar — 웹 세미나 및 가상 이벤트 마케팅 워크플로우입니다. 웹 세미나를 처음부터 계획하거나(비즈니스 목표에 비해 규모가 작은), 숫자가 실망스러운 웹 세미나를 구출하거나(퍼널 점수 매기기, 손상된 단계 수정), 과거 웹 세미나를 항상 지속되는 주문형 리드 엔진으로 전환하십시오. 등록, 프로모션 런웨이, 쇼업, 실시간 참여, 실시간 마감, 세분화된 후속 조치 등 전체 퍼널을 다룹니다. 웨비나를 이벤트가 아닌 퍼널로 간주합니다."
+      "path": "collected_assets/skills/cs-webinar"
     },
     "skills-feature-flags-architect": {
       "name": "feature-flags-architect",
@@ -12531,11 +12563,10 @@
     "cs-fullstack-engineer": {
       "name": "cs-fullstack-engineer",
       "type": "skill",
-      "description": "Fullstack-engineering orchestrator. Walks the Matt Pocock 7-question forcing-question grill, runs the deterministic profile picker, then forks into the POWERFUL-tier specialists (api-design-reviewer, ci-cd-pipeline-builder, database-designer, performance-profiler, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context so heavy ingestion does not pollute parent thread. Invoke via /cs:fullstack-review or Agent({subagent_type:\"cs-fullstack-engineer\",...}).",
+      "description": "Fullstack-engineering orchestrator. Walks the Matt Pocock 7-question forcing-question grill, runs the deterministic profile picker, then forks into the POWERFUL-tier specialists (api-design-reviewer, ci-cd-pipeline-builder, database-designer, performance-profiler, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context so heavy ingestion does not pollute parent thread. Invoke via /cs-fullstack-review or Agent({subagent_type:\"cs-fullstack-engineer\",...}).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cs-fullstack-engineer",
-      "description_ko": "풀스택 엔지니어링 오케스트레이터. Matt Pocock 7가지 질문 강제 질문 그릴을 살펴보고 결정론적 프로필 선택기를 실행한 다음 범위를 다시 구현하는 대신 강력한 계층 전문가(api-design-reviewer, ci-cd-pipeline-builder, 데이터베이스 디자이너, 성능 프로파일러, slo-architect - 알파벳순으로 나열됨, 워크플로 순서는 종속성 기반)에 포크됩니다. 자체 컨텍스트를 포크하므로 과도한 수집으로 인해 상위 스레드가 오염되지 않습니다. /cs:fullstack-review 또는 에이전트({subagent_type:\"cs-fullstack-engineer\",...})를 통해 호출합니다."
+      "path": "collected_assets/skills/cs-fullstack-engineer"
     },
     "cs-webinar-marketer": {
       "name": "cs-webinar-marketer",
@@ -12554,15 +12585,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cs-karpathy-reviewer",
       "description_ko": "Karpathy의 4가지 코딩 원칙에 따라 단계적 Git 변경 사항을 검토합니다. 변경된 파일에 대해 complex_checker를 실행하고, diff에 대해 diff_surgeon을 실행하고 특정 수정 권장 사항이 포함된 판정을 생성합니다. 커밋하기 전, 사용자가 \"karpathy check\", \"review my diff\"라고 말하거나 /karpathy-check 명령이 호출될 때 생성됩니다."
-    },
-    "TEMPLATE": {
-      "name": "Agent Name",
-      "type": "skill",
-      "description": "One paragraph describing what this agent does, who it's for, and when to activate it.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/TEMPLATE",
-      "description_ko": "이 에이전트의 기능, 대상, 활성화 시기를 설명하는 한 단락입니다."
     },
     "cs-wiki-linter": {
       "name": "cs-wiki-linter",
@@ -16081,6 +16103,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/session-anonymizer",
       "description_ko": "세션 기록을 위한 3계층 PII 익명화(치료, 코칭, 컨설팅, 멘토링). 최대 적용 범위를 위해 Natasha(Russian NER), OpenAI Privacy Filter 및 로컬 LLM(Ollama)을 순서대로 실행합니다. 기본적으로 완전 로컬입니다. 이 기술은 AI 분석 전에 세션 기록, 메모 또는 클라이언트 PII가 포함된 텍스트를 익명화할 때 사용해야 합니다. \"익명화\", \"PII 수정\", \"세션 익명화\", \"클라이언트 데이터 보호\", \"개인 데이터 제거\", \"녹취록 익명화\"에 대해 트리거됩니다."
+    },
+    "vault-fs": {
+      "name": "vault-fs",
+      "type": "skill",
+      "description": "Safely move, rename, or trash notes and attachments in an Obsidian vault while keeping every link working. Use whenever a vault file operation is requested — \"move this note to X\", \"rename note\", \"reorganize folder\", \"bulk move\", \"archive these notes\", \"delete/trash this note\", \"is anything linking to this?\" — instead of mv/rm/git mv, which silently break [[wikilinks]]. Dry-run by default, stdlib only.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/vault-fs"
     },
     "app-release": {
       "name": "app-release",
@@ -24831,6 +24861,15 @@
       "path": "collected_assets/skills/azure-servicebus-ts",
       "description_ko": "대기열, 주제 및 구독이 포함된 엔터프라이즈 메시징."
     },
+    "geo-report-pdf": {
+      "name": "geo-report-pdf",
+      "type": "skill",
+      "description": "Generate a professional PDF report from a GEO audit using pandoc + Chrome",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/geo-report-pdf",
+      "description_ko": "pandoc + Chrome을 사용하여 GEO 감사에서 전문적인 PDF 보고서 생성"
+    },
     "azure-ai-translation-text-py": {
       "name": "azure-ai-translation-text-py",
       "type": "skill",
@@ -28846,6 +28885,14 @@
       "path": "collected_assets/skills/docs-guard",
       "description_ko": "README, API 참조, 독스트링, 변경 로그, 튜토리얼 및 문서 사이트를 포함하여 생성되거나 변경된 문서를 배송 전에 검토하세요."
     },
+    "apify-youtube-transcript-scraper": {
+      "name": "apify-youtube-transcript-scraper",
+      "type": "skill",
+      "description": "Get YouTube captions, timestamped quotations, SRT/VTT and translated transcripts for videos, channels and playlists through the harshmaur/youtube-transcript-scraper Apify Actor.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apify-youtube-transcript-scraper"
+    },
     "sveltekit": {
       "name": "sveltekit",
       "type": "skill",
@@ -28863,6 +28910,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/confluence-automation",
       "description_ko": "Rube MCP(Composio)를 통해 Confluence 페이지 생성, 콘텐츠 검색, 공간 관리, 레이블 및 계층 구조 탐색을 자동화합니다. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
+    },
+    "party-planning": {
+      "name": "party-planning",
+      "type": "skill",
+      "description": "Estimate party food and drink quantities, select games, and draft hosting timelines using HostPartyPlay's published planning heuristics.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/party-planning"
     },
     "m365-agents-py": {
       "name": "m365-agents-py",
@@ -31207,6 +31262,14 @@
       "path": "collected_assets/skills/pytest-skill",
       "description_ko": "픽스처, 매개변수화, 마커, 모킹 및 컨테스트 패턴을 사용하여 Python에서 프로덕션 수준의 pytest 테스트를 생성합니다. 사용자가 \\\"pytest\\\", \\\"conftest\\\", \\\"@pytest.fixture\\\", \\\"@pytest.mark\\\", \\\"Python test\\\"를 언급할 때 사용합니다."
     },
+    "neverapply": {
+      "name": "neverapply",
+      "type": "skill",
+      "description": "Find matching jobs, tailor resumes, prepare for interviews and apply to jobs with the user's approval through NeverApply's hosted MCP server (OAuth sign-in).",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/neverapply"
+    },
     "report-writing": {
       "name": "report-writing",
       "type": "skill",
@@ -32165,6 +32228,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-monitor-ingestion-java",
       "description_ko": "Java용 Azure Monitor 수집 SDK. DCR(데이터 수집 규칙) 및 DCE(데이터 수집 끝점)를 통해 Azure Monitor에 사용자 지정 로그를 보냅니다."
+    },
+    "pixeltable": {
+      "name": "pixeltable",
+      "type": "skill",
+      "description": "Build Pixeltable apps in app.py with tables, computed columns, embedding search, and HTTP routes. Use for RAG, media pipelines, and tool-calling agents.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pixeltable"
     },
     "nexrad-mosaic-access": {
       "name": "nexrad-mosaic-access",
@@ -33271,6 +33342,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/browser-bridge"
     },
+    "ai-storyboard-generator": {
+      "name": "ai-storyboard-generator",
+      "type": "skill",
+      "description": "Install and use the official AI Storyboard Generator package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-storyboard-generator"
+    },
     "runapi-cli": {
       "name": "runapi-cli",
       "type": "skill",
@@ -33613,6 +33692,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/remotion-render",
       "description_ko": "원격 비디오 내보내기"
+    },
+    "ai-audiobook-narration": {
+      "name": "ai-audiobook-narration",
+      "type": "skill",
+      "description": "Install and use the official AI Audiobook Generator package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-audiobook-narration"
     },
     "systemd-services": {
       "name": "systemd-services",
@@ -36411,6 +36498,14 @@
       "path": "collected_assets/skills/posthog-automation",
       "description_ko": "Rube MCP(Composio)를 통해 PostHog 작업 자동화: 이벤트, 기능 플래그, 프로젝트, 사용자 프로필, 주석. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
     },
+    "wechat-cover-maker": {
+      "name": "wechat-cover-maker",
+      "type": "skill",
+      "description": "Install and use the official WeChat Article Cover package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/wechat-cover-maker"
+    },
     "antigravity-design-expert": {
       "name": "antigravity-design-expert",
       "type": "skill",
@@ -36872,6 +36967,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-storage-file-datalake-py",
       "description_ko": "Python용 Azure Data Lake Storage Gen2 SDK. 계층적 파일 시스템, 빅 데이터 분석, 파일/디렉터리 작업에 사용합니다."
+    },
+    "zhongcao-note-copywriter": {
+      "name": "zhongcao-note-copywriter",
+      "type": "skill",
+      "description": "Install and use the official Xiaohongshu Copywriter package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/zhongcao-note-copywriter"
     },
     "video-content-extractor": {
       "name": "video-content-extractor",
@@ -37474,6 +37577,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/llm-caching",
       "description_ko": "정확한 일치, 의미적 유사성을 갖춘 다중 계층 LLM 캐싱을 구현합니다."
+    },
+    "lanshu-create-ai-presenter-video": {
+      "name": "lanshu-create-ai-presenter-video",
+      "type": "skill",
+      "description": "Turn a topic or script into a publish-ready explainer video, led by an AI presenter or performed in one of twelve styled explainer looks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/lanshu-create-ai-presenter-video"
     },
     "threejs-fundamentals": {
       "name": "threejs-fundamentals",
@@ -38444,6 +38555,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/skill-seekers"
+    },
+    "calibrate-first": {
+      "name": "calibrate-first",
+      "type": "skill",
+      "description": "Measure a dataset's detection floor before reading any trading-signal result, pre-register every test, and report too-small-to-see as UNDECIDABLE, not 'no effect'.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/calibrate-first"
     },
     "papers-skill": {
       "name": "papers-skill",
@@ -39491,6 +39610,14 @@
       "path": "collected_assets/skills/wireshark-analysis",
       "description_ko": "보안 조사, 성능 최적화 및 문제 해결을 위해 Wireshark를 사용하여 포괄적인 네트워크 트래픽 분석을 실행하여 네트워크 패킷을 캡처, 필터링 및 검사합니다."
     },
+    "ai-image-realism": {
+      "name": "ai-image-realism",
+      "type": "skill",
+      "description": "Install and use the official AI Image Realism package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-image-realism"
+    },
     "nexrad-mosaic-construction": {
       "name": "nexrad-mosaic-construction",
       "type": "skill",
@@ -39517,6 +39644,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cred-omega",
       "description_ko": "CISO 운영 기업은 총체적 신용과 분리를 관리합니다."
+    },
+    "zhongcao-cover-maker": {
+      "name": "zhongcao-cover-maker",
+      "type": "skill",
+      "description": "Install and use the official Xiaohongshu Cover Maker package, pinned by digest, for paid hosted work on the Beatra service.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/zhongcao-cover-maker"
     },
     "fixing-accessibility": {
       "name": "fixing-accessibility",
@@ -40524,15 +40659,6 @@
       "path": "collected_assets/skills/ai-md",
       "description_ko": "사람이 작성한 CLAUDE.md를 AI 기반 구조화된 라벨 형식으로 변환합니다. 4개 모델에 걸쳐 실전 테스트를 거쳤습니다. 동일한 규칙, 더 적은 수의 토큰, 더 높은 규정 준수."
     },
-    "geo-report-pdf": {
-      "name": "geo-report-pdf",
-      "type": "skill",
-      "description": "Generate a professional PDF report from a GEO audit using pandoc + Chrome",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/geo-report-pdf",
-      "description_ko": "pandoc + Chrome을 사용하여 GEO 감사에서 전문적인 PDF 보고서 생성"
-    },
     "competitor-analysis": {
       "name": "competitor-analysis",
       "type": "skill",
@@ -40961,14 +41087,6 @@
       "path": "collected_assets/skills/macos-screen-recorder",
       "description_ko": "ScreenCaptureKit을 통해 메인 디스플레이와 시스템 오디오를 캡처하는 macOS 화면 레코더 — 블랙홀/루프백 드라이버 없음, sudo 없음, 표준 화면 녹화 권한만 제공됩니다. CLI 기반; 시스템 사운드로 헤드리스 화면 녹화 공백을 채울 수 없습니다. QuickTime과 `screencapture -v`는 할 수 없습니다."
     },
-    "neverapply": {
-      "name": "neverapply",
-      "type": "skill",
-      "description": "Find matching jobs, tailor resumes, prepare for interviews and apply to jobs with the user's approval through NeverApply's hosted MCP server (OAuth sign-in).",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/neverapply"
-    },
     "codex-fable5": {
       "name": "codex-fable5",
       "type": "skill",
@@ -41354,6 +41472,15 @@
       "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
       "source_name": "microsoft/upgrade-agent-plugins",
       "path": "collected_assets/skills/aspire-integration",
+      "description_ko": ">"
+    },
+    "reviewing-execution-integrity": {
+      "name": "reviewing-execution-integrity",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/skills/reviewing-execution-integrity",
       "description_ko": ">"
     },
     "replacing-eventlog-with-winevent": {
@@ -41797,6 +41924,15 @@
       "path": "collected_assets/skills/migrating-data-edm-to-odata",
       "description_ko": ">"
     },
+    "migrating-transient-fault-handling-to-polly": {
+      "name": "migrating-transient-fault-handling-to-polly",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/skills/migrating-transient-fault-handling-to-polly",
+      "description_ko": ">"
+    },
     "migrating-semantic-kernel-to-agents": {
       "name": "migrating-semantic-kernel-to-agents",
       "type": "skill",
@@ -42083,6 +42219,15 @@
       "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
       "source_name": "microsoft/upgrade-agent-plugins",
       "path": "collected_assets/skills/managing-legacy-dotnet-packages",
+      "description_ko": ">"
+    },
+    "recovering-from-blocked-dependency-resolution": {
+      "name": "recovering-from-blocked-dependency-resolution",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/skills/recovering-from-blocked-dependency-resolution",
       "description_ko": ">"
     },
     "modernizing-csharp-version": {
@@ -55723,11 +55868,10 @@
     "cs-aeo": {
       "name": "cs-aeo",
       "type": "command",
-      "description": "/cs:aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-aeo.md",
-      "description_ko": "/cs:aeo — 응답 엔진 최적화 작업 흐름. LLM 인용을 유도하는 E-E-A-T + 구조 신호에 대한 감사 콘텐츠(ChatGPT, Perplexity, Claude. Claude Code, Codex CLI, Gemini CLI에 대한 슬래시 명령)"
+      "path": "collected_assets/commands/cs-aeo.md"
     },
     "chaos-experiment": {
       "name": "chaos-experiment",
@@ -55821,11 +55965,10 @@
     "cs-webinar": {
       "name": "cs-webinar",
       "type": "command",
-      "description": "/cs:webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-webinar.md",
-      "description_ko": "/cs:webinar — 웹 세미나 및 가상 이벤트 마케팅 워크플로우입니다. 웹세미나를 처음부터 계획하고(비즈니스 목표보다 규모가 작은) 웹세미나를 구조하세요. Claude Code, Codex CLI, Gemini CLI에 대한 슬래시 명령입니다."
+      "path": "collected_assets/commands/cs-webinar.md"
     },
     "tc": {
       "name": "tc",
@@ -55975,7 +56118,7 @@
     "cs-arquiteto": {
       "name": "cs-arquiteto",
       "type": "command",
-      "description": "/cs:arquiteto — Builds a company from scratch as an OKF bundle (tree of .md with type + link graph). Guides the 12-phase interview, one at a time. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-arquiteto — Builds a company from scratch as an OKF bundle (tree of .md with type + link graph). Guides the 12-phase interview, one at a time. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-arquiteto.md"
@@ -56219,6 +56362,22 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-grill-product.md"
     },
+    "cs-flux-review": {
+      "name": "cs-flux-review",
+      "type": "command",
+      "description": "Just the flux gate - mark material fluctuations by your threshold rule and return every explanation that is missing, boilerplate, unquantified or. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-flux-review.md"
+    },
+    "cs-month-end-close": {
+      "name": "cs-month-end-close",
+      "type": "command",
+      "description": "Full close pass - plan the calendar on its critical path, prove each reconciliation, and gate flux explanations, with a BLOCKED / AT RISK / READY. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-month-end-close.md"
+    },
     "cs-pm-loop": {
       "name": "cs-pm-loop",
       "type": "command",
@@ -56249,7 +56408,7 @@
     "cs-weekly-review": {
       "name": "cs-weekly-review",
       "type": "command",
-      "description": "/cs:weekly-review — Run a GTD weekly review: GET CLEAR (collect, inboxes to zero, empty your head), GET CURRENT (next actions, both calendars. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-weekly-review — Run a GTD weekly review: GET CLEAR (collect, inboxes to zero, empty your head), GET CURRENT (next actions, both calendars. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-weekly-review.md"
@@ -56257,7 +56416,7 @@
     "cs-fable-goal": {
       "name": "cs-fable-goal",
       "type": "command",
-      "description": "/cs:fable-goal — Turn a ramble about something you want made into one polished, autonomous /goal prompt (copy-paste ready). Extracts. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-fable-goal — Turn a ramble about something you want made into one polished, autonomous /goal prompt (copy-paste ready). Extracts. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-fable-goal.md"
@@ -56265,7 +56424,7 @@
     "cs-inbox-triage": {
       "name": "cs-inbox-triage",
       "type": "command",
-      "description": "/cs:inbox-triage — Recurring email triage execution. Reads 7-file KB built by /cs:inbox-setup. Classifies recent emails, drafts replies (NEVER. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-inbox-triage — Recurring email triage execution. Reads 7-file KB built by /cs-inbox-setup. Classifies recent emails, drafts replies (NEVER. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-inbox-triage.md"
@@ -56273,7 +56432,7 @@
     "cs-inbox-setup": {
       "name": "cs-inbox-setup",
       "type": "command",
-      "description": "/cs:inbox-setup — Interactive 8-section interview that builds a personalized 7-file email-triage knowledge base. ~25-31 grill-me questions, one at a. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-inbox-setup — Interactive 8-section interview that builds a personalized 7-file email-triage knowledge base. ~25-31 grill-me questions, one at a. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-inbox-setup.md"
@@ -56289,16 +56448,15 @@
     "cs-handoff": {
       "name": "cs-handoff",
       "type": "command",
-      "description": "/cs:handoff <next-session-focus> — Compact the current conversation into a handoff document for a fresh agent. Tailored to next-session focus (deploy/review/debug/design/test). Replaces PRD/ADR/issue/commit content with references. Recommends specific skills for the next session.",
+      "description": "/cs-handoff <next-session-focus> — Compact the current conversation into a handoff document for a fresh agent. Tailored to next-session focus (deploy/review/debug/design/test). Replaces PRD/ADR/issue/commit content with references. Recommends specific skills for the next session.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-handoff.md",
-      "description_ko": "/cs:handoff <next-session-focus> — 현재 대화를 새로운 상담원을 위한 전달 문서로 압축합니다. 다음 세션 초점(배포/검토/디버그/설계/테스트)에 맞춰 조정되었습니다. PRD/ADR/issue/commit 콘텐츠를 참조로 바꿉니다. 다음 세션을 위한 특정 기술을 권장합니다."
+      "path": "collected_assets/commands/cs-handoff.md"
     },
     "cs-deep-work": {
       "name": "cs-deep-work",
       "type": "command",
-      "description": "/cs:deep-work — Plan a deep work day the Cal Newport way: audit the task list deep vs shallow against a budget, build an energy-first time-blocked. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-deep-work — Plan a deep work day the Cal Newport way: audit the task list deep vs shallow against a budget, build an energy-first time-blocked. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-deep-work.md"
@@ -56306,7 +56464,7 @@
     "cs-time-block": {
       "name": "cs-time-block",
       "type": "command",
-      "description": "/cs:time-block — Build today's time-block plan from a task list, fast: deep blocks of at least 90 minutes in the earliest hours under a hard 4-hour. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-time-block — Build today's time-block plan from a task list, fast: deep blocks of at least 90 minutes in the earliest hours under a hard 4-hour. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-time-block.md"
@@ -56314,7 +56472,7 @@
     "cs-capture": {
       "name": "cs-capture",
       "type": "command",
-      "description": "/cs:capture <dump-text-or-path> — Explicit invocation of the brain-dump organizer. Captures an unstructured stream of thoughts/tasks/ideas and. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-capture <dump-text-or-path> — Explicit invocation of the brain-dump organizer. Captures an unstructured stream of thoughts/tasks/ideas and. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-capture.md"
@@ -56322,7 +56480,7 @@
     "cs-meeting-prep": {
       "name": "cs-meeting-prep",
       "type": "command",
-      "description": "/cs:meeting-prep — Gate a meeting before it exists: price it in real dollars (attendees x minutes x rate + optional 23-minute refocus overhead). Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-meeting-prep — Gate a meeting before it exists: price it in real dollars (attendees x minutes x rate + optional 23-minute refocus overhead). Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-meeting-prep.md"
@@ -56330,7 +56488,7 @@
     "cs-meeting-actions": {
       "name": "cs-meeting-actions",
       "type": "command",
-      "description": "/cs:meeting-actions — Turn raw meeting notes into an owned action-item checklist: extracts checkboxes, ACTION:/TODO: lines, '@name will …' and 'Name. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-meeting-actions — Turn raw meeting notes into an owned action-item checklist: extracts checkboxes, ACTION:/TODO: lines, '@name will …' and 'Name. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-meeting-actions.md"
@@ -56338,7 +56496,7 @@
     "cs-roast": {
       "name": "cs-roast",
       "type": "command",
-      "description": "/cs:roast — Convene a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on an idea, then a Judge delivers one GO /. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-roast — Convene a 5-angle adversarial panel (Critic, Champion, Analyst, Investigator, Customer) on an idea, then a Judge delivers one GO /. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-roast.md"
@@ -56346,7 +56504,7 @@
     "cs-reflect": {
       "name": "cs-reflect",
       "type": "command",
-      "description": "/cs:reflect — Mid-conversation reflection: halts current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-reflect — Mid-conversation reflection: halts current thread, re-reads full conversation from original goal forward, runs 5-dimension analysis. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-reflect.md"
@@ -56354,7 +56512,7 @@
     "cs-pmf-check": {
       "name": "cs-pmf-check",
       "type": "command",
-      "description": "/cs:pmf-check — Are you before or after product/market fit? A focused Andreessen-mode interrogation that scores the felt signals + the Sean Ellis 40%. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-pmf-check — Are you before or after product/market fit? A focused Andreessen-mode interrogation that scores the felt signals + the Sean Ellis 40%. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-pmf-check.md"
@@ -56362,7 +56520,7 @@
     "cs-andreessen": {
       "name": "cs-andreessen",
       "type": "command",
-      "description": "/cs:andreessen — Marc Andreessen-mode verdict on a venture, idea, feature, or career bet. Market-first, no hedging, no disclaimers, explicit. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "description": "/cs-andreessen — Marc Andreessen-mode verdict on a venture, idea, feature, or career bet. Market-first, no hedging, no disclaimers, explicit. Slash command for Claude Code, Codex CLI, Gemini CLI.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-andreessen.md"
@@ -56370,11 +56528,10 @@
     "cs-grants": {
       "name": "cs-grants",
       "type": "command",
-      "description": "/cs:grants <research-idea> — NIH funding intelligence. 6-Q grill-me intake (idea + career stage + prelim + environment + posture + institutes) → 5-facet Consensus positioning + RePORTER POST institute mapping + NOSI fetches → 9-section .docx with mandatory program officer recommendation.",
+      "description": "/cs-grants <research-idea> — NIH funding intelligence. 6-Q grill-me intake (idea + career stage + prelim + environment + posture + institutes) → 5-facet Consensus positioning + RePORTER POST institute mapping + NOSI fetches → 9-section .docx with mandatory program officer recommendation.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-grants.md",
-      "description_ko": "/cs:grants <research-idea> — NIH 자금 지원 정보. 6-Q 그릴미 섭취(아이디어 + 경력 단계 + 예비 + 환경 + 자세 + 기관) → 5면 합의 포지셔닝 + RePORTER POST 기관 매핑 + NOSI 가져오기 → 필수 프로그램 책임자 추천이 포함된 9섹션 .docx."
+      "path": "collected_assets/commands/cs-grants.md"
     },
     "cs-research-ops": {
       "name": "cs-research-ops",
@@ -56383,6 +56540,22 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-research-ops.md"
+    },
+    "cs-linkedin-profile": {
+      "name": "cs-linkedin-profile",
+      "type": "command",
+      "description": "/cs-linkedin-profile — Audit a LinkedIn profile 0-100, rank every fix by points per hour, score the headline on five dimensions against the 220-character cap, and assemble an About section that survives the '…see more' fold.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-profile.md"
+    },
+    "cs-interview-mapper": {
+      "name": "cs-interview-mapper",
+      "type": "command",
+      "description": "Transcript-level interview mapping. Route intake to one of 16 lenses, code the transcript with verbatim quote verification, run a reliability council on unstable analytic cells, and (for >=2 interviews) synthesize triangulated cross-interview insights. Every conclusion carries a verified quote + line number; disagreement is flagged for a human, never auto-resolved. Direct invocation of the interview-mapper skill.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-interview-mapper.md"
     },
     "cs-md-review": {
       "name": "cs-md-review",
@@ -56396,11 +56569,18 @@
     "cs-human-gate": {
       "name": "cs-human-gate",
       "type": "command",
-      "description": "/cs:human-gate — Get real human review on an artifact and prove it happened. Builds a single-file review page, collects batched feedback as structured data, and runs a gate that refuses to close while a BLOCKER is open, the reviewer is unnamed, or nobody has looked at all. Non-blocking: hands over the path and ends the turn.",
+      "description": "/cs-human-gate — Get real human review on an artifact and prove it happened. Builds a single-file review page, collects batched feedback as structured data, and runs a gate that refuses to close while a BLOCKER is open, the reviewer is unnamed, or nobody has looked at all. Non-blocking: hands over the path and ends the turn.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-human-gate.md",
-      "description_ko": "/cs:human-gate — 아티팩트에 대한 실제 사람의 검토를 받고 그것이 발생했음을 증명합니다. 단일 파일 검토 페이지를 구축하고, 일괄 피드백을 구조화된 데이터로 수집하고, BLOCKER가 열려 있거나 검토자의 이름이 없거나 아무도 전혀 보지 않은 동안 닫히지 않는 게이트를 실행합니다. 논 블로킹(Non-blocking): 경로를 넘겨주고 턴을 종료합니다."
+      "path": "collected_assets/commands/cs-human-gate.md"
+    },
+    "cs-dl-reading-path": {
+      "name": "cs-dl-reading-path",
+      "type": "command",
+      "description": "/cs-dl-reading-path — Build a prerequisite-closed reading path through the Deep Learning book from a goal, a background and the hours you actually have. Refuses to route a goal the 2016 book does not cover, and names what covers it instead.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-dl-reading-path.md"
     },
     "cs-skill-doctor": {
       "name": "cs-skill-doctor",
@@ -56414,11 +56594,10 @@
     "cs-caveman": {
       "name": "cs-caveman",
       "type": "command",
-      "description": "/cs:caveman — Activate persistent caveman-mode. Ultra-compressed responses with technical substance preserved. Auto-clarity exception for warnings + destructive ops. Stays active until 'stop caveman' / 'normal mode'.",
+      "description": "/cs-caveman — Activate persistent caveman-mode. Ultra-compressed responses with technical substance preserved. Auto-clarity exception for warnings + destructive ops. Stays active until 'stop caveman' / 'normal mode'.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-caveman.md",
-      "description_ko": "/cs:caveman — 영구 원시인 모드를 활성화합니다. 기술적인 요소를 그대로 유지하면서 극도로 압축된 응답성을 제공합니다. 경고 + 파괴적인 작업에 대한 자동 명확성 예외입니다. '원시인 중지'/'일반 모드'까지 활성 상태를 유지합니다."
+      "path": "collected_assets/commands/cs-caveman.md"
     },
     "cs-scrape": {
       "name": "cs-scrape",
@@ -56432,25 +56611,31 @@
     "cs-grill-with-docs": {
       "name": "cs-grill-with-docs",
       "type": "command",
-      "description": "/cs:grill-with-docs <path-to-plan> — Start a docs-anchored grilling session. Pre-flights CONTEXT.md + docs/adr/ linters, then interrogates the plan one decision at a time, updating glossary + writing ADRs inline as they crystallise.",
+      "description": "/cs-grill-with-docs <path-to-plan> — Start a docs-anchored grilling session. Pre-flights CONTEXT.md + docs/adr/ linters, then interrogates the plan one decision at a time, updating glossary + writing ADRs inline as they crystallise.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-grill-with-docs.md",
-      "description_ko": "/cs:grill-with-docs <계획 경로> — 문서 고정 그릴링 세션을 시작합니다. CONTEXT.md + docs/adr/linters를 사전 비행한 다음 한 번에 한 가지 결정씩 계획을 조사하여 용어집을 업데이트하고 결정화되는 ADR을 인라인으로 작성합니다."
+      "path": "collected_assets/commands/cs-grill-with-docs.md"
     },
     "cs-write-a-skill": {
       "name": "cs-write-a-skill",
       "type": "command",
-      "description": "/cs:write-a-skill <name-or-description> — Author a new agent skill with Matt Pocock's 3-phase workflow (Gather → Draft → Review). Runs 6 review-checklist items + 3 validator tools as a gate. Use when starting a new skill in this repo.",
+      "description": "/cs-write-a-skill <name-or-description> — Author a new agent skill with Matt Pocock's 3-phase workflow (Gather → Draft → Review). Runs 6 review-checklist items + 3 validator tools as a gate. Use when starting a new skill in this repo.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-write-a-skill.md",
-      "description_ko": "/cs:write-a-skill <이름 또는 설명> — Matt Pocock의 3단계 워크플로(수집 → 초안 → 검토)를 사용하여 새 에이전트 기술을 작성합니다. 6개의 검토 체크리스트 항목과 3개의 검증 도구를 게이트로 실행합니다. 이 저장소에서 새 기술을 시작할 때 사용합니다."
+      "path": "collected_assets/commands/cs-write-a-skill.md"
+    },
+    "cs-claude-settings-lint": {
+      "name": "cs-claude-settings-lint",
+      "type": "command",
+      "description": "Lint Claude Code settings across shared, local, user and managed scopes, and say what the merged permission policy actually allows.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-claude-settings-lint.md"
     },
     "cs-grill-research-ops": {
       "name": "cs-grill-research-ops",
       "type": "command",
-      "description": "Matt Pocock-style docs-anchored grilling for a Research Operations plan — clinical study, R&D budget, market size, or product study. Walks the plan against the research canon (ICH E9, IAS 38, Cochran, Kotler, Nielsen) one question at a time, recommends an answer per question, and refuses to invoke any sub-skill until the lane-defining decisions are locked. Use before running /cs:research-ops on a fuzzy plan.",
+      "description": "Matt Pocock-style docs-anchored grilling for a Research Operations plan — clinical study, R&D budget, market size, or product study. Walks the plan against the research canon (ICH E9, IAS 38, Cochran, Kotler, Nielsen) one question at a time, recommends an answer per question, and refuses to invoke any sub-skill until the lane-defining decisions are locked. Use before running /cs-research-ops on a fuzzy plan.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-grill-research-ops.md"
@@ -56467,56 +56652,66 @@
     "cs-landing": {
       "name": "cs-landing",
       "type": "command",
-      "description": "/cs:landing <product-or-brief> — Generate a premium single-file HTML landing page with GSAP 3D animations, scroll-triggered reveals, and mouse-parallax depth. Grill-me intake (4 questions) locks down product / audience / brand / tone before any markup. Output: ${OUTPUT_DIR}/<product-kebab>.html or HTML artifact.",
+      "description": "/cs-landing <product-or-brief> — Generate a premium single-file HTML landing page with GSAP 3D animations, scroll-triggered reveals, and mouse-parallax depth. Grill-me intake (4 questions) locks down product / audience / brand / tone before any markup. Output: ${OUTPUT_DIR}/<product-kebab>.html or HTML artifact.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-landing.md",
-      "description_ko": "/cs:landing <product-or-brief> — GSAP 3D 애니메이션, 스크롤 트리거 공개 및 마우스 시차 깊이를 사용하여 프리미엄 단일 파일 HTML 랜딩 페이지를 생성합니다. Grill-me 섭취(4개 질문)는 마크업 전에 제품/고객/브랜드/톤을 고정합니다. 출력: ${OUTPUT_DIR}/<product-kebab>.html 또는 HTML 아티팩트."
+      "path": "collected_assets/commands/cs-landing.md"
+    },
+    "cs-linkedin-analyze": {
+      "name": "cs-linkedin-analyze",
+      "type": "command",
+      "description": "/cs-linkedin-analyze — Read your own exported LinkedIn post data, report medians and outlier bands rather than misleading means, test candidate patterns against a seeded permutation null with multiple-comparisons accounting, and size a real experiment. Refuses to conclude anything below 10 posts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-analyze.md"
     },
     "cs-deep-research": {
       "name": "cs-deep-research",
       "type": "command",
-      "description": "/cs:deep-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans out parallel search sub-agents, triangulates every thesis against >=3 independent sources, saves each source to its own file with verbatim quotes, runs an adversarial pass, and emits an auditable, reusable research folder with a refresh protocol. The heavyweight alternative to the fast research router.",
+      "description": "/cs-deep-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans out parallel search sub-agents, triangulates every thesis against >=3 independent sources, saves each source to its own file with verbatim quotes, runs an adversarial pass, and emits an auditable, reusable research folder with a refresh protocol. The heavyweight alternative to the fast research router.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-deep-research.md",
-      "description_ko": "/cs:deep-research <질문> — 고위험 질문에 대한 엄격한 다중 소스 조사입니다. 위조 가능한 가설, 계획으로 재구성하고, 병렬 검색 하위 에이전트를 팬아웃하고, 3개 이상의 독립적 소스에 대해 모든 논문을 삼각측량하고, 각 소스를 축어적 인용문과 함께 자체 파일에 저장하고, 적대적 패스를 실행하고, 새로 고침 프로토콜을 통해 감사 가능하고 재사용 가능한 연구 폴더를 내보냅니다. 빠른 연구 라우터에 대한 중량급 대안입니다."
+      "path": "collected_assets/commands/cs-deep-research.md"
+    },
+    "cs-linkedin-outreach": {
+      "name": "cs-linkedin-outreach",
+      "type": "command",
+      "description": "/cs-linkedin-outreach — Build a weekly commenting roster inside a real time budget, and write one outreach message at a time that refuses to be a template. Caps volume against LinkedIn's observed invitation limits and refuses automation-shaped plans. Nothing is ever sent.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-outreach.md"
     },
     "cs-grill-me": {
       "name": "cs-grill-me",
       "type": "command",
-      "description": "/cs:grill-me <path-to-plan> — Start a relentless interrogation of a plan or design. Walks decision tree one branch at a time. One question per turn with recommended answer. Explores codebase before asking.",
+      "description": "/cs-grill-me <path-to-plan> — Start a relentless interrogation of a plan or design. Walks decision tree one branch at a time. One question per turn with recommended answer. Explores codebase before asking.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-grill-me.md",
-      "description_ko": "/cs:grill-me <계획 경로> — 계획이나 디자인에 대한 끊임없는 조사를 시작합니다. 의사결정 트리를 한 번에 한 분기씩 이동합니다. 추천 답변이 포함된 질문은 턴당 하나입니다. 질문하기 전에 코드베이스를 탐색합니다."
+      "path": "collected_assets/commands/cs-grill-me.md"
     },
     "cs-pulse": {
       "name": "cs-pulse",
       "type": "command",
-      "description": "/cs:pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per platform), optional X/Twitter, cross-platform synthesis. Output: ${RESEARCH_DIR}/pulse/<slug>-<date>.md + full briefing in chat.",
+      "description": "/cs-pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per platform), optional X/Twitter, cross-platform synthesis. Output: ${RESEARCH_DIR}/pulse/<slug>-<date>.md + full briefing in chat.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-pulse.md",
-      "description_ko": "/cs:pulse <주제> — 다중 소스 최근 연구. Grill-me 섭취(주제/각도/창/범위), 병렬 Reddit + HN + 웹(플랫폼당 1q/초), 선택적 X/Twitter, 크로스 플랫폼 합성. 출력: ${RESEARCH_DIR}/pulse/<slug>-<date>.md + 채팅의 전체 브리핑."
+      "path": "collected_assets/commands/cs-pulse.md"
     },
     "cs-research": {
       "name": "cs-research",
       "type": "command",
-      "description": "/cs:research <question> — Default research entry point. Hybrid router: classifies question deterministically and either delegates to specialist (pulse / grants / litreview / dossier / patent / syllabus) OR runs own plan-decompose-search-synthesize fallback. Always surfaces routing decision; accepts override. NEVER silent delegation.",
+      "description": "/cs-research <question> — Default research entry point. Hybrid router: classifies question deterministically and either delegates to specialist (pulse / grants / litreview / dossier / patent / syllabus) OR runs own plan-decompose-search-synthesize fallback. Always surfaces routing decision; accepts override. NEVER silent delegation.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-research.md",
-      "description_ko": "/cs:research <질문> — 기본 연구 진입점입니다. 하이브리드 라우터: 질문을 결정론적으로 분류하고 전문가에게 위임(펄스/승인/리트리뷰/서류/특허/강의 계획)하거나 자체 계획-분해-검색-합성 폴백을 실행합니다. 항상 라우팅 결정을 표면화합니다. 재정의를 수락합니다. 절대 자동 위임을 하지 마세요."
+      "path": "collected_assets/commands/cs-research.md"
     },
     "index": {
       "name": "index",
       "type": "command",
-      "description": "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
+      "description": "143 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/index.md",
-      "description_ko": "Claude Code, Codex CLI 및 Gemini CLI를 위한 124개의 슬래시 명령 — 스프린트 계획, 기술 부채 분석, PRD, OKR 등."
+      "path": "collected_assets/commands/index.md"
     },
     "skillopt-sleep": {
       "name": "skillopt-sleep",
@@ -56544,14 +56739,37 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-clinical-research.md"
     },
+    "cs-agent-evals": {
+      "name": "cs-agent-evals",
+      "type": "command",
+      "description": "Full regression-eval pass on an agent change - trajectories, flaky cases, and the paired baseline-vs-candidate gate.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-agent-evals.md"
+    },
+    "cs-deep-learning": {
+      "name": "cs-deep-learning",
+      "type": "command",
+      "description": "/cs-deep-learning — Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Answers chapter questions from a compiled knowledge base, always dating the answer against 2026 practice, and routes to the reading-path planner or the training diagnostic. Points at the free official chapters; never reproduces them.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-deep-learning.md"
+    },
     "cs-notebooklm": {
       "name": "cs-notebooklm",
       "type": "command",
-      "description": "/cs:notebooklm — NotebookLM browser automation. Action-routing intake (Q1: read / add source / Studio output / create new) + per-action Q2-Q4 branching. Fire-and-notify for slow Studio ops. Mandatory custom prompts (defaults are mediocre). Requires browser automation environment — fails clean on web.",
+      "description": "/cs-notebooklm — NotebookLM browser automation. Action-routing intake (Q1: read / add source / Studio output / create new) + per-action Q2-Q4 branching. Fire-and-notify for slow Studio ops. Mandatory custom prompts (defaults are mediocre). Requires browser automation environment — fails clean on web.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-notebooklm.md",
-      "description_ko": "/cs:notebooklm — NotebookLM 브라우저 자동화. 액션 라우팅 인테이크(Q1: 읽기/소스 추가/Studio 출력/새 만들기) + 액션별 Q2-Q4 분기. 느린 Studio 작업을 위한 실행 및 알림. 필수 사용자 정의 프롬프트(기본값은 보통임) 브라우저 자동화 환경이 필요합니다. 웹에서는 정리가 실패합니다."
+      "path": "collected_assets/commands/cs-notebooklm.md"
+    },
+    "cs-claude-rollout": {
+      "name": "cs-claude-rollout",
+      "type": "command",
+      "description": "Full Claude Code team-rollout audit - settings across scopes, MCP/plugin inventory, CLAUDE.md layering, and adoption stage.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-claude-rollout.md"
     },
     "cs-memory-engineering": {
       "name": "cs-memory-engineering",
@@ -56561,6 +56779,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-memory-engineering.md",
       "description_ko": "전체 4개 렌즈 메모리 엔지니어링 패스인 에이전트 메모리 시스템의 가격을 책정하고, 선택하고, 감사하고 관리합니다."
+    },
+    "cs-linkedin-plan": {
+      "name": "cs-linkedin-plan",
+      "type": "command",
+      "description": "/cs-linkedin-plan — Build the positioning brief (objective, audience, 2-4 proof-backed pillars, exclusion list), size a weekly cadence against the hours that actually exist, and gate a newsletter against eligibility and a six-month commitment.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-plan.md"
     },
     "cs-design-system": {
       "name": "cs-design-system",
@@ -56574,20 +56800,26 @@
     "cs-book-to-plugin": {
       "name": "cs-book-to-plugin",
       "type": "command",
-      "description": "/cs:book-to-plugin <compiled-skill-dir> [--domain <domain>] — wrap a compiled book skill in a claude-skills plugin package (manifest + cs-* agent + /cs:* command + README) so the rest of the library can route to it. Use after /cs:book-to-skill, or when an existing knowledge-base skill folder needs to become an installable plugin.",
+      "description": "/cs-book-to-plugin <compiled-skill-dir> [--domain <domain>] — wrap a compiled book skill in a claude-skills plugin package (manifest + cs-* agent + /cs-* command + README) so the rest of the library can route to it. Use after /cs-book-to-skill, or when an existing knowledge-base skill folder needs to become an installable plugin.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-book-to-plugin.md",
-      "description_ko": "/cs:book-to-plugin <compiled-skill-dir> [--domain <domain>] — 컴파일된 도서 기술을 claude-skills 플러그인 패키지(매니페스트 + cs-* 에이전트 + /cs:* 명령 + README)로 래핑하여 라이브러리의 나머지 부분이 해당 기술로 라우팅할 수 있도록 합니다. /cs:book-to-skill 다음에 사용하거나 기존 지식 기반 기술 폴더를 설치 가능한 플러그인으로 만들어야 할 때 사용합니다."
+      "path": "collected_assets/commands/cs-book-to-plugin.md"
     },
     "cs-dossier": {
       "name": "cs-dossier",
       "type": "command",
-      "description": "/cs:dossier <entity> — Decision-grade entity research with mandatory hypothesis-testing. 6-Q grill-me intake (Q4 hypothesis MANDATORY) → ≥30% disconfirming search budget → 9-section .docx with verdict (SUPPORTED/PARTIALLY/DISPROVEN/INCONCLUSIVE) + 3-5 finding-tied conversation hooks.",
+      "description": "/cs-dossier <entity> — Decision-grade entity research with mandatory hypothesis-testing. 6-Q grill-me intake (Q4 hypothesis MANDATORY) → ≥30% disconfirming search budget → 9-section .docx with verdict (SUPPORTED/PARTIALLY/DISPROVEN/INCONCLUSIVE) + 3-5 finding-tied conversation hooks.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-dossier.md",
-      "description_ko": "/cs:dossier <entity> — 필수 가설 테스트를 통한 의사결정 수준 엔터티 연구입니다. 6-Q 그릴미 섭취(Q4 가설 필수) → ≥30% 검색 예산 확인 → 판결이 포함된 9섹션 .docx(지원/부분/반대/결론 없음) + 3~5개의 결과 관련 대화 후크."
+      "path": "collected_assets/commands/cs-dossier.md"
+    },
+    "cs-linkedin": {
+      "name": "cs-linkedin",
+      "type": "command",
+      "description": "/cs-linkedin — Route any organic LinkedIn goal to the right lane (profile / strategy / content / engagement / analytics) after gating it against LinkedIn's User Agreement. Refuses automation, scraping, engagement pods, bulk DMs, fake identity, and fabricated proof before a word is drafted. Nothing is ever sent.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin.md"
     },
     "cs-market-research": {
       "name": "cs-market-research",
@@ -56597,6 +56829,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-market-research.md"
     },
+    "cs-dl-diagnose": {
+      "name": "cs-dl-diagnose",
+      "type": "command",
+      "description": "/cs-dl-diagnose — Diagnose a training run against Chapter 11's decision tree: read training error before deciding anything, and never diagnose a NaN as overfitting. Returns a ranked cause, the specific next action, and the chapter that justifies it.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-dl-diagnose.md"
+    },
     "cs-forgetting-audit": {
       "name": "cs-forgetting-audit",
       "type": "command",
@@ -56605,6 +56845,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-forgetting-audit.md",
       "description_ko": "메모리 설계 또는 저장에 대해 차단 망각 게이트만 실행하십시오. 즉, 무엇이 떠나고 어떤 규칙에 따라 실행하십시오."
+    },
+    "cs-spinning-up-deep-rl": {
+      "name": "cs-spinning-up-deep-rl",
+      "type": "command",
+      "description": "/cs-spinning-up-deep-rl [topic | framework | chNN] — query the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Use when applying its frameworks while working, looking up a term, or reading one chapter's summary.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-spinning-up-deep-rl.md"
     },
     "cs-md-document": {
       "name": "cs-md-document",
@@ -56627,11 +56875,10 @@
     "cs-syllabus": {
       "name": "cs-syllabus",
       "type": "command",
-      "description": "/cs:syllabus <syllabus-file-or-paste> — Generate curated supplementary reading list from any course syllabus. 3-Q grill-me (input format + audience + year range) + grouping checkpoint → Consensus searches per section with applied-domain weaving → .docx via bundled JS script with audience-calibrated summaries + Bloom higher-order discussion questions.",
+      "description": "/cs-syllabus <syllabus-file-or-paste> — Generate curated supplementary reading list from any course syllabus. 3-Q grill-me (input format + audience + year range) + grouping checkpoint → Consensus searches per section with applied-domain weaving → .docx via bundled JS script with audience-calibrated summaries + Bloom higher-order discussion questions.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-syllabus.md",
-      "description_ko": "/cs:syllabus <syllabus-file-or-paste> — 모든 강좌 강의 계획서에서 선별된 보충 읽기 목록을 생성합니다. 3-Q 그릴미(입력 형식 + 청중 + 연도 범위) + 그룹화 체크포인트 → 적용 도메인 직조를 사용하여 섹션별 합의 검색 → 청중 보정 요약이 포함된 번들 JS 스크립트를 통한 .docx + Bloom 고차원 토론 질문."
+      "path": "collected_assets/commands/cs-syllabus.md"
     },
     "cs-product-research": {
       "name": "cs-product-research",
@@ -56644,38 +56891,50 @@
     "cs-grill-markdown-html": {
       "name": "cs-grill-markdown-html",
       "type": "command",
-      "description": "Matt-Pocock-style forcing-question grill for markdown-html conversions. Walks 5 cited-canon questions (purpose, line-count threshold, design-system onboarding, output path, doctype confidence) one at a time with a recommended answer. Run before /cs:markdown-html when you want clarity about what the HTML is for, not just a route to the closest sub-skill.",
+      "description": "Matt-Pocock-style forcing-question grill for markdown-html conversions. Walks 5 cited-canon questions (purpose, line-count threshold, design-system onboarding, output path, doctype confidence) one at a time with a recommended answer. Run before /cs-markdown-html when you want clarity about what the HTML is for, not just a route to the closest sub-skill.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-grill-markdown-html.md",
-      "description_ko": "Markdown-html 변환을 위한 Matt-Pocock 스타일의 강제 질문 그릴입니다. 5가지 인용 표준 질문(목적, 줄 수 임계값, 디자인 시스템 온보딩, 출력 경로, 문서 유형 신뢰도)을 권장 답변과 함께 한 번에 하나씩 안내합니다. 가장 가까운 하위 기술에 대한 경로뿐만 아니라 HTML의 용도를 명확하게 알고 싶다면 /cs:markdown-html 이전에 실행하세요."
+      "path": "collected_assets/commands/cs-grill-markdown-html.md"
     },
     "cs-litreview": {
       "name": "cs-litreview",
       "type": "command",
-      "description": "/cs:litreview <research-question> — Academic literature orientation. Grill-me intake (question + framework + depth), free-lane recon (PubMed E-utilities + OpenAlex, keyless; Consensus MCP added only when connected), framework checkpoint, sequential budget-allocated searches (5/10/20), 8-section .docx research guide output. Sibling of /cs:pulse (research pack).",
+      "description": "/cs-litreview <research-question> — Academic literature orientation. Grill-me intake (question + framework + depth), free-lane recon (PubMed E-utilities + OpenAlex, keyless; Consensus MCP added only when connected), framework checkpoint, sequential budget-allocated searches (5/10/20), 8-section .docx research guide output. Sibling of /cs-pulse (research pack).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-litreview.md",
-      "description_ko": "/cs:litreview <research-question> — 학술 문헌 오리엔테이션. Grill-me 섭취(질문 + 프레임워크 + 깊이), 무료 차선 정찰(PubMed E-utilities + OpenAlex, 키 없음, 연결된 경우에만 합의 MCP 추가), 프레임워크 체크포인트, 순차적 예산 할당 검색(5/10/20), 8섹션 .docx 연구 가이드 출력. /cs:pulse(연구 팩)의 형제입니다."
+      "path": "collected_assets/commands/cs-litreview.md"
+    },
+    "cs-linkedin-repurpose": {
+      "name": "cs-linkedin-repurpose",
+      "type": "command",
+      "description": "/cs-linkedin-repurpose — Split an article, talk transcript, README, or write-up into standalone LinkedIn units, score each on whether it survives without its context, and skip anything already in the reuse ledger so the same idea never goes out twice.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-repurpose.md"
     },
     "cs-patent": {
       "name": "cs-patent",
       "type": "command",
-      "description": "/cs:patent <invention> — Patent prior-art + landscape intelligence with mandatory sub-use-case commitment. 6-Q grill-me intake (Q2 picks one of: novelty / FTO / landscape / diligence / litigation). Multi-source search (Google Patents + Espacenet + USPTO + optional Lens.org BYOK). 8-section .docx with verdict + claim text + family-resolved hits + mandatory legal disclaimer (novelty + FTO).",
+      "description": "/cs-patent <invention> — Patent prior-art + landscape intelligence with mandatory sub-use-case commitment. 6-Q grill-me intake (Q2 picks one of: novelty / FTO / landscape / diligence / litigation). Multi-source search (Google Patents + Espacenet + USPTO + optional Lens.org BYOK). 8-section .docx with verdict + claim text + family-resolved hits + mandatory legal disclaimer (novelty + FTO).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-patent.md",
-      "description_ko": "/cs:patent <발명> — 필수 하위 사용 사례 약속이 포함된 특허 선행 기술 + 환경 인텔리전스입니다. 6-Q 그릴미 섭취(Q2는 참신함 / FTO / 풍경 / 근면 / 소송 중 하나 선택). 다중 소스 검색(Google Patents + Espacenet + USPTO + 선택적 Lens.org BYOK). 판결 + 청구 텍스트 + 가족이 해결한 히트 + 필수 법적 고지 사항(참신함 + FTO)이 포함된 8섹션 .docx입니다."
+      "path": "collected_assets/commands/cs-patent.md"
+    },
+    "cs-eval-gate": {
+      "name": "cs-eval-gate",
+      "type": "command",
+      "description": "Just the merge gate - paired statistical comparison of a candidate eval run against baseline, with a PASS / WARN / BLOCK exit code.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-eval-gate.md"
     },
     "cs-book-to-skill": {
       "name": "cs-book-to-skill",
       "type": "command",
-      "description": "/cs:book-to-skill <path|folder|glob>... [skill-name] — convert a book, documentation folder, or source collection into a structured agent skill (core frameworks + on-demand chapters + glossary + patterns + cheatsheet). Use when the user wants to study a document with an agent, apply an author's frameworks while working, or turn internal docs into a reusable knowledge base.",
+      "description": "/cs-book-to-skill <path|folder|glob>... [skill-name] — convert a book, documentation folder, or source collection into a structured agent skill (core frameworks + on-demand chapters + glossary + patterns + cheatsheet). Use when the user wants to study a document with an agent, apply an author's frameworks while working, or turn internal docs into a reusable knowledge base.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-book-to-skill.md",
-      "description_ko": "/cs:book-to-skill <path|folder|glob>... [skill-name] — 책, 문서 폴더 또는 소스 컬렉션을 구조화된 에이전트 기술(핵심 프레임워크 + 주문형 장 + 용어집 + 패턴 + 치트시트)로 변환합니다. 사용자가 에이전트와 함께 문서를 연구하고, 작업하는 동안 작성자의 프레임워크를 적용하고, 내부 문서를 재사용 가능한 지식 기반으로 전환하고 싶을 때 사용하세요."
+      "path": "collected_assets/commands/cs-book-to-skill.md"
     },
     "cs-research-finance": {
       "name": "cs-research-finance",
@@ -56688,20 +56947,34 @@
     "cs-harness": {
       "name": "cs-harness",
       "type": "command",
-      "description": "Compile a goal into a verified agent-harness loop for a domain and drive it to close — /cs:harness <domain> <goal>",
+      "description": "Compile a goal into a verified agent-harness loop for a domain and drive it to close — /cs-harness <domain> <goal>",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-harness.md",
-      "description_ko": "도메인에 대해 검증된 에이전트 하네스 루프로 목표를 컴파일하고 이를 종료하도록 유도합니다 — /cs:harness <도메인> <목표>"
+      "path": "collected_assets/commands/cs-harness.md"
+    },
+    "cs-linkedin-post": {
+      "name": "cs-linkedin-post",
+      "type": "command",
+      "description": "/cs-linkedin-post — Pick the format the material actually supports, draft to the ~140-character mobile fold, and lint 0-100 across mechanics, hook, integrity, and accessibility. Blocking findings for the 3,000-character cap, engagement bait, and Unicode pseudo-bold.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-linkedin-post.md"
+    },
+    "cs-grill-linkedin": {
+      "name": "cs-grill-linkedin",
+      "type": "command",
+      "description": "/cs-grill-linkedin — Interrogate a LinkedIn plan one forcing question at a time, each with a recommended answer anchored in the plugin's canon. Refuses to start the work until the objective, the audience, the hours, the proof, and the exclusion list survive the questions.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-grill-linkedin.md"
     },
     "cs-workflow-build": {
       "name": "cs-workflow-build",
       "type": "command",
-      "description": "/cs:workflow-build <task-description> — Design and write a deterministic Claude Code workflow (.js). Opens with intake questions, infers-and-proposes a topology when the request is vague, then scaffolds + validates the file. Use when building or running a custom Claude Code workflow.",
+      "description": "/cs-workflow-build <task-description> — Design and write a deterministic Claude Code workflow (.js). Opens with intake questions, infers-and-proposes a topology when the request is vague, then scaffolds + validates the file. Use when building or running a custom Claude Code workflow.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-workflow-build.md",
-      "description_ko": "/cs:workflow-build <task-description> — 결정적 Claude Code 워크플로(.js)를 설계하고 작성합니다. 접수 질문으로 열고, 요청이 모호할 때 토폴로지를 추론 및 제안한 다음, 스캐폴드를 수행하고 파일의 유효성을 검사합니다. 사용자 정의 Claude Code 워크플로를 구축하거나 실행할 때 사용합니다."
+      "path": "collected_assets/commands/cs-workflow-build.md"
     },
     "cs-memory": {
       "name": "cs-memory",
@@ -56711,42 +56984,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-memory.md",
       "description_ko": "계층형 에이전트 메모리 저장소 검사, 추적 및 채택(상태 | 이유 | 경쟁 | 채택 | 잊어버리기)"
-    },
-    "cs-dl-reading-path": {
-      "name": "cs-dl-reading-path",
-      "type": "command",
-      "description": "/cs:dl-reading-path — Build a prerequisite-closed reading path through the Deep Learning book from a goal, a background and the hours you actually have. Refuses to route a goal the 2016 book does not cover, and names what covers it instead.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-dl-reading-path.md",
-      "description_ko": "/cs:dl-reading-path — 목표, 배경 및 실제 시간을 바탕으로 딥 러닝 책을 통해 필수 조건이 포함된 읽기 경로를 구축하세요. 2016년 책에서 다루지 않는 목표를 전달하는 것을 거부하고 대신 다루는 내용을 지정합니다."
-    },
-    "cs-deep-learning": {
-      "name": "cs-deep-learning",
-      "type": "command",
-      "description": "/cs:deep-learning — Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Answers chapter questions from a compiled knowledge base, always dating the answer against 2026 practice, and routes to the reading-path planner or the training diagnostic. Points at the free official chapters; never reproduces them.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-deep-learning.md",
-      "description_ko": "/cs:deep-learning — 딥 러닝 교과서의 학습 동반자입니다(Goodfellow, Bengio & Courville, 2016). 컴파일된 지식 기반의 장 질문에 답변하고 항상 2026년 연습에 대한 답변을 날짜를 지정하고 읽기 경로 플래너 또는 교육 진단으로 연결합니다. 무료 공식 챕터의 포인트 결코 재현하지 않습니다."
-    },
-    "cs-dl-diagnose": {
-      "name": "cs-dl-diagnose",
-      "type": "command",
-      "description": "/cs:dl-diagnose — Diagnose a training run against Chapter 11's decision tree: read training error before deciding anything, and never diagnose a NaN as overfitting. Returns a ranked cause, the specific next action, and the chapter that justifies it.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-dl-diagnose.md",
-      "description_ko": "/cs:dl-diagnose — 11장의 의사결정 트리에 대해 훈련 실행을 진단합니다. 결정하기 전에 훈련 오류를 읽고 NaN을 과적합으로 진단하지 마십시오. 순위가 매겨진 원인, 구체적인 다음 작업 및 이를 정당화하는 장을 반환합니다."
-    },
-    "cs-spinning-up-deep-rl": {
-      "name": "cs-spinning-up-deep-rl",
-      "type": "command",
-      "description": "/cs:spinning-up-deep-rl [topic | framework | chNN] — query the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Use when applying its frameworks while working, looking up a term, or reading one chapter's summary.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-spinning-up-deep-rl.md",
-      "description_ko": "/cs:spinning-up-deep-rl [주제 | 프레임워크 | chNN] — Joshua Achiam(OpenAI)이 Spinning Up in Deep RL에서 편집한 지식 기반을 쿼리합니다. 작업하거나, 용어를 검색하거나, 한 장의 요약을 읽는 동안 해당 프레임워크를 적용할 때 사용합니다."
     },
     "hive": {
       "name": "hive",
@@ -56810,78 +57047,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/swarm.md",
       "description_ko": "작업에 대해 병렬 오픈코드 작업자 떼를 조율합니다(작업 트리 격리, 병합)"
-    },
-    "cs-linkedin-profile": {
-      "name": "cs-linkedin-profile",
-      "type": "command",
-      "description": "/cs:linkedin-profile — Audit a LinkedIn profile 0-100, rank every fix by points per hour, score the headline on five dimensions against the 220-character cap, and assemble an About section that survives the '…see more' fold.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-profile.md",
-      "description_ko": "/cs:linkedin-profile — LinkedIn 프로필을 0-100으로 감사하고, 모든 수정 사항을 시간당 포인트로 순위를 매기고, 220자 한도를 기준으로 5가지 차원에서 헤드라인에 점수를 매기고, '...자세히 보기' 접힌 부분에서 살아남는 정보 섹션을 구성합니다."
-    },
-    "cs-linkedin-analyze": {
-      "name": "cs-linkedin-analyze",
-      "type": "command",
-      "description": "/cs:linkedin-analyze — Read your own exported LinkedIn post data, report medians and outlier bands rather than misleading means, test candidate patterns against a seeded permutation null with multiple-comparisons accounting, and size a real experiment. Refuses to conclude anything below 10 posts.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-analyze.md",
-      "description_ko": "/cs:linkedin-analyze — 내보낸 LinkedIn 게시물 데이터를 읽고, 오해의 소지가 있는 수단 대신 중앙값과 이상치 대역을 보고하고, 다중 비교 계정을 사용하여 시드 순열 null에 대해 후보 패턴을 테스트하고, 실제 실험의 크기를 조정합니다. 10개 미만의 게시물에 대한 결론을 거부합니다."
-    },
-    "cs-linkedin-outreach": {
-      "name": "cs-linkedin-outreach",
-      "type": "command",
-      "description": "/cs:linkedin-outreach — Build a weekly commenting roster inside a real time budget, and write one outreach message at a time that refuses to be a template. Caps volume against LinkedIn's observed invitation limits and refuses automation-shaped plans. Nothing is ever sent.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-outreach.md",
-      "description_ko": "/cs:linkedin-outreach — 실시간 예산 내에서 주간 댓글 목록을 작성하고 템플릿이 아닌 한 번에 하나의 홍보 메시지를 작성하세요. LinkedIn이 관찰한 초대 제한에 따라 볼륨을 제한하고 자동화 형태의 계획을 거부합니다. 아무것도 전송되지 않습니다."
-    },
-    "cs-linkedin-plan": {
-      "name": "cs-linkedin-plan",
-      "type": "command",
-      "description": "/cs:linkedin-plan — Build the positioning brief (objective, audience, 2-4 proof-backed pillars, exclusion list), size a weekly cadence against the hours that actually exist, and gate a newsletter against eligibility and a six-month commitment.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-plan.md",
-      "description_ko": "/cs:linkedin-plan — 포지셔닝 개요(목표, 대상, 2-4개의 증거 기반 기둥, 제외 목록)를 작성하고, 실제로 존재하는 시간을 기준으로 주간 케이던스를 조정하고, 자격 및 6개월 약정에 대해 뉴스레터를 발행합니다."
-    },
-    "cs-linkedin": {
-      "name": "cs-linkedin",
-      "type": "command",
-      "description": "/cs:linkedin — Route any organic LinkedIn goal to the right lane (profile / strategy / content / engagement / analytics) after gating it against LinkedIn's User Agreement. Refuses automation, scraping, engagement pods, bulk DMs, fake identity, and fabricated proof before a word is drafted. Nothing is ever sent.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin.md",
-      "description_ko": "/cs:linkedin — LinkedIn의 사용자 계약을 기준으로 모든 유기적 LinkedIn 목표를 올바른 경로(프로필/전략/콘텐츠/참여/분석)로 라우팅합니다. 자동화, 스크래핑, 참여 포드, 대량 DM, 가짜 신원 및 단어 초안 작성 전 위조된 증거를 거부합니다. 아무것도 전송되지 않습니다."
-    },
-    "cs-linkedin-repurpose": {
-      "name": "cs-linkedin-repurpose",
-      "type": "command",
-      "description": "/cs:linkedin-repurpose — Split an article, talk transcript, README, or write-up into standalone LinkedIn units, score each on whether it survives without its context, and skip anything already in the reuse ledger so the same idea never goes out twice.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-repurpose.md",
-      "description_ko": "/cs:linkedin-re목적 — 기사, 대화 내용, README 또는 글을 독립형 LinkedIn 단위로 분할하고, 맥락 없이도 살아남는지 여부에 대해 각각 점수를 매기고, 재사용 원장에 이미 있는 항목을 건너뛰어 동일한 아이디어가 두 번 나오지 않도록 합니다."
-    },
-    "cs-linkedin-post": {
-      "name": "cs-linkedin-post",
-      "type": "command",
-      "description": "/cs:linkedin-post — Pick the format the material actually supports, draft to the ~140-character mobile fold, and lint 0-100 across mechanics, hook, integrity, and accessibility. Blocking findings for the 3,000-character cap, engagement bait, and Unicode pseudo-bold.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-linkedin-post.md",
-      "description_ko": "/cs:linkedin-post — 자료가 실제로 지원하는 형식을 선택하고, 최대 140자 모바일 폴더로 드래프트하고, 메커니즘, 후크, 무결성 및 접근성 전반에 걸쳐 린트 0-100을 선택합니다. 3,000자 제한, 참여 미끼 및 유니코드 의사 굵게 표시에 대한 차단 결과입니다."
-    },
-    "cs-grill-linkedin": {
-      "name": "cs-grill-linkedin",
-      "type": "command",
-      "description": "/cs:grill-linkedin — Interrogate a LinkedIn plan one forcing question at a time, each with a recommended answer anchored in the plugin's canon. Refuses to start the work until the objective, the audience, the hours, the proof, and the exclusion list survive the questions.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-grill-linkedin.md",
-      "description_ko": "/cs:grill-linkedin — 플러그인의 캐논에 고정된 권장 답변이 포함된 한 번에 하나의 강제 질문으로 LinkedIn 계획을 조사합니다. 목표, 청중, 시간, 증거 및 제외 목록이 질문에서 살아남을 때까지 작업 시작을 거부합니다."
     },
     "dev-docs": {
       "name": "dev-docs",
@@ -61114,6 +61279,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/test-debugger.md"
     },
+    "cs-close-controller": {
+      "name": "cs-close-controller",
+      "type": "agent",
+      "description": "Use when someone is running, planning or trying to shorten a month-end or quarter-end close, reconciling a bank statement or sub-ledger to the. Agent-native orchestrator for Claude Code, Codex, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-close-controller.md"
+    },
     "cs-pm-orchestrator": {
       "name": "cs-pm-orchestrator",
       "type": "agent",
@@ -61317,6 +61490,15 @@
       "path": "collected_assets/agents/openai.yaml",
       "description_ko": "인터페이스:"
     },
+    "cs-linkedin-editor": {
+      "name": "cs-linkedin-editor",
+      "type": "agent",
+      "description": "Drafts, edits, and lints LinkedIn posts to a publishable standard — hook that survives the ~140-character mobile fold, one idea, real numbers, no engagement bait, no Unicode pseudo-bold, alt text and captions written. Runs post_linter.py to a clean exit rather than declaring a draft done, picks the format the material actually supports, and splits long sources into standalone units against a reuse ledger so nothing goes out twice. Refuses to invent a metric, client, result, or quote. Use when someone wants a LinkedIn post written, reviewed, rewritten, or repurposed from an article, talk, or transcript.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-linkedin-editor.md",
+      "description_ko": "게시 가능한 표준에 따라 LinkedIn 게시물의 초안, 편집 및 보푸라기를 작성합니다. 최대 140자의 모바일 접기, 하나의 아이디어, 실수, 참여 미끼 없음, 유니코드 의사 굵게 없음, 대체 텍스트 및 캡션이 작성되지 않은 후크를 유지합니다. 초안 완료를 선언하는 대신 post_linter.py를 깔끔하게 종료하고, 자료가 실제로 지원하는 형식을 선택하고, 긴 소스를 재사용 원장에 대해 독립형 단위로 분할하여 두 번 나가는 일이 없도록 합니다. 측정항목, 클라이언트, 결과 또는 견적을 만들어내는 것을 거부합니다. 누군가 LinkedIn 게시물을 기사, 강연 또는 성적표에서 작성, 검토, 재작성 또는 용도 변경하려는 경우에 사용하세요."
+    },
     "cs-grants": {
       "name": "cs-grants",
       "type": "agent",
@@ -61325,6 +61507,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-grants.md",
       "description_ko": "NIH는 임상 연구자를 위한 연구 페르소나를 부여합니다. 검색 전 6가지 강제 입학 질문(연구 아이디어 + 경력 단계 + 예비 데이터 + 환경 + 제출 자세 + 알려진 기관 대상)을 안내합니다. 5면 합의 포지셔닝 분석 + RePORTER POST 쿼리(RePORTER의 경우 web_fetch는 절대 안 됨 - POST 전용임) + NOSI 가져오기를 실행합니다. 병렬 합의 호출(1q/초)을 거부합니다. 경력 단계에만 기반한 메커니즘 권장 사항을 거부합니다(범위 문제). 항상 프로그램 담당자 추천을 포함합니다(필수). 감사 로그와 함께 9섹션 .docx를 출력합니다."
+    },
+    "cs-interview-mapper": {
+      "name": "cs-interview-mapper",
+      "type": "agent",
+      "description": "Transcript-level interview analyst. Refuses to accept a conclusion without a verbatim quote checked against the source, refuses to call a cross-run analytic label settled until independent re-runs agree, and refuses to call a cross-interview pattern an insight below the triangulation threshold. Routes to the interview-mapper skill's 16 lenses and its S0-S8 pipeline.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-interview-mapper.md"
     },
     "wiki-ingestor": {
       "name": "wiki-ingestor",
@@ -61356,11 +61546,10 @@
     "cs-caveman-mode": {
       "name": "cs-caveman-mode",
       "type": "agent",
-      "description": "Caveman-mode operator. Persistent ultra-compressed communication mode. Drops articles, filler, pleasantries, and hedging while preserving all technical substance. Auto-clarity exception for security warnings, irreversible actions, multi-step sequences, and clarification requests. Activated by user phrases (\"caveman mode\", \"talk like caveman\", \"use caveman\", \"less tokens\", \"be brief\") or /cs:caveman command.",
+      "description": "Caveman-mode operator. Persistent ultra-compressed communication mode. Drops articles, filler, pleasantries, and hedging while preserving all technical substance. Auto-clarity exception for security warnings, irreversible actions, multi-step sequences, and clarification requests. Activated by user phrases (\"caveman mode\", \"talk like caveman\", \"use caveman\", \"less tokens\", \"be brief\") or /cs-caveman command.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-caveman-mode.md",
-      "description_ko": "원시인 모드 운영자. 지속적인 초압축 통신 모드. 모든 기술적 내용을 보존하면서 기사, 필러, 농담 및 헤징을 삭제합니다. 보안 경고, 되돌릴 수 없는 작업, 다단계 시퀀스 및 설명 요청에 대한 자동 명확성 예외입니다. 사용자 문구(\"caveman mode\", \"talk like caveman\", \"use caveman\", \"less tokens\", \"be Brief\") 또는 /cs:caveman 명령으로 활성화됩니다."
+      "path": "collected_assets/agents/cs-caveman-mode.md"
     },
     "cs-grill-with-docs": {
       "name": "cs-grill-with-docs",
@@ -61452,6 +61641,15 @@
       "path": "collected_assets/agents/cs-notebooklm.md",
       "description_ko": "NotebookLM 브라우저 자동화 페르소나. 2~4단계 강제 수용 질문을 진행합니다(Q1 작업: 읽기/소스 추가/Studio 출력/새 만들기, 작업당 Q2-Q4 분기). 행동에 대한 헌신 없이 시작하기를 거부합니다. 로그인 흐름의 자동 처리를 거부합니다. Studio 세대에 대한 동기식 대기를 거부합니다(실행 및 알림). 항상 Studio 사용자 정의 메뉴를 열고 자세한 사용자 정의 프롬프트를 작성합니다(기본 프롬프트는 평범한 출력을 생성합니다). 스크린샷 우선 원칙. find()-클릭 전. 브라우저 자동화를 사용할 수 없으면 빠르게 실패합니다."
     },
+    "cs-linkedin-orchestrator": {
+      "name": "cs-linkedin-orchestrator",
+      "type": "agent",
+      "description": "Routes any LinkedIn organic-growth request to the right lane and gates it against LinkedIn's User Agreement before a word is drafted. Runs the policy gate (ALLOW / CONSTRAIN / REFUSE against §8.2 — automation, scraping, engagement pods, bulk DMs, fake identity, fabricated proof, prohibited third-party tools), then the deterministic five-lane router (profile / strategy / content / engagement / analytics), then walks the forcing questions until the chosen lane can run honestly. Holds no LinkedIn credentials and sends nothing. Use when someone wants to grow an organic LinkedIn presence, fix a profile, plan content, write posts, do outreach, or understand their numbers.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-linkedin-orchestrator.md",
+      "description_ko": "LinkedIn의 유기적 성장 요청을 올바른 방향으로 라우팅하고 단어 초안이 작성되기 전에 LinkedIn의 사용자 계약에 대해 이를 차단합니다. 정책 게이트(§8.2에 대한 허용/제한/거부 — 자동화, 스크래핑, 참여 포드, 대량 DM, 가짜 신원, 위조된 증거, 금지된 제3자 도구)를 실행한 다음 결정적 5레인 라우터(프로필/전략/콘텐츠/참여/분석)를 실행한 다음 선택한 레인이 정직하게 실행될 수 있을 때까지 강제 질문을 진행합니다. LinkedIn 자격 증명이 없으며 아무 것도 보내지 않습니다. 누군가가 유기적인 LinkedIn 존재감을 키우고, 프로필을 수정하고, 콘텐츠를 계획하고, 게시물을 작성하고, 홍보 활동을 하거나, 숫자를 이해하고 싶을 때 사용하세요."
+    },
     "cs-scraping-architect": {
       "name": "cs-scraping-architect",
       "type": "agent",
@@ -61496,6 +61694,15 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-research-ops-orchestrator.md"
     },
+    "cs-spinning-up-deep-rl": {
+      "name": "cs-spinning-up-deep-rl",
+      "type": "agent",
+      "description": "Answers from the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Loads the master frameworks first and reads a single chapter file on demand rather than the whole source. Refuses to answer beyond what the source covers.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-spinning-up-deep-rl.md",
+      "description_ko": "Joshua Achiam(OpenAI)이 Spinning Up in Deep RL에서 편집한 지식 기반의 답변입니다. 마스터 프레임워크를 먼저 로드하고 요청 시 전체 소스가 아닌 단일 챕터 파일을 읽습니다. 출처에서 다루는 내용 이상의 답변을 거부합니다."
+    },
     "cs-memory-curator": {
       "name": "cs-memory-curator",
       "type": "agent",
@@ -61526,11 +61733,19 @@
     "experiment-runner": {
       "name": "experiment-runner",
       "type": "agent",
-      "description": "Runs one iteration of an autoresearch experiment loop. Reads experiment state from .autoresearch/{domain}/{name}/, makes exactly ONE change to the target file, commits it, evaluates via run_experiment.py, and reports KEEP / DISCARD / CRASH. Spawned per iteration by /ar:run and /ar:loop. Never modifies the evaluator. Not for general refactoring or multi-change edits.",
+      "description": "Runs one iteration of an autoresearch experiment loop. Reads experiment state from .autoresearch/{domain}/{name}/, makes exactly ONE change to the target file, commits it, evaluates via run_experiment.py, and reports KEEP / DISCARD / CRASH. Spawned per iteration by /ar:ar-run and /ar:loop. Never modifies the evaluator. Not for general refactoring or multi-change edits.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/experiment-runner.md",
-      "description_ko": "자동 조사 실험 루프를 한 번 반복 실행합니다. .autoresearch/{domain}/{name}/에서 실험 상태를 읽고, 대상 파일을 정확히 한 번 변경하고, 커밋하고, run_experiment.py를 통해 평가하고, KEEP/DISCARD/CRASH를 보고합니다. /ar:run 및 /ar:loop에 의해 반복마다 생성됩니다. 평가자를 수정하지 마십시오. 일반 리팩토링이나 다중 변경 편집에는 적합하지 않습니다."
+      "path": "collected_assets/agents/experiment-runner.md"
+    },
+    "cs-deep-learning-tutor": {
+      "name": "cs-deep-learning-tutor",
+      "type": "agent",
+      "description": "Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Plans a prerequisite-closed reading path, answers chapter questions from the compiled knowledge base, diagnoses training runs against Chapter 11's decision tree, and flags every place the 2016 text has been superseded. Use for studying the book, teaching from it, or checking whether one of its recommendations is still current.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-deep-learning-tutor.md",
+      "description_ko": "딥 러닝 교과서의 학습 동반자(Goodfellow, Bengio & Courville, 2016). 전제 조건이 닫힌 읽기 경로를 계획하고, 컴파일된 지식 기반의 장 질문에 답하고, 11장의 의사 결정 트리에 대해 훈련 실행을 진단하고, 2016 텍스트가 대체된 모든 위치에 플래그를 지정합니다. 책을 공부하거나, 가르치거나, 권장 사항 중 하나가 아직 최신인지 확인하는 데 사용합니다."
     },
     "readme": {
       "name": "readme",
@@ -61558,6 +61773,22 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-memory-engineer.md",
       "description_ko": "누군가가 에이전트에 메모리를 추가하거나, 메모리 아키텍처를 선택하거나, 기존 메모리 저장소를 감사하거나, 메모리 시스템이 비싸거나 느리거나 잘못된 이유를 묻는 경우에 사용하세요. 쓰기 경로에 가격을 책정하고, 디자인 비용을 지불하는 이름을 지정하고, 매장이 실제로 보유하고 있는 항목을 분류하고, 잊지 않는 정책으로 디자인 승인을 거부합니다."
+    },
+    "cs-eval-gatekeeper": {
+      "name": "cs-eval-gatekeeper",
+      "type": "agent",
+      "description": "Use when someone wants to know whether an agent, prompt, model or tool change made their agent worse, is setting up a regression eval suite or CI eval gate, or is arguing about whether a pass-rate drop is real. Runs repeated-trial evals through three deterministic scripts and returns a PASS / WARN / BLOCK verdict with the statistics behind it.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-eval-gatekeeper.md"
+    },
+    "cs-claude-code-rollout": {
+      "name": "cs-claude-code-rollout",
+      "type": "agent",
+      "description": "Use when a team or organization is rolling out Claude Code, or auditing one already in use — shared and managed settings, permission rules, MCP server and plugin approval, CLAUDE.md layering, and whether people actually use it. Runs four deterministic scripts and returns findings ranked by severity with the fix for each.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-claude-code-rollout.md"
     },
     "wiki-librarian": {
       "name": "wiki-librarian",
@@ -61622,23 +61853,13 @@
       "path": "collected_assets/agents/template.md",
       "description_ko": "이 에이전트의 기능, 대상, 활성화 시기를 설명하는 한 단락입니다. Claude Code, Codex, Gemini CLI용 에이전트 기반 오케스트레이터입니다."
     },
-    "cs-deep-learning-tutor": {
-      "name": "cs-deep-learning-tutor",
+    "verifier": {
+      "name": "verifier",
       "type": "agent",
-      "description": "Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Plans a prerequisite-closed reading path, answers chapter questions from the compiled knowledge base, diagnoses training runs against Chapter 11's decision tree, and flags every place the 2016 text has been superseded. Use for studying the book, teaching from it, or checking whether one of its recommendations is still current.",
+      "description": "Adversarial fact-checker - re-derives another worker's claims from the source files and tries to refute them",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-deep-learning-tutor.md",
-      "description_ko": "딥 러닝 교과서의 학습 동반자(Goodfellow, Bengio & Courville, 2016). 전제 조건이 닫힌 읽기 경로를 계획하고, 컴파일된 지식 기반의 장 질문에 답하고, 11장의 의사 결정 트리에 대해 훈련 실행을 진단하고, 2016 텍스트가 대체된 모든 위치에 플래그를 지정합니다. 책을 공부하거나, 가르치거나, 권장 사항 중 하나가 아직 최신인지 확인하는 데 사용합니다."
-    },
-    "cs-spinning-up-deep-rl": {
-      "name": "cs-spinning-up-deep-rl",
-      "type": "agent",
-      "description": "Answers from the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Loads the master frameworks first and reads a single chapter file on demand rather than the whole source. Refuses to answer beyond what the source covers.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-spinning-up-deep-rl.md",
-      "description_ko": "Joshua Achiam(OpenAI)이 Spinning Up in Deep RL에서 편집한 지식 기반의 답변입니다. 마스터 프레임워크를 먼저 로드하고 요청 시 전체 소스가 아닌 단일 챕터 파일을 읽습니다. 출처에서 다루는 내용 이상의 답변을 거부합니다."
+      "path": "collected_assets/agents/verifier.md"
     },
     "tester": {
       "name": "tester",
@@ -61666,24 +61887,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/scout.md",
       "description_ko": "읽기 전용 코드베이스 스카우트 - 연구 및 보고, 쓰기 없음"
-    },
-    "cs-linkedin-editor": {
-      "name": "cs-linkedin-editor",
-      "type": "agent",
-      "description": "Drafts, edits, and lints LinkedIn posts to a publishable standard — hook that survives the ~140-character mobile fold, one idea, real numbers, no engagement bait, no Unicode pseudo-bold, alt text and captions written. Runs post_linter.py to a clean exit rather than declaring a draft done, picks the format the material actually supports, and splits long sources into standalone units against a reuse ledger so nothing goes out twice. Refuses to invent a metric, client, result, or quote. Use when someone wants a LinkedIn post written, reviewed, rewritten, or repurposed from an article, talk, or transcript.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-linkedin-editor.md",
-      "description_ko": "게시 가능한 표준에 따라 LinkedIn 게시물의 초안, 편집 및 보푸라기를 작성합니다. 최대 140자의 모바일 접기, 하나의 아이디어, 실수, 참여 미끼 없음, 유니코드 의사 굵게 없음, 대체 텍스트 및 캡션이 작성되지 않은 후크를 유지합니다. 초안 완료를 선언하는 대신 post_linter.py를 깔끔하게 종료하고, 자료가 실제로 지원하는 형식을 선택하고, 긴 소스를 재사용 원장에 대해 독립형 단위로 분할하여 두 번 나가는 일이 없도록 합니다. 측정항목, 클라이언트, 결과 또는 견적을 만들어내는 것을 거부합니다. 누군가 LinkedIn 게시물을 기사, 강연 또는 성적표에서 작성, 검토, 재작성 또는 용도 변경하려는 경우에 사용하세요."
-    },
-    "cs-linkedin-orchestrator": {
-      "name": "cs-linkedin-orchestrator",
-      "type": "agent",
-      "description": "Routes any LinkedIn organic-growth request to the right lane and gates it against LinkedIn's User Agreement before a word is drafted. Runs the policy gate (ALLOW / CONSTRAIN / REFUSE against §8.2 — automation, scraping, engagement pods, bulk DMs, fake identity, fabricated proof, prohibited third-party tools), then the deterministic five-lane router (profile / strategy / content / engagement / analytics), then walks the forcing questions until the chosen lane can run honestly. Holds no LinkedIn credentials and sends nothing. Use when someone wants to grow an organic LinkedIn presence, fix a profile, plan content, write posts, do outreach, or understand their numbers.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-linkedin-orchestrator.md",
-      "description_ko": "LinkedIn의 유기적 성장 요청을 올바른 방향으로 라우팅하고 단어 초안이 작성되기 전에 LinkedIn의 사용자 계약에 대해 이를 차단합니다. 정책 게이트(§8.2에 대한 허용/제한/거부 — 자동화, 스크래핑, 참여 포드, 대량 DM, 가짜 신원, 위조된 증거, 금지된 제3자 도구)를 실행한 다음 결정적 5레인 라우터(프로필/전략/콘텐츠/참여/분석)를 실행한 다음 선택한 레인이 정직하게 실행될 수 있을 때까지 강제 질문을 진행합니다. LinkedIn 자격 증명이 없으며 아무 것도 보내지 않습니다. 누군가가 유기적인 LinkedIn 존재감을 키우고, 프로필을 수정하고, 콘텐츠를 계획하고, 게시물을 작성하고, 홍보 활동을 하거나, 숫자를 이해하고 싶을 때 사용하세요."
     },
     "orchestrator-agent": {
       "name": "orchestrator-agent",
@@ -62698,6 +62901,14 @@
       "path": "collected_assets/agents/task-breaker.agent.md",
       "description_ko": "단일 패스로 실행하기에는 너무 성가신 하나의 작업을 분할하는 방법을 결정하고 하위 작업 자체를 등록합니다. 작업이 너무 거친 것으로 판명되거나 사용자가 특정 작업 분할을 요청할 때 실행 중간에 전달됩니다."
     },
+    "upgrade-advisor.agent": {
+      "name": "upgrade-advisor.agent",
+      "type": "agent",
+      "description": "Answers a modernization question, or produces one bounded read-only artifact such as an assessment, without starting an upgrade. Dispatched when the user — or another agent delegating to this one — asks what an upgrade would involve, how a migration works, whether something is supported, or asks for an assessment or analysis on its own. Never changes code and never touches workflow state.",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/agents/upgrade-advisor.agent.md"
+    },
     "planner.agent": {
       "name": "planner.agent",
       "type": "agent",
@@ -62706,6 +62917,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/planner.agent.md",
       "description_ko": "새로운 기능을 위한 구현 계획을 생성하거나 기존 코드를 리팩터링합니다."
+    },
+    "dotnet-investigator.agent": {
+      "name": "dotnet-investigator.agent",
+      "type": "agent",
+      "description": "Read-only .NET lookup helper. Answers specific questions about package versions, namespaces, types, and members. Returns facts, never verdicts.",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/agents/dotnet-investigator.agent.md"
     },
     "error-fixer.agent": {
       "name": "error-fixer.agent",
@@ -62770,6 +62989,14 @@
       "path": "collected_assets/agents/terminal-executor.agent.md",
       "description_ko": "짧고 잘 정의된 터미널/셸 명령 세트(git 작업, 빠른 검사, 일회성 스크립트)를 실행하고 간결한 상태를 반환합니다. 명령 출력은 해당 컨텍스트를 벗어나지 않습니다. 저렴한 모델로 운행됩니다."
     },
+    "integrity-reviewer.agent": {
+      "name": "integrity-reviewer.agent",
+      "type": "agent",
+      "description": "Read-only reviewer for a change. Returns one verdict and a findings list covering both code quality and execution integrity — whether what the change claims is real.",
+      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
+      "source_name": "microsoft/upgrade-agent-plugins",
+      "path": "collected_assets/agents/integrity-reviewer.agent.md"
+    },
     "dotnet-version-assessor.agent": {
       "name": "dotnet-version-assessor.agent",
       "type": "agent",
@@ -62796,15 +63023,6 @@
       "source_name": "microsoft/upgrade-agent-plugins",
       "path": "collected_assets/agents/report-generator.agent.md",
       "description_ko": "완료된 시나리오에서 변경된 모든 내용을 요약하는 영구 final-report.md를 작성합니다. 사용자가 완료 후 보고서 제안을 수락하거나 언제든지 업그레이드 수행 내용에 대한 보고서, 요약 또는 기록을 요청할 때 전달됩니다. 읽는 아티팩트 파일은 해당 컨텍스트를 벗어나지 않습니다."
-    },
-    "code-reviewer.agent": {
-      "name": "code-reviewer.agent",
-      "type": "agent",
-      "description": "Read-only quality gate that reviews a phase/project's changes and returns a findings list. Has no edit path — it reports findings rather than fixing them.",
-      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
-      "source_name": "microsoft/upgrade-agent-plugins",
-      "path": "collected_assets/agents/code-reviewer.agent.md",
-      "description_ko": "단계/프로젝트의 변경 사항을 검토하고 결과 목록을 반환하는 읽기 전용 품질 게이트입니다. 편집 경로가 없습니다. 결과를 수정하는 대신 보고합니다."
     },
     "dotnet-version-estimator.agent": {
       "name": "dotnet-version-estimator.agent",

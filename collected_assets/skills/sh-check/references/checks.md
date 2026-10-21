@@ -166,6 +166,25 @@ test, not prose in a comment — *and* a `*help` function with a call site, so a
 defined-but-unwired help routine does not carry the file. Whether every public
 command routes to it is the auditor's call.
 
+**Thin wrappers** (dEitY719/dotfiles#2195) hand `"$@"` to another executable and
+own no flag handling themselves:
+
+```sh
+aicron() {
+    local _exe="${SHELL_COMMON:-...}"/tools/custom/aicron.sh
+    "$_exe" "$@"
+}
+```
+
+When the file has no flag of its own, the helper reads the first such call —
+`"$_exe" "$@"` with `_exe` assigned on one line, or a one-line
+`.../x.sh "$@"` — takes the literal path tail after the last `}` / `$VAR`, and
+looks it up under each ancestor directory of the audited file, nearest first,
+stopping at the file's git top level when it has one (a literal absolute path is checked as is, never re-rooted; a binary target
+never matches). A found target with `-h|--help` in option position is PASS
+(`delegates --help to <path>`); a found target without it is FAIL; a target it
+cannot resolve stays FAIL, with the expression named in the note.
+
 **Grep hints**
 ```sh
 grep -nE -- '(-h|--help)[^[:alnum:]]*[])|]' "$FILE"   # flag in option position
@@ -219,7 +238,12 @@ grep -nE 'Unknown option|Missing argument|Required' "$FILE"
 
 **What to look for**
 A status/diagnostic function (name contains `status` or `verdict`) computes a
-fixed-line verdict and hands rendering to a separate caller. The gwt contract,
+fixed-line verdict and hands rendering to a separate caller. A function with no
+fixed-line `printf` is a help renderer, not a verdict candidate, when it calls
+`ux_table_row` — e.g. `_gwt_help_rows_status`, the help rows of the
+`gwt status` subcommand — or is named `*_help_*`, such as
+`_ssl_help_rows_status`, which prints `ux_success` lines (issue #104). A
+`*_help_*` function that does return fixed lines is still checked. The gwt contract,
 excerpted verbatim from `dEitY719/dotfiles@89c2763`
 `shell-common/functions/git_worktree.sh`:
 

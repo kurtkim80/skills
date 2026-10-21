@@ -1,13 +1,13 @@
 ---
 title: "Slash Commands — AI Coding Agent Commands & Codex Shortcuts"
-description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more."
+description: "143 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more."
 ---
 
 <div class="domain-header" markdown>
 
 # :material-console: Slash Commands
 
-<p class="domain-count">124 commands for quick access to common operations</p>
+<p class="domain-count">143 commands for quick access to common operations</p>
 
 </div>
 
@@ -47,7 +47,7 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     ---
 
-    Command: /cs:aeo action args
+    Command: /cs-aeo action args
 
 -   :material-console:{ .lg .middle } **[`/cs-backend-review`](cs-backend-review.md)**
 
@@ -77,7 +77,7 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     ---
 
-    Command: /cs:webinar mode args
+    Command: /cs-webinar mode args
 
 -   :material-console:{ .lg .middle } **[`/financial-health`](financial-health.md)**
 
@@ -259,23 +259,35 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     Argument: $ARGUMENTS (default: status)
 
+-   :material-console:{ .lg .middle } **[`/cs-agent-evals`](cs-agent-evals.md)**
+
+    ---
+
+    Decide whether the change in $ARGUMENTS made the agent worse.
+
+-   :material-console:{ .lg .middle } **[`/cs-eval-gate`](cs-eval-gate.md)**
+
+    ---
+
+    Answer one question about $ARGUMENTS: is the candidate measurably worse than the baseline?
+
 -   :material-console:{ .lg .middle } **[`/cs-book-to-plugin`](cs-book-to-plugin.md)**
 
     ---
 
-    Command: /cs:book-to-plugin <compiled-skill-dir> --domain <domain> --rights <basis>
+    Command: /cs-book-to-plugin <compiled-skill-dir> --domain <domain> --rights <basis>
 
 -   :material-console:{ .lg .middle } **[`/cs-book-to-skill`](cs-book-to-skill.md)**
 
     ---
 
-    Command: /cs:book-to-skill <path|folder|glob>... skill-name-slug
+    Command: /cs-book-to-skill <path|folder|glob>... skill-name-slug
 
 -   :material-console:{ .lg .middle } **[`/cs-caveman`](cs-caveman.md)**
 
     ---
 
-    Command: /cs:caveman
+    Command: /cs-caveman
 
 -   :material-console:{ .lg .middle } **[`/cs-claude-coach`](cs-claude-coach.md)**
 
@@ -283,29 +295,59 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     Activates the claude-coach skill. From this point on, the conversation gains:
 
+-   :material-console:{ .lg .middle } **[`/cs-claude-rollout`](cs-claude-rollout.md)**
+
+    ---
+
+    Audit the Claude Code setup for $ARGUMENTS (default: the current repository) as a team policy.
+
+-   :material-console:{ .lg .middle } **[`/cs-claude-settings-lint`](cs-claude-settings-lint.md)**
+
+    ---
+
+    bash
+
+-   :material-console:{ .lg .middle } **[`/cs-deep-learning`](cs-deep-learning.md)**
+
+    ---
+
+    Command: /cs-deep-learning topic | chNN | question
+
+-   :material-console:{ .lg .middle } **[`/cs-dl-diagnose`](cs-dl-diagnose.md)**
+
+    ---
+
+    Command: /cs-dl-diagnose symptoms
+
+-   :material-console:{ .lg .middle } **[`/cs-dl-reading-path`](cs-dl-reading-path.md)**
+
+    ---
+
+    Command: /cs-dl-reading-path goal
+
 -   :material-console:{ .lg .middle } **[`/cs-grill-me`](cs-grill-me.md)**
 
     ---
 
-    Command: /cs:grill-me <path-to-plan>
+    Command: /cs-grill-me <path-to-plan>
 
 -   :material-console:{ .lg .middle } **[`/cs-grill-with-docs`](cs-grill-with-docs.md)**
 
     ---
 
-    Command: /cs:grill-with-docs <path-to-plan>
+    Command: /cs-grill-with-docs <path-to-plan>
 
 -   :material-console:{ .lg .middle } **[`/cs-handoff`](cs-handoff.md)**
 
     ---
 
-    Command: /cs:handoff <next-session-focus>
+    Command: /cs-handoff <next-session-focus>
 
 -   :material-console:{ .lg .middle } **[`/cs-human-gate`](cs-human-gate.md)**
 
     ---
 
-    Command: /cs:human-gate <artifact> step
+    Command: /cs-human-gate <artifact> step
 
 -   :material-console:{ .lg .middle } **[`/cs-forgetting-audit`](cs-forgetting-audit.md)**
 
@@ -331,6 +373,12 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     You are driving SkillOpt-Sleep: a tool that lets this user's Claude agent
 
+-   :material-console:{ .lg .middle } **[`/cs-spinning-up-deep-rl`](cs-spinning-up-deep-rl.md)**
+
+    ---
+
+    Command: /cs-spinning-up-deep-rl topic | framework name | chNN
+
 -   :material-console:{ .lg .middle } **[`/cs-scrape`](cs-scrape.md)**
 
     ---
@@ -341,13 +389,13 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     ---
 
-    Command: /cs:workflow-build <task-description>
+    Command: /cs-workflow-build <task-description>
 
 -   :material-console:{ .lg .middle } **[`/cs-write-a-skill`](cs-write-a-skill.md)**
 
     ---
 
-    Command: /cs:write-a-skill <name-or-description>
+    Command: /cs-write-a-skill <name-or-description>
 
 -   :material-console:{ .lg .middle } **[`/cs-grill-product`](cs-grill-product.md)**
 
@@ -389,55 +437,67 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     ---
 
-    Command: /cs:arquiteto
+    Command: /cs-arquiteto
+
+-   :material-console:{ .lg .middle } **[`/cs-flux-review`](cs-flux-review.md)**
+
+    ---
+
+    Answer one question about $ARGUMENTS: is every material fluctuation explained well enough to sign?
+
+-   :material-console:{ .lg .middle } **[`/cs-month-end-close`](cs-month-end-close.md)**
+
+    ---
+
+    Run the close gates over $ARGUMENTS. Skip any step whose input was not given and say so.
 
 -   :material-console:{ .lg .middle } **[`/cs-andreessen`](cs-andreessen.md)**
 
     ---
 
-    Command: /cs:andreessen
+    Command: /cs-andreessen
 
 -   :material-console:{ .lg .middle } **[`/cs-pmf-check`](cs-pmf-check.md)**
 
     ---
 
-    Command: /cs:pmf-check
+    Command: /cs-pmf-check
 
 -   :material-console:{ .lg .middle } **[`/cs-capture`](cs-capture.md)**
 
     ---
 
-    Command: /cs:capture <dump-text-or-path>
+    Command: /cs-capture <dump-text-or-path>
 
 -   :material-console:{ .lg .middle } **[`/cs-deep-work`](cs-deep-work.md)**
 
     ---
 
-    Command: /cs:deep-work today's task list
+    Command: /cs-deep-work today's task list
 
 -   :material-console:{ .lg .middle } **[`/cs-time-block`](cs-time-block.md)**
 
     ---
 
-    Command: /cs:time-block task list + start/end
+    Command: /cs-time-block task list + start/end
 
 -   :material-console:{ .lg .middle } **[`/cs-inbox-setup`](cs-inbox-setup.md)**
 
     ---
 
-    Command: /cs:inbox-setup
+    Command: /cs-inbox-setup
 
 -   :material-console:{ .lg .middle } **[`/cs-inbox-triage`](cs-inbox-triage.md)**
 
     ---
 
-    Command: /cs:inbox-triage
+    Command: /cs-inbox-triage
 
 -   :material-console:{ .lg .middle } **[`/cs-fable-goal`](cs-fable-goal.md)**
 
     ---
 
-    Command: /cs:fable-goal <ramble>
+    Command: /cs-fable-goal <ramble>
 
 -   :material-console:{ .lg .middle } **[`/cs-handoff-setup`](cs-handoff-setup.md)**
 
@@ -449,91 +509,139 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
 
     ---
 
-    Command: /cs:meeting-actions notes file or pasted notes
+    Command: /cs-meeting-actions notes file or pasted notes
 
 -   :material-console:{ .lg .middle } **[`/cs-meeting-prep`](cs-meeting-prep.md)**
 
     ---
 
-    Command: /cs:meeting-prep the meeting
+    Command: /cs-meeting-prep the meeting
 
 -   :material-console:{ .lg .middle } **[`/cs-reflect`](cs-reflect.md)**
 
     ---
 
-    Command: /cs:reflect
+    Command: /cs-reflect
 
 -   :material-console:{ .lg .middle } **[`/cs-roast`](cs-roast.md)**
 
     ---
 
-    Command: /cs:roast the idea
+    Command: /cs-roast the idea
 
 -   :material-console:{ .lg .middle } **[`/cs-weekly-review`](cs-weekly-review.md)**
 
     ---
 
-    Command: /cs:weekly-review directory or notes
+    Command: /cs-weekly-review directory or notes
 
 -   :material-console:{ .lg .middle } **[`/cs-landing`](cs-landing.md)**
 
     ---
 
-    Command: /cs:landing <product-or-brief>
+    Command: /cs-landing <product-or-brief>
+
+-   :material-console:{ .lg .middle } **[`/cs-grill-linkedin`](cs-grill-linkedin.md)**
+
+    ---
+
+    Command: /cs-grill-linkedin your plan
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-analyze`](cs-linkedin-analyze.md)**
+
+    ---
+
+    Command: /cs-linkedin-analyze export path or the claim to test
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-outreach`](cs-linkedin-outreach.md)**
+
+    ---
+
+    Command: /cs-linkedin-outreach who, and how much time
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-plan`](cs-linkedin-plan.md)**
+
+    ---
+
+    Command: /cs-linkedin-plan your 90-day goal
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-post`](cs-linkedin-post.md)**
+
+    ---
+
+    Command: /cs-linkedin-post idea or draft
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-profile`](cs-linkedin-profile.md)**
+
+    ---
+
+    Command: /cs-linkedin-profile headline or profile description
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin-repurpose`](cs-linkedin-repurpose.md)**
+
+    ---
+
+    Command: /cs-linkedin-repurpose path to source
+
+-   :material-console:{ .lg .middle } **[`/cs-linkedin`](cs-linkedin.md)**
+
+    ---
+
+    Command: /cs-linkedin your goal
 
 -   :material-console:{ .lg .middle } **[`/cs-deep-research`](cs-deep-research.md)**
 
     ---
 
-    Command: /cs:deep-research <question>
+    Command: /cs-deep-research <question>
 
 -   :material-console:{ .lg .middle } **[`/cs-dossier`](cs-dossier.md)**
 
     ---
 
-    Command: /cs:dossier <entity>
+    Command: /cs-dossier <entity>
 
 -   :material-console:{ .lg .middle } **[`/cs-grants`](cs-grants.md)**
 
     ---
 
-    Command: /cs:grants <research-idea>
+    Command: /cs-grants <research-idea>
 
 -   :material-console:{ .lg .middle } **[`/cs-litreview`](cs-litreview.md)**
 
     ---
 
-    Command: /cs:litreview <research question>
+    Command: /cs-litreview <research question>
 
 -   :material-console:{ .lg .middle } **[`/cs-notebooklm`](cs-notebooklm.md)**
 
     ---
 
-    Command: /cs:notebooklm
+    Command: /cs-notebooklm
 
 -   :material-console:{ .lg .middle } **[`/cs-patent`](cs-patent.md)**
 
     ---
 
-    Command: /cs:patent <invention description>
+    Command: /cs-patent <invention description>
 
 -   :material-console:{ .lg .middle } **[`/cs-pulse`](cs-pulse.md)**
 
     ---
 
-    Command: /cs:pulse <topic>
+    Command: /cs-pulse <topic>
 
 -   :material-console:{ .lg .middle } **[`/cs-research`](cs-research.md)**
 
     ---
 
-    Command: /cs:research <research question>
+    Command: /cs-research <research question>
 
 -   :material-console:{ .lg .middle } **[`/cs-syllabus`](cs-syllabus.md)**
 
     ---
 
-    Command: /cs:syllabus <syllabus-file-or-paste>
+    Command: /cs-syllabus <syllabus-file-or-paste>
 
 -   :material-console:{ .lg .middle } **[`/cs-bizops`](cs-bizops.md)**
 
@@ -648,6 +756,12 @@ description: "124 slash commands for Claude Code, Codex CLI, and Gemini CLI — 
     ---
 
     Apply Matt Pocock's grill-with-docs discipline to this plan / problem:
+
+-   :material-console:{ .lg .middle } **[`/cs-interview-mapper`](cs-interview-mapper.md)**
+
+    ---
+
+    Run the interview-mapper skill on this input:
 
 -   :material-console:{ .lg .middle } **[`/cs-market-research`](cs-market-research.md)**
 

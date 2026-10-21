@@ -436,6 +436,79 @@ EOF
 eq "spaced_flag: a --help equality test counts as flag handling" \
   "$(row "$(sh "$here/sh_check.sh" "$spaced_flag")" 6)" PASS
 
+# ---------- Check 9/10: a help-table renderer is not a verdict (#104) ----------
+rows=$work/rows.sh
+cat > "$rows" <<'EOF'
+#!/bin/sh
+_rw_rows_status() {
+    ux_table_row "syntax" "rw status" "Per-item diagnostic"
+    ux_table_row "verdict" "dirty/clean" "+ Next action hint"
+}
+EOF
+rw=$(sh "$here/sh_check.sh" "$rows")
+eq "rows: ux_table_row-only *_status (no _help_ in name) is not a verdict (9)" "$(row "$rw" 9)" 'N/A'
+eq "rows: ux_table_row-only *_status (no _help_ in name) is not a verdict (10)" "$(row "$rw" 10)" 'N/A'
+hrow=$work/hrow.sh
+printf '#!/bin/sh\n_hr_help_rows_status() { ux_success "key set"; }\n' > "$hrow"
+eq "hrow: a *_help_* renderer without fixed lines is not a verdict" \
+  "$(row "$(sh "$here/sh_check.sh" "$hrow")" 9)" 'N/A'
+cat "$vpass" > "$work/vrows.sh"
+printf '%s\n' '_vt_status_rows() { ux_table_row "a" "b"; }' >> "$work/vrows.sh"
+printf '#!/bin/sh\n_cm_status() {\n    # no ux_table_row here, only this comment\n    echo ok\n}\n' > "$work/vcm.sh"
+eq "vcm: ux_table_row in a comment does not hide a verdict" \
+  "$(row "$(sh "$here/sh_check.sh" "$work/vcm.sh")" 9)" FAIL
+eq "vrows: the real verdict still decides 9 beside a table renderer" \
+  "$(row "$(sh "$here/sh_check.sh" "$work/vrows.sh")" 9)" PASS
+
+# ---------- Check 6: a thin wrapper delegating "$@" (#104, dotfiles#2195) ----------
+mkdir -p "$work/dotfiles/shell-common/tools/custom"
+wtool=$work/dotfiles/shell-common/tools/custom/wtool.sh
+printf '#!/bin/bash\ncase "$1" in help | -h | --help) echo usage ;; esac\n' > "$wtool"
+wrap=$work/dotfiles/shell-common/functions/wtool.sh
+cat > "$wrap" <<'EOF'
+#!/bin/sh
+wtool() {
+    local _exe="${SHELL_COMMON:-${DOTFILES_ROOT:-$HOME/dotfiles}/shell-common}"/tools/custom/wtool.sh
+    "$_exe" "$@"
+}
+EOF
+w=$(sh "$here/sh_check.sh" "$wrap")
+eq "wrap: \$_exe \"\$@\" credits the target's --help" "$(row "$w" 6)" PASS
+eq "wrap: the note names the target" \
+  "$(printf '%s\n' "$w" | awk -F'\t' '$1 == 6 { print $3 }')" "delegates --help to $wtool"
+wlit=$work/dotfiles/shell-common/functions/wlit.sh
+printf '#!/bin/sh\nwlit() { "${SHELL_COMMON}"/tools/custom/wtool.sh "$@"; }\n' > "$wlit"
+eq "wlit: a one-line .../x.sh \"\$@\" credits the target's --help" \
+  "$(row "$(sh "$here/sh_check.sh" "$wlit")" 6)" PASS
+printf '#!/bin/bash\necho no help here\n' > "$wtool"
+eq "wrap: a target without --help is FAIL" "$(row "$(sh "$here/sh_check.sh" "$wrap")" 6)" FAIL
+wgone=$work/dotfiles/shell-common/functions/wgone.sh
+printf '#!/bin/sh\nwgone() {\n    _exe="$HOME"/nowhere/wgone-missing.sh\n    "$_exe" "$@"\n}\n' > "$wgone"
+eq "wgone: an unresolved target stays FAIL" "$(row "$(sh "$here/sh_check.sh" "$wgone")" 6)" FAIL
+printf '#!/bin/bash\ncase "$1" in help | -h | --help) echo usage ;; esac\n' > "$wtool"
+wcom=$work/dotfiles/shell-common/functions/wcom.sh
+printf '#!/bin/sh\nwcom() {\n    _exe="${SHELL_COMMON}"/tools/custom/wtool.sh # the tool\n    "$_exe" "$@"\n}\n' > "$wcom"
+eq "wcom: a trailing comment on the assignment still resolves" \
+  "$(sh "$here/sh_check.sh" "$wcom" | awk -F'\t' '$1 == 6 { print $3 }')" \
+  "delegates --help to $wtool"
+# Quotes and spaces inside the default expansion do not reach the tail (PR #105, agy).
+wsp=$work/dotfiles/shell-common/functions/wsp.sh
+printf '#!/bin/sh\nwsp() {\n    local _exe="${FOO:-"$HOME/dir/a b"}"/tools/custom/wtool.sh\n    exec "$_exe" "$@"\n}\n' > "$wsp"
+eq "wsp: a quoted, spaced default and an exec prefix still resolve" \
+  "$(row "$(sh "$here/sh_check.sh" "$wsp")" 6)" PASS
+# A binary target is never grepped as text, even with --help) in its bytes.
+wbin=$work/dotfiles/shell-common/tools/custom/wbin.sh
+printf '\177ELF\000\000 -h|--help) \000\n' > "$wbin"
+printf '#!/bin/sh\nwb() { "${SHELL_COMMON}"/tools/custom/wbin.sh "$@"; }\n' > "$work/dotfiles/shell-common/functions/wb.sh"
+eq "wbin: a binary target is not credited with --help" \
+  "$(row "$(sh "$here/sh_check.sh" "$work/dotfiles/shell-common/functions/wb.sh")" 6)" FAIL
+mkdir -p "$work/dotfiles/nowhere-abs"
+printf '#!/bin/bash\ncase "$1" in -h | --help) echo usage ;; esac\n' > "$work/dotfiles/nowhere-abs/wtool.sh"
+wabs=$work/dotfiles/shell-common/functions/wabs.sh
+printf '#!/bin/sh\nwabs() { /nowhere-abs/wtool.sh "$@"; }\n' > "$wabs"
+eq "wabs: a missing literal absolute target is not re-rooted under ancestors" \
+  "$(row "$(sh "$here/sh_check.sh" "$wabs")" 6)" FAIL
+
 # ---------- usage errors ----------
 if sh "$here/sh_check.sh" >/dev/null 2>&1; then
   no "usage: no argument" "exited 0, expected 2"
