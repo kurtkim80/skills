@@ -10347,14 +10347,13 @@
       "path": "collected_assets/skills/inbox-setup",
       "description_ko": "대화형 인터뷰를 통해 개인화된 받은 편지함 분류 지식 기반을 구축하는 일회성 설정 기술입니다. 그릴미 규율(한 번에 하나의 질문, 가능한 경우 강제 형식, 종속성 순서, 각 질문은 내가 묻는 이유를 설명)을 사용하여 이메일 패턴, 비즈니스 컨텍스트, 응답 스타일 및 우선 순위에 대해 사용자를 인터뷰한 다음 동반 '받은 편지함 분류' 기술을 강화하는 지식 기반 파일을 생성합니다. inbox-triage를 처음 사용하기 전에 이 작업을 한 번 실행하세요. 비즈니스, 가격 또는 우선순위가 크게 변경되면 다시 실행하세요. 트리거: '받은 편지함 설정', '받은 편지함 분류 구성', '이메일 시스템 설정', '이메일 분류 구성', '이메일 지식 기반 구축', '이메일 관리 초기화', '받은 편지함 분류 설정', '온보딩 이메일 분류' 또는 누군가 처음으로 이메일 분류 시스템을 실행하려는 변형입니다."
     },
-    "handoff": {
-      "name": "handoff",
+    "session-handoff": {
+      "name": "session-handoff",
       "type": "skill",
-      "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+      "description": "Use when context approaches capacity, before /clear or /compact, when switching tasks, or when ending a coding session: produces a structured handoff artifact for the next session.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/handoff",
-      "description_ko": "현재 대화를 다른 상담원이 선택할 수 있도록 전달 문서로 압축합니다."
+      "path": "collected_assets/skills/session-handoff"
     },
     "deep-work": {
       "name": "deep-work",
@@ -11277,6 +11276,15 @@
       "path": "collected_assets/skills/spinning-up-deep-rl",
       "description_ko": "Joshua Achiam(OpenAI, MIT 라이선스)이 작성한 \\\"Spinning Up in Deep RL\\\"의 기술 자료입니다. RL 기본 사항 및 MDP, 모델 없는 알고리즘 분류, 정책 그라데이션 파생, 6가지 참조 알고리즘(VPG, TRPO, PPO, DDPG, TD3, SAC)을 위한 Achiam의 프레임워크를 적용하거나 자동으로 실패하는 RL 코드를 디버깅하거나 엄격한 다중 시드 RL 실험을 실행할 때 사용합니다."
     },
+    "handoff": {
+      "name": "handoff",
+      "type": "skill",
+      "description": "Compact the current conversation into a handoff document for another agent to pick up.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/handoff",
+      "description_ko": "현재 대화를 다른 상담원이 선택할 수 있도록 전달 문서로 압축합니다."
+    },
     "feature-flags-architect": {
       "name": "feature-flags-architect",
       "type": "skill",
@@ -11947,15 +11955,6 @@
       "path": "collected_assets/skills/research",
       "description_ko": "모든 연구 요청에 대한 기본 진입점 - 질문을 결정론적으로 분류하고 전문 연구 기술(트렌드/감정에 대한 펄스, NIH 자금 지원, 학술 문헌에 대한 문학 검토, 강좌 읽기를 위한 강의 계획서, 선행 기술 + IP 환경에 대한 특허, 개체 연구에 대한 서류, 제공된 문서의 증거 우선 읽기를 위한 심층 읽기)에 위임하거나, 그렇지 않은 경우 자체 계획-분해-다중 소스-검색-합성-인용 폴백 워크플로우를 실행하는 하이브리드 라우터 전문가 경기. 사용자가 재정의할 수 있도록 항상 라우팅 결정을 표시합니다. 사용자가 보다 구체적인 전문 기술과 확실히 일치하지 않는 조사 요청을 할 때 사용합니다(예: \"[주제] 조사\", \"[주제] 조사\", \"[주제]에 대해 무엇을 알고 있습니까?\", \"[주제] 조사\", \"[주제]에 대한 정보 찾기\", \"[주제]에 대해 조사해 보세요\", \"[주제]를 이해해야 합니다\"). 출력은 전체 인용 및 감사 로그가 포함된 마크다운 브리핑(기본값) 또는 .docx 문서(요청 시)입니다."
     },
-    "cmd-a11y-audit": {
-      "name": "a11y-audit",
-      "type": "skill",
-      "description": "Scan a frontend project for WCAG 2.2 accessibility violations and fix them. Usage: /a11y-audit [path]",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmd-a11y-audit",
-      "description_ko": "WCAG 2.2 접근성 위반이 있는지 프런트엔드 프로젝트를 검사하고 수정합니다. 사용법: /a11y-audit [경로]"
-    },
     "cs-financial-analyst": {
       "name": "cs-financial-analyst",
       "type": "skill",
@@ -11983,14 +11982,6 @@
       "path": "collected_assets/skills/wiki-init",
       "description_ko": "3계층 구조, 스키마 파일 및 시작 템플릿을 사용하여 새로운 LLM Wiki 저장소를 부트스트랩합니다. 사용법 /wiki-init <경로> --topic \"<주제>\" [--tool all|claude-code|codex|cursor|antigravity]"
     },
-    "cmd-cs-aeo": {
-      "name": "cs-aeo",
-      "type": "skill",
-      "description": "/cs-aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude, Gemini, Mistral). Optimize content in 3 modes (conservative/balanced/aggressive). Track which LLMs cite which pages via local ledger. Industry-aware thresholds (8 industries with YMYL calibration). Distinct from SEO — refuses to optimize one at expense of the other.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmd-cs-aeo"
-    },
     "cs-backend-engineer": {
       "name": "cs-backend-engineer",
       "type": "skill",
@@ -11998,23 +11989,6 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cs-backend-engineer"
-    },
-    "skills-coding-agent-rollout": {
-      "name": "coding-agent-rollout",
-      "type": "skill",
-      "description": "Use when rolling Claude Code out to a team or organization, or auditing a rollout already under way — writing or reviewing shared and managed settings.json permissions, deciding which MCP servers, plugins and marketplaces to approve, cleaning up layered CLAUDE.md files, or measuring whether the team actually uses it. Lints settings across scopes, inventories every MCP server and plugin against an approved list, resolves CLAUDE.md layers and imports, and turns local session data into privacy-safe adoption counts.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-coding-agent-rollout"
-    },
-    "linkedin-profile": {
-      "name": "linkedin-profile",
-      "type": "skill",
-      "description": "Use when someone wants their LinkedIn profile audited or rewritten — headline, About section, experience bullets, Featured, banner, recommendations — or says \"fix my headline\", \"my profile gets views but nothing happens\", \"optimize my LinkedIn profile\", \"what should my About section say\". Scores the headline on five dimensions, audits the whole profile 0-100 and ranks fixes by points per hour, and assembles an About section that survives the \"…see more\" fold.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-profile",
-      "description_ko": "누군가 자신의 LinkedIn 프로필을 감사하거나 다시 작성하기를 원할 때(헤드라인, 정보 섹션, 경험 글머리기호, 추천, 배너, 권장 사항) 또는 \"내 헤드라인 수정\", \"내 프로필이 조회수를 얻었지만 아무 일도 일어나지 않습니다\", \"내 LinkedIn 프로필 최적화\", \"내 정보 섹션에 뭐라고 말해야 할까요?\"라고 말할 때 사용하세요. 5개 차원에서 헤드라인에 점수를 매기고, 전체 프로필을 0~100으로 감사하고, 수정 사항의 순위를 시간당 포인트로 매기고, \"...자세히 보기\" 접기 후에도 유지되는 정보 섹션을 구성합니다."
     },
     "growth-marketer": {
       "name": "Growth Marketer",
@@ -12025,15 +11999,6 @@
       "path": "collected_assets/skills/growth-marketer",
       "description_ko": "부트스트랩 스타트업과 인디 해커를 위한 성장 마케팅 전문가입니다. 콘텐츠 엔진을 구축하고, 퍼널을 최적화하고, 출시 순서를 실행하고, 확장 가능한 획득 채널을 찾는 등 이 모든 것이 기업 마케팅 담당자가 울게 만드는 예산으로 이루어집니다. 예산보다 성장이 필요한 경우에 사용하세요. 예를 들어 제품 검색 출시 순서를 계획하거나 광고 지출 없이 먼저 투자할 유기적 채널(SEO, 콘텐츠, 커뮤니티)을 선택합니다. (유료 예산을 사용한 유입경로 진단은 cs-demand-gen-specialist를 참조하세요.)"
     },
-    "skills-chief-data-officer-advisor": {
-      "name": "chief-data-officer-advisor",
-      "type": "skill",
-      "description": "Chief Data Officer advisory for startups: AI training data rights and consent provenance, data product strategy (warehouse vs lakehouse vs mesh, build-vs-buy), B2B customer-data-as-asset valuation and M&A readiness, data team org evolution. Use when deciding whether to train models on customer data, choosing data architecture, valuing data for fundraising or M&A, sequencing data hires, or when user mentions CDO, chief data officer, data strategy, data mesh, lakehouse, training data, data product, data monetization, or customer data asset. NOT a tactical data engineering skill — strategic decisions only.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-chief-data-officer-advisor",
-      "description_ko": "스타트업을 위한 최고 데이터 책임자 자문: AI 교육 데이터 권리 및 동의 출처, 데이터 제품 전략(웨어하우스 대 레이크하우스 대 메시, 구축 대 구매), B2B 고객 데이터 자산 가치 평가 및 M&A 준비, 데이터 팀 조직 발전. 고객 데이터에 대한 모델 교육 여부를 결정할 때, 데이터 아키텍처 선택, 자금 조달 또는 M&A를 위한 데이터 가치 평가, 데이터 고용 순서 지정 또는 사용자가 CDO, 최고 데이터 책임자, 데이터 전략, 데이터 메시, 레이크하우스, 교육 데이터, 데이터 제품, 데이터 수익화 또는 고객 데이터 자산을 언급할 때 사용합니다. 전술적 데이터 엔지니어링 기술이 아닙니다. 전략적 결정만 가능합니다."
-    },
     "operator-audit": {
       "name": "operator-audit",
       "type": "skill",
@@ -12042,24 +12007,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/operator-audit",
       "description_ko": "현재 저장소에서 전체 Kubernetes Operator 감사(CRD + 조정 + 기능)를 실행합니다."
-    },
-    "research-bundle": {
-      "name": "research",
-      "type": "skill",
-      "description": "Default entry point for any research request — a hybrid router that classifies the question deterministically and either delegates to a specialist research skill (pulse for trends/sentiment, grants for NIH funding, litreview for academic literature, syllabus for course reading, patent for prior-art + IP landscape, dossier for entity research, deepread for evidence-first reading of supplied documents) or runs its own plan-decompose-multi-source-search-synthesize-cite fallback workflow when no specialist matches. Always surfaces the routing decision so users can override. Use when the user makes any research request that doesn't obviously match a more-specific specialist skill (e.g., \"research [topic]\", \"look into [topic]\", \"what do we know about [topic]\", \"investigate [topic]\", \"find me information on [topic]\", \"do some research on [topic]\", \"I need to understand [topic]\"). Output is a markdown briefing (default) or .docx document (on request) with full citations and an audit log.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/research-bundle",
-      "description_ko": "모든 연구 요청에 대한 기본 진입점 - 질문을 결정론적으로 분류하고 전문 연구 기술(트렌드/감정에 대한 펄스, NIH 자금 지원, 학술 문헌에 대한 문학 검토, 강좌 읽기를 위한 강의 계획서, 선행 기술 + IP 환경에 대한 특허, 개체 연구에 대한 서류, 제공된 문서의 증거 우선 읽기를 위한 심층 읽기)에 위임하거나, 그렇지 않은 경우 자체 계획-분해-다중 소스-검색-합성-인용 폴백 워크플로우를 실행하는 하이브리드 라우터 전문가 경기. 사용자가 재정의할 수 있도록 항상 라우팅 결정을 표시합니다. 사용자가 보다 구체적인 전문 기술과 확실히 일치하지 않는 조사 요청을 할 때 사용합니다(예: \"[주제] 조사\", \"[주제] 조사\", \"[주제]에 대해 무엇을 알고 있습니까?\", \"[주제] 조사\", \"[주제]에 대한 정보 찾기\", \"[주제]에 대해 조사해 보세요\", \"[주제]를 이해해야 합니다\"). 출력은 전체 인용 및 감사 로그가 포함된 마크다운 브리핑(기본값) 또는 .docx 문서(요청 시)입니다."
-    },
-    "skills-vpe-advisor": {
-      "name": "vpe-advisor",
-      "type": "skill",
-      "description": "VP of Engineering advisory for startups: delivery throughput (DORA 4 metrics + bottleneck identification), engineering hiring funnel (sourcing → screen → onsite → offer conversion + time-to-fill + pipeline gap), engineering team structure (squad/tribe/chapter design + tech-lead manager-trigger thresholds), and production discipline (on-call, deployment cadence, postmortem culture). Use when sprint velocity is dropping, eng hiring is broken, team structure is unclear, or deciding when to add a tech-lead manager. NOT a CTO skill (which owns architecture) — VPE owns delivery operations and how the team ships.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-vpe-advisor",
-      "description_ko": "스타트업 엔지니어링 자문 VP: 납품 처리량(DORA 4 지표 + 병목 현상 식별), 엔지니어링 채용 퍼널(소싱 → 스크린 → 현장 → 제안 전환 + 채우기 시간 + 파이프라인 간격), 엔지니어링 팀 구조(분대/부족/챕터 디자인 + 기술 리더 관리자 트리거 임계값) 및 생산 규율(대기 중, 배포 흐름, 사후 문화). 스프린트 속도가 떨어지고, 엔지니어링 채용이 중단되고, 팀 구조가 불분명하거나, 기술 책임자 관리자를 추가할 시기를 결정할 때 사용하세요. CTO 기술(아키텍처 소유)이 아님 - VPE는 배송 작업과 팀 배송 방법을 소유합니다."
     },
     "cs-engineering-lead": {
       "name": "cs-engineering-lead",
@@ -12088,15 +12035,6 @@
       "path": "collected_assets/skills/cs-project-manager",
       "description_ko": "스프린트 계획, Jira/Confluence 워크플로, 스크럼 행사 및 이해관계자 보고를 위한 프로젝트 관리자 에이전트입니다. 프로젝트 관리 기술을 조율합니다. Jira에서 용량 및 이월 수학을 사용하여 스프린트를 계획하거나 티켓 및 속도 데이터에서 이해관계자를 위한 포트폴리오 상태 보고서를 취합하는 등 전달 작업을 실행할 때 사용합니다."
     },
-    "research-finance": {
-      "name": "research-finance",
-      "type": "skill",
-      "description": "Use when managing the money for an internal R&D program or portfolio — building a multi-period program budget with the F&A (indirect) split, tracking burn rate and runway against value-inflection milestones, or routing R&D cost items to a capitalize-vs-expense determination. Every budget output surfaces its assumptions block; capitalize-vs-expense is decision-support only and routes to a named finance owner — it never books an entry or decides accounting treatment. Distinct from finance/financial-analysis (corporate DCF, close, valuation) and research/grants (funding discovery — this manages money already won).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/research-finance",
-      "description_ko": "내부 R&D 프로그램 또는 포트폴리오를 위한 자금을 관리할 때 사용합니다. F&A(간접) 분할을 통해 다기간 프로그램 예산을 구축하고, 가치 변곡점에 대한 소모율 및 활주로를 추적하거나, R&D 비용 항목을 자본화 대 비용 결정으로 라우팅합니다. 모든 예산 산출물은 가정 블록을 표면화합니다. capitalize-vs-expense는 의사 결정 지원 전용이며 지정된 재무 소유자에게 전달됩니다. 항목을 예약하거나 회계 처리를 결정하지 않습니다. 재무/재무 분석(기업 DCF, 마감, 평가) 및 연구/보조금(자금 발견 - 이미 획득한 자금을 관리함)과는 다릅니다."
-    },
     "user-story": {
       "name": "user-story",
       "type": "skill",
@@ -12105,23 +12043,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/user-story",
       "description_ko": "수용 기준 및 스프린트 계획을 통해 사용자 스토리를 생성합니다. 사용법: /user-story <생성|스프린트> [옵션]"
-    },
-    "skills-month-end-close": {
-      "name": "month-end-close",
-      "type": "skill",
-      "description": "Use when running, planning or speeding up a month-end (or quarter-end) close — building or reviewing the close checklist and calendar, reconciling a bank statement or sub-ledger to the general ledger, writing or reviewing flux (variance) explanations, or finding why the close takes too many days. Orders close tasks by dependency and finds the critical path, proves each reconciliation and ages what is left, and refuses to sign off material fluctuations explained with boilerplate.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-month-end-close"
-    },
-    "skills-iso42001-specialist": {
-      "name": "iso42001-specialist",
-      "type": "skill",
-      "description": "ISO/IEC 42001:2023 AI Management System (AIMS) specialist for compliance teams running internal audits. Three decisions: (1) Where are the gaps against Clauses 4-10 and what do we close first? (2) What goes in the AI risk register and which Annex A controls treat each risk? (3) What's the 12-month internal audit plan that satisfies Clause 9.2? Use when preparing for certification, scoping internal audit cycles, or onboarding AI systems into an existing ISMS (27001) / QMS (13485) program. NOT an executive AI strategy skill (see chief-ai-officer-advisor). NOT EU AI Act compliance (see compliance-team-eu-ai-act).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-iso42001-specialist",
-      "description_ko": "ISO/IEC 42001:2023 내부 감사를 실행하는 규정 준수 팀을 위한 AI 관리 시스템(AIMS) 전문가입니다. 세 가지 결정: (1) 4-10항과의 격차는 어디에 있으며 무엇을 먼저 메워야 합니까? (2) AI 위험 등록부에는 무엇이 들어가고 어떤 부록 A 통제가 각 위험을 처리합니까? (3) 9.2항을 만족하는 12개월 내부감사 계획은 무엇입니까? 인증 준비, 내부 감사 주기 범위 지정 또는 기존 ISMS(27001)/QMS(13485) 프로그램에 AI 시스템 온보딩 시 사용합니다. 임원 AI 전략 기술이 아닙니다(최고 AI 책임자-고문 참조). EU AI Act 준수가 아닙니다(compliance-team-eu-ai-act 참조)."
     },
     "cs-ux-researcher": {
       "name": "cs-ux-researcher",
@@ -12140,24 +12061,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/slo-design",
       "description_ko": "SLI, 목표, 오류 예산, 소모율 알림을 사용하여 SLO를 설계하는 대화형 마법사"
-    },
-    "linkedin-skills": {
-      "name": "linkedin-skills",
-      "type": "skill",
-      "description": "Use when someone wants to grow an organic LinkedIn presence — a content strategy for a career change or consulting or thought leadership, a rewritten profile or headline, post drafts and hooks, a posting cadence or newsletter plan, connection notes and outreach, a commenting strategy, repurposing an article or talk into posts, or a read on why their reach dropped. Triggers on \"grow my LinkedIn\", \"fix my headline\", \"write a LinkedIn post\", \"what should I post about\", \"LinkedIn strategy\", \"connection request\", \"my reach dropped\". Forks context to route to one of five sub-skills, and refuses automation, scraping, pods, and bulk DMs before any drafting starts.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-skills",
-      "description_ko": "경력 변경이나 컨설팅 또는 사고 리더십을 위한 콘텐츠 전략, 재작성된 프로필 또는 헤드라인, 게시물 초안 및 후크, 게시 흐름 또는 뉴스레터 계획, 연결 메모 및 홍보, 댓글 전략, 기사 용도 변경 또는 게시물에 대한 대화, 도달 범위가 감소한 이유에 대한 읽기 등 유기적인 LinkedIn 존재감을 키우고 싶을 때 사용하세요. \"내 LinkedIn 성장\", \"내 헤드라인 수정\", \"LinkedIn 게시물 작성\", \"무엇에 대해 게시해야 하는지\", \"LinkedIn 전략\", \"연결 요청\", \"내 도달 범위가 감소함\"에 대해 트리거됩니다. 5가지 하위 기술 중 하나로 라우팅하기 위해 컨텍스트를 포크하고 초안 작성이 시작되기 전에 자동화, 스크래핑, 포드 및 대량 DM을 거부합니다."
-    },
-    "clinical-research": {
-      "name": "clinical-research",
-      "type": "skill",
-      "description": "Use when designing a prospective clinical study before submission — selecting and classifying endpoints (primary / key-secondary / exploratory, with surrogate-endpoint flagging), estimating sample size and power for two-arm designs (means / proportions / survival), or scoring a study plan for feasibility and a GO / GO-WITH-CONDITIONS / REDESIGN / NO-GO phase-gate decision. Every output is an ESTIMATE plus a named human owner (clinician / biostatistician / regulatory owner) — never clinical fact, never a finished protocol. Distinct from ra-qm-team, which handles the regulatory/QM submission (ISO 13485, EU MDR, FDA 510(k)/PMA/QSR), not the study design.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/clinical-research",
-      "description_ko": "제출 전 전향적 임상 연구를 설계할 때 사용합니다. 즉, 종말점 선택 및 분류(1차/핵심-2차/탐색, 대리 종말점 표시 포함), 두 가지 설계에 대한 표본 크기 및 검정력 추정(평균/비율/생존), 타당성에 대한 연구 계획 점수 매기기 및 GO/GO-WITH-CONDITIONS/REDESIGN/NO-GO 단계 게이트 결정에 사용합니다. 모든 출력은 추정치와 명명된 인간 소유자(임상의/생물통계학자/규제 소유자)로 이루어지며 결코 임상적 사실도 아니고 완성된 프로토콜도 아닙니다. 연구 설계가 아닌 규제/QM 제출(ISO 13485, EU MDR, FDA 510(k)/PMA/QSR)을 처리하는 ra-qm-team과 다릅니다."
     },
     "wiki-log": {
       "name": "wiki-log",
@@ -12266,23 +12169,6 @@
       "path": "collected_assets/skills/cs-agile-product-owner",
       "description_ko": "대규모 분석, 스프린트 계획, 백로그 개선 및 INVEST 준수 사용자 스토리 생성을 위한 민첩한 제품 소유자 에이전트입니다. 개발 팀을 위한 작업을 준비할 때 사용합니다. 예를 들어 대규모 서사시를 승인 기준에 따라 INVEST 호환 스토리로 분해하거나 스프린트 계획에 앞서 지저분한 백로그를 다듬습니다."
     },
-    "skills-agent-regression-evals": {
-      "name": "agent-regression-evals",
-      "type": "skill",
-      "description": "Use when an agent, prompt, model or tool change needs proof it did not make the agent worse — setting up a regression eval suite, deciding whether a pass-rate drop is real or noise, grading tool-call trajectories, finding flaky eval cases, or wiring an eval gate into CI that blocks the merge. Runs repeated trials, reports pass@k and pass^k, compares candidate to baseline with paired statistics, and refuses to pass a dropped case, a critical-case regression, or a forbidden tool call.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-agent-regression-evals"
-    },
-    "skills-kubernetes-operator": {
-      "name": "kubernetes-operator",
-      "type": "skill",
-      "description": "Use when building a Kubernetes Operator — custom controllers that reconcile CRD state. Triggers on \"build an operator\", \"CRD design\", \"reconcile loop\", \"controller-runtime\", \"kubebuilder\", \"operator-sdk\", \"metacontroller\", \"KOPF\", \"operator capability levels\", or \"custom resource\". Ships CRD validator, reconcile-loop linter, and OperatorHub capability auditor (all stdlib Python), 4 references on the operator pattern + CRD design + reconcile patterns + tooling landscape, and a /operator-audit slash command. NOT a generic k8s skill — specifically the Operator pattern.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-kubernetes-operator",
-      "description_ko": "CRD 상태를 조정하는 사용자 정의 컨트롤러인 Kubernetes Operator를 구축할 때 사용합니다. \"연산자 빌드\", \"CRD 디자인\", \"루프 조정\", \"controller-runtime\", \"kubebuilder\", \"operator-sdk\", \"metacontroller\", \"KOPF\", \"연산자 기능 수준\" 또는 \"사용자 정의 리소스\"에서 트리거됩니다. CRD 유효성 검사기, 조정 루프 린터 및 OperatorHub 기능 감사자(모두 stdlib Python), 연산자 패턴 + CRD 설계 + 조정 패턴 + 도구 환경에 대한 참조 4개 및 /operator-audit 슬래시 명령을 제공합니다. 일반적인 k8s 기술이 아닙니다. 특히 Operator 패턴입니다."
-    },
     "finance-lead": {
       "name": "Finance Lead",
       "type": "skill",
@@ -12319,32 +12205,6 @@
       "path": "collected_assets/skills/cs-growth-strategist",
       "description_ko": "수익 운영, 영업 엔지니어링, 고객 성공 및 비즈니스 개발을 위한 성장 전략가 에이전트입니다. 비즈니스 성장 기술을 조율합니다. 사용자에게 파이프라인 분석, 이탈 방지, 확장 채점, 판매 데모 또는 제안서 작성이 필요할 때 생성됩니다."
     },
-    "linkedin-content": {
-      "name": "linkedin-content",
-      "type": "skill",
-      "description": "Use when someone wants to write, edit, or lint a LinkedIn post — a story, how-to, opinion piece, carousel script, video script, or poll — or wants an article, talk, or transcript repurposed into posts. Triggers on \"write a LinkedIn post\", \"is this hook any good\", \"review my post\", \"turn this into LinkedIn posts\", \"carousel\", \"what format should this be\". Lints posts 0-100 on mechanics, hook, integrity, and accessibility; picks the format the material actually supports; and splits long sources into standalone units with a reuse ledger.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-content",
-      "description_ko": "누군가가 LinkedIn 게시물(스토리, 노하우, 의견, 캐러셀 스크립트, 비디오 스크립트 또는 여론 조사)을 작성, 편집 또는 린트하려고 하거나 기사, 강연 또는 녹취록을 게시물로 재활용하려는 경우에 사용하세요. \"LinkedIn 게시물 작성\", \"이 후크가 유용한가요?\", \"내 게시물 검토\", \"LinkedIn 게시물로 전환\", \"캐러셀\", \"이 형식은 무엇이어야 하나요?\"에 대해 트리거됩니다. Lints는 역학, 후크, 무결성 및 접근성에 대해 0-100을 게시합니다. 자료가 실제로 지원하는 형식을 선택합니다. 재사용 원장을 사용하여 긴 소스를 독립형 단위로 분할합니다."
-    },
-    "interview-mapper": {
-      "name": "interview-mapper",
-      "type": "skill",
-      "description": "Maps a single interview transcript into a verbatim-grounded, lens-coded structure and checks whether analytic conclusions hold across independent re-runs. Use when the user wants to code, map, interpret, or make sense of an interview transcript, depth interview, custdev/JTBD/expert/usability/exit/win-loss/focus-group session, or wants cross-interview synthesis (insight cards, patterns) built up from coded transcripts — even if they don't name a method. Every conclusion must carry a verbatim quote verified against the source text; unstable conclusions are flagged for a human, never resolved by a single silent pass. Not for generating new interviews, not for plain audio transcription, and not for research-method or sample-size planning above the transcript (see product-research).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/interview-mapper"
-    },
-    "skills-chaos-engineering": {
-      "name": "chaos-engineering",
-      "type": "skill",
-      "description": "Use when planning, running, or learning from chaos engineering experiments. Triggers on \"chaos experiment\", \"fault injection\", \"gameday\", \"resilience test\", \"blast radius\", \"steady state\", \"abort criteria\", \"Chaos Toolkit\", \"Chaos Mesh\", \"Litmus\", \"Gremlin\", \"AWS FIS\", or any deliberate failure-injection question. Ships experiment designer, blast-radius calculator, and postmortem generator (all stdlib Python), 4 references on chaos principles + experiment design + attack taxonomy + tooling landscape, and a /chaos-experiment slash command. Composes with feature-flags-architect (kill switches as abort triggers) and kubernetes-operator (common chaos targets).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-chaos-engineering",
-      "description_ko": "카오스 엔지니어링 실험을 계획, 실행 또는 학습할 때 사용합니다. \"카오스 실험\", \"결함 주입\", \"게임데이\", \"복원력 테스트\", \"폭발 반경\", \"정상 상태\", \"중단 기준\", \"카오스 툴킷\", \"카오스 메시\", \"Litmus\", \"Gremlin\", \"AWS FIS\" 또는 의도적인 실패 주입 질문에 대해 트리거됩니다. 실험 디자이너, 폭발 반경 계산기, 사후 생성기(모두 stdlib Python), 혼돈 원칙에 대한 4가지 참고 자료 + 실험 설계 + 공격 분류 + 도구 환경 및 /chaos-experiment 슬래시 명령을 제공합니다. feature-flags-architect(중단 트리거로서의 킬 스위치) 및 kubernetes-operator(일반적인 카오스 대상)로 구성됩니다."
-    },
     "cs-fullstack-review": {
       "name": "cs-fullstack-review",
       "type": "skill",
@@ -12354,15 +12214,6 @@
       "path": "collected_assets/skills/cs-fullstack-review",
       "description_ko": "풀스택 엔지니어링 검토 — 7가지 Matt Pocock 강제 질문을 살펴보고, 프로필을 선택하고, 강력한 전문가(API 설계 검토자, 데이터베이스 설계자, 슬로 설계자)에게 문의합니다. 컨텍스트 포크를 사용하여 cs-fullstack-engineer 에이전트를 호출합니다."
     },
-    "skills-chief-customer-officer-advisor": {
-      "name": "chief-customer-officer-advisor",
-      "type": "skill",
-      "description": "Chief Customer Officer advisory for startups: retention decomposition (gross retention vs NRR honesty, churn root-cause taxonomy), customer segmentation strategy (differential investment across tiers + ICP fit scoring), CS team coverage model (pooled vs named CSM thresholds + ratio math), and CS team org evolution (CS vs Support vs AM distinctions). Use when designing retention strategy, segmenting customers for differential investment, sizing CS team, or sequencing CS hires. Strategic only — does not duplicate engineering/business-growth tactical skills.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-chief-customer-officer-advisor",
-      "description_ko": "스타트업을 위한 최고 고객 책임자 자문: 유지 분해(총 유지 대 NRR 정직성, 이탈 근본 원인 분류), 고객 세분화 전략(계층 간 차등 투자 + ICP 적합 점수), CS 팀 적용 범위 모델(풀링된 대 명명된 CSM 임계값 + 비율 수학), CS 팀 조직 진화(CS 대 지원 대 AM 구분). 유지 전략을 설계하고, 차등 투자를 위해 고객을 분류하고, CS 팀 규모를 조정하거나 CS 채용 순서를 정할 때 사용합니다. 전략적 전용 — 엔지니어링/비즈니스 성장 전술적 기술을 복제하지 않습니다."
-    },
     "wiki-lint": {
       "name": "wiki-lint",
       "type": "skill",
@@ -12371,15 +12222,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/wiki-lint",
       "description_ko": "LLM Wiki 저장소에서 상태 검사를 실행합니다. 기계적 검사(고아, 끊어진 링크, 오래된 페이지, 본문 누락, 로그 간격, 중복)와 의미 체계 검사(모순, 상호 참조 간격, 자체 페이지 누락 개념)를 수행합니다. 제안된 작업이 포함된 마크다운 보고서를 출력합니다. 사용법 /wiki-lint [--stale-days N] [--log-gap-days N]"
-    },
-    "linkedin-engagement": {
-      "name": "linkedin-engagement",
-      "type": "skill",
-      "description": "Use when someone wants to grow reach through comments, replies, groups, or outreach on LinkedIn — a commenting roster, a connection request note, a DM or InMail, a networking plan, or a check on whether their outreach volume is safe. Triggers on \"who should I engage with\", \"write a connection request\", \"cold DM\", \"LinkedIn outreach\", \"networking strategy\", \"how many invites can I send\". Builds a weekly comment roster inside a real time budget, assembles one message at a time and refuses templates, and caps volume against LinkedIn's limits. Nothing is ever sent.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-engagement",
-      "description_ko": "댓글, 회신, 그룹 또는 LinkedIn의 홍보 활동(댓글 작성 명단, 연결 요청 메모, DM 또는 InMail, 네트워킹 계획, 홍보 볼륨이 안전한지 확인 등)을 통해 도달 범위를 확대하려는 경우에 사용하세요. \"누구와 소통해야 하는가\", \"연결 요청 작성\", \"콜드 DM\", \"LinkedIn 홍보\", \"네트워킹 전략\", \"초대를 몇 개까지 보낼 수 있는지\"에 대해 트리거됩니다. 실시간 예산 내에서 주간 댓글 명단을 작성하고, 한 번에 하나의 메시지를 모아 템플릿을 거부하고, LinkedIn의 한도에 맞춰 볼륨을 제한합니다. 아무것도 전송되지 않습니다."
     },
     "seo-auditor": {
       "name": "seo-auditor",
@@ -12399,15 +12241,6 @@
       "path": "collected_assets/skills/tdd",
       "description_ko": "테스트 중심 개발. 사용자가 테스트 우선으로 기능을 구축하거나 버그를 수정하려고 하거나, \"red-green-refactor\"를 언급하거나, 통합 테스트를 원하는 경우에 사용하세요."
     },
-    "product-research": {
-      "name": "product-research",
-      "type": "skill",
-      "description": "Use when planning and synthesizing product/user research as a method-and-repository discipline — selecting the right method for the goal (generative interviews vs usability test vs concept test vs validation), computing method-based saturation/sample size with an explicit confidence level, or synthesizing coded observations into insights while flagging single-source anecdotes. Never fabricates user insight; an insight requires recurrence across independent participants. Distinct from product-team/ux-researcher-designer (persona/journey artifacts), product-discovery (discovery-sprint planning), and experiment-designer (live A/B) — this is the research-ops method + insight-repository layer.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/product-research",
-      "description_ko": "방법 및 저장소 분야로 제품/사용자 연구를 계획하고 종합할 때 목표에 적합한 방법 선택(생성 인터뷰 vs 사용성 테스트 vs 개념 테스트 vs 검증), 명시적인 신뢰 수준을 사용하여 방법 기반 포화도/샘플 크기 계산, 단일 소스 일화에 플래그를 지정하는 동안 코드화된 관찰을 통찰력으로 통합하는 데 사용합니다. 사용자 통찰력을 조작하지 마십시오. 통찰력을 얻으려면 독립적인 참여자 간에 반복이 필요합니다. 제품-팀/UX-연구원-디자이너(페르소나/여정 아티팩트), 제품 발견(발견-스프린트 계획) 및 실험-디자이너(라이브 A/B)와 구별됩니다. 이는 연구 운영 방법 + 통찰력-저장소 계층입니다."
-    },
     "tech-debt": {
       "name": "tech-debt",
       "type": "skill",
@@ -12416,15 +12249,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/tech-debt",
       "description_ko": "기술 부채를 스캔하고 우선순위를 지정하고 보고합니다. 사용법: /tech-debt <scan|prioritize|report> [옵션]"
-    },
-    "landing": {
-      "name": "landing",
-      "type": "skill",
-      "description": "Generates a premium single-page HTML landing page with 3D CSS animations, GSAP scroll effects, and mouse-parallax depth. Forcing intake (product + elevator pitch, audience register, brand overrides, tone) locks down positioning before any copy or markup is written, so the page reflects the actual product rather than generic boilerplate. Use whenever the user says 'landing for X', 'create a landing page', 'build a landing page', 'make a landing page for X', 'I need a web page for Y', or provides product/service details and wants a polished website. Also triggers on 'promotional page', 'product page', 'one-pager', 'web presence', 'sales page'. Outputs a single self-contained HTML file (Claude Code) or HTML artifact (Claude.ai). Supports configurable brand colors via CSS custom property overrides.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/landing",
-      "description_ko": "3D CSS 애니메이션, GSAP 스크롤 효과 및 마우스 시차 깊이를 갖춘 프리미엄 단일 페이지 HTML 랜딩 페이지를 생성합니다. 강제 도입(제품 + 엘리베이터 피치, 청중 등록, 브랜드 재정의, 톤)은 카피나 마크업이 작성되기 전에 포지셔닝을 고정하므로 페이지는 일반적인 상용구가 아닌 실제 제품을 반영합니다. 사용자가 'X용 랜딩 페이지', '랜딩 페이지 생성', '랜딩 페이지 구축', 'X용 랜딩 페이지 만들기', 'Y용 웹페이지가 필요합니다'라고 말하거나 제품/서비스 세부정보를 제공하고 세련된 웹사이트를 원할 때마다 사용하세요. 또한 '홍보 페이지', '제품 페이지', '원페이저', '웹 인지도', '판매 페이지'에서도 트리거됩니다. 단일 자체 포함 HTML 파일(Claude Code) 또는 HTML 아티팩트(Claude.ai)를 출력합니다. CSS 사용자 정의 속성 재정의를 통해 구성 가능한 브랜드 색상을 지원합니다."
     },
     "cs-wiki-ingestor": {
       "name": "cs-wiki-ingestor",
@@ -12462,15 +12286,6 @@
       "path": "collected_assets/skills/cs-workspace-admin",
       "description_ko": "gws CLI를 사용하는 Google Workspace 관리 에이전트 작업공간 설정, Gmail/Drive/Sheets/Calendar 자동화, 보안 감사, 레시피 실행을 조정합니다. 사용자에게 Google Workspace 자동화, gws CLI 도움말 또는 작업공간 관리가 필요할 때 생성됩니다."
     },
-    "cmd-focused-fix": {
-      "name": "focused-fix",
-      "type": "skill",
-      "description": "Deep-dive feature repair — systematically fix an entire feature/module across all its files and dependencies. Usage: /focused-fix <feature-path>",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmd-focused-fix",
-      "description_ko": "심층 기능 복구 — 모든 파일과 종속성에 걸쳐 전체 기능/모듈을 체계적으로 수정합니다. 사용법: /focused-fix <기능 경로>"
-    },
     "solo-founder": {
       "name": "Solo Founder",
       "type": "skill",
@@ -12488,33 +12303,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/wiki-query",
       "description_ko": "LLM Wiki 쿼리 — 먼저 index.md를 읽고, 3~10개의 관련 페이지를 살펴보고, 인라인 [[wikilink]] 인용으로 답변을 종합하고, 답변을 새로운 비교 또는 종합 페이지로 다시 제출하도록 제안합니다. 사용법 /wiki-query \"<질문>"
-    },
-    "linkedin-analytics": {
-      "name": "linkedin-analytics",
-      "type": "skill",
-      "description": "Use when someone wants to understand their own LinkedIn numbers — which posts worked, why reach dropped, whether a pattern is real, or how to test a hypothesis. Triggers on \"why did my reach drop\", \"what's working on my LinkedIn\", \"analyze my posts\", \"do carousels do better for me\", \"should I test this\", \"LinkedIn analytics\". Reads your own exported post data, reports medians and outlier bands, tests candidate patterns against a permutation null, and sizes a real experiment — refusing to conclude anything below 10 posts.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-analytics",
-      "description_ko": "누군가가 자신의 LinkedIn 번호(어떤 게시물이 효과가 있었는지, 도달률이 떨어진 이유, 패턴이 실제인지 또는 가설을 테스트하는 방법)를 이해하고 싶을 때 사용하세요. \"내 도달 범위가 감소한 이유\", \"내 LinkedIn에서 작동하는 기능\", \"내 게시물 분석\", \"캐러셀이 나에게 더 나은가요?\", \"이것을 테스트해야 할까요?\", \"LinkedIn 분석\"에 대한 트리거입니다. 자신이 내보낸 게시물 데이터를 읽고, 중앙값과 이상값 밴드를 보고하고, 순열 null에 대해 후보 패턴을 테스트하고, 실제 실험의 크기를 조정합니다. 게시물이 10개 미만이면 결론을 내리지 않습니다."
-    },
-    "skills-slo-architect": {
-      "name": "slo-architect",
-      "type": "skill",
-      "description": "Use when defining, reviewing, or operating SLOs/SLIs/error budgets. Triggers on \"define an SLO\", \"what should our SLO be\", \"error budget\", \"burn rate\", \"SLI\", \"service level objective\", \"Google SRE workbook\", \"multi-window burn-rate alert\", or any reliability-target question. Ships SLO designer, error-budget calculator with multi-window burn-rate thresholds, and SLO reviewer that catches the common bugs (target too aggressive, window too short, conflicting SLOs, no SLI definition). 4 references on SLO principles + SLI design + error budget math + composition with feature-flags-architect/chaos-engineering/kubernetes-operator. NOT a generic observability skill — specifically the SLO discipline.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-slo-architect",
-      "description_ko": "SLO/SLI/오류 예산을 정의, 검토, 운영할 때 사용합니다. 'SLO 정의', 'SLO는 무엇이어야 하는가', '오류 예산', '소진율', 'SLI', '서비스 수준 목표', 'Google SRE 통합 문서', '다중 창 소진율 경고' 또는 안정성 목표 질문에 대해 트리거됩니다. SLO 디자이너, 다중 창 소모율 임계값이 있는 오류 예산 계산기, 일반적인 버그(대상이 너무 공격적, 기간이 너무 짧음, SLO 충돌, SLI 정의 없음)를 포착하는 SLO 검토자가 제공됩니다. SLO 원칙에 대한 참고 자료 4개 + SLI 설계 + 오류 예산 수학 + 기능 플래그 아키텍처/카오스 엔지니어링/kubernetes-운영자를 사용한 구성. 일반적인 관찰 기술이 아닙니다. 특히 SLO 분야입니다."
-    },
-    "skills-arquiteto-de-empresa": {
-      "name": "arquiteto-de-empresa",
-      "type": "skill",
-      "description": "Company Architect: builds a business from scratch as an OKF (Open Knowledge Format) bundle — a tree of version-controllable .md files with frontmatter type, links forming a graph, and reserved index.md/log.md, readable by humans and agents. Guides the founder through a 12-phase interview (foundation, strategy, market, financial, sales, marketing, product, operations, tech, people, legal, governance), one phase at a time, few questions per block, and generates the concepts as conformant markdown. Trigger when the user wants to create, structure, or document an entire company in folders and .md files; when they mention build my company from scratch, company as code, company knowledge base for AI to read, company wiki for agents, OKF, or knowledge bundle. In English.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-arquiteto-de-empresa",
-      "description_ko": "Company Architect: OKF(Open Knowledge Format) 번들로 비즈니스를 처음부터 구축합니다. 이는 서두 유형, 그래프를 형성하는 링크, 사람과 에이전트가 읽을 수 있는 예약된 index.md/log.md가 포함된 버전 제어 가능한 .md 파일 트리입니다. 12단계 인터뷰(재단, 전략, 시장, 재무, 영업, 마케팅, 제품, 운영, 기술, 사람, 법률, 거버넌스)를 통해 한 번에 한 단계씩, 블록당 몇 개의 질문으로 창업자를 안내하고 적합한 마크다운으로 개념을 생성합니다. 사용자가 폴더 및 .md 파일에서 회사 전체를 생성, 구성 또는 문서화하려고 할 때 트리거됩니다. 그들이 처음부터 내 회사를 구축한다고 언급할 때, 코드형 회사, AI가 읽을 수 있는 회사 지식 기반, 에이전트를 위한 회사 위키, OKF 또는 지식 번들 등이 있습니다. 영어로."
     },
     "sprint-plan": {
       "name": "sprint-plan",
@@ -12541,15 +12329,6 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cs-webinar"
-    },
-    "skills-feature-flags-architect": {
-      "name": "feature-flags-architect",
-      "type": "skill",
-      "description": "Use when adding, retiring, or auditing feature flags. Triggers on \"add a flag\", \"ship behind a flag\", \"rollout plan\", \"kill switch\", \"stale flags\", \"flag debt\", \"LaunchDarkly\", \"GrowthBook\", \"Statsig\", \"Unleash\", \"Flipt\", or any progressive-delivery question. Ships flag debt scanner, rollout planner, and kill-switch auditor (all stdlib Python), 4 references on flag taxonomy + provider trade-offs + rollout strategies + lifecycle, plus a /flag-cleanup slash command.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-feature-flags-architect",
-      "description_ko": "기능 플래그를 추가, 폐기 또는 감사할 때 사용합니다. \"플래그 추가\", \"플래그 뒤의 배송\", \"롤아웃 계획\", \"킬 스위치\", \"부실 플래그\", \"플래그 부채\", \"LaunchDarkly\", \"GrowthBook\", \"Statsig\", \"Unleash\", \"Flipt\" 또는 모든 점진적 전달 질문에 대해 트리거됩니다. 플래그 부채 스캐너, 롤아웃 플래너 및 킬 스위치 감사자(모두 stdlib Python), 플래그 분류에 대한 4가지 참조 + 공급자 절충 + 롤아웃 전략 + 수명 주기 및 /flag-cleanup 슬래시 명령을 제공합니다."
     },
     "tc": {
       "name": "tc",
@@ -12613,24 +12392,6 @@
       "path": "collected_assets/skills/changelog",
       "description_ko": "Git 기록에서 변경 로그를 생성하고 기존 커밋의 유효성을 검사합니다. 사용법: /changelog <generate|lint> [옵션]"
     },
-    "compliance-os-bundle": {
-      "name": "compliance-os",
-      "type": "skill",
-      "description": "Compliance OS — meta-orchestrator that lets compliance teams CONFIGURE which frameworks apply, COMPUTE cross-framework control overlap, SIMULATE internal audits, and CONSOLIDATE evidence across multiple frameworks. Four decisions: (1) Given a company profile, which of the 12 supported frameworks apply (ISO 27001/13485/42001/14971, EU AI Act, MDR 745, GDPR, SOC 2, FDA QSR, NIST CSF 2.0, NIS2, HIPAA)? (2) Across selected frameworks, which controls overlap and how much evidence reuses? (3) For a given framework + scope, what does a realistic mock audit produce — drawing from the 205-scenario library? (4) Across selected frameworks, what's the unified evidence checklist with reuse map? Use when standing up a multi-framework program, planning the annual audit calendar, or preparing for certification stage 1. Does NOT replace per-framework skills (it orchestrates them).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/compliance-os-bundle",
-      "description_ko": "규정 준수 OS — 규정 준수 팀이 적용할 프레임워크를 구성하고, 프레임워크 간 제어 중복을 계산하고, 내부 감사를 시뮬레이션하고, 여러 프레임워크에 걸쳐 증거를 통합할 수 있는 메타 조정자입니다. 4가지 결정: (1) 회사 프로필이 주어지면 지원되는 12가지 프레임워크 중 어느 것이 적용됩니까(ISO 27001/13485/42001/14971, EU AI Act, MDR 745, GDPR, SOC 2, FDA QSR, NIST CSF 2.0, NIS2, HIPAA)? (2) 선택된 프레임워크 전반에 걸쳐 어떤 제어가 중복되고 얼마나 많은 증거가 재사용됩니까? (3) 주어진 프레임워크 + 범위에 대해 현실적인 모의 감사는 205 시나리오 라이브러리에서 그리는 무엇을 생성합니까? (4) 선택한 프레임워크 전반에 걸쳐 재사용 맵이 포함된 통합 증거 체크리스트는 무엇입니까? 다중 프레임워크 프로그램을 준비하거나, 연간 감사 일정을 계획하거나, 인증 1단계를 준비할 때 사용합니다. 프레임워크별 기술을 대체하지 않습니다(오케스트레이션)."
-    },
-    "research-ops-skills": {
-      "name": "research-ops-skills",
-      "type": "skill",
-      "description": "Use when planning, funding, scoping, or synthesizing enterprise research across workstreams — clinical study design, R&D program finance, market sizing/surveys, or product/user research. Triggers on \"design this clinical study\", \"what sample size\", \"R&D budget\", \"burn rate\", \"capitalize or expense\", \"TAM SAM SOM\", \"market sizing\", \"survey design\", \"segment the market\", \"plan user interviews\", \"usability test\", \"synthesize research insights\". Forks context to route to one of four Research-Operations sub-skills (clinical-research, research-finance, market-research, product-research) and returns a digest. Distinct from ra-qm-team (regulatory submission), finance (corporate close/valuation), research/grants (funding discovery), product-team (persona/journey/live experiments), and marketing-skill (campaign analytics).",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/research-ops-skills",
-      "description_ko": "임상 연구 설계, R&D 프로그램 재정, 시장 규모/설문조사 또는 제품/사용자 연구 등 작업 흐름 전반에 걸쳐 기업 연구를 계획, 자금 조달, 범위 지정 또는 종합할 때 사용합니다. \"이 임상 연구 설계\", \"샘플 크기\", \"R&D 예산\", \"소진률\", \"자본화 또는 비용\", \"TAM SAM SOM\", \"시장 규모\", \"설문 조사 설계\", \"시장 세분화\", \"사용자 인터뷰 계획\", \"사용성 테스트\", \"연구 통찰력 종합\"을 트리거합니다. 4가지 연구-운영 하위 기술(임상-연구, 연구-금융, 시장-연구, 제품-연구) 중 하나로 라우팅하기 위한 컨텍스트를 포크하고 다이제스트를 반환합니다. ra-qm-팀(규제 제출), 재무(기업 마감/평가), 연구/지원금(자금 발견), 제품 팀(페르소나/여행/실시간 실험) 및 마케팅 기술(캠페인 분석)과는 다릅니다."
-    },
     "cs-wiki-librarian": {
       "name": "cs-wiki-librarian",
       "type": "skill",
@@ -12649,15 +12410,6 @@
       "path": "collected_assets/skills/cs-cto-advisor",
       "description_ko": "기술 전략, 팀 확장, 아키텍처 결정 및 엔지니어링 우수성을 다루는 CTO를 위한 기술 리더십 고문입니다. CTO 또는 기술 창립자가 회사 수준의 기술 판단이 필요할 때 사용합니다. 예를 들어 핵심 플랫폼 구성 요소에 대한 구축-구매를 결정하거나 납품 속도를 잃지 않고 엔지니어링 조직을 5명에서 30명의 엔지니어로 확장하는 방법을 계획합니다."
     },
-    "skills-handoff": {
-      "name": "handoff",
-      "type": "skill",
-      "description": "Compact the current conversation into a handoff document for another agent to pick up. References existing artifacts (PRDs, plans, ADRs, issues, commits, diffs) by path or URL instead of duplicating them. Use when user wants to hand off the conversation to a fresh agent or starts a new session that picks up prior work.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-handoff",
-      "description_ko": "현재 대화를 다른 상담원이 선택할 수 있도록 전달 문서로 압축합니다. 복제하는 대신 경로나 URL을 통해 기존 아티팩트(PRD, 계획, ADR, 문제, 커밋, 차이점)를 참조합니다. 사용자가 대화를 새로운 상담원에게 전달하려고 하거나 이전 작업을 선택하는 새 세션을 시작할 때 사용합니다."
-    },
     "cs-engineer-grill": {
       "name": "cs-engineer-grill",
       "type": "skill",
@@ -12675,15 +12427,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/karpathy-check",
       "description_ko": "단계적 변경 또는 마지막 커밋에 대해 Karpathy의 4가지 원칙 검토를 실행하세요. 복잡성, 차이 노이즈, 숨겨진 가정 및 목표 확인을 확인합니다. 사용법 /karpathy-check [--last-commit]"
-    },
-    "linkedin-strategy": {
-      "name": "linkedin-strategy",
-      "type": "skill",
-      "description": "Use when someone needs a LinkedIn plan rather than a post — content pillars, positioning for a career change or consulting or thought leadership, a sustainable posting cadence, or a newsletter decision. Triggers on \"what should I post about\", \"how often should I post\", \"LinkedIn content strategy\", \"should I start a LinkedIn newsletter\", \"grow my following\", \"90-day plan\". Validates the positioning brief, sizes the week against real hours and refuses a plan that will not survive week five, and gates a newsletter against eligibility and a six-month cadence commitment.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/linkedin-strategy",
-      "description_ko": "콘텐츠 기둥, 경력 변경을 위한 포지셔닝, 컨설팅 또는 사고 리더십, 지속 가능한 게시 흐름, 뉴스레터 결정 등 게시물 대신 LinkedIn 계획이 필요한 경우에 사용하세요. \"무엇에 대해 게시해야 할까요?\", \"얼마나 자주 게시해야 할까요?\", \"LinkedIn 콘텐츠 전략\", \"LinkedIn 뉴스레터를 시작해야 할까요?\", \"팔로어 늘리기\", \"90일 계획\"을 기준으로 합니다. 포지셔닝 개요를 검증하고 실제 시간에 맞춰 주를 조정하며 5주차에 지속되지 않는 계획을 거부하고 자격 및 6개월 주기 약속에 대해 뉴스레터를 발행합니다."
     },
     "cs-aeo": {
       "name": "cs-aeo",
@@ -12721,15 +12464,6 @@
       "path": "collected_assets/skills/prd",
       "description_ko": "소프트웨어 시스템 및 AI 기반 기능에 대한 고품질 제품 요구 사항 문서(PRD)를 생성합니다. 요약, 사용자 사례, 기술 사양 및 위험 분석이 포함됩니다."
     },
-    "skills-general-counsel-advisor": {
-      "name": "general-counsel-advisor",
-      "type": "skill",
-      "description": "General Counsel advisory for startups: contract review (MSA, SaaS, NDA, DPA, employment), IP strategy, term sheet decoding, and regulatory landscape mapping. Use when reviewing any contract or term sheet, deciding when to engage outside counsel, defining IP strategy, evaluating regulatory exposure (HIPAA, GDPR, FDA, fintech), or when user mentions general counsel, GC, legal review, contract risk, term sheet, IP assignment, or regulatory exposure. NOT a substitute for licensed counsel — surfaces questions to bring to qualified attorneys.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-general-counsel-advisor",
-      "description_ko": "스타트업을 위한 법무 자문: 계약 검토(MSA, SaaS, NDA, DPA, 고용), IP 전략, 용어 시트 해독 및 규제 환경 매핑. 계약서 또는 약관서를 검토할 때, 외부 변호사를 고용할 시기 결정, IP 전략 정의, 규제 노출 평가(HIPAA, GDPR, FDA, 핀테크) 또는 사용자가 법무 자문위원, GC, 법적 검토, 계약 위험, 약관서, IP 할당 또는 규제 노출을 언급할 때 사용합니다. 자격을 갖춘 변호사를 대신할 수 없습니다. 자격을 갖춘 변호사에게 질문을 제시할 수 있습니다."
-    },
     "competitive-matrix": {
       "name": "competitive-matrix",
       "type": "skill",
@@ -12747,15 +12481,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/content-strategist",
       "description_ko": "순위를 매기고, 변환하고, 합성하는 콘텐츠 엔진을 구축합니다. 시스템에서 생각합니다. 개별 게시물이 아닌 주제 클러스터입니다. 모든 조각은 그 자리를 차지하거나 죽습니다. 콘텐츠가 게시물 스트림이 아닌 시스템처럼 작동해야 할 때 사용합니다. 예를 들어 유기적 트래픽을 0에서 늘리기 위한 주제 클러스터 계획을 설계하거나 편집 일정을 감사하고 90일 후에도 전환되지 않는 부분을 제거합니다. (단일 자산, 브랜드 카피 제작의 경우 cs-content-creator를 참조하세요.)"
-    },
-    "skills-chief-ai-officer-advisor": {
-      "name": "chief-ai-officer-advisor",
-      "type": "skill",
-      "description": "Chief AI Officer advisory for startups: model build-vs-buy decisions (API vs fine-tune vs in-house), AI risk classification under EU AI Act + US state patchwork, AI cost economics (API-to-self-hosted breakeven), and AI team org evolution. Use when deciding whether to call an API or fine-tune, classifying AI use cases for regulatory risk, calculating when self-hosting pays off, sequencing AI hires, or when user mentions CAIO, AI strategy, model selection, foundation model, fine-tuning, EU AI Act, NIST AI RMF, AI governance, model risk, or AI economics. Strategic only — does not duplicate engineering AI/ML skills.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-chief-ai-officer-advisor",
-      "description_ko": "스타트업을 위한 최고 AI 책임자 자문: 모델 구축 대 구매 결정(API 대 미세 조정 대 사내), EU AI 법 + 미국 주 패치워크에 따른 AI 위험 분류, AI 비용 경제성(API에서 자체 호스팅 손익분기점), AI 팀 조직 발전. API 호출 또는 미세 조정 여부를 결정할 때, 규제 위험에 대한 AI 사용 사례 분류, 자체 호스팅이 성과를 거둘 때 계산, AI 고용 순서 지정 또는 사용자가 CAIO, AI 전략, 모델 선택, 기초 모델, 미세 조정, EU AI Act, NIST AI RMF, AI 거버넌스, 모델 위험 또는 AI 경제학을 언급할 때 사용합니다. 전략적 전용 - 엔지니어링 AI/ML 기술을 복제하지 않습니다."
     },
     "rice": {
       "name": "rice",
@@ -12775,23 +12500,6 @@
       "path": "collected_assets/skills/saas-health",
       "description_ko": "SaaS 상태 지표(ARR, MRR, 이탈, CAC, LTV, NRR)를 계산하고 업계 표준에 대한 벤치마크를 수행합니다. 사용법: /saas-health <metrics|quick-ratio|simulate> [옵션]"
     },
-    "market-research": {
-      "name": "market-research",
-      "type": "skill",
-      "description": "日本語翻訳：このファイルは market-research 用の日本語翻訳が必要です",
-      "source_repo": "https://github.com/affaan-m/ECC.git",
-      "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/market-research"
-    },
-    "skills-eu-ai-act-specialist": {
-      "name": "eu-ai-act-specialist",
-      "type": "skill",
-      "description": "EU AI Act (Regulation (EU) 2024/1689) operational compliance for compliance teams. Three Article-level decisions: (1) What's the risk tier of this AI system — prohibited (Art. 5), high-risk (Art. 6 + Annex III), limited-risk (Art. 50), or minimal-risk? (2) For high-risk systems, what's the Article 43 conformity assessment route (Module A internal control vs Module H full QMS + notified body) and what goes in the Annex IV technical documentation? (3) Per organizational role (provider / deployer / importer / distributor / authorized representative), what are the active obligations and deadlines? Use during AI system intake review, when planning conformity assessment, or when scoping deployer obligations. Cites Articles + Annexes for every output. NOT executive AI strategy (see chief-ai-officer-advisor). NOT a legal substitute.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/skills-eu-ai-act-specialist",
-      "description_ko": "규정 준수 팀을 위한 EU AI 법(규정(EU) 2024/1689) 운영 규정 준수. 세 가지 조항 수준 결정: (1) 이 AI 시스템의 위험 계층은 금지(5조), 고위험(6조 + 부록 III), 제한된 위험(50조) 또는 최소 위험 등 무엇입니까? (2) 고위험 시스템의 경우 43조 적합성 평가 경로(모듈 A 내부 통제 vs 모듈 H 전체 QMS + 인증 기관)는 무엇이며 부속서 IV 기술 문서에는 무엇이 포함됩니까? (3) 조직의 역할(공급자/배포자/수입업자/유통자/권한 대리인)별 적극적 의무와 기한은 무엇입니까? AI 시스템 접수 검토 중, 적합성 평가 계획 시 또는 배포자 의무 범위 지정 시 사용합니다. 모든 결과물에 대해 기사와 부록을 인용합니다. 임원 AI 전략이 아닙니다(최고 AI 책임자-고문 참조). 법적 대체품이 아닙니다."
-    },
     "cs-product-strategist": {
       "name": "cs-product-strategist",
       "type": "skill",
@@ -12804,11 +12512,10 @@
     "product-manager": {
       "name": "product-manager",
       "type": "skill",
-      "description": "Senior PM agent with 6 knowledge domains, 30+ frameworks, 12 templates, and 32 SaaS metrics with formulas. Pure Markdown, zero scripts.",
+      "description": "Guide product strategy, discovery, prioritization and metrics; upstream templates and formula collections are external prerequisites.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/product-manager",
-      "description_ko": "6개의 지식 영역, 30개 이상의 프레임워크, 12개의 템플릿, 32개의 SaaS 지표(수식 포함)를 갖춘 수석 PM 에이전트입니다. 순수 마크다운, 스크립트 없음."
+      "path": "collected_assets/skills/product-manager"
     },
     "cs-demand-gen-specialist": {
       "name": "cs-demand-gen-specialist",
@@ -12818,15 +12525,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cs-demand-gen-specialist",
       "description_ko": "마케팅-수요-획득, 유료 광고 및 이메일 시퀀스 기술을 조율하는 수요 생성 및 획득 퍼널 전문가입니다. 획득 엔진을 구축하거나 수정할 때 사용합니다. 예를 들어 $40,000/월 예산을 재할당하기 전에 채널 CAC를 B2B SaaS 벤치마크와 비교하거나, 지출을 확장하기 전에 ad_health_scorer.py로 유료 광고 계정 상태에 점수를 매기거나, 출시 전에 시퀀스_analyzer.py에서 70점 이상을 획득해야 하는 육성 시퀀스를 설계합니다. 채널 믹스, CAC/ROAS 수학, MQL→SQL 워크플로우, 어트리뷰션, 육성 설계를 다룹니다."
-    },
-    "cmd-code-to-prd": {
-      "name": "code-to-prd",
-      "type": "skill",
-      "description": "Reverse-engineer a frontend codebase into a PRD. Usage: /code-to-prd [path]",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/cmd-code-to-prd",
-      "description_ko": "프런트엔드 코드베이스를 PRD로 리버스 엔지니어링합니다. 사용법: /code-to-prd [경로]"
     },
     "persona": {
       "name": "persona",
@@ -12845,6 +12543,121 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/wiki-ingest",
       "description_ko": "원시/에서 LLM Wiki로 소스 파일을 수집합니다. 요약 페이지를 읽고, 토론하고, 작성하고, 5~15페이지에 걸쳐 상호 참조를 업데이트하고, 색인을 재생성하고, 로그에 추가합니다. 사용법 /wiki-ingest <소스 경로>"
+    },
+    "linkedin-profile": {
+      "name": "linkedin-profile",
+      "type": "skill",
+      "description": "Use when someone wants their LinkedIn profile audited or rewritten — headline, About section, experience bullets, Featured, banner, recommendations — or says \"fix my headline\", \"my profile gets views but nothing happens\", \"optimize my LinkedIn profile\", \"what should my About section say\". Scores the headline on five dimensions, audits the whole profile 0-100 and ranks fixes by points per hour, and assembles an About section that survives the \"…see more\" fold.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-profile",
+      "description_ko": "누군가 자신의 LinkedIn 프로필을 감사하거나 다시 작성하기를 원할 때(헤드라인, 정보 섹션, 경험 글머리기호, 추천, 배너, 권장 사항) 또는 \"내 헤드라인 수정\", \"내 프로필이 조회수를 얻었지만 아무 일도 일어나지 않습니다\", \"내 LinkedIn 프로필 최적화\", \"내 정보 섹션에 뭐라고 말해야 할까요?\"라고 말할 때 사용하세요. 5개 차원에서 헤드라인에 점수를 매기고, 전체 프로필을 0~100으로 감사하고, 수정 사항의 순위를 시간당 포인트로 매기고, \"...자세히 보기\" 접기 후에도 유지되는 정보 섹션을 구성합니다."
+    },
+    "linkedin-skills": {
+      "name": "linkedin-skills",
+      "type": "skill",
+      "description": "Use when someone wants to grow an organic LinkedIn presence — a content strategy for a career change or consulting or thought leadership, a rewritten profile or headline, post drafts and hooks, a posting cadence or newsletter plan, connection notes and outreach, a commenting strategy, repurposing an article or talk into posts, or a read on why their reach dropped. Triggers on \"grow my LinkedIn\", \"fix my headline\", \"write a LinkedIn post\", \"what should I post about\", \"LinkedIn strategy\", \"connection request\", \"my reach dropped\". Forks context to route to one of five sub-skills, and refuses automation, scraping, pods, and bulk DMs before any drafting starts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-skills",
+      "description_ko": "경력 변경이나 컨설팅 또는 사고 리더십을 위한 콘텐츠 전략, 재작성된 프로필 또는 헤드라인, 게시물 초안 및 후크, 게시 흐름 또는 뉴스레터 계획, 연결 메모 및 홍보, 댓글 전략, 기사 용도 변경 또는 게시물에 대한 대화, 도달 범위가 감소한 이유에 대한 읽기 등 유기적인 LinkedIn 존재감을 키우고 싶을 때 사용하세요. \"내 LinkedIn 성장\", \"내 헤드라인 수정\", \"LinkedIn 게시물 작성\", \"무엇에 대해 게시해야 하는지\", \"LinkedIn 전략\", \"연결 요청\", \"내 도달 범위가 감소함\"에 대해 트리거됩니다. 5가지 하위 기술 중 하나로 라우팅하기 위해 컨텍스트를 포크하고 초안 작성이 시작되기 전에 자동화, 스크래핑, 포드 및 대량 DM을 거부합니다."
+    },
+    "linkedin-content": {
+      "name": "linkedin-content",
+      "type": "skill",
+      "description": "Use when someone wants to write, edit, or lint a LinkedIn post — a story, how-to, opinion piece, carousel script, video script, or poll — or wants an article, talk, or transcript repurposed into posts. Triggers on \"write a LinkedIn post\", \"is this hook any good\", \"review my post\", \"turn this into LinkedIn posts\", \"carousel\", \"what format should this be\". Lints posts 0-100 on mechanics, hook, integrity, and accessibility; picks the format the material actually supports; and splits long sources into standalone units with a reuse ledger.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-content",
+      "description_ko": "누군가가 LinkedIn 게시물(스토리, 노하우, 의견, 캐러셀 스크립트, 비디오 스크립트 또는 여론 조사)을 작성, 편집 또는 린트하려고 하거나 기사, 강연 또는 녹취록을 게시물로 재활용하려는 경우에 사용하세요. \"LinkedIn 게시물 작성\", \"이 후크가 유용한가요?\", \"내 게시물 검토\", \"LinkedIn 게시물로 전환\", \"캐러셀\", \"이 형식은 무엇이어야 하나요?\"에 대해 트리거됩니다. Lints는 역학, 후크, 무결성 및 접근성에 대해 0-100을 게시합니다. 자료가 실제로 지원하는 형식을 선택합니다. 재사용 원장을 사용하여 긴 소스를 독립형 단위로 분할합니다."
+    },
+    "linkedin-engagement": {
+      "name": "linkedin-engagement",
+      "type": "skill",
+      "description": "Use when someone wants to grow reach through comments, replies, groups, or outreach on LinkedIn — a commenting roster, a connection request note, a DM or InMail, a networking plan, or a check on whether their outreach volume is safe. Triggers on \"who should I engage with\", \"write a connection request\", \"cold DM\", \"LinkedIn outreach\", \"networking strategy\", \"how many invites can I send\". Builds a weekly comment roster inside a real time budget, assembles one message at a time and refuses templates, and caps volume against LinkedIn's limits. Nothing is ever sent.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-engagement",
+      "description_ko": "댓글, 회신, 그룹 또는 LinkedIn의 홍보 활동(댓글 작성 명단, 연결 요청 메모, DM 또는 InMail, 네트워킹 계획, 홍보 볼륨이 안전한지 확인 등)을 통해 도달 범위를 확대하려는 경우에 사용하세요. \"누구와 소통해야 하는가\", \"연결 요청 작성\", \"콜드 DM\", \"LinkedIn 홍보\", \"네트워킹 전략\", \"초대를 몇 개까지 보낼 수 있는지\"에 대해 트리거됩니다. 실시간 예산 내에서 주간 댓글 명단을 작성하고, 한 번에 하나의 메시지를 모아 템플릿을 거부하고, LinkedIn의 한도에 맞춰 볼륨을 제한합니다. 아무것도 전송되지 않습니다."
+    },
+    "linkedin-analytics": {
+      "name": "linkedin-analytics",
+      "type": "skill",
+      "description": "Use when someone wants to understand their own LinkedIn numbers — which posts worked, why reach dropped, whether a pattern is real, or how to test a hypothesis. Triggers on \"why did my reach drop\", \"what's working on my LinkedIn\", \"analyze my posts\", \"do carousels do better for me\", \"should I test this\", \"LinkedIn analytics\". Reads your own exported post data, reports medians and outlier bands, tests candidate patterns against a permutation null, and sizes a real experiment — refusing to conclude anything below 10 posts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-analytics",
+      "description_ko": "누군가가 자신의 LinkedIn 번호(어떤 게시물이 효과가 있었는지, 도달률이 떨어진 이유, 패턴이 실제인지 또는 가설을 테스트하는 방법)를 이해하고 싶을 때 사용하세요. \"내 도달 범위가 감소한 이유\", \"내 LinkedIn에서 작동하는 기능\", \"내 게시물 분석\", \"캐러셀이 나에게 더 나은가요?\", \"이것을 테스트해야 할까요?\", \"LinkedIn 분석\"에 대한 트리거입니다. 자신이 내보낸 게시물 데이터를 읽고, 중앙값과 이상값 밴드를 보고하고, 순열 null에 대해 후보 패턴을 테스트하고, 실제 실험의 크기를 조정합니다. 게시물이 10개 미만이면 결론을 내리지 않습니다."
+    },
+    "linkedin-strategy": {
+      "name": "linkedin-strategy",
+      "type": "skill",
+      "description": "Use when someone needs a LinkedIn plan rather than a post — content pillars, positioning for a career change or consulting or thought leadership, a sustainable posting cadence, or a newsletter decision. Triggers on \"what should I post about\", \"how often should I post\", \"LinkedIn content strategy\", \"should I start a LinkedIn newsletter\", \"grow my following\", \"90-day plan\". Validates the positioning brief, sizes the week against real hours and refuses a plan that will not survive week five, and gates a newsletter against eligibility and a six-month cadence commitment.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/linkedin-strategy",
+      "description_ko": "콘텐츠 기둥, 경력 변경을 위한 포지셔닝, 컨설팅 또는 사고 리더십, 지속 가능한 게시 흐름, 뉴스레터 결정 등 게시물 대신 LinkedIn 계획이 필요한 경우에 사용하세요. \"무엇에 대해 게시해야 할까요?\", \"얼마나 자주 게시해야 할까요?\", \"LinkedIn 콘텐츠 전략\", \"LinkedIn 뉴스레터를 시작해야 할까요?\", \"팔로어 늘리기\", \"90일 계획\"을 기준으로 합니다. 포지셔닝 개요를 검증하고 실제 시간에 맞춰 주를 조정하며 5주차에 지속되지 않는 계획을 거부하고 자격 및 6개월 주기 약속에 대해 뉴스레터를 발행합니다."
+    },
+    "landing": {
+      "name": "landing",
+      "type": "skill",
+      "description": "Generates a premium single-page HTML landing page with 3D CSS animations, GSAP scroll effects, and mouse-parallax depth. Forcing intake (product + elevator pitch, audience register, brand overrides, tone) locks down positioning before any copy or markup is written, so the page reflects the actual product rather than generic boilerplate. Use whenever the user says 'landing for X', 'create a landing page', 'build a landing page', 'make a landing page for X', 'I need a web page for Y', or provides product/service details and wants a polished website. Also triggers on 'promotional page', 'product page', 'one-pager', 'web presence', 'sales page'. Outputs a single self-contained HTML file (Claude Code) or HTML artifact (Claude.ai). Supports configurable brand colors via CSS custom property overrides.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/landing",
+      "description_ko": "3D CSS 애니메이션, GSAP 스크롤 효과 및 마우스 시차 깊이를 갖춘 프리미엄 단일 페이지 HTML 랜딩 페이지를 생성합니다. 강제 도입(제품 + 엘리베이터 피치, 청중 등록, 브랜드 재정의, 톤)은 카피나 마크업이 작성되기 전에 포지셔닝을 고정하므로 페이지는 일반적인 상용구가 아닌 실제 제품을 반영합니다. 사용자가 'X용 랜딩 페이지', '랜딩 페이지 생성', '랜딩 페이지 구축', 'X용 랜딩 페이지 만들기', 'Y용 웹페이지가 필요합니다'라고 말하거나 제품/서비스 세부정보를 제공하고 세련된 웹사이트를 원할 때마다 사용하세요. 또한 '홍보 페이지', '제품 페이지', '원페이저', '웹 인지도', '판매 페이지'에서도 트리거됩니다. 단일 자체 포함 HTML 파일(Claude Code) 또는 HTML 아티팩트(Claude.ai)를 출력합니다. CSS 사용자 정의 속성 재정의를 통해 구성 가능한 브랜드 색상을 지원합니다."
+    },
+    "research-finance": {
+      "name": "research-finance",
+      "type": "skill",
+      "description": "Use when managing the money for an internal R&D program or portfolio — building a multi-period program budget with the F&A (indirect) split, tracking burn rate and runway against value-inflection milestones, or routing R&D cost items to a capitalize-vs-expense determination. Every budget output surfaces its assumptions block; capitalize-vs-expense is decision-support only and routes to a named finance owner — it never books an entry or decides accounting treatment. Distinct from finance/financial-analysis (corporate DCF, close, valuation) and research/grants (funding discovery — this manages money already won).",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/research-finance",
+      "description_ko": "내부 R&D 프로그램 또는 포트폴리오를 위한 자금을 관리할 때 사용합니다. F&A(간접) 분할을 통해 다기간 프로그램 예산을 구축하고, 가치 변곡점에 대한 소모율 및 활주로를 추적하거나, R&D 비용 항목을 자본화 대 비용 결정으로 라우팅합니다. 모든 예산 산출물은 가정 블록을 표면화합니다. capitalize-vs-expense는 의사 결정 지원 전용이며 지정된 재무 소유자에게 전달됩니다. 항목을 예약하거나 회계 처리를 결정하지 않습니다. 재무/재무 분석(기업 DCF, 마감, 평가) 및 연구/보조금(자금 발견 - 이미 획득한 자금을 관리함)과는 다릅니다."
+    },
+    "clinical-research": {
+      "name": "clinical-research",
+      "type": "skill",
+      "description": "Use when designing a prospective clinical study before submission — selecting and classifying endpoints (primary / key-secondary / exploratory, with surrogate-endpoint flagging), estimating sample size and power for two-arm designs (means / proportions / survival), or scoring a study plan for feasibility and a GO / GO-WITH-CONDITIONS / REDESIGN / NO-GO phase-gate decision. Every output is an ESTIMATE plus a named human owner (clinician / biostatistician / regulatory owner) — never clinical fact, never a finished protocol. Distinct from ra-qm-team, which handles the regulatory/QM submission (ISO 13485, EU MDR, FDA 510(k)/PMA/QSR), not the study design.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/clinical-research",
+      "description_ko": "제출 전 전향적 임상 연구를 설계할 때 사용합니다. 즉, 종말점 선택 및 분류(1차/핵심-2차/탐색, 대리 종말점 표시 포함), 두 가지 설계에 대한 표본 크기 및 검정력 추정(평균/비율/생존), 타당성에 대한 연구 계획 점수 매기기 및 GO/GO-WITH-CONDITIONS/REDESIGN/NO-GO 단계 게이트 결정에 사용합니다. 모든 출력은 추정치와 명명된 인간 소유자(임상의/생물통계학자/규제 소유자)로 이루어지며 결코 임상적 사실도 아니고 완성된 프로토콜도 아닙니다. 연구 설계가 아닌 규제/QM 제출(ISO 13485, EU MDR, FDA 510(k)/PMA/QSR)을 처리하는 ra-qm-team과 다릅니다."
+    },
+    "interview-mapper": {
+      "name": "interview-mapper",
+      "type": "skill",
+      "description": "Maps a single interview transcript into a verbatim-grounded, lens-coded structure and checks whether analytic conclusions hold across independent re-runs. Use when the user wants to code, map, interpret, or make sense of an interview transcript, depth interview, custdev/JTBD/expert/usability/exit/win-loss/focus-group session, or wants cross-interview synthesis (insight cards, patterns) built up from coded transcripts — even if they don't name a method. Every conclusion must carry a verbatim quote verified against the source text; unstable conclusions are flagged for a human, never resolved by a single silent pass. Not for generating new interviews, not for plain audio transcription, and not for research-method or sample-size planning above the transcript (see product-research).",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/interview-mapper"
+    },
+    "product-research": {
+      "name": "product-research",
+      "type": "skill",
+      "description": "Use when planning and synthesizing product/user research as a method-and-repository discipline — selecting the right method for the goal (generative interviews vs usability test vs concept test vs validation), computing method-based saturation/sample size with an explicit confidence level, or synthesizing coded observations into insights while flagging single-source anecdotes. Never fabricates user insight; an insight requires recurrence across independent participants. Distinct from product-team/ux-researcher-designer (persona/journey artifacts), product-discovery (discovery-sprint planning), and experiment-designer (live A/B) — this is the research-ops method + insight-repository layer.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/product-research",
+      "description_ko": "방법 및 저장소 분야로 제품/사용자 연구를 계획하고 종합할 때 목표에 적합한 방법 선택(생성 인터뷰 vs 사용성 테스트 vs 개념 테스트 vs 검증), 명시적인 신뢰 수준을 사용하여 방법 기반 포화도/샘플 크기 계산, 단일 소스 일화에 플래그를 지정하는 동안 코드화된 관찰을 통찰력으로 통합하는 데 사용합니다. 사용자 통찰력을 조작하지 마십시오. 통찰력을 얻으려면 독립적인 참여자 간에 반복이 필요합니다. 제품-팀/UX-연구원-디자이너(페르소나/여정 아티팩트), 제품 발견(발견-스프린트 계획) 및 실험-디자이너(라이브 A/B)와 구별됩니다. 이는 연구 운영 방법 + 통찰력-저장소 계층입니다."
+    },
+    "research-ops-skills": {
+      "name": "research-ops-skills",
+      "type": "skill",
+      "description": "Use when planning, funding, scoping, or synthesizing enterprise research across workstreams — clinical study design, R&D program finance, market sizing/surveys, or product/user research. Triggers on \"design this clinical study\", \"what sample size\", \"R&D budget\", \"burn rate\", \"capitalize or expense\", \"TAM SAM SOM\", \"market sizing\", \"survey design\", \"segment the market\", \"plan user interviews\", \"usability test\", \"synthesize research insights\". Forks context to route to one of four Research-Operations sub-skills (clinical-research, research-finance, market-research, product-research) and returns a digest. Distinct from ra-qm-team (regulatory submission), finance (corporate close/valuation), research/grants (funding discovery), product-team (persona/journey/live experiments), and marketing-skill (campaign analytics).",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/research-ops-skills",
+      "description_ko": "임상 연구 설계, R&D 프로그램 재정, 시장 규모/설문조사 또는 제품/사용자 연구 등 작업 흐름 전반에 걸쳐 기업 연구를 계획, 자금 조달, 범위 지정 또는 종합할 때 사용합니다. \"이 임상 연구 설계\", \"샘플 크기\", \"R&D 예산\", \"소진률\", \"자본화 또는 비용\", \"TAM SAM SOM\", \"시장 규모\", \"설문 조사 설계\", \"시장 세분화\", \"사용자 인터뷰 계획\", \"사용성 테스트\", \"연구 통찰력 종합\"을 트리거합니다. 4가지 연구-운영 하위 기술(임상-연구, 연구-금융, 시장-연구, 제품-연구) 중 하나로 라우팅하기 위한 컨텍스트를 포크하고 다이제스트를 반환합니다. ra-qm-팀(규제 제출), 재무(기업 마감/평가), 연구/지원금(자금 발견), 제품 팀(페르소나/여행/실시간 실험) 및 마케팅 기술(캠페인 분석)과는 다릅니다."
+    },
+    "market-research": {
+      "name": "market-research",
+      "type": "skill",
+      "description": "日本語翻訳：このファイルは market-research 用の日本語翻訳が必要です",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/market-research"
     },
     "context-engineering-collection": {
       "name": "context-engineering-collection",
@@ -16353,6 +16166,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/site-diagnosis",
       "description_ko": "AI 도구(Claude, Codex, Cursor, Bolt, v0 등)를 사용하여 웹사이트를 구축하는 고객 중 품질, 디자인, 유지보수성에 대한 고민이 있는 고객을 위한 상담 전 진단 질문지입니다. 프로젝트, 도구, 문제점 및 목표에 대한 구조화된 답변을 수집한 다음 상담 개요를 생성합니다. 웹사이트 리뷰 상담을 준비할 때, 클라이언트가 사이트 감사를 요청할 때, 누군가가 AI로 구축한 사이트에 문제가 있다고 말할 때 사용하세요. 러시아어와 영어를 지원합니다. 클라이언트에게 언어를 먼저 선택하도록 요청합니다."
+    },
+    "cms-migration-checklist": {
+      "name": "cms-migration-checklist",
+      "type": "skill",
+      "description": "Gated checklist and working method for migrating a WordPress site to Next.js with a Payload CMS admin — audit, owner decisions, HTML→Lexical conversion, idempotent import and reconciliation, URL/SEO parity, editorial admin, security probes, self-hosted deploy, DNS cutover, rollback and the first week after. Use this whenever someone is planning, building, reviewing or launching a WordPress → Payload (or WordPress → headless Next.js) migration, even if they only ask one slice of it. Includes a setup mode that interviews the user about the old site and goals and writes a migration brief — \"set up a migration for example.com\", \"are we ready to cut over?\", \"how do I know the import didn't lose anything?\", \"what should I audit in the WP database first?\", \"replace wp-admin with Payload\", \"move off WordPress\", \"migration plan for our blog\", \"will old URLs still work?\".",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/cms-migration-checklist"
     },
     "daydream": {
       "name": "daydream",
@@ -20235,11 +20056,10 @@
     "seo-keyword-strategist": {
       "name": "seo-keyword-strategist",
       "type": "skill",
-      "description": "Analyzes keyword usage in provided content, calculates density, suggests semantic variations and LSI keywords based on the topic. Prevents over-optimization. Use PROACTIVELY for content optimization.",
+      "description": "Analyzes keyword usage in provided content, calculates density, suggests semantic variations and related terms based on the topic. Prevents over-optimization. Use PROACTIVELY for content optimization.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/seo-keyword-strategist",
-      "description_ko": "제공된 콘텐츠의 키워드 사용량을 분석하고 밀도를 계산하며 주제에 따른 의미 변형 및 LSI 키워드를 제안합니다. 과도한 최적화를 방지합니다. 콘텐츠 최적화를 위해 적극적으로 사용하세요."
+      "path": "collected_assets/skills/seo-keyword-strategist"
     },
     "markstream-react": {
       "name": "markstream-react",
@@ -24525,11 +24345,10 @@
     "varlock-claude-skill": {
       "name": "varlock-claude-skill",
       "type": "skill",
-      "description": "Secure environment variable management ensuring secrets are never exposed in Claude sessions, terminals, logs, or git commits",
+      "description": "Secure environment variable management with explicit checks to reduce secret exposure in Claude sessions, terminals, logs, or git commits",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/varlock-claude-skill",
-      "description_ko": "Claude 세션, 터미널, 로그 또는 git 커밋에 비밀이 노출되지 않도록 보장하는 안전한 환경 변수 관리"
+      "path": "collected_assets/skills/varlock-claude-skill"
     },
     "llm-structured-output": {
       "name": "llm-structured-output",
@@ -24738,11 +24557,10 @@
     "service-mesh-expert": {
       "name": "service-mesh-expert",
       "type": "skill",
-      "description": "Expert service mesh architect specializing in Istio, Linkerd, and cloud-native networking patterns. Masters traffic management, security policies, observability integration, and multi-cluster mesh con",
+      "description": "Review Istio or Linkerd topology, traffic policies, mTLS, observability and multi-cluster operations within an authorized environment.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/service-mesh-expert",
-      "description_ko": "Istio, Linkerd 및 클라우드 네이티브 네트워킹 패턴을 전문으로 하는 전문 서비스 메시 설계자입니다. 트래픽 관리, 보안 정책, 가시성 통합 및 다중 클러스터 메시 구성을 마스터합니다."
+      "path": "collected_assets/skills/service-mesh-expert"
     },
     "cloudflare-workers-expert": {
       "name": "cloudflare-workers-expert",
@@ -25196,11 +25014,10 @@
     "risk-manager": {
       "name": "risk-manager",
       "type": "skill",
-      "description": "Monitor portfolio risk, R-multiples, and position limits. Creates hedging strategies, calculates expectancy, and implements stop-losses.",
+      "description": "Monitor portfolio risk, R-multiples, and position limits. Creates hedging strategies, calculates expectancy, and analyzes proposed stop-loss levels.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/risk-manager",
-      "description_ko": "포트폴리오 위험, R-배수 및 포지션 한도를 모니터링합니다. 헤징 전략을 수립하고, 기대치를 계산하고, 손절매를 구현합니다."
+      "path": "collected_assets/skills/risk-manager"
     },
     "azure-mgmt-fabric-dotnet": {
       "name": "azure-mgmt-fabric-dotnet",
@@ -30604,11 +30421,10 @@
     "search-specialist": {
       "name": "search-specialist",
       "type": "skill",
-      "description": "Expert web researcher using advanced search techniques and",
+      "description": "Research questions with focused web searches, primary-source verification, and explicit evidence gaps.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/search-specialist",
-      "description_ko": "고급 검색 기술을 활용한 전문 웹 연구원과"
+      "path": "collected_assets/skills/search-specialist"
     },
     "payment-integration": {
       "name": "payment-integration",
@@ -33024,11 +32840,10 @@
     "viboscope": {
       "name": "viboscope",
       "type": "skill",
-      "description": "Psychological compatibility matching — find cofounders, collaborators, and friends through validated psychometrics",
+      "description": "Psychological compatibility matching — find cofounders, collaborators, and friends with explicit consent and unverified provider scoring",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/viboscope",
-      "description_ko": "심리적 적합성 매칭 - 검증된 심리 측정을 통해 공동 창업자, 협력자 및 친구를 찾습니다."
+      "path": "collected_assets/skills/viboscope"
     },
     "kubernetes-deployment": {
       "name": "kubernetes-deployment",
@@ -36972,14 +36787,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/autonomous-agent-patterns",
       "description_ko": "[Cline](https://github.com/cline/cline) 및 [OpenAI Codex](https://github.com/openai/codex)에서 영감을 받아 자율 코딩 에이전트를 구축하기 위한 설계 패턴입니다."
-    },
-    "session-handoff": {
-      "name": "session-handoff",
-      "type": "skill",
-      "description": "Use when context approaches capacity, before /clear or /compact, when switching tasks, or when ending a coding session: produces a structured handoff artifact for the next session.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/session-handoff"
     },
     "youtube-seo-optimizer": {
       "name": "youtube-seo-optimizer",
@@ -40938,6 +40745,14 @@
       "path": "collected_assets/skills/delegating-to-agents",
       "description_ko": "컨텍스트, 소유권 및 진행 상황 확인을 유지하면서 제한된 작업을 다른 AI 에이전트에 위임합니다."
     },
+    "faber-language": {
+      "name": "faber-language",
+      "type": "skill",
+      "description": "Write, check and run Faber programs, an experimental statically typed language for coding agents and human authors. Defers to the live faberlang.dev agent docs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/faber-language"
+    },
     "android-cli": {
       "name": "android-cli",
       "type": "skill",
@@ -40964,6 +40779,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/gemini-deep-research",
       "description_ko": "Google의 Gemini Deep Research Agent를 사용하여 자율적인 다단계 연구를 실행하세요. 쿼리를 시작하고, 진행 상황을 조사하고, 시장 분석 또는 문헌 검토를 위해 인용 보고서를 수집합니다."
+    },
+    "product-design-harness": {
+      "name": "product-design-harness",
+      "type": "skill",
+      "description": "Use when a product direction, feature, workflow, experiment, launch, feedback signal, automation, or scale decision needs judgment before execution or the next iteration.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/product-design-harness"
     },
     "agy-powerline": {
       "name": "agy-powerline",
@@ -41026,6 +40849,14 @@
       "path": "collected_assets/skills/skill-issue",
       "description_ko": "코딩 에이전트 스킬이 실행되지 않는 이유를 알아보세요. 활성화 시 각 SKILL.md A~F 등급을 매기고, 프롬프트가 트리거하는 스킬을 시뮬레이션하고, 자동으로 다른 스킬을 그림자로 표시하는 충돌에 플래그를 지정합니다."
     },
+    "footval-stats-and-transfer-news": {
+      "name": "footval-stats-and-transfer-news",
+      "type": "skill",
+      "description": "Football season leaderboards and transfer news from FootVal: top scorers, assists, minutes and appearances per competition, plus confirmed transfers and rumours with reliability.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/footval-stats-and-transfer-news"
+    },
     "sendblue-cli": {
       "name": "sendblue-cli",
       "type": "skill",
@@ -41080,6 +40911,14 @@
       "path": "collected_assets/skills/postgres-readonly-queries",
       "description_ko": "다중 연결 지원 및 심층 방어 쓰기 보호 기능을 통해 PostgreSQL 데이터베이스에 대해 안전한 읽기 전용 SQL 쿼리를 실행합니다."
     },
+    "datawebot": {
+      "name": "datawebot",
+      "type": "skill",
+      "description": "Find products for sale across online shops, list every seller's price with direct links, and run Amazon and Shopify extraction Jobs through the hosted datawebot MCP server.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/datawebot"
+    },
     "claude-code-expert": {
       "name": "claude-code-expert",
       "type": "skill",
@@ -41106,6 +40945,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/dispatch",
       "description_ko": "주제 인식 세션을 통해 Claude Code의 OpenAI Codex CLI 및 Google Antigravity CLI에 작업 위임"
+    },
+    "footval-follow-matches-and-tables": {
+      "name": "footval-follow-matches-and-tables",
+      "type": "skill",
+      "description": "Football scores, fixtures, match centres and league tables through FootVal: live and past results, a team's next or last matches, events, statistics, line-ups and standings.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/footval-follow-matches-and-tables"
     },
     "socialclaw": {
       "name": "socialclaw",
@@ -41187,6 +41034,14 @@
       "path": "collected_assets/skills/using-git-worktrees",
       "description_ko": "Git 작업 트리는 동일한 저장소를 공유하는 격리된 작업 공간을 생성하므로 전환 없이 동시에 여러 분기에서 작업할 수 있습니다."
     },
+    "shopify-firebase-app": {
+      "name": "shopify-firebase-app",
+      "type": "skill",
+      "description": "Scaffold, extend and deploy Shopify embedded apps on Firebase with Nitrogen. Use for a Shopify app on Cloud Functions, Firestore and Hosting, or inside a Nitrogen project.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/shopify-firebase-app"
+    },
     "gh-image": {
       "name": "gh-image",
       "type": "skill",
@@ -41232,6 +41087,14 @@
       "path": "collected_assets/skills/atlas-contract",
       "description_ko": "목표 무결성 기술. 백엔드/API/지속성, 보존/변경하지 않음, 테스트/검증, 모의, 재작업, 다중 부분 요청에 사용합니다. 목표 계약, 편차 알림, 단계 점검, 최종 감사를 내보냅니다. Q&A나 사소한 수정은 건너뛰세요."
     },
+    "doomsday-escrow": {
+      "name": "doomsday-escrow",
+      "type": "skill",
+      "description": "Verify cryptographic Proof-of-Escrow collateral (L1 UTXO outpoint proofs and Base Mainnet wDOOM settlement receipts) on GitHub bounties before spending autonomous agent compute.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/doomsday-escrow"
+    },
     "gh-attach": {
       "name": "gh-attach",
       "type": "skill",
@@ -41240,6 +41103,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/gh-attach",
       "description_ko": "GitHub 사용자 첨부 파일에 로컬 파일(스크린샷, 이미지, PDF, zip, 비디오)을 업로드하고, GitHub 사용자 첨부 파일을 다운로드하며, PR, 이슈 또는 댓글에 로컬 파일을 포함합니다. \"PR에 스크린샷 첨부\", \"이슈에 이미지 추가\", \"스크린샷 전후 삽입\", \"이 파일 첨부\" 또는 \"이 GitHub 첨부 파일 다운로드\"를 묻는 메시지가 표시될 때 사용합니다. 'gh-attach'에 의해 구동됩니다."
+    },
+    "cooper-email": {
+      "name": "cooper-email",
+      "type": "skill",
+      "description": "Give an AI agent its own email inbox with Cooper Email: send, receive, reply, and wait for replies or verification codes over MCP or HTTP.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cooper-email"
     },
     "auri-core": {
       "name": "auri-core",
@@ -41412,6 +41283,14 @@
       "path": "collected_assets/skills/ejentum-reasoning-harness",
       "description_ko": "네 가지 인지 활용 모드(추론, 코드, 사기 방지, 메모리)를 노출하는 MCP 서버입니다. 각 호출은 에이전트가 생성하기 전에 수집하는 엔지니어링된 스캐폴드(실패 패턴, 절차, 억제 벡터, 위조 테스트)를 반환합니다."
     },
+    "footval-scout-and-rank-players": {
+      "name": "footval-scout-and-rank-players",
+      "type": "skill",
+      "description": "Scout and rank footballers with FootVal: shortlists by league, position, age, foot and value; undervalued, overvalued, rising and young players; club, league and national squads.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/footval-scout-and-rank-players"
+    },
     "cowork-to-code-bridge": {
       "name": "cowork-to-code-bridge",
       "type": "skill",
@@ -41438,6 +41317,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
+    },
+    "footval-value-and-compare-players": {
+      "name": "footval-value-and-compare-players",
+      "type": "skill",
+      "description": "Explain what a footballer is worth with FootVal: its own transfer value next to the market value, the factors behind the gap, and comparisons of two to four players.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/footval-value-and-compare-players"
     },
     "anywrite": {
       "name": "anywrite",
@@ -46271,6 +46158,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/ai-team-orchestration",
       "description_ko": "경량 다중 에이전트 개발 팀을 부트스트랩하고 운영합니다. 프로젝트 시작 또는 채택, 작업 계획, 구현 조정 및 선택적인 QA, 뚜렷한 관점으로 브레인스토밍, 세션 전반에 걸쳐 컨텍스트 유지 등을 수행할 때 사용하세요."
+    },
+    "npm-trusted-publishing": {
+      "name": "npm-trusted-publishing",
+      "type": "skill",
+      "description": "Set up or fix npm trusted publishing (OIDC) in GitHub Actions and remove NPM_TOKEN. Use for ENEEDAUTH, E404 on PUT, E422 repository.url, or migrating off 2FA-bypass tokens before January 2027.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/npm-trusted-publishing"
     },
     "azure-well-architected-review": {
       "name": "azure-well-architected-review",
@@ -52107,6 +52002,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/create-agent-template",
+      "description_ko": ">-"
+    },
+    "write-hql": {
+      "name": "write-hql",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/write-hql",
       "description_ko": ">-"
     },
     "create-environment": {
@@ -61048,11 +60952,10 @@
     "README": {
       "name": "README",
       "type": "agent",
-      "description": "Pre-configured agent personas with curated skill loadouts, workflows, and distinct personalities.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/README.md",
-      "description_ko": "선별된 스킬 로드아웃, 워크플로 및 독특한 성격을 갖춘 사전 구성된 상담원 페르소나입니다."
+      "description": "These files define reviewer roles.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/README.md"
     },
     "cs-project-manager": {
       "name": "cs-project-manager",
@@ -63044,6 +62947,63 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/agents/creator-docs.md",
       "description_ko": "코드베이스에 대한 하네스 문서 파일을 생성하거나 업데이트하고 있습니다."
+    },
+    "registry": {
+      "name": "registry",
+      "type": "agent",
+      "description": "{",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/registry.json",
+      "description_ko": "{"
+    },
+    "council-facilitator": {
+      "name": "council-facilitator",
+      "type": "agent",
+      "description": "Turn verified disagreement into one product decision. Do not vote and do not",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/council-facilitator.md"
+    },
+    "uncertainty-reviewer": {
+      "name": "uncertainty-reviewer",
+      "type": "agent",
+      "description": "Prevent false confidence before execution expands.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/uncertainty-reviewer.md"
+    },
+    "user-flow-reviewer": {
+      "name": "user-flow-reviewer",
+      "type": "agent",
+      "description": "Protect user reality: actor, situation, problem, path, consequence, affected",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/user-flow-reviewer.md"
+    },
+    "evidence-flow-reviewer": {
+      "name": "evidence-flow-reviewer",
+      "type": "agent",
+      "description": "Protect decision quality: provenance, signal type, interpretation, freshness,",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/evidence-flow-reviewer.md"
+    },
+    "business-flow-reviewer": {
+      "name": "business-flow-reviewer",
+      "type": "agent",
+      "description": "Protect sustainable value: value exchange, ownership cost, priority,",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/business-flow-reviewer.md"
+    },
+    "claim-analyst": {
+      "name": "claim-analyst",
+      "type": "agent",
+      "description": "Break a product direction into testable claims and dependency edges before the",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/agents/claim-analyst.md"
     },
     "task-breaker.agent": {
       "name": "task-breaker.agent",
