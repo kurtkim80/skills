@@ -163,8 +163,30 @@ arguments, all rendered via `ux_table_row`.
 
 Mechanically, PASS needs the flag in an option position — a case pattern or a
 test, not prose in a comment — *and* a `*help` function with a call site, so a
-defined-but-unwired help routine does not carry the file. Whether every public
-command routes to it is the auditor's call.
+defined-but-unwired help routine does not carry the file. A `|` after the flag
+continues a case pattern only when bare words separated by `|` run on to its
+`)` (`help | -h | --help)`); `free -h | awk ...` is a pipe, not flag handling,
+and nothing inside `$(...)` / `<(...)` counts (`x=$(du -h | tail)`). Glob arms
+(`*--help*)`, `--help=*)`, `-h*)`) do count (#106). Whether every public command routes to it is the auditor's call.
+
+**Who is asked** (#106). In a sourced file the helper asks only *public*
+functions (no leading `_`) that read their arguments (`$1`..`$9`, `$@`, `$*`,
+`$#`, or implicitly via `getopts`, `shift`, `for x; do` — a `$1` inside a
+single-quoted awk/sed program and `${#var}` do not count; a single-quoted
+span holding a `"` is kept, so `"don't" "$1"` still reads `$1`), and never a
+`*_help` renderer — asking a help function for `--help` is circular. When the
+file handles no flag of its own and no wrapper call is found, a sourced file
+with no public function is N/A (`no public command`), and one whose public
+functions are all excluded is N/A too. Help a file *does* handle still scores
+PASS/WARN — the N/A only replaces a FAIL. An executed script (or a
+`tools/custom/*.sh` entrypoint) is always asked, whatever its functions are
+called, and so is a file with an `alias x=_fn` or a definition the helper
+cannot parse (`function f {`, an indented or hyphenated `f-x()`).
+
+An init hook that takes an argument (dotfiles' `dotfiles_init_summary
+<file_count>`, called by the loader, not typed by a user) is not caught by
+either rule and stays FAIL. The auditor may override that row to N/A, naming
+the caller in the note.
 
 **Thin wrappers** (dEitY719/dotfiles#2195) hand `"$@"` to another executable and
 own no flag handling themselves:
@@ -176,18 +198,30 @@ aicron() {
 }
 ```
 
-When the file has no flag of its own, the helper reads the first such call —
-`"$_exe" "$@"` with `_exe` assigned on one line, or a one-line
-`.../x.sh "$@"` — takes the literal path tail after the last `}` / `$VAR`, and
-looks it up under each ancestor directory of the audited file, nearest first,
-stopping at the file's git top level when it has one (a literal absolute path is checked as is, never re-rooted; a binary target
-never matches). A found target with `-h|--help` in option position is PASS
-(`delegates --help to <path>`); a found target without it is FAIL; a target it
-cannot resolve stays FAIL, with the expression named in the note.
+The call may carry env assignments or an interpreter (#106) — the shape a
+command that changes the caller's cwd is forced into:
+
+```sh
+GHES_MIRROR_CD_FILE="$_gm_cd_file" "$_gm_exe" "$@"
+bash "$script" "$@"          # or sh / zsh "$script" "$@"
+```
+
+When the file has no flag of its own, the helper reads every such call —
+`"$_exe" "$@"` with `_exe` assigned on one line (the nearest assignment above
+the call, so a `local script=...` reused across functions resolves per
+function; with none above, the first one in the file), or a one-line `.../x.sh "$@"` — takes the literal path tail after
+the last `}` / `$VAR`, and looks it up under each ancestor directory of the
+audited file, nearest first, stopping at the file's git top level when it has
+one (a literal absolute path is checked as is, never re-rooted; a binary
+target never matches). Every found target with `-h|--help` in option position
+is PASS (`delegates --help to <path>`); any found target without it is FAIL
+(`delegates to <path>, which has no -h/--help handling`, naming the first). A
+call it cannot resolve (`"$EDITOR" "$@"`) is ignored beside a resolved one; when
+none resolves the row stays FAIL, with the expression named in the note.
 
 **Grep hints**
 ```sh
-grep -nE -- '(-h|--help)[^[:alnum:]]*[])|]' "$FILE"   # flag in option position
+grep -nE -- '^([^#$<]|[$<][^(#])*(^|[^-[:alnum:]_])(-h|--help)[*=]*["'"'"']?(([[:space:]]*[|][[:space:]]*[^[:space:]|)]+)*[[:space:]]*[)]|[[:space:]]*])' "$FILE"   # flag in option position, not a pipe
 ```
 
 ### Check 7 — UX Lib Usage
@@ -313,7 +347,8 @@ there is resolved through that variable's non-empty `var="..."` assignments.
 
 Command-shaped means one of:
 
-- a known command prefix: `gwt `, `git `, `gh `, `ps `, or a hyphenated member of that family (`gh-flow `, #41);
+- a known command prefix: `gwt `, `git `, `gh `, `ps `, or a hyphenated member of that family (`gh-flow `, #41 — which already covers `gh-pr-approve `);
+- a read-only `tail`, `ls` or `cat` followed by a flag, quote, `$var` or path (`tail -40 '$_dir/log'`, #106) — `tail the log` stays prose;
 - a skill invocation: `/plugin:skill`;
 - `-` — the terminal-state marker;
 - any of the above behind `cd <arg> && ` (`cd $_wt && gwt teardown`, #47) — the part after `&&` is judged by the same rule, so `cd X && review it` stays WARN.

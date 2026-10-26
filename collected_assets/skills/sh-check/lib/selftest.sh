@@ -191,6 +191,17 @@ eq "vcd: cd X && <command> is a command (issue #47)" "$(row "$(sh "$here/sh_chec
 eq "vcdp: cd X && <prose> is still WARN" "$(row "$(sh "$here/sh_check.sh" "$vcdp")" 10)" WARN
 eq "vcdb: cd X && <nothing> is still WARN" "$(row "$(sh "$here/sh_check.sh" "$vcdb")" 10)" WARN
 eq "vthen: review ..., then <command> is still WARN" "$(row "$(sh "$here/sh_check.sh" "$vthen")" 10)" WARN
+# Read-only commands and the gh- hyphen family are command-shaped (#106).
+# (gh-pr-approve already matched the gh- family rule; pinned here.)
+for c in "tail -40 '\$_dir/log'" "ls -la '\$_dir'" "cat '\$_dir/out'" 'gh-pr-approve prune 1'; do
+  verdict_fixture "$work/vro.sh" "$c"
+  eq "vro: '$c' NEXT is a command (issue #106)" "$(row "$(sh "$here/sh_check.sh" "$work/vro.sh")" 10)" PASS
+done
+# ...but prose that merely opens with one of those words stays WARN.
+for c in 'tail the log until it settles' 'cat output looks wrong, investigate'; do
+  verdict_fixture "$work/vro.sh" "$c"
+  eq "vro: '$c' prose NEXT stays WARN" "$(row "$(sh "$here/sh_check.sh" "$work/vro.sh")" 10)" WARN
+done
 eq "vprose: prose NEXT is WARN, not FAIL" "$(row "$(sh "$here/sh_check.sh" "$vprose")" 10)" WARN
 eq "vblank: blank NEXT is WARN" "$(row "$(sh "$here/sh_check.sh" "$vblank")" 10)" WARN
 
@@ -508,6 +519,113 @@ wabs=$work/dotfiles/shell-common/functions/wabs.sh
 printf '#!/bin/sh\nwabs() { /nowhere-abs/wtool.sh "$@"; }\n' > "$wabs"
 eq "wabs: a missing literal absolute target is not re-rooted under ancestors" \
   "$(row "$(sh "$here/sh_check.sh" "$wabs")" 6)" FAIL
+
+# ---------- Check 6: env-prefixed and interpreter wrappers (#106) ----------
+wenv=$work/dotfiles/shell-common/functions/wenv.sh
+cat > "$wenv" <<'EOF2'
+#!/bin/sh
+wenv() {
+    local _exe="${SHELL_COMMON}"/tools/custom/wtool.sh
+    local _cd_file
+    _cd_file=$(mktemp) || return 1
+    WENV_CD_FILE="$_cd_file" "$_exe" "$@"
+    cd "$(cat "$_cd_file")" || return 1
+}
+EOF2
+eq "wenv: VAR=... \"\$_exe\" \"\$@\" is delegation (A-1)" \
+  "$(sh "$here/sh_check.sh" "$wenv" | awk -F'\t' '$1 == 6 { print $2 " " $3 }')" "PASS delegates --help to $wtool"
+nohelp=$work/dotfiles/shell-common/tools/custom/nohelp.sh
+printf '#!/bin/bash\nread -r t u < <(free -h | awk "NR==2 {print \\$2}")\n' > "$nohelp"; chmod +x "$nohelp"
+wbash=$work/dotfiles/shell-common/functions/wbash.sh
+cat > "$wbash" <<'EOF2'
+#!/bin/sh
+wone() {
+    local script="${SHELL_COMMON}/tools/custom/wtool.sh"
+    [ -f "$script" ] || return 2
+    bash "$script" "$@"
+}
+wtwo() {
+    local script="${SHELL_COMMON}/tools/custom/nohelp.sh"
+    [ -f "$script" ] || return 2
+    sh "$script" "$@"
+}
+EOF2
+eq "wbash: bash/sh \"\$var\" \"\$@\" judges every call by its nearest assignment (A-2)" \
+  "$(sh "$here/sh_check.sh" "$wbash" | awk -F'\t' '$1 == 6 { print $2 " " $3 }')" \
+  "FAIL delegates to $nohelp, which has no -h/--help handling"
+eq "nohelp: '-h | awk' is a pipe, not a case pattern" \
+  "$(row "$(sh "$here/sh_check.sh" "$nohelp")" 6)" FAIL
+
+# ---------- Check 6: who is asked for --help (#106) ----------
+fns=$work/dotfiles/shell-common/functions
+printf '#!/bin/sh\n_priv_run() { echo "$1"; }\n_priv_sum() { echo "$@"; }\n' > "$fns/priv.sh"
+eq "priv: only _private helpers -> N/A no public command (B)" \
+  "$(sh "$here/sh_check.sh" "$fns/priv.sh" | awk -F'\t' '$1 == 6 { print $2 " " $3 }')" 'N/A no public command'
+printf '#!/bin/sh\nzsh_switch() {\n    exec zsh -i\n}\n' > "$fns/noarg.sh"
+eq "noarg: a public command reading no \$1/\$@/\$# -> N/A (C-a)" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/noarg.sh")" 6)" 'N/A'
+printf '#!/bin/sh\nthing_help() {\n    ux_info "usage: thing $1"\n}\n' > "$fns/thing_help.sh"
+eq "thelp: a *_help renderer is not asked for --help (C-b)" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/thing_help.sh")" 6)" 'N/A'
+printf '#!/bin/sh\ninit_summary() {\n    local n="${1:-0}"\n    ux_success "$n"\n}\n' > "$fns/hook.sh"
+eq "hook: an init hook taking an argument stays FAIL (auditor may override)" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/hook.sh")" 6)" FAIL
+printf '#!/bin/sh\nshow_help() {\n    case "$1" in -h|--help) ux_info "usage"; return 0 ;; esac\n}\nx() { show_help; }\n' > "$fns/hhelp.sh"
+eq "hhelp: help a file does handle still scores PASS, not N/A" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/hhelp.sh")" 6)" PASS
+printf '#!/bin/sh\n_main() { echo hi; }\n_main\n' > "$work/exe.sh"; chmod +x "$work/exe.sh"
+eq "exe: an executable script with only _helpers is still asked for --help" \
+  "$(row "$(sh "$here/sh_check.sh" "$work/exe.sh")" 6)" FAIL
+cat > "$fns/quoted.sh" <<'EOF2'
+#!/bin/sh
+ps_top() {
+    ps aux | awk '{print $2}' | head -n "${#PATH}"
+}
+EOF2
+eq "quoted: \$2 in an awk program and \${#var} are not argument reads -> N/A" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/quoted.sh")" 6)" 'N/A'
+printf '#!/bin/sh\nopt_cmd() {\n    while getopts v o; do :; done\n}\nloop_cmd() {\n    for a; do :; done\n}\n' > "$fns/implicit.sh"
+eq "implicit: getopts / for a; do read arguments -> FAIL, not N/A" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/implicit.sh")" 6)" FAIL
+printf '#!/bin/sh\nfunction kw {\n    echo "$1"\n}\nif true; then\n    ind() { echo "$1"; }\nfi\n' > "$fns/unseen.sh"
+eq "unseen: definitions FUNCS cannot parse are not N/A no public command" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/unseen.sh")" 6)" FAIL
+printf '#!/bin/sh\nalias gs=_gs\n_gs() { git status "$@"; }\n' > "$fns/alias.sh"
+eq "alias: an alias exposing a _private function is still asked" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/alias.sh")" 6)" FAIL
+
+# ---------- PR #107 review: glob arms, subshell pipes, assignment order ----------
+for arm in '*--help*)' '--help=*)' '-h*)'; do
+  printf '#!/bin/sh\nglob_cmd() {\n    case "$1" in %s ux_info usage; return 0 ;; esac\n}\n' "$arm" > "$fns/glob.sh"
+  eq "glob: '$arm' is flag handling" "$(row "$(sh "$here/sh_check.sh" "$fns/glob.sh")" 6)" WARN
+done
+printf '#!/bin/bash\nm=$(free -h | sort)\nn=$(du -h|tail)\n' > "$work/subp.sh"; chmod +x "$work/subp.sh"
+eq "subp: '-h | word)' closing \$(...) is not flag handling" \
+  "$(row "$(sh "$here/sh_check.sh" "$work/subp.sh")" 6)" FAIL
+cat > "$fns/wlate.sh" <<'EOF2'
+#!/bin/sh
+wlate() {
+    "$_wl_exe" "$@"
+}
+_wl_exe="${SHELL_COMMON}"/tools/custom/wtool.sh
+EOF2
+eq "wlate: a top-level assignment below the call still resolves" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/wlate.sh")" 6)" PASS
+cat > "$fns/wmix.sh" <<'EOF2'
+#!/bin/sh
+wmix() {
+    local _exe="${SHELL_COMMON}"/tools/custom/wtool.sh
+    "$_exe" "$@"
+}
+wedit() {
+    "$EDITOR" "$@"
+}
+EOF2
+eq "wmix: an unresolvable call beside a resolved wrapper does not FAIL it" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/wmix.sh")" 6)" PASS
+printf '#!/bin/sh\nsay_it() {\n    echo "don'"'"'t" "$1" '"'"'x'"'"'\n}\n' > "$fns/dq.sh"
+eq "dq: an apostrophe inside double quotes does not hide \$1" \
+  "$(row "$(sh "$here/sh_check.sh" "$fns/dq.sh")" 6)" FAIL
 
 # ---------- usage errors ----------
 if sh "$here/sh_check.sh" >/dev/null 2>&1; then

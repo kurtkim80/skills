@@ -9489,11 +9489,10 @@
     "self-improving-agent": {
       "name": "self-improving-agent",
       "type": "skill",
-      "description": "Curate Claude Code's auto-memory into durable project knowledge. Analyze MEMORY.md for patterns, promote proven learnings to CLAUDE.md and .claude/rules/, extract recurring solutions into reusable skills. Use when: (1) reviewing what Claude has learned about your project, (2) graduating a pattern from notes to enforced rules, (3) turning a debugging solution into a skill, (4) checking memory health and capacity.",
+      "description": "Curate the agent's own memory into durable project knowledge. Reviews Claude Code auto-memory (MEMORY.md and its topic files) for learnings worth keeping, promotes proven ones into CLAUDE.md or .claude/rules/, records a correction as a lesson that persists across sessions, prunes stale or duplicate entries, and turns a recurring fix into a reusable skill. Use whenever the user asks what you have learned or saved about the project, which memories should become permanent rules, to remember a lesson or stop repeating a mistake, or to clean up, audit or check the health of memory.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/self-improving-agent",
-      "description_ko": "Claude Code의 자동 기억을 지속적인 프로젝트 지식으로 관리하세요. MEMORY.md에서 패턴을 분석하고, 검증된 학습을 CLAUDE.md 및 .claude/rules/로 촉진하고, 반복되는 솔루션을 재사용 가능한 기술로 추출합니다. 다음과 같은 경우에 사용하세요. (1) Claude가 프로젝트에 대해 배운 내용을 검토하고, (2) 메모에서 시행된 규칙으로 패턴을 전환하고, (3) 디버깅 솔루션을 기술로 전환하고, (4) 메모리 상태 및 용량을 확인합니다."
+      "path": "collected_assets/skills/self-improving-agent"
     },
     "promote": {
       "name": "promote",
@@ -11374,11 +11373,10 @@
     "agent-harness": {
       "name": "agent-harness",
       "type": "skill",
-      "description": "Turn any domain folder of skills into a bounded agentic loop: compile a goal into a verifiable task plan, execute tasks with the domain's own tools, verify every task with machine-run checks, retry with caps, escalate to a human when budgets exhaust, and refuse to close until everything is verified or explicitly waived. Use when you want an agent or subagent to pick up a goal and drive it to a verified close across one of this repo's 18 domains ('run this goal through the engineering harness', 'set up an agentic loop for marketing work', 'make the finance domain self-verifying'). NOT for authoring Claude Code Workflow-tool .js scripts (workflow-builder), N-agent tournaments on one task (agenthub), single-file metric optimization (autoresearch-agent), or discovering published loop recipes (loop-library).",
+      "description": "Turn any domain folder of skills into a bounded agentic loop: compile a goal into a verifiable task plan, execute tasks with the domain's own tools, verify every task with machine-run checks, retry with caps, escalate to a human when budgets exhaust, and refuse to close until everything is verified or explicitly waived. Use when you want an agent or subagent to pick up a goal and drive it to a verified close across one of this repo's 20 domains ('run this goal through the engineering harness', 'set up an agentic loop for marketing work', 'make the finance domain self-verifying'). NOT for authoring Claude Code Workflow-tool .js scripts (workflow-builder), N-agent tournaments on one task (agenthub), single-file metric optimization (autoresearch-agent), or discovering published loop recipes (loop-library).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/agent-harness",
-      "description_ko": "기술의 모든 도메인 폴더를 제한된 에이전트 루프로 전환합니다. 목표를 검증 가능한 작업 계획으로 컴파일하고, 도메인 자체 도구로 작업을 실행하고, 기계 실행 검사로 모든 ​​작업을 확인하고, 한도를 사용해 재시도하고, 예산이 소진되면 사람에게 에스컬레이션하고, 모든 것이 확인되거나 명시적으로 포기될 때까지 종료를 거부합니다. 에이전트 또는 하위 에이전트가 목표를 선택하고 이 저장소의 18개 도메인('엔지니어링 하네스를 통해 이 목표 실행', '마케팅 작업을 위한 에이전트 루프 설정', '재무 도메인 자체 확인 만들기') 중 하나에서 이를 확인된 종료로 유도하려는 경우에 사용합니다. Claude Code Workflow-tool .js 스크립트 작성(workflow-builder), 단일 작업에 대한 N-agent 토너먼트(agenthub), 단일 파일 메트릭 최적화(autoresearch-agent) 또는 게시된 루프 레시피 검색(loop-library)에는 적합하지 않습니다."
+      "path": "collected_assets/skills/agent-harness"
     },
     "universal-scraping-architect": {
       "name": "universal-scraping-architect",
@@ -43736,6 +43734,14 @@
       "path": "collected_assets/skills/game-engine",
       "description_ko": "HTML5, Canvas, WebGL 및 JavaScript를 사용하여 웹 기반 게임 엔진 및 게임을 구축하는 전문 기술입니다. 게임 생성, 게임 엔진 구축, 게임 물리학 구현, 충돌 감지 처리, 게임 루프 설정, 스프라이트 관리, 게임 컨트롤 추가 또는 2D/3D 렌더링 작업을 요청받을 때 사용합니다. 플랫폼 게임, 브레이크아웃 스타일 게임, 미로 게임, 타일맵, 오디오, WebRTC를 통한 멀티플레이어 및 퍼블리싱 게임에 대한 기술을 다룹니다."
     },
+    "azure-logic-apps-standard-cli": {
+      "name": "azure-logic-apps-standard-cli",
+      "type": "skill",
+      "description": "Create, inspect, validate, test, run, debug, package, and deploy Azure Logic Apps Standard projects using the Azure CLI logicapp extension. Use for Standard workflow authoring, optional workspaces, connector discovery, identity-based connections, local runtimes, native workflow tests, and approved cloud lifecycle operations. Not for Consumption-only workflow development.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/azure-logic-apps-standard-cli"
+    },
     "tugboat": {
       "name": "tugboat",
       "type": "skill",
@@ -44878,6 +44884,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/react19-concurrent-patterns",
       "description_ko": "React 18 동시 패턴을 보존하고 마이그레이션 중에 React 19 API(useTransition, useDeferredValue, Suspense, use(), useOptimistic, Actions)를 채택합니다."
+    },
+    "foundry-agentic-loop": {
+      "name": "foundry-agentic-loop",
+      "type": "skill",
+      "description": "Build agentic solutions on Microsoft Foundry, GitHub and Azure: hosted agents, toolbox tools and skills, Foundry IQ grounding and a React/FastAPI app. Three modes: rapid prototyping in an existing Foundry project; spec-driven development (SDD), where the foundry-agentic-loop-workflow runs Specify, Implement, Verify and Deploy to create the Foundry project and deploy with azd, or one phase runs alone; and Improve, which refines this skill and the workflow from past runs. Use for Agentic Loop requests and canvas actions, or end-to-end agent solutions from architecture to Azure deployment. Not for isolated Azure administration or unrelated UI edits.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/foundry-agentic-loop"
     },
     "doc-and-modernize": {
       "name": "doc-and-modernize",
@@ -46391,11 +46405,10 @@
     "webmcpify": {
       "name": "webmcpify",
       "type": "skill",
-      "description": "Make a web app agent-ready — propose a WebMCP tool manifest, integrate, verify in a real browser, heal; unrelated code stays untouched. Use for \"webmcpify\", \"add WebMCP\", or \"expose app actions to AI agents\".",
+      "description": "WebMCP agent skill for curated core coverage or route-by-route parity — inventory an existing web app, integrate approved tools, then inspect, verify and heal them in a real browser. Use for \"webmcpify\", \"add WebMCP\", or \"expose app actions to AI agents\".",
       "source_repo": "https://github.com/github/awesome-copilot.git",
       "source_name": "github/awesome-copilot",
-      "path": "collected_assets/skills/webmcpify",
-      "description_ko": "웹 앱 에이전트를 준비합니다. WebMCP 도구 매니페스트를 제안하고, 통합하고, 실제 브라우저에서 확인하고, 복구합니다. 관련 없는 코드는 그대로 유지됩니다. \"webmcpify\", \"WebMCP 추가\" 또는 \"AI 에이전트에 앱 작업 ​​노출\"에 사용합니다."
+      "path": "collected_assets/skills/webmcpify"
     },
     "gtm-product-led-growth": {
       "name": "gtm-product-led-growth",
@@ -46531,6 +46544,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/structured-autonomy-implement",
       "description_ko": "구조화된 자율성 구현 프롬프트"
+    },
+    "globestudio": {
+      "name": "globestudio",
+      "type": "skill",
+      "description": "Creates, edits and embeds dotted world maps and animated 3D globes with Globestudio (globestudio.app), a free open source studio with 21 looks. Use when the user wants a dotted map, a dotted or 3D globe, a spinning earth or a stylized world map for a website hero, background, slide, social post or video; when they paste a globestudio.app link or a ?c= config; or when code uses @globestudio/react, @globestudio/element, the globe-studio web component or globestudio.app/embed. Also use it to highlight a country, continent or region, plot points and arcs, match brand colors, or prepare PNG, SVG, GLB, MP4, WebM or GIF exports. Not for interactive tiled maps, routing, geocoding or GIS analysis (Mapbox, MapLibre, deck.gl), or for ordinary charts.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/globestudio"
     },
     "github-actions-efficiency": {
       "name": "github-actions-efficiency",
@@ -46684,6 +46705,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/azure-resource-health-diagnose",
       "description_ko": "Azure 리소스 상태를 분석하고, 로그 및 원격 분석을 통해 문제를 진단하고, 식별된 문제에 대한 수정 계획을 만듭니다."
+    },
+    "markdown-to-word-mermaid": {
+      "name": "markdown-to-word-mermaid",
+      "type": "skill",
+      "description": "Export Markdown containing Mermaid code fences to Word (.docx) with embedded SVG diagrams and PNG fallbacks. Use when diagram sharpness, Office-compatible labels, or page-aware placement matters. Not for Word-to-Markdown conversion, editable Office shapes, or general slide creation.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/markdown-to-word-mermaid"
     },
     "freecad-scripts": {
       "name": "freecad-scripts",
