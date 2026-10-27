@@ -19593,6 +19593,14 @@
       "path": "collected_assets/skills/gcp-audit-logs",
       "description_ko": "규정 준수를 위해 GCP Cloud 감사 로그를 구성합니다. 로그 라우팅을 설정하고"
     },
+    "redirect-checker": {
+      "name": "redirect-checker",
+      "type": "skill",
+      "description": "Redirect Checker. Use when working with URL or recorded response chain.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/redirect-checker"
+    },
     "pi-web-search": {
       "name": "pi-web-search",
       "type": "skill",
@@ -19991,6 +19999,14 @@
       "path": "collected_assets/skills/fact-check-x-unified",
       "description_ko": "사실확인-X流程编排能力，依次组织各方答案汇总、各方答案聚合（未核验）、权威核验后的最终答案와 各方答案测评，生成可打开、可审计、可迁移的阶段产物与完整报告包。"
     },
+    "syncbook-discovery": {
+      "name": "syncbook-discovery",
+      "type": "skill",
+      "description": "Find reciprocal collaborators on Syncbook or prepare a private profile draft for human review using only explicitly supplied task facts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/syncbook-discovery"
+    },
     "markstream-install": {
       "name": "markstream-install",
       "type": "skill",
@@ -20079,6 +20095,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/busybox-on-windows",
       "description_ko": "BusyBox의 Win32 빌드를 사용하여 Windows에서 다양한 표준 UNIX 명령줄 도구를 실행하는 방법."
+    },
+    "faq-generator": {
+      "name": "faq-generator",
+      "type": "skill",
+      "description": "FAQ Generator. Use when working with actual questions plus answer facts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/faq-generator"
     },
     "xiaohongshu-content-strategist": {
       "name": "xiaohongshu-content-strategist",
@@ -20710,6 +20734,22 @@
       "path": "collected_assets/skills/okta-attack",
       "description_ko": "Okta-as-IdP 레드팀 공격 체인"
     },
+    "duplicate-content-checker": {
+      "name": "duplicate-content-checker",
+      "type": "skill",
+      "description": "Duplicate Content Checker. Use when working with two or more texts or accessible pages.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/duplicate-content-checker"
+    },
+    "competitor-summary-report-creator": {
+      "name": "competitor-summary-report-creator",
+      "type": "skill",
+      "description": "Competitor Summary Report Creator. Use when working with competitor names or URLs and evidence to summarize.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/competitor-summary-report-creator"
+    },
     "network-engineer": {
       "name": "network-engineer",
       "type": "skill",
@@ -20772,6 +20812,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cc-skill-coding-standards",
       "description_ko": "TypeScript, JavaScript, React 및 Node.js 개발을 위한 범용 코딩 표준, 모범 사례 및 패턴입니다."
+    },
+    "internal-link-suggestion-tool": {
+      "name": "internal-link-suggestion-tool",
+      "type": "skill",
+      "description": "Internal Link Suggestion Tool. Use when working with source text and available destination pages.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/internal-link-suggestion-tool"
+    },
+    "http-status-code-tester": {
+      "name": "http-status-code-tester",
+      "type": "skill",
+      "description": "HTTP Status Code Tester. Use when working with one or more HTTP(S) URLs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/http-status-code-tester"
     },
     "markstream-vue": {
       "name": "markstream-vue",
@@ -20844,6 +20900,14 @@
       "path": "collected_assets/skills/hunt-sharepoint",
       "description_ko": "Microsoft SharePoint Server 헌트(2013/2016/2019/구독 에디션)"
     },
+    "link-relevance-evaluator": {
+      "name": "link-relevance-evaluator",
+      "type": "skill",
+      "description": "Link Relevance Evaluator. Use when working with source page context and destination page context.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/link-relevance-evaluator"
+    },
     "threejs-lighting": {
       "name": "threejs-lighting",
       "type": "skill",
@@ -20861,6 +20925,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/nerdzao-elite"
     },
+    "organic-growth-forecast-tool": {
+      "name": "organic-growth-forecast-tool",
+      "type": "skill",
+      "description": "Organic Growth Forecast Tool. Use when working with dated traffic history or baseline with explicit growth assumptions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/organic-growth-forecast-tool"
+    },
     "lead-magnets": {
       "name": "lead-magnets",
       "type": "skill",
@@ -20869,6 +20941,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/lead-magnets",
       "description_ko": "이메일 캡처 및 리드 생성을 위한 리드 마그넷을 계획하고 최적화합니다. 제한 콘텐츠, 체크리스트, 템플릿, 다운로드 가능한 리소스 또는 방문자를 구독자로 전환하는 기타 제안을 디자인할 때 사용하세요."
+    },
+    "gmb-optimization-helper": {
+      "name": "gmb-optimization-helper",
+      "type": "skill",
+      "description": "GMB Optimization Helper. Use when working with Google Business Profile details or business facts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/gmb-optimization-helper"
     },
     "global-chat-agent-discovery": {
       "name": "global-chat-agent-discovery",
@@ -20905,6 +20985,14 @@
       "path": "collected_assets/skills/ffuf-web-fuzzing",
       "description_ko": "원시 요청을 사용한 인증된 퍼징, 자동 보정 및 결과 분석을 포함하여 침투 테스트 중 ffuf 웹 퍼징에 대한 전문가 지침"
     },
+    "seo-checklist-generator": {
+      "name": "seo-checklist-generator",
+      "type": "skill",
+      "description": "SEO Checklist Generator. Use when working with site type and current goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/seo-checklist-generator"
+    },
     "ui-ux-designer": {
       "name": "ui-ux-designer",
       "type": "skill",
@@ -20922,6 +21010,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hf-mem",
       "description_ko": "Hugging Face Hub에서 추론을 위해 Safetensor 또는 GGUF 모델 가중치를 로드하는 데 필요한 메모리를 추정하기 위한 Hugging Face CLI"
+    },
+    "pro-motion": {
+      "name": "pro-motion",
+      "type": "skill",
+      "description": "Make a motion-graphics launch, brand or promo film audio first: plan the music, then render the film in code (canvas to MP4) cut to the track. Use for 发布视频, 宣传片, TVC, BGM, Suno prompts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pro-motion"
     },
     "seo-programmatic": {
       "name": "seo-programmatic",
@@ -20968,6 +21064,14 @@
       "path": "collected_assets/skills/developer-seo",
       "description_ko": "기술적인 질문과 개발자 대상을 위한 SEO 전략. \\\"언어로 X를 사용하는 방법\\\" 쿼리, 오류 메시지 SEO, 스택 오버플로 스타일 콘텐츠, 기술 롱테일 키워드 및 공식 문서 사이트와의 경쟁에 대한 키워드 연구를 다룹니다."
     },
+    "keyword-gap-finder": {
+      "name": "keyword-gap-finder",
+      "type": "skill",
+      "description": "Keyword Gap Finder. Use when working with your keyword set and competitor keyword sets.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-gap-finder"
+    },
     "github": {
       "name": "github",
       "type": "skill",
@@ -20976,6 +21080,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/github",
       "description_ko": "문제, 끌어오기 요청, 작업 실행 및 GitHub API 쿼리에 'gh' CLI를 사용하세요."
+    },
+    "guest-posting-opportunity-finder": {
+      "name": "guest-posting-opportunity-finder",
+      "type": "skill",
+      "description": "Guest Posting Opportunity Finder. Use when working with topic, audience and optional prospect list.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/guest-posting-opportunity-finder"
     },
     "build": {
       "name": "build",
@@ -21408,6 +21520,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/famulor-skill",
       "description_ko": "호스팅된 MCP 서버를 통해 Famulor 도우미, 커뮤니케이션 이력, 캠페인, 지식, 자동화, 전화 통신 및 작업 공간 관리를 운영합니다."
+    },
+    "doom-pay": {
+      "name": "doom-pay",
+      "type": "skill",
+      "description": "Add self-custodial DOOM and wDOOM checkout links with DoomPay, then verify payment receipts on Doomsday Network Layer-1 or Base Mainnet.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/doom-pay"
     },
     "ddd-tactical-patterns": {
       "name": "ddd-tactical-patterns",
@@ -21892,6 +22012,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/gha-security-review"
     },
+    "content-gap-finder": {
+      "name": "content-gap-finder",
+      "type": "skill",
+      "description": "Content Gap Finder. Use when working with existing content inventory and audience goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/content-gap-finder"
+    },
     "microsoft-azure-webjobs-extensions-authentication-events-dotnet": {
       "name": "microsoft-azure-webjobs-extensions-authentication-events-dotnet",
       "type": "skill",
@@ -21937,6 +22065,14 @@
       "path": "collected_assets/skills/tdd-workflows-tdd-red",
       "description_ko": "예상되는 동작과 엣지 케이스를 정의하기 위해 TDD 빨간색 단계에 대한 실패 테스트를 생성합니다."
     },
+    "keyword-suggestion-tool": {
+      "name": "keyword-suggestion-tool",
+      "type": "skill",
+      "description": "Keyword Suggestion Tool. Use when working with seed topic.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-suggestion-tool"
+    },
     "explain-like-socrates": {
       "name": "explain-like-socrates",
       "type": "skill",
@@ -21981,6 +22117,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cline-pilot",
       "description_ko": ">-"
+    },
+    "text-translator": {
+      "name": "text-translator",
+      "type": "skill",
+      "description": "Text Translator. Use when working with source text and target language or locale.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/text-translator"
     },
     "red-team-tools": {
       "name": "red-team-tools",
@@ -22096,6 +22240,14 @@
       "path": "collected_assets/skills/aws-agentic-ai",
       "description_ko": "대규모로 AI 에이전트를 배포하고 관리하는 AWS Bedrock AgentCore 종합 전문가입니다. 게이트웨이, 런타임, 메모리, ID, 코드 해석기, 브라우저, 관찰 가능성, 에이전트 레지스트리 또는 평가를 포함한 모든 AgentCore 서비스로 작업할 때 사용합니다."
     },
+    "geo-keyword-expansion-tool": {
+      "name": "geo-keyword-expansion-tool",
+      "type": "skill",
+      "description": "Geo Keyword Expansion Tool. Use when working with seed keyword and target locations.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/geo-keyword-expansion-tool"
+    },
     "geo-prospect": {
       "name": "geo-prospect",
       "type": "skill",
@@ -22157,6 +22309,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/shopify-automation",
       "description_ko": "Rube MCP(Composio)를 통해 제품, 주문, 고객, 재고, 컬렉션 등 Shopify 작업을 자동화합니다. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
+    },
+    "renhua": {
+      "name": "renhua",
+      "type": "skill",
+      "description": "Write Chinese social posts and product copy in a real person's voice, removing AI tells. Use for 小红书, X 帖子, 日记, 朋友圈, 产品介绍, 去 AI 味, 说人话.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/renhua"
     },
     "conductor-revert": {
       "name": "conductor-revert",
@@ -22321,6 +22481,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hunt-saml",
       "description_ko": "SAML/SSO 공격을 사냥합니다."
+    },
+    "content-freshness-checker": {
+      "name": "content-freshness-checker",
+      "type": "skill",
+      "description": "Content Freshness Checker. Use when working with content and known publication or update date if available.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/content-freshness-checker"
     },
     "android-ui-journey-testing": {
       "name": "android-ui-journey-testing",
@@ -22589,6 +22757,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/parcel-coupon"
     },
+    "skill-skill": {
+      "name": "skill-skill",
+      "type": "skill",
+      "description": "Write, upgrade or audit a Claude skill so it changes what gets generated: forcing functions, triggerable descriptions, and a static audit script with a 0-100 health score. Use for 写 skill, 改 skill.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/skill-skill"
+    },
     "freshservice-automation": {
       "name": "freshservice-automation",
       "type": "skill",
@@ -22597,6 +22773,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/freshservice-automation",
       "description_ko": "Rube MCP(Composio)를 통해 Freshservice ITSM 작업 자동화: 티켓 생성/업데이트, 대량 작업, 서비스 요청 및 아웃바운드 이메일. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
+    },
+    "ai-content-improver": {
+      "name": "ai-content-improver",
+      "type": "skill",
+      "description": "AI Content Improver. Use when working with draft text.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-content-improver"
     },
     "saas-security-posture": {
       "name": "saas-security-posture",
@@ -22856,6 +23040,14 @@
       "path": "collected_assets/skills/seo-forensic-incident-response",
       "description_ko": "유기적 트래픽 또는 순위의 급격한 하락을 조사하고 분류, 근본 원인 분석 및 복구 계획을 통해 구조화된 포렌식 SEO 사고 대응을 실행합니다."
     },
+    "memory-handoff": {
+      "name": "memory-handoff",
+      "type": "skill",
+      "description": "Portable session handoff across agent CLIs: read a project's handoff file at session start, rewrite it at session end, so the next session starts mid-thought instead of cold.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/memory-handoff"
+    },
     "azure-ai-voicelive-py": {
       "name": "azure-ai-voicelive-py",
       "type": "skill",
@@ -22891,6 +23083,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/backend-development-feature-development",
       "description_ko": "요구사항부터 배포까지 엔드투엔드 백엔드 기능 개발을 조율합니다. 팀과 서비스 전반에 걸쳐 다단계 기능 제공을 조정할 때 사용합니다."
+    },
+    "netapi": {
+      "name": "netapi",
+      "type": "skill",
+      "description": "Check domains and IPs against a free compromised feed, find newly registered lookalike domains, and get TLD stats and Top 1M ranks from NetAPI, with no API key.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/netapi"
     },
     "voice-cloning-studio": {
       "name": "voice-cloning-studio",
@@ -23191,6 +23391,22 @@
       "path": "collected_assets/skills/makepad-dsl",
       "description_ko": "|"
     },
+    "competitor-backlink-idea-generator": {
+      "name": "competitor-backlink-idea-generator",
+      "type": "skill",
+      "description": "Competitor Backlink Idea Generator. Use when working with your niche and competitor backlink examples or export.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/competitor-backlink-idea-generator"
+    },
+    "word-count-structure-checker": {
+      "name": "word-count-structure-checker",
+      "type": "skill",
+      "description": "Word Count & Structure Checker. Use when working with text or structured article.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/word-count-structure-checker"
+    },
     "eas-update-insights": {
       "name": "eas-update-insights",
       "type": "skill",
@@ -23447,6 +23663,14 @@
       "path": "collected_assets/skills/jobgpt",
       "description_ko": "JobGPT MCP 서버를 사용한 구직 자동화, 자동 지원, 이력서 생성, 지원 추적, 급여 정보 및 채용 담당자 지원."
     },
+    "mobile-friendly-test": {
+      "name": "mobile-friendly-test",
+      "type": "skill",
+      "description": "Mobile-Friendly Test. Use when working with accessible page or supplied screenshots and HTML.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/mobile-friendly-test"
+    },
     "knowledge-base": {
       "name": "knowledge-base",
       "type": "skill",
@@ -23567,6 +23791,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/acceptance-orchestrator",
       "description_ko": "인적 재개입을 최소화하면서 문제 접수부터 구현, 검토, 배포, 승인 확인까지 코딩 작업을 엔드투엔드 방식으로 진행해야 하는 경우에 사용하세요."
+    },
+    "anchor-text-analyzer": {
+      "name": "anchor-text-analyzer",
+      "type": "skill",
+      "description": "Anchor Text Analyzer. Use when working with links with anchor text and destinations.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/anchor-text-analyzer"
     },
     "mcp-dependency-drift-audit": {
       "name": "mcp-dependency-drift-audit",
@@ -23728,6 +23960,14 @@
       "path": "collected_assets/skills/fal-workflow",
       "description_ko": "AI 모델 연결을 위한 워크플로 JSON 파일 생성"
     },
+    "readability-score-calculator": {
+      "name": "readability-score-calculator",
+      "type": "skill",
+      "description": "Readability Score Calculator. Use when working with text and language.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/readability-score-calculator"
+    },
     "sqlmap-database-pentesting": {
       "name": "sqlmap-database-pentesting",
       "type": "skill",
@@ -23836,6 +24076,14 @@
       "path": "collected_assets/skills/vitest-skill",
       "description_ko": "Vite 기본 속도로 JavaScript/TypeScript로 Vitest 테스트를 생성합니다. ESM 지원 및 HMR을 갖춘 Jest 호환 API입니다. 사용자가 \"Vitest\", \"vi.mock\", \"vitest.config\"를 언급할 때 사용합니다. 트리거 대상: \"Vitest\", \"vi.mock\", \"vi.fn\", \"Vite test\", \"vitest config\"."
     },
+    "keyword-expansion-tool": {
+      "name": "keyword-expansion-tool",
+      "type": "skill",
+      "description": "Keyword Expansion Tool. Use when working with seed terms and optional industry.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-expansion-tool"
+    },
     "bug-hunter": {
       "name": "bug-hunter",
       "type": "skill",
@@ -23854,6 +24102,14 @@
       "path": "collected_assets/skills/bun-development",
       "description_ko": "[oven-sh/bun](https://github.com/oven-sh/bun)에서 영감을 받은 Bun 런타임을 사용한 빠르고 현대적인 JavaScript/TypeScript 개발."
     },
+    "canonical-url-builder": {
+      "name": "canonical-url-builder",
+      "type": "skill",
+      "description": "Canonical URL Builder. Use when working with preferred page URL and duplicate URL variants.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/canonical-url-builder"
+    },
     "quality-nonconformance": {
       "name": "quality-nonconformance",
       "type": "skill",
@@ -23862,6 +24118,22 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/quality-nonconformance",
       "description_ko": "日本語翻訳：이것에 대한 품질 부적합"
+    },
+    "structured-data-validator": {
+      "name": "structured-data-validator",
+      "type": "skill",
+      "description": "Structured Data Validator. Use when working with JSON-LD, Microdata or RDFa source.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/structured-data-validator"
+    },
+    "paragraph-keyword-optimizer": {
+      "name": "paragraph-keyword-optimizer",
+      "type": "skill",
+      "description": "Paragraph Keyword Optimizer. Use when working with paragraph and target keyword.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/paragraph-keyword-optimizer"
     },
     "javascript-mastery": {
       "name": "javascript-mastery",
@@ -23978,6 +24250,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/nodejs-best-practices",
       "description_ko": "Node.js 개발 원칙과 의사결정. 프레임워크 선택, 비동기 패턴, 보안 및 아키텍처. 복사가 아닌 사고를 가르칩니다."
+    },
+    "backlink-tracking-template-generator": {
+      "name": "backlink-tracking-template-generator",
+      "type": "skill",
+      "description": "Backlink Tracking Template Generator. Use when working with tracking goal; existing rows optional.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/backlink-tracking-template-generator"
+    },
+    "bounce-rate-estimator": {
+      "name": "bounce-rate-estimator",
+      "type": "skill",
+      "description": "Bounce Rate Estimator. Use when working with sessions and bounced sessions, or sessions and engaged sessions with metric definition.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/bounce-rate-estimator"
     },
     "hugging-face-vision-trainer": {
       "name": "hugging-face-vision-trainer",
@@ -24251,6 +24539,14 @@
       "path": "collected_assets/skills/odoo-docker-deployment",
       "description_ko": "PostgreSQL, 영구 볼륨, 환경 기반 구성 및 Nginx 역방향 프록시를 사용하여 Odoo를 위한 프로덕션 준비 Docker 및 docker-compose 설정입니다."
     },
+    "tone-of-voice-analyzer": {
+      "name": "tone-of-voice-analyzer",
+      "type": "skill",
+      "description": "Tone of Voice Analyzer. Use when working with text and optional brand voice sample.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/tone-of-voice-analyzer"
+    },
     "web-project-brainstorming": {
       "name": "web-project-brainstorming",
       "type": "skill",
@@ -24498,6 +24794,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/invokely-statistics"
     },
+    "ai-meta-tag-writer": {
+      "name": "ai-meta-tag-writer",
+      "type": "skill",
+      "description": "AI Meta Tag Writer. Use when working with page copy or factual page summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-meta-tag-writer"
+    },
     "hunt-dispatch": {
       "name": "hunt-dispatch",
       "type": "skill",
@@ -24648,6 +24952,14 @@
       "path": "collected_assets/skills/freshdesk-automation",
       "description_ko": "Rube MCP(Composio)를 통해 티켓, 연락처, 회사, 메모, 답장 등 Freshdesk 헬프데스크 운영을 자동화하세요. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
     },
+    "competitor-gap-analyzer": {
+      "name": "competitor-gap-analyzer",
+      "type": "skill",
+      "description": "Competitor Gap Analyzer. Use when working with your offering and at least one competitor profile.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/competitor-gap-analyzer"
+    },
     "swiftui-ui-patterns": {
       "name": "swiftui-ui-patterns",
       "type": "skill",
@@ -24731,6 +25043,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/error-diagnostics-error-trace"
+    },
+    "seo-content-checker": {
+      "name": "seo-content-checker",
+      "type": "skill",
+      "description": "SEO Content Checker. Use when working with content and target query or reader task.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/seo-content-checker"
     },
     "ai-engineer": {
       "name": "ai-engineer",
@@ -24838,6 +25158,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/product-photo-studio"
+    },
+    "ctr-predictor": {
+      "name": "ctr-predictor",
+      "type": "skill",
+      "description": "CTR Predictor. Use when working with impressions and an explicitly supplied CTR assumption or historical benchmark.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ctr-predictor"
     },
     "skill-creator-ms": {
       "name": "skill-creator-ms",
@@ -25301,6 +25629,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/email-systems"
     },
+    "selector": {
+      "name": "selector",
+      "type": "skill",
+      "description": "Select a specialized 100seotools skill from a plain-language SEO or project-documentation request. Use when the user needs help choosing the appropriate workflow.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/selector"
+    },
     "makepad-splash": {
       "name": "makepad-splash",
       "type": "skill",
@@ -25431,6 +25767,14 @@
       "path": "collected_assets/skills/micro-saas-launcher",
       "description_ko": "소규모 집중 SaaS 제품을 빠르게 출시하는 전문가 - 인디"
     },
+    "traffic-potential-calculator": {
+      "name": "traffic-potential-calculator",
+      "type": "skill",
+      "description": "Traffic Potential Calculator. Use when working with search volume and explicit CTR assumptions for matching period and market.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/traffic-potential-calculator"
+    },
     "azure-security-keyvault-keys-dotnet": {
       "name": "azure-security-keyvault-keys-dotnet",
       "type": "skill",
@@ -25484,6 +25828,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-mgmt-mongodbatlas-dotnet",
       "description_ko": "Azure Marketplace를 통한 통합 청구를 통해 MongoDB Atlas 조직을 Azure ARM 리소스로 관리하세요."
+    },
+    "post": {
+      "name": "post",
+      "type": "skill",
+      "description": "Make share-post image sets that look native: Xiaohongshu carousels, X images, covers, App Store poster layouts, real screenshots and faithful app-UI mocks. Use for 图文, 配图, 组图, 封面, 分享帖.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/post"
     },
     "wiki-vitepress": {
       "name": "wiki-vitepress",
@@ -26137,6 +26489,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/team-calendar"
     },
+    "postel-writing": {
+      "name": "postel-writing",
+      "type": "skill",
+      "description": "Draft X (Twitter) or LinkedIn posts in the user's own voice, research high-performing posts, and schedule or publish them through the user's Postel account.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/postel-writing"
+    },
     "co-marketing": {
       "name": "co-marketing",
       "type": "skill",
@@ -26287,6 +26647,14 @@
       "path": "collected_assets/skills/azure-security-keyvault-secrets-java",
       "description_ko": "비밀 관리를 위한 Azure Key Vault 비밀 Java SDK입니다. 비밀번호, API 키, 연결 문자열 또는 기타 민감한 구성 데이터를 저장, 검색 또는 관리할 때 사용합니다."
     },
+    "ranking-opportunity-finder": {
+      "name": "ranking-opportunity-finder",
+      "type": "skill",
+      "description": "Ranking Opportunity Finder. Use when working with query/page performance export or dated ranking evidence.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ranking-opportunity-finder"
+    },
     "folder-specific-claude-and-agents-md": {
       "name": "folder-specific-claude-and-agents-md",
       "type": "skill",
@@ -26352,6 +26720,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/crypto-bd-agent"
+    },
+    "soundza": {
+      "name": "soundza",
+      "type": "skill",
+      "description": "Find, audition and add free sound effects, ambience or music to a game, video or app with Soundza, or generate a new sound effect from a prompt, over MCP or a REST API.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/soundza"
     },
     "webflow-automation": {
       "name": "webflow-automation",
@@ -26529,6 +26905,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/audit-context-building",
       "description_ko": "취약성 또는 버그 찾기 전에 심층적인 아키텍처 컨텍스트를 구축하기 위해 매우 세분화된 라인별 코드 분석을 지원합니다."
+    },
+    "product-description-generator": {
+      "name": "product-description-generator",
+      "type": "skill",
+      "description": "Product Description Generator. Use when working with verified product features and intended buyer.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/product-description-generator"
     },
     "firecrawl-scraper": {
       "name": "firecrawl-scraper",
@@ -26731,6 +27115,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/aas-compose-stack"
+    },
+    "readability-enhancer": {
+      "name": "readability-enhancer",
+      "type": "skill",
+      "description": "Readability Enhancer. Use when working with text and optional reader level.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/readability-enhancer"
     },
     "longbridge-content": {
       "name": "longbridge-content",
@@ -27187,6 +27579,14 @@
       "path": "collected_assets/skills/aws-cost-optimization",
       "description_ko": "규모 조정, 자동 확장, 약정 계획을 통해 AWS 지출을 줄입니다."
     },
+    "domain-authority-simulator": {
+      "name": "domain-authority-simulator",
+      "type": "skill",
+      "description": "Domain Authority Simulator. Use when working with domain signals and an explicit scoring rubric.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/domain-authority-simulator"
+    },
     "bash-scripting": {
       "name": "bash-scripting",
       "type": "skill",
@@ -27213,6 +27613,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/linear-automation",
       "description_ko": "Rube MCP(Composio)를 통해 이슈, 프로젝트, 주기, 팀, 라벨 등 선형 작업을 자동화합니다. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
+    },
+    "keyword-intent-identifier": {
+      "name": "keyword-intent-identifier",
+      "type": "skill",
+      "description": "Keyword Intent Identifier. Use when working with keyword or query list.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-intent-identifier"
     },
     "model-supply-chain-security": {
       "name": "model-supply-chain-security",
@@ -27258,6 +27666,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/tdd-orchestrator",
       "description_ko": "레드-그린-리팩터링 분야, 다중 에이전트 워크플로 조정 및 포괄적인 테스트 기반 개발 사례를 전문으로 하는 마스터 TDD 오케스트레이터입니다."
+    },
+    "outreach-email-template-generator": {
+      "name": "outreach-email-template-generator",
+      "type": "skill",
+      "description": "Outreach Email Template Generator. Use when working with recipient context, outreach purpose and genuine offer.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/outreach-email-template-generator"
     },
     "photopea-embedded-editor": {
       "name": "photopea-embedded-editor",
@@ -27469,6 +27885,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/tax-register"
+    },
+    "text-to-html-converter": {
+      "name": "text-to-html-converter",
+      "type": "skill",
+      "description": "Text to HTML Converter. Use when working with plain text and optional structure preferences.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/text-to-html-converter"
     },
     "fp-either-ref": {
       "name": "fp-either-ref",
@@ -27867,6 +28291,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/frontend-slides"
     },
+    "ai-snippet-generator": {
+      "name": "ai-snippet-generator",
+      "type": "skill",
+      "description": "AI Snippet Generator. Use when working with question and supporting source text.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-snippet-generator"
+    },
     "azure-keyvault-keys-ts": {
       "name": "azure-keyvault-keys-ts",
       "type": "skill",
@@ -27875,6 +28307,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-keyvault-keys-ts",
       "description_ko": "JavaScript용 Azure Key Vault Keys SDK(@azure/keyvault-keys)를 사용하여 암호화 키를 관리합니다. 키를 생성, 암호화/복호화, 서명 또는 순환할 때 사용합니다."
+    },
+    "impression-to-click-ratio-calculator": {
+      "name": "impression-to-click-ratio-calculator",
+      "type": "skill",
+      "description": "Impression-to-Click Ratio Calculator. Use when working with clicks and impressions for the same scope.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/impression-to-click-ratio-calculator"
     },
     "supercov": {
       "name": "supercov",
@@ -28193,6 +28633,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agents-v2-py"
     },
+    "local-seo-audit-checklist": {
+      "name": "local-seo-audit-checklist",
+      "type": "skill",
+      "description": "Local SEO Audit Checklist. Use when working with business type, location and profile or site details.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/local-seo-audit-checklist"
+    },
     "sales-enablement": {
       "name": "sales-enablement",
       "type": "skill",
@@ -28201,6 +28649,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/sales-enablement",
       "description_ko": "자료, 단일 페이지 자료, 이의 제기 문서, 데모 스크립트, 플레이북, 제안서 템플릿과 같은 영업 자료를 만듭니다. 영업팀이 담당자가 거래를 진행하고 마감하는 데 도움이 되는 자산이 필요할 때 사용하세요."
+    },
+    "domain-comparison-report-tool": {
+      "name": "domain-comparison-report-tool",
+      "type": "skill",
+      "description": "Domain Comparison Report Tool. Use when working with two or more domains with dated comparable metrics.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/domain-comparison-report-tool"
     },
     "exa-search": {
       "name": "exa-search",
@@ -28421,6 +28877,14 @@
       "path": "collected_assets/skills/markstream-nuxt",
       "description_ko": "SSR 안전 클라이언트 경계, 렌더러 모드, 명시적 CSS 및 브라우저 전용 선택적 피어를 사용하여 markstream-vue를 Nuxt 3 또는 4에 통합합니다."
     },
+    "local-citation-finder": {
+      "name": "local-citation-finder",
+      "type": "skill",
+      "description": "Local Citation Finder. Use when working with business category and service location.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/local-citation-finder"
+    },
     "dbos-golang": {
       "name": "dbos-golang",
       "type": "skill",
@@ -28437,6 +28901,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/qrx"
+    },
+    "visibility-index-calculator": {
+      "name": "visibility-index-calculator",
+      "type": "skill",
+      "description": "Visibility Index Calculator. Use when working with keyword weights and rank-to-CTR mapping with rankings.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/visibility-index-calculator"
     },
     "dropthehassle-publish": {
       "name": "dropthehassle-publish",
@@ -28491,6 +28963,14 @@
       "path": "collected_assets/skills/maxia",
       "description_ko": "솔라나(Solana)에서 MAXIA AI-to-AI 마켓플레이스에 연결하세요. AI 서비스를 검색, 구매, 판매하세요. USDC를 획득하세요. 13가지 MCP 도구, A2A 프로토콜, DeFi 수익률, 감정 분석, 러그 감지."
     },
+    "ai-schema-generator": {
+      "name": "ai-schema-generator",
+      "type": "skill",
+      "description": "AI Schema Generator. Use when working with visible page content and page URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-schema-generator"
+    },
     "cdn-setup": {
       "name": "cdn-setup",
       "type": "skill",
@@ -28543,6 +29023,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/rehabilitation-analyzer",
       "description_ko": "分析康复训练数据, 识别康复模式, 评估康复进进进, 并提供个性化康复建议"
+    },
+    "reverse-image-search": {
+      "name": "reverse-image-search",
+      "type": "skill",
+      "description": "Reverse Image Search. Use when working with image or public image URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/reverse-image-search"
     },
     "hugging-face-trackio": {
       "name": "hugging-face-trackio",
@@ -28625,6 +29113,14 @@
       "path": "collected_assets/skills/plan-writing",
       "description_ko": "명확한 분류, 종속성 및 검증 기준을 갖춘 구조화된 작업 계획입니다. 기능 구현, 리팩토링 또는 다단계 작업 시 사용합니다."
     },
+    "keyword-clustering-tool": {
+      "name": "keyword-clustering-tool",
+      "type": "skill",
+      "description": "Keyword Clustering Tool. Use when working with keyword list.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-clustering-tool"
+    },
     "m365-entra-attack": {
       "name": "m365-entra-attack",
       "type": "skill",
@@ -28670,6 +29166,14 @@
       "path": "collected_assets/skills/to-prd",
       "description_ko": "현재 대화를 PRD로 변환하고 프로젝트 이슈 트래커에 게시합니다. 인터뷰는 필요 없으며 이미 논의한 내용을 종합하면 됩니다."
     },
+    "link-source-categorizer": {
+      "name": "link-source-categorizer",
+      "type": "skill",
+      "description": "Link Source Categorizer. Use when working with backlink rows with source URLs and optional page context.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/link-source-categorizer"
+    },
     "hunt-xss": {
       "name": "hunt-xss",
       "type": "skill",
@@ -28695,6 +29199,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/007",
       "description_ko": "모든 프로젝트에 대한 보안 감사, 강화, 위협 모델링(STRIDE/PASTA), Red/Blue Team, OWASP 검사, 코드 검토, 사고 대응 및 인프라 보안."
+    },
+    "ranking-progress-tracker": {
+      "name": "ranking-progress-tracker",
+      "type": "skill",
+      "description": "Ranking Progress Tracker. Use when working with dated keyword positions with engine, market and device.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ranking-progress-tracker"
     },
     "hig-components-search": {
       "name": "hig-components-search",
@@ -28852,6 +29364,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/m365-agents-py",
       "description_ko": "Python용 Microsoft 365 에이전트 SDK. aiohttp 호스팅, AgentApplication 라우팅, 스트리밍 응답 및 MSAL 기반 인증을 사용하여 Teams/M365/Copilot Studio용 다중 채널 에이전트를 구축하세요."
+    },
+    "image-alt-tag-generator": {
+      "name": "image-alt-tag-generator",
+      "type": "skill",
+      "description": "Image Alt Tag Generator. Use when working with image or accurate image description and page context.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/image-alt-tag-generator"
     },
     "azure-ai-transcription-py": {
       "name": "azure-ai-transcription-py",
@@ -29141,6 +29661,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hig-technologies"
+    },
+    "blog-title-generator": {
+      "name": "blog-title-generator",
+      "type": "skill",
+      "description": "Blog Title Generator. Use when working with topic or page summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/blog-title-generator"
     },
     "odoo-sales-crm-expert": {
       "name": "odoo-sales-crm-expert",
@@ -29519,6 +30047,14 @@
       "path": "collected_assets/skills/aws-iam-best-practices",
       "description_ko": "IAM 정책 검토, 강화 및 최소 권한 구현"
     },
+    "title-meta-length-counter": {
+      "name": "title-meta-length-counter",
+      "type": "skill",
+      "description": "Title & Meta Length Counter. Use when working with title and/or meta description.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/title-meta-length-counter"
+    },
     "conductor-implement": {
       "name": "conductor-implement",
       "type": "skill",
@@ -29599,6 +30135,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/supabase-postgres-best-practices",
       "description_ko": "Supabase의 Postgres 성능 최적화 및 모범 사례. Postgres 쿼리, 스키마 디자인 또는 데이터베이스 구성을 작성, 검토 또는 최적화할 때 이 기술을 사용하십시오."
+    },
+    "local-schema-builder": {
+      "name": "local-schema-builder",
+      "type": "skill",
+      "description": "Local Schema Builder. Use when working with business facts, page URL and actual address or service area.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/local-schema-builder"
     },
     "stellar-anchor-integration": {
       "name": "stellar-anchor-integration",
@@ -29825,6 +30369,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/julia-pro",
       "description_ko": "최신 기능, 성능 최적화, 다중 파견 및 생산 준비 방식을 갖춘 Master Julia 1.10+입니다."
+    },
+    "headline-analyzer": {
+      "name": "headline-analyzer",
+      "type": "skill",
+      "description": "Headline Analyzer. Use when working with headline and intended article summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/headline-analyzer"
     },
     "jobs-to-be-done-analyst": {
       "name": "jobs-to-be-done-analyst",
@@ -30205,6 +30757,14 @@
       "path": "collected_assets/skills/helm-charts",
       "description_ko": "차트 구조, 값 디자인 및 환경 재정의, 릴리스 및 개정, 업그레이드/롤백 의미 체계, 템플릿 무분별한 확장 방지, Helm 대 Kustomize 선택 등 Helm을 사용한 Kubernetes 매니페스트의 패키징 및 템플릿 작성을 다룹니다. 사용자가 Helm 차트를 작성하거나, value.yaml 계층 구조를 설계하거나, 실패한 'helm 업그레이드'를 디버깅하거나, Helm과 Kustomize 중에서 결정할 때마다 이를 사용하세요. 클러스터의 롤아웃 메커니즘의 경우 `kubernetes-Operations`를 사용하세요. GitOps에서 차트를 전달하려면 'gitops'를 사용하세요."
     },
+    "content-length-comparator": {
+      "name": "content-length-comparator",
+      "type": "skill",
+      "description": "Content Length Comparator. Use when working with two or more labeled text samples.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/content-length-comparator"
+    },
     "hf-cli": {
       "name": "hf-cli",
       "type": "skill",
@@ -30557,6 +31117,14 @@
       "path": "collected_assets/skills/case-review",
       "description_ko": "리버스 엔지니어링 또는 평가 사례 패키지의 품질 게이트 검토: 범위 준비 상태, 증거-찾기-경로 추적성, 작업 항목 적용 범위, 타임라인 일관성 및 아티팩트 해시."
     },
+    "keyword-comparison-tool": {
+      "name": "keyword-comparison-tool",
+      "type": "skill",
+      "description": "Keyword Comparison Tool. Use when working with two or more keywords and optional metrics.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-comparison-tool"
+    },
     "voiceover-narration-studio": {
       "name": "voiceover-narration-studio",
       "type": "skill",
@@ -30793,6 +31361,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/privacy-mask",
       "description_ko": "전화번호, 이메일, ID, API 키, 암호화폐 지갑, 신용카드, 비밀번호 등 스크린샷과 이미지의 민감한 정보(PII)를 마스킹, 수정, 익명화 및 검열합니다."
+    },
+    "ai-blog-intro-writer": {
+      "name": "ai-blog-intro-writer",
+      "type": "skill",
+      "description": "AI Blog Intro Writer. Use when working with topic and article angle, or article draft.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-blog-intro-writer"
     },
     "warp-delegate": {
       "name": "warp-delegate",
@@ -32011,6 +32587,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/last30days"
     },
+    "featured-tool-schema-generator": {
+      "name": "featured-tool-schema-generator",
+      "type": "skill",
+      "description": "Featured Tool Schema Generator. Use when working with tool page URL and visible tool capabilities.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/featured-tool-schema-generator"
+    },
     "ui-tokens": {
       "name": "ui-tokens",
       "type": "skill",
@@ -32300,6 +32884,14 @@
       "path": "collected_assets/skills/azure-speech-to-text-rest-py",
       "description_ko": "짧은 오디오(Python)를 위한 Azure Speech to Text REST API입니다. Speech SDK 없이 최대 60초 오디오 파일의 간단한 음성 인식에 사용합니다."
     },
+    "ai-content-outline-generator": {
+      "name": "ai-content-outline-generator",
+      "type": "skill",
+      "description": "AI Content Outline Generator. Use when working with topic or reader question.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-content-outline-generator"
+    },
     "ai-loop": {
       "name": "ai-loop",
       "type": "skill",
@@ -32388,6 +32980,14 @@
       "path": "collected_assets/skills/hono",
       "description_ko": "Hono를 사용하여 초고속 웹 API와 풀 스택 앱을 구축하세요. Cloudflare Workers, Deno, Bun, Node.js 및 모든 WinterCG 호환 런타임에서 실행됩니다."
     },
+    "internal-linking-planner": {
+      "name": "internal-linking-planner",
+      "type": "skill",
+      "description": "Internal Linking Planner. Use when working with site page inventory and priority user journeys.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/internal-linking-planner"
+    },
     "unslop-review": {
       "name": "unslop-review",
       "type": "skill",
@@ -32422,6 +33022,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/vibe-code-auditor",
       "description_ko": "구조적 결함, 취약성 및 생산 위험에 대해 신속하게 생성되거나 AI가 생성한 코드를 감사합니다."
+    },
+    "site-comparison-report-generator": {
+      "name": "site-comparison-report-generator",
+      "type": "skill",
+      "description": "Site Comparison Report Generator. Use when working with two or more sites and the user's comparison goal.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/site-comparison-report-generator"
     },
     "telegram-automation": {
       "name": "telegram-automation",
@@ -32538,6 +33146,14 @@
       "path": "collected_assets/skills/vllm-server",
       "description_ko": "높은 처리량의 LLM 추론을 위해 vLLM을 배포하고 관리합니다. 연속 구성"
     },
+    "link-toxicity-checker": {
+      "name": "link-toxicity-checker",
+      "type": "skill",
+      "description": "Link Toxicity Checker. Use when working with backlink examples and available evidence.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/link-toxicity-checker"
+    },
     "reverse-engineer-anything": {
       "name": "reverse-engineer-anything",
       "type": "skill",
@@ -32580,6 +33196,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/remote-work-tracker"
+    },
+    "restosignals": {
+      "name": "restosignals",
+      "type": "skill",
+      "description": "Find US restaurants and bars before they open, as scored leads fused from liquor-license, food-permit and business-filing records, via the RestoSignals MCP server or REST API.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/restosignals"
     },
     "product-decision-agent": {
       "name": "product-decision-agent",
@@ -32722,6 +33346,14 @@
       "path": "collected_assets/skills/startup-it-troubleshooting",
       "description_ko": "전담 인력이 없는 소규모 팀을 위한 실용적인 IT 문제 해결 플레이북"
     },
+    "canonical-tag-checker": {
+      "name": "canonical-tag-checker",
+      "type": "skill",
+      "description": "Canonical Tag Checker. Use when working with HTML and page URL, or accessible page URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/canonical-tag-checker"
+    },
     "azure-data-tables-java": {
       "name": "azure-data-tables-java",
       "type": "skill",
@@ -32730,6 +33362,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-data-tables-java",
       "description_ko": "Java용 Azure Tables SDK를 사용하여 테이블 스토리지 애플리케이션을 빌드합니다. Azure Table Storage 및 Cosmos DB Table API 모두에서 작동합니다."
+    },
+    "keyword-roi-calculator": {
+      "name": "keyword-roi-calculator",
+      "type": "skill",
+      "description": "Keyword ROI Calculator. Use when working with traffic estimate, conversion rate, value per conversion, margin and SEO cost for one period.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-roi-calculator"
     },
     "azure-resource-manager-sql-dotnet": {
       "name": "azure-resource-manager-sql-dotnet",
@@ -32766,6 +33406,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/linkedin-cli",
       "description_ko": "CLI를 통해 LinkedIn을 자동화할 때 사용: 프로필 가져오기, 사람/회사 검색, 메시지 보내기, 연결 관리, 게시물 작성 및 세일즈 네비게이터."
+    },
+    "robots-txt-validator": {
+      "name": "robots-txt-validator",
+      "type": "skill",
+      "description": "Robots.txt Validator. Use when working with robots.txt text, crawler and URLs to test.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/robots-txt-validator"
     },
     "machine-learning-ops-ml-pipeline": {
       "name": "machine-learning-ops-ml-pipeline",
@@ -32862,6 +33510,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/viboscope"
+    },
+    "trending-keyword-visualizer": {
+      "name": "trending-keyword-visualizer",
+      "type": "skill",
+      "description": "Trending Keyword Visualizer. Use when working with dated keyword interest or volume series with source.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/trending-keyword-visualizer"
     },
     "kubernetes-deployment": {
       "name": "kubernetes-deployment",
@@ -33050,6 +33706,14 @@
       "path": "collected_assets/skills/python-pptx-generator",
       "description_ko": "python-pptx 및 실제 슬라이드 콘텐츠로 세련된 PowerPoint 데크를 구축하는 완전한 Python 스크립트를 생성합니다."
     },
+    "ai-faq-creator": {
+      "name": "ai-faq-creator",
+      "type": "skill",
+      "description": "AI FAQ Creator. Use when working with source content or topic.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-faq-creator"
+    },
     "cucumber-skill": {
       "name": "cucumber-skill",
       "type": "skill",
@@ -33171,6 +33835,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/doomsday-escrow"
+    },
+    "xml-sitemap-visualizer": {
+      "name": "xml-sitemap-visualizer",
+      "type": "skill",
+      "description": "XML Sitemap Visualizer. Use when working with XML sitemap or sitemap index.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/xml-sitemap-visualizer"
     },
     "agent-manager-skill": {
       "name": "agent-manager-skill",
@@ -33379,6 +34051,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/keyword-extractor",
       "description_ko": ">"
+    },
+    "review-response-generator": {
+      "name": "review-response-generator",
+      "type": "skill",
+      "description": "Review Response Generator. Use when working with review text and verified business context.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/review-response-generator"
     },
     "aws-cost-operations": {
       "name": "aws-cost-operations",
@@ -33606,6 +34286,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/curlshot"
     },
+    "robots-txt-creator": {
+      "name": "robots-txt-creator",
+      "type": "skill",
+      "description": "Robots.txt Creator. Use when working with site origin and desired crawl rules.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/robots-txt-creator"
+    },
     "documentation-and-adrs": {
       "name": "documentation-and-adrs",
       "type": "skill",
@@ -33720,6 +34408,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ui-states"
+    },
+    "keyword-placement-highlighter": {
+      "name": "keyword-placement-highlighter",
+      "type": "skill",
+      "description": "Keyword Placement Highlighter. Use when working with text and target keywords.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-placement-highlighter"
     },
     "adhx": {
       "name": "adhx",
@@ -33913,6 +34609,14 @@
       "path": "collected_assets/skills/neon-postgres-egress-optimizer",
       "description_ko": "코드베이스에서 과도한 Postgres 송신(네트워크 데이터 전송)을 진단하고 수정합니다."
     },
+    "redirect-301-generator": {
+      "name": "redirect-301-generator",
+      "type": "skill",
+      "description": "301 Redirect Generator. Use when working with source-to-destination mapping and deployment platform.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/redirect-301-generator"
+    },
     "developer-churn": {
       "name": "developer-churn",
       "type": "skill",
@@ -33930,6 +34634,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/claimable-postgres",
       "description_ko": "로그인, 가입 또는 신용카드 없이 Claimable Postgres by Neon(neon.new)을 통해 즉각적인 임시 Postgres 데이터베이스를 프로비저닝하세요. REST API, CLI, SDK를 지원합니다."
+    },
+    "keyword-density-checker": {
+      "name": "keyword-density-checker",
+      "type": "skill",
+      "description": "Keyword Density Checker. Use when working with text and target word or phrase.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-density-checker"
     },
     "seo-aeo-schema-generator": {
       "name": "seo-aeo-schema-generator",
@@ -34221,6 +34933,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/error-diagnostics-error-analysis",
       "description_ko": "귀하는 분산 시스템 디버깅, 생산 사고 분석 및 포괄적인 관찰 솔루션 구현에 대한 심층적인 전문 지식을 갖춘 전문 오류 분석 전문가입니다."
+    },
+    "long-tail-keyword-generator": {
+      "name": "long-tail-keyword-generator",
+      "type": "skill",
+      "description": "Long-Tail Keyword Generator. Use when working with seed topic and optional audience or use case.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/long-tail-keyword-generator"
     },
     "muapi-media": {
       "name": "muapi-media",
@@ -34749,6 +35469,14 @@
       "path": "collected_assets/skills/agent-framework-azure-ai-py",
       "description_ko": "Microsoft Agent Framework Python SDK를 사용하여 Azure AI Foundry에서 영구 에이전트를 빌드합니다."
     },
+    "meta-tag-generator": {
+      "name": "meta-tag-generator",
+      "type": "skill",
+      "description": "Meta Tag Generator. Use when working with page summary, URL and optional brand or social image.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meta-tag-generator"
+    },
     "blog-writing-guide": {
       "name": "blog-writing-guide",
       "type": "skill",
@@ -34757,6 +35485,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/blog-writing-guide",
       "description_ko": "이 기술은 엔지니어가 첫 번째 블로그 게시물을 작성하도록 돕거나 마케팅 담당자가 제품 발표 초안을 작성하도록 돕는 등 모든 게시물에 걸쳐 Sentry의 블로그 작성 표준을 적용합니다."
+    },
+    "url-slug-generator": {
+      "name": "url-slug-generator",
+      "type": "skill",
+      "description": "URL Slug Generator. Use when working with page title and optional language or URL policy.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/url-slug-generator"
     },
     "code-showcase-systematic-debugging": {
       "name": "code-showcase-systematic-debugging",
@@ -34819,6 +35555,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/brooks-audit",
       "description_ko": "12권의 고전 엔지니어링 서적을 활용하여 모듈 종속성을 매핑하고, 계층화 무결성을 확인하고, 코드베이스 전반에 걸쳐 구조적 붕괴를 표시하는 아키텍처 감사입니다."
+    },
+    "competitor-keyword-overlap-checker": {
+      "name": "competitor-keyword-overlap-checker",
+      "type": "skill",
+      "description": "Competitor Keyword Overlap Checker. Use when working with two labeled keyword sets.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/competitor-keyword-overlap-checker"
     },
     "marketing-plan": {
       "name": "marketing-plan",
@@ -34968,6 +35712,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/wifi-wireless",
       "description_ko": "승인된 무선 보안 평가: Wi-Fi 캡처, WPA 핸드셰이크 분석, 불량 AP 탐지 연구 및 실험실 전용 인증 해제 테스트."
+    },
+    "on-page-seo-audit-checker": {
+      "name": "on-page-seo-audit-checker",
+      "type": "skill",
+      "description": "On-Page SEO Audit Checker. Use when working with page URL or HTML and target reader task.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/on-page-seo-audit-checker"
     },
     "brooks-sweep": {
       "name": "brooks-sweep",
@@ -35147,6 +35899,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/attack-chain",
       "description_ko": "정찰, 초기 액세스, 권한 상승, 측면 이동 및 보고를 포괄하는 승인된 다단계 공격 경로 계획 및 조정입니다. 전체 참여 및 교차 단계 작업을 위한 진입점입니다."
+    },
+    "keyword-share-estimator": {
+      "name": "keyword-share-estimator",
+      "type": "skill",
+      "description": "Keyword Share Estimator. Use when working with comparable visibility values for your domain and selected competitors.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-share-estimator"
     },
     "code-refactoring-refactor-clean": {
       "name": "code-refactoring-refactor-clean",
@@ -35413,6 +36173,14 @@
       "path": "collected_assets/skills/unslop",
       "description_ko": "unslop CLI를 통해 AI 생성 텍스트를 사후 처리하여 게시하기 전에 AI 쓰기 패턴을 제거합니다."
     },
+    "meta-tag-comparison-tool": {
+      "name": "meta-tag-comparison-tool",
+      "type": "skill",
+      "description": "Meta Tag Comparison Tool. Use when working with HTML or extracted metadata from two or more labeled pages.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meta-tag-comparison-tool"
+    },
     "apify-competitor-intelligence": {
       "name": "apify-competitor-intelligence",
       "type": "skill",
@@ -35563,6 +36331,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-ai-document-intelligence-ts",
       "description_ko": "사전 구축된 사용자 정의 모델을 사용하여 문서에서 텍스트, 테이블 및 구조화된 데이터를 추출합니다."
+    },
+    "webly": {
+      "name": "webly",
+      "type": "skill",
+      "description": "Publish a website or share files at a live URL in seconds with no account, then let the person claim it, edit it over Webly's MCP server, and publish drafts they approve.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/webly"
     },
     "patch-diff-exploit": {
       "name": "patch-diff-exploit",
@@ -36325,6 +37101,14 @@
       "path": "collected_assets/skills/swiftui-performance-audit",
       "description_ko": "코드 검토 및 프로파일링 증거를 통해 SwiftUI 성능 문제를 감사합니다."
     },
+    "seo-health-score-calculator": {
+      "name": "seo-health-score-calculator",
+      "type": "skill",
+      "description": "SEO Health Score Calculator. Use when working with audit findings and a disclosed scoring rubric.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/seo-health-score-calculator"
+    },
     "pci-dss-compliance": {
       "name": "pci-dss-compliance",
       "type": "skill",
@@ -36333,6 +37117,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/pci-dss-compliance",
       "description_ko": "결제 카드 데이터에 대한 PCI DSS 요구 사항을 구현합니다. 카드홀더 구성"
+    },
+    "heading-analyzer": {
+      "name": "heading-analyzer",
+      "type": "skill",
+      "description": "Heading Analyzer. Use when working with HTML, Markdown or extracted headings.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/heading-analyzer"
     },
     "agentic-verify": {
       "name": "agentic-verify",
@@ -36359,6 +37151,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/nextjs-best-practices",
       "description_ko": "Next.js 앱 라우터 원칙. 서버 구성 요소, 데이터 가져오기, 라우팅 패턴."
+    },
+    "keyword-difficulty-estimator": {
+      "name": "keyword-difficulty-estimator",
+      "type": "skill",
+      "description": "Keyword Difficulty Estimator. Use when working with keyword plus supplied SERP or competitor evidence.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/keyword-difficulty-estimator"
+    },
+    "backlink-idea-generator": {
+      "name": "backlink-idea-generator",
+      "type": "skill",
+      "description": "Backlink Idea Generator. Use when working with site topic and target audience.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/backlink-idea-generator"
     },
     "expo-observe": {
       "name": "expo-observe",
@@ -36794,6 +37602,14 @@
       "path": "collected_assets/skills/autonomous-agent-patterns",
       "description_ko": "[Cline](https://github.com/cline/cline) 및 [OpenAI Codex](https://github.com/openai/codex)에서 영감을 받아 자율 코딩 에이전트를 구축하기 위한 설계 패턴입니다."
     },
+    "location-based-content-idea-generator": {
+      "name": "location-based-content-idea-generator",
+      "type": "skill",
+      "description": "Local Content Idea Generator. Use when working with location, audience and business topic.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/location-based-content-idea-generator"
+    },
     "youtube-seo-optimizer": {
       "name": "youtube-seo-optimizer",
       "type": "skill",
@@ -37135,6 +37951,14 @@
       "path": "collected_assets/skills/uniprot-database",
       "description_ko": "UniProt에 대한 직접 REST API 액세스. 단백질 검색, FASTA 검색, ID 매핑, Swiss-Prot/TrEMBL. 여러 데이터베이스가 있는 Python 워크플로의 경우 바이오서비스(40개 이상의 서비스에 대한 통합 인터페이스)를 선호합니다. 직접적인 HTTP/REST 작업이나 UniProt 관련 제어에 사용하세요."
     },
+    "og-tag-generator": {
+      "name": "og-tag-generator",
+      "type": "skill",
+      "description": "OG Tag Generator. Use when working with page URL, title, description and optional public image URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/og-tag-generator"
+    },
     "commit": {
       "name": "commit",
       "type": "skill",
@@ -37168,6 +37992,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/probation-tracker"
+    },
+    "ai-keyword-explainer": {
+      "name": "ai-keyword-explainer",
+      "type": "skill",
+      "description": "AI Keyword Explainer. Use when working with keyword or phrase.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-keyword-explainer"
     },
     "commandcode-delegate": {
       "name": "commandcode-delegate",
@@ -37464,6 +38296,14 @@
       "path": "collected_assets/skills/aider-delegate",
       "description_ko": "사용자가 명시적으로 지정한 경우에만 코딩 작업을 Aider(`aider`)에게 위임하세요."
     },
+    "page-speed-score-simulator": {
+      "name": "page-speed-score-simulator",
+      "type": "skill",
+      "description": "Page Speed Score Simulator. Use when working with performance report or explicit hypothetical performance inputs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/page-speed-score-simulator"
+    },
     "hashicorp-vault": {
       "name": "hashicorp-vault",
       "type": "skill",
@@ -37481,6 +38321,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/llm-caching",
       "description_ko": "정확한 일치, 의미적 유사성을 갖춘 다중 계층 LLM 캐싱을 구현합니다."
+    },
+    "ai-competitor-title-rewriter": {
+      "name": "ai-competitor-title-rewriter",
+      "type": "skill",
+      "description": "AI Competitor Title Rewriter. Use when working with competitor title and your page topic.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-competitor-title-rewriter"
     },
     "lanshu-create-ai-presenter-video": {
       "name": "lanshu-create-ai-presenter-video",
@@ -37763,6 +38611,14 @@
       "path": "collected_assets/skills/cv-generator",
       "description_ko": "FlowCV, Canva, Google Docs 또는 Word에 대한 전문적인 ATS 최적화 CV를 생성하세요. 다중 소스 병합, JD 타겟팅, 선임 적응 및 인간화된 재작성을 처리합니다. ATS 결함 보고서 및 개선 제안과 함께 붙여넣기 가능한 텍스트를 출력합니다."
     },
+    "sitemap-generator": {
+      "name": "sitemap-generator",
+      "type": "skill",
+      "description": "XML Sitemap Generator. Use when working with canonical public page URLs and optional real modification dates.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/sitemap-generator"
+    },
     "ui-page": {
       "name": "ui-page",
       "type": "skill",
@@ -37931,6 +38787,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/orchestrate",
       "description_ko": "주요 작업에 집중된 하위 에이전트를 조정하고 소유권이 중복되지 않게 유지하며 검증된 결과를 통합합니다. 대규모 Codex 작업에 사용합니다. 코디네이터와 함께 사소한 일을 계속하십시오."
+    },
+    "ai-content-detector": {
+      "name": "ai-content-detector",
+      "type": "skill",
+      "description": "AI Content Detector. Use when working with text to review.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-content-detector"
     },
     "airtable-automation": {
       "name": "airtable-automation",
@@ -38102,6 +38966,14 @@
       "path": "collected_assets/skills/hunt-ntlm-info",
       "description_ko": "NTLM을 추적하고 인터넷에 연결할 수 있는 IIS/SharePoint/Exchange에서 정보 공개를 협상합니다."
     },
+    "local-keyword-generator": {
+      "name": "local-keyword-generator",
+      "type": "skill",
+      "description": "Local Keyword Generator. Use when working with service or product and actual target location.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/local-keyword-generator"
+    },
     "hunt-cicd": {
       "name": "hunt-cicd",
       "type": "skill",
@@ -38270,6 +39142,14 @@
       "path": "collected_assets/skills/azure-ai-textanalytics-py",
       "description_ko": "감정 분석, 엔터티 인식, 핵심 문구, 언어 감지, PII 및 의료 NLP를 위한 Azure AI Text Analytics SDK입니다. 텍스트의 자연어 처리에 사용합니다."
     },
+    "perq": {
+      "name": "perq",
+      "type": "skill",
+      "description": "Find verified free AI credits, free tiers, startup programs and student perks for AI APIs, GPUs and dev tools, each with the vendor's source link and a last-verified date.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/perq"
+    },
     "framework-migration-deps-upgrade": {
       "name": "framework-migration-deps-upgrade",
       "type": "skill",
@@ -38400,6 +39280,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/orchestrate-batch-refactor",
       "description_ko": "종속성 인식 작업 패킷과 병렬 분석을 통해 대규모 리팩터링을 계획하고 실행합니다."
+    },
+    "hreflang-tag-generator": {
+      "name": "hreflang-tag-generator",
+      "type": "skill",
+      "description": "Hreflang Tag Generator. Use when working with equivalent page URLs mapped to language and optional region.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/hreflang-tag-generator"
     },
     "remotion-best-practices": {
       "name": "remotion-best-practices",
@@ -38720,6 +39608,14 @@
       "path": "collected_assets/skills/threat-hunting",
       "description_ko": "블루팀 위협 사냥: Sigma/YARA를 사용한 탐지 엔지니어링, SIEM 쿼리 설계, 알려진 기술 패턴에 대한 사고 탐지 검증."
     },
+    "meta-description-optimizer": {
+      "name": "meta-description-optimizer",
+      "type": "skill",
+      "description": "Meta Description Optimizer. Use when working with existing description and page content or summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meta-description-optimizer"
+    },
     "frontend-optimistic-mutations": {
       "name": "frontend-optimistic-mutations",
       "type": "skill",
@@ -38746,6 +39642,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ingest-youtube",
       "description_ko": "yt-dlp 자막 검색, VTT 정리, 메타데이터 본문 및 캡처 시드 스텁을 사용하여 YouTube 비디오 대본을 쿼리 가능한 마크다운 저장소로 가져옵니다."
+    },
+    "search-preview-simulator": {
+      "name": "search-preview-simulator",
+      "type": "skill",
+      "description": "Search Preview Simulator. Use when working with title, description and page URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/search-preview-simulator"
     },
     "debugger": {
       "name": "debugger",
@@ -39264,6 +40168,14 @@
       "path": "collected_assets/skills/sops-encryption",
       "description_ko": "Mozilla SOPS로 파일과 구성을 암호화하세요."
     },
+    "ai-schema-markup-generator": {
+      "name": "ai-schema-markup-generator",
+      "type": "skill",
+      "description": "Schema Markup Generator. Use when working with entity type or page facts and canonical page URL.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ai-schema-markup-generator"
+    },
     "objection-preemptor": {
       "name": "objection-preemptor",
       "type": "skill",
@@ -39733,6 +40645,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/project-memory-log"
     },
+    "bluebook-writing": {
+      "name": "bluebook-writing",
+      "type": "skill",
+      "description": "Write design-reading books and articles in plain language with a two-layer skeleton: a zero-terminology everyday story first, then the professional layer with formal names, mechanisms, boundaries, and costs. Use when explaining unfamiliar systems to non-programmers.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/bluebook-writing"
+    },
     "emil-design-eng": {
       "name": "emil-design-eng",
       "type": "skill",
@@ -39766,6 +40686,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/error-detective",
       "description_ko": "오류 패턴, 스택 추적 및 이상 현상에 대한 로그 및 코드베이스를 검색합니다. 시스템 전체의 오류를 연관시키고 근본 원인을 식별합니다."
+    },
+    "nap-consistency-checker": {
+      "name": "nap-consistency-checker",
+      "type": "skill",
+      "description": "NAP Consistency Checker. Use when working with canonical business name, address and phone plus listing records.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nap-consistency-checker"
     },
     "inventory-demand-planning": {
       "name": "inventory-demand-planning",
@@ -39971,6 +40899,14 @@
       "path": "collected_assets/skills/event-sourcing-architect",
       "description_ko": "이벤트 소싱, CQRS 및 이벤트 기반 아키텍처 패턴 전문가입니다. Masters 이벤트 매장 디자인, 프로젝션 구축, 사가 오케스트레이션 및 최종 일관성 패턴. 이벤트 소스 시스템, 감사 추적 요구 사항 또는 임시 쿼리를 사용한 복잡한 도메인 모델링에 적극적으로 사용하세요."
     },
+    "project-brief": {
+      "name": "project-brief",
+      "type": "skill",
+      "description": "Project Detail Optimizer. Use when working with one sentence, rough notes or an existing project brief.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/project-brief"
+    },
     "longbridge-quant": {
       "name": "longbridge-quant",
       "type": "skill",
@@ -40145,6 +41081,14 @@
       "path": "collected_assets/skills/reddit-automation",
       "description_ko": "Rube MCP(Composio)를 통해 Reddit 작업 자동화: 하위 레딧 검색, 게시물 작성, 댓글 관리 및 인기 콘텐츠 찾아보기. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
     },
+    "meta-description-writer": {
+      "name": "meta-description-writer",
+      "type": "skill",
+      "description": "Meta Description Writer. Use when working with page content or factual summary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/meta-description-writer"
+    },
     "agent-harness-fault-injection": {
       "name": "agent-harness-fault-injection",
       "type": "skill",
@@ -40161,6 +41105,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ppl-personal-crm"
+    },
+    "featured-snippet-optimizer": {
+      "name": "featured-snippet-optimizer",
+      "type": "skill",
+      "description": "Featured Snippet Optimizer. Use when working with target question and existing passage.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/featured-snippet-optimizer"
     },
     "remotion-create": {
       "name": "remotion-create",
@@ -40335,6 +41287,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/not-a-vibe-coder",
       "description_ko": "모호한 메시지를 새로운 프로젝트를 위한 8개의 구조화된 계획 파일로 변환합니다. 기존 코드베이스에는 사용하지 마세요."
+    },
+    "broken-link-finder": {
+      "name": "broken-link-finder",
+      "type": "skill",
+      "description": "Broken Link Finder. Use when working with page URL, HTML or a list of links.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/broken-link-finder"
     },
     "swiftui-liquid-glass": {
       "name": "swiftui-liquid-glass",
@@ -40595,6 +41555,14 @@
       "path": "collected_assets/skills/claude-code-expert",
       "description_ko": "Claude Code의 전문가는 Anthropic의 CLI입니다. 최대 생산 제품은 아탈호스, 후크, MCP, 고급 구성, 워크플로, CLAUDE.md, 메모리, 하위 에이전트, 허용 및 에코시스템 통합입니다."
     },
+    "pro-launch": {
+      "name": "pro-launch",
+      "type": "skill",
+      "description": "Build an app or product from 0 to 1, taste-first, with phase gates: references, naming, style frames, UI loop, launch video, GTM and shipping. Use for 做产品, 起名, 找参考, UI 太丑, launch plans.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pro-launch"
+    },
     "hierarchical-agent-memory": {
       "name": "hierarchical-agent-memory",
       "type": "skill",
@@ -40717,14 +41685,6 @@
       "path": "collected_assets/skills/redteam-report-template",
       "description_ko": "고객 대상 레드팀 제공 서비스 형식"
     },
-    "redirect-checker": {
-      "name": "redirect-checker",
-      "type": "skill",
-      "description": "Redirect Checker. Use when working with URL or recorded response chain.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/redirect-checker"
-    },
     "delegating-to-agents": {
       "name": "delegating-to-agents",
       "type": "skill",
@@ -40733,14 +41693,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/delegating-to-agents",
       "description_ko": "컨텍스트, 소유권 및 진행 상황 확인을 유지하면서 제한된 작업을 다른 AI 에이전트에 위임합니다."
-    },
-    "faq-generator": {
-      "name": "faq-generator",
-      "type": "skill",
-      "description": "FAQ Generator. Use when working with actual questions plus answer facts.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/faq-generator"
     },
     "android-cli": {
       "name": "android-cli",
@@ -40751,94 +41703,6 @@
       "path": "collected_assets/skills/android-cli",
       "description_ko": "`android` 명령줄 도구를 사용하여 프로젝트 생성, 배포, SDK 관리, 환경 진단을 포함한 Android 개발 작업을 조율합니다."
     },
-    "duplicate-content-checker": {
-      "name": "duplicate-content-checker",
-      "type": "skill",
-      "description": "Duplicate Content Checker. Use when working with two or more texts or accessible pages.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/duplicate-content-checker"
-    },
-    "competitor-summary-report-creator": {
-      "name": "competitor-summary-report-creator",
-      "type": "skill",
-      "description": "Competitor Summary Report Creator. Use when working with competitor names or URLs and evidence to summarize.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/competitor-summary-report-creator"
-    },
-    "internal-link-suggestion-tool": {
-      "name": "internal-link-suggestion-tool",
-      "type": "skill",
-      "description": "Internal Link Suggestion Tool. Use when working with source text and available destination pages.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/internal-link-suggestion-tool"
-    },
-    "http-status-code-tester": {
-      "name": "http-status-code-tester",
-      "type": "skill",
-      "description": "HTTP Status Code Tester. Use when working with one or more HTTP(S) URLs.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/http-status-code-tester"
-    },
-    "link-relevance-evaluator": {
-      "name": "link-relevance-evaluator",
-      "type": "skill",
-      "description": "Link Relevance Evaluator. Use when working with source page context and destination page context.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/link-relevance-evaluator"
-    },
-    "organic-growth-forecast-tool": {
-      "name": "organic-growth-forecast-tool",
-      "type": "skill",
-      "description": "Organic Growth Forecast Tool. Use when working with dated traffic history or baseline with explicit growth assumptions.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/organic-growth-forecast-tool"
-    },
-    "gmb-optimization-helper": {
-      "name": "gmb-optimization-helper",
-      "type": "skill",
-      "description": "GMB Optimization Helper. Use when working with Google Business Profile details or business facts.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/gmb-optimization-helper"
-    },
-    "seo-checklist-generator": {
-      "name": "seo-checklist-generator",
-      "type": "skill",
-      "description": "SEO Checklist Generator. Use when working with site type and current goal.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/seo-checklist-generator"
-    },
-    "pro-motion": {
-      "name": "pro-motion",
-      "type": "skill",
-      "description": "Make a motion-graphics launch, brand or promo film audio first: plan the music, then render the film in code (canvas to MP4) cut to the track. Use for 发布视频, 宣传片, TVC, BGM, Suno prompts.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/pro-motion"
-    },
-    "keyword-gap-finder": {
-      "name": "keyword-gap-finder",
-      "type": "skill",
-      "description": "Keyword Gap Finder. Use when working with your keyword set and competitor keyword sets.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-gap-finder"
-    },
-    "guest-posting-opportunity-finder": {
-      "name": "guest-posting-opportunity-finder",
-      "type": "skill",
-      "description": "Guest Posting Opportunity Finder. Use when working with topic, audience and optional prospect list.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/guest-posting-opportunity-finder"
-    },
     "gemini-deep-research": {
       "name": "gemini-deep-research",
       "type": "skill",
@@ -40848,14 +41712,6 @@
       "path": "collected_assets/skills/gemini-deep-research",
       "description_ko": "Google의 Gemini Deep Research Agent를 사용하여 자율적인 다단계 연구를 실행하세요. 쿼리를 시작하고, 진행 상황을 조사하고, 시장 분석 또는 문헌 검토를 위해 인용 보고서를 수집합니다."
     },
-    "doom-pay": {
-      "name": "doom-pay",
-      "type": "skill",
-      "description": "Add self-custodial DOOM and wDOOM checkout links with DoomPay, then verify payment receipts on Doomsday Network Layer-1 or Base Mainnet.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/doom-pay"
-    },
     "agy-powerline": {
       "name": "agy-powerline",
       "type": "skill",
@@ -40863,30 +41719,6 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agy-powerline"
-    },
-    "content-gap-finder": {
-      "name": "content-gap-finder",
-      "type": "skill",
-      "description": "Content Gap Finder. Use when working with existing content inventory and audience goal.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/content-gap-finder"
-    },
-    "keyword-suggestion-tool": {
-      "name": "keyword-suggestion-tool",
-      "type": "skill",
-      "description": "Keyword Suggestion Tool. Use when working with seed topic.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-suggestion-tool"
-    },
-    "text-translator": {
-      "name": "text-translator",
-      "type": "skill",
-      "description": "Text Translator. Use when working with source text and target language or locale.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/text-translator"
     },
     "mock-hunter": {
       "name": "mock-hunter",
@@ -40906,30 +41738,6 @@
       "path": "collected_assets/skills/dos-verify-done-claims",
       "description_ko": "에이전트의 '완료/배송/수정' 주장을 수락하기 전에 DOS 커널의 `dos verify` 및 `dos commit-audit`를 사용하여 실제 사실(git ancestry + 커밋 자체 diff)에 대해 검증하십시오. 절대 에이전트 자체 설명이 아닙니다."
     },
-    "geo-keyword-expansion-tool": {
-      "name": "geo-keyword-expansion-tool",
-      "type": "skill",
-      "description": "Geo Keyword Expansion Tool. Use when working with seed keyword and target locations.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/geo-keyword-expansion-tool"
-    },
-    "renhua": {
-      "name": "renhua",
-      "type": "skill",
-      "description": "Write Chinese social posts and product copy in a real person's voice, removing AI tells. Use for 小红书, X 帖子, 日记, 朋友圈, 产品介绍, 去 AI 味, 说人话.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/renhua"
-    },
-    "content-freshness-checker": {
-      "name": "content-freshness-checker",
-      "type": "skill",
-      "description": "Content Freshness Checker. Use when working with content and known publication or update date if available.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/content-freshness-checker"
-    },
     "agy-auto": {
       "name": "agy-auto",
       "type": "skill",
@@ -40938,22 +41746,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agy-auto",
       "description_ko": "--dangerously-skip-permissions 대신 계층화된 정책 제어를 사용하여 Antigravity CLI(agy)를 무인으로 실행하려면 agy-auto PreToolUse 보안 게이트를 구성합니다."
-    },
-    "skill-skill": {
-      "name": "skill-skill",
-      "type": "skill",
-      "description": "Write, upgrade or audit a Claude skill so it changes what gets generated: forcing functions, triggerable descriptions, and a static audit script with a 0-100 health score. Use for 写 skill, 改 skill.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/skill-skill"
-    },
-    "ai-content-improver": {
-      "name": "ai-content-improver",
-      "type": "skill",
-      "description": "AI Content Improver. Use when working with draft text.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-content-improver"
     },
     "electron-drive-skill": {
       "name": "electron-drive-skill",
@@ -40972,22 +41764,6 @@
       "path": "collected_assets/skills/sql-sentinel",
       "description_ko": "웨어하우스 크레딧을 소모하는 비용 및 성능 안티 패턴에 대해 SQL을 감사합니다. 웨어하우스 상태를 0~100점으로 평가하고 BigQuery, Snowflake, Redshift, Postgres에 대한 우선순위 비용 절감 계획을 출력합니다."
     },
-    "competitor-backlink-idea-generator": {
-      "name": "competitor-backlink-idea-generator",
-      "type": "skill",
-      "description": "Competitor Backlink Idea Generator. Use when working with your niche and competitor backlink examples or export.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/competitor-backlink-idea-generator"
-    },
-    "word-count-structure-checker": {
-      "name": "word-count-structure-checker",
-      "type": "skill",
-      "description": "Word Count & Structure Checker. Use when working with text or structured article.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/word-count-structure-checker"
-    },
     "skill-issue": {
       "name": "skill-issue",
       "type": "skill",
@@ -40996,22 +41772,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/skill-issue",
       "description_ko": "코딩 에이전트 스킬이 실행되지 않는 이유를 알아보세요. 활성화 시 각 SKILL.md A~F 등급을 매기고, 프롬프트가 트리거하는 스킬을 시뮬레이션하고, 자동으로 다른 스킬을 그림자로 표시하는 충돌에 플래그를 지정합니다."
-    },
-    "mobile-friendly-test": {
-      "name": "mobile-friendly-test",
-      "type": "skill",
-      "description": "Mobile-Friendly Test. Use when working with accessible page or supplied screenshots and HTML.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/mobile-friendly-test"
-    },
-    "anchor-text-analyzer": {
-      "name": "anchor-text-analyzer",
-      "type": "skill",
-      "description": "Anchor Text Analyzer. Use when working with links with anchor text and destinations.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/anchor-text-analyzer"
     },
     "sendblue-cli": {
       "name": "sendblue-cli",
@@ -41049,14 +41809,6 @@
       "path": "collected_assets/skills/sendblue-notify",
       "description_ko": "장기 실행 작업, 에이전트 차례 또는 예약된 작업이 완료되면 아웃바운드의 경우 @sendblue/cli를 통해 사용자에게 전화로 문자 메시지를 보내며, 선택적으로 자동 실행을 위해 Claude Code Stop 후크에 연결됩니다."
     },
-    "readability-score-calculator": {
-      "name": "readability-score-calculator",
-      "type": "skill",
-      "description": "Readability Score Calculator. Use when working with text and language.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/readability-score-calculator"
-    },
     "unship": {
       "name": "unship",
       "type": "skill",
@@ -41066,54 +41818,6 @@
       "path": "collected_assets/skills/unship",
       "description_ko": "AI 에이전트가 만든 UI 변형을 실제 앱에서 로컬로 비교한 다음 하나를 유지하고 사용하지 않는 임시 코드를 정리합니다."
     },
-    "keyword-expansion-tool": {
-      "name": "keyword-expansion-tool",
-      "type": "skill",
-      "description": "Keyword Expansion Tool. Use when working with seed terms and optional industry.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-expansion-tool"
-    },
-    "canonical-url-builder": {
-      "name": "canonical-url-builder",
-      "type": "skill",
-      "description": "Canonical URL Builder. Use when working with preferred page URL and duplicate URL variants.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/canonical-url-builder"
-    },
-    "structured-data-validator": {
-      "name": "structured-data-validator",
-      "type": "skill",
-      "description": "Structured Data Validator. Use when working with JSON-LD, Microdata or RDFa source.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/structured-data-validator"
-    },
-    "paragraph-keyword-optimizer": {
-      "name": "paragraph-keyword-optimizer",
-      "type": "skill",
-      "description": "Paragraph Keyword Optimizer. Use when working with paragraph and target keyword.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/paragraph-keyword-optimizer"
-    },
-    "backlink-tracking-template-generator": {
-      "name": "backlink-tracking-template-generator",
-      "type": "skill",
-      "description": "Backlink Tracking Template Generator. Use when working with tracking goal; existing rows optional.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/backlink-tracking-template-generator"
-    },
-    "bounce-rate-estimator": {
-      "name": "bounce-rate-estimator",
-      "type": "skill",
-      "description": "Bounce Rate Estimator. Use when working with sessions and bounced sessions, or sessions and engaged sessions with metric definition.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/bounce-rate-estimator"
-    },
     "postgres-readonly-queries": {
       "name": "postgres-readonly-queries",
       "type": "skill",
@@ -41122,30 +41826,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/postgres-readonly-queries",
       "description_ko": "다중 연결 지원 및 심층 방어 쓰기 보호 기능을 통해 PostgreSQL 데이터베이스에 대해 안전한 읽기 전용 SQL 쿼리를 실행합니다."
-    },
-    "tone-of-voice-analyzer": {
-      "name": "tone-of-voice-analyzer",
-      "type": "skill",
-      "description": "Tone of Voice Analyzer. Use when working with text and optional brand voice sample.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/tone-of-voice-analyzer"
-    },
-    "ai-meta-tag-writer": {
-      "name": "ai-meta-tag-writer",
-      "type": "skill",
-      "description": "AI Meta Tag Writer. Use when working with page copy or factual page summary.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-meta-tag-writer"
-    },
-    "competitor-gap-analyzer": {
-      "name": "competitor-gap-analyzer",
-      "type": "skill",
-      "description": "Competitor Gap Analyzer. Use when working with your offering and at least one competitor profile.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/competitor-gap-analyzer"
     },
     "claude-settings-audit": {
       "name": "claude-settings-audit",
@@ -41165,22 +41845,6 @@
       "path": "collected_assets/skills/dispatch",
       "description_ko": "주제 인식 세션을 통해 Claude Code의 OpenAI Codex CLI 및 Google Antigravity CLI에 작업 위임"
     },
-    "seo-content-checker": {
-      "name": "seo-content-checker",
-      "type": "skill",
-      "description": "SEO Content Checker. Use when working with content and target query or reader task.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/seo-content-checker"
-    },
-    "ctr-predictor": {
-      "name": "ctr-predictor",
-      "type": "skill",
-      "description": "CTR Predictor. Use when working with impressions and an explicitly supplied CTR assumption or historical benchmark.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ctr-predictor"
-    },
     "socialclaw": {
       "name": "socialclaw",
       "type": "skill",
@@ -41188,30 +41852,6 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/socialclaw"
-    },
-    "selector": {
-      "name": "selector",
-      "type": "skill",
-      "description": "Select a specialized 100seotools skill from a plain-language SEO or project-documentation request. Use when the user needs help choosing the appropriate workflow.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/selector"
-    },
-    "traffic-potential-calculator": {
-      "name": "traffic-potential-calculator",
-      "type": "skill",
-      "description": "Traffic Potential Calculator. Use when working with search volume and explicit CTR assumptions for matching period and market.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/traffic-potential-calculator"
-    },
-    "post": {
-      "name": "post",
-      "type": "skill",
-      "description": "Make share-post image sets that look native: Xiaohongshu carousels, X images, covers, App Store poster layouts, real screenshots and faithful app-UI mocks. Use for 图文, 配图, 组图, 封面, 分享帖.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/post"
     },
     "sshepherd": {
       "name": "sshepherd",
@@ -41222,62 +41862,6 @@
       "path": "collected_assets/skills/sshepherd",
       "description_ko": "영지식 SSH ops CLI — 자격 증명을 에이전트에 노출하지 않고 서버 상태 확인, docker/systemd 제어, 로그 테일링, Postgres 내부 검사 및 선언적 배포를 수행합니다."
     },
-    "pro-launch": {
-      "name": "pro-launch",
-      "type": "skill",
-      "description": "Build an app or product from 0 to 1, taste-first, with phase gates: references, naming, style frames, UI loop, launch video, GTM and shipping. Use for 做产品, 起名, 找参考, UI 太丑, launch plans.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/pro-launch"
-    },
-    "postel-writing": {
-      "name": "postel-writing",
-      "type": "skill",
-      "description": "Draft X (Twitter) or LinkedIn posts in the user's own voice, research high-performing posts, and schedule or publish them through the user's Postel account.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/postel-writing"
-    },
-    "ranking-opportunity-finder": {
-      "name": "ranking-opportunity-finder",
-      "type": "skill",
-      "description": "Ranking Opportunity Finder. Use when working with query/page performance export or dated ranking evidence.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ranking-opportunity-finder"
-    },
-    "product-description-generator": {
-      "name": "product-description-generator",
-      "type": "skill",
-      "description": "Product Description Generator. Use when working with verified product features and intended buyer.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/product-description-generator"
-    },
-    "readability-enhancer": {
-      "name": "readability-enhancer",
-      "type": "skill",
-      "description": "Readability Enhancer. Use when working with text and optional reader level.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/readability-enhancer"
-    },
-    "domain-authority-simulator": {
-      "name": "domain-authority-simulator",
-      "type": "skill",
-      "description": "Domain Authority Simulator. Use when working with domain signals and an explicit scoring rubric.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/domain-authority-simulator"
-    },
-    "keyword-intent-identifier": {
-      "name": "keyword-intent-identifier",
-      "type": "skill",
-      "description": "Keyword Intent Identifier. Use when working with keyword or query list.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-intent-identifier"
-    },
     "molykit": {
       "name": "molykit",
       "type": "skill",
@@ -41286,38 +41870,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/molykit",
       "description_ko": "|"
-    },
-    "outreach-email-template-generator": {
-      "name": "outreach-email-template-generator",
-      "type": "skill",
-      "description": "Outreach Email Template Generator. Use when working with recipient context, outreach purpose and genuine offer.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/outreach-email-template-generator"
-    },
-    "text-to-html-converter": {
-      "name": "text-to-html-converter",
-      "type": "skill",
-      "description": "Text to HTML Converter. Use when working with plain text and optional structure preferences.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/text-to-html-converter"
-    },
-    "ai-snippet-generator": {
-      "name": "ai-snippet-generator",
-      "type": "skill",
-      "description": "AI Snippet Generator. Use when working with question and supporting source text.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-snippet-generator"
-    },
-    "impression-to-click-ratio-calculator": {
-      "name": "impression-to-click-ratio-calculator",
-      "type": "skill",
-      "description": "Impression-to-Click Ratio Calculator. Use when working with clicks and impressions for the same scope.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/impression-to-click-ratio-calculator"
     },
     "manage-skills": {
       "name": "manage-skills",
@@ -41328,46 +41880,6 @@
       "path": "collected_assets/skills/manage-skills",
       "description_ko": "세션 변경사항을 분석하여 검증 스킬 누락을 탐지합니다. 기존 스킬을 동적으로 탐색하고, 새 스킬을 생성하거나 기존 스킬을 업데이트한 뒤 프로젝트 CLAUDE.md를 관리합니다."
     },
-    "local-seo-audit-checklist": {
-      "name": "local-seo-audit-checklist",
-      "type": "skill",
-      "description": "Local SEO Audit Checklist. Use when working with business type, location and profile or site details.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/local-seo-audit-checklist"
-    },
-    "domain-comparison-report-tool": {
-      "name": "domain-comparison-report-tool",
-      "type": "skill",
-      "description": "Domain Comparison Report Tool. Use when working with two or more domains with dated comparable metrics.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/domain-comparison-report-tool"
-    },
-    "local-citation-finder": {
-      "name": "local-citation-finder",
-      "type": "skill",
-      "description": "Local Citation Finder. Use when working with business category and service location.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/local-citation-finder"
-    },
-    "visibility-index-calculator": {
-      "name": "visibility-index-calculator",
-      "type": "skill",
-      "description": "Visibility Index Calculator. Use when working with keyword weights and rank-to-CTR mapping with rankings.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/visibility-index-calculator"
-    },
-    "ai-schema-generator": {
-      "name": "ai-schema-generator",
-      "type": "skill",
-      "description": "AI Schema Generator. Use when working with visible page content and page URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-schema-generator"
-    },
     "cursor-delegate": {
       "name": "cursor-delegate",
       "type": "skill",
@@ -41376,22 +41888,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cursor-delegate",
       "description_ko": "다음과 같은 경우에만 코딩 작업을 커서 에이전트 CLI('cursor-agent')에 위임하세요."
-    },
-    "reverse-image-search": {
-      "name": "reverse-image-search",
-      "type": "skill",
-      "description": "Reverse Image Search. Use when working with image or public image URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/reverse-image-search"
-    },
-    "keyword-clustering-tool": {
-      "name": "keyword-clustering-tool",
-      "type": "skill",
-      "description": "Keyword Clustering Tool. Use when working with keyword list.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-clustering-tool"
     },
     "hugging-face-dataset-viewer": {
       "name": "hugging-face-dataset-viewer",
@@ -41402,22 +41898,6 @@
       "path": "collected_assets/skills/hugging-face-dataset-viewer",
       "description_ko": "포옹하는 얼굴 데이터세트 뷰어"
     },
-    "link-source-categorizer": {
-      "name": "link-source-categorizer",
-      "type": "skill",
-      "description": "Link Source Categorizer. Use when working with backlink rows with source URLs and optional page context.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/link-source-categorizer"
-    },
-    "ranking-progress-tracker": {
-      "name": "ranking-progress-tracker",
-      "type": "skill",
-      "description": "Ranking Progress Tracker. Use when working with dated keyword positions with engine, market and device.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ranking-progress-tracker"
-    },
     "longbridge": {
       "name": "longbridge",
       "type": "skill",
@@ -41425,22 +41905,6 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/longbridge"
-    },
-    "image-alt-tag-generator": {
-      "name": "image-alt-tag-generator",
-      "type": "skill",
-      "description": "Image Alt Tag Generator. Use when working with image or accurate image description and page context.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/image-alt-tag-generator"
-    },
-    "blog-title-generator": {
-      "name": "blog-title-generator",
-      "type": "skill",
-      "description": "Blog Title Generator. Use when working with topic or page summary.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/blog-title-generator"
     },
     "tokenwise": {
       "name": "tokenwise",
@@ -41451,22 +41915,6 @@
       "path": "collected_assets/skills/tokenwise",
       "description_ko": "Claude Code를 위한 측정 기반 모델 라우터입니다. 작업 클래스별로 Haiku/Sonnet/Opus를 라우팅하고, 라우팅된 모든 작업을 실제 $ 숫자로 기록하며, A/B는 절감액을 신뢰하기 전에 더 저렴한 계층을 테스트합니다."
     },
-    "title-meta-length-counter": {
-      "name": "title-meta-length-counter",
-      "type": "skill",
-      "description": "Title & Meta Length Counter. Use when working with title and/or meta description.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/title-meta-length-counter"
-    },
-    "local-schema-builder": {
-      "name": "local-schema-builder",
-      "type": "skill",
-      "description": "Local Schema Builder. Use when working with business facts, page URL and actual address or service area.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/local-schema-builder"
-    },
     "using-git-worktrees": {
       "name": "using-git-worktrees",
       "type": "skill",
@@ -41476,22 +41924,6 @@
       "path": "collected_assets/skills/using-git-worktrees",
       "description_ko": "Git 작업 트리는 동일한 저장소를 공유하는 격리된 작업 공간을 생성하므로 전환 없이 동시에 여러 분기에서 작업할 수 있습니다."
     },
-    "headline-analyzer": {
-      "name": "headline-analyzer",
-      "type": "skill",
-      "description": "Headline Analyzer. Use when working with headline and intended article summary.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/headline-analyzer"
-    },
-    "content-length-comparator": {
-      "name": "content-length-comparator",
-      "type": "skill",
-      "description": "Content Length Comparator. Use when working with two or more labeled text samples.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/content-length-comparator"
-    },
     "gh-image": {
       "name": "gh-image",
       "type": "skill",
@@ -41500,22 +41932,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/gh-image",
       "description_ko": "GitHub에 로컬 이미지를 업로드하고 표준 사용자 첨부 파일 포함 URL을 가져옵니다. PR, 문제 또는 댓글에 스크린샷을 첨부하라는 요청을 받거나 README에 이전/이후 이미지를 포함하라는 요청을 받을 때 사용합니다."
-    },
-    "keyword-comparison-tool": {
-      "name": "keyword-comparison-tool",
-      "type": "skill",
-      "description": "Keyword Comparison Tool. Use when working with two or more keywords and optional metrics.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-comparison-tool"
-    },
-    "ai-blog-intro-writer": {
-      "name": "ai-blog-intro-writer",
-      "type": "skill",
-      "description": "AI Blog Intro Writer. Use when working with topic and article angle, or article draft.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-blog-intro-writer"
     },
     "macos-screen-recorder": {
       "name": "macos-screen-recorder",
@@ -41535,38 +41951,6 @@
       "path": "collected_assets/skills/codex-fable5",
       "description_ko": "Fable에서 영감을 받은 규율을 Codex 작업에 적용합니다. 먼저 검사하고, 목표와 결과를 추적하고, 증거에 근거한 결론을 내리고, 완료 전에 확인하고, 신원이나 제공자 주장 없이 Claude/Fable의 즉각적인 지침을 적용합니다."
     },
-    "featured-tool-schema-generator": {
-      "name": "featured-tool-schema-generator",
-      "type": "skill",
-      "description": "Featured Tool Schema Generator. Use when working with tool page URL and visible tool capabilities.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/featured-tool-schema-generator"
-    },
-    "ai-content-outline-generator": {
-      "name": "ai-content-outline-generator",
-      "type": "skill",
-      "description": "AI Content Outline Generator. Use when working with topic or reader question.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-content-outline-generator"
-    },
-    "internal-linking-planner": {
-      "name": "internal-linking-planner",
-      "type": "skill",
-      "description": "Internal Linking Planner. Use when working with site page inventory and priority user journeys.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/internal-linking-planner"
-    },
-    "site-comparison-report-generator": {
-      "name": "site-comparison-report-generator",
-      "type": "skill",
-      "description": "Site Comparison Report Generator. Use when working with two or more sites and the user's comparison goal.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/site-comparison-report-generator"
-    },
     "bilig-workpaper": {
       "name": "bilig-workpaper",
       "type": "skill",
@@ -41575,14 +41959,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/bilig-workpaper",
       "description_ko": "Excel이나 브라우저 UI를 구동하지 않고도 상담원 스프레드시트 작업을 위해 수식 지원 WorkPaper JSON 및 MCP 도구를 사용하세요."
-    },
-    "link-toxicity-checker": {
-      "name": "link-toxicity-checker",
-      "type": "skill",
-      "description": "Link Toxicity Checker. Use when working with backlink examples and available evidence.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/link-toxicity-checker"
     },
     "atlas-contract": {
       "name": "atlas-contract",
@@ -41593,46 +41969,6 @@
       "path": "collected_assets/skills/atlas-contract",
       "description_ko": "목표 무결성 기술. 백엔드/API/지속성, 보존/변경하지 않음, 테스트/검증, 모의, 재작업, 다중 부분 요청에 사용합니다. 목표 계약, 편차 알림, 단계 점검, 최종 감사를 내보냅니다. Q&A나 사소한 수정은 건너뛰세요."
     },
-    "canonical-tag-checker": {
-      "name": "canonical-tag-checker",
-      "type": "skill",
-      "description": "Canonical Tag Checker. Use when working with HTML and page URL, or accessible page URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/canonical-tag-checker"
-    },
-    "keyword-roi-calculator": {
-      "name": "keyword-roi-calculator",
-      "type": "skill",
-      "description": "Keyword ROI Calculator. Use when working with traffic estimate, conversion rate, value per conversion, margin and SEO cost for one period.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-roi-calculator"
-    },
-    "robots-txt-validator": {
-      "name": "robots-txt-validator",
-      "type": "skill",
-      "description": "Robots.txt Validator. Use when working with robots.txt text, crawler and URLs to test.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/robots-txt-validator"
-    },
-    "trending-keyword-visualizer": {
-      "name": "trending-keyword-visualizer",
-      "type": "skill",
-      "description": "Trending Keyword Visualizer. Use when working with dated keyword interest or volume series with source.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/trending-keyword-visualizer"
-    },
-    "ai-faq-creator": {
-      "name": "ai-faq-creator",
-      "type": "skill",
-      "description": "AI FAQ Creator. Use when working with source content or topic.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-faq-creator"
-    },
     "gh-attach": {
       "name": "gh-attach",
       "type": "skill",
@@ -41641,14 +41977,6 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/gh-attach",
       "description_ko": "GitHub 사용자 첨부 파일에 로컬 파일(스크린샷, 이미지, PDF, zip, 비디오)을 업로드하고, GitHub 사용자 첨부 파일을 다운로드하며, PR, 이슈 또는 댓글에 로컬 파일을 포함합니다. \"PR에 스크린샷 첨부\", \"이슈에 이미지 추가\", \"스크린샷 전후 삽입\", \"이 파일 첨부\" 또는 \"이 GitHub 첨부 파일 다운로드\"를 묻는 메시지가 표시될 때 사용합니다. 'gh-attach'에 의해 구동됩니다."
-    },
-    "xml-sitemap-visualizer": {
-      "name": "xml-sitemap-visualizer",
-      "type": "skill",
-      "description": "XML Sitemap Visualizer. Use when working with XML sitemap or sitemap index.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/xml-sitemap-visualizer"
     },
     "fp-backend": {
       "name": "fp-backend",
@@ -41667,14 +41995,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/auri-core"
     },
-    "review-response-generator": {
-      "name": "review-response-generator",
-      "type": "skill",
-      "description": "Review Response Generator. Use when working with review text and verified business context.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/review-response-generator"
-    },
     "tools-page-seo-optimizer": {
       "name": "tools-page-seo-optimizer",
       "type": "skill",
@@ -41683,14 +42003,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/tools-page-seo-optimizer",
       "description_ko": "여러 도구, 제품 또는 기능 페이지가 있는 모든 사이트에 대한 프레임워크에 구애받지 않는 SEO 워크플로우입니다. 중복 콘텐츠, 고유 메타 태그, 제목 계층 구조, 내부 연결, URL 슬러그, E-E-A-T, 50~500페이지 확장을 위한 콘텐츠 레지스트리 패턴, 위치 50~68 키워드에 대한 블로그 콘텐츠 전략을 다룹니다."
-    },
-    "robots-txt-creator": {
-      "name": "robots-txt-creator",
-      "type": "skill",
-      "description": "Robots.txt Creator. Use when working with site origin and desired crawl rules.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/robots-txt-creator"
     },
     "polis-protocol": {
       "name": "polis-protocol",
@@ -41701,30 +42013,6 @@
       "path": "collected_assets/skills/polis-protocol",
       "description_ko": "다중 공급업체 AI 에이전트를 자체 개선 팀으로 조정합니다. 학습 라우터는 실적에 따라 작업을 할당하고 시민들은 프로토콜의 자체 규칙을 수정할 수 있습니다."
     },
-    "keyword-placement-highlighter": {
-      "name": "keyword-placement-highlighter",
-      "type": "skill",
-      "description": "Keyword Placement Highlighter. Use when working with text and target keywords.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-placement-highlighter"
-    },
-    "redirect-301-generator": {
-      "name": "redirect-301-generator",
-      "type": "skill",
-      "description": "301 Redirect Generator. Use when working with source-to-destination mapping and deployment platform.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/redirect-301-generator"
-    },
-    "keyword-density-checker": {
-      "name": "keyword-density-checker",
-      "type": "skill",
-      "description": "Keyword Density Checker. Use when working with text and target word or phrase.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-density-checker"
-    },
     "mercury-mcp": {
       "name": "mercury-mcp",
       "type": "skill",
@@ -41733,38 +42021,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/mercury-mcp",
       "description_ko": "Mercury(양성자) MCP 도구에 대한 치트시트입니다. Mercury MCP 서버에 연결할 때 메시징 팀원, 스레드, 작업, 자동화 또는 관리 팀 그래프 편집을 호출할 mercury_* 도구를 조회하는 데 사용합니다."
-    },
-    "long-tail-keyword-generator": {
-      "name": "long-tail-keyword-generator",
-      "type": "skill",
-      "description": "Long-Tail Keyword Generator. Use when working with seed topic and optional audience or use case.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/long-tail-keyword-generator"
-    },
-    "meta-tag-generator": {
-      "name": "meta-tag-generator",
-      "type": "skill",
-      "description": "Meta Tag Generator. Use when working with page summary, URL and optional brand or social image.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/meta-tag-generator"
-    },
-    "url-slug-generator": {
-      "name": "url-slug-generator",
-      "type": "skill",
-      "description": "URL Slug Generator. Use when working with page title and optional language or URL policy.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/url-slug-generator"
-    },
-    "competitor-keyword-overlap-checker": {
-      "name": "competitor-keyword-overlap-checker",
-      "type": "skill",
-      "description": "Competitor Keyword Overlap Checker. Use when working with two labeled keyword sets.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/competitor-keyword-overlap-checker"
     },
     "frontend-slides-frontend-slides": {
       "name": "frontend-slides-frontend-slides",
@@ -41775,14 +42031,6 @@
       "path": "collected_assets/skills/frontend-slides-frontend-slides",
       "description_ko": "처음부터 또는 PowerPoint 파일을 변환하여 멋진 애니메이션이 풍부한 HTML 프레젠테이션을 만드세요. 사용자가 프레젠테이션을 작성하거나, PPT/PPTX를 웹으로 변환하거나, 강연/피칭을 위한 슬라이드를 만들고 싶을 때 사용하세요."
     },
-    "on-page-seo-audit-checker": {
-      "name": "on-page-seo-audit-checker",
-      "type": "skill",
-      "description": "On-Page SEO Audit Checker. Use when working with page URL or HTML and target reader task.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/on-page-seo-audit-checker"
-    },
     "analyze-project": {
       "name": "analyze-project",
       "type": "skill",
@@ -41790,30 +42038,6 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/analyze-project"
-    },
-    "keyword-share-estimator": {
-      "name": "keyword-share-estimator",
-      "type": "skill",
-      "description": "Keyword Share Estimator. Use when working with comparable visibility values for your domain and selected competitors.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-share-estimator"
-    },
-    "meta-tag-comparison-tool": {
-      "name": "meta-tag-comparison-tool",
-      "type": "skill",
-      "description": "Meta Tag Comparison Tool. Use when working with HTML or extracted metadata from two or more labeled pages.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/meta-tag-comparison-tool"
-    },
-    "webly": {
-      "name": "webly",
-      "type": "skill",
-      "description": "Publish a website or share files at a live URL in seconds with no account, then let the person claim it, edit it over Webly's MCP server, and publish drafts they approve.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/webly"
     },
     "antigravity-agent-manager": {
       "name": "antigravity-agent-manager",
@@ -41823,38 +42047,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/antigravity-agent-manager",
       "description_ko": "독립형 Antigravity 2.0 Agent Manager 및 Antigravity IDE를 사용하여 병렬 에이전트를 구성하고 조정합니다."
-    },
-    "seo-health-score-calculator": {
-      "name": "seo-health-score-calculator",
-      "type": "skill",
-      "description": "SEO Health Score Calculator. Use when working with audit findings and a disclosed scoring rubric.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/seo-health-score-calculator"
-    },
-    "heading-analyzer": {
-      "name": "heading-analyzer",
-      "type": "skill",
-      "description": "Heading Analyzer. Use when working with HTML, Markdown or extracted headings.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/heading-analyzer"
-    },
-    "keyword-difficulty-estimator": {
-      "name": "keyword-difficulty-estimator",
-      "type": "skill",
-      "description": "Keyword Difficulty Estimator. Use when working with keyword plus supplied SERP or competitor evidence.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/keyword-difficulty-estimator"
-    },
-    "backlink-idea-generator": {
-      "name": "backlink-idea-generator",
-      "type": "skill",
-      "description": "Backlink Idea Generator. Use when working with site topic and target audience.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/backlink-idea-generator"
     },
     "claude-in-chrome-troubleshooting": {
       "name": "claude-in-chrome-troubleshooting",
@@ -41874,14 +42066,6 @@
       "path": "collected_assets/skills/screenstudio-alt",
       "description_ko": "오픈 소스 헤드리스 Screen Studio 대안: 유휴 상태의 자동 속도 향상, 클릭 클러스터의 자동 확대/축소, 키 입력 오버레이 칩, 부드러운 합성 커서 및 작업을 따르는 9:16 수직 내보내기(CLI에서 화면 녹화를 위한 포스트 프로덕션)."
     },
-    "location-based-content-idea-generator": {
-      "name": "location-based-content-idea-generator",
-      "type": "skill",
-      "description": "Local Content Idea Generator. Use when working with location, audience and business topic.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/location-based-content-idea-generator"
-    },
     "x-twitter-scraper": {
       "name": "x-twitter-scraper",
       "type": "skill",
@@ -41891,22 +42075,6 @@
       "path": "collected_assets/skills/x-twitter-scraper",
       "description_ko": "Xquik X API SDK, REST 엔드포인트, 호스팅된 Apify Actor 실행, MCP 도구, TweetClaw OpenClaw 플러그인 설치, 서명된 웹후크, 트윗 검색, 사용자 조회, 팔로어 내보내기, 미디어 작업 및 에이전트 자동화를 사용하여 GitHub Copilot 워크플로를 구축하세요."
     },
-    "og-tag-generator": {
-      "name": "og-tag-generator",
-      "type": "skill",
-      "description": "OG Tag Generator. Use when working with page URL, title, description and optional public image URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/og-tag-generator"
-    },
-    "ai-keyword-explainer": {
-      "name": "ai-keyword-explainer",
-      "type": "skill",
-      "description": "AI Keyword Explainer. Use when working with keyword or phrase.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-keyword-explainer"
-    },
     "diary": {
       "name": "diary",
       "type": "skill",
@@ -41915,22 +42083,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/diary",
       "description_ko": "통합 일기 시스템(Unified Diary System): 다중 프로젝트 개발을 위한 상황을 보존하는 자동 로거입니다."
-    },
-    "page-speed-score-simulator": {
-      "name": "page-speed-score-simulator",
-      "type": "skill",
-      "description": "Page Speed Score Simulator. Use when working with performance report or explicit hypothetical performance inputs.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/page-speed-score-simulator"
-    },
-    "ai-competitor-title-rewriter": {
-      "name": "ai-competitor-title-rewriter",
-      "type": "skill",
-      "description": "AI Competitor Title Rewriter. Use when working with competitor title and your page topic.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-competitor-title-rewriter"
     },
     "huggingface-datasets": {
       "name": "huggingface-datasets",
@@ -41959,46 +42111,6 @@
       "path": "collected_assets/skills/skill-optimizer",
       "description_ko": "실제 세션 데이터와 연구 지원 정적 분석을 통해 상담원 기술(SKILL.md)을 진단하고 최적화합니다. Claude Code, Codex 및 모든 Agent Skills 호환 에이전트와 함께 작동합니다."
     },
-    "sitemap-generator": {
-      "name": "sitemap-generator",
-      "type": "skill",
-      "description": "XML Sitemap Generator. Use when working with canonical public page URLs and optional real modification dates.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/sitemap-generator"
-    },
-    "ai-content-detector": {
-      "name": "ai-content-detector",
-      "type": "skill",
-      "description": "AI Content Detector. Use when working with text to review.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-content-detector"
-    },
-    "local-keyword-generator": {
-      "name": "local-keyword-generator",
-      "type": "skill",
-      "description": "Local Keyword Generator. Use when working with service or product and actual target location.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/local-keyword-generator"
-    },
-    "perq": {
-      "name": "perq",
-      "type": "skill",
-      "description": "Find verified free AI credits, free tiers, startup programs and student perks for AI APIs, GPUs and dev tools, each with the vendor's source link and a last-verified date.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/perq"
-    },
-    "hreflang-tag-generator": {
-      "name": "hreflang-tag-generator",
-      "type": "skill",
-      "description": "Hreflang Tag Generator. Use when working with equivalent page URLs mapped to language and optional region.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/hreflang-tag-generator"
-    },
     "apple-notes-search": {
       "name": "apple-notes-search",
       "type": "skill",
@@ -42007,22 +42119,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/apple-notes-search",
       "description_ko": "apple-notes MCP 서버를 통해 사용자 자신의 Apple Notes 전반에 걸쳐 의미론적 + 키워드 검색 및 연결 검색이 가능합니다. 사용자가 자신의 노트에서 무언가를 찾고, 회상하고, 종합하고 싶거나 명확하지 않은 연결/관련 노트를 표면화하려는 경우에 사용하세요. macOS, 온디바이스."
-    },
-    "meta-description-optimizer": {
-      "name": "meta-description-optimizer",
-      "type": "skill",
-      "description": "Meta Description Optimizer. Use when working with existing description and page content or summary.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/meta-description-optimizer"
-    },
-    "search-preview-simulator": {
-      "name": "search-preview-simulator",
-      "type": "skill",
-      "description": "Search Preview Simulator. Use when working with title, description and page URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/search-preview-simulator"
     },
     "blockrun": {
       "name": "blockrun",
@@ -42069,14 +42165,6 @@
       "path": "collected_assets/skills/cowork-to-code-bridge",
       "description_ko": "이미 설치되어 있고 독립적으로 검증된 동료-코드 브리지를 사용하여 로컬 파일 대기열을 통해 사용자 자신의 macOS, Linux 또는 WSL2 시스템에서 제한적으로 승인된 작업을 실행하세요."
     },
-    "ai-schema-markup-generator": {
-      "name": "ai-schema-markup-generator",
-      "type": "skill",
-      "description": "Schema Markup Generator. Use when working with entity type or page facts and canonical page URL.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ai-schema-markup-generator"
-    },
     "odw": {
       "name": "odw",
       "type": "skill",
@@ -42085,14 +42173,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/odw",
       "description_ko": "동적 다중 에이전트 워크플로우 — 먼저 계획한 다음 로컬 odw 데몬을 통한 적대적 검증을 통해 병렬 에이전트를 조정합니다. 사용자가 \"워크플로\"를 요청하거나 \"울트라코드\"라고 말하거나 병렬 에이전트의 이점을 누릴 수 있는 많은 파일/항목에 걸친 작업을 전달할 때 사용합니다."
-    },
-    "nap-consistency-checker": {
-      "name": "nap-consistency-checker",
-      "type": "skill",
-      "description": "NAP Consistency Checker. Use when working with canonical business name, address and phone plus listing records.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/nap-consistency-checker"
     },
     "audit-skills": {
       "name": "audit-skills",
@@ -42103,30 +42183,6 @@
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
     },
-    "project-brief": {
-      "name": "project-brief",
-      "type": "skill",
-      "description": "Project Detail Optimizer. Use when working with one sentence, rough notes or an existing project brief.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/project-brief"
-    },
-    "meta-description-writer": {
-      "name": "meta-description-writer",
-      "type": "skill",
-      "description": "Meta Description Writer. Use when working with page content or factual summary.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/meta-description-writer"
-    },
-    "featured-snippet-optimizer": {
-      "name": "featured-snippet-optimizer",
-      "type": "skill",
-      "description": "Featured Snippet Optimizer. Use when working with target question and existing passage.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/featured-snippet-optimizer"
-    },
     "anywrite": {
       "name": "anywrite",
       "type": "skill",
@@ -42135,14 +42191,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/anywrite",
       "description_ko": "Anytype 로컬 API의 52개 엔드포인트(객체, 속성, 태그, 검색, 채팅, 파일)를 모두 포괄하는 컴파일된 CLI - 하나의 바이너리, MCP 서버가 필요하지 않습니다."
-    },
-    "broken-link-finder": {
-      "name": "broken-link-finder",
-      "type": "skill",
-      "description": "Broken Link Finder. Use when working with page URL, HTML or a list of links.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/broken-link-finder"
     },
     "vssdk-sdk-style-conversion": {
       "name": "vssdk-sdk-style-conversion",
@@ -44695,6 +44743,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/conventional-commit",
       "description_ko": "구조화된 XML 형식을 사용하여 기존 커밋 메시지를 생성하기 위한 프롬프트 및 작업 흐름입니다. 지침, 예제 및 검증을 포함하여 기존 커밋 사양에 따라 표준화되고 설명이 포함된 커밋 메시지를 생성하도록 사용자를 안내합니다."
+    },
+    "caption-qa": {
+      "name": "caption-qa",
+      "type": "skill",
+      "description": "Check SRT or WebVTT captions and subtitles against published standards (Netflix English, BBC subtitle guidelines, DCMP Captioning Key) for reading speed, line length, line count, time on screen, gaps and overlaps, then fix failures by retiming before rewording. Use when asked to QA, lint or validate captions, check whether subtitles read too fast, prepare captions for Netflix, broadcast or educational delivery, or add a caption check to CI.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/caption-qa"
     },
     "mkdocs-translations": {
       "name": "mkdocs-translations",

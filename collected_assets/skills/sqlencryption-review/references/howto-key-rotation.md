@@ -78,6 +78,7 @@ On the secondary, import the primary's new public key (`create certificate ... f
 
 Rotate one replica at a time to avoid failover.
 
+<!-- lint-tsql: skip parser-gap: ALTER ENDPOINT without ROLE; ROLE is optional on ALTER (MS Learn: specify only the parameters to change), ScriptDom requires it -->
 ```sql
 -- On each replica
 create certificate AG_Cert_v2
@@ -130,16 +131,18 @@ The CMK lives outside SQL Server. Rotate by provisioning a new key in the extern
 Add-AzKeyVaultKey -VaultName 'MyVault' -Name 'AE_CMK' -Destination 'Software'
 ```
 
+<!-- lint-tsql: skip fragment: <placeholder> values for the reader to fill in -->
 ```sql
 -- Register the new CMK (pointing to new AKV key version)
 create column master key AE_CMK_v2
-from provider = AZURE_KEY_VAULT
-with provider_key_name = 'https://myvault.vault.azure.net/keys/AE_CMK/4a3b...',
-     key_store_provider_name = 'AZURE_KEY_VAULT';
+with (
+    key_store_provider_name = N'AZURE_KEY_VAULT',
+    key_path = N'https://myvault.vault.azure.net/keys/AE_CMK/4a3b...'
+);
 
 -- Add CEK values encrypted by the new CMK (encrypted_value generated client-side)
 alter column encryption key CEK_SSN
-add value with (
+add value (
     column_master_key = AE_CMK_v2,
     algorithm = 'RSA_OAEP',
     encrypted_value = <client_provided_value>
@@ -152,6 +155,7 @@ After all CEKs reference the new CMK, update application connection strings to u
 
 Rotates the key that encrypts column data (the CMK stays the same).
 
+<!-- lint-tsql: skip fragment: <placeholder> values for the reader to fill in -->
 ```sql
 -- 1. Create a new CEK under the existing CMK (encrypted_value from client)
 create column encryption key CEK_SSN_v2

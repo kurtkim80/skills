@@ -716,7 +716,7 @@
           "name": "--path",
           "type": "string",
           "required": false,
-          "description": "Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the path restriction; use the `files_only` permission set to confine a key to file operations and their supporting lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read."
+          "description": "Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need a path the owning user can read. Keys with any other permission set cannot have a path."
         },
         {
           "name": "--permission-set",
@@ -899,7 +899,7 @@
           "name": "--filter",
           "type": "object",
           "required": false,
-          "description": "If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`."
+          "description": "If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id`, `replayed_from_message_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ replayed_from_message_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, replayed_from_message_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]`, `[ workspace_id, replayed_from_message_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`."
         },
         {
           "name": "--filter-gt",
@@ -924,6 +924,34 @@
           "type": "object",
           "required": false,
           "description": "If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`."
+        }
+      ]
+    },
+    {
+      "name": "as2-incoming-messages find",
+      "group": "as2-incoming-messages",
+      "description": "Show AS2 Incoming Message",
+      "auth_required": true,
+      "parameters": [
+        {
+          "name": "--id",
+          "type": "int64",
+          "required": true,
+          "description": "As2 Incoming Message ID."
+        }
+      ]
+    },
+    {
+      "name": "as2-incoming-messages replay",
+      "group": "as2-incoming-messages",
+      "description": "Replay AS2 Incoming Message",
+      "auth_required": true,
+      "parameters": [
+        {
+          "name": "--id",
+          "type": "int64",
+          "required": true,
+          "description": "As2 Incoming Message ID."
         }
       ]
     },
@@ -4238,7 +4266,7 @@
           "name": "--delivery-policy",
           "type": "object",
           "required": false,
-          "description": "Event Subscription delivery policy."
+          "description": "Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy."
         },
         {
           "name": "--event-target-ids",
@@ -4324,7 +4352,7 @@
           "name": "--delivery-policy",
           "type": "object",
           "required": false,
-          "description": "Event Subscription delivery policy."
+          "description": "Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy."
         },
         {
           "name": "--event-target-ids",
@@ -4416,7 +4444,7 @@
           "name": "--config",
           "type": "object",
           "required": true,
-          "description": "Event Target configuration. Folder targets accept path and format (json or csv)."
+          "description": "Event Target configuration. Fields depend on target_type."
         },
         {
           "name": "--delivery-policy",
@@ -4472,7 +4500,7 @@
           "name": "--config",
           "type": "object",
           "required": false,
-          "description": "Event Target configuration. Folder targets accept path and format (json or csv)."
+          "description": "Event Target configuration. Fields depend on target_type."
         },
         {
           "name": "--delivery-policy",
@@ -11493,7 +11521,7 @@
           "name": "--export-options",
           "type": "object",
           "required": false,
-          "description": "Report-specific options. `permission_audit` supports `group_by` with `user` or `path`."
+          "description": "Options for the report selected by export_type."
         },
         {
           "name": "--user-id",
@@ -11591,7 +11619,7 @@
           "name": "--export-options",
           "type": "object",
           "required": false,
-          "description": "Report-specific options. `permission_audit` supports `group_by` with `user` or `path`."
+          "description": "Options for the report selected by export_type."
         },
         {
           "name": "--user-id",
@@ -13461,6 +13489,12 @@
           "type": "bool",
           "required": false,
           "description": "Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?"
+        },
+        {
+          "name": "--enforce-parent-site-user-ip-restrictions",
+          "type": "bool",
+          "required": false,
+          "description": "Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing IP restrictions. Applies to all Workspaces. Defaults to false."
         },
         {
           "name": "--disallowed-countries",

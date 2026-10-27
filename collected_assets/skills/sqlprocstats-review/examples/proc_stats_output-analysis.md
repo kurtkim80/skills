@@ -46,6 +46,7 @@
 - **Observed:** `max_cpu_ms = 288,400`, `avg_cpu_ms = 14,042`, ratio = **20.5×**. The worst single execution used 20× the average CPU.
 - **Impact:** The plan was compiled for a parameter set that returns a small result (fast plan). Some executions receive parameters returning far more data, turning a nested loops join into an N+1 catastrophe. The 288-second execution likely caused timeouts or user-visible slowness.
 - **Fix:**
+  <!-- lint-tsql: skip fragment: alternative fixes shown side by side, not one batch -->
   ```sql
   -- Option 1: Recompile per execution (if < a few times/sec)
   ALTER PROCEDURE dbo.usp_GetSalesReport WITH RECOMPILE;
@@ -118,6 +119,7 @@
 - **Fix:** Rewrite to accept a TVP of customer IDs and return all results in one call:
   ```sql
   CREATE TYPE dbo.IdList AS TABLE (Id int NOT NULL PRIMARY KEY);
+  GO
 
   ALTER PROCEDURE dbo.usp_SearchCustomers
       @CustomerIds dbo.IdList READONLY  -- replace @SingleId

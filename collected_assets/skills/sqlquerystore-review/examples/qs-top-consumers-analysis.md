@@ -43,6 +43,7 @@
 - Observed: `is_forced_plan = 1`, `force_failure_count = 3`, `last_force_failure_reason_desc = NO_INDEX`
 - Impact: The forced plan references an index that no longer exists. Query Store is silently failing to apply the forced plan, and the optimizer is choosing a new (likely scan-heavy) plan on each execution. Current averages: 284,906 ms duration, 2,568,900 logical reads per execution — 3 distinct plans present, indicating persistent instability.
 - Immediate investigation:
+  <!-- lint-tsql: skip fragment: <placeholder> values for the reader to fill in -->
   ```sql
   -- Identify the forced plan and its missing index reference
   SELECT qp.plan_id, qp.is_forced_plan, qp.force_failure_count,
@@ -70,7 +71,7 @@
   ALTER DATABASE SalesDB SET QUERY_STORE = ON (MAX_STORAGE_SIZE_MB = 2048);
 
   -- Option B — reduce retention to free space immediately
-  ALTER DATABASE SalesDB SET QUERY_STORE = ON (STALE_QUERY_THRESHOLD_DAYS = 14);
+  ALTER DATABASE SalesDB SET QUERY_STORE = ON (CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 14));
 
   -- Check current size after change
   SELECT current_storage_size_mb, max_storage_size_mb
