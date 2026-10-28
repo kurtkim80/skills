@@ -1,13 +1,13 @@
 ---
 name: google-calendar-automation
-description: "Plan and perform authorized Google Calendar workflows through an existing authenticated integration; inspect events, draft changes and verify results."
+description: Plan and perform authorized Google Calendar workflows through an existing authenticated integration; inspect events, draft changes and verify results.
 license: Apache-2.0
-risk: critical
-source: community
-date_added: "2026-02-05"
 metadata:
   author: sanjay3290
-  version: "1.0"
+  version: '1.0'
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-05'
 ---
 
 # Google Calendar Automation

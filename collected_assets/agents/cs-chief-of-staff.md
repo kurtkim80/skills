@@ -1,16 +1,12 @@
 ---
-title: "Chief of Staff Agent — AI Coding Agent & Codex Skill"
-description: "Routing-and-synthesis chief of staff for orchestrating the virtual boardroom, logging decisions, and surfacing stale ones. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-chief-of-staff
+description: Routing-and-synthesis chief of staff for orchestrating the virtual boardroom, logging decisions, and surfacing stale ones
+domain: c-level
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # Chief of Staff Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-chief-of-staff.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -28,19 +24,19 @@ This is the agent the founder talks to **first**. It pulls company-context.md, p
 
 ## Skill Integration
 
-**Skill Location:** [`skills/chief-of-staff`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/chief-of-staff)
+**Skill Location:** `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/chief-of-staff/`
 
 ### Knowledge Bases
 
-- [`references/routing-matrix.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/chief-of-staff/references/routing-matrix.md) — keywords → role mapping, multi-role triggers
-- [`references/synthesis-framework.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/chief-of-staff/references/synthesis-framework.md) — how to combine inputs from multiple advisors
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/chief-of-staff/references/routing-matrix.md` — keywords → role mapping, multi-role triggers
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/chief-of-staff/references/synthesis-framework.md` — how to combine inputs from multiple advisors
 
 ### Coordination Skills
 
-- [`skills/board-meeting`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/board-meeting) — 6-phase deliberation protocol with Phase 2 isolation
-- [`skills/decision-logger`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/decision-logger) — two-layer memory (raw transcripts + approved decisions)
-- [`skills/context-engine`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/context-engine) — company-context loading + anonymization
-- [`skills/agent-protocol`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/agent-protocol) — inter-agent invocation, loop prevention, quality loop
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/board-meeting/` — 6-phase deliberation protocol with Phase 2 isolation
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/decision-logger/` — two-layer memory (raw transcripts + approved decisions)
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/context-engine/` — company-context loading + anonymization
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/agent-protocol/` — inter-agent invocation, loop prevention, quality loop
 
 ## Workflows
 
@@ -122,14 +118,14 @@ echo "Decision logged to ~/.claude/decisions/raw/$(date +%Y-%m-%d)-$RANDOM.md"
 ## Related Agents
 
 - All cs-* C-level advisors (routes to them)
-- [cs-ceo-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-ceo-advisor.md) — primary upward report
-- [executive-mentor / devils-advocate](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/executive-mentor/agents/devils-advocate.md) — pre-decision adversarial check
+- [cs-ceo-advisor](../../agents/c-level/cs-ceo-advisor.md) — primary upward report
+- [executive-mentor / devils-advocate](../../c-level-advisor/executive-mentor/agents/devils-advocate.md) — pre-decision adversarial check
 
 ## References
 
-- Skill: [../../skills/chief-of-staff/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/chief-of-staff/SKILL.md)
-- Voice spec: [../references/persona-voices.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/references/persona-voices.md)
-- Decision-logger: [../../skills/decision-logger/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/decision-logger/SKILL.md)
+- Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/chief-of-staff/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/chief-of-staff/SKILL.md)
+- Voice spec: [../references/persona-voices.md](../references/persona-voices.md)
+- Decision-logger: [${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/decision-logger/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/decision-logger/SKILL.md)
 
 ---
 

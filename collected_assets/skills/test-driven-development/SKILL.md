@@ -1,9 +1,10 @@
 ---
 name: test-driven-development
-description: "Use a failing behavioral test to guide a feature or bug fix, then implement and refactor with relevant regression checks."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Use a failing behavioral test to guide a feature or bug fix, then implement and refactor with relevant regression checks.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Test-Driven Development (TDD)

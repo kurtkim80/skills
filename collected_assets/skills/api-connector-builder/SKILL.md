@@ -1,78 +1,79 @@
 ---
 name: api-connector-builder
-description: ターゲット リポジトリの既存統合パターンに正確に一致する新しい API コネクターまたはプロバイダーを構築します。2 番目のアーキテクチャを発明せずに、1 つ以上の統合を追加するときに使用します。
-origin: ECC direct-port adaptation
-version: "1.0.0"
+description: Build a new API connector or provider by matching the target repo's existing integration pattern exactly. Use when adding one more integration without inventing a second architecture.
+metadata:
+  version: "1.0.0"
+  origin: ECC direct-port adaptation
 ---
 
-# API コネクター ビルダー
+# API Connector Builder
 
-リポジトリネイティブな統合サーフェスを追加する場合に使用します。汎用 HTTP クライアントではありません。
+Use this when the job is to add a repo-native integration surface, not just a generic HTTP client.
 
-ポイントはホスト リポジトリのパターンと一致することです：
+The point is to match the host repository's pattern:
 
-- コネクター レイアウト
-- 構成スキーマ
-- 認証モデル
-- エラー処理
-- テスト スタイル
-- 登録/発見ワイヤリング
+- connector layout
+- config schema
+- auth model
+- error handling
+- test style
+- registration/discovery wiring
 
-## 使用するとき
+## When to Use
 
-- 「このプロジェクトの Jira コネクターを構築する」
-- 「既存のパターンに従う Slack プロバイダーを追加する」
-- 「この API の新しい統合を作成する」
-- 「リポジトリのコネクター スタイルに一致するプラグインを構築する」
+- "Build a Jira connector for this project"
+- "Add a Slack provider following the existing pattern"
+- "Create a new integration for this API"
+- "Build a plugin that matches the repo's connector style"
 
-## ガード レール
+## Guardrails
 
-- リポジトリに既に統合アーキテクチャがある場合は、新しい統合アーキテクチャを発明しないでください。
-- ベンダー ドキュメントだけから始めないでください。最初に既存の repo 内コネクターから始めてください。
-- リポジトリがレジストリ ワイヤリング、テスト、およびドキュメントを期待する場合は、トランスポート コードで停止しないでください。
-- リポジトリに新しい現在のパターンがある場合は、古いコネクターをカーゴカルト化しないでください。
+- do not invent a new integration architecture when the repo already has one
+- do not start from vendor docs alone; start from existing in-repo connectors first
+- do not stop at transport code if the repo expects registry wiring, tests, and docs
+- do not cargo-cult old connectors if the repo has a newer current pattern
 
-## ワークフロー
+## Workflow
 
-### 1. ハウス スタイルを学ぶ
+### 1. Learn the house style
 
-少なくとも 2 つの既存のコネクター/プロバイダーを検査して、マップしてください：
+Inspect at least 2 existing connectors/providers and map:
 
-- ファイル レイアウト
-- 抽象化の境界
-- 構成モデル
-- 再試行 / ページネーション コンベンション
-- レジストリ フック
-- テスト フィクスチャと命名
+- file layout
+- abstraction boundaries
+- config model
+- retry / pagination conventions
+- registry hooks
+- test fixtures and naming
 
-### 2. ターゲット統合を絞り込む
+### 2. Narrow the target integration
 
-リポジトリが実際に必要とするサーフェスのみを定義します：
+Define only the surface the repo actually needs:
 
-- 認証フロー
-- キー エンティティ
-- コア読み取り/書き込み操作
-- ページネーションとレート制限
-- Webhook またはポーリング モデル
+- auth flow
+- key entities
+- core read/write operations
+- pagination and rate limits
+- webhook or polling model
 
-### 3. リポジトリネイティブ レイヤーで構築
+### 3. Build in repo-native layers
 
-一般的なスライス：
+Typical slices:
 
-- 構成/スキーマ
-- クライアント/トランスポート
-- マッピング レイヤー
-- コネクター/プロバイダー エントリ ポイント
-- 登録
-- テスト
+- config/schema
+- client/transport
+- mapping layer
+- connector/provider entrypoint
+- registration
+- tests
 
-### 4. ソース パターンに対して検証
+### 4. Validate against the source pattern
 
-新しいコネクターは、別のエコシステムから インポートされたのではなく、コードベースで明白に見えるはずです。
+The new connector should look obvious in the codebase, not imported from a different ecosystem.
 
-## リファレンス シェイプ
+## Reference Shapes
 
-### プロバイダー スタイル
+### Provider-style
 
 ```text
 providers/
@@ -82,7 +83,7 @@ providers/
     config.py
 ```
 
-### コネクター スタイル
+### Connector-style
 
 ```text
 integrations/
@@ -92,7 +93,7 @@ integrations/
     connector.py
 ```
 
-### TypeScript プラグイン スタイル
+### TypeScript plugin-style
 
 ```text
 src/integrations/
@@ -103,17 +104,17 @@ src/integrations/
     test.ts
 ```
 
-## 品質チェックリスト
+## Quality Checklist
 
-- [ ] 既存の repo 内統合パターンに一致します
-- [ ] 構成検証が存在します
-- [ ] 認証とエラー処理が明示的です
-- [ ] ページネーション/再試行動作がリポジトリ規範に従います
-- [ ] レジストリ/発見ワイヤリングが完成しました
-- [ ] テストはホスト リポジトリのスタイルを反映しています
-- [ ] ドキュメント/例がリポジトリで期待されている場合は更新されます
+- [ ] matches an existing in-repo integration pattern
+- [ ] config validation exists
+- [ ] auth and error handling are explicit
+- [ ] pagination/retry behavior follows repo norms
+- [ ] registry/discovery wiring is complete
+- [ ] tests mirror the host repo's style
+- [ ] docs/examples are updated if expected by the repo
 
-## 関連スキル
+## Related Skills
 
 - `backend-patterns`
 - `mcp-server-patterns`

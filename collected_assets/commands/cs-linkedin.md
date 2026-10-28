@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin"
-description: "/cs-linkedin — Route any organic LinkedIn goal to the right lane (profile / strategy / content / engagement / analytics) after gating it against LinkedIn's User Agreement. Refuses automation, scraping, engagement pods, bulk DMs, fake identity, and fabricated proof before a word is drafted. Nothing is ever sent."
-argument-hint: "[what you want from LinkedIn — a goal, a profile problem, a post, an outreach plan, or a question about your numbers]"
+title: "/cs-linkedin — Slash Command for AI Coding Agents"
+description: "/cs-linkedin — Route any organic LinkedIn goal to the right lane (profile / strategy / content / engagement / analytics) after gating it against. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin — Gate, then route
+# /cs-linkedin
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin [your goal]`
 
@@ -73,6 +78,6 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-skills/scripts/linkedin_goal_route
 
 ## Related
 
-- Agent: [`cs-linkedin-orchestrator`](../agents/cs-linkedin-orchestrator.md)
-- Skill: [`linkedin-skills`](../skills/linkedin-skills/SKILL.md)
+- Agent: [`cs-linkedin-orchestrator`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/agents/cs-linkedin-orchestrator.md)
+- Skill: [`linkedin-skills`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-skills/SKILL.md)
 - Siblings: [`/cs-grill-linkedin`](cs-grill-linkedin.md) and the six lane commands

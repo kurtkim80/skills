@@ -4,24 +4,32 @@ description: Instinct-based learning system that observes sessions via hooks, cr
 version: 2.0.0
 ---
 
-# 持續學習 v2 - 基於本能的架構
+# Continuous Learning v2 - Instinct-Based Architecture
 
-進階學習系統，透過原子「本能」（帶信心評分的小型學習行為）將你的 Claude Code 工作階段轉化為可重用知識。
+An advanced learning system that turns your Claude Code sessions into reusable knowledge through atomic "instincts" - small learned behaviors with confidence scoring.
 
-## v2 的新功能
+## When to Activate
 
-| 功能 | v1 | v2 |
-|------|----|----|
-| 觀察 | Stop hook（工作階段結束） | PreToolUse/PostToolUse（100% 可靠） |
-| 分析 | 主要上下文 | 背景 agent（Haiku） |
-| 粒度 | 完整技能 | 原子「本能」 |
-| 信心 | 無 | 0.3-0.9 加權 |
-| 演化 | 直接到技能 | 本能 → 聚類 → 技能/指令/agent |
-| 分享 | 無 | 匯出/匯入本能 |
+- Setting up automatic learning from Claude Code sessions
+- Configuring instinct-based behavior extraction via hooks
+- Tuning confidence thresholds for learned behaviors
+- Reviewing, exporting, or importing instinct libraries
+- Evolving instincts into full skills, commands, or agents
 
-## 本能模型
+## What's New in v2
 
-本能是一個小型學習行為：
+| Feature | v1 | v2 |
+|---------|----|----|
+| Observation | Stop hook (session end) | PreToolUse/PostToolUse (100% reliable) |
+| Analysis | Main context | Background agent (Haiku) |
+| Granularity | Full skills | Atomic "instincts" |
+| Confidence | None | 0.3-0.9 weighted |
+| Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
+| Sharing | None | Export/import instincts |
+
+## The Instinct Model
+
+An instinct is a small learned behavior:
 
 ```yaml
 ---
@@ -32,44 +40,44 @@ domain: "code-style"
 source: "session-observation"
 ---
 
-# 偏好函式風格
+# Prefer Functional Style
 
-## 動作
-適當時使用函式模式而非類別。
+## Action
+Use functional patterns over classes when appropriate.
 
-## 證據
-- 觀察到 5 次函式模式偏好
-- 使用者在 2025-01-15 將基於類別的方法修正為函式
+## Evidence
+- Observed 5 instances of functional pattern preference
+- User corrected class-based approach to functional on 2025-01-15
 ```
 
-**屬性：**
-- **原子性** — 一個觸發器，一個動作
-- **信心加權** — 0.3 = 試探性，0.9 = 近乎確定
-- **領域標記** — code-style、testing、git、debugging、workflow 等
-- **證據支持** — 追蹤建立它的觀察
+**Properties:**
+- **Atomic** — one trigger, one action
+- **Confidence-weighted** — 0.3 = tentative, 0.9 = near certain
+- **Domain-tagged** — code-style, testing, git, debugging, workflow, etc.
+- **Evidence-backed** — tracks what observations created it
 
-## 運作方式
+## How It Works
 
 ```
-工作階段活動
+Session Activity
       │
-      │ Hooks 捕獲提示 + 工具使用（100% 可靠）
+      │ Hooks capture prompts + tool use (100% reliable)
       ▼
 ┌─────────────────────────────────────────┐
 │         observations.jsonl              │
-│   （提示、工具呼叫、結果）               │
+│   (prompts, tool calls, outcomes)       │
 └─────────────────────────────────────────┘
       │
-      │ Observer agent 讀取（背景、Haiku）
+      │ Observer agent reads (background, Haiku)
       ▼
 ┌─────────────────────────────────────────┐
-│          模式偵測                        │
-│   • 使用者修正 → 本能                   │
-│   • 錯誤解決 → 本能                     │
-│   • 重複工作流程 → 本能                 │
+│          PATTERN DETECTION              │
+│   • User corrections → instinct         │
+│   • Error resolutions → instinct        │
+│   • Repeated workflows → instinct       │
 └─────────────────────────────────────────┘
       │
-      │ 建立/更新
+      │ Creates/updates
       ▼
 ┌─────────────────────────────────────────┐
 │         instincts/personal/             │
@@ -78,7 +86,7 @@ source: "session-observation"
 │   • use-zod-validation.md (0.6)         │
 └─────────────────────────────────────────┘
       │
-      │ /evolve 聚類
+      │ /evolve clusters
       ▼
 ┌─────────────────────────────────────────┐
 │              evolved/                   │
@@ -88,11 +96,36 @@ source: "session-observation"
 └─────────────────────────────────────────┘
 ```
 
-## 快速開始
+## Quick Start
 
-### 1. 啟用觀察 Hooks
+### 1. Enable Observation Hooks
 
-新增到你的 `~/.claude/settings.json`：
+Add to your `~/.claude/settings.json`.
+
+**If installed as a plugin** (recommended):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "command",
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre"
+      }]
+    }],
+    "PostToolUse": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "command",
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post"
+      }]
+    }]
+  }
+}
+```
+
+**If installed manually** to `~/.claude/skills`:
 
 ```json
 {
@@ -115,34 +148,36 @@ source: "session-observation"
 }
 ```
 
-### 2. 初始化目錄結構
+### 2. Initialize Directory Structure
+
+The Python CLI will create these automatically, but you can also create them manually:
 
 ```bash
 mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands}}
 touch ~/.claude/homunculus/observations.jsonl
 ```
 
-### 3. 執行 Observer Agent（可選）
-
-觀察者可以在背景執行並分析觀察：
+### 3. Use the Instinct Commands
 
 ```bash
-# 啟動背景觀察者
-~/.claude/skills/continuous-learning-v2/agents/start-observer.sh
+/instinct-status     # Show learned instincts with confidence scores
+/evolve              # Cluster related instincts into skills/commands
+/instinct-export     # Export instincts for sharing
+/instinct-import     # Import instincts from others
 ```
 
-## 指令
+## Commands
 
-| 指令 | 描述 |
-|------|------|
-| `/instinct-status` | 顯示所有學習本能及其信心 |
-| `/evolve` | 將相關本能聚類為技能/指令 |
-| `/instinct-export` | 匯出本能以分享 |
-| `/instinct-import <file>` | 從他人匯入本能 |
+| Command | Description |
+|---------|-------------|
+| `/instinct-status` | Show all learned instincts with confidence |
+| `/evolve` | Cluster related instincts into skills/commands |
+| `/instinct-export` | Export instincts for sharing |
+| `/instinct-import <file>` | Import instincts from others |
 
-## 設定
+## Configuration
 
-編輯 `config.json`：
+Edit `config.json`:
 
 ```json
 {
@@ -178,80 +213,80 @@ touch ~/.claude/homunculus/observations.jsonl
 }
 ```
 
-## 檔案結構
+## File Structure
 
 ```
 ~/.claude/homunculus/
-├── identity.json           # 你的個人資料、技術水平
-├── observations.jsonl      # 當前工作階段觀察
-├── observations.archive/   # 已處理觀察
+├── identity.json           # Your profile, technical level
+├── observations.jsonl      # Current session observations
+├── observations.archive/   # Processed observations
 ├── instincts/
-│   ├── personal/           # 自動學習本能
-│   └── inherited/          # 從他人匯入
+│   ├── personal/           # Auto-learned instincts
+│   └── inherited/          # Imported from others
 └── evolved/
-    ├── agents/             # 產生的專業 agents
-    ├── skills/             # 產生的技能
-    └── commands/           # 產生的指令
+    ├── agents/             # Generated specialist agents
+    ├── skills/             # Generated skills
+    └── commands/           # Generated commands
 ```
 
-## 與 Skill Creator 整合
+## Integration with Skill Creator
 
-當你使用 [Skill Creator GitHub App](https://skill-creator.app) 時，它現在產生**兩者**：
-- 傳統 SKILL.md 檔案（用於向後相容）
-- 本能集合（用於 v2 學習系統）
+When you use the [Skill Creator GitHub App](https://skill-creator.app), it now generates **both**:
+- Traditional SKILL.md files (for backward compatibility)
+- Instinct collections (for v2 learning system)
 
-從倉庫分析的本能有 `source: "repo-analysis"` 並包含來源倉庫 URL。
+Instincts from repo analysis have `source: "repo-analysis"` and include the source repository URL.
 
-## 信心評分
+## Confidence Scoring
 
-信心隨時間演化：
+Confidence evolves over time:
 
-| 分數 | 意義 | 行為 |
-|------|------|------|
-| 0.3 | 試探性 | 建議但不強制 |
-| 0.5 | 中等 | 相關時應用 |
-| 0.7 | 強烈 | 自動批准應用 |
-| 0.9 | 近乎確定 | 核心行為 |
+| Score | Meaning | Behavior |
+|-------|---------|----------|
+| 0.3 | Tentative | Suggested but not enforced |
+| 0.5 | Moderate | Applied when relevant |
+| 0.7 | Strong | Auto-approved for application |
+| 0.9 | Near-certain | Core behavior |
 
-**信心增加**當：
-- 重複觀察到模式
-- 使用者不修正建議行為
-- 來自其他來源的類似本能同意
+**Confidence increases** when:
+- Pattern is repeatedly observed
+- User doesn't correct the suggested behavior
+- Similar instincts from other sources agree
 
-**信心減少**當：
-- 使用者明確修正行為
-- 長期未觀察到模式
-- 出現矛盾證據
+**Confidence decreases** when:
+- User explicitly corrects the behavior
+- Pattern isn't observed for extended periods
+- Contradicting evidence appears
 
-## 為何 Hooks vs Skills 用於觀察？
+## Why Hooks vs Skills for Observation?
 
-> "v1 依賴技能進行觀察。技能是機率性的——它們根據 Claude 的判斷觸發約 50-80% 的時間。"
+> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time based on Claude's judgment."
 
-Hooks **100% 的時間**確定性地觸發。這意味著：
-- 每個工具呼叫都被觀察
-- 無模式被遺漏
-- 學習是全面的
+Hooks fire **100% of the time**, deterministically. This means:
+- Every tool call is observed
+- No patterns are missed
+- Learning is comprehensive
 
-## 向後相容性
+## Backward Compatibility
 
-v2 完全相容 v1：
-- 現有 `~/.claude/skills/learned/` 技能仍可運作
-- Stop hook 仍執行（但現在也餵入 v2）
-- 漸進遷移路徑：兩者並行執行
+v2 is fully compatible with v1:
+- Existing `~/.claude/skills/learned/` skills still work
+- Stop hook still runs (but now also feeds into v2)
+- Gradual migration path: run both in parallel
 
-## 隱私
+## Privacy
 
-- 觀察保持在你的機器**本機**
-- 只有**本能**（模式）可被匯出
-- 不會分享實際程式碼或對話內容
-- 你控制匯出內容
+- Observations stay **local** on your machine
+- Only **instincts** (patterns) can be exported
+- No actual code or conversation content is shared
+- You control what gets exported
 
-## 相關
+## Related
 
-- [Skill Creator](https://skill-creator.app) - 從倉庫歷史產生本能
-- [Homunculus](https://github.com/humanplane/homunculus) - v2 架構靈感
-- [Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 持續學習章節
+- [Skill Creator](https://skill-creator.app) - Generate instincts from repo history
+- [Homunculus](https://github.com/humanplane/homunculus) - Inspiration for v2 architecture
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Continuous learning section
 
 ---
 
-*基於本能的學習：一次一個觀察，教導 Claude 你的模式。*
+*Instinct-based learning: teaching Claude your patterns, one observation at a time.*

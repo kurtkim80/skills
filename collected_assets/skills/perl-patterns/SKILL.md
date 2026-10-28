@@ -1,40 +1,41 @@
 ---
 name: perl-patterns
-description: 堅牢でメンテナブルなPerlアプリケーションを構築するためのModern Perl 5.36+のイディオム、ベストプラクティス、規約。
-origin: ECC
+description: Modern Perl 5.36+ idioms, best practices, and conventions for building robust, maintainable Perl applications. Use when writing or reviewing modern Perl 5.36+ code.
+metadata:
+  origin: ECC
 ---
 
-# モダンPerl開発パターン
+# Modern Perl Development Patterns
 
-堅牢でメンテナブルなアプリケーションを構築するためのイディオマティックなPerl 5.36+パターンとベストプラクティス。
+Idiomatic Perl 5.36+ patterns and best practices for building robust, maintainable applications.
 
-## アクティベートするタイミング
+## When to Activate
 
-- 新しいPerlコードまたはモジュールを書くとき
-- イディオム準拠のためにPerlコードをレビューするとき
-- レガシーPerlをモダンな標準にリファクタリングするとき
-- PerlモジュールのアーキテクチャをDesignするとき
-- 5.36以前のコードをモダンなPerlに移行するとき
+- Writing new Perl code or modules
+- Reviewing Perl code for idiom compliance
+- Refactoring legacy Perl to modern standards
+- Designing Perl module architecture
+- Migrating pre-5.36 code to modern Perl
 
-## 仕組み
+## How It Works
 
-これらのパターンをModern Perl 5.36+のデフォルトへのバイアスとして適用する: シグネチャ、明示的なモジュール、集中的なエラー処理、テスト可能な境界。以下の例は出発点としてコピーし、目の前の実際のアプリ、依存スタック、デプロイモデルに合わせて締め付けることを意図している。
+Apply these patterns as a bias toward modern Perl 5.36+ defaults: signatures, explicit modules, focused error handling, and testable boundaries. The examples below are meant to be copied as starting points, then tightened for the actual app, dependency stack, and deployment model in front of you.
 
-## コア原則
+## Core Principles
 
-### 1. `v5.36`プラグマの使用
+### 1. Use `v5.36` Pragma
 
-単一の`use v5.36`が古い定型文を置き換え、strict、warnings、サブルーチンシグネチャを有効化する。
+A single `use v5.36` replaces the old boilerplate and enables strict, warnings, and subroutine signatures.
 
 ```perl
-# Good: モダンなプリアンブル
+# Good: Modern preamble
 use v5.36;
 
 sub greet($name) {
     say "Hello, $name!";
 }
 
-# Bad: レガシーな定型文
+# Bad: Legacy boilerplate
 use strict;
 use warnings;
 use feature 'say', 'signatures';
@@ -46,28 +47,28 @@ sub greet {
 }
 ```
 
-### 2. サブルーチンシグネチャ
+### 2. Subroutine Signatures
 
-明確さと自動アリティチェックのためにシグネチャを使用する。
+Use signatures for clarity and automatic arity checking.
 
 ```perl
 use v5.36;
 
-# Good: デフォルト値付きシグネチャ
+# Good: Signatures with defaults
 sub connect_db($host, $port = 5432, $timeout = 30) {
-    # $hostは必須、その他はデフォルトあり
+    # $host is required, others have defaults
     return DBI->connect("dbi:Pg:host=$host;port=$port", undef, undef, {
         RaiseError => 1,
         PrintError => 0,
     });
 }
 
-# Good: 可変引数のためのスラーピーパラメータ
+# Good: Slurpy parameter for variable args
 sub log_message($level, @details) {
     say "[$level] " . join(' ', @details);
 }
 
-# Bad: 手動引数アンパック
+# Bad: Manual argument unpacking
 sub connect_db {
     my ($host, $port, $timeout) = @_;
     $port    //= 5432;
@@ -76,23 +77,23 @@ sub connect_db {
 }
 ```
 
-### 3. コンテキスト感度
+### 3. Context Sensitivity
 
-スカラーvsリストコンテキストを理解する — Perlのコアコンセプト。
+Understand scalar vs list context — a core Perl concept.
 
 ```perl
 use v5.36;
 
 my @items = (1, 2, 3, 4, 5);
 
-my @copy  = @items;            # リストコンテキスト: すべての要素
-my $count = @items;            # スカラーコンテキスト: カウント (5)
-say "Items: " . scalar @items; # スカラーコンテキストを強制
+my @copy  = @items;            # List context: all elements
+my $count = @items;            # Scalar context: count (5)
+say "Items: " . scalar @items; # Force scalar context
 ```
 
-### 4. 後置逆参照
+### 4. Postfix Dereferencing
 
-ネストされた構造で読みやすさのために後置逆参照構文を使用する。
+Use postfix dereference syntax for readability with nested structures.
 
 ```perl
 use v5.36;
@@ -104,28 +105,28 @@ my $data = {
     ],
 };
 
-# Good: 後置逆参照
+# Good: Postfix dereferencing
 my @users = $data->{users}->@*;
 my @roles = $data->{users}[0]{roles}->@*;
 my %first = $data->{users}[0]->%*;
 
-# Bad: 前置逆参照（チェーンで読みにくい）
+# Bad: Circumfix dereferencing (harder to read in chains)
 my @users = @{ $data->{users} };
 my @roles = @{ $data->{users}[0]{roles} };
 ```
 
-### 5. `isa`演算子（5.32+）
+### 5. The `isa` Operator (5.32+)
 
-中置型チェック — `blessed($o) && $o->isa('X')`を置き換える。
+Infix type-check — replaces `blessed($o) && $o->isa('X')`.
 
 ```perl
 use v5.36;
 if ($obj isa 'My::Class') { $obj->do_something }
 ```
 
-## エラー処理
+## Error Handling
 
-### eval/dieパターン
+### eval/die Pattern
 
 ```perl
 use v5.36;
@@ -137,7 +138,7 @@ sub parse_config($path) {
 }
 ```
 
-### Try::Tiny（信頼性の高い例外処理）
+### Try::Tiny (Reliable Exception Handling)
 
 ```perl
 use v5.36;
@@ -156,7 +157,7 @@ sub fetch_user($id) {
 }
 ```
 
-### ネイティブtry/catch（5.40+）
+### Native try/catch (5.40+)
 
 ```perl
 use v5.40;
@@ -173,12 +174,12 @@ sub divide($x, $y) {
 }
 ```
 
-## MooによるモダンOO
+## Modern OO with Moo
 
-軽量でモダンなOOにはMooを優先する。メタプロトコルが必要な場合のみMooseを使用する。
+Prefer Moo for lightweight, modern OO. Use Moose only when its metaprotocol is needed.
 
 ```perl
-# Good: Mooクラス
+# Good: Moo class
 package User;
 use Moo;
 use Types::Standard qw(Str Int ArrayRef);
@@ -199,14 +200,14 @@ sub greet($self) {
 
 1;
 
-# 使用法
+# Usage
 my $user = User->new(
     name  => 'Alice',
     email => 'alice@example.com',
     roles => ['admin', 'user'],
 );
 
-# Bad: ブレスされたhashref（バリデーションなし、アクセサなし）
+# Bad: Blessed hashref (no validation, no accessors)
 package User;
 sub new {
     my ($class, %args) = @_;
@@ -216,7 +217,7 @@ sub name { return $_[0]->{name} }
 1;
 ```
 
-### Mooロール
+### Moo Roles
 
 ```perl
 package Role::Serializable;
@@ -235,7 +236,7 @@ sub TO_HASH($self) { { name => $self->name, email => $self->email } }
 1;
 ```
 
-### ネイティブ`class`キーワード（5.38+、Corinna）
+### Native `class` Keyword (5.38+, Corinna)
 
 ```perl
 use v5.38;
@@ -252,14 +253,14 @@ my $p = Point->new(x => 3, y => 4);
 say $p->magnitude;  # 5
 ```
 
-## 正規表現
+## Regular Expressions
 
-### 名前付きキャプチャと`/x`フラグ
+### Named Captures and `/x` Flag
 
 ```perl
 use v5.36;
 
-# Good: 読みやすさのための/xを使った名前付きキャプチャ
+# Good: Named captures with /x for readability
 my $log_re = qr{
     ^ (?<timestamp> \d{4}-\d{2}-\d{2} \s \d{2}:\d{2}:\d{2} )
     \s+ \[ (?<level> \w+ ) \]
@@ -271,18 +272,18 @@ if ($line =~ $log_re) {
     say "Message: $+{message}";
 }
 
-# Bad: 位置キャプチャ（メンテが難しい）
+# Bad: Positional captures (hard to maintain)
 if ($line =~ /^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s+\[(\w+)\]\s+(.+)$/) {
     say "Time: $1, Level: $2";
 }
 ```
 
-### プリコンパイルパターン
+### Precompiled Patterns
 
 ```perl
 use v5.36;
 
-# Good: 1回コンパイル、複数回使用
+# Good: Compile once, use many
 my $email_re = qr/^[A-Za-z0-9._%+-]+\@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 sub validate_emails(@emails) {
@@ -290,14 +291,14 @@ sub validate_emails(@emails) {
 }
 ```
 
-## データ構造
+## Data Structures
 
-### リファレンスと安全な深いアクセス
+### References and Safe Deep Access
 
 ```perl
 use v5.36;
 
-# ハッシュと配列リファレンス
+# Hash and array references
 my $config = {
     database => {
         host => 'localhost',
@@ -306,18 +307,18 @@ my $config = {
     },
 };
 
-# 安全な深いアクセス（どのレベルが欠落してもundefを返す）
+# Safe deep access (returns undef if any level missing)
 my $port = $config->{database}{port};           # 5432
-my $missing = $config->{cache}{host};           # undef、エラーなし
+my $missing = $config->{cache}{host};           # undef, no error
 
-# ハッシュスライス
+# Hash slices
 my %subset;
 @subset{qw(host port)} = @{$config->{database}}{qw(host port)};
 
-# 配列スライス
+# Array slices
 my @first_two = $config->{database}{options}->@[0, 1];
 
-# 複数変数のforループ（5.36で実験的、5.40で安定）
+# Multi-variable for loop (experimental in 5.36, stable in 5.40)
 use feature 'for_list';
 no warnings 'experimental::for_list';
 for my ($key, $val) (%$config) {
@@ -325,14 +326,14 @@ for my ($key, $val) (%$config) {
 }
 ```
 
-## ファイルI/O
+## File I/O
 
-### 3引数open
+### Three-Argument Open
 
 ```perl
 use v5.36;
 
-# Good: autodieを使った3引数open（コアモジュール、'or die'を排除）
+# Good: Three-arg open with autodie (core module, eliminates 'or die')
 use autodie;
 
 sub read_file($path) {
@@ -343,12 +344,12 @@ sub read_file($path) {
     return $content;
 }
 
-# Bad: 2引数open（シェルインジェクションリスク、perl-securityを参照）
-open FH, $path;            # 絶対にしない
-open FH, "< $path";        # まだ悪い — モード文字列のユーザーデータ
+# Bad: Two-arg open (shell injection risk, see perl-security)
+open FH, $path;            # NEVER do this
+open FH, "< $path";        # Still bad — user data in mode string
 ```
 
-### ファイル操作のPath::Tiny
+### Path::Tiny for File Operations
 
 ```perl
 use v5.36;
@@ -358,36 +359,36 @@ my $file = path('config', 'app.json');
 my $content = $file->slurp_utf8;
 $file->spew_utf8($new_content);
 
-# ディレクトリを反復
+# Iterate directory
 for my $child (path('src')->children(qr/\.pl$/)) {
     say $child->basename;
 }
 ```
 
-## モジュール構成
+## Module Organization
 
-### 標準プロジェクトレイアウト
+### Standard Project Layout
 
 ```text
 MyApp/
 ├── lib/
 │   └── MyApp/
-│       ├── App.pm           # メインモジュール
-│       ├── Config.pm        # 設定
-│       ├── DB.pm            # データベース層
-│       └── Util.pm          # ユーティリティ
+│       ├── App.pm           # Main module
+│       ├── Config.pm        # Configuration
+│       ├── DB.pm            # Database layer
+│       └── Util.pm          # Utilities
 ├── bin/
-│   └── myapp                # エントリーポイントスクリプト
+│   └── myapp                # Entry-point script
 ├── t/
-│   ├── 00-load.t            # コンパイルテスト
-│   ├── unit/                # ユニットテスト
-│   └── integration/         # インテグレーションテスト
-├── cpanfile                 # 依存関係
-├── Makefile.PL              # ビルドシステム
-└── .perlcriticrc            # リンティング設定
+│   ├── 00-load.t            # Compilation tests
+│   ├── unit/                # Unit tests
+│   └── integration/         # Integration tests
+├── cpanfile                 # Dependencies
+├── Makefile.PL              # Build system
+└── .perlcriticrc            # Linting config
 ```
 
-### エクスポーターパターン
+### Exporter Patterns
 
 ```perl
 package MyApp::Util;
@@ -402,20 +403,20 @@ sub trim($str) { $str =~ s/^\s+|\s+$//gr }
 1;
 ```
 
-## ツーリング
+## Tooling
 
-### perltidy設定（.perltidyrc）
+### perltidy Configuration (.perltidyrc)
 
 ```text
--i=4        # 4スペースインデント
--l=100      # 100文字行長
--ci=4       # 継続インデント
+-i=4        # 4-space indent
+-l=100      # 100-char line length
+-ci=4       # continuation indent
 -ce         # cuddled else
--bar        # 同じ行に開き括弧
--nolq       # 長い引用文字列のアウトデントをしない
+-bar        # opening brace on same line
+-nolq       # don't outdent long quoted strings
 ```
 
-### perlcritic設定（.perlcriticrc）
+### perlcritic Configuration (.perlcriticrc)
 
 ```ini
 severity = 3
@@ -432,12 +433,12 @@ severity = 4
 allowed_values = 0 1 2 -1
 ```
 
-### 依存関係管理（cpanfile + carton）
+### Dependency Management (cpanfile + carton)
 
 ```bash
-cpanm App::cpanminus Carton   # ツールをインストール
-carton install                 # cpanfileから依存関係をインストール
-carton exec -- perl bin/myapp  # ローカル依存関係で実行
+cpanm App::cpanminus Carton   # Install tools
+carton install                 # Install deps from cpanfile
+carton exec -- perl bin/myapp  # Run with local deps
 ```
 
 ```perl
@@ -453,52 +454,52 @@ on test => sub {
 };
 ```
 
-## クイックリファレンス: モダンPerlイディオム
+## Quick Reference: Modern Perl Idioms
 
-| レガシーパターン | モダンな置き換え |
+| Legacy Pattern | Modern Replacement |
 |---|---|
 | `use strict; use warnings;` | `use v5.36;` |
 | `my ($x, $y) = @_;` | `sub foo($x, $y) { ... }` |
 | `@{ $ref }` | `$ref->@*` |
 | `%{ $ref }` | `$ref->%*` |
 | `open FH, "< $file"` | `open my $fh, '<:encoding(UTF-8)', $file` |
-| `blessed hashref` | 型付きの`Moo`クラス |
-| `$1, $2, $3` | `$+{name}`（名前付きキャプチャ） |
-| `eval { }; if ($@)` | `Try::Tiny`またはネイティブ`try/catch`（5.40+） |
+| `blessed hashref` | `Moo` class with types |
+| `$1, $2, $3` | `$+{name}` (named captures) |
+| `eval { }; if ($@)` | `Try::Tiny` or native `try/catch` (5.40+) |
 | `BEGIN { require Exporter; }` | `use Exporter 'import';` |
-| 手動ファイル操作 | `Path::Tiny` |
-| `blessed($o) && $o->isa('X')` | `$o isa 'X'`（5.32+） |
-| `builtin::true / false` | `use builtin 'true', 'false';`（5.36+、実験的） |
+| Manual file ops | `Path::Tiny` |
+| `blessed($o) && $o->isa('X')` | `$o isa 'X'` (5.32+) |
+| `builtin::true / false` | `use builtin 'true', 'false';` (5.36+, experimental) |
 
-## アンチパターン
+## Anti-Patterns
 
 ```perl
-# 1. 2引数open（セキュリティリスク）
-open FH, $filename;                     # 絶対にしない
+# 1. Two-arg open (security risk)
+open FH, $filename;                     # NEVER
 
-# 2. 間接オブジェクト構文（あいまいな解析）
+# 2. Indirect object syntax (ambiguous parsing)
 my $obj = new Foo(bar => 1);            # Bad
 my $obj = Foo->new(bar => 1);           # Good
 
-# 3. $_への過度の依存
-map { process($_) } grep { validate($_) } @items;  # 追うのが難しい
-my @valid = grep { validate($_) } @items;           # より良い: 分割する
+# 3. Excessive reliance on $_
+map { process($_) } grep { validate($_) } @items;  # Hard to follow
+my @valid = grep { validate($_) } @items;           # Better: break it up
 my @results = map { process($_) } @valid;
 
-# 4. strictリファレンスの無効化
-no strict 'refs';                        # ほぼ常に間違い
-${"My::Package::$var"} = $value;         # 代わりにhashを使用
+# 4. Disabling strict refs
+no strict 'refs';                        # Almost always wrong
+${"My::Package::$var"} = $value;         # Use a hash instead
 
-# 5. グローバル変数を設定として使用
-our $TIMEOUT = 30;                       # Bad: 可変グローバル
-use constant TIMEOUT => 30;              # Better: 定数
-# Best: デフォルト付きのMoo属性
+# 5. Global variables as configuration
+our $TIMEOUT = 30;                       # Bad: mutable global
+use constant TIMEOUT => 30;              # Better: constant
+# Best: Moo attribute with default
 
-# 6. モジュールロードのための文字列eval
-eval "require $module";                  # Bad: コードインジェクションリスク
+# 6. String eval for module loading
+eval "require $module";                  # Bad: code injection risk
 eval "use $module";                      # Bad
-use Module::Runtime 'require_module';    # Good: 安全なモジュールロード
+use Module::Runtime 'require_module';    # Good: safe module loading
 require_module($module);
 ```
 
-**忘れないこと**: モダンなPerlはクリーン、読みやすく、安全である。`use v5.36`に定型文を処理させ、オブジェクトにはMooを使用し、手作りのソリューションよりCPANの実績あるモジュールを優先する。
+**Remember**: Modern Perl is clean, readable, and safe. Let `use v5.36` handle the boilerplate, use Moo for objects, and prefer CPAN's battle-tested modules over hand-rolled solutions.

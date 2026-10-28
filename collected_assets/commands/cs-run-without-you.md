@@ -1,15 +1,9 @@
 ---
-title: "/cs-run-without-you — Slash Command for AI Coding Agents"
-description: "Phase 4 — make the agent run without you. Turn a graded agent into a recurring POSIX-cron scheduled deployment (optionally self-grading each firing). Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Phase 4 — make the agent run without you. Turn a graded agent into a recurring POSIX-cron scheduled deployment (optionally self-grading each firing), an event-driven curl trigger, or on-demand use, then finalize NEXT-DIRECTIONS, via the run-without-you skill. Tests with a manual run before trusting the schedule.
+argument-hint: "[optional: cron expression, e.g. \"0 9 * * *\"]"
 ---
 
-# /cs-run-without-you
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-run-without-you.md">Source</a></span>
-</div>
-
+# /cs-run-without-you — Phase 4: Run Without You
 
 Run the `run-without-you` skill.
 

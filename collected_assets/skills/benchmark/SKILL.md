@@ -1,79 +1,81 @@
 ---
 name: benchmark
-description: このスキルを使用して、パフォーマンスベースラインを測定し、PR前後の回帰を検出し、スタック代替案を比較します。
-origin: ECC
+description: Measure performance baselines and detect regressions across browser Core Web Vitals (LCP, INP, CLS, page weight), API endpoint latency percentiles, and build/test feedback times, with before/after comparison stored in git-tracked .ecc/benchmarks JSON. Use when checking page speed, responding to 'it feels slow' reports, verifying launch performance targets, or comparing stack alternatives.
+license: MIT
+metadata:
+  origin: ECC
 ---
 
-# ベンチマーク — パフォーマンスベースラインと回帰検出
+# Benchmark — Performance Baseline & Regression Detection
 
-## 使用時期
+## When to Use
 
-- PR前後にパフォーマンスへの影響を測定
-- プロジェクトのパフォーマンスベースラインを設定
-- ユーザーが「遅く感じる」と報告したとき
-- ローンチ前 — パフォーマンスターゲットを満たしていることを確認
-- スタックを代替案と比較
+- Before and after a PR to measure performance impact
+- Setting up performance baselines for a project
+- When users report "it feels slow"
+- Before a launch — ensure you meet performance targets
+- Comparing your stack against alternatives
 
-## 動作方法
+## How It Works
 
-### モード1：ページパフォーマンス
+### Mode 1: Page Performance
 
-ブラウザMCPを介してリアルブラウザメトリクスを測定：
-
-```
-1. 各ターゲットURLに移動
-2. Core Web Vitalsを測定：
-   - LCP (Largest Contentful Paint) — ターゲット < 2.5s
-   - CLS (Cumulative Layout Shift) — ターゲット < 0.1
-   - INP (Interaction to Next Paint) — ターゲット < 200ms
-   - FCP (First Contentful Paint) — ターゲット < 1.8s
-   - TTFB (Time to First Byte) — ターゲット < 800ms
-3. リソースサイズを測定：
-   - 合計ページウェイト（ターゲット < 1MB）
-   - JSバンドルサイズ（ターゲット < 200KBgzipped）
-   - CSSサイズ
-   - 画像ウェイト
-   - サードパーティスクリプトウェイト
-4. ネットワークリクエストをカウント
-5. レンダリングブロッキングリソースをチェック
-```
-
-### モード2：APIパフォーマンス
-
-APIエンドポイントをベンチマーク：
+Measures real browser metrics via browser MCP:
 
 ```
-1. 各エンドポイントに100回ヒット
-2. 測定：p50、p95、p99レイテンシ
-3. トラック：レスポンスサイズ、ステータスコード
-4. ロード下でテスト：10個の同時リクエスト
-5. SLAターゲットと比較
+1. Navigate to each target URL
+2. Measure Core Web Vitals:
+   - LCP (Largest Contentful Paint) — target < 2.5s
+   - CLS (Cumulative Layout Shift) — target < 0.1
+   - INP (Interaction to Next Paint) — target < 200ms
+   - FCP (First Contentful Paint) — target < 1.8s
+   - TTFB (Time to First Byte) — target < 800ms
+3. Measure resource sizes:
+   - Total page weight (target < 1MB)
+   - JS bundle size (target < 200KB gzipped)
+   - CSS size
+   - Image weight
+   - Third-party script weight
+4. Count network requests
+5. Check for render-blocking resources
 ```
 
-### モード3：ビルドパフォーマンス
+### Mode 2: API Performance
 
-開発フィードバックループを測定：
-
-```
-1. コールドビルド時間
-2. ホットリロード時間（HMR）
-3. テストスイート期間
-4. TypeScriptチェック時間
-5. Lint時間
-6. Dockerビルド時間
-```
-
-### モード4：前後の比較
-
-変更前後に実行して影響を測定：
+Benchmarks API endpoints:
 
 ```
-/benchmark baseline    # 現在のメトリクスを保存
-# ... 変更を加える ...
-/benchmark compare     # ベースラインと比較
+1. Hit each endpoint 100 times
+2. Measure: p50, p95, p99 latency
+3. Track: response size, status codes
+4. Test under load: 10 concurrent requests
+5. Compare against SLA targets
 ```
 
-出力：
+### Mode 3: Build Performance
+
+Measures development feedback loop:
+
+```
+1. Cold build time
+2. Hot reload time (HMR)
+3. Test suite duration
+4. TypeScript check time
+5. Lint time
+6. Docker build time
+```
+
+### Mode 4: Before/After Comparison
+
+Run before and after a change to measure impact:
+
+```
+/benchmark baseline    # saves current metrics
+# ... make changes ...
+/benchmark compare     # compares against baseline
+```
+
+Output:
 ```
 | Metric | Before | After | Delta | Verdict |
 |--------|--------|-------|-------|---------|
@@ -82,12 +84,12 @@ APIエンドポイントをベンチマーク：
 | Build | 12s | 14s | +2s | WARNING: WARN |
 ```
 
-## 出力
+## Output
 
-`.ecc/benchmarks/`にJSONとしてベースラインを保存。Gitで追跡されるため、チームはベースラインを共有します。
+Stores baselines in `.ecc/benchmarks/` as JSON. Git-tracked so the team shares baselines.
 
-## 統合
+## Integration
 
-- CI：すべてのPRで`/benchmark compare`を実行
-- `/canary-watch`とペアリングしてデプロイ後の監視
-- `/browser-qa`とペアリングして完全な出荷前チェックリスト
+- CI: run `/benchmark compare` on every PR
+- Pair with `/canary-watch` for post-deploy monitoring
+- Pair with `/browser-qa` for full pre-ship checklist

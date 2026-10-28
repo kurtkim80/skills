@@ -1,109 +1,110 @@
 ---
 name: architecture-decision-records
-description: コーディングセッション中にアーキテクチャ決定を構造化ADRとして記録し、自動的に決定の瞬間を検出し、コンテキスト、検討された代替案、根拠を記録します。今後の開発者がコードベースの形成理由を理解するためのADRログを維持します。
-origin: ECC
+description: Capture architectural decisions as numbered ADR markdown files in docs/adr/ with context, alternatives considered, consequences, and an index README. Use when the user says 'record this decision' or 'ADR this', chooses between frameworks or databases, discusses trade-offs, or asks why the codebase is shaped this way.
+metadata:
+  origin: ECC
 ---
 
-# アーキテクチャ決定記録
+# Architecture Decision Records
 
-コーディングセッション中にアーキテクチャ決定を構造化ドキュメントとして記録します。決定がSlackスレッド、PRコメント、または誰かの記憶にのみ存在する代わりに、このスキルはコードと並行して存在する構造化ADRドキュメントを生成します。
+Capture architectural decisions as they happen during coding sessions. Instead of decisions living only in Slack threads, PR comments, or someone's memory, this skill produces structured ADR documents that live alongside the code.
 
-## アクティベーション時期
+## When to Activate
 
-- ユーザーが明示的に「この決定を記録しよう」または「このADRを作成しよう」と言う
-- 重要な代替案の選択（フレームワーク、ライブラリ、パターン、データベース、API設計）
-- ユーザーが「私たちは...を選択した」または「YではなくXをしている理由は...です」と言う
-- ユーザーが「なぜXを選んだのか」と尋ねる（既存のADRを読む）
-- アーキテクチャ上のトレードオフが検討される計画段階
+- User explicitly says "let's record this decision" or "ADR this"
+- User chooses between significant alternatives (framework, library, pattern, database, API design)
+- User says "we decided to..." or "the reason we're doing X instead of Y is..."
+- User asks "why did we choose X?" (read existing ADRs)
+- During planning phases when architectural trade-offs are discussed
 
-## ADR形式
+## ADR Format
 
-Michael Nygardによって提案されたADR形式を、AI支援開発向けに調整したものを使用します：
+Use the lightweight ADR format proposed by Michael Nygard, adapted for AI-assisted development:
 
 ```markdown
-# ADR-NNNN: [決定タイトル]
+# ADR-NNNN: [Decision Title]
 
 **Date**: YYYY-MM-DD
 **Status**: proposed | accepted | deprecated | superseded by ADR-NNNN
-**Deciders**: [関係者]
+**Deciders**: [who was involved]
 
 ## Context
 
-この決定または変更を促すどのような問題や状況が見られるのか？
+What is the issue that we're seeing that is motivating this decision or change?
 
-[2～5文で状況、制約条件、作用する力について説明]
+[2-5 sentences describing the situation, constraints, and forces at play]
 
 ## Decision
 
-提案または実施する変更は何か？
+What is the change that we're proposing and/or doing?
 
-[決定を明確に述べる1～3文]
+[1-3 sentences stating the decision clearly]
 
-## Alternatives Considered（検討された代替案）
+## Alternatives Considered
 
-### Alternative 1: [名前]
-- **Pros**: [利点]
-- **Cons**: [欠点]
-- **Why not**: [この選択肢が拒否された特定の理由]
+### Alternative 1: [Name]
+- **Pros**: [benefits]
+- **Cons**: [drawbacks]
+- **Why not**: [specific reason this was rejected]
 
-### Alternative 2: [名前]
-- **Pros**: [利点]
-- **Cons**: [欠点]
-- **Why not**: [この選択肢が拒否された特定の理由]
+### Alternative 2: [Name]
+- **Pros**: [benefits]
+- **Cons**: [drawbacks]
+- **Why not**: [specific reason this was rejected]
 
-## Consequences（結果）
+## Consequences
 
-この変更により、何がより簡単になり、何がより難しくなるか？
+What becomes easier or more difficult to do because of this change?
 
 ### Positive
-- [利点1]
-- [利点2]
+- [benefit 1]
+- [benefit 2]
 
 ### Negative
-- [トレードオフ1]
-- [トレードオフ2]
+- [trade-off 1]
+- [trade-off 2]
 
 ### Risks
-- [リスクと軽減策]
+- [risk and mitigation]
 ```
 
-## ワークフロー
+## Workflow
 
-### 新しいADRをキャプチャする
+### Capturing a New ADR
 
-決定の瞬間が検出されたとき：
+When a decision moment is detected:
 
-1. **初期化（初回のみ）** — `docs/adr/`が存在しない場合、ユーザーの確認を得た上でディレクトリ、インデックステーブルヘッダーでシードされた`README.md`（下記のADRインデックス形式を参照）、手動使用用の空白の`template.md`を作成します。明示的な同意なしにファイルを作成しないでください。
-2. **決定を特定する** — 行われている中核的なアーキテクチャの選択を抽出する
-3. **コンテキストを収集する** — この問題を起こした背景は？存在する制約条件は？
-4. **代替案をドキュメント化する** — どの他のオプションが検討されたか？ なぜ拒否されたか？
-5. **結果を述べる** — トレードオフは何か？何がより簡単/難しくなるか？
-6. **番号を割り当てる** — `docs/adr/`内の既存のADRをスキャンして増分する
-7. **確認して書き込む** — レビュー用のドラフトADRをユーザーに提示します。明示的な承認後にのみ`docs/adr/NNNN-decision-title.md`に書き込みます。ユーザーが辞退した場合、ファイルを書き込まずにドラフトを破棄します。
-8. **インデックスを更新する** — `docs/adr/README.md`に追記する
+1. **Initialize (first time only)** — if `docs/adr/` does not exist, ask the user for confirmation before creating the directory, a `README.md` seeded with the index table header (see ADR Index Format below), and a blank `template.md` for manual use. Do not create files without explicit consent.
+2. **Identify the decision** — extract the core architectural choice being made
+3. **Gather context** — what problem prompted this? What constraints exist?
+4. **Document alternatives** — what other options were considered? Why were they rejected?
+5. **State consequences** — what are the trade-offs? What becomes easier/harder?
+6. **Assign a number** — scan existing ADRs in `docs/adr/` and increment
+7. **Confirm and write** — present the draft ADR to the user for review. Only write to `docs/adr/NNNN-decision-title.md` after explicit approval. If the user declines, discard the draft without writing any files.
+8. **Update the index** — append to `docs/adr/README.md`
 
-### 既存のADRを読む
+### Reading Existing ADRs
 
-ユーザーが「なぜXを選んだのか」と尋ねたとき：
+When a user asks "why did we choose X?":
 
-1. `docs/adr/`が存在するかチェック — 存在しない場合、「このプロジェクトでADRが見つかりません。アーキテクチャ決定の記録を始めたいですか？」と応答
-2. 存在する場合、関連エントリの`docs/adr/README.md`インデックスをスキャン
-3. 一致するADRファイルを読み、ContextとDecisionセクションを表示
-4. 一致が見つからない場合、「その決定についてのADRが見つかりません。今すぐ記録しますか？」と応答
+1. Check if `docs/adr/` exists — if not, respond: "No ADRs found in this project. Would you like to start recording architectural decisions?"
+2. If it exists, scan `docs/adr/README.md` index for relevant entries
+3. Read matching ADR files and present the Context and Decision sections
+4. If no match is found, respond: "No ADR found for that decision. Would you like to record one now?"
 
-### ADRディレクトリ構造
+### ADR Directory Structure
 
 ```
 docs/
 └── adr/
-    ├── README.md              ← すべてのADRのインデックス
+    ├── README.md              ← index of all ADRs
     ├── 0001-use-nextjs.md
     ├── 0002-postgres-over-mongo.md
     ├── 0003-rest-over-graphql.md
-    └── template.md            ← 手動使用用の空白テンプレート
+    └── template.md            ← blank template for manual use
 ```
 
-### ADRインデックス形式
+### ADR Index Format
 
 ```markdown
 # Architecture Decision Records
@@ -115,65 +116,65 @@ docs/
 | [0003](0003-rest-over-graphql.md) | REST API over GraphQL | accepted | 2026-02-01 |
 ```
 
-## 決定検出シグナル
+## Decision Detection Signals
 
-会話の中でアーキテクチャ決定を示すこれらのパターンに注意：
+Watch for these patterns in conversation that indicate an architectural decision:
 
-**明示的なシグナル**
-- 「Xにしよう」
-- 「YではなくXを使うべき」
-- 「トレードオフは...だから価値がある」
-- 「このをADRとして記録して」
+**Explicit signals**
+- "Let's go with X"
+- "We should use X instead of Y"
+- "The trade-off is worth it because..."
+- "Record this as an ADR"
 
-**暗黙的なシグナル**（ADRの記録を提案する — ユーザーの確認なしに自動作成しない）
-- 2つのフレームワークまたはライブラリを比較して結論に達する
-- 述べられた根拠を持つデータベーススキーマ設計の選択をする
-- アーキテクチャパターン（モノリス対マイクロサービス、REST対GraphQL）の間で選択する
-- 認証/認可戦略を決定する
-- 代替案を評価した後、デプロイインフラストラクチャを選択する
+**Implicit signals** (suggest recording an ADR — do not auto-create without user confirmation)
+- Comparing two frameworks or libraries and reaching a conclusion
+- Making a database schema design choice with stated rationale
+- Choosing between architectural patterns (monolith vs microservices, REST vs GraphQL)
+- Deciding on authentication/authorization strategy
+- Selecting deployment infrastructure after evaluating alternatives
 
-## 良いADRとは
+## What Makes a Good ADR
 
-### すること
-- **具体的に** — 「ORMを使う」ではなく「Prisma ORMを使う」
-- **根拠を記録する** — 根拠は何よりも重要です
-- **拒否された代替案を含める** — 将来の開発者は何が検討されたかを知る必要があります
-- **結果を正直に述べる** — すべての決定にはトレードオフがあります
-- **短く保つ** — ADRは2分で読めるべき
-- **現在時制を使う** — 「Xを使う」ではなく「私たちはXを使う」
+### Do
+- **Be specific** — "Use Prisma ORM" not "use an ORM"
+- **Record the why** — the rationale matters more than the what
+- **Include rejected alternatives** — future developers need to know what was considered
+- **State consequences honestly** — every decision has trade-offs
+- **Keep it short** — an ADR should be readable in 2 minutes
+- **Use present tense** — "We use X" not "We will use X"
 
-### しないこと
-- 些細な決定を記録する — 変数名またはフォーマット選択はADRを必要としません
-- エッセイを書く — contextセクションが10行を超える場合は長すぎます
-- 代替案を省略する — 「単に選んだ」は有効な根拠ではありません
-- マーキングなしでバックフィルする — 過去の決定を記録する場合は元の日付を注記
-- ADRを古い状態にする — 置き換えられた決定は置き換えを参照する必要があります
+### Don't
+- Record trivial decisions — variable naming or formatting choices don't need ADRs
+- Write essays — if the context section exceeds 10 lines, it's too long
+- Omit alternatives — "we just picked it" is not a valid rationale
+- Backfill without marking it — if recording a past decision, note the original date
+- Let ADRs go stale — superseded decisions should reference their replacement
 
-## ADRライフサイクル
+## ADR Lifecycle
 
 ```
 proposed → accepted → [deprecated | superseded by ADR-NNNN]
 ```
 
-- **proposed**: 決定が検討中であり、まだコミットされていない
-- **accepted**: 決定が有効であり、フォローされている
-- **deprecated**: 決定は関連性がなくなった（例：機能が削除された）
-- **superseded**: 新しいADRがこれを置き換える（常に置き換えをリンク）
+- **proposed**: decision is under discussion, not yet committed
+- **accepted**: decision is in effect and being followed
+- **deprecated**: decision is no longer relevant (e.g., feature removed)
+- **superseded**: a newer ADR replaces this one (always link the replacement)
 
-## 記録する価値のある決定カテゴリ
+## Categories of Decisions Worth Recording
 
 | Category | Examples |
 |----------|---------|
-| **Technology choices** | フレームワーク、言語、データベース、クラウドプロバイダ |
-| **Architecture patterns** | モノリス対マイクロサービス、イベント駆動、CQRS |
-| **API design** | REST対GraphQL、バージョニング戦略、auth機構 |
-| **Data modeling** | スキーマ設計、正規化決定、キャッシング戦略 |
-| **Infrastructure** | デプロイメントモデル、CI/CDパイプライン、監視スタック |
-| **Security** | Auth戦略、暗号化アプローチ、シークレット管理 |
-| **Testing** | テストフレームワーク、カバレッジ対象、E2E対統合のバランス |
-| **Process** | ブランチング戦略、レビュープロセス、リリースケーデンス |
+| **Technology choices** | Framework, language, database, cloud provider |
+| **Architecture patterns** | Monolith vs microservices, event-driven, CQRS |
+| **API design** | REST vs GraphQL, versioning strategy, auth mechanism |
+| **Data modeling** | Schema design, normalization decisions, caching strategy |
+| **Infrastructure** | Deployment model, CI/CD pipeline, monitoring stack |
+| **Security** | Auth strategy, encryption approach, secret management |
+| **Testing** | Test framework, coverage targets, E2E vs integration balance |
+| **Process** | Branching strategy, review process, release cadence |
 
-## 他のスキルとの統合
+## Integration with Other Skills
 
-- **Planner エージェント**: プランナーがアーキテクチャ変更を提案するとき、ADRの作成を提案
-- **Code reviewer エージェント**: 対応するADRなしでアーキテクチャ変更を導入するPRにフラグを立てる
+- **Planner agent**: when the planner proposes architecture changes, suggest creating an ADR
+- **Code reviewer agent**: flag PRs that introduce architectural changes without a corresponding ADR

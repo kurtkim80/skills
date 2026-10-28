@@ -1,39 +1,44 @@
-# 驗證循環技能
+---
+name: verification-loop
+description: "A comprehensive verification system for Claude Code sessions."
+---
 
-Claude Code 工作階段的完整驗證系統。
+# Verification Loop Skill
 
-## 何時使用
+A comprehensive verification system for Claude Code sessions.
 
-在以下情況呼叫此技能：
-- 完成功能或重大程式碼變更後
-- 建立 PR 前
-- 想確保品質門檻通過時
-- 重構後
+## When to Use
 
-## 驗證階段
+Invoke this skill:
+- After completing a feature or significant code change
+- Before creating a PR
+- When you want to ensure quality gates pass
+- After refactoring
 
-### 階段 1：建置驗證
+## Verification Phases
+
+### Phase 1: Build Verification
 ```bash
-# 檢查專案是否建置
+# Check if project builds
 npm run build 2>&1 | tail -20
-# 或
+# OR
 pnpm build 2>&1 | tail -20
 ```
 
-如果建置失敗，停止並在繼續前修復。
+If build fails, STOP and fix before continuing.
 
-### 階段 2：型別檢查
+### Phase 2: Type Check
 ```bash
-# TypeScript 專案
+# TypeScript projects
 npx tsc --noEmit 2>&1 | head -30
 
-# Python 專案
+# Python projects
 pyright . 2>&1 | head -30
 ```
 
-報告所有型別錯誤。繼續前修復關鍵錯誤。
+Report all type errors. Fix critical ones before continuing.
 
-### 階段 3：Lint 檢查
+### Phase 3: Lint Check
 ```bash
 # JavaScript/TypeScript
 npm run lint 2>&1 | head -30
@@ -42,79 +47,79 @@ npm run lint 2>&1 | head -30
 ruff check . 2>&1 | head -30
 ```
 
-### 階段 4：測試套件
+### Phase 4: Test Suite
 ```bash
-# 執行帶覆蓋率的測試
+# Run tests with coverage
 npm run test -- --coverage 2>&1 | tail -50
 
-# 檢查覆蓋率門檻
-# 目標：最低 80%
+# Check coverage threshold
+# Target: 80% minimum
 ```
 
-報告：
-- 總測試數：X
-- 通過：X
-- 失敗：X
-- 覆蓋率：X%
+Report:
+- Total tests: X
+- Passed: X
+- Failed: X
+- Coverage: X%
 
-### 階段 5：安全掃描
+### Phase 5: Security Scan
 ```bash
-# 檢查密鑰
+# Check for secrets
 grep -rn "sk-" --include="*.ts" --include="*.js" . 2>/dev/null | head -10
 grep -rn "api_key" --include="*.ts" --include="*.js" . 2>/dev/null | head -10
 
-# 檢查 console.log
+# Check for console.log
 grep -rn "console.log" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | head -10
 ```
 
-### 階段 6：差異審查
+### Phase 6: Diff Review
 ```bash
-# 顯示變更內容
+# Show what changed
 git diff --stat
 git diff HEAD~1 --name-only
 ```
 
-審查每個變更的檔案：
-- 非預期變更
-- 缺少錯誤處理
-- 潛在邊界案例
+Review each changed file for:
+- Unintended changes
+- Missing error handling
+- Potential edge cases
 
-## 輸出格式
+## Output Format
 
-執行所有階段後，產生驗證報告：
+After running all phases, produce a verification report:
 
 ```
-驗證報告
+VERIFICATION REPORT
 ==================
 
-建置：     [PASS/FAIL]
-型別：     [PASS/FAIL]（X 個錯誤）
-Lint：     [PASS/FAIL]（X 個警告）
-測試：     [PASS/FAIL]（X/Y 通過，Z% 覆蓋率）
-安全性：   [PASS/FAIL]（X 個問題）
-差異：     [X 個檔案變更]
+Build:     [PASS/FAIL]
+Types:     [PASS/FAIL] (X errors)
+Lint:      [PASS/FAIL] (X warnings)
+Tests:     [PASS/FAIL] (X/Y passed, Z% coverage)
+Security:  [PASS/FAIL] (X issues)
+Diff:      [X files changed]
 
-整體：     [READY/NOT READY] for PR
+Overall:   [READY/NOT READY] for PR
 
-待修復問題：
+Issues to Fix:
 1. ...
 2. ...
 ```
 
-## 持續模式
+## Continuous Mode
 
-對於長時間工作階段，每 15 分鐘或重大變更後執行驗證：
+For long sessions, run verification every 15 minutes or after major changes:
 
 ```markdown
-設定心理檢查點：
-- 完成每個函式後
-- 完成元件後
-- 移至下一個任務前
+Set a mental checkpoint:
+- After completing each function
+- After finishing a component
+- Before moving to next task
 
-執行：/verify
+Run: /verify
 ```
 
-## 與 Hooks 整合
+## Integration with Hooks
 
-此技能補充 PostToolUse hooks 但提供更深入的驗證。
-Hooks 立即捕捉問題；此技能提供全面審查。
+This skill complements PostToolUse hooks but provides deeper verification.
+Hooks catch issues immediately; this skill provides comprehensive review.

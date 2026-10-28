@@ -1,16 +1,12 @@
 ---
-title: "CISO Advisor Agent — AI Coding Agent & Codex Skill"
-description: "Risk-paranoid CISO advisor for threat modeling, compliance, incident response, and security architecture. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-ciso-advisor
+description: Risk-paranoid CISO advisor for threat modeling, compliance, incident response, and security architecture
+domain: c-level
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # CISO Advisor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account-tie: C-Level Advisory</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -28,27 +24,27 @@ Pairs with `cs-cto-advisor` (security architecture), `cs-cfo-advisor` (risk quan
 
 ## Skill Integration
 
-**Skill Location:** [`skills/ciso-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor)
+**Skill Location:** `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/`
 
 ### Python Tools
 
 1. **Risk Quantifier**
-   - Path: [`scripts/risk_quantifier.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/scripts/risk_quantifier.py)
+   - Path: `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/scripts/risk_quantifier.py`
    - FAIR-based annualized loss expectancy, risk register, mitigation ROI
 
 2. **Compliance Tracker**
-   - Path: [`scripts/compliance_tracker.py`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/scripts/compliance_tracker.py)
+   - Path: `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/scripts/compliance_tracker.py`
    - SOC 2 / ISO 27001 / HIPAA / GDPR control mapping, gap analysis, audit readiness
 
 ### Knowledge Bases
 
-- [`references/security_strategy.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/references/security_strategy.md) — STRIDE, PASTA, attacker journey
-- [`references/compliance_roadmap.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/references/compliance_roadmap.md) — SOC 2 Type 2, ISO 27001, GDPR sequencing
-- [`references/incident_response.md`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/references/incident_response.md) — IR runbooks, comms plan, regulator notification windows
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/references/security_strategy.md` — STRIDE, PASTA, attacker journey
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/references/compliance_roadmap.md` — SOC 2 Type 2, ISO 27001, GDPR sequencing
+- `${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/references/incident_response.md` — IR runbooks, comms plan, regulator notification windows
 
 ### Adjacent Skills
 
-- [`ra-qm-team`](https://github.com/alirezarezvani/claude-skills/tree/main/ra-qm-team) — ISO 27001 ISMS, GDPR controls, audit prep
+- `../../ra-qm-team/` — ISO 27001 ISMS, GDPR controls, audit prep
 
 ## Workflows
 
@@ -71,7 +67,7 @@ Pairs with `cs-cto-advisor` (security architecture), `cs-cfo-advisor` (risk quan
 4. Output: 18-month roadmap, audit budget, controls owners
 
 ```bash
-python ../../skills/ciso-advisor/scripts/compliance_tracker.py
+python ${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/scripts/compliance_tracker.py
 ```
 
 ### Workflow 3: Incident Response Readiness
@@ -97,9 +93,9 @@ python ../../skills/ciso-advisor/scripts/compliance_tracker.py
 
 ```bash
 echo "🔐 CISO Pre-Prod Gate"
-python ../../skills/ciso-advisor/scripts/risk_quantifier.py
-python ../../skills/ciso-advisor/scripts/compliance_tracker.py
-echo "IR runbook check: ../../skills/ciso-advisor/references/incident_response.md"
+python ${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/scripts/risk_quantifier.py
+python ${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/scripts/compliance_tracker.py
+echo "IR runbook check: ${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/references/incident_response.md"
 ```
 
 ## Success Metrics
@@ -113,15 +109,15 @@ echo "IR runbook check: ../../skills/ciso-advisor/references/incident_response.m
 
 ## Related Agents
 
-- [cs-cto-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-cto-advisor.md) — security architecture
+- [cs-cto-advisor](../../agents/c-level/cs-cto-advisor.md) — security architecture
 - [cs-cfo-advisor](cs-cfo-advisor.md) — risk → insurance, audit budget
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — ISO 27001, GDPR execution
-- [cs-senior-engineer](https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering/cs-senior-engineer.md) — secure coding
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — ISO 27001, GDPR execution
+- [cs-senior-engineer](../../agents/engineering/cs-senior-engineer.md) — secure coding
 
 ## References
 
-- Skill: [../../skills/ciso-advisor/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/skills/ciso-advisor/SKILL.md)
-- Voice spec: [../references/persona-voices.md](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/references/persona-voices.md)
+- Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/c-level-advisor/ciso-advisor/SKILL.md)
+- Voice spec: [../references/persona-voices.md](../references/persona-voices.md)
 
 ---
 

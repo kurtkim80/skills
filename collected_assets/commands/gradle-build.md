@@ -1,70 +1,70 @@
 ---
-description: AndroidおよびKMPプロジェクトのGradleビルドエラーを修正します
+description: Fix Gradle build errors for Android and KMP projects
 ---
 
-# Gradleビルド修正
+# Gradle Build Fix
 
-AndroidおよびKotlin Multiplatformプロジェクトのgradleビルドおよびコンパイルエラーをインクリメンタルに修正します。
+Incrementally fix Gradle build and compilation errors for Android and Kotlin Multiplatform projects.
 
-## ステップ 1: ビルド設定の検出
+## Step 1: Detect Build Configuration
 
-プロジェクトタイプを特定し、適切なビルドを実行:
+Identify the project type and run the appropriate build:
 
-| インジケーター | ビルドコマンド |
-|--------------|--------------|
-| `build.gradle.kts` + `composeApp/`（KMP） | `./gradlew composeApp:compileKotlinMetadata 2>&1` |
-| `build.gradle.kts` + `app/`（Android） | `./gradlew app:compileDebugKotlin 2>&1` |
-| モジュール付き`settings.gradle.kts` | `./gradlew assemble 2>&1` |
-| Detekt設定済み | `./gradlew detekt 2>&1` |
+| Indicator | Build Command |
+|-----------|---------------|
+| `build.gradle.kts` + `composeApp/` (KMP) | `./gradlew composeApp:compileKotlinMetadata 2>&1` |
+| `build.gradle.kts` + `app/` (Android) | `./gradlew app:compileDebugKotlin 2>&1` |
+| `settings.gradle.kts` with modules | `./gradlew assemble 2>&1` |
+| Detekt configured | `./gradlew detekt 2>&1` |
 
-`gradle.properties`と`local.properties`の設定も確認します。
+Also check `gradle.properties` and `local.properties` for configuration.
 
-## ステップ 2: エラーの解析とグループ化
+## Step 2: Parse and Group Errors
 
-1. ビルドコマンドを実行し出力をキャプチャ
-2. Kotlinコンパイルエラーとgradle設定エラーを分離
-3. モジュールとファイルパスでグループ化
-4. ソート: 設定エラーを最初に、次に依存関係順でコンパイルエラー
+1. Run the build command and capture output
+2. Separate Kotlin compilation errors from Gradle configuration errors
+3. Group by module and file path
+4. Sort: configuration errors first, then compilation errors by dependency order
 
-## ステップ 3: 修正ループ
+## Step 3: Fix Loop
 
-各エラーに対して:
+For each error:
 
-1. **ファイルを読む** — エラー行周辺の完全なコンテキスト
-2. **診断** — 一般的なカテゴリ:
-   - importの欠落または未解決の参照
-   - 型の不一致または非互換な型
-   - `build.gradle.kts`内の依存関係の欠落
-   - Expect/actualの不一致（KMP）
-   - Composeコンパイラエラー
-3. **最小限の修正** — エラーを解決する最小の変更
-4. **ビルドを再実行** — 修正を検証し新しいエラーを確認
-5. **続行** — 次のエラーへ
+1. **Read the file** — Full context around the error line
+2. **Diagnose** — Common categories:
+   - Missing import or unresolved reference
+   - Type mismatch or incompatible types
+   - Missing dependency in `build.gradle.kts`
+   - Expect/actual mismatch (KMP)
+   - Compose compiler error
+3. **Fix minimally** — Smallest change that resolves the error
+4. **Re-run build** — Verify fix and check for new errors
+5. **Continue** — Move to next error
 
-## ステップ 4: ガードレール
+## Step 4: Guardrails
 
-以下の場合はユーザーに停止して確認:
-- 修正が解決するより多くのエラーを導入
-- 3回の試行後も同じエラーが持続
-- エラーが新しい依存関係の追加やモジュール構造の変更を必要とする
-- Gradle sync自体が失敗（設定フェーズエラー）
-- エラーが生成コード内にある（Room、SQLDelight、KSP）
+Stop and ask the user if:
+- Fix introduces more errors than it resolves
+- Same error persists after 3 attempts
+- Error requires adding new dependencies or changing module structure
+- Gradle sync itself fails (configuration-phase error)
+- Error is in generated code (Room, SQLDelight, KSP)
 
-## ステップ 5: サマリー
+## Step 5: Summary
 
-報告内容:
-- 修正されたエラー（モジュール、ファイル、説明）
-- 残りのエラー
-- 導入された新しいエラー（ゼロであるべき）
-- 推奨される次のステップ
+Report:
+- Errors fixed (module, file, description)
+- Errors remaining
+- New errors introduced (should be zero)
+- Suggested next steps
 
-## 一般的なGradle/KMP修正
+## Common Gradle/KMP Fixes
 
-| エラー | 修正 |
-|--------|------|
-| `commonMain`内の未解決の参照 | 依存関係が`commonMain.dependencies {}`にあるか確認 |
-| actualなしのExpect宣言 | 各プラットフォームソースセットに`actual`実装を追加 |
-| Composeコンパイラバージョンの不一致 | `libs.versions.toml`でKotlinとComposeコンパイラバージョンを揃える |
-| 重複クラス | `./gradlew dependencies`で競合する依存関係を確認 |
-| KSPエラー | `./gradlew kspCommonMainKotlinMetadata`を実行して再生成 |
-| 設定キャッシュの問題 | シリアライズ不可能なタスク入力を確認 |
+| Error | Fix |
+|-------|-----|
+| Unresolved reference in `commonMain` | Check if the dependency is in `commonMain.dependencies {}` |
+| Expect declaration without actual | Add `actual` implementation in each platform source set |
+| Compose compiler version mismatch | Align Kotlin and Compose compiler versions in `libs.versions.toml` |
+| Duplicate class | Check for conflicting dependencies with `./gradlew dependencies` |
+| KSP error | Run `./gradlew kspCommonMainKotlinMetadata` to regenerate |
+| Configuration cache issue | Check for non-serializable task inputs |

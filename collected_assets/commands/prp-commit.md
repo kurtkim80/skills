@@ -1,81 +1,81 @@
 ---
-description: "自然言語でファイルを指定するクイックコミット — 何をコミットするかを平易な言葉で記述"
-argument-hint: "[ターゲットの説明]（空欄 = すべての変更）"
+description: "Quick commit with natural language file targeting — describe what to commit in plain English"
+argument-hint: "[target description] (blank = all changes)"
 ---
 
-# スマートコミット
+# Smart Commit
 
-> PRPs-agentic-engのWirasmによる適応。PRPワークフローシリーズの一部。
+> Adapted from PRPs-agentic-eng by Wirasm. Part of the PRP workflow series.
 
-**入力**: $ARGUMENTS
+**Input**: $ARGUMENTS
 
 ---
 
-## フェーズ 1 — ASSESS
+## Phase 1 — ASSESS
 
 ```bash
 git status --short
 ```
 
-出力が空の場合 → 停止: "コミットするものがありません。"
+If output is empty → stop: "Nothing to commit."
 
-変更内容のサマリーをユーザーに表示（追加、変更、削除、未追跡）。
+Show the user a summary of what's changed (added, modified, deleted, untracked).
 
 ---
 
-## フェーズ 2 — INTERPRET & STAGE
+## Phase 2 — INTERPRET & STAGE
 
-`$ARGUMENTS`を解釈してステージング対象を決定:
+Interpret `$ARGUMENTS` to determine what to stage:
 
-| 入力 | 解釈 | Gitコマンド |
+| Input | Interpretation | Git Command |
 |---|---|---|
-| *（空 / 未入力）* | すべてをステージ | `git add -A` |
-| `staged` | 既にステージ済みのものを使用 | *（git addなし）* |
-| `*.ts`や`*.py`など | マッチするglobをステージ | `git add '*.ts'` |
-| `except tests` | すべてステージ後、テストをアンステージ | `git add -A && git reset -- '**/*.test.*' '**/*.spec.*' '**/test_*' 2>/dev/null \|\| true` |
-| `only new files` | 未追跡ファイルのみステージ | `git ls-files --others --exclude-standard \| grep . && git ls-files --others --exclude-standard \| xargs git add` |
-| `the auth changes` | status/diffから解釈 — auth関連ファイルを検出 | `git add <matched files>` |
-| 特定のファイル名 | それらのファイルをステージ | `git add <files>` |
+| *(blank / empty)* | Stage everything | `git add -A` |
+| `staged` | Use whatever is already staged | *(no git add)* |
+| `*.ts` or `*.py` etc. | Stage matching glob | `git add '*.ts'` |
+| `except tests` | Stage all, then unstage tests | `git add -A && git reset -- '**/*.test.*' '**/*.spec.*' '**/test_*' 2>/dev/null \|\| true` |
+| `only new files` | Stage untracked files only | `git ls-files --others --exclude-standard \| grep . && git ls-files --others --exclude-standard \| xargs git add` |
+| `the auth changes` | Interpret from status/diff — find auth-related files | `git add <matched files>` |
+| Specific filenames | Stage those files | `git add <files>` |
 
-自然言語入力（"the auth changes"など）の場合、`git status`出力と`git diff`を相互参照して関連ファイルを特定。どのファイルをなぜステージングするかをユーザーに表示。
+For natural language inputs (like "the auth changes"), cross-reference the `git status` output and `git diff` to identify relevant files. Show the user which files you're staging and why.
 
 ```bash
 git add <determined files>
 ```
 
-ステージング後、検証:
+After staging, verify:
 ```bash
 git diff --cached --stat
 ```
 
-ステージングされたものがなければ、停止: "説明に一致するファイルがありません。"
+If nothing staged, stop: "No files matched your description."
 
 ---
 
-## フェーズ 3 — COMMIT
+## Phase 3 — COMMIT
 
-命令形で単一行のコミットメッセージを作成:
+Craft a single-line commit message in imperative mood:
 
 ```
 {type}: {description}
 ```
 
-タイプ:
-- `feat` — 新機能または能力
-- `fix` — バグ修正
-- `refactor` — 動作を変えないコード再構築
-- `docs` — ドキュメント変更
-- `test` — テストの追加または更新
-- `chore` — ビルド、設定、依存関係
-- `perf` — パフォーマンス改善
-- `ci` — CI/CD変更
+Types:
+- `feat` — New feature or capability
+- `fix` — Bug fix
+- `refactor` — Code restructuring without behavior change
+- `docs` — Documentation changes
+- `test` — Adding or updating tests
+- `chore` — Build, config, dependencies
+- `perf` — Performance improvement
+- `ci` — CI/CD changes
 
-ルール:
-- 命令形（"added feature"ではなく"add feature"）
-- タイププレフィックスの後は小文字
-- 末尾にピリオドなし
-- 72文字以内
-- HOWではなくWHATが変わったかを記述
+Rules:
+- Imperative mood ("add feature" not "added feature")
+- Lowercase after the type prefix
+- No period at the end
+- Under 72 characters
+- Describe WHAT changed, not HOW
 
 ```bash
 git commit -m "{type}: {description}"
@@ -83,9 +83,9 @@ git commit -m "{type}: {description}"
 
 ---
 
-## フェーズ 4 — OUTPUT
+## Phase 4 — OUTPUT
 
-ユーザーへの報告:
+Report to user:
 
 ```
 Committed: {hash_short}
@@ -93,20 +93,20 @@ Message:   {type}: {description}
 Files:     {count} file(s) changed
 
 Next steps:
-  - git push           → リモートにプッシュ
-  - /prp-pr            → プルリクエストを作成
-  - /code-review       → プッシュ前にレビュー
+  - git push           → push to remote
+  - /prp-pr            → create a pull request
+  - /code-review       → review before pushing
 ```
 
 ---
 
-## 例
+## Examples
 
-| 入力 | 動作 |
+| You say | What happens |
 |---|---|
-| `/prp-commit` | すべてステージ、メッセージを自動生成 |
-| `/prp-commit staged` | 既にステージ済みのもののみコミット |
-| `/prp-commit *.ts` | すべてのTypeScriptファイルをステージしてコミット |
-| `/prp-commit except tests` | テストファイル以外すべてをステージ |
-| `/prp-commit the database migration` | statusからDBマイグレーションファイルを検出してステージ |
-| `/prp-commit only new files` | 未追跡ファイルのみステージ |
+| `/prp-commit` | Stages all, auto-generates message |
+| `/prp-commit staged` | Commits only what's already staged |
+| `/prp-commit *.ts` | Stages all TypeScript files, commits |
+| `/prp-commit except tests` | Stages everything except test files |
+| `/prp-commit the database migration` | Finds DB migration files from status, stages them |
+| `/prp-commit only new files` | Stages untracked files only |

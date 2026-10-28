@@ -1,179 +1,179 @@
 ---
-description: 厳密なバリデーションループを伴う実装計画の実行
+description: Execute an implementation plan with rigorous validation loops
 argument-hint: <path/to/plan.md>
 ---
 
-> PRPs-agentic-eng（Wirasm）から適応。PRP ワークフローシリーズの一部。
+> Adapted from PRPs-agentic-eng by Wirasm. Part of the PRP workflow series.
 
-# PRP 実装
+# PRP Implement
 
-計画ファイルをステップごとに実行し、継続的にバリデーションを行います。すべての変更は即座に検証されます。壊れた状態を蓄積してはなりません。
+Execute a plan file step-by-step with continuous validation. Every change is verified immediately — never accumulate broken state.
 
-**基本理念**: バリデーションループはミスを早期に検出します。変更のたびにチェックを実行します。問題は即座に修正します。
+**Core Philosophy**: Validation loops catch mistakes early. Run checks after every change. Fix issues immediately.
 
-**黄金ルール**: バリデーションが失敗した場合、次に進む前に修正してください。壊れた状態を蓄積してはなりません。
+**Golden Rule**: If a validation fails, fix it before moving on. Never accumulate broken state.
 
 ---
 
-## フェーズ 0 — 検出
+## Phase 0 — DETECT
 
-### パッケージマネージャーの検出
+### Package Manager Detection
 
-| ファイルの存在 | パッケージマネージャー | ランナー |
+| File Exists | Package Manager | Runner |
 |---|---|---|
 | `bun.lockb` | bun | `bun run` |
 | `pnpm-lock.yaml` | pnpm | `pnpm run` |
 | `yarn.lock` | yarn | `yarn` |
 | `package-lock.json` | npm | `npm run` |
-| `pyproject.toml` または `requirements.txt` | uv / pip | `uv run` または `python -m` |
+| `pyproject.toml` or `requirements.txt` | uv / pip | `uv run` or `python -m` |
 | `Cargo.toml` | cargo | `cargo` |
 | `go.mod` | go | `go` |
 
-### バリデーションスクリプト
+### Validation Scripts
 
-`package.json`（または同等のファイル）で利用可能なスクリプトを確認します:
+Check `package.json` (or equivalent) for available scripts:
 
 ```bash
-# Node.js プロジェクトの場合
+# For Node.js projects
 cat package.json | grep -A 20 '"scripts"'
 ```
 
-利用可能なコマンドを確認します: 型チェック、リント、テスト、ビルド。
+Note available commands for: type-check, lint, test, build.
 
 ---
 
-## フェーズ 1 — 読み込み
+## Phase 1 — LOAD
 
-計画ファイルを読み込みます:
+Read the plan file:
 
 ```bash
 cat "$ARGUMENTS"
 ```
 
-計画から以下のセクションを抽出します:
-- **概要** — 何を構築するか
-- **ミラーするパターン** — 従うべきコード規約
-- **変更対象ファイル** — 作成または変更するもの
-- **ステップごとのタスク** — 実装の順序
-- **バリデーションコマンド** — 正しさを検証する方法
-- **受け入れ基準** — 完了の定義
+Extract these sections from the plan:
+- **Summary** — What is being built
+- **Patterns to Mirror** — Code conventions to follow
+- **Files to Change** — What to create or modify
+- **Step-by-Step Tasks** — Implementation sequence
+- **Validation Commands** — How to verify correctness
+- **Acceptance Criteria** — Definition of done
 
-ファイルが存在しないか、有効な計画でない場合:
+If the file doesn't exist or isn't a valid plan:
 ```
 Error: Plan file not found or invalid.
 Run /prp-plan <feature-description> to create a plan first.
 ```
 
-**チェックポイント**: 計画を読み込み完了。すべてのセクションを特定。タスクを抽出。
+**CHECKPOINT**: Plan loaded. All sections identified. Tasks extracted.
 
 ---
 
-## フェーズ 2 — 準備
+## Phase 2 — PREPARE
 
-### Git の状態
+### Git State
 
 ```bash
 git branch --show-current
 git status --porcelain
 ```
 
-### ブランチの判断
+### Branch Decision
 
-| 現在の状態 | アクション |
+| Current State | Action |
 |---|---|
-| フィーチャーブランチにいる | 現在のブランチを使用 |
-| main にいて、ワーキングツリーがクリーン | フィーチャーブランチを作成: `git checkout -b feat/{plan-name}` |
-| main にいて、ワーキングツリーがダーティ | **停止** — スタッシュまたはコミットを先に行うようユーザーに確認 |
-| このフィーチャー用の Git ワークツリー内にいる | そのワークツリーを使用 |
+| On feature branch | Use current branch |
+| On main, clean working tree | Create feature branch: `git checkout -b feat/{plan-name}` |
+| On main, dirty working tree | **STOP** — Ask user to stash or commit first |
+| In a git worktree for this feature | Use the worktree |
 
-### リモートとの同期
+### Sync Remote
 
 ```bash
 git pull --rebase origin $(git branch --show-current) 2>/dev/null || true
 ```
 
-**チェックポイント**: 正しいブランチにいる。ワーキングツリー準備完了。リモート同期済み。
+**CHECKPOINT**: On correct branch. Working tree ready. Remote synced.
 
 ---
 
-## フェーズ 3 — 実行
+## Phase 3 — EXECUTE
 
-計画の各タスクを順番に処理します。
+Process each task from the plan sequentially.
 
-### タスクごとのループ
+### Per-Task Loop
 
-**ステップごとのタスク**の各タスクについて:
+For each task in **Step-by-Step Tasks**:
 
-1. **MIRROR リファレンスを読む** — タスクの MIRROR フィールドで参照されているパターンファイルを開きます。コードを書く前に規約を理解します。
+1. **Read MIRROR reference** — Open the pattern file referenced in the task's MIRROR field. Understand the convention before writing code.
 
-2. **実装する** — パターンに正確に従ってコードを書きます。GOTCHA 警告を適用します。指定された IMPORTS を使用します。
+2. **Implement** — Write the code following the pattern exactly. Apply GOTCHA warnings. Use specified IMPORTS.
 
-3. **即座にバリデーションする** — すべてのファイル変更後に:
+3. **Validate immediately** — After EVERY file change:
    ```bash
-   # 型チェックを実行（プロジェクトに応じてコマンドを調整）
+   # Run type-check (adjust command per project)
    [type-check command from Phase 0]
    ```
-   型チェックが失敗した場合 → 次のファイルに進む前にエラーを修正します。
+   If type-check fails → fix the error before moving to the next file.
 
-4. **進捗を追跡する** — ログ: `[done] Task N: [task name] — complete`
+4. **Track progress** — Log: `[done] Task N: [task name] — complete`
 
-### 逸脱の処理
+### Handling Deviations
 
-実装が計画から逸脱する必要がある場合:
-- **何が**変わったかを記録
-- **なぜ**変わったかを記録
-- 修正されたアプローチで続行
-- これらの逸脱はレポートに記録されます
+If implementation must deviate from the plan:
+- Note **WHAT** changed
+- Note **WHY** it changed
+- Continue with the corrected approach
+- These deviations will be captured in the report
 
-**チェックポイント**: すべてのタスクを実行完了。逸脱を記録済み。
+**CHECKPOINT**: All tasks executed. Deviations logged.
 
 ---
 
-## フェーズ 4 — バリデーション
+## Phase 4 — VALIDATE
 
-計画のすべてのバリデーションレベルを実行します。各レベルで問題を修正してから次に進みます。
+Run all validation levels from the plan. Fix issues at each level before proceeding.
 
-### レベル 1: 静的解析
+### Level 1: Static Analysis
 
 ```bash
-# 型チェック — エラーゼロが必須
+# Type checking — zero errors required
 [project type-check command]
 
-# リント — 可能な場合は自動修正
+# Linting — fix automatically where possible
 [project lint command]
 [project lint-fix command]
 ```
 
-自動修正後もリントエラーが残る場合は、手動で修正します。
+If lint errors remain after auto-fix, fix manually.
 
-### レベル 2: ユニットテスト
+### Level 2: Unit Tests
 
-すべての新しい関数にテストを書きます（計画のテスト戦略で指定されたとおり）。
+Write tests for every new function (as specified in the plan's Testing Strategy).
 
 ```bash
 [project test command for affected area]
 ```
 
-- すべての関数に少なくとも1つのテストが必要
-- 計画に記載されたエッジケースをカバー
-- テストが失敗した場合 → 実装を修正します（テストが間違っている場合を除き、テストではなく実装を修正）
+- Every function needs at least one test
+- Cover edge cases listed in the plan
+- If a test fails → fix the implementation (not the test, unless the test is wrong)
 
-### レベル 3: ビルドチェック
+### Level 3: Build Check
 
 ```bash
 [project build command]
 ```
 
-ビルドはエラーゼロで成功する必要があります。
+Build must succeed with zero errors.
 
-### レベル 4: 統合テスト（該当する場合）
+### Level 4: Integration Testing (if applicable)
 
 ```bash
-# サーバーを起動し、テストを実行し、サーバーを停止
+# Start server, run tests, stop server
 [project dev server command] &
 SERVER_PID=$!
 
-# サーバーの準備完了を待機（ポートは必要に応じて調整）
+# Wait for server to be ready (adjust port as needed)
 SERVER_READY=0
 for i in $(seq 1 30); do
   if curl -sf http://localhost:PORT/health >/dev/null 2>&1; then
@@ -198,188 +198,188 @@ wait "$SERVER_PID" 2>/dev/null || true
 exit "$TEST_EXIT"
 ```
 
-### レベル 5: エッジケーステスト
+### Level 5: Edge Case Testing
 
-計画のテスト戦略チェックリストからエッジケースを実行します。
+Run through edge cases from the plan's Testing Strategy checklist.
 
-**チェックポイント**: 5つのバリデーションレベルすべてが合格。エラーゼロ。
+**CHECKPOINT**: All 5 validation levels pass. Zero errors.
 
 ---
 
-## フェーズ 5 — レポート
+## Phase 5 — REPORT
 
-### 実装レポートの作成
+### Create Implementation Report
 
 ```bash
 mkdir -p .claude/PRPs/reports
 ```
 
-レポートを `.claude/PRPs/reports/{plan-name}-report.md` に書き込みます:
+Write report to `.claude/PRPs/reports/{plan-name}-report.md`:
 
 ```markdown
 # Implementation Report: [Feature Name]
 
 ## Summary
-[何を実装したか]
+[What was implemented]
 
 ## Assessment vs Reality
 
-| 指標 | 予測（計画） | 実績 |
+| Metric | Predicted (Plan) | Actual |
 |---|---|---|
-| 複雑度 | [計画から] | [実績] |
-| 信頼度 | [計画から] | [実績] |
-| 変更ファイル数 | [計画から] | [実際の数] |
+| Complexity | [from plan] | [actual] |
+| Confidence | [from plan] | [actual] |
+| Files Changed | [from plan] | [actual count] |
 
 ## Tasks Completed
 
-| # | タスク | ステータス | 備考 |
+| # | Task | Status | Notes |
 |---|---|---|---|
 | 1 | [task name] | [done] Complete | |
-| 2 | [task name] | [done] Complete | Deviated — [理由] |
+| 2 | [task name] | [done] Complete | Deviated — [reason] |
 
 ## Validation Results
 
-| レベル | ステータス | 備考 |
+| Level | Status | Notes |
 |---|---|---|
-| 静的解析 | [done] Pass | |
-| ユニットテスト | [done] Pass | N件のテストを作成 |
-| ビルド | [done] Pass | |
-| 統合 | [done] Pass | または N/A |
-| エッジケース | [done] Pass | |
+| Static Analysis | [done] Pass | |
+| Unit Tests | [done] Pass | N tests written |
+| Build | [done] Pass | |
+| Integration | [done] Pass | or N/A |
+| Edge Cases | [done] Pass | |
 
 ## Files Changed
 
-| ファイル | アクション | 行数 |
+| File | Action | Lines |
 |---|---|---|
 | `path/to/file` | CREATED | +N |
 | `path/to/file` | UPDATED | +N / -M |
 
 ## Deviations from Plan
-[逸脱の一覧（何が、なぜ）、または「なし」]
+[List any deviations with WHAT and WHY, or "None"]
 
 ## Issues Encountered
-[発生した問題とその解決方法の一覧、または「なし」]
+[List any problems and how they were resolved, or "None"]
 
 ## Tests Written
 
-| テストファイル | テスト数 | カバレッジ |
+| Test File | Tests | Coverage |
 |---|---|---|
-| `path/to/test` | N件のテスト | [カバーした領域] |
+| `path/to/test` | N tests | [area covered] |
 
 ## Next Steps
-- [ ] `/code-review` でコードレビュー
-- [ ] `/prp-pr` でPRを作成
+- [ ] Code review via `/code-review`
+- [ ] Create PR via `/prp-pr`
 ```
 
-### PRD の更新（該当する場合）
+### Update PRD (if applicable)
 
-この実装が PRD フェーズの一部だった場合:
-1. フェーズのステータスを `in-progress` から `complete` に更新
-2. レポートパスを参照として追加
+If this implementation was for a PRD phase:
+1. Update the phase status from `in-progress` to `complete`
+2. Add report path as reference
 
-### 計画のアーカイブ
+### Archive Plan
 
 ```bash
 mkdir -p .claude/PRPs/plans/completed
 mv "$ARGUMENTS" .claude/PRPs/plans/completed/
 ```
 
-**チェックポイント**: レポート作成完了。PRD 更新完了。計画をアーカイブ済み。
+**CHECKPOINT**: Report created. PRD updated. Plan archived.
 
 ---
 
-## フェーズ 6 — 出力
+## Phase 6 — OUTPUT
 
-ユーザーに報告します:
+Report to user:
 
 ```
-## 実装完了
+## Implementation Complete
 
-- **計画**: [plan file path] → completed/ にアーカイブ
-- **ブランチ**: [current branch name]
-- **ステータス**: [done] すべてのタスク完了
+- **Plan**: [plan file path] → archived to completed/
+- **Branch**: [current branch name]
+- **Status**: [done] All tasks complete
 
-### バリデーション概要
+### Validation Summary
 
-| チェック | ステータス |
+| Check | Status |
 |---|---|
-| 型チェック | [done] |
-| リント | [done] |
-| テスト | [done] (N件作成) |
-| ビルド | [done] |
-| 統合 | [done] または N/A |
+| Type Check | [done] |
+| Lint | [done] |
+| Tests | [done] (N written) |
+| Build | [done] |
+| Integration | [done] or N/A |
 
-### 変更されたファイル
-- [N] ファイル作成、[M] ファイル更新
+### Files Changed
+- [N] files created, [M] files updated
 
-### 逸脱
-[概要 または「なし — 計画どおりに実装」]
+### Deviations
+[Summary or "None — implemented exactly as planned"]
 
-### 成果物
-- レポート: `.claude/PRPs/reports/{name}-report.md`
-- アーカイブ済み計画: `.claude/PRPs/plans/completed/{name}.plan.md`
+### Artifacts
+- Report: `.claude/PRPs/reports/{name}-report.md`
+- Archived Plan: `.claude/PRPs/plans/completed/{name}.plan.md`
 
-### PRD 進捗（該当する場合）
-| フェーズ | ステータス |
+### PRD Progress (if applicable)
+| Phase | Status |
 |---|---|
-| フェーズ 1 | [done] 完了 |
-| フェーズ 2 | [next] |
+| Phase 1 | [done] Complete |
+| Phase 2 | [next] |
 | ... | ... |
 
-> 次のステップ: `/prp-pr` でプルリクエストを作成するか、`/code-review` で先に変更をレビューしてください。
+> Next step: Run `/prp-pr` to create a pull request, or `/code-review` to review changes first.
 ```
 
 ---
 
-## 失敗時の対処
+## Handling Failures
 
-### 型チェックの失敗
-1. エラーメッセージを注意深く読む
-2. ソースファイルの型エラーを修正
-3. 型チェックを再実行
-4. クリーンになってから次に進む
+### Type Check Fails
+1. Read the error message carefully
+2. Fix the type error in the source file
+3. Re-run type-check
+4. Continue only when clean
 
-### テストの失敗
-1. バグが実装にあるのかテストにあるのかを特定
-2. 根本原因を修正（通常は実装側）
-3. テストを再実行
-4. グリーンになってから次に進む
+### Tests Fail
+1. Identify whether the bug is in the implementation or the test
+2. Fix the root cause (usually the implementation)
+3. Re-run tests
+4. Continue only when green
 
-### リントの失敗
-1. まず自動修正を実行
-2. エラーが残る場合は手動で修正
-3. リントを再実行
-4. クリーンになってから次に進む
+### Lint Fails
+1. Run auto-fix first
+2. If errors remain, fix manually
+3. Re-run lint
+4. Continue only when clean
 
-### ビルドの失敗
-1. 通常は型またはインポートの問題 — エラーメッセージを確認
-2. 問題のあるファイルを修正
-3. ビルドを再実行
-4. 成功してから次に進む
+### Build Fails
+1. Usually a type or import issue — check error message
+2. Fix the offending file
+3. Re-run build
+4. Continue only when successful
 
-### 統合テストの失敗
-1. サーバーが正しく起動したか確認
-2. エンドポイント/ルートが存在するか確認
-3. リクエスト形式が期待どおりか確認
-4. 修正して再実行
-
----
-
-## 成功基準
-
-- **TASKS_COMPLETE**: 計画のすべてのタスクを実行
-- **TYPES_PASS**: 型エラーゼロ
-- **LINT_PASS**: リントエラーゼロ
-- **TESTS_PASS**: すべてのテストがグリーン、新しいテストを作成
-- **BUILD_PASS**: ビルド成功
-- **REPORT_CREATED**: 実装レポートを保存
-- **PLAN_ARCHIVED**: 計画を `completed/` に移動
+### Integration Test Fails
+1. Check server started correctly
+2. Verify endpoint/route exists
+3. Check request format matches expected
+4. Fix and re-run
 
 ---
 
-## 次のステップ
+## Success Criteria
 
-- `/code-review` を実行してコミット前に変更をレビュー
-- `/prp-commit` を実行して説明的なメッセージでコミット
-- `/prp-pr` を実行してプルリクエストを作成
-- `/prp-plan <next-phase>` を実行（PRD にさらにフェーズがある場合）
+- **TASKS_COMPLETE**: All tasks from the plan executed
+- **TYPES_PASS**: Zero type errors
+- **LINT_PASS**: Zero lint errors
+- **TESTS_PASS**: All tests green, new tests written
+- **BUILD_PASS**: Build succeeds
+- **REPORT_CREATED**: Implementation report saved
+- **PLAN_ARCHIVED**: Plan moved to `completed/`
+
+---
+
+## Next Steps
+
+- Run `/code-review` to review changes before committing
+- Run `/prp-commit` to commit with a descriptive message
+- Run `/prp-pr` to create a pull request
+- Run `/prp-plan <next-phase>` if the PRD has more phases

@@ -1,447 +1,447 @@
 ---
-description: "対話型PRDジェネレーター - 問題起点・仮説駆動のプロダクト仕様書を対話的な質疑応答で作成"
-argument-hint: "[機能/プロダクトのアイデア] (空白 = 質問から開始)"
+description: "Interactive PRD generator - problem-first, hypothesis-driven product spec with back-and-forth questioning"
+argument-hint: "[feature/product idea] (blank = start with questions)"
 ---
 
-# プロダクト要件定義書ジェネレーター
+# Product Requirements Document Generator
 
-> PRPs-agentic-eng（Wirasm作）から適応。PRPワークフローシリーズの一部。
+> Adapted from PRPs-agentic-eng by Wirasm. Part of the PRP workflow series.
 
-**入力**: $ARGUMENTS
-
----
-
-## あなたの役割
-
-あなたは鋭いプロダクトマネージャーであり：
-- ソリューションではなく、問題から始める
-- 構築する前にエビデンスを要求する
-- 仕様ではなく、仮説で考える
-- 想定する前に明確化のための質問をする
-- 不確実性を正直に認める
-
-**アンチパターン**: セクションを空虚な内容で埋めないこと。情報が不足している場合は、もっともらしい要件を捏造するのではなく「TBD - 調査が必要」と記載する。
+**Input**: $ARGUMENTS
 
 ---
 
-## プロセス概要
+## Your Role
+
+You are a sharp product manager who:
+- Starts with PROBLEMS, not solutions
+- Demands evidence before building
+- Thinks in hypotheses, not specs
+- Asks clarifying questions before assuming
+- Acknowledges uncertainty honestly
+
+**Anti-pattern**: Don't fill sections with fluff. If info is missing, write "TBD - needs research" rather than inventing plausible-sounding requirements.
+
+---
+
+## Process Overview
 
 ```
-質問セット1 → グラウンディング → 質問セット2 → リサーチ → 質問セット3 → 生成
+QUESTION SET 1 → GROUNDING → QUESTION SET 2 → RESEARCH → QUESTION SET 3 → GENERATE
 ```
 
-各質問セットは前の回答をもとに構築される。グラウンディングフェーズでは前提条件を検証する。
+Each question set builds on previous answers. Grounding phases validate assumptions.
 
 ---
 
-## フェーズ1: 開始 - 核心的な問題
+## Phase 1: INITIATE - Core Problem
 
-**入力が提供されていない場合**、以下を質問する：
+**If no input provided**, ask:
 
-> **何を構築したいですか？**
-> プロダクト、機能、またはケイパビリティを数文で説明してください。
+> **What do you want to build?**
+> Describe the product, feature, or capability in a few sentences.
 
-**入力が提供されている場合**、理解を言い換えて確認する：
+**If input provided**, confirm understanding by restating:
 
-> 以下を構築したいと理解しました: {言い換えた理解内容}
-> これで正しいですか？それとも理解を修正すべきですか？
+> I understand you want to build: {restated understanding}
+> Is this correct, or should I adjust my understanding?
 
-**ゲート**: ユーザーの応答を待ってから次に進む。
-
----
-
-## フェーズ2: 基礎 - 問題の発見
-
-以下の質問をする（全てを一度に提示し、ユーザーはまとめて回答可能）：
-
-> **基礎的な質問：**
->
-> 1. **誰が** この問題を抱えていますか？「ユーザー」だけでなく、どのような人物/役割か具体的に。
->
-> 2. **何の** 問題に直面していますか？想定されるニーズではなく、観察可能なペインを説明してください。
->
-> 3. **なぜ** 今日それを解決できないのですか？どのような代替手段が存在し、なぜそれらが不十分なのですか？
->
-> 4. **なぜ今なのですか？** 何が変わって、これを構築する価値が生まれたのですか？
->
-> 5. **どうやって** 解決できたと判断しますか？成功とはどのような状態ですか？
-
-**ゲート**: ユーザーの応答を待ってから次に進む。
+**GATE**: Wait for user response before proceeding.
 
 ---
 
-## フェーズ3: グラウンディング - 市場とコンテキストのリサーチ
+## Phase 2: FOUNDATION - Problem Discovery
 
-基礎的な回答を得た後、リサーチを実施する：
+Ask these questions (present all at once, user can answer together):
 
-**市場コンテキストのリサーチ：**
-
-1. 市場における類似のプロダクト/機能を見つける
-2. 競合がこの問題をどう解決しているか特定する
-3. 一般的なパターンとアンチパターンを記録する
-4. この分野における最近のトレンドや変化を確認する
-
-直接リンク、主要なインサイト、利用可能な情報のギャップを含めて調査結果をまとめる。
-
-**コードベースが存在する場合、並行して探索する：**
-
-1. プロダクト/機能のアイデアに関連する既存の機能を見つける
-2. 活用できるパターンを特定する
-3. 技術的な制約や機会を記録する
-
-ファイルの場所、コードパターン、観察された慣例を記録する。
-
-**ユーザーへの調査結果の要約：**
-
-> **判明したこと：**
-> - {市場のインサイト1}
-> - {競合のアプローチ}
-> - {コードベースからの関連パターン（該当する場合）}
+> **Foundation Questions:**
 >
-> これによって考えが変わったり、洗練されたりしますか？
+> 1. **Who** has this problem? Be specific - not just "users" but what type of person/role?
+>
+> 2. **What** problem are they facing? Describe the observable pain, not the assumed need.
+>
+> 3. **Why** can't they solve it today? What alternatives exist and why do they fail?
+>
+> 4. **Why now?** What changed that makes this worth building?
+>
+> 5. **How** will you know if you solved it? What would success look like?
 
-**ゲート**: ユーザー入力のための短い一時停止（「続行」または調整が可能）。
+**GATE**: Wait for user responses before proceeding.
 
 ---
 
-## フェーズ4: 深掘り - ビジョンとユーザー
+## Phase 3: GROUNDING - Market & Context Research
 
-基礎 + リサーチに基づいて質問する：
+After foundation answers, conduct research:
 
-> **ビジョンとユーザー：**
->
-> 1. **ビジョン**: これが大成功した場合の理想的な最終状態を一文で述べてください。
->
-> 2. **プライマリユーザー**: 最も重要なユーザーを説明してください - その役割、状況、ニーズを引き起こすトリガー。
->
-> 3. **ジョブ・トゥ・ビー・ダン**: これを完成させてください：「[状況]のとき、[動機]したい。それにより[成果]を達成できる。」
->
-> 4. **非ターゲットユーザー**: 明示的にターゲットでないのは誰ですか？無視すべきは誰ですか？
->
-> 5. **制約**: どのような制限がありますか？（時間、予算、技術、規制）
+**Research market context:**
 
-**ゲート**: ユーザーの応答を待ってから次に進む。
+1. Find similar products/features in the market
+2. Identify how competitors solve this problem
+3. Note common patterns and anti-patterns
+4. Check for recent trends or changes in this space
+
+Compile findings with direct links, key insights, and any gaps in available information.
+
+**If a codebase exists, explore it in parallel:**
+
+1. Find existing functionality relevant to the product/feature idea
+2. Identify patterns that could be leveraged
+3. Note technical constraints or opportunities
+
+Record file locations, code patterns, and conventions observed.
+
+**Summarize findings to user:**
+
+> **What I found:**
+> - {Market insight 1}
+> - {Competitor approach}
+> - {Relevant pattern from codebase, if applicable}
+>
+> Does this change or refine your thinking?
+
+**GATE**: Brief pause for user input (can be "continue" or adjustments).
 
 ---
 
-## フェーズ5: グラウンディング - 技術的実現可能性
+## Phase 4: DEEP DIVE - Vision & Users
 
-**コードベースが存在する場合、2つの並行調査を実施する：**
+Based on foundation + research, ask:
 
-調査1 - 実現可能性の探索：
-1. 活用可能な既存インフラストラクチャを特定する
-2. 既に実装されている類似パターンを見つける
-3. 統合ポイントと依存関係をマッピングする
-4. 関連する設定と型定義を見つける
-
-ファイルの場所、コードパターン、観察された慣例を記録する。
-
-調査2 - 制約の分析：
-1. 既存の関連機能がエンドツーエンドでどのように実装されているかを追跡する
-2. 潜在的な統合ポイントを通じたデータフローをマッピングする
-3. アーキテクチャパターンと境界を特定する
-4. 類似機能に基づいて複雑さを見積もる
-
-正確なファイル:行番号の参照とともに存在するものを文書化する。提案は不要。
-
-**コードベースがない場合、技術的アプローチをリサーチする：**
-
-1. 他者が使用した技術的アプローチを見つける
-2. 一般的な実装パターンを特定する
-3. 既知の技術的課題と落とし穴を記録する
-
-引用とギャップ分析を含めて調査結果をまとめる。
-
-**ユーザーへの要約：**
-
-> **技術的コンテキスト：**
-> - 実現可能性: {高/中/低} 理由: {理由}
-> - 活用可能: {既存のパターン/インフラストラクチャ}
-> - 主要な技術リスク: {主な懸念事項}
+> **Vision & Users:**
 >
-> 知っておくべき技術的制約はありますか？
+> 1. **Vision**: In one sentence, what's the ideal end state if this succeeds wildly?
+>
+> 2. **Primary User**: Describe your most important user - their role, context, and what triggers their need.
+>
+> 3. **Job to Be Done**: Complete this: "When [situation], I want to [motivation], so I can [outcome]."
+>
+> 4. **Non-Users**: Who is explicitly NOT the target? Who should we ignore?
+>
+> 5. **Constraints**: What limitations exist? (time, budget, technical, regulatory)
 
-**ゲート**: ユーザー入力のための短い一時停止。
+**GATE**: Wait for user responses before proceeding.
 
 ---
 
-## フェーズ6: 決定 - スコープとアプローチ
+## Phase 5: GROUNDING - Technical Feasibility
 
-最終的な明確化の質問をする：
+**If a codebase exists, perform two parallel investigations:**
 
-> **スコープとアプローチ：**
->
-> 1. **MVP定義**: これが機能するかテストするための絶対的な最小限は何ですか？
->
-> 2. **必須 vs あると良い**: v1に必ず含まれるべき2-3項目は何ですか？何が待てますか？
->
-> 3. **主要仮説**: これを完成させてください：「我々は[機能]が[ユーザー]の[問題を解決する]と信じている。[測定可能な成果]が得られた時、我々の仮説が正しかったと判る。」
->
-> 4. **スコープ外**: 明示的に構築しないものは何ですか（ユーザーが要求しても）？
->
-> 5. **未解決の質問**: アプローチを変える可能性のある不確実性は何ですか？
+Investigation 1 — Explore feasibility:
+1. Identify existing infrastructure that can be leveraged
+2. Find similar patterns already implemented
+3. Map integration points and dependencies
+4. Locate relevant configuration and type definitions
 
-**ゲート**: ユーザーの応答を待ってから生成する。
+Record file locations, code patterns, and conventions observed.
+
+Investigation 2 — Analyze constraints:
+1. Trace how existing related features are implemented end-to-end
+2. Map data flow through potential integration points
+3. Identify architectural patterns and boundaries
+4. Estimate complexity based on similar features
+
+Document what exists with precise file:line references. No suggestions.
+
+**If no codebase, research technical approaches:**
+
+1. Find technical approaches others have used
+2. Identify common implementation patterns
+3. Note known technical challenges and pitfalls
+
+Compile findings with citations and gap analysis.
+
+**Summarize to user:**
+
+> **Technical Context:**
+> - Feasibility: {HIGH/MEDIUM/LOW} because {reason}
+> - Can leverage: {existing patterns/infrastructure}
+> - Key technical risk: {main concern}
+>
+> Any technical constraints I should know about?
+
+**GATE**: Brief pause for user input.
 
 ---
 
-## フェーズ7: 生成 - PRDの作成
+## Phase 6: DECISIONS - Scope & Approach
 
-**出力パス**: `.claude/PRPs/prds/{ケバブケース名}.prd.md`
+Ask final clarifying questions:
 
-必要に応じてディレクトリを作成する: `mkdir -p .claude/PRPs/prds`
+> **Scope & Approach:**
+>
+> 1. **MVP Definition**: What's the absolute minimum to test if this works?
+>
+> 2. **Must Have vs Nice to Have**: What 2-3 things MUST be in v1? What can wait?
+>
+> 3. **Key Hypothesis**: Complete this: "We believe [capability] will [solve problem] for [users]. We'll know we're right when [measurable outcome]."
+>
+> 4. **Out of Scope**: What are you explicitly NOT building (even if users ask)?
+>
+> 5. **Open Questions**: What uncertainties could change the approach?
 
-### PRDテンプレート
+**GATE**: Wait for user responses before generating.
+
+---
+
+## Phase 7: GENERATE - Write PRD
+
+**Output path**: `.claude/PRPs/prds/{kebab-case-name}.prd.md`
+
+Create directory if needed: `mkdir -p .claude/PRPs/prds`
+
+### PRD Template
 
 ```markdown
-# {プロダクト/機能名}
+# {Product/Feature Name}
 
-## 問題の記述
+## Problem Statement
 
-{2-3文: 誰がどのような問題を抱えていて、解決しないことのコストは何か？}
+{2-3 sentences: Who has what problem, and what's the cost of not solving it?}
 
-## エビデンス
+## Evidence
 
-- {この問題が存在することを証明するユーザーの引用、データポイント、または観察}
-- {もう1つのエビデンス}
-- {ない場合: 「仮定 - [方法]による検証が必要」}
+- {User quote, data point, or observation that proves this problem exists}
+- {Another piece of evidence}
+- {If none: "Assumption - needs validation through [method]"}
 
-## 提案するソリューション
+## Proposed Solution
 
-{1段落: 何を構築するのか、なぜ代替案ではなくこのアプローチなのか}
+{One paragraph: What we're building and why this approach over alternatives}
 
-## 主要仮説
+## Key Hypothesis
 
-我々は{機能}が{ユーザー}の{問題を解決する}と信じている。
-{測定可能な成果}が得られた時、我々の仮説が正しかったと判る。
+We believe {capability} will {solve problem} for {users}.
+We'll know we're right when {measurable outcome}.
 
-## 構築しないもの
+## What We're NOT Building
 
-- {スコープ外の項目1} - {理由}
-- {スコープ外の項目2} - {理由}
+- {Out of scope item 1} - {why}
+- {Out of scope item 2} - {why}
 
-## 成功指標
+## Success Metrics
 
-| 指標 | 目標 | 測定方法 |
-|------|------|----------|
-| {主要指標} | {具体的な数値} | {方法} |
-| {副次指標} | {具体的な数値} | {方法} |
+| Metric | Target | How Measured |
+|--------|--------|--------------|
+| {Primary metric} | {Specific number} | {Method} |
+| {Secondary metric} | {Specific number} | {Method} |
 
-## 未解決の質問
+## Open Questions
 
-- [ ] {未解決の質問1}
-- [ ] {未解決の質問2}
-
----
-
-## ユーザーとコンテキスト
-
-**プライマリユーザー**
-- **誰**: {具体的な説明}
-- **現在の行動**: {現在行っていること}
-- **トリガー**: {ニーズを引き起こす瞬間}
-- **成功状態**: {「完了」がどのような状態か}
-
-**ジョブ・トゥ・ビー・ダン**
-{状況}のとき、{動機}したい。それにより{成果}を達成できる。
-
-**非ターゲットユーザー**
-{誰がターゲットでないか、その理由}
+- [ ] {Unresolved question 1}
+- [ ] {Unresolved question 2}
 
 ---
 
-## ソリューション詳細
+## Users & Context
 
-### コアケイパビリティ (MoSCoW)
+**Primary User**
+- **Who**: {Specific description}
+- **Current behavior**: {What they do today}
+- **Trigger**: {What moment triggers the need}
+- **Success state**: {What "done" looks like}
 
-| 優先度 | ケイパビリティ | 根拠 |
-|--------|---------------|------|
-| Must | {機能} | {なぜ必須か} |
-| Must | {機能} | {なぜ必須か} |
-| Should | {機能} | {なぜ重要だがブロッカーではないか} |
-| Could | {機能} | {あると良い} |
-| Won't | {機能} | {明示的に延期する理由} |
+**Job to Be Done**
+When {situation}, I want to {motivation}, so I can {outcome}.
 
-### MVPスコープ
-
-{仮説を検証するための最小限は何か}
-
-### ユーザーフロー
-
-{クリティカルパス - 価値への最短経路}
+**Non-Users**
+{Who this is NOT for and why}
 
 ---
 
-## 技術的アプローチ
+## Solution Detail
 
-**実現可能性**: {高/中/低}
+### Core Capabilities (MoSCoW)
 
-**アーキテクチャノート**
-- {主要な技術的決定とその理由}
-- {依存関係または統合ポイント}
+| Priority | Capability | Rationale |
+|----------|------------|-----------|
+| Must | {Feature} | {Why essential} |
+| Must | {Feature} | {Why essential} |
+| Should | {Feature} | {Why important but not blocking} |
+| Could | {Feature} | {Nice to have} |
+| Won't | {Feature} | {Explicitly deferred and why} |
 
-**技術的リスク**
+### MVP Scope
 
-| リスク | 可能性 | 軽減策 |
-|--------|--------|--------|
-| {リスク} | {高/中/低} | {対処方法} |
+{What's the minimum to validate the hypothesis}
+
+### User Flow
+
+{Critical path - shortest journey to value}
 
 ---
 
-## 実装フェーズ
+## Technical Approach
+
+**Feasibility**: {HIGH/MEDIUM/LOW}
+
+**Architecture Notes**
+- {Key technical decision and why}
+- {Dependency or integration point}
+
+**Technical Risks**
+
+| Risk | Likelihood | Mitigation |
+|------|------------|------------|
+| {Risk} | {H/M/L} | {How to handle} |
+
+---
+
+## Implementation Phases
 
 <!--
   STATUS: pending | in-progress | complete
-  PARALLEL: 同時実行可能なフェーズ（例: "with 3" または "-"）
-  DEPENDS: 先に完了すべきフェーズ（例: "1, 2" または "-"）
-  PRP: 生成された計画ファイルへのリンク（作成後）
+  PARALLEL: phases that can run concurrently (e.g., "with 3" or "-")
+  DEPENDS: phases that must complete first (e.g., "1, 2" or "-")
+  PRP: link to generated plan file once created
 -->
 
-| # | フェーズ | 説明 | ステータス | 並行 | 依存 | PRP計画 |
-|---|---------|------|----------|------|------|---------|
-| 1 | {フェーズ名} | {このフェーズが提供するもの} | pending | - | - | - |
-| 2 | {フェーズ名} | {このフェーズが提供するもの} | pending | - | 1 | - |
-| 3 | {フェーズ名} | {このフェーズが提供するもの} | pending | with 4 | 2 | - |
-| 4 | {フェーズ名} | {このフェーズが提供するもの} | pending | with 3 | 2 | - |
-| 5 | {フェーズ名} | {このフェーズが提供するもの} | pending | - | 3, 4 | - |
+| # | Phase | Description | Status | Parallel | Depends | PRP Plan |
+|---|-------|-------------|--------|----------|---------|----------|
+| 1 | {Phase name} | {What this phase delivers} | pending | - | - | - |
+| 2 | {Phase name} | {What this phase delivers} | pending | - | 1 | - |
+| 3 | {Phase name} | {What this phase delivers} | pending | with 4 | 2 | - |
+| 4 | {Phase name} | {What this phase delivers} | pending | with 3 | 2 | - |
+| 5 | {Phase name} | {What this phase delivers} | pending | - | 3, 4 | - |
 
-### フェーズ詳細
+### Phase Details
 
-**フェーズ1: {名前}**
-- **目標**: {達成しようとしていること}
-- **スコープ**: {限定された成果物}
-- **成功シグナル**: {完了したと判断する方法}
+**Phase 1: {Name}**
+- **Goal**: {What we're trying to achieve}
+- **Scope**: {Bounded deliverables}
+- **Success signal**: {How we know it's done}
 
-**フェーズ2: {名前}**
-- **目標**: {達成しようとしていること}
-- **スコープ**: {限定された成果物}
-- **成功シグナル**: {完了したと判断する方法}
+**Phase 2: {Name}**
+- **Goal**: {What we're trying to achieve}
+- **Scope**: {Bounded deliverables}
+- **Success signal**: {How we know it's done}
 
-{各フェーズについて続ける...}
+{Continue for each phase...}
 
-### 並行処理ノート
+### Parallelism Notes
 
-{どのフェーズが並行実行可能か、その理由を説明する}
-
----
-
-## 決定ログ
-
-| 決定事項 | 選択 | 代替案 | 根拠 |
-|----------|------|--------|------|
-| {決定事項} | {選択} | {検討したオプション} | {この選択の理由} |
+{Explain which phases can run in parallel and why}
 
 ---
 
-## リサーチサマリー
+## Decisions Log
 
-**市場コンテキスト**
-{市場リサーチからの主要な発見}
-
-**技術的コンテキスト**
-{技術的探索からの主要な発見}
+| Decision | Choice | Alternatives | Rationale |
+|----------|--------|--------------|-----------|
+| {Decision} | {Choice} | {Options considered} | {Why this one} |
 
 ---
 
-*生成日時: {timestamp}*
-*ステータス: ドラフト - 検証が必要*
+## Research Summary
+
+**Market Context**
+{Key findings from market research}
+
+**Technical Context**
+{Key findings from technical exploration}
+
+---
+
+*Generated: {timestamp}*
+*Status: DRAFT - needs validation*
 ```
 
 ---
 
-## フェーズ8: 出力 - サマリー
+## Phase 8: OUTPUT - Summary
 
-生成後に以下を報告する：
+After generating, report:
 
 ```markdown
-## PRD作成完了
+## PRD Created
 
-**ファイル**: `.claude/PRPs/prds/{name}.prd.md`
+**File**: `.claude/PRPs/prds/{name}.prd.md`
 
-### サマリー
+### Summary
 
-**問題**: {一行}
-**ソリューション**: {一行}
-**主要指標**: {主要な成功指標}
+**Problem**: {One line}
+**Solution**: {One line}
+**Key Metric**: {Primary success metric}
 
-### 検証ステータス
+### Validation Status
 
-| セクション | ステータス |
-|-----------|-----------|
-| 問題の記述 | {検証済み/仮定} |
-| ユーザーリサーチ | {完了/必要} |
-| 技術的実現可能性 | {評価済み/TBD} |
-| 成功指標 | {定義済み/要改善} |
+| Section | Status |
+|---------|--------|
+| Problem Statement | {Validated/Assumption} |
+| User Research | {Done/Needed} |
+| Technical Feasibility | {Assessed/TBD} |
+| Success Metrics | {Defined/Needs refinement} |
 
-### 未解決の質問 ({count})
+### Open Questions ({count})
 
-{回答が必要な未解決の質問を一覧表示する}
+{List the open questions that need answers}
 
-### 推奨する次のステップ
+### Recommended Next Step
 
-{以下のいずれか: ユーザーリサーチ、技術スパイク、プロトタイプ、ステークホルダーレビューなど}
+{One of: user research, technical spike, prototype, stakeholder review, etc.}
 
-### 実装フェーズ
+### Implementation Phases
 
-| # | フェーズ | ステータス | 並行可能 |
-|---|---------|----------|---------|
-{PRDからのフェーズ一覧}
+| # | Phase | Status | Can Parallel |
+|---|-------|--------|--------------|
+{Table of phases from PRD}
 
-### 実装を開始するには
+### To Start Implementation
 
-実行: `/prp-plan .claude/PRPs/prds/{name}.prd.md`
+Run: `/prp-plan .claude/PRPs/prds/{name}.prd.md`
 
-これにより自動的に次の保留中のフェーズが選択され、実装計画が作成されます。
+This will automatically select the next pending phase and create an implementation plan.
 ```
 
 ---
 
-## 質問フローのサマリー
+## Question Flow Summary
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  開始: 「何を構築したいですか？」                           │
+│  INITIATE: "What do you want to build?"                 │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  基礎: 誰が、何を、なぜ、なぜ今、どう測定するか            │
+│  FOUNDATION: Who, What, Why, Why now, How to measure    │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  グラウンディング: 市場リサーチ、競合分析                    │
+│  GROUNDING: Market research, competitor analysis        │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  深掘り: ビジョン、プライマリユーザー、JTBD、制約           │
+│  DEEP DIVE: Vision, Primary user, JTBD, Constraints     │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  グラウンディング: 技術的実現可能性、コードベース探索        │
+│  GROUNDING: Technical feasibility, codebase exploration │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  決定: MVP、必須事項、仮説、スコープ外                      │
+│  DECISIONS: MVP, Must-haves, Hypothesis, Out of scope   │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
-│  生成: PRDを .claude/PRPs/prds/ に出力                     │
+│  GENERATE: Write PRD to .claude/PRPs/prds/              │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ECCとの連携
+## Integration with ECC
 
-PRD生成後：
-- `/prp-plan` を使用してPRDのフェーズから実装計画を作成する
-- `/plan` を使用してPRD構造なしのシンプルな計画を作成する
-- `/save-session` を使用してセッション間でPRDコンテキストを保持する
+After PRD generation:
+- Use `/prp-plan` to create implementation plans from PRD phases
+- Use `/plan` for simpler planning without PRD structure
+- Use `/save-session` to preserve PRD context across sessions
 
-## 成功基準
+## Success Criteria
 
-- **PROBLEM_VALIDATED**: 問題が具体的でエビデンスに基づいている（または仮定として明記されている）
-- **USER_DEFINED**: プライマリユーザーが具体的であり、汎用的でない
-- **HYPOTHESIS_CLEAR**: 測定可能な成果を伴うテスト可能な仮説
-- **SCOPE_BOUNDED**: 明確な必須事項と明示的なスコープ外
-- **QUESTIONS_ACKNOWLEDGED**: 不確実性が隠されずにリストアップされている
-- **ACTIONABLE**: 懐疑的な人でも、なぜこれを構築する価値があるか理解できる
+- **PROBLEM_VALIDATED**: Problem is specific and evidenced (or marked as assumption)
+- **USER_DEFINED**: Primary user is concrete, not generic
+- **HYPOTHESIS_CLEAR**: Testable hypothesis with measurable outcome
+- **SCOPE_BOUNDED**: Clear must-haves and explicit out-of-scope
+- **QUESTIONS_ACKNOWLEDGED**: Uncertainties are listed, not hidden
+- **ACTIONABLE**: A skeptic could understand why this is worth building

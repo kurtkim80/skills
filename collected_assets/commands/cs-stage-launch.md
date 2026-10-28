@@ -1,15 +1,9 @@
 ---
-title: "/cs-stage-launch — Slash Command for AI Coding Agents"
-description: "Phase 2 — turn a build sheet into exact API payloads and a resumable BYOK curl launch script, then launch (environment → agent → session → kickoff). Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Phase 2 — turn a build sheet into exact API payloads and a resumable BYOK curl launch script, then launch (environment → agent → session → kickoff) with the founder's own key via the stage-launch skill. No tool makes API calls; the key never enters chat.
+argument-hint: "[optional: path to build-sheet.json, default ./my-agent/build-sheet.json]"
 ---
 
-# /cs-stage-launch
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-stage-launch.md">Source</a></span>
-</div>
-
+# /cs-stage-launch — Phase 2: Stage → Launch
 
 Run the `stage-launch` skill.
 

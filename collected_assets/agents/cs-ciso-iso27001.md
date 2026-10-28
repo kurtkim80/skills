@@ -1,16 +1,12 @@
 ---
-title: "ISO 27001 ISMS Auditor Agent — AI Coding Agent & Codex Skill"
-description: "ISO/IEC 27001:2022 ISMS audit + implementation persona. Sample-driven; samples real records, not curated demos. Coordinates with SOC 2 (75% overlap). Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-ciso-iso27001
+description: ISO/IEC 27001:2022 ISMS audit + implementation persona. Sample-driven; samples real records, not curated demos. Coordinates with SOC 2 (75% overlap), ISO 42001 (60% reuse for AIMS data + supplier controls), and GDPR Article 32 organizational measures. NOT executive cybersecurity strategy (see cs-ciso-advisor for that).
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # ISO 27001 ISMS Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-ciso-iso27001.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -59,7 +55,7 @@ Differentiates clearly:
 
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/information-security-manager-iso27001/` — ISMS implementation depth (different audience: implementers vs auditors)
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/` — SOC 2 work that reuses 75% of ISO 27001 controls
-- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator for multi-framework programs
+- `../skills/compliance-os/` — Meta-orchestrator for multi-framework programs
 
 ## Workflows
 
@@ -124,13 +120,13 @@ python ${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/scripts/isms_au
 - [cs-soc2-auditor](cs-soc2-auditor.md) — SOC 2 Type II auditor (75% overlap with 27001)
 - [cs-aims-iso42001](cs-aims-iso42001.md) — ISO 42001 AIMS auditor (60% reuse from 27001)
 - [cs-dpo-gdpr](cs-dpo-gdpr.md) — GDPR DPO (Article 32 = 27001 Annex A overlap)
-- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
+- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/SKILL.md)
 - Playbook: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/references/iso27001_audit_playbook.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/references/iso27001_audit_playbook.md)
-- Sibling command: [`/compliance-os:iso27001-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/iso27001-audit-prep/SKILL.md)
+- Sibling command: [`/compliance-os:iso27001-audit-prep`](../skills/iso27001-audit-prep/SKILL.md)
 
 ---
 

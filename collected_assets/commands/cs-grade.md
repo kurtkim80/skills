@@ -1,15 +1,9 @@
 ---
-title: "/cs-grade — Slash Command for AI Coding Agents"
-description: "Phase 3 — the bounded grade→iterate loop. Define a CMA outcome (required rubric, max_iterations 1..20), read each grader verdict, decide the next. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Phase 3 — the bounded grade→iterate loop. Define a CMA outcome (required rubric, max_iterations 1..20), read each grader verdict, decide the next move, and run held-back eval cases once a version passes, via the grade-iterate skill. Never unbounded.
+argument-hint: "[optional: path to build-sheet.json]"
 ---
 
-# /cs-grade
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-grade.md">Source</a></span>
-</div>
-
+# /cs-grade — Phase 3: Grade → Iterate
 
 Run the `grade-iterate` skill.
 

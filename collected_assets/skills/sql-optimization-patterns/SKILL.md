@@ -1,9 +1,10 @@
 ---
 name: sql-optimization-patterns
-description: "Diagnose slow SQL with query plans, preserve query results, and verify indexing or query changes against representative data."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Diagnose slow SQL with query plans, preserve query results, and verify indexing or query changes against representative data.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # SQL Optimization Patterns

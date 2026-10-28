@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin-repurpose"
-description: "/cs-linkedin-repurpose — Split an article, talk transcript, README, or write-up into standalone LinkedIn units, score each on whether it survives without its context, and skip anything already in the reuse ledger so the same idea never goes out twice."
-argument-hint: "[path to the source: article, transcript, README, notes]"
+title: "/cs-linkedin-repurpose — Slash Command for AI Coding Agents"
+description: "/cs-linkedin-repurpose — Split an article, talk transcript, README, or write-up into standalone LinkedIn units, score each on whether it survives. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin-repurpose — One source, many posts, no duplicates
+# /cs-linkedin-repurpose
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-repurpose.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin-repurpose [path to source]`
 
@@ -59,5 +64,5 @@ Commit the ledger alongside the source. It is project state, not a cache.
 
 ## Related
 
-- Skill: [`linkedin-content`](../skills/linkedin-content/SKILL.md)
-- Reference: [`repurposing_discipline.md`](../skills/linkedin-content/references/repurposing_discipline.md)
+- Skill: [`linkedin-content`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-content/SKILL.md)
+- Reference: [`repurposing_discipline.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-content/references/repurposing_discipline.md)

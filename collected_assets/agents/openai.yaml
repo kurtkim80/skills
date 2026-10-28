@@ -1,4 +1,7 @@
 interface:
-  display_name: "Terminal Opener"
-  short_description: "Open commands safely in visible terminals"
-  default_prompt: "Use $terminal-opener to open an executable and its argument array in a visible terminal."
+  display_name: "Competitive Report Structure"
+  short_description: "Assemble scored cards into a decision-grade competitive report"
+  brand_color: "#10B981"
+  default_prompt: "Use $competitive-report-structure to assemble a competitive benchmarking report."
+policy:
+  allow_implicit_invocation: true

@@ -1,10 +1,11 @@
 ---
 name: top-web-vulnerabilities
-description: "Provide an illustrative, overlapping reference for common web application vulnerability patterns organized by category. This skill enables systematic vulnerability identification, impact assessment, and remediation guidance across the full spectrum of web security threats."
-risk: offensive
-source: community
-author: zebbern
-date_added: "2026-02-27"
+description: Provide an illustrative, overlapping reference for common web application vulnerability patterns organized by category. This skill enables systematic vulnerability identification, impact assessment, and remediation guidance across the full spectrum of web security threats.
+metadata:
+  aas-risk: offensive
+  aas-source: community
+  aas-author: zebbern
+  aas-date-added: '2026-02-27'
 ---
 
 > **⚠️ AUTHORIZED USE ONLY**

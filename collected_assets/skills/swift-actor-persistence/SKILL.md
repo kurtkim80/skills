@@ -1,7 +1,8 @@
 ---
 name: swift-actor-persistence
-description: Thread-safe data persistence in Swift using actors — in-memory cache with file-backed storage, eliminating data races by design.
-origin: ECC
+description: Thread-safe data persistence in Swift using actors — in-memory cache with file-backed storage, eliminating data races by design. Use when persisting data in Swift and a data race or thread-safety problem needs designing out.
+metadata:
+  origin: ECC
 ---
 
 # Swift Actors for Thread-Safe Persistence
@@ -10,7 +11,7 @@ Patterns for building thread-safe data persistence layers using Swift actors. Co
 
 ## When to Activate
 
-- Building a data persistence layer in Swift 5.9+ (iOS 17+, macOS 14+)
+- Building a data persistence layer in Swift 5.5+
 - Need thread-safe access to shared mutable state
 - Want to eliminate manual synchronization (locks, DispatchQueues)
 - Building offline-first apps with local storage
@@ -64,7 +65,7 @@ public actor LocalRepository<T: Codable & Identifiable> where T.ID == String {
               let items = try? JSONDecoder().decode([T].self, from: data) else {
             return [:]
         }
-        return Dictionary(items.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
+        return Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
     }
 }
 ```

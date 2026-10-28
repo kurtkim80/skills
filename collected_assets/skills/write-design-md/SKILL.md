@@ -1,17 +1,18 @@
 ---
 name: write-design-md
-description: "Write or update a project's DESIGN.md from the colors, type, spacing and components it really uses, with rules agents follow so new screens match."
-category: frontend
-risk: safe
-source: https://github.com/uxkin/agent/tree/main/.agents/skills/design-md
-source_repo: uxkin/agent
-source_type: official
-date_added: "2026-10-12"
-author: UXKIN
-tags: [design-system, design-md, design-tokens, documentation, frontend]
-tools: [claude, codex, cursor, copilot, gemini]
+description: Write or update a project's DESIGN.md from the colors, type, spacing and components it really uses, with rules agents follow so new screens match.
 license: MIT
-license_source: https://github.com/uxkin/agent/blob/main/LICENSE
+metadata:
+  aas-category: frontend
+  aas-risk: safe
+  aas-source: https://github.com/uxkin/agent/tree/main/.agents/skills/design-md
+  aas-source-repo: uxkin/agent
+  aas-source-type: official
+  aas-date-added: '2026-10-12'
+  aas-author: UXKIN
+  aas-tags: '["design-system","design-md","design-tokens","documentation","frontend"]'
+  aas-tools: '["claude","codex","cursor","copilot","gemini"]'
+  aas-license-source: https://github.com/uxkin/agent/blob/main/LICENSE
 ---
 
 # DESIGN.md · by UXKIN

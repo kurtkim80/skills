@@ -1,112 +1,116 @@
 ---
-description: "Extraer patrones reutilizables de la sesión, autoevaluar la calidad antes de guardar y determinar la ubicación correcta (Global vs. Proyecto)."
+description: "セッションから再利用可能なパターンを抽出し、保存前に品質を自己評価し、適切な保存場所（グローバル vs プロジェクト）を決定します。"
 ---
 
-# /learn-eval - Extraer, Evaluar y luego Guardar
+# /learn-eval - 抽出、評価、そして保存
 
-Extiende `/learn` con una puerta de calidad, decisión de ubicación de guardado y conciencia de colocación del conocimiento antes de escribir cualquier archivo de skill.
+`/learn`を拡張し、スキルファイルを書く前に品質ゲート、保存場所の決定、ナレッジ配置の認識を追加します。
 
-## Qué Extraer
+## 抽出対象
 
-Buscar:
+以下を探す:
 
-1. **Patrones de Resolución de Errores** — causa raíz + corrección + reutilizabilidad
-2. **Técnicas de Depuración** — pasos no obvios, combinaciones de herramientas
-3. **Soluciones Alternativas** — peculiaridades de librerías, limitaciones de API, correcciones específicas de versión
-4. **Patrones Específicos del Proyecto** — convenciones, decisiones arquitectónicas, patrones de integración
+1. **エラー解決パターン** — 根本原因 + 修正 + 再利用性
+2. **デバッグテクニック** — 非自明なステップ、ツールの組み合わせ
+3. **ワークアラウンド** — ライブラリの癖、APIの制限、バージョン固有の修正
+4. **プロジェクト固有のパターン** — 規約、アーキテクチャの決定、統合パターン
 
-## Proceso
+## プロセス
 
-1. Revisar la sesión en busca de patrones extraíbles
-2. Identificar el insight más valioso/reutilizable
+1. セッションから抽出可能なパターンをレビュー
+2. 最も価値の高い/再利用可能なインサイトを特定
 
-3. **Determinar la ubicación de guardado:**
-   - Preguntar: "¿Este patrón sería útil en un proyecto diferente?"
-   - **Global** (`~/.claude/skills/learned/`): Patrones genéricos usables en 2+ proyectos (compatibilidad bash, comportamiento de API LLM, técnicas de depuración, etc.)
-   - **Proyecto** (`.claude/skills/learned/` en el proyecto actual): Conocimiento específico del proyecto (peculiaridades de un archivo de configuración particular, decisiones de arquitectura específicas del proyecto, etc.)
-   - Ante la duda, elegir Global (mover Global → Proyecto es más fácil que al revés)
+3. **保存場所の決定:**
+   - 質問: 「このパターンは別のプロジェクトでも役立つか？」
+   - **グローバル** (`~/.claude/skills/learned/`): 2つ以上のプロジェクトで使える汎用パターン（bash互換性、LLM APIの動作、デバッグテクニックなど）
+   - **プロジェクト** (現在のプロジェクトの`.claude/skills/learned/`): プロジェクト固有のナレッジ（特定の設定ファイルの癖、プロジェクト固有のアーキテクチャ決定など）
+   - 迷ったらグローバルを選択（グローバル → プロジェクトへの移動はその逆より容易）
 
-4. Redactar el archivo de skill usando este formato:
+4. 以下の形式でスキルファイルのドラフトを作成:
 
 ```markdown
 ---
-name: nombre-del-patron
-description: "Menos de 130 caracteres"
+name: pattern-name
+description: "130文字以内"
 user-invocable: false
 origin: auto-extracted
 ---
 
-# [Nombre Descriptivo del Patrón]
+# [説明的なパターン名]
 
-**Extraído:** [Fecha]
-**Contexto:** [Breve descripción de cuándo aplica]
+**抽出日:** [日付]
+**コンテキスト:** [これが適用される場面の簡潔な説明]
 
-## Problema
-[Qué problema resuelve - ser específico]
+## 問題
+[このパターンが解決する問題 - 具体的に]
 
-## Solución
-[El patrón/técnica/solución alternativa - con ejemplos de código]
+## 解決策
+[パターン/テクニック/ワークアラウンド - コード例付き]
 
-## Cuándo Usar
-[Condiciones de activación]
+## 使用するタイミング
+[トリガー条件]
 ```
 
-5. **Puerta de calidad — Lista de verificación + Veredicto holístico**
+5. **品質ゲート — チェックリスト + 総合判定**
 
-   ### 5a. Lista de verificación requerida (verificar leyendo los archivos reales)
+   ### 5a. 必須チェックリスト（実際にファイルを読んで検証）
 
-   Ejecutar **todos** los siguientes antes de evaluar el borrador:
+   ドラフトを評価する前に、以下の**すべて**を実行:
 
-   - [ ] Hacer grep en `~/.claude/skills/` y archivos relevantes de `.claude/skills/` del proyecto por palabras clave para verificar superposición de contenido
-   - [ ] Verificar MEMORY.md (tanto del proyecto como global) para superposición
-   - [ ] Considerar si añadir a una skill existente sería suficiente
-   - [ ] Confirmar que este es un patrón reutilizable, no una corrección puntual
+   - [ ] `~/.claude/skills/`および関連プロジェクトの`.claude/skills/`ファイルをキーワードでgrepし、内容の重複を確認
+   - [ ] MEMORY.md（プロジェクトとグローバル両方）の重複を確認
+   - [ ] 既存スキルへの追記で十分かを検討
+   - [ ] これが再利用可能なパターンであり、一回限りの修正でないことを確認
 
-   ### 5b. Veredicto holístico
+   ### 5b. 総合判定
 
-   Sintetizar los resultados de la lista de verificación y la calidad del borrador, luego elegir **uno** de los siguientes:
+   チェックリスト結果とドラフト品質を統合し、以下の**いずれか1つ**を選択:
 
-   | Veredicto | Significado | Próxima Acción |
-   |-----------|-------------|---------------|
-   | **Guardar** | Único, específico, bien delimitado | Proceder al Paso 6 |
-   | **Mejorar y luego Guardar** | Valioso pero necesita refinamiento | Listar mejoras → revisar → re-evaluar (una vez) |
-   | **Absorber en [X]** | Debe añadirse a una skill existente | Mostrar skill objetivo y adiciones → Paso 6 |
-   | **Descartar** | Trivial, redundante o demasiado abstracto | Explicar razonamiento y parar |
+   | 判定 | 意味 | 次のアクション |
+   |------|------|--------------|
+   | **Save** | ユニーク、具体的、適切にスコープされている | ステップ 6に進む |
+   | **Improve then Save** | 価値はあるが改善が必要 | 改善点をリスト → 修正 → 再評価（1回） |
+   | **Absorb into [X]** | 既存スキルに追記すべき | 対象スキルと追加内容を表示 → ステップ 6 |
+   | **Drop** | 些末、冗長、または抽象的すぎる | 理由を説明して終了 |
 
-**Dimensiones de guía** (informando el veredicto, no puntuadas):
+**ガイドライン指標**（判定を通知するが、スコアリングはしない）:
 
-- **Especificidad y Accionabilidad**: Contiene ejemplos de código o comandos que son utilizables inmediatamente
-- **Ajuste de Alcance**: El nombre, las condiciones de activación y el contenido están alineados y enfocados en un solo patrón
-- **Unicidad**: Proporciona valor no cubierto por skills existentes (informado por los resultados de la lista de verificación)
-- **Reutilizabilidad**: Existen escenarios de activación realistas en sesiones futuras
+- **具体性と実行可能性**: すぐに使えるコード例やコマンドが含まれている
+- **スコープの適合性**: 名前、トリガー条件、内容が整合し、単一のパターンに焦点を当てている
+- **ユニーク性**: 既存スキルでカバーされていない価値を提供（チェックリスト結果から判断）
+- **再利用性**: 将来のセッションで現実的なトリガーシナリオが存在
 
-6. **Flujo de confirmación específico por veredicto**
+6. **判定別の確認フロー**
 
-- **Mejorar y luego Guardar**: Presentar las mejoras requeridas + borrador revisado + lista de verificación/veredicto actualizado después de una re-evaluación; si el veredicto revisado es **Guardar**, guardar después de confirmación del usuario, de lo contrario seguir el nuevo veredicto
-- **Guardar**: Presentar ruta de guardado + resultados de lista de verificación + razón de veredicto de 1 línea + borrador completo → guardar después de confirmación del usuario
-- **Absorber en [X]**: Presentar ruta objetivo + adiciones (formato diff) + resultados de lista de verificación + razón del veredicto → añadir después de confirmación del usuario
-- **Descartar**: Mostrar solo resultados de lista de verificación + razonamiento (sin necesidad de confirmación)
+- **Improve then Save**: 必要な改善 + 修正ドラフト + 更新されたチェックリスト/判定を1回の再評価後に提示。修正後の判定が**Save**ならユーザー確認後に保存、それ以外は新しい判定に従う
+- **Save**: 保存パス + チェックリスト結果 + 1行の判定理由 + 完全なドラフトを提示 → ユーザー確認後に保存
+- **Absorb into [X]**: 対象パス + 追加内容（diff形式）+ チェックリスト結果 + 判定理由を提示 → ユーザー確認後に追記
+- **Drop**: チェックリスト結果 + 理由のみを表示（確認不要）
 
-7. Guardar / Absorber en la ubicación determinada
+7. 決定された場所に保存/追記
 
-## Formato de Salida para el Paso 5
+## ステップ 5の出力形式
 
 ```
-### Lista de Verificación
-- [x] grep de skills/: sin superposición (o: superposición encontrada → detalles)
-- [x] MEMORY.md: sin superposición (o: superposición encontrada → detalles)
-- [x] Añadir a skill existente: nuevo archivo apropiado (o: debería añadirse a [X])
-- [x] Reutilizabilidad: confirmada (o: caso único → Descartar)
+### チェックリスト
+- [x] skills/ grep: 重複なし（または: 重複検出 → 詳細）
+- [x] MEMORY.md: 重複なし（または: 重複検出 → 詳細）
+- [x] 既存スキル追記: 新規ファイルが適切（または: [X]に追記すべき）
+- [x] 再利用性: 確認済み（または: 一回限り → Drop）
 
-### Veredicto: Guardar / Mejorar y luego Guardar / Absorber en [X] / Descartar
+### 判定: Save / Improve then Save / Absorb into [X] / Drop
 
-**Razonamiento:** (1-2 oraciones explicando el veredicto)
+**理由:** （判定を説明する1-2文）
 ```
 
-## Notas
+## 設計の根拠
 
-- No extraer correcciones triviales (typos, errores de sintaxis simples)
-- No extraer problemas puntuales (interrupciones específicas de API, etc.)
-- Enfocarse en patrones que ahorrarán tiempo en sesiones futuras
-- Mantener las skills enfocadas — un patrón por skill
-- Cuando el veredicto es Absorber, añadir a la skill existente en lugar de crear un archivo nuevo
+このバージョンは、以前の5ディメンション数値スコアリングルーブリック（Specificity、Actionability、Scope Fit、Non-redundancy、Coverageを1-5でスコアリング）をチェックリストベースの総合判定システムに置き換えています。最新のフロンティアモデル（Opus 4.6+、Claude 5 系列を含む）は強力なコンテキスト判断能力を持っており、豊かな定性的シグナルを数値スコアに強制すると、ニュアンスが失われ、誤解を招く合計を生み出す可能性があります。総合的なアプローチにより、モデルがすべての要因を自然に重み付けし、明示的なチェックリストが重要なチェックのスキップを防ぎながら、より正確な保存/破棄の決定を生み出します。
+
+## 注意事項
+
+- 些末な修正を抽出しない（タイプミス、単純な構文エラー）
+- 一回限りの問題を抽出しない（特定のAPI障害など）
+- 将来のセッションで時間を節約するパターンに焦点を当てる
+- スキルは焦点を絞る — 1スキル1パターン
+- 判定がAbsorbの場合、新しいファイルを作成せず既存スキルに追記

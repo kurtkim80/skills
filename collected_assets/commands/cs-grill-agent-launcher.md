@@ -1,15 +1,9 @@
 ---
-title: "/cs-grill-agent-launcher — Slash Command for AI Coding Agents"
-description: "Matt Pocock docs-anchored grill for an agent-launcher goal — walks the phase's forcing questions ONE at a time, each with a recommended answer and a. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Matt Pocock docs-anchored grill for an agent-launcher goal — walks the phase's forcing questions ONE at a time, each with a recommended answer and a citation to a reference doc, refusing to advance on a fuzzy input. Use to pressure-test a CMA plan before launching.
+argument-hint: "[optional: phase name to grill — interview | grade-iterate | run-without-you]"
 ---
 
-# /cs-grill-agent-launcher
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-grill-agent-launcher.md">Source</a></span>
-</div>
-
+# /cs-grill-agent-launcher — pressure-test the plan
 
 Grill the current goal's phase using its SKILL.md "Forcing-question library".
 

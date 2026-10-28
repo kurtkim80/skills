@@ -1,23 +1,67 @@
 ---
-description: Legacy slash-entry shim for the verification-loop skill. Prefer the skill directly.
+description: Run verification loop to validate implementation
+agent: build
 ---
 
-# Verification Command (Legacy Shim)
+# Verify Command
 
-Use this only if you still invoke `/verify`. The maintained workflow lives in `skills/verification-loop/SKILL.md`.
+Run verification loop to validate the implementation: $ARGUMENTS
 
-## Canonical Surface
+## Your Task
 
-- Prefer the `verification-loop` skill directly.
-- Keep this file only as a compatibility entry point.
+Execute comprehensive verification:
 
-## Arguments
+1. **Type Check**: `npx tsc --noEmit`
+2. **Lint**: `npm run lint`
+3. **Unit Tests**: `npm test`
+4. **Integration Tests**: `npm run test:integration` (if available)
+5. **Build**: `npm run build`
+6. **Coverage Check**: Verify 80%+ coverage
 
-`$ARGUMENTS`
+## Verification Checklist
 
-## Delegation
+### Code Quality
+- [ ] No TypeScript errors
+- [ ] No lint warnings
+- [ ] No console.log statements
+- [ ] Functions < 50 lines
+- [ ] Files < 800 lines
 
-Apply the `verification-loop` skill.
-- Choose the right verification depth for the user's requested mode.
-- Run build, types, lint, tests, security/log checks, and diff review in the right order for the current repo.
-- Report only the verdicts and blockers instead of maintaining a second verification checklist here.
+### Tests
+- [ ] All tests passing
+- [ ] Coverage >= 80%
+- [ ] Edge cases covered
+- [ ] Error conditions tested
+
+### Security
+- [ ] No hardcoded secrets
+- [ ] Input validation present
+- [ ] No SQL injection risks
+- [ ] No XSS vulnerabilities
+
+### Build
+- [ ] Build succeeds
+- [ ] No warnings
+- [ ] Bundle size acceptable
+
+## Verification Report
+
+### Summary
+- Status: PASS: PASS / FAIL: FAIL
+- Score: X/Y checks passed
+
+### Details
+| Check | Status | Notes |
+|-------|--------|-------|
+| TypeScript | PASS:/FAIL: | [details] |
+| Lint | PASS:/FAIL: | [details] |
+| Tests | PASS:/FAIL: | [details] |
+| Coverage | PASS:/FAIL: | XX% (target: 80%) |
+| Build | PASS:/FAIL: | [details] |
+
+### Action Items
+[If FAIL, list what needs to be fixed]
+
+---
+
+**NOTE**: Verification loop should be run before every commit and PR.

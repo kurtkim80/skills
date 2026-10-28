@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin-analyze"
-description: "/cs-linkedin-analyze — Read your own exported LinkedIn post data, report medians and outlier bands rather than misleading means, test candidate patterns against a seeded permutation null with multiple-comparisons accounting, and size a real experiment. Refuses to conclude anything below 10 posts."
-argument-hint: "[path to your LinkedIn post export, or the pattern you think you see]"
+title: "/cs-linkedin-analyze — Slash Command for AI Coding Agents"
+description: "/cs-linkedin-analyze — Read your own exported LinkedIn post data, report medians and outlier bands rather than misleading means, test candidate. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin-analyze — Describe honestly, refuse to over-conclude
+# /cs-linkedin-analyze
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-analyze.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin-analyze [export path or the claim to test]`
 
@@ -67,6 +72,6 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-analytics/scripts/experiment_plann
 
 ## Related
 
-- Skill: [`linkedin-analytics`](../skills/linkedin-analytics/SKILL.md)
-- Log: [`measurement_log_template.md`](../skills/linkedin-analytics/assets/measurement_log_template.md)
-- Reference: [`evidence_thresholds.md`](../skills/linkedin-analytics/references/evidence_thresholds.md)
+- Skill: [`linkedin-analytics`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-analytics/SKILL.md)
+- Log: [`measurement_log_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-analytics/assets/measurement_log_template.md)
+- Reference: [`evidence_thresholds.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-analytics/references/evidence_thresholds.md)

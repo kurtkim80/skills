@@ -1,15 +1,22 @@
 ---
 name: makepad-layout
-description: |
-  CRITICAL: Use for Makepad layout system. Triggers on:
+description: 'CRITICAL: Use for Makepad layout system. Triggers on:
+
   makepad layout, makepad width, makepad height, makepad flex,
+
   makepad padding, makepad margin, makepad flow, makepad align,
+
   Fit, Fill, Size, Walk, "how to center in makepad",
+
   makepad 布局, makepad 宽度, makepad 对齐, makepad 居中
-risk: safe
-source: community
-date_added: "2026-03-06"
+
+  '
+metadata:
+  aas-risk: safe
+  aas-source: community
+  aas-date-added: '2026-03-06'
 ---
+
 ## Supporting material availability
 
 This catalog copy contains the inline guidance below, but does not include the following supporting paths. They are external prerequisites, not bundled files:

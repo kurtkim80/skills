@@ -1,15 +1,9 @@
 ---
-title: "/cs-wrap-up — Slash Command for AI Coding Agents"
-description: "Close out a launched Claude Managed Agent — recap every primitive owned, regenerate the single-file overview page, and suggest the next 1–2 upgrades. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Close out a launched Claude Managed Agent — recap every primitive owned, regenerate the single-file overview page, and suggest the next 1–2 upgrades, via the wrap-up skill. The last stop before phase=done.
+argument-hint: "[optional: path to build-sheet.json]"
 ---
 
-# /cs-wrap-up
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-wrap-up.md">Source</a></span>
-</div>
-
+# /cs-wrap-up — close it out
 
 Run the `wrap-up` skill.
 

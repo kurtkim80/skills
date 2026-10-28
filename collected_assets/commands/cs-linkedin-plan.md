@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin-plan"
-description: "/cs-linkedin-plan — Build the positioning brief (objective, audience, 2-4 proof-backed pillars, exclusion list), size a weekly cadence against the hours that actually exist, and gate a newsletter against eligibility and a six-month commitment."
-argument-hint: "[what you want LinkedIn to do for you in 90 days]"
+title: "/cs-linkedin-plan — Slash Command for AI Coding Agents"
+description: "/cs-linkedin-plan — Build the positioning brief (objective, audience, 2-4 proof-backed pillars, exclusion list), size a weekly cadence against the. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin-plan — Brief, cadence, newsletter
+# /cs-linkedin-plan
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-plan.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin-plan [your 90-day goal]`
 
@@ -59,5 +64,5 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-strategy/scripts/newsletter_planne
 
 ## Related
 
-- Skill: [`linkedin-strategy`](../skills/linkedin-strategy/SKILL.md)
+- Skill: [`linkedin-strategy`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-strategy/SKILL.md)
 - Next: [`/cs-linkedin-post`](cs-linkedin-post.md) once the brief exists

@@ -1,15 +1,9 @@
 ---
-title: "/cs-launch — Slash Command for AI Coding Agents"
-description: "Main entry / resume for building a Claude Managed Agent. Runs the agent-launcher-orchestrator skill from the current session goal — reads. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Main entry / resume for building a Claude Managed Agent. Runs the agent-launcher-orchestrator skill from the current session goal — reads ./my-agent/goal.json, routes to the right phase (interview → stage-launch → grade-iterate → run-without-you → wrap-up), compiles the loop/workflow, and forks to the phase skill. Emits BYOK curl; never makes API calls or prints the key.
+argument-hint: "[optional: a one-sentence goal to set first]"
 ---
 
-# /cs-launch
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-launch.md">Source</a></span>
-</div>
-
+# /cs-launch — build/resume a Claude Managed Agent
 
 Route through the `agent-launcher-orchestrator` skill.
 

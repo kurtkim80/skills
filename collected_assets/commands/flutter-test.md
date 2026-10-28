@@ -1,59 +1,59 @@
 ---
-description: Flutter/Dartテストを実行し、失敗を報告し、テスト問題をインクリメンタルに修正します。ユニット、ウィジェット、ゴールデン、統合テストをカバーします。
+description: Run Flutter/Dart tests, report failures, and incrementally fix test issues. Covers unit, widget, golden, and integration tests.
 ---
 
-# Flutterテスト
+# Flutter Test
 
-このコマンドはFlutterテストスイートを実行し、結果を報告します。失敗が発生した場合、問題を診断しインクリメンタルに修正します。
+This command runs the Flutter test suite and reports results. When failures occur, it diagnoses and fixes issues incrementally.
 
-## このコマンドの動作
+## What This Command Does
 
-1. **テスト実行**: `flutter test`を実行（または変更されたファイルにスコープを限定）
-2. **失敗を解析**: タイプと原因別に失敗するテストを特定
-3. **インクリメンタルに修正**: 可能な場合は一度に1つの失敗
-4. **検証**: 各修正後に再実行
-5. **報告**: カバレッジサマリーと残りの失敗を表示
+1. **Run Tests**: Execute `flutter test` (or scope to changed files)
+2. **Parse Failures**: Identify failing tests by type and cause
+3. **Fix Incrementally**: One failure at a time where possible
+4. **Verify**: Re-run after each fix
+5. **Report**: Show coverage summary and remaining failures
 
-## 使用するタイミング
+## When to Use
 
-`/flutter-test`を使用するのは:
-- 機能を実装した後に何も壊れていないことを確認するため
-- `/flutter-build`実行後にテストが通ることを確認するため
-- 新しいコードのテストカバレッジを確認するため
-- 特定のテストファイルが失敗している時
-- PRを提出する前
+Use `/flutter-test` when:
+- After implementing a feature to verify nothing broke
+- After running `/flutter-build` to ensure tests pass
+- To check test coverage on new code
+- When a specific test file is failing
+- Before submitting a PR
 
-## 実行されるコマンド
+## Commands Run
 
 ```bash
-# すべてのテストを実行
+# Run all tests
 flutter test 2>&1
 
-# カバレッジ付きで実行
+# Run with coverage
 flutter test --coverage 2>&1
 
-# 特定のテストファイルを実行
+# Run specific test file
 flutter test test/unit/domain/usecases/get_user_test.dart 2>&1
 
-# 名前パターンに一致するテストを実行
+# Run tests matching a name pattern
 flutter test --name "CartBloc" 2>&1
 
-# 統合テストを実行（デバイス/エミュレーターが必要）
+# Run integration tests (requires device/emulator)
 flutter test integration_test/ 2>&1
 
-# 意図的なビジュアル変更時にゴールデンファイルを更新
+# Update golden files when intentional visual changes are made
 flutter test --update-goldens 2>&1
 ```
 
-## セッション例
+## Example Session
 
 ````text
 User: /flutter-test
 
 Agent:
-# Flutterテスト実行
+# Flutter Test Run
 
-## テスト実行
+## Test Execution
 
 ```
 $ flutter test
@@ -72,33 +72,33 @@ FAILED: test/widget/cart_page_test.dart
     Found: no widget with text 'Your cart is empty'
 ```
 
-## 修正 1: リポジトリテスト
+## Fix 1: Repository Test
 
 File: test/unit/data/user_repository_test.dart
-失敗: `getById`が欠落IDに対してnullを返すべきところでユーザーを返す
+Failure: `getById` returns a user when it should return null for missing ID
 
-根本原因: テストセットアップがID 'test-id' のユーザーを追加するが、'missing-id' でクエリしている。
-修正: 'missing-id' でクエリするようテストを更新 — セットアップは正しく、クエリが間違っていた。
+Root cause: Test setup adds a user with ID 'test-id' but queries with 'missing-id'.
+Fix: Updated test to query with 'missing-id' — setup was correct, query was wrong.
 
 ```
 $ flutter test test/unit/data/user_repository_test.dart
 1 test passed.
 ```
 
-## 修正 2: ウィジェットテスト
+## Fix 2: Widget Test
 
 File: test/widget/cart_page_test.dart
-失敗: 空状態のテキストウィジェットが見つからない
+Failure: Empty state text widget not found
 
-根本原因: 空状態メッセージがウィジェット内で 'Your cart is empty' から 'Cart is empty' に変更されていた。
-修正: 現在のウィジェットのコピーに合わせてテスト文字列を更新。
+Root cause: Empty state message was renamed from 'Your cart is empty' to 'Cart is empty' in the widget.
+Fix: Updated test string to match current widget copy.
 
 ```
 $ flutter test test/widget/cart_page_test.dart
 1 test passed.
 ```
 
-## 最終実行
+## Final Run
 
 ```
 $ flutter test --coverage
@@ -106,39 +106,39 @@ All 44 tests passed.
 Coverage: 84.2% (target: 80%)
 ```
 
-## サマリー
+## Summary
 
-| メトリクス | 値 |
-|-----------|-----|
-| 総テスト数 | 44 |
-| 成功 | 44 |
-| 失敗 | 0 |
-| カバレッジ | 84.2% |
+| Metric | Value |
+|--------|-------|
+| Total tests | 44 |
+| Passed | 44 |
+| Failed | 0 |
+| Coverage | 84.2% |
 
-テストステータス: PASS ✓
+Test Status: PASS ✓
 ````
 
-## 一般的なテスト失敗
+## Common Test Failures
 
-| 失敗 | 典型的な修正 |
-|------|-------------|
-| `Expected: <X> Actual: <Y>` | アサーションを更新するか実装を修正 |
-| `Widget not found` | ファインダーセレクタを修正するかウィジェット名変更後にテストを更新 |
-| `Golden file not found` | `flutter test --update-goldens`を実行して生成 |
-| `Golden mismatch` | 差分を検査し、変更が意図的なら`--update-goldens`を実行 |
-| `MissingPluginException` | テストセットアップでプラットフォームチャネルをモック |
-| `LateInitializationError` | `setUp()`で`late`フィールドを初期化 |
-| `pumpAndSettle timed out` | 明示的な`pump(Duration)`コールに置き換え |
+| Failure | Typical Fix |
+|---------|-------------|
+| `Expected: <X> Actual: <Y>` | Update assertion or fix implementation |
+| `Widget not found` | Fix finder selector or update test after widget rename |
+| `Golden file not found` | Run `flutter test --update-goldens` to generate |
+| `Golden mismatch` | Inspect diff; run `--update-goldens` if change was intentional |
+| `MissingPluginException` | Mock platform channel in test setup |
+| `LateInitializationError` | Initialize `late` fields in `setUp()` |
+| `pumpAndSettle timed out` | Replace with explicit `pump(Duration)` calls |
 
-## 関連コマンド
+## Related Commands
 
-- `/flutter-build` — テスト実行前にビルドエラーを修正
-- `/flutter-review` — テスト通過後にコードをレビュー
-- `tdd-workflow`スキル — テスト駆動開発ワークフロー
+- `/flutter-build` — Fix build errors before running tests
+- `/flutter-review` — Review code after tests pass
+- `tdd-workflow` skill — Test-driven development workflow
 
-## 関連
+## Related
 
-- エージェント: `agents/flutter-reviewer.md`
-- エージェント: `agents/dart-build-resolver.md`
-- スキル: `skills/flutter-dart-code-review/`
-- ルール: `rules/dart/testing.md`
+- Agent: `agents/flutter-reviewer.md`
+- Agent: `agents/dart-build-resolver.md`
+- Skill: `skills/flutter-dart-code-review/`
+- Rules: `rules/dart/testing.md`

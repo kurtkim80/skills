@@ -1,27 +1,28 @@
 ---
 name: quarkus-patterns
-description: Patrones de arquitectura Quarkus 3.x LTS con Camel para mensajería, diseño de API RESTful, servicios CDI, acceso a datos con Panache y procesamiento asíncrono.
-origin: ECC
+description: Quarkus 3.x LTS architecture patterns with Camel for messaging, RESTful API design, CDI services, data access with Panache, and async processing. Use for Java Quarkus backend work with event-driven architectures. Use when building or reviewing a Quarkus service, especially with Camel messaging or Panache data access.
+metadata:
+  origin: ECC
 ---
 
-# Patrones de Desarrollo Quarkus
+# Quarkus Development Patterns
 
-Patrones de arquitectura y API de Quarkus 3.x para servicios cloud-native y orientados a eventos con Apache Camel.
+Quarkus 3.x architecture and API patterns for cloud-native, event-driven services with Apache Camel.
 
-## Cuándo Activar
+## When to Activate
 
-- Construir APIs REST con JAX-RS o RESTEasy Reactive
-- Estructurar capas resource → service → repository
-- Implementar patrones orientados a eventos con Apache Camel y RabbitMQ
-- Configurar Hibernate Panache, caché o streams reactivos
-- Agregar validación, mapeo de excepciones o paginación
-- Configurar perfiles para entornos dev/staging/producción (configuración YAML)
-- Logging personalizado con LogContext y Logback/Logstash encoder
-- Trabajar con CompletableFuture para operaciones asíncronas
-- Implementar procesamiento condicional de flujos
-- Trabajar con compilación nativa GraalVM
+- Building REST APIs with JAX-RS or RESTEasy Reactive
+- Structuring resource → service → repository layers
+- Implementing event-driven patterns with Apache Camel and RabbitMQ
+- Configuring Hibernate Panache, caching, or reactive streams
+- Adding validation, exception mapping, or pagination
+- Setting up profiles for dev/staging/production environments (YAML config)
+- Custom logging with LogContext and Logback/Logstash encoder
+- Working with CompletableFuture for async operations
+- Implementing conditional flow processing
+- Working with GraalVM native compilation
 
-## Capa de Servicio con Múltiples Dependencias
+## Service Layer with Multiple Dependencies
 
 ```java
 @Slf4j
@@ -51,21 +52,21 @@ public class OrderProcessingService {
         auditPublisher.publish("ORDER_ACCEPTED", receipt);
         eventService.createSuccessEvent(receipt, "ORDER_ACCEPTED");
 
-        log.info("Orden procesada {}", order.id);
+        log.info("Processed order {}", order.id);
         return receipt;
     }
 }
 ```
 
-**Patrones Clave:**
-- `@RequiredArgsConstructor` para inyección por constructor mediante Lombok
-- `@Slf4j` para logging con Logback
-- `@Transactional` en métodos de servicio que escriben a través de Panache o repositorios
-- Validar entrada antes de persistencia o publicación de mensajes
-- Seguimiento de eventos para escenarios de éxito/error
-- Publicación asíncrona de mensajes Camel
+**Key Patterns:**
+- `@RequiredArgsConstructor` for constructor injection via Lombok
+- `@Slf4j` for Logback logging
+- `@Transactional` on service methods that write through Panache or repositories
+- Validate input before persistence or message publication
+- Event tracking for success/error scenarios
+- Async Camel message publishing
 
-## Patrón de Contexto de Logging Personalizado (Logback)
+## Custom Logging Context Pattern (Logback)
 
 ```java
 @ApplicationScoped
@@ -74,24 +75,26 @@ public class ProcessingService {
     public void processDocument(Document doc) {
         LogContext logContext = CustomLog.getCurrentContext();
         try (SafeAutoCloseable ignored = CustomLog.startScope(logContext)) {
+            // Add context to all log statements
             logContext.put("documentId", doc.getId().toString());
             logContext.put("documentType", doc.getType());
             logContext.put("userId", SecurityContext.getUserId());
 
-            log.info("Iniciando procesamiento de documento");
+            log.info("Starting document processing");
 
+            // All logs within this scope inherit the context
             processInternal(doc);
 
-            log.info("Procesamiento de documento completado");
+            log.info("Document processing completed");
         } catch (Exception e) {
-            log.error("Error en el procesamiento de documento", e);
+            log.error("Document processing failed", e);
             throw e;
         }
     }
 }
 ```
 
-**Configuración de Logback (logback.xml):**
+**Logback Configuration (logback.xml):**
 
 ```xml
 <configuration>
@@ -109,7 +112,7 @@ public class ProcessingService {
 </configuration>
 ```
 
-## Patrón de Servicio de Eventos
+## Event Service Pattern
 
 ```java
 @Slf4j
@@ -120,7 +123,7 @@ public class EventService {
     private final ObjectMapper objectMapper;
 
     public void createSuccessEvent(Object payload, String eventType) {
-        Objects.requireNonNull(payload, "El payload no puede ser null");
+        Objects.requireNonNull(payload, "Payload cannot be null");
         Event event = new Event();
         event.setType(eventType);
         event.setStatus(EventStatus.SUCCESS);
@@ -128,13 +131,13 @@ public class EventService {
         event.setTimestamp(Instant.now());
 
         eventRepository.persist(event);
-        log.info("Evento de éxito creado: {}", eventType);
+        log.info("Success event created: {}", eventType);
     }
 
     public void createErrorEvent(Object payload, String eventType, String errorMessage) {
-        Objects.requireNonNull(payload, "El payload no puede ser null");
+        Objects.requireNonNull(payload, "Payload cannot be null");
         if (errorMessage == null || errorMessage.isBlank()) {
-            throw new IllegalArgumentException("El mensaje de error no puede estar en blanco");
+            throw new IllegalArgumentException("Error message cannot be blank");
         }
         Event event = new Event();
         event.setType(eventType);
@@ -144,20 +147,20 @@ public class EventService {
         event.setTimestamp(Instant.now());
 
         eventRepository.persist(event);
-        log.error("Evento de error creado: {} - {}", eventType, errorMessage);
+        log.error("Error event created: {} - {}", eventType, errorMessage);
     }
 
     private String serializePayload(Object payload) {
         try {
             return objectMapper.writeValueAsString(payload);
         } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Error al serializar el payload del evento", e);
+            throw new IllegalStateException("Failed to serialize event payload", e);
         }
     }
 }
 ```
 
-## Publicación de Mensajes Camel (RabbitMQ)
+## Camel Message Publishing (RabbitMQ)
 
 ```java
 @Slf4j
@@ -175,7 +178,7 @@ public class BusinessRulesPublisher {
 }
 ```
 
-**Configuración de Ruta Camel:**
+**Camel Route Configuration:**
 
 ```java
 @ApplicationScoped
@@ -194,7 +197,7 @@ public class BusinessRulesRoute extends RouteBuilder {
     public void configure() {
         from("direct:business-rules-publisher")
             .routeId("business-rules-publisher")
-            .log("Publicando mensaje en RabbitMQ: ${body}")
+            .log("Publishing message to RabbitMQ: ${body}")
             .marshal().json(JsonLibrary.Jackson)
             .toF("spring-rabbitmq:%s?hostname=%s&portNumber=%d",
                 businessRulesQueue, rabbitHost, rabbitPort);
@@ -202,7 +205,7 @@ public class BusinessRulesRoute extends RouteBuilder {
 }
 ```
 
-## Rutas Camel Direct (En Memoria)
+## Camel Direct Routes (In-Memory)
 
 ```java
 @ApplicationScoped
@@ -210,14 +213,16 @@ public class DocumentProcessingRoute extends RouteBuilder {
 
     @Override
     public void configure() {
+        // Error handling
         onException(ValidationException.class)
             .handled(true)
             .to("direct:validation-error-handler")
-            .log("Error de validación: ${exception.message}");
+            .log("Validation error: ${exception.message}");
 
+        // Main processing route
         from("direct:process-document")
             .routeId("document-processing")
-            .log("Procesando documento: ${header.documentId}")
+            .log("Processing document: ${header.documentId}")
             .bean(DocumentValidator.class, "validate")
             .bean(DocumentTransformer.class, "transform")
             .choice()
@@ -228,11 +233,15 @@ public class DocumentProcessingRoute extends RouteBuilder {
                 .otherwise()
                     .to("direct:process-generic")
             .end();
+
+        from("direct:validation-error-handler")
+            .bean(EventService.class, "createErrorEvent")
+            .log("Validation error handled");
     }
 }
 ```
 
-## Procesamiento de Archivos Camel
+## Camel File Processing
 
 ```java
 @ApplicationScoped
@@ -252,13 +261,37 @@ public class FileMonitoringRoute extends RouteBuilder {
         from("file:" + inputDirectory + "?move=" + processedDirectory +
              "&moveFailed=" + errorDirectory + "&delay=5000")
             .routeId("file-monitor")
-            .log("Procesando archivo: ${header.CamelFileName}")
+            .log("Processing file: ${header.CamelFileName}")
             .to("direct:process-file");
+
+        from("direct:process-file")
+            .bean(OrderProcessingService.class, "processFile")
+            .log("File processing completed");
     }
 }
 ```
 
-## Estructura de API REST
+## Camel Bean Invocation
+
+```java
+@ApplicationScoped
+public class InvoiceRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("direct:invoice-validation")
+            .bean(InvoiceFlowValidator.class, "validateFlowWithConfig")
+            .log("Validation result: ${body}");
+
+        from("direct:persist-and-publish")
+            .bean(DocumentJobService.class, "createDocumentAndJobEntities")
+            .bean(BusinessRulesPublisher.class, "publishAsync")
+            .bean(EventService.class, "createSuccessEvent(${body}, 'PUBLISHED')");
+    }
+}
+```
+
+## REST API Structure
 
 ```java
 @Path("/api/documents")
@@ -297,7 +330,7 @@ public class DocumentResource {
 }
 ```
 
-## Patrón de Repositorio (Panache Repository)
+## Repository Pattern (Panache Repository)
 
 ```java
 @ApplicationScoped
@@ -312,10 +345,14 @@ public class DocumentRepository implements PanacheRepository<Document> {
   public Optional<Document> findByReferenceNumber(String referenceNumber) {
     return find("referenceNumber", referenceNumber).firstResultOptional();
   }
+
+  public long countByStatusAndDate(DocumentStatus status, LocalDate date) {
+    return count("status = ?1 and createdAt >= ?2", status, date.atStartOfDay());
+  }
 }
 ```
 
-## Capa de Servicio con Transacciones
+## Service Layer with Transactions
 
 ```java
 @ApplicationScoped
@@ -338,10 +375,20 @@ public class DocumentService {
 
     return document;
   }
+
+  public Optional<Document> findById(Long id) {
+    return repo.findByIdOptional(id);
+  }
+
+  public List<Document> list(int page, int size) {
+    return repo.findAll()
+        .page(page, size)
+        .list();
+  }
 }
 ```
 
-## DTOs y Validación
+## DTOs and Validation
 
 ```java
 public record CreateDocumentRequest(
@@ -358,7 +405,7 @@ public record DocumentResponse(Long id, String referenceNumber, DocumentStatus s
 }
 ```
 
-## Mapeo de Excepciones
+## Exception Mapping
 
 ```java
 @Provider
@@ -374,9 +421,22 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
         .build();
   }
 }
+
+@Provider
+@Slf4j
+public class GenericExceptionMapper implements ExceptionMapper<Exception> {
+
+  @Override
+  public Response toResponse(Exception exception) {
+    log.error("Unhandled exception", exception);
+    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        .entity(Map.of("error", "internal_error", "message", "An unexpected error occurred"))
+        .build();
+  }
+}
 ```
 
-## Operaciones Asíncronas con CompletableFuture
+## CompletableFuture Async Operations
 
 ```java
 @Slf4j
@@ -385,6 +445,9 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 public class FileStorageService {
     private final S3Client s3Client;
     private final ExecutorService executorService;
+
+    @ConfigProperty(name = "storage.bucket-name")
+    String bucketName;
 
     public CompletableFuture<StoredDocumentInfo> uploadOriginalFile(
             InputStream inputStream,
@@ -404,17 +467,19 @@ public class FileStorageService {
 
                 s3Client.putObject(request, RequestBody.fromInputStream(inputStream, size));
 
+                log.info("File uploaded to S3: {}", path);
+
                 return new StoredDocumentInfo(path, size, Instant.now());
             } catch (Exception e) {
-                log.error("Error al subir archivo a S3", e);
-                throw new StorageException("Subida fallida", e);
+                log.error("Failed to upload file to S3", e);
+                throw new StorageException("Upload failed", e);
             }
         }, executorService);
     }
 }
 ```
 
-## Caché
+## Caching
 
 ```java
 @ApplicationScoped
@@ -429,10 +494,13 @@ public class DocumentCacheService {
 
   @CacheInvalidate(cacheName = "document-cache")
   public void evict(@CacheKey Long id) {}
+
+  @CacheInvalidateAll(cacheName = "document-cache")
+  public void evictAll() {}
 }
 ```
 
-## Configuración como YAML
+## Configuration as YAML
 
 ```yaml
 # application.yml
@@ -443,6 +511,15 @@ public class DocumentCacheService {
         url: jdbc:postgresql://localhost:5432/dev_db
       username: dev_user
       password: ${DB_PASSWORD}
+    hibernate-orm:
+      database:
+        generation: drop-and-create
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
 
 "%test":
   quarkus:
@@ -460,6 +537,22 @@ public class DocumentCacheService {
         url: ${DATABASE_URL}
       username: ${DB_USER}
       password: ${DB_PASSWORD}
+    hibernate-orm:
+      database:
+        generation: validate
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+# Camel configuration
+camel:
+  rabbitmq:
+    queue:
+      business-rules: business-rules-queue
+      invoice-processing: invoice-processing-queue
 ```
 
 ## Health Checks
@@ -483,9 +576,24 @@ public class DatabaseHealthCheck implements HealthCheck {
     }
   }
 }
+
+@Liveness
+@ApplicationScoped
+public class CamelHealthCheck implements HealthCheck {
+  @Inject
+  CamelContext camelContext;
+
+  @Override
+  public HealthCheckResponse call() {
+    boolean isStarted = camelContext.getStatus().isStarted();
+    return HealthCheckResponse.named("Camel Context")
+        .status(isStarted)
+        .build();
+  }
+}
 ```
 
-## Dependencias (Maven)
+## Dependencies (Maven)
 
 ```xml
 <properties>
@@ -495,27 +603,121 @@ public class DatabaseHealthCheck implements HealthCheck {
     <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
     <maven.compiler.release>17</maven.compiler.release>
 </properties>
+
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus.platform</groupId>
+            <artifactId>quarkus-bom</artifactId>
+            <version>${quarkus.platform.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus.platform</groupId>
+            <artifactId>quarkus-camel-bom</artifactId>
+            <version>${quarkus.platform.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <!-- Quarkus Core -->
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+
+    <!-- Camel Extensions -->
+    <dependency>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-spring-rabbitmq</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-direct</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-bean</artifactId>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+        <groupId>io.quarkiverse.logging.logback</groupId>
+        <artifactId>quarkus-logging-logback</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>net.logstash.logback</groupId>
+        <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+</dependencies>
 ```
 
-## Buenas Prácticas
+## Best Practices
 
-### Arquitectura
-- Usar `@RequiredArgsConstructor` con Lombok para inyección por constructor
-- Mantener la capa de servicio delgada; delegar lógica compleja a clases especializadas
-- Usar rutas Camel para enrutamiento de mensajes y patrones de integración
-- Preferir el patrón Panache Repository para acceso a datos
+### Architecture
+- Use `@RequiredArgsConstructor` with Lombok for constructor injection
+- Keep service layer thin; delegate complex logic to specialized classes
+- Use Camel routes for message routing and integration patterns
+- Prefer Panache Repository pattern for data access
 
-### Orientado a Eventos
-- Siempre rastrear operaciones con EventService (eventos de éxito/error)
-- Usar endpoints `direct:` de Camel para enrutamiento en memoria
-- Usar el componente `spring-rabbitmq` para integración con RabbitMQ
+### Event-Driven
+- Always track operations with EventService (success/error events)
+- Use Camel `direct:` endpoints for in-memory routing
+- Use `spring-rabbitmq` component for RabbitMQ integration
+- Implement async publishing with `ProducerTemplate.asyncSendBody()`
 
 ### Logging
-- Usar Logback con Logstash encoder para logging estructurado
-- Propagar LogContext a través de llamadas de servicio con `SafeAutoCloseable`
-- Usar `@Slf4j` en lugar de instanciación manual del logger
+- Use Logback with Logstash encoder for structured logging
+- Propagate LogContext through service calls with `SafeAutoCloseable`
+- Add contextual information to LogContext for request tracing
+- Use `@Slf4j` instead of manual logger instantiation
 
-### Configuración
-- Usar configuración YAML (`quarkus-config-yaml`)
-- Configuración consciente de perfil para entornos dev/test/prod
-- Externalizar configuración sensible a variables de entorno
+### Async Operations
+- Use CompletableFuture for non-blocking I/O operations
+- Call `.join()` when you need to wait for completion
+- Handle exceptions from CompletableFuture properly
+- Pass LogContext to async operations for tracing
+
+### Configuration
+- Use YAML configuration (`quarkus-config-yaml`)
+- Profile-aware configuration for dev/test/prod environments
+- Externalize sensitive configuration to environment variables
+- Use `@ConfigProperty` for type-safe config injection
+
+### Validation
+- Validate at resource layer with `@Valid`
+- Use Bean Validation annotations on DTOs
+- Map exceptions to proper HTTP responses with `@Provider`
+
+### Transactions
+- Use `@Transactional` on service methods that modify data
+- Keep transactions short and focused
+- Avoid calling async operations within transactions
+
+### Testing
+- Use `camel-quarkus-junit5` for route testing
+- Use AssertJ for assertions
+- Mock all external dependencies
+- Test conditional flow logic thoroughly
+
+### Quarkus-Specific
+- Stay on latest LTS version (3.x)
+- Use Quarkus dev mode for hot reload
+- Add health checks for production readiness
+- Test native compilation compatibility periodically

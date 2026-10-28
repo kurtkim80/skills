@@ -1,53 +1,83 @@
 ---
 name: design-system
-description: アクセシビリティ、レスポンシブネス、テーマ設定、コンポーネント群、トークンを備えた本番環境対応デザインシステムの構築。Figma、Storybook、コンポーネントライブラリ統合。
-origin: ECC
+description: "Generate a design system from an existing codebase or audit one for visual consistency: extract tokens (colors, typography, spacing, shadows) into design-tokens.json and CSS custom properties with DESIGN.md rationale and an interactive HTML preview, score the UI across 10 dimensions, and flag AI-slop patterns. Use when starting a design system, auditing visual consistency before a redesign, or reviewing a PR that touches styling."
+metadata:
+  origin: ECC
 ---
 
-# デザイン システム
+# Design System — Generate & Audit Visual Systems
 
-スケーラブルで保守可能なデザインシステムの構築。
+## When to Use
 
-## 使用時期
+- Starting a new project that needs a design system
+- Auditing an existing codebase for visual consistency
+- Before a redesign — understand what you have
+- When the UI looks "off" but you can't pinpoint why
+- Reviewing PRs that touch styling
 
-- デザインシステムを初期化
-- コンポーネントライブラリを拡張
-- デザインと実装の間の同期を保つ
-- アクセシビリティ標準を強制
-- テーマング実装
+## How It Works
 
-## コア要素
+### Mode 1: Generate Design System
 
-### 1. デザイントークン
+Analyzes your codebase and generates a cohesive design system:
 
-色、タイポグラフィ、スペーシング、シャドウの中央コレクション。
+```
+1. Scan CSS/Tailwind/styled-components for existing patterns
+2. Extract: colors, typography, spacing, border-radius, shadows, breakpoints
+3. Research 3 competitor sites for inspiration (via browser MCP)
+4. Propose a design token set (JSON + CSS custom properties)
+5. Generate DESIGN.md with rationale for each decision
+6. Create an interactive HTML preview page (self-contained, no deps)
+```
 
-### 2. コンポーネント
+Output: `DESIGN.md` + `design-tokens.json` + `design-preview.html`
 
-ボタン、入力、カード、など基本的なUIの再利用可能なビルディングブロック。
+### Mode 2: Visual Audit
 
-### 3. レイアウトパターン
+Scores your UI across 10 dimensions (0-10 each):
 
-ページレイアウト、フォーム、グリッド。
+```
+1. Color consistency — are you using your palette or random hex values?
+2. Typography hierarchy — clear h1 > h2 > h3 > body > caption?
+3. Spacing rhythm — consistent scale (4px/8px/16px) or arbitrary?
+4. Component consistency — do similar elements look similar?
+5. Responsive behavior — fluid or broken at breakpoints?
+6. Dark mode — complete or half-done?
+7. Animation — purposeful or gratuitous?
+8. Accessibility — contrast ratios, focus states, touch targets
+9. Information density — cluttered or clean?
+10. Polish — hover states, transitions, loading states, empty states
+```
 
-### 4. アイコン
+Each dimension gets a score, specific examples, and a fix with exact file:line.
 
-SVGベースのアイコンライブラリ。
+### Mode 3: AI Slop Detection
 
-## ツール
+Identifies generic AI-generated design patterns:
 
-- **Figma** 設計ツール
-- **Storybook** コンポーネント展示
-- **Chromatic** ビジュアルテスト
-- **Design tokens** JSON管理
+```
+- Gratuitous gradients on everything
+- Purple-to-blue defaults
+- "Glass morphism" cards with no purpose
+- Rounded corners on things that shouldn't be rounded
+- Excessive animations on scroll
+- Generic hero with centered text over stock gradient
+- Sans-serif font stack with no personality
+```
 
-## チェックリスト
+## Examples
 
-- [ ] トークン定義（色、スペーシング、タイプ）
-- [ ] 基本コンポーネント実装
-- [ ] Storybook設定
-- [ ] アクセシビリティテスト
-- [ ] ドキュメント作成
-- [ ] チーム採用
+**Generate for a SaaS app:**
+```
+/design-system generate --style minimal --palette earth-tones
+```
 
-詳細については、ドキュメントを参照してください。
+**Audit existing UI:**
+```
+/design-system audit --url http://localhost:3000 --pages / /pricing /docs
+```
+
+**Check for AI slop:**
+```
+/design-system slop-check
+```

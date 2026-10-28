@@ -1,9 +1,10 @@
 ---
 name: azd-deployment
-description: "Prepare and verify authorized Azure Container Apps deployments with azd. Use for azure.yaml, Bicep, remote builds, managed identity and post-deploy checks."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Prepare and verify authorized Azure Container Apps deployments with azd. Use for azure.yaml, Bicep, remote builds, managed identity and post-deploy checks.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Azure Developer CLI (azd) Container Apps Deployment

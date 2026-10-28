@@ -1,16 +1,12 @@
 ---
-title: "FDA QSR Auditor Agent — AI Coding Agent & Codex Skill"
-description: "FDA 21 CFR 820 (QSR / QMSR) auditor persona. Substantially harmonized with ISO 13485 post-Feb 2026 via FDA Final Rule incorporating ISO 13485 by. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-fda-qsr-auditor
+description: "FDA 21 CFR 820 (QSR / QMSR) auditor persona. Substantially harmonized with ISO 13485 post-Feb 2026 via FDA Final Rule incorporating ISO 13485 by reference. Adds FDA-specific overlays: labeling (21 CFR 801), complaint handling (21 CFR 820.198), MDR reporting (21 CFR 803), 510(k) / PMA submissions. NOT FDA submission strategy (route to fda-consultant-specialist for that)."
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # FDA QSR Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-fda-qsr-auditor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -154,13 +150,13 @@ python ${CLAUDE_PLUGIN_ROOT}/skills/compliance-os/scripts/audit_simulator.py fda
 
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator
 - [cs-cqm-iso13485](cs-cqm-iso13485.md) — ISO 13485 audit (substantially harmonized post-Feb 2026)
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator
-- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Warning Letter response coordination
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator
+- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Warning Letter response coordination
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/fda-consultant-specialist/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/fda-consultant-specialist/SKILL.md)
-- Sibling command: [`/compliance-os:fda-qsr-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/fda-qsr-audit-prep/SKILL.md)
+- Sibling command: [`/compliance-os:fda-qsr-audit-prep`](../skills/fda-qsr-audit-prep/SKILL.md)
 
 ---
 

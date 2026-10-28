@@ -1,7 +1,8 @@
 ---
 name: cpp-testing
 description: Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, diagnosing failing or flaky tests, or adding coverage/sanitizers.
-origin: ECC
+metadata:
+  origin: ECC
 ---
 
 # C++ Testing (Agent Skill)
@@ -267,7 +268,7 @@ endif()
 
 - Never use `sleep` for synchronization; use condition variables or latches.
 - Make temp directories unique per test and always clean them.
-- Avoid real-time, network, or filesystem dependencies in unit tests.
+- Avoid real time, network, or filesystem dependencies in unit tests.
 - Use deterministic seeds for randomized inputs.
 
 ## Best Practices

@@ -1,75 +1,75 @@
 ---
-description: エージェント、フック、MCP、パーミッション、シークレットのサーフェスに対してAgentShieldを実行します。
-agent: ecc:security-reviewer
+description: Run AgentShield against agent, hook, MCP, permission, and secret surfaces.
+agent: security-reviewer
 subtask: true
 ---
 
-# セキュリティスキャンコマンド
+# Security Scan Command
 
-現在のプロジェクトまたはターゲットパスに対してAgentShieldを実行し、所見を優先順位付きの修正計画に変換します。
+Run AgentShield against the current project or a target path, then turn the findings into a prioritized remediation plan.
 
-## 使い方
+## Usage
 
 `/security-scan [path] [--format text|json|markdown|html] [--min-severity low|medium|high|critical] [--fix]`
 
-- `path`（オプション）: デフォルトは現在のプロジェクト。`.claude/`パス、リポジトリルート、またはチェックインされたテンプレートディレクトリを使用。
-- `--format`: 出力形式。CIには`json`、引き継ぎには`markdown`、スタンドアロンレビューレポートには`html`。
-- `--min-severity`: 低優先度の所見をフィルタ。
-- `--fix`: 安全かつ自動修正可能と明示的にマークされたAgentShieldの修正のみを適用。
+- `path` (optional): defaults to the current project. Use a `.claude/` path, a repo root, or a checked-in template directory.
+- `--format`: output format. Use `json` for CI, `markdown` for handoffs, and `html` for standalone review reports.
+- `--min-severity`: filters lower-priority findings.
+- `--fix`: applies only AgentShield fixes explicitly marked as safe and auto-fixable.
 
-## 決定論的エンジン
+## Deterministic Engine
 
-パッケージ化されたスキャナーを優先:
+Prefer the packaged scanner:
 
 ```bash
 npx ecc-agentshield scan --path "${TARGET_PATH:-.}" --format text
 ```
 
-ローカルAgentShield開発の場合、AgentShieldチェックアウトから実行:
+For local AgentShield development, run from the AgentShield checkout:
 
 ```bash
 npm run scan -- --path "${TARGET_PATH:-.}" --format text
 ```
 
-所見を作り出さないこと。AgentShieldの出力を信頼できるソースとして使用し、スキャナーの事実とフォローアップの判断を分離。
+Do not invent findings. Use AgentShield output as the source of truth and separate scanner facts from follow-up judgment.
 
-## レビューチェックリスト
+## Review Checklist
 
-1. まずアクティブなランタイムの所見を特定:
-   - ハードコードされたシークレット
-   - 広範なパーミッション
-   - 実行可能なフック
-   - シェル、ファイルシステム、リモートトランスポート、またはピン留めされていない`npx`を持つMCPサーバー
-   - 防御なしで信頼できないコンテンツを処理するエージェントプロンプト
-2. 低信頼度のインベントリを分離:
-   - ドキュメントの例
-   - テンプレートの例
-   - プラグインマニフェスト
-   - プロジェクトローカルのオプション設定
-3. criticalまたはhighの各所見について返却:
-   - ファイルパス
-   - 重大度
-   - ランタイム信頼度
-   - 重要な理由
-   - 正確な修正方法
-   - 自動修正が安全かどうか
-4. `--fix`が要求された場合、修正を適用する前に計画された編集を述べる。
-5. 修正後にスキャンを再実行し、前後のスコアを報告。
+1. Identify active runtime findings first:
+   - hardcoded secrets
+   - broad permissions
+   - executable hooks
+   - MCP servers with shell, filesystem, remote transport, or unpinned `npx`
+   - agent prompts that handle untrusted content without defenses
+2. Separate lower-confidence inventory:
+   - docs examples
+   - template examples
+   - plugin manifests
+   - project-local optional settings
+3. For each critical or high finding, return:
+   - file path
+   - severity
+   - runtime confidence
+   - why it matters
+   - exact remediation
+   - whether it is safe to auto-fix
+4. If `--fix` is requested, state the planned edits before applying fixes.
+5. Re-run the scan after fixes and report the before/after score.
 
-## 出力契約
+## Output Contract
 
-返却内容:
+Return:
 
-1. セキュリティグレードとスコア。
-2. 重大度とランタイム信頼度別の件数。
-3. 正確なパス付きのcritical/highの所見。
-4. 低信頼度の所見は別グループ。
-5. 修正順序。
-6. 実行されたコマンドとスキャンがローカル、CI、npxバックのいずれか。
+1. Security grade and score.
+2. Counts by severity and runtime confidence.
+3. Critical/high findings with exact paths.
+4. Lower-confidence findings grouped separately.
+5. A remediation order.
+6. Commands run and whether the scan was local, CI, or npx-backed.
 
-## CIパターン
+## CI Pattern
 
-強制ゲートのためにGitHub ActionsでAgentShieldを使用:
+Use AgentShield in GitHub Actions for enforced gates:
 
 ```yaml
 - uses: affaan-m/agentshield@v1
@@ -79,14 +79,14 @@ npm run scan -- --path "${TARGET_PATH:-.}" --format text
     fail-on-findings: true
 ```
 
-## リンク
+## Links
 
-- スキル: `skills/security-scan/SKILL.md`
-- エージェント: `agents/security-reviewer.md`
-- スキャナー: <https://github.com/affaan-m/agentshield>
+- Skill: `skills/security-scan/SKILL.md`
+- Agent: `agents/security-reviewer.md`
+- Scanner: <https://github.com/affaan-m/agentshield>
 
-## 引数
+## Arguments
 
 $ARGUMENTS:
-- オプションのターゲットパス
-- オプションのAgentShieldフラグ
+- optional target path
+- optional AgentShield flags

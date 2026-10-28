@@ -1,51 +1,52 @@
 ---
 name: kotlin-ktor-patterns
-description: Ktor サーバーパターン（ルーティング DSL、プラグイン、認証、Koin DI、kotlinx.serialization、WebSocket、testApplication テストを含む）。
-origin: ECC
+description: Ktor server patterns including routing DSL, plugins, authentication, Koin DI, kotlinx.serialization, WebSockets, and testApplication testing. Use when building a Ktor server — routing, plugins, auth, DI, serialization, or tests.
+metadata:
+  origin: ECC
 ---
 
-# Ktor サーバーパターン
+# Ktor Server Patterns
 
-Kotlin コルーチンで堅牢かつ保守性の高い HTTP サーバーを構築するための包括的な Ktor パターン。
+Comprehensive Ktor patterns for building robust, maintainable HTTP servers with Kotlin coroutines.
 
-## アクティベートするタイミング
+## When to Activate
 
-- Ktor HTTP サーバーの構築
-- Ktor プラグインの設定（Auth、CORS、ContentNegotiation、StatusPages）
-- Ktor を使用した REST API の実装
-- Koin を使用した依存性注入の設定
-- testApplication を使用した Ktor インテグレーションテストの作成
-- Ktor での WebSocket の使用
+- Building Ktor HTTP servers
+- Configuring Ktor plugins (Auth, CORS, ContentNegotiation, StatusPages)
+- Implementing REST APIs with Ktor
+- Setting up dependency injection with Koin
+- Writing Ktor integration tests with testApplication
+- Working with WebSockets in Ktor
 
-## アプリケーション構造
+## Application Structure
 
-### 標準的な Ktor プロジェクトレイアウト
+### Standard Ktor Project Layout
 
 ```text
 src/main/kotlin/
 ├── com/example/
-│   ├── Application.kt           # エントリーポイント、モジュール設定
+│   ├── Application.kt           # Entry point, module configuration
 │   ├── plugins/
-│   │   ├── Routing.kt           # ルート定義
-│   │   ├── Serialization.kt     # コンテントネゴシエーション設定
-│   │   ├── Authentication.kt    # 認証設定
-│   │   ├── StatusPages.kt       # エラーハンドリング
-│   │   └── CORS.kt              # CORS 設定
+│   │   ├── Routing.kt           # Route definitions
+│   │   ├── Serialization.kt     # Content negotiation setup
+│   │   ├── Authentication.kt    # Auth configuration
+│   │   ├── StatusPages.kt       # Error handling
+│   │   └── CORS.kt              # CORS configuration
 │   ├── routes/
-│   │   ├── UserRoutes.kt        # /users エンドポイント
-│   │   ├── AuthRoutes.kt        # /auth エンドポイント
-│   │   └── HealthRoutes.kt      # /health エンドポイント
+│   │   ├── UserRoutes.kt        # /users endpoints
+│   │   ├── AuthRoutes.kt        # /auth endpoints
+│   │   └── HealthRoutes.kt      # /health endpoints
 │   ├── models/
-│   │   ├── User.kt              # ドメインモデル
-│   │   └── ApiResponse.kt       # レスポンスエンベロープ
+│   │   ├── User.kt              # Domain models
+│   │   └── ApiResponse.kt       # Response envelopes
 │   ├── services/
-│   │   ├── UserService.kt       # ビジネスロジック
-│   │   └── AuthService.kt       # 認証ロジック
+│   │   ├── UserService.kt       # Business logic
+│   │   └── AuthService.kt       # Auth logic
 │   ├── repositories/
-│   │   ├── UserRepository.kt    # データアクセスインターフェース
+│   │   ├── UserRepository.kt    # Data access interface
 │   │   └── ExposedUserRepository.kt
 │   └── di/
-│       └── AppModule.kt         # Koin モジュール
+│       └── AppModule.kt         # Koin modules
 src/test/kotlin/
 ├── com/example/
 │   ├── routes/
@@ -54,7 +55,7 @@ src/test/kotlin/
 │       └── UserServiceTest.kt
 ```
 
-### アプリケーションエントリーポイント
+### Application Entry Point
 
 ```kotlin
 // Application.kt
@@ -72,9 +73,9 @@ fun Application.module() {
 }
 ```
 
-## ルーティング DSL
+## Routing DSL
 
-### 基本ルート
+### Basic Routes
 
 ```kotlin
 // plugins/Routing.kt
@@ -130,28 +131,28 @@ fun Route.userRoutes() {
 }
 ```
 
-### 認証ルートを使用したルート整理
+### Route Organization with Authenticated Routes
 
 ```kotlin
 fun Route.userRoutes() {
     route("/users") {
-        // パブリックルート
-        get { /* ユーザー一覧 */ }
-        get("/{id}") { /* ユーザー取得 */ }
+        // Public routes
+        get { /* list users */ }
+        get("/{id}") { /* get user */ }
 
-        // 保護されたルート
+        // Protected routes
         authenticate("jwt") {
-            post { /* ユーザー作成 - 認証が必要 */ }
-            put("/{id}") { /* ユーザー更新 - 認証が必要 */ }
-            delete("/{id}") { /* ユーザー削除 - 認証が必要 */ }
+            post { /* create user - requires auth */ }
+            put("/{id}") { /* update user - requires auth */ }
+            delete("/{id}") { /* delete user - requires auth */ }
         }
     }
 }
 ```
 
-## コンテントネゴシエーションとシリアライゼーション
+## Content Negotiation & Serialization
 
-### kotlinx.serialization セットアップ
+### kotlinx.serialization Setup
 
 ```kotlin
 // plugins/Serialization.kt
@@ -168,7 +169,7 @@ fun Application.configureSerialization() {
 }
 ```
 
-### シリアライズ可能なモデル
+### Serializable Models
 
 ```kotlin
 @Serializable
@@ -209,7 +210,7 @@ data class PaginatedResponse<T>(
 )
 ```
 
-### カスタムシリアライザー
+### Custom Serializers
 
 ```kotlin
 object InstantSerializer : KSerializer<Instant> {
@@ -221,9 +222,9 @@ object InstantSerializer : KSerializer<Instant> {
 }
 ```
 
-## 認証
+## Authentication
 
-### JWT 認証
+### JWT Authentication
 
 ```kotlin
 // plugins/Authentication.kt
@@ -256,7 +257,7 @@ fun Application.configureAuthentication() {
     }
 }
 
-// JWT からユーザーを取得
+// Extracting user from JWT
 fun ApplicationCall.userId(): String =
     principal<JWTPrincipal>()
         ?.payload
@@ -265,7 +266,7 @@ fun ApplicationCall.userId(): String =
         ?: throw AuthenticationException("No userId in token")
 ```
 
-### 認証ルート
+### Auth Routes
 
 ```kotlin
 fun Route.authRoutes() {
@@ -299,7 +300,7 @@ fun Route.authRoutes() {
 }
 ```
 
-## StatusPages（エラーハンドリング）
+## Status Pages (Error Handling)
 
 ```kotlin
 // plugins/StatusPages.kt
@@ -355,7 +356,7 @@ fun Application.configureStatusPages() {
 }
 ```
 
-## CORS 設定
+## CORS Configuration
 
 ```kotlin
 // plugins/CORS.kt
@@ -374,27 +375,27 @@ fun Application.configureCORS() {
 }
 ```
 
-## Koin 依存性注入
+## Koin Dependency Injection
 
-### モジュール定義
+### Module Definition
 
 ```kotlin
 // di/AppModule.kt
 val appModule = module {
-    // データベース
+    // Database
     single<Database> { DatabaseFactory.create(get()) }
 
-    // リポジトリ
+    // Repositories
     single<UserRepository> { ExposedUserRepository(get()) }
     single<OrderRepository> { ExposedOrderRepository(get()) }
 
-    // サービス
+    // Services
     single { UserService(get()) }
     single { OrderService(get(), get()) }
     single { AuthService(get(), get()) }
 }
 
-// アプリケーションセットアップ
+// Application setup
 fun Application.configureDI() {
     install(Koin) {
         modules(appModule)
@@ -402,7 +403,7 @@ fun Application.configureDI() {
 }
 ```
 
-### ルートでの Koin の使用
+### Using Koin in Routes
 
 ```kotlin
 fun Route.userRoutes() {
@@ -417,7 +418,7 @@ fun Route.userRoutes() {
 }
 ```
 
-### テスト用の Koin
+### Koin for Testing
 
 ```kotlin
 class UserServiceTest : FunSpec(), KoinTest {
@@ -440,17 +441,17 @@ class UserServiceTest : FunSpec(), KoinTest {
 }
 ```
 
-## リクエストバリデーション
+## Request Validation
 
 ```kotlin
-// ルートでリクエストデータを検証
+// Validate request data in routes
 fun Route.userRoutes() {
     val userService by inject<UserService>()
 
     post("/users") {
         val request = call.receive<CreateUserRequest>()
 
-        // バリデーション
+        // Validate
         require(request.name.isNotBlank()) { "Name is required" }
         require(request.name.length <= 100) { "Name must be 100 characters or less" }
         require(request.email.matches(Regex(".+@.+\\..+"))) { "Invalid email format" }
@@ -460,7 +461,7 @@ fun Route.userRoutes() {
     }
 }
 
-// またはバリデーション拡張を使用
+// Or use a validation extension
 fun CreateUserRequest.validate() {
     require(name.isNotBlank()) { "Name is required" }
     require(name.length <= 100) { "Name must be 100 characters or less" }
@@ -468,15 +469,15 @@ fun CreateUserRequest.validate() {
 }
 ```
 
-## WebSocket
+## WebSockets
 
 ```kotlin
 fun Application.configureWebSockets() {
     install(WebSockets) {
         pingPeriod = 15.seconds
         timeout = 15.seconds
-        maxFrameSize = 64 * 1024 // 64 KiB — プロトコルがより大きなフレームを必要とする場合のみ増加
-        masking = false // RFC 6455 に従い、サーバーからクライアントへのフレームはマスクなし。クライアントからサーバーは Ktor が常にマスク
+        maxFrameSize = 64 * 1024 // 64 KiB — increase only if your protocol requires larger frames
+        masking = false // Server-to-client frames are unmasked per RFC 6455; client-to-server are always masked by Ktor
     }
 }
 
@@ -495,7 +496,7 @@ fun Route.chatRoutes() {
                 val text = frame.readText()
                 val message = ChatMessage(thisConnection.name, text)
 
-                // ConcurrentModificationException を避けるためにロック下でスナップショットを作成
+                // Snapshot under lock to avoid ConcurrentModificationException
                 val snapshot = synchronized(connections) { connections.toList() }
                 snapshot.forEach { conn ->
                     conn.session.send(Json.encodeToString(message))
@@ -518,9 +519,9 @@ data class Connection(val session: DefaultWebSocketSession) {
 }
 ```
 
-## testApplication テスト
+## testApplication Testing
 
-### 基本的なルートテスト
+### Basic Route Testing
 
 ```kotlin
 class UserRoutesTest : FunSpec({
@@ -582,7 +583,7 @@ class UserRoutesTest : FunSpec({
 })
 ```
 
-### 認証ルートのテスト
+### Testing Authenticated Routes
 
 ```kotlin
 class AuthenticatedRoutesTest : FunSpec({
@@ -631,7 +632,7 @@ class AuthenticatedRoutesTest : FunSpec({
 })
 ```
 
-## 設定
+## Configuration
 
 ### application.yaml
 
@@ -655,7 +656,7 @@ database:
   maxPoolSize: 10
 ```
 
-### 設定の読み取り
+### Reading Config
 
 ```kotlin
 fun Application.configureDI() {
@@ -672,18 +673,18 @@ fun Application.configureDI() {
 }
 ```
 
-## クイックリファレンス: Ktor パターン
+## Quick Reference: Ktor Patterns
 
-| パターン | 説明 |
-|---------|------|
-| `route("/path") { get { } }` | DSL を使用したルートグループ化 |
-| `call.receive<T>()` | リクエストボディのデシリアライズ |
-| `call.respond(status, body)` | ステータス付きレスポンスの送信 |
-| `call.parameters["id"]` | パスパラメーターの読み取り |
-| `call.request.queryParameters["q"]` | クエリパラメーターの読み取り |
-| `install(Plugin) { }` | プラグインのインストールと設定 |
-| `authenticate("name") { }` | 認証でルートを保護 |
-| `by inject<T>()` | Koin 依存性注入 |
-| `testApplication { }` | インテグレーションテスト |
+| Pattern | Description |
+|---------|-------------|
+| `route("/path") { get { } }` | Route grouping with DSL |
+| `call.receive<T>()` | Deserialize request body |
+| `call.respond(status, body)` | Send response with status |
+| `call.parameters["id"]` | Read path parameters |
+| `call.request.queryParameters["q"]` | Read query parameters |
+| `install(Plugin) { }` | Install and configure plugin |
+| `authenticate("name") { }` | Protect routes with auth |
+| `by inject<T>()` | Koin dependency injection |
+| `testApplication { }` | Integration testing |
 
-**覚えておくこと**: Ktor は Kotlin コルーチンと DSL を中心に設計されています。ルートをシンプルに保ち、ロジックはサービスに移し、依存性注入には Koin を使用してください。完全なインテグレーションカバレッジのために `testApplication` でテストしてください。
+**Remember**: Ktor is designed around Kotlin coroutines and DSLs. Keep routes thin, push logic to services, and use Koin for dependency injection. Test with `testApplication` for full integration coverage.

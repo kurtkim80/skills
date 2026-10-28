@@ -3,24 +3,33 @@ name: clickhouse-io
 description: ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads.
 ---
 
-# ClickHouse 分析模式
+# ClickHouse Analytics Patterns
 
-用於高效能分析和資料工程的 ClickHouse 特定模式。
+ClickHouse-specific patterns for high-performance analytics and data engineering.
 
-## 概述
+## When to Activate
 
-ClickHouse 是一個列式資料庫管理系統（DBMS），用於線上分析處理（OLAP）。它針對大型資料集的快速分析查詢進行了優化。
+- Designing ClickHouse table schemas (MergeTree engine selection)
+- Writing analytical queries (aggregations, window functions, joins)
+- Optimizing query performance (partition pruning, projections, materialized views)
+- Ingesting large volumes of data (batch inserts, Kafka integration)
+- Migrating from PostgreSQL/MySQL to ClickHouse for analytics
+- Implementing real-time dashboards or time-series analytics
 
-**關鍵特性：**
-- 列式儲存
-- 資料壓縮
-- 平行查詢執行
-- 分散式查詢
-- 即時分析
+## Overview
 
-## 表格設計模式
+ClickHouse is a column-oriented database management system (DBMS) for online analytical processing (OLAP). It's optimized for fast analytical queries on large datasets.
 
-### MergeTree 引擎（最常見）
+**Key Features:**
+- Column-oriented storage
+- Data compression
+- Parallel query execution
+- Distributed queries
+- Real-time analytics
+
+## Table Design Patterns
+
+### MergeTree Engine (Most Common)
 
 ```sql
 CREATE TABLE markets_analytics (
@@ -38,10 +47,10 @@ ORDER BY (date, market_id)
 SETTINGS index_granularity = 8192;
 ```
 
-### ReplacingMergeTree（去重）
+### ReplacingMergeTree (Deduplication)
 
 ```sql
--- 用於可能有重複的資料（例如來自多個來源）
+-- For data that may have duplicates (e.g., from multiple sources)
 CREATE TABLE user_events (
     event_id String,
     user_id String,
@@ -54,10 +63,10 @@ ORDER BY (user_id, event_id, timestamp)
 PRIMARY KEY (user_id, event_id);
 ```
 
-### AggregatingMergeTree（預聚合）
+### AggregatingMergeTree (Pre-aggregation)
 
 ```sql
--- 用於維護聚合指標
+-- For maintaining aggregated metrics
 CREATE TABLE market_stats_hourly (
     hour DateTime,
     market_id String,
@@ -68,7 +77,7 @@ CREATE TABLE market_stats_hourly (
 PARTITION BY toYYYYMM(hour)
 ORDER BY (hour, market_id);
 
--- 查詢聚合資料
+-- Query aggregated data
 SELECT
     hour,
     market_id,
@@ -81,12 +90,12 @@ GROUP BY hour, market_id
 ORDER BY hour DESC;
 ```
 
-## 查詢優化模式
+## Query Optimization Patterns
 
-### 高效過濾
+### Efficient Filtering
 
 ```sql
--- ✅ 良好：先使用索引欄位
+-- ✅ GOOD: Use indexed columns first
 SELECT *
 FROM markets_analytics
 WHERE date >= '2025-01-01'
@@ -95,7 +104,7 @@ WHERE date >= '2025-01-01'
 ORDER BY date DESC
 LIMIT 100;
 
--- ❌ 不良：先過濾非索引欄位
+-- ❌ BAD: Filter on non-indexed columns first
 SELECT *
 FROM markets_analytics
 WHERE volume > 1000
@@ -103,10 +112,10 @@ WHERE volume > 1000
   AND date >= '2025-01-01';
 ```
 
-### 聚合
+### Aggregations
 
 ```sql
--- ✅ 良好：使用 ClickHouse 特定聚合函式
+-- ✅ GOOD: Use ClickHouse-specific aggregation functions
 SELECT
     toStartOfDay(created_at) AS day,
     market_id,
@@ -119,7 +128,7 @@ WHERE created_at >= today() - INTERVAL 7 DAY
 GROUP BY day, market_id
 ORDER BY day DESC, total_volume DESC;
 
--- ✅ 使用 quantile 計算百分位數（比 percentile 更高效）
+-- ✅ Use quantile for percentiles (more efficient than percentile)
 SELECT
     quantile(0.50)(trade_size) AS median,
     quantile(0.95)(trade_size) AS p95,
@@ -128,10 +137,10 @@ FROM trades
 WHERE created_at >= now() - INTERVAL 1 HOUR;
 ```
 
-### 視窗函式
+### Window Functions
 
 ```sql
--- 計算累計總和
+-- Calculate running totals
 SELECT
     date,
     market_id,
@@ -146,9 +155,9 @@ WHERE date >= today() - INTERVAL 30 DAY
 ORDER BY market_id, date;
 ```
 
-## 資料插入模式
+## Data Insertion Patterns
 
-### 批量插入（推薦）
+### Bulk Insert (Recommended)
 
 ```typescript
 import { ClickHouse } from 'clickhouse'
@@ -162,7 +171,7 @@ const clickhouse = new ClickHouse({
   }
 })
 
-// ✅ 批量插入（高效）
+// ✅ Batch insert (efficient)
 async function bulkInsertTrades(trades: Trade[]) {
   const values = trades.map(trade => `(
     '${trade.id}',
@@ -178,19 +187,19 @@ async function bulkInsertTrades(trades: Trade[]) {
   `).toPromise()
 }
 
-// ❌ 個別插入（慢）
+// ❌ Individual inserts (slow)
 async function insertTrade(trade: Trade) {
-  // 不要在迴圈中這樣做！
+  // Don't do this in a loop!
   await clickhouse.query(`
     INSERT INTO trades VALUES ('${trade.id}', ...)
   `).toPromise()
 }
 ```
 
-### 串流插入
+### Streaming Insert
 
 ```typescript
-// 用於持續資料攝取
+// For continuous data ingestion
 import { createWriteStream } from 'fs'
 import { pipeline } from 'stream/promises'
 
@@ -205,12 +214,12 @@ async function streamInserts() {
 }
 ```
 
-## 物化視圖
+## Materialized Views
 
-### 即時聚合
+### Real-time Aggregations
 
 ```sql
--- 建立每小時統計的物化視圖
+-- Create materialized view for hourly stats
 CREATE MATERIALIZED VIEW market_stats_hourly_mv
 TO market_stats_hourly
 AS SELECT
@@ -222,7 +231,7 @@ AS SELECT
 FROM trades
 GROUP BY hour, market_id;
 
--- 查詢物化視圖
+-- Query the materialized view
 SELECT
     hour,
     market_id,
@@ -234,12 +243,12 @@ WHERE hour >= now() - INTERVAL 24 HOUR
 GROUP BY hour, market_id;
 ```
 
-## 效能監控
+## Performance Monitoring
 
-### 查詢效能
+### Query Performance
 
 ```sql
--- 檢查慢查詢
+-- Check slow queries
 SELECT
     query_id,
     user,
@@ -256,10 +265,10 @@ ORDER BY query_duration_ms DESC
 LIMIT 10;
 ```
 
-### 表格統計
+### Table Statistics
 
 ```sql
--- 檢查表格大小
+-- Check table sizes
 SELECT
     database,
     table,
@@ -272,12 +281,12 @@ GROUP BY database, table
 ORDER BY sum(bytes) DESC;
 ```
 
-## 常見分析查詢
+## Common Analytics Queries
 
-### 時間序列分析
+### Time Series Analysis
 
 ```sql
--- 每日活躍使用者
+-- Daily active users
 SELECT
     toDate(timestamp) AS date,
     uniq(user_id) AS daily_active_users
@@ -286,7 +295,7 @@ WHERE timestamp >= today() - INTERVAL 30 DAY
 GROUP BY date
 ORDER BY date;
 
--- 留存分析
+-- Retention analysis
 SELECT
     signup_date,
     countIf(days_since_signup = 0) AS day_0,
@@ -306,10 +315,10 @@ GROUP BY signup_date
 ORDER BY signup_date DESC;
 ```
 
-### 漏斗分析
+### Funnel Analysis
 
 ```sql
--- 轉換漏斗
+-- Conversion funnel
 SELECT
     countIf(step = 'viewed_market') AS viewed,
     countIf(step = 'clicked_trade') AS clicked,
@@ -327,10 +336,10 @@ FROM (
 GROUP BY session_id;
 ```
 
-### 世代分析
+### Cohort Analysis
 
 ```sql
--- 按註冊月份的使用者世代
+-- User cohorts by signup month
 SELECT
     toStartOfMonth(signup_date) AS cohort,
     toStartOfMonth(activity_date) AS month,
@@ -347,17 +356,17 @@ GROUP BY cohort, month, months_since_signup
 ORDER BY cohort, months_since_signup;
 ```
 
-## 資料管線模式
+## Data Pipeline Patterns
 
-### ETL 模式
+### ETL Pattern
 
 ```typescript
-// 提取、轉換、載入
+// Extract, Transform, Load
 async function etlPipeline() {
-  // 1. 從來源提取
+  // 1. Extract from source
   const rawData = await extractFromPostgres()
 
-  // 2. 轉換
+  // 2. Transform
   const transformed = rawData.map(row => ({
     date: new Date(row.created_at).toISOString().split('T')[0],
     market_id: row.market_slug,
@@ -365,18 +374,18 @@ async function etlPipeline() {
     trades: parseInt(row.trade_count)
   }))
 
-  // 3. 載入到 ClickHouse
+  // 3. Load to ClickHouse
   await bulkInsertToClickHouse(transformed)
 }
 
-// 定期執行
-setInterval(etlPipeline, 60 * 60 * 1000)  // 每小時
+// Run periodically
+setInterval(etlPipeline, 60 * 60 * 1000)  // Every hour
 ```
 
-### 變更資料捕獲（CDC）
+### Change Data Capture (CDC)
 
 ```typescript
-// 監聽 PostgreSQL 變更並同步到 ClickHouse
+// Listen to PostgreSQL changes and sync to ClickHouse
 import { Client } from 'pg'
 
 const pgClient = new Client({ connectionString: process.env.DATABASE_URL })
@@ -397,33 +406,33 @@ pgClient.on('notification', async (msg) => {
 })
 ```
 
-## 最佳實務
+## Best Practices
 
-### 1. 分區策略
-- 按時間分區（通常按月或日）
-- 避免太多分區（效能影響）
-- 分區鍵使用 DATE 類型
+### 1. Partitioning Strategy
+- Partition by time (usually month or day)
+- Avoid too many partitions (performance impact)
+- Use DATE type for partition key
 
-### 2. 排序鍵
-- 最常過濾的欄位放在最前面
-- 考慮基數（高基數優先）
-- 排序影響壓縮
+### 2. Ordering Key
+- Put most frequently filtered columns first
+- Consider cardinality (high cardinality first)
+- Order impacts compression
 
-### 3. 資料類型
-- 使用最小的適當類型（UInt32 vs UInt64）
-- 重複字串使用 LowCardinality
-- 分類資料使用 Enum
+### 3. Data Types
+- Use smallest appropriate type (UInt32 vs UInt64)
+- Use LowCardinality for repeated strings
+- Use Enum for categorical data
 
-### 4. 避免
-- SELECT *（指定欄位）
-- FINAL（改為在查詢前合併資料）
-- 太多 JOINs（為分析反正規化）
-- 小量頻繁插入（改用批量）
+### 4. Avoid
+- SELECT * (specify columns)
+- FINAL (merge data before query instead)
+- Too many JOINs (denormalize for analytics)
+- Small frequent inserts (batch instead)
 
-### 5. 監控
-- 追蹤查詢效能
-- 監控磁碟使用
-- 檢查合併操作
-- 審查慢查詢日誌
+### 5. Monitoring
+- Track query performance
+- Monitor disk usage
+- Check merge operations
+- Review slow query log
 
-**記住**：ClickHouse 擅長分析工作負載。為你的查詢模式設計表格，批量插入，並利用物化視圖進行即時聚合。
+**Remember**: ClickHouse excels at analytical workloads. Design tables for your query patterns, batch inserts, and leverage materialized views for real-time aggregations.

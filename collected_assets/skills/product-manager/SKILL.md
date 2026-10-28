@@ -1,12 +1,13 @@
 ---
 name: product-manager
-description: "Guide product strategy, discovery, prioritization and metrics; upstream templates and formula collections are external prerequisites."
-risk: safe
-version: "1.0.0"
-author: "Digidai"
-tags: ["product-management", "saas", "frameworks", "metrics", "strategy"]
-source: "Digidai/product-manager-skills (MIT)"
-date_added: "2026-03-06"
+description: Guide product strategy, discovery, prioritization and metrics; upstream templates and formula collections are external prerequisites.
+metadata:
+  aas-risk: safe
+  aas-version: 1.0.0
+  aas-author: Digidai
+  aas-tags: '["product-management","saas","frameworks","metrics","strategy"]'
+  aas-source: Digidai/product-manager-skills (MIT)
+  aas-date-added: '2026-03-06'
 ---
 
 # Product Manager Skills

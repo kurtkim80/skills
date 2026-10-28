@@ -1,166 +1,164 @@
 ---
-description: 現在のタスクを中断せずにサイドの質問にすばやく回答します。回答後は自動的に作業を再開します。
+description: Answer a quick side question without interrupting or losing context from the current task. Resume work automatically after answering.
 ---
 
-# Asideコマンド
+# Aside Command
 
-タスク中に質問をして即座に集中した回答を受け取り、中断した場所から作業を続行します。現在のタスク、ファイル、コンテキストは一切変更されません。
+Ask a question mid-task and get an immediate, focused answer — then continue right where you left off. The current task, files, and context are never modified.
 
-## 使用するタイミング
+## When to Use
 
-- Claudeが作業中に気になることがあり、勢いを失いたくない場合
-- Claudeが現在編集しているコードのクイック説明が必要な場合
-- タスクを脱線させずに判断のセカンドオピニオンや確認が必要な場合
-- Claudeが続行する前にエラー、概念、パターンを理解したい場合
-- 現在のタスクと無関係なことを新しいセッションを開始せずに質問したい場合
+- You're curious about something while Claude is working and don't want to lose momentum
+- You need a quick explanation of code Claude is currently editing
+- You want a second opinion or clarification on a decision without derailing the task
+- You need to understand an error, concept, or pattern before Claude proceeds
+- You want to ask something unrelated to the current task without starting a new session
 
-## 使い方
-
-```
-/aside <質問>
-/aside この関数は実際に何を返す？
-/aside このパターンはスレッドセーフ？
-/aside なぜここでYの代わりにXを使っている？
-/aside foo()とbar()の違いは？
-/aside 追加したN+1クエリは心配すべき？
-```
-
-## プロセス
-
-### ステップ1: 現在のタスク状態をフリーズ
-
-回答する前に、以下を確認:
-- アクティブなタスクは何か？（どのファイル、機能、問題に取り組んでいたか）
-- `/aside`が呼び出された時点でどのステップが進行中だったか？
-- 次に何が行われる予定だったか？
-
-aside中はファイルの編集、作成、削除を一切行わない。
-
-### ステップ2: 質問に直接回答
-
-完全で有用でありながら最も簡潔な形式で回答する。
-
-- 推論ではなく回答から始める
-- 短く保つ — 詳細な説明が必要な場合は、タスク後に掘り下げることを提案
-- 現在作業中のファイルやコードについての質問の場合、正確に参照（関連する場合はファイルパスと行番号）
-- 回答にファイル読み取りが必要な場合、読み取る — ただし読み取り専用、書き込みは絶対にしない
-
-レスポンスのフォーマット:
+## Usage
 
 ```
-ASIDE: [質問を簡潔に再表現]
-
-[回答]
-
-— タスクに戻る: [行っていた作業の一行説明]
+/aside <your question>
+/aside what does this function actually return?
+/aside is this pattern thread-safe?
+/aside why are we using X instead of Y here?
+/aside what's the difference between foo() and bar()?
+/aside should we be worried about the N+1 query we just added?
 ```
 
-### ステップ3: メインタスクを再開
+## Process
 
-回答を提供した後、即座にアクティブなタスクを一時停止した正確なポイントから続行する。asideの回答がブロッカーや現在のアプローチを再考する理由を明らかにしない限り、再開の許可を求めない（エッジケースを参照）。
+### Step 1: Freeze the current task state
 
----
+Before answering anything, mentally note:
+- What is the active task? (what file, feature, or problem was being worked on)
+- What step was in progress at the moment `/aside` was invoked?
+- What was about to happen next?
 
-## エッジケース
+Do NOT touch, edit, create, or delete any files during the aside.
 
-**質問が提供されない（`/aside`のみ）:**
-応答:
+### Step 2: Answer the question directly
+
+Answer the question in the most concise form that is still complete and useful.
+
+- Lead with the answer, not the reasoning
+- Keep it short — if a full explanation is needed, offer to go deeper after the task
+- If the question is about the current file or code being worked on, reference it precisely (file path and line number if relevant)
+- If answering requires reading a file, read it — but read only, never write
+
+Format the response as:
+
 ```
-ASIDE: 質問が提供されていません
+ASIDE: [restate the question briefly]
 
-何を知りたいですか？（質問してください。現在のタスクコンテキストを失わずに回答します）
+[Your answer here]
 
-— タスクに戻る: [行っていた作業の一行説明]
-```
-
-**質問が現在のタスクの潜在的な問題を明らかにする:**
-再開前に明確にフラグを立てる:
-```
-ASIDE: [回答]
-
-WARNING: この回答は現在のアプローチに[問題]があることを示唆しています。続行する前にこれに対処しますか、それとも予定通り進めますか？
-```
-再開前にユーザーの判断を待つ。
-
-**質問が実際にはタスクのリダイレクト（サイドの質問ではない）:**
-質問が構築中のものを変更することを意味する場合（例: `/aside 実は、代わりにRedisを使おう`）、確認:
-```
-ASIDE: それはサイドの質問ではなく、方向転換のようです。
-どうしますか:
-  (a) 情報としてのみ回答し、現在の計画を維持
-  (b) 現在のタスクを一時停止してアプローチを変更
-```
-ユーザーの回答を待つ — 仮定を立てない。
-
-**現在開いているファイルやコードについての質問:**
-ライブコンテキストから回答する。ファイルがセッション中に既に読み取られている場合、直接参照する。そうでない場合、今読み取り（読み取り専用）、file:line参照で回答する。
-
-**アクティブなタスクがない（`/aside`呼び出し時に進行中のものがない）:**
-レスポンスの形状を一貫させるため、標準ラッパーを使用:
-```
-ASIDE: [質問を簡潔に再表現]
-
-[回答]
-
-— タスクに戻る: 再開するアクティブなタスクなし
+— Back to task: [one-line description of what was being done]
 ```
 
-**長い回答が必要な質問:**
-本質的な回答を簡潔に述べ、次に提案:
-```
-以上が短いバージョンです。[現在のタスク]を終えた後、より詳しい説明が必要ですか？
-```
+### Step 3: Resume the main task
 
-**連続した複数の`/aside`質問:**
-それぞれ順番に回答する。最後の回答の後、メインタスクを再開する。一連のaside全体でタスク状態を失わない。
-
-**asideの回答がコード変更が必要であることを示す:**
-必要な変更を記録するが、aside中は実行しない:
-```
-ASIDE: [回答]
-
-修正すべき点: [変更内容]。現在のタスク後にフラグを立てますが、今対処したい場合はお知らせください。
-```
-
-**質問が曖昧または漠然としすぎる:**
-1つの明確化質問をする — 回答に必要な情報を得るための最短の質問。複数の質問はしない。
+After delivering the answer, immediately continue the active task from the exact point it was paused. Do not ask for permission to resume unless the aside answer revealed a blocker or a reason to reconsider the current approach (see Edge Cases).
 
 ---
 
-## 出力例
+## Edge Cases
 
+**No question provided (`/aside` with nothing after it):**
+Respond:
 ```
-User: /aside fetchWithRetry()は実際に何をする？
+ASIDE: no question provided
 
-ASIDE: fetchWithRetry()は何をする？
+What would you like to know? (ask your question and I'll answer without losing the current task context)
 
-fetchWithRetry() (src/api/retry.ts:12) はリクエストを指数バックオフ
-（250ms → 500ms → 1s）で最大3回試行します。5xxレスポンスと
-ネットワークエラーのみリトライし、4xxエラーは最終的なものとして
-リトライしません。
-
-— タスクに戻る: src/middleware/auth.tsの認証ミドルウェアのリファクタリング
+— Back to task: [one-line description of what was being done]
 ```
 
+**Question reveals a potential problem with the current task:**
+Flag it clearly before resuming:
 ```
-User: /aside 現在取っているアプローチはスレッドセーフ？
+ASIDE: [answer]
 
-ASIDE: 現在のアプローチはスレッドセーフ？
+WARNING: Note: This answer suggests [issue] with the current approach. Want to address this before continuing, or proceed as planned?
+```
+Wait for the user's decision before resuming.
 
-いいえ — src/cache/store.ts:34の共有キャッシュオブジェクトがロックなしで
-変更されています。並行リクエスト下ではこれは競合状態です。
-シングルプロセスのNode.jsサーバーではリスクは低いですが、ワーカースレッドや
-クラスタリングでは実際の問題になります。
+**Question is actually a task redirect (not a side question):**
+If the question implies changing what is being built (e.g., `/aside actually, let's use Redis instead`), clarify:
+```
+ASIDE: That sounds like a direction change, not just a side question.
+Do you want to:
+  (a) Answer this as information only and keep the current plan
+  (b) Pause the current task and change approach
+```
+Wait for the user's answer — do not make assumptions.
 
-WARNING: これは構築中の機能に影響する可能性があります。今対処しますか、それとも続行してフォローアップで修正しますか？
+**Question is about the currently open file or code:**
+Answer from the live context. If the file was read earlier in the session, reference it directly. If not, read it now (read-only) and answer with a file:line reference.
+
+**No active task (nothing in progress when `/aside` is invoked):**
+Still use the standard wrapper so the response shape stays consistent:
+```
+ASIDE: [restate the question briefly]
+
+[Your answer here]
+
+— Back to task: no active task to resume
+```
+
+**Question requires a long answer:**
+Give the essential answer concisely, then offer:
+```
+That's the short version. Want a deeper explanation after we finish [current task]?
+```
+
+**Multiple `/aside` questions in a row:**
+Answer each one in sequence. After the last answer, resume the main task. Do not lose task state across a chain of asides.
+
+**Aside answer implies a code change is needed:**
+Note the change needed but do not make it during the aside:
+```
+ASIDE: [answer]
+
+ Worth fixing: [what should be changed]. I'll flag this after the current task unless you want to address it now.
+```
+
+**Question is ambiguous or too vague:**
+Ask one clarifying question — the shortest question that gets the information needed to answer. Do not ask multiple questions.
+
+---
+
+## Example Output
+
+```
+User: /aside what does fetchWithRetry() actually do?
+
+ASIDE: what does fetchWithRetry() do?
+
+fetchWithRetry() (src/api/retry.ts:12) attempts the request up to 3 times with
+exponential backoff (250ms → 500ms → 1s). It only retries on 5xx responses and
+network errors — 4xx errors are treated as final and not retried.
+
+— Back to task: refactoring the auth middleware in src/middleware/auth.ts
+```
+
+```
+User: /aside is the approach we're taking thread-safe?
+
+ASIDE: is the current approach thread-safe?
+
+No — the shared cache object in src/cache/store.ts:34 is mutated without locking.
+Under concurrent requests this is a race condition. It's low risk in a single-process
+Node.js server but would be a real problem with worker threads or clustering.
+
+WARNING: Note: This could affect the feature we're building. Want to address this now or continue and fix it in a follow-up?
 ```
 
 ---
 
-## ノート
+## Notes
 
-- aside中はファイルを変更しない — 読み取り専用アクセスのみ
-- asideは会話の一時停止であり、新しいタスクではない — 元のタスクは必ず再開しなければならない
-- 回答は焦点を絞る: 目標はユーザーのブロックをすばやく解除すること、講義を行うことではない
-- asideがより大きな議論を引き起こす場合、asideがブロッカーを明らかにしない限り、現在のタスクを先に終了する
-- asideはタスク結果に明示的に関連しない限り、セッションファイルに保存されない
+- Never modify files during an aside — read-only access only
+- The aside is a conversation pause, not a new task — the original task must always resume
+- Keep answers focused: the goal is to unblock the user quickly, not to deliver a lecture
+- If an aside sparks a larger discussion, finish the current task first unless the aside reveals a blocker
+- Asides are not saved to session files unless explicitly relevant to the task outcome

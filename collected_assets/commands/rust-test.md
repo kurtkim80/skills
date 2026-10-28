@@ -1,47 +1,47 @@
 ---
-description: RustにおけるTDDワークフローを強制します。テストを先に書き、その後に実装します。cargo-llvm-covで80%以上のカバレッジを検証します。
+description: Enforce TDD workflow for Rust. Write tests first, then implement. Verify 80%+ coverage with cargo-llvm-cov.
 ---
 
-# Rust TDD コマンド
+# Rust TDD Command
 
-このコマンドは、`#[test]`、rstest、proptest、mockall を使用した Rust コードのテスト駆動開発手法を強制します。
+This command enforces test-driven development methodology for Rust code using `#[test]`, rstest, proptest, and mockall.
 
-## このコマンドの機能
+## What This Command Does
 
-1. **型/トレイトの定義**: `todo!()` で関数シグネチャをスキャフォールドする
-2. **テストの作成**: 包括的なテストモジュールを作成する（RED）
-3. **テストの実行**: テストが正しい理由で失敗することを確認する
-4. **コードの実装**: テストを通過する最小限のコードを書く（GREEN）
-5. **リファクタリング**: テストをグリーンに保ちながら改善する
-6. **カバレッジの確認**: cargo-llvm-cov で80%以上のカバレッジを確保する
+1. **Define Types/Traits**: Scaffold function signatures with `todo!()`
+2. **Write Tests**: Create comprehensive test module (RED)
+3. **Run Tests**: Verify tests fail for the right reason
+4. **Implement Code**: Write minimal code to pass (GREEN)
+5. **Refactor**: Improve while keeping tests green
+6. **Check Coverage**: Ensure 80%+ coverage with cargo-llvm-cov
 
-## 使用するタイミング
+## When to Use
 
-以下の場合に `/rust-test` を使用してください：
-- 新しい Rust の関数、メソッド、トレイトを実装する場合
-- 既存の Rust コードにテストカバレッジを追加する場合
-- バグを修正する場合（先に失敗するテストを書く）
-- 重要なビジネスロジックを構築する場合
-- Rust での TDD ワークフローを学習する場合
+Use `/rust-test` when:
+- Implementing new Rust functions, methods, or traits
+- Adding test coverage to existing Rust code
+- Fixing bugs (write failing test first)
+- Building critical business logic
+- Learning TDD workflow in Rust
 
-## TDD サイクル
+## TDD Cycle
 
 ```
-RED     -> 先に失敗するテストを書く
-GREEN   -> テストを通過する最小限のコードを実装する
-REFACTOR -> コードを改善し、テストはグリーンを維持する
-REPEAT  -> 次のテストケースへ
+RED     -> Write failing test first
+GREEN   -> Implement minimal code to pass
+REFACTOR -> Improve code, tests stay green
+REPEAT  -> Next test case
 ```
 
-## セッション例
+## Example Session
 
 ````text
-User: /rust-test ユーザー登録を検証する関数が必要です
+User: /rust-test I need a function to validate user registration
 
-エージェント:
-# TDD セッション: 登録バリデーター
+Agent:
+# TDD Session: Registration Validator
 
-## ステップ 1: インターフェースの定義
+## Step 1: Define Interface
 
 ```rust
 // src/validator.rs
@@ -61,7 +61,7 @@ pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult 
 }
 ```
 
-## ステップ 2: テストの作成（RED）
+## Step 2: Write Tests (RED)
 
 ```rust
 #[cfg(test)]
@@ -121,7 +121,7 @@ mod tests {
 }
 ```
 
-## ステップ 3: テストの実行 — 失敗を確認
+## Step 3: Run Tests — Verify FAIL
 
 ```bash
 $ cargo test
@@ -132,9 +132,9 @@ test tests::invalid_email_returns_invalid ... FAILED
 test tests::short_password_returns_invalid ... FAILED
 ```
 
-テストは想定通り失敗しました（todo! パニック）。
+Tests fail as expected (todo! panic).
 
-## ステップ 4: 最小限のコードを実装（GREEN）
+## Step 4: Implement Minimal Code (GREEN)
 
 ```rust
 pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult {
@@ -158,7 +158,7 @@ pub fn validate_registration(request: &RegistrationRequest) -> ValidationResult 
 }
 ```
 
-## ステップ 5: テストの実行 — 成功を確認
+## Step 5: Run Tests — Verify PASS
 
 ```bash
 $ cargo test
@@ -171,23 +171,23 @@ test tests::short_password_returns_invalid ... ok
 test result: ok. 4 passed; 0 failed
 ```
 
-すべてのテストが成功しました！
+All tests passing!
 
-## ステップ 6: カバレッジの確認
+## Step 6: Check Coverage
 
 ```bash
 $ cargo llvm-cov
 Coverage: 100.0% of lines
 ```
 
-カバレッジ: 100%
+Coverage: 100%
 
-## TDD 完了！
+## TDD Complete!
 ````
 
-## テストパターン
+## Test Patterns
 
-### ユニットテスト
+### Unit Tests
 
 ```rust
 #[cfg(test)]
@@ -208,7 +208,7 @@ mod tests {
 }
 ```
 
-### rstest によるパラメータ化テスト
+### Parameterized Tests with rstest
 
 ```rust
 use rstest::{rstest, fixture};
@@ -222,7 +222,7 @@ fn test_string_length(#[case] input: &str, #[case] expected: usize) {
 }
 ```
 
-### 非同期テスト
+### Async Tests
 
 ```rust
 #[tokio::test]
@@ -233,7 +233,7 @@ async fn fetches_data_successfully() {
 }
 ```
 
-### プロパティベーステスト
+### Property-Based Tests
 
 ```rust
 use proptest::prelude::*;
@@ -248,61 +248,61 @@ proptest! {
 }
 ```
 
-## カバレッジコマンド
+## Coverage Commands
 
 ```bash
-# サマリーレポート
+# Summary report
 cargo llvm-cov
 
-# HTMLレポート
+# HTML report
 cargo llvm-cov --html
 
-# しきい値を下回った場合に失敗
+# Fail if below threshold
 cargo llvm-cov --fail-under-lines 80
 
-# 特定のテストを実行
+# Run specific test
 cargo test test_name
 
-# 出力付きで実行
+# Run with output
 cargo test -- --nocapture
 
-# 最初の失敗で停止しない
+# Run without stopping on first failure
 cargo test --no-fail-fast
 ```
 
-## カバレッジ目標
+## Coverage Targets
 
-| コードの種類 | 目標 |
+| Code Type | Target |
 |-----------|--------|
-| 重要なビジネスロジック | 100% |
-| パブリック API | 90%以上 |
-| 一般的なコード | 80%以上 |
-| 生成コード / FFI バインディング | 除外 |
+| Critical business logic | 100% |
+| Public API | 90%+ |
+| General code | 80%+ |
+| Generated / FFI bindings | Exclude |
 
-## TDD ベストプラクティス
+## TDD Best Practices
 
-**すべきこと:**
-- 実装の前にまずテストを書く
-- 変更のたびにテストを実行する
-- より良いエラーメッセージのために `assert!` よりも `assert_eq!` を使用する
-- よりクリーンな出力のために `Result` を返すテストで `?` を使用する
-- 実装ではなく振る舞いをテストする
-- エッジケースを含める（空、境界値、エラーパス）
+**DO:**
+- Write test FIRST, before any implementation
+- Run tests after each change
+- Use `assert_eq!` over `assert!` for better error messages
+- Use `?` in tests that return `Result` for cleaner output
+- Test behavior, not implementation
+- Include edge cases (empty, boundary, error paths)
 
-**すべきでないこと:**
-- テストの前に実装を書く
-- RED フェーズをスキップする
-- `Result::is_err()` で対応できる場合に `#[should_panic]` を使用する
-- テストで `sleep()` を使用する — チャネルまたは `tokio::time::pause()` を使用する
-- すべてをモック化する — 可能な場合は統合テストを優先する
+**DON'T:**
+- Write implementation before tests
+- Skip the RED phase
+- Use `#[should_panic]` when `Result::is_err()` works
+- Use `sleep()` in tests — use channels or `tokio::time::pause()`
+- Mock everything — prefer integration tests when feasible
 
-## 関連コマンド
+## Related Commands
 
-- `/rust-build` - ビルドエラーの修正
-- `/rust-review` - 実装後のコードレビュー
-- `verification-loop` スキル - 完全な検証ループの実行
+- `/rust-build` - Fix build errors
+- `/rust-review` - Review code after implementation
+- `verification-loop` skill - Run full verification loop
 
-## 関連
+## Related
 
-- スキル: `skills/rust-testing/`
-- スキル: `skills/rust-patterns/`
+- Skill: `skills/rust-testing/`
+- Skill: `skills/rust-patterns/`

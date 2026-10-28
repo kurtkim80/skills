@@ -1,49 +1,49 @@
 ---
-description: コードベースの理解とアーキテクチャに焦点を当てたガイド付き機能開発
+description: Guided feature development with codebase understanding and architecture focus
 ---
 
-既存コードの理解を新しいコードの作成より重視する、構造化された機能開発ワークフロー。
+A structured feature-development workflow that emphasizes understanding existing code before writing new code.
 
-## フェーズ
+## Phases
 
-### 1. ディスカバリー
+### 1. Discovery
 
-- 機能リクエストを注意深く読む
-- 要件、制約、受け入れ基準を特定する
-- リクエストが曖昧な場合は明確化の質問をする
+- read the feature request carefully
+- identify requirements, constraints, and acceptance criteria
+- ask clarifying questions if the request is ambiguous
 
-### 2. コードベース探索
+### 2. Codebase Exploration
 
-- `code-explorer`を使用して関連する既存コードを分析する
-- 実行パスとアーキテクチャレイヤーを追跡する
-- 統合ポイントと規約を理解する
+- use `code-explorer` to analyze the relevant existing code
+- trace execution paths and architecture layers
+- understand integration points and conventions
 
-### 3. 明確化の質問
+### 3. Clarifying Questions
 
-- 探索からの所見を提示する
-- ターゲットを絞った設計とエッジケースの質問をする
-- 続行する前にユーザーのレスポンスを待つ
+- present findings from exploration
+- ask targeted design and edge-case questions
+- wait for user response before proceeding
 
-### 4. アーキテクチャ設計
+### 4. Architecture Design
 
-- `code-architect`を使用して機能を設計する
-- 実装のブループリントを提供する
-- 実装前に承認を待つ
+- use `code-architect` to design the feature
+- provide the implementation blueprint
+- wait for approval before implementing
 
-### 5. 実装
+### 5. Implementation
 
-- 承認された設計に従って機能を実装する
-- 適切な場合はTDDを優先する
-- コミットを小さく焦点を絞ったものにする
+- implement the feature following the approved design
+- prefer TDD where appropriate
+- keep commits small and focused
 
-### 6. 品質レビュー
+### 6. Quality Review
 
-- `code-reviewer`を使用して実装をレビューする
-- CRITICALおよび重要な問題に対処する
-- テストカバレッジを検証する
+- use `code-reviewer` to review the implementation
+- address critical and important issues
+- verify test coverage
 
-### 7. サマリー
+### 7. Summary
 
-- 構築したものをサマリーする
-- フォローアップ項目や制限を一覧する
-- テスト手順を提供する
+- summarize what was built
+- list follow-up items or limitations
+- provide testing instructions

@@ -1,16 +1,12 @@
 ---
-title: "SOC 2 Type II Auditor Agent — AI Coding Agent & Codex Skill"
-description: "SOC 2 Type II auditor persona — observation-period discipline + AICPA TSC focused. Coordinates with ISO 27001 (75% overlap, the canonical cross-walk. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-soc2-auditor
+description: SOC 2 Type II auditor persona — observation-period discipline + AICPA TSC focused. Coordinates with ISO 27001 (75% overlap, the canonical cross-walk pair) and GDPR (if Privacy TSC in scope). NOT executive cybersecurity strategy (see cs-ciso-advisor); NOT external audit firm engagement (that's the licensed CPA firm's role).
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # SOC 2 Type II Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-soc2-auditor.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -70,7 +66,7 @@ Differentiates clearly:
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/isms-audit-expert/` — ISO 27001 audit (the 75% cross-walk pair)
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/information-security-manager-iso27001/` — ISO 27001 implementation
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/` — GDPR (Privacy TSC overlap)
-- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator
+- `../skills/compliance-os/` — Meta-orchestrator
 
 ## Workflows
 
@@ -141,13 +137,13 @@ python ${CLAUDE_PLUGIN_ROOT}/skills/compliance-os/scripts/audit_simulator.py soc
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator
 - [cs-ciso-iso27001](cs-ciso-iso27001.md) — ISO 27001 audit (75% cross-walk pair)
 - [cs-dpo-gdpr](cs-dpo-gdpr.md) — GDPR (Privacy TSC overlap)
-- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
+- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity strategy
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/SKILL.md)
 - Playbook: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/references/soc2_audit_playbook.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/references/soc2_audit_playbook.md)
-- Sibling command: [`/compliance-os:soc2-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/soc2-audit-prep/SKILL.md)
+- Sibling command: [`/compliance-os:soc2-audit-prep`](../skills/soc2-audit-prep/SKILL.md)
 
 ---
 

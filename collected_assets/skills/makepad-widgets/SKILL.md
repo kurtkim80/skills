@@ -1,10 +1,12 @@
 ---
 name: makepad-widgets
-description: "Select and compose Makepad widgets, configure their properties and styling, and debug widget behavior against a pinned makepad-widgets version."
-risk: safe
-source: community
-date_added: "2026-03-06"
+description: Select and compose Makepad widgets, configure their properties and styling, and debug widget behavior against a pinned makepad-widgets version.
+metadata:
+  aas-risk: safe
+  aas-source: community
+  aas-date-added: '2026-03-06'
 ---
+
 ## Supporting material availability
 
 This catalog copy contains the inline guidance below, but does not include the following supporting paths. They are external prerequisites, not bundled files:

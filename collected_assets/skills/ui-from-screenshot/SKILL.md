@@ -1,17 +1,18 @@
 ---
 name: ui-from-screenshot
-description: "Turn a screenshot or mockup into matching UI with the project's own components, then compare the result side by side with the image and fix the differences."
-category: frontend
-risk: safe
-source: https://github.com/uxkin/agent/tree/main/.agents/skills/ui-from-screenshot
-source_repo: uxkin/agent
-source_type: official
-date_added: "2026-10-12"
-author: UXKIN
-tags: [ui, frontend, screenshot, mockup, implementation]
-tools: [claude, codex, cursor, copilot, gemini]
+description: Turn a screenshot or mockup into matching UI with the project's own components, then compare the result side by side with the image and fix the differences.
 license: MIT
-license_source: https://github.com/uxkin/agent/blob/main/LICENSE
+metadata:
+  aas-category: frontend
+  aas-risk: safe
+  aas-source: https://github.com/uxkin/agent/tree/main/.agents/skills/ui-from-screenshot
+  aas-source-repo: uxkin/agent
+  aas-source-type: official
+  aas-date-added: '2026-10-12'
+  aas-author: UXKIN
+  aas-tags: '["ui","frontend","screenshot","mockup","implementation"]'
+  aas-tools: '["claude","codex","cursor","copilot","gemini"]'
+  aas-license-source: https://github.com/uxkin/agent/blob/main/LICENSE
 ---
 
 # UI from screenshot · by UXKIN

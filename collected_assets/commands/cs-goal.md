@@ -1,15 +1,9 @@
 ---
-title: "/cs-goal — Slash Command for AI Coding Agents"
-description: "Set, show, or advance the per-session agent-launcher goal (./my-agent/goal.json) — the through-line of a CMA launch. Backs the opt-in SessionStart. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Set, show, or advance the per-session agent-launcher goal (./my-agent/goal.json) — the through-line of a CMA launch. Backs the opt-in SessionStart hook. Subcommands map to goal_state.py init/set/status/advance.
+argument-hint: "set \"<goal>\" | status | advance | phase <name>"
 ---
 
-# /cs-goal
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-goal.md">Source</a></span>
-</div>
-
+# /cs-goal — manage the session goal
 
 The goal is one sentence for one agent. It selects the phase and the loop shape.
 

@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin-post"
-description: "/cs-linkedin-post — Pick the format the material actually supports, draft to the ~140-character mobile fold, and lint 0-100 across mechanics, hook, integrity, and accessibility. Blocking findings for the 3,000-character cap, engagement bait, and Unicode pseudo-bold."
-argument-hint: "[the post idea, or paste a draft to be reviewed]"
+title: "/cs-linkedin-post — Slash Command for AI Coding Agents"
+description: "/cs-linkedin-post — Pick the format the material actually supports, draft to the ~140-character mobile fold, and lint 0-100 across mechanics, hook. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin-post — Format, draft, lint
+# /cs-linkedin-post
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-post.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin-post [idea or draft]`
 
@@ -64,6 +69,6 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-content/scripts/post_linter.py \
 
 ## Related
 
-- Agent: [`cs-linkedin-editor`](../agents/cs-linkedin-editor.md)
-- Skill: [`linkedin-content`](../skills/linkedin-content/SKILL.md)
-- Assets: [`post_templates.md`](../skills/linkedin-content/assets/post_templates.md)
+- Agent: [`cs-linkedin-editor`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/agents/cs-linkedin-editor.md)
+- Skill: [`linkedin-content`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-content/SKILL.md)
+- Assets: [`post_templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-content/assets/post_templates.md)

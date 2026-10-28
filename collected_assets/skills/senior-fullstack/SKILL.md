@@ -1,9 +1,10 @@
 ---
 name: senior-fullstack
-description: "Coordinate full-stack implementation across interface, service, database and delivery boundaries using the existing project stack and verified checks."
-risk: critical
-source: community
-date_added: "2026-02-27"
+description: Coordinate full-stack implementation across interface, service, database and delivery boundaries using the existing project stack and verified checks.
+metadata:
+  aas-risk: critical
+  aas-source: community
+  aas-date-added: '2026-02-27'
 ---
 
 # Full-Stack Implementation Review

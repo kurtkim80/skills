@@ -1,60 +1,60 @@
 ---
-description: Go용 TDD 워크플로우 강제. 테이블 기반 테스트를 먼저 작성한 후 구현. go test -cover로 80% 이상 커버리지 검증.
+description: Enforce TDD workflow for Go. Write table-driven tests first, then implement. Verify 80%+ coverage with go test -cover.
 ---
 
-# Go TDD 커맨드
+# Go TDD Command
 
-이 커맨드는 관용적 Go 테스팅 패턴을 사용하여 Go 코드에 테스트 주도 개발 방법론을 강제합니다.
+This command enforces test-driven development methodology for Go code using idiomatic Go testing patterns.
 
-## 이 커맨드가 하는 것
+## What This Command Does
 
-1. **타입/인터페이스 정의**: 함수 시그니처를 먼저 스캐폴딩
-2. **테이블 기반 테스트 작성**: 포괄적인 테스트 케이스 생성 (RED)
-3. **테스트 실행**: 올바른 이유로 테스트가 실패하는지 확인
-4. **코드 구현**: 통과하기 위한 최소한의 코드 작성 (GREEN)
-5. **리팩토링**: 테스트를 통과시키면서 개선
-6. **커버리지 확인**: 80% 이상 커버리지 확보
+1. **Define Types/Interfaces**: Scaffold function signatures first
+2. **Write Table-Driven Tests**: Create comprehensive test cases (RED)
+3. **Run Tests**: Verify tests fail for the right reason
+4. **Implement Code**: Write minimal code to pass (GREEN)
+5. **Refactor**: Improve while keeping tests green
+6. **Check Coverage**: Ensure 80%+ coverage
 
-## 사용 시점
+## When to Use
 
-`/go-test`를 사용해야 할 때:
-- 새로운 Go 함수 구현
-- 기존 코드에 테스트 커버리지 추가
-- 버그 수정 (실패하는 테스트를 먼저 작성)
-- 핵심 비즈니스 로직 구현
-- Go에서 TDD 워크플로우 학습
+Use `/go-test` when:
+- Implementing new Go functions
+- Adding test coverage to existing code
+- Fixing bugs (write failing test first)
+- Building critical business logic
+- Learning TDD workflow in Go
 
-## TDD 사이클
+## TDD Cycle
 
 ```
-RED     → 실패하는 테이블 기반 테스트 작성
-GREEN   → 통과하기 위한 최소한의 코드 구현
-REFACTOR → 코드 개선, 테스트는 통과 유지
-REPEAT  → 다음 테스트 케이스
+RED     → Write failing table-driven test
+GREEN   → Implement minimal code to pass
+REFACTOR → Improve code, tests stay green
+REPEAT  → Next test case
 ```
 
-## 예시 세션
+## Example Session
 
 ````
-User: /go-test 이메일 주소를 검증하는 함수가 필요합니다
+User: /go-test I need a function to validate email addresses
 
 Agent:
-# TDD 세션: 이메일 검증기
+# TDD Session: Email Validator
 
-## 1단계: 인터페이스 정의
+## Step 1: Define Interface
 
 ```go
 // validator/email.go
 package validator
 
-// ValidateEmail은 주어진 문자열이 유효한 이메일 주소인지 확인합니다.
-// 유효하면 nil을 반환하고, 그렇지 않으면 이슈를 설명하는 error를 반환합니다.
+// ValidateEmail checks if the given string is a valid email address.
+// Returns nil if valid, error describing the issue otherwise.
 func ValidateEmail(email string) error {
     panic("not implemented")
 }
 ```
 
-## 2단계: 테이블 기반 테스트 작성 (RED)
+## Step 2: Write Table-Driven Tests (RED)
 
 ```go
 // validator/email_test.go
@@ -70,20 +70,20 @@ func TestValidateEmail(t *testing.T) {
         email   string
         wantErr bool
     }{
-        // 유효한 이메일
-        {"단순 이메일", "user@example.com", false},
-        {"서브도메인 포함", "user@mail.example.com", false},
-        {"플러스 포함", "user+tag@example.com", false},
-        {"점 포함", "first.last@example.com", false},
+        // Valid emails
+        {"simple email", "user@example.com", false},
+        {"with subdomain", "user@mail.example.com", false},
+        {"with plus", "user+tag@example.com", false},
+        {"with dots", "first.last@example.com", false},
 
-        // 유효하지 않은 이메일
-        {"빈 문자열", "", true},
-        {"@ 기호 없음", "userexample.com", true},
-        {"도메인 없음", "user@", true},
-        {"로컬 파트 없음", "@example.com", true},
-        {"이중 @", "user@@example.com", true},
-        {"공백 포함", "user @example.com", true},
-        {"TLD 없음", "user@example", true},
+        // Invalid emails
+        {"empty string", "", true},
+        {"no at sign", "userexample.com", true},
+        {"no domain", "user@", true},
+        {"no local part", "@example.com", true},
+        {"double at", "user@@example.com", true},
+        {"spaces", "user @example.com", true},
+        {"no tld", "user@example", true},
     }
 
     for _, tt := range tests {
@@ -100,21 +100,21 @@ func TestValidateEmail(t *testing.T) {
 }
 ```
 
-## 3단계: 테스트 실행 - 실패 확인
+## Step 3: Run Tests - Verify FAIL
 
 ```bash
 $ go test ./validator/...
 
 --- FAIL: TestValidateEmail (0.00s)
-    --- FAIL: TestValidateEmail/단순_이메일 (0.00s)
+    --- FAIL: TestValidateEmail/simple_email (0.00s)
         panic: not implemented
 
 FAIL
 ```
 
-✓ 예상대로 테스트 실패 (panic).
+✓ Tests fail as expected (panic).
 
-## 4단계: 최소한의 코드 구현 (GREEN)
+## Step 4: Implement Minimal Code (GREEN)
 
 ```go
 // validator/email.go
@@ -143,7 +143,7 @@ func ValidateEmail(email string) error {
 }
 ```
 
-## 5단계: 테스트 실행 - 통과 확인
+## Step 5: Run Tests - Verify PASS
 
 ```bash
 $ go test ./validator/...
@@ -152,9 +152,9 @@ PASS
 ok      project/validator    0.003s
 ```
 
-✓ 모든 테스트 통과!
+✓ All tests passing!
 
-## 6단계: 커버리지 확인
+## Step 6: Check Coverage
 
 ```bash
 $ go test -cover ./validator/...
@@ -164,14 +164,14 @@ coverage: 100.0% of statements
 ok      project/validator    0.003s
 ```
 
-✓ 커버리지: 100%
+✓ Coverage: 100%
 
-## TDD 완료!
+## TDD Complete!
 ````
 
-## 테스트 패턴
+## Test Patterns
 
-### 테이블 기반 테스트
+### Table-Driven Tests
 ```go
 tests := []struct {
     name     string
@@ -179,30 +179,30 @@ tests := []struct {
     want     OutputType
     wantErr  bool
 }{
-    {"케이스 1", input1, want1, false},
-    {"케이스 2", input2, want2, true},
+    {"case 1", input1, want1, false},
+    {"case 2", input2, want2, true},
 }
 
 for _, tt := range tests {
     t.Run(tt.name, func(t *testing.T) {
         got, err := Function(tt.input)
-        // 단언문
+        // assertions
     })
 }
 ```
 
-### 병렬 테스트
+### Parallel Tests
 ```go
 for _, tt := range tests {
-    tt := tt // 캡처
+    tt := tt // Capture
     t.Run(tt.name, func(t *testing.T) {
         t.Parallel()
-        // 테스트 본문
+        // test body
     })
 }
 ```
 
-### 테스트 헬퍼
+### Test Helpers
 ```go
 func setupTestDB(t *testing.T) *sql.DB {
     t.Helper()
@@ -212,57 +212,57 @@ func setupTestDB(t *testing.T) *sql.DB {
 }
 ```
 
-## 커버리지 커맨드
+## Coverage Commands
 
 ```bash
-# 기본 커버리지
+# Basic coverage
 go test -cover ./...
 
-# 커버리지 프로파일
+# Coverage profile
 go test -coverprofile=coverage.out ./...
 
-# 브라우저에서 확인
+# View in browser
 go tool cover -html=coverage.out
 
-# 함수별 커버리지
+# Coverage by function
 go tool cover -func=coverage.out
 
-# 레이스 감지와 함께
+# With race detection
 go test -race -cover ./...
 ```
 
-## 커버리지 목표
+## Coverage Targets
 
-| 코드 유형 | 목표 |
-|-----------|------|
-| 핵심 비즈니스 로직 | 100% |
-| 공개 API | 90%+ |
-| 일반 코드 | 80%+ |
-| 생성된 코드 | 제외 |
+| Code Type | Target |
+|-----------|--------|
+| Critical business logic | 100% |
+| Public APIs | 90%+ |
+| General code | 80%+ |
+| Generated code | Exclude |
 
-## TDD 모범 사례
+## TDD Best Practices
 
-**해야 할 것:**
-- 구현 전에 테스트를 먼저 작성
-- 각 변경 후 테스트 실행
-- 포괄적인 커버리지를 위해 테이블 기반 테스트 사용
-- 구현 세부사항이 아닌 동작 테스트
-- 엣지 케이스 포함 (빈 값, nil, 최대값)
+**DO:**
+- Write test FIRST, before any implementation
+- Run tests after each change
+- Use table-driven tests for comprehensive coverage
+- Test behavior, not implementation details
+- Include edge cases (empty, nil, max values)
 
-**하지 말아야 할 것:**
-- 테스트 전에 구현 작성
-- RED 단계 건너뛰기
-- private 함수를 직접 테스트
-- 테스트에서 `time.Sleep` 사용
-- 불안정한 테스트 무시
+**DON'T:**
+- Write implementation before tests
+- Skip the RED phase
+- Test private functions directly
+- Use `time.Sleep` in tests
+- Ignore flaky tests
 
-## 관련 커맨드
+## Related Commands
 
-- `/go-build` - build 에러 수정
-- `/go-review` - 구현 후 코드 리뷰
-- `/verify` - 전체 검증 루프
+- `/go-build` - Fix build errors
+- `/go-review` - Review code after implementation
+- `verification-loop` skill - Run full verification loop
 
-## 관련 항목
+## Related
 
-- 스킬: `skills/golang-testing/`
-- 스킬: `skills/tdd-workflow/`
+- Skill: `skills/golang-testing/`
+- Skill: `skills/tdd-workflow/`

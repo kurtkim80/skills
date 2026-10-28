@@ -1,58 +1,109 @@
 ---
 name: dashboard-builder
-description: Grafana、SigNoz、および同様のプラットフォーム用の実際のオペレータ質問に答える監視ダッシュボードを構築します。メトリクスを虚栄ボードではなく機能するダッシュボードに変える場合に使用します。
-origin: ECC direct-port adaptation
-version: "1.0.0"
+description: Build monitoring dashboards that answer real operator questions for Grafana, SigNoz, and similar platforms. Use when turning metrics into a working dashboard instead of a vanity board.
+metadata:
+  version: "1.0.0"
+  origin: ECC direct-port adaptation
 ---
 
-# ダッシュボード ビルダー
+# Dashboard Builder
 
-タスクが人々が操作できるダッシュボードを構築することの場合に使用。
+Use this when the task is to build a dashboard people can operate from.
 
-目標は「すべてのメトリクスを表示」ではありません。目標は以下の質問に答えることです：
+The goal is not "show every metric." The goal is to answer:
 
-- 健康ですか？
-- ボトルネックはどこですか？
-- 何が変わったのですか？
-- 誰かが取るべき措置は何ですか？
+- is it healthy?
+- where is the bottleneck?
+- what changed?
+- what action should someone take?
 
-## 使用時期
+## When to Use
 
-- 「Kafkaモニタリングダッシュボードを構築」
-- 「Elasticsearch用のGrafanaダッシュボードを作成」
-- 「このサービス用のSigNozダッシュボードを作成」
-- 「このメトリクスリストを実際の運用ダッシュボードに変える」
+- "Build a Kafka monitoring dashboard"
+- "Create a Grafana dashboard for Elasticsearch"
+- "Make a SigNoz dashboard for this service"
+- "Turn this metrics list into a real operational dashboard"
 
-## ガードレール
+## Guardrails
 
-- ビジュアルレイアウトから始めない；オペレータの質問から始める
-- 利用可能なすべてのメトリクスを含めない
-- 健康、スループット、リソースパネルを構造なしで混ぜない
-- タイトル、ユニット、合理的なしきい値なしでパネルを出荷しない
+- do not start from visual layout; start from operator questions
+- do not include every available metric just because it exists
+- do not mix health, throughput, and resource panels without structure
+- do not ship panels without titles, units, and sane thresholds
 
-## ワークフロー
+## Workflow
 
-### 1. 運用質問を定義
+### 1. Define the operating questions
 
-以下の周りに整理：
+Organize around:
 
-- 健康/可用性
-- レイテンシ/パフォーマンス
-- スループット/ボリューム
-- 飽和/リソース
-- サービス固有のリスク
+- health / availability
+- latency / performance
+- throughput / volume
+- saturation / resources
+- service-specific risk
 
-### 2. ターゲットプラットフォームスキーマを研究
+### 2. Study the target platform schema
 
-既存のダッシュボードを最初に検査：
+Inspect existing dashboards first:
 
-- JSON構造
-- クエリ言語
+- JSON structure
+- query language
+- variables
+- threshold styling
+- section layout
 
-### 3. メトリクスを選択
+### 3. Build the minimum useful board
 
-オペレータが実際に見ているもの、アラートしているもと、対応するのに必要なメトリクスのみを含める。
+Recommended structure:
 
-### 4. レイアウトの構築
+1. overview
+2. performance
+3. resources
+4. service-specific section
 
-質問ごとにパネルをグループ化。
+### 4. Cut vanity panels
+
+Every panel should answer a real question. If it does not, remove it.
+
+## Example Panel Sets
+
+### Elasticsearch
+
+- cluster health
+- shard allocation
+- search latency
+- indexing rate
+- JVM heap / GC
+
+### Kafka
+
+- broker count
+- under-replicated partitions
+- messages in / out
+- consumer lag
+- disk and network pressure
+
+### API gateway / ingress
+
+- request rate
+- p50 / p95 / p99 latency
+- error rate
+- upstream health
+- active connections
+
+## Quality Checklist
+
+- [ ] valid dashboard JSON
+- [ ] clear section grouping
+- [ ] titles and units are present
+- [ ] thresholds/status colors are meaningful
+- [ ] variables exist for common filters
+- [ ] default time range and refresh are sensible
+- [ ] no vanity panels with no operator value
+
+## Related Skills
+
+- `research-ops`
+- `backend-patterns`
+- `terminal-ops`

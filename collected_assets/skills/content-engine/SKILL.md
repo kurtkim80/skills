@@ -1,131 +1,88 @@
 ---
 name: content-engine
-description: X、LinkedIn、TikTok、YouTube、ニュースレター、マルチプラットフォームキャンペーンのプラットフォームネイティブなコンテンツシステムを作成します。ソーシャル投稿、スレッド、スクリプト、コンテンツカレンダー、または1つのソースアセットを複数プラットフォームにきれいに適応したい場合に使用します。
+description: Create platform-native content systems for X, LinkedIn, TikTok, YouTube, newsletters, and repurposed multi-platform campaigns. Use when the user wants social posts, threads, scripts, content calendars, or one source asset adapted cleanly across platforms.
 origin: ECC
 ---
 
-# コンテンツエンジン
+# Content Engine
 
-著者の本当の声をプラットフォームの型に押し込めることなく、プラットフォームネイティブなコンテンツを構築します。
+Turn one idea into strong, platform-native content instead of posting the same thing everywhere.
 
-## 起動条件
+## When to Activate
 
-- X投稿やスレッドを書く場合
-- LinkedIn投稿やローンチアップデートのドラフトを作成する場合
-- 短編動画やYouTube解説のスクリプトを作成する場合
-- 記事、ポッドキャスト、デモ、ドキュメント、内部ノートを公開コンテンツに転用する場合
-- 製品、インサイト、またはナラティブを中心にローンチシーケンスや継続的なコンテンツシステムを構築する場合
+- writing X posts or threads
+- drafting LinkedIn posts or launch updates
+- scripting short-form video or YouTube explainers
+- repurposing articles, podcasts, demos, or docs into social content
+- building a lightweight content plan around a launch, milestone, or theme
 
-## 絶対条件
+## First Questions
 
-1. 汎用的な投稿フォーミュラではなく、ソース素材から始める。
-2. ペルソナではなく、プラットフォームに合わせてフォーマットを適応する。
-3. 1つの投稿は1つの実際の主張を持つべき。
-4. 具体性は形容詞に勝る。
-5. ユーザーが明示的に求めない限り、エンゲージメントベイトは使用しない。
+Clarify:
+- source asset: what are we adapting from
+- audience: builders, investors, customers, operators, or general audience
+- platform: X, LinkedIn, TikTok, YouTube, newsletter, or multi-platform
+- goal: awareness, conversion, recruiting, authority, launch support, or engagement
 
-## ソースファーストワークフロー
+## Core Rules
 
-ドラフト前に、ソースセットを特定します：
-- 公開記事
-- ノートや内部メモ
-- 製品デモ
-- ドキュメントやチェンジログ
-- トランスクリプト
-- スクリーンショット
-- 同じ著者の過去の投稿
+1. Adapt for the platform. Do not cross-post the same copy.
+2. Hooks matter more than summaries.
+3. Every post should carry one clear idea.
+4. Use specifics over slogans.
+5. Keep the ask small and clear.
 
-ユーザーが特定の声を希望する場合、書く前に実際の例から音声プロファイルを構築します。
-声の一貫性が複数の出力にわたって重要な場合は、標準的なワークフローとして`brand-voice`を使用します。
-
-## 声の扱い
-
-`brand-voice`は標準的な声レイヤーです。
-
-以下の場合は最初に実行します：
-
-- 複数のダウンストリーム出力がある場合
-- ユーザーが文体を明示的に気にする場合
-- コンテンツがローンチ、アウトリーチ、または評判に敏感な場合
-
-ここで2番目の声モデルを再構築する代わりに、生成された`VOICE PROFILE`を再利用します。
-ユーザーがAffaan / ECCの声を具体的に望む場合も、`brand-voice`を信頼できる情報源として扱い、利用可能な最良のライブまたはソース由来の素材を提供します。
-
-## 禁止事項
-
-以下のいずれかを削除して書き直します：
-- 「急速に進化する今日のランドスケープにおいて」
-- 「ゲームチェンジャー」「革命的な」「最先端の」
-- 「なぜこれが重要かを説明します」（すぐに具体的な内容が続く場合を除く）
-- 返信を集めるためだけのLinkedInスタイルの質問で終わること
-- LinkedIn上の強制的なカジュアルさ
-- ソース素材に存在しなかった偽のエンゲージメントパディング
-
-## プラットフォーム適応ルール
+## Platform Guidance
 
 ### X
-
-- 最も強い主張、成果物、または緊張感で始める
-- ソースの声が圧縮されている場合は圧縮を保つ
-- スレッドを書く場合、各投稿は議論を進めなければならない
-- 読者が必要としないコンテキストでパディングしない
+- open fast
+- one idea per post or per tweet in a thread
+- keep links out of the main body unless necessary
+- avoid hashtag spam
 
 ### LinkedIn
+- strong first line
+- short paragraphs
+- more explicit framing around lessons, results, and takeaways
 
-- ニッチの外の人々が理解できる程度にのみ展開する
-- ソース素材が本当に内省的でない限り、偽のレッスン投稿にしない
-- 企業的なインスピレーションのリズムはなし
-- 称賛の積み上げなし、「旅」フィラーなし
-
-### 短編動画
-
-- 視覚シーケンスと証拠点の周りでスクリプトを書く
-- 最初の数秒は結果、問題、またはパンチを見せるべき
-- 画面上より紙上で良く聞こえるナレーションを書かない
+### TikTok / Short Video
+- first 3 seconds must interrupt attention
+- script around visuals, not just narration
+- one demo, one claim, one CTA
 
 ### YouTube
+- show the result early
+- structure by chapter
+- refresh the visual every 20-30 seconds
 
-- 結果または緊張感を早めに見せる
-- フィラーセクションではなく、議論または進行で整理する
-- 明確さに役立つ場合のみチャプタリングを使用する
+### Newsletter
+- deliver one clear lens, not a bundle of unrelated items
+- make section titles skimmable
+- keep the opening paragraph doing real work
 
-### ニュースレター
+## Repurposing Flow
 
-- 要点、衝突、または成果物で始める
-- 最初の段落で準備を整えることに時間を費やさない
-- すべてのセクションで何か新しいことを追加する必要がある
+Default cascade:
+1. anchor asset: article, video, demo, memo, or launch doc
+2. extract 3-7 atomic ideas
+3. write platform-native variants
+4. trim repetition across outputs
+5. align CTAs with platform intent
 
-## 転用フロー
+## Deliverables
 
-1. アンカーアセットを選択する。
-2. 3〜7の原子的な主張またはシーンを抽出する。
-3. 鋭さ、新規性、証拠でランク付けする。
-4. 各出力に1つの強いアイデアを割り当てる。
-5. 各プラットフォームの構造に適応する。
-6. プラットフォーム的なフィラーを除去する。
-7. 品質ゲートを実行する。
+When asked for a campaign, return:
+- the core angle
+- platform-specific drafts
+- optional posting order
+- optional CTA variants
+- any missing inputs needed before publishing
 
-## 成果物
+## Quality Gate
 
-キャンペーンを求められた場合、以下を返します：
-- 声のマッチングが重要な場合は短い声プロファイル
-- コアアングル
-- プラットフォームネイティブなドラフト
-- 実行に役立つ場合のみ投稿順序
-- 公開前に埋める必要があるギャップ
-
-## 品質ゲート
-
-提供前に：
-- すべてのドラフトはプラットフォームのステレオタイプではなく、意図した著者のように聞こえる
-- すべてのドラフトは実際の主張、証拠点、または具体的な観察を含む
-- 汎用的なハイプ言語が残っていない
-- 偽のエンゲージメントベイトが残っていない
-- 要求されない限りプラットフォーム間でコピーが重複していない
-- すべてのCTAは稼がれておりユーザーが承認している
-
-## 関連スキル
-
-- `brand-voice`：ソース由来の声プロファイル
-- `crosspost`：プラットフォーム固有の配布
-- `x-api`：最近の投稿のソーシングと承認済みXの出力の公開
+Before delivering:
+- each draft reads natively for its platform
+- hooks are strong and specific
+- no generic hype language
+- no duplicated copy across platforms unless requested
+- the CTA matches the content and audience

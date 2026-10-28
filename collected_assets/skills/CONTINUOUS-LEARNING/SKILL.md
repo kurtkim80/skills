@@ -3,21 +3,29 @@ name: continuous-learning
 description: Automatically extract reusable patterns from Claude Code sessions and save them as learned skills for future use.
 ---
 
-# 持續學習技能
+# Continuous Learning Skill
 
-自動評估 Claude Code 工作階段結束時的內容，提取可重用模式並儲存為學習技能。
+Automatically evaluates Claude Code sessions on end to extract reusable patterns that can be saved as learned skills.
 
-## 運作方式
+## When to Activate
 
-此技能作為 **Stop hook** 在每個工作階段結束時執行：
+- Setting up automatic pattern extraction from Claude Code sessions
+- Configuring the Stop hook for session evaluation
+- Reviewing or curating learned skills in `~/.claude/skills/learned/`
+- Adjusting extraction thresholds or pattern categories
+- Comparing v1 (this) vs v2 (instinct-based) approaches
 
-1. **工作階段評估**：檢查工作階段是否有足夠訊息（預設：10+ 則）
-2. **模式偵測**：從工作階段識別可提取的模式
-3. **技能提取**：將有用模式儲存到 `~/.claude/skills/learned/`
+## How It Works
 
-## 設定
+This skill runs as a **Stop hook** at the end of each session:
 
-編輯 `config.json` 以自訂：
+1. **Session Evaluation**: Checks if session has enough messages (default: 10+)
+2. **Pattern Detection**: Identifies extractable patterns from the session
+3. **Skill Extraction**: Saves useful patterns to `~/.claude/skills/learned/`
+
+## Configuration
+
+Edit `config.json` to customize:
 
 ```json
 {
@@ -40,19 +48,19 @@ description: Automatically extract reusable patterns from Claude Code sessions a
 }
 ```
 
-## 模式類型
+## Pattern Types
 
-| 模式 | 描述 |
-|------|------|
-| `error_resolution` | 特定錯誤如何被解決 |
-| `user_corrections` | 來自使用者修正的模式 |
-| `workarounds` | 框架/函式庫怪異問題的解決方案 |
-| `debugging_techniques` | 有效的除錯方法 |
-| `project_specific` | 專案特定慣例 |
+| Pattern | Description |
+|---------|-------------|
+| `error_resolution` | How specific errors were resolved |
+| `user_corrections` | Patterns from user corrections |
+| `workarounds` | Solutions to framework/library quirks |
+| `debugging_techniques` | Effective debugging approaches |
+| `project_specific` | Project-specific conventions |
 
-## Hook 設定
+## Hook Setup
 
-新增到你的 `~/.claude/settings.json`：
+Add to your `~/.claude/settings.json`:
 
 ```json
 {
@@ -68,43 +76,43 @@ description: Automatically extract reusable patterns from Claude Code sessions a
 }
 ```
 
-## 為什麼用 Stop Hook？
+## Why Stop Hook?
 
-- **輕量**：工作階段結束時只執行一次
-- **非阻塞**：不會為每則訊息增加延遲
-- **完整上下文**：可存取完整工作階段記錄
+- **Lightweight**: Runs once at session end
+- **Non-blocking**: Doesn't add latency to every message
+- **Complete context**: Has access to full session transcript
 
-## 相關
+## Related
 
-- [Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 持續學習章節
-- `/learn` 指令 - 工作階段中手動提取模式
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Section on continuous learning
+- `/learn` command - Manual pattern extraction mid-session
 
 ---
 
-## 比較筆記（研究：2025 年 1 月）
+## Comparison Notes (Research: Jan 2025)
 
 ### vs Homunculus (github.com/humanplane/homunculus)
 
-Homunculus v2 採用更複雜的方法：
+Homunculus v2 takes a more sophisticated approach:
 
-| 功能 | 我們的方法 | Homunculus v2 |
-|------|----------|---------------|
-| 觀察 | Stop hook（工作階段結束） | PreToolUse/PostToolUse hooks（100% 可靠） |
-| 分析 | 主要上下文 | 背景 agent（Haiku） |
-| 粒度 | 完整技能 | 原子「本能」 |
-| 信心 | 無 | 0.3-0.9 加權 |
-| 演化 | 直接到技能 | 本能 → 聚類 → 技能/指令/agent |
-| 分享 | 無 | 匯出/匯入本能 |
+| Feature | Our Approach | Homunculus v2 |
+|---------|--------------|---------------|
+| Observation | Stop hook (end of session) | PreToolUse/PostToolUse hooks (100% reliable) |
+| Analysis | Main context | Background agent (Haiku) |
+| Granularity | Full skills | Atomic "instincts" |
+| Confidence | None | 0.3-0.9 weighted |
+| Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
+| Sharing | None | Export/import instincts |
 
-**來自 homunculus 的關鍵見解：**
-> "v1 依賴技能進行觀察。技能是機率性的——它們觸發約 50-80% 的時間。v2 使用 hooks 進行觀察（100% 可靠），並以本能作為學習行為的原子單位。"
+**Key insight from homunculus:**
+> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time. v2 uses hooks for observation (100% reliable) and instincts as the atomic unit of learned behavior."
 
-### 潛在 v2 增強
+### Potential v2 Enhancements
 
-1. **基於本能的學習** - 較小的原子行為，帶信心評分
-2. **背景觀察者** - Haiku agent 並行分析
-3. **信心衰減** - 如果被矛盾則本能失去信心
-4. **領域標記** - code-style、testing、git、debugging 等
-5. **演化路徑** - 將相關本能聚類為技能/指令
+1. **Instinct-based learning** - Smaller, atomic behaviors with confidence scoring
+2. **Background observer** - Haiku agent analyzing in parallel
+3. **Confidence decay** - Instincts lose confidence if contradicted
+4. **Domain tagging** - code-style, testing, git, debugging, etc.
+5. **Evolution path** - Cluster related instincts into skills/commands
 
-參見：`/Users/affoon/Documents/tasks/12-continuous-learning-v2.md` 完整規格。
+See: `/Users/affoon/Documents/tasks/12-continuous-learning-v2.md` for full spec.

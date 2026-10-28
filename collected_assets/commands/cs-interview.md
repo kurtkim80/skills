@@ -1,15 +1,9 @@
 ---
-title: "/cs-interview — Slash Command for AI Coding Agents"
-description: "Phase 1 — interview the founder into a validated CMA build sheet (primitives table + v1/v2 deferrals + eval plan) via the interview skill. No API key. Slash command for Claude Code, Codex CLI, Gemini CLI."
+description: Phase 1 — interview the founder into a validated CMA build sheet (primitives table + v1/v2 deferrals + eval plan) via the interview skill. No API key needed. Walks the six intake slots, maps to primitives, validates against CMA limits.
+argument-hint: "[optional: a one-line description of the agent's job]"
 ---
 
-# /cs-interview
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/agent-launcher/commands/cs-interview.md">Source</a></span>
-</div>
-
+# /cs-interview — Phase 1: Interview → Plan
 
 Run the `interview` skill.
 

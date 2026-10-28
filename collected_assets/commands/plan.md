@@ -1,113 +1,206 @@
 ---
-description: 요구사항을 재확인하고, 위험을 평가하며, 단계별 구현 계획을 작성합니다. 코드를 건드리기 전에 사용자 확인을 기다립니다.
+description: Restate requirements, assess risks, and create step-by-step implementation plan. WAIT for user CONFIRM before touching any code. Use for a single-model inline or PRD-driven implementation plan; for a dual-model (Codex/Antigravity) plan use /multi-plan, and for visual annotate-and-approve review of the resulting plan use /plan-canvas.
+argument-hint: "[feature description | path/to/*.prd.md]"
 ---
 
-# Plan 커맨드
+# Plan Command
 
-이 커맨드는 **planner** 에이전트를 호출하여 코드를 작성하기 전에 포괄적인 구현 계획을 만듭니다.
+This command creates a comprehensive implementation plan before writing any code. It accepts either free-form requirements or a PRD markdown file.
 
-## 이 커맨드가 하는 일
+Run inline by default. Do not call the Task tool or any subagent by default. This keeps `/plan` usable from plugin installs that ship commands without agent files.
 
-1. **요구사항 재확인** - 무엇을 만들어야 하는지 명확히 합니다
-2. **위험 식별** - 잠재적 이슈와 차단 요소를 도출합니다
-3. **단계별 계획 작성** - 구현을 단계별로 분해합니다
-4. **확인 대기** - 진행하기 전에 반드시 사용자 승인을 받아야 합니다
+## What This Command Does
 
-## 사용 시점
+1. **Restate Requirements** - Clarify what needs to be built
+2. **Identify Risks** - Surface potential issues and blockers
+3. **Create Step Plan** - Break down implementation into phases
+4. **Wait for Confirmation** - MUST receive user approval before proceeding
 
-`/plan`을 사용해야 할 때:
-- 새 기능을 시작할 때
-- 중요한 아키텍처 변경을 할 때
-- 복잡한 리팩토링 작업을 할 때
-- 여러 파일/컴포넌트에 영향을 미칠 때
-- 요구사항이 불명확하거나 모호할 때
+## When to Use
 
-## 작동 방식
+Use `/plan` when:
+- Starting a new feature
+- Making significant architectural changes
+- Working on complex refactoring
+- Multiple files/components will be affected
+- Requirements are unclear or ambiguous
 
-planner 에이전트가 수행하는 작업:
+## How It Works
 
-1. 요청을 **분석**하고 요구사항을 명확한 용어로 재확인합니다
-2. 구체적이고 실행 가능한 단계로 **분해**합니다
-3. 컴포넌트 간 **의존성을 식별**합니다
-4. **위험을 평가**하고 잠재적 차단 요소를 파악합니다
-5. **복잡도를 추정**합니다 (High/Medium/Low)
-6. 계획을 **제시**하고 명시적 확인을 **대기**합니다
+The assistant will:
 
-## 사용 예시
+1. **Analyze the request** and restate requirements in clear terms
+2. **Ground the plan** in relevant codebase patterns when the repo is available
+3. **Break down into phases** with specific, actionable steps
+4. **Identify dependencies** between components
+5. **Assess risks** and potential blockers
+6. **Estimate complexity** (High/Medium/Low)
+7. **Present the plan** and WAIT for your explicit confirmation
+
+## Input Modes
+
+| Input | Mode | Behavior |
+|---|---|---|
+| `path/to/name.prd.md` | PRD artifact mode | Read the PRD, pick the next pending delivery milestone or implementation phase, and write `.claude/plans/{name}.plan.md` |
+| Any other markdown path | Reference mode | Read the file as context and produce an inline plan |
+| Free-form text | Conversational mode | Produce an inline plan |
+| Empty input | Clarification mode | Ask what should be planned |
+
+In PRD artifact mode, create `.claude/plans/` if needed. If the PRD contains a `Delivery Milestones` table, update only the selected row from `pending` to `in-progress` and set its `Plan` cell to the generated plan path. If the PRD uses the legacy `.claude/PRPs/prds/` format with `Implementation Phases`, read it without migrating paths.
+
+## Pattern Grounding
+
+Before writing the plan, search the codebase for conventions the implementation should mirror. Capture the top example for each relevant category with file references:
+
+| Category | What to capture |
+|---|---|
+| Naming | File, function, type, command, or script naming in the affected area |
+| Error handling | How failures are raised, returned, logged, or handled gracefully |
+| Logging | Levels, format, and what gets logged |
+| Data access | Repository, service, query, or filesystem patterns |
+| Tests | Test file location, framework, fixtures, and assertion style |
+
+If no similar code exists, state that explicitly. Do not invent a pattern.
+
+## PRD Artifact Output
+
+When called with a `.prd.md` file, write the plan to `.claude/plans/{kebab-case-name}.plan.md` using this structure:
+
+````markdown
+# Plan: {Feature Name}
+
+**Source PRD**: {path}
+**Selected Milestone**: {milestone or phase name}
+**Complexity**: {Small | Medium | Large}
+
+## Summary
+{2-3 sentences}
+
+## Patterns to Mirror
+| Category | Source | Pattern |
+|---|---|---|
+| Naming | `path:line` | {short description} |
+| Errors | `path:line` | {short description} |
+| Tests | `path:line` | {short description} |
+
+## Files to Change
+| File | Action | Why |
+|---|---|---|
+| `path` | CREATE / UPDATE / DELETE | {reason} |
+
+## Tasks
+### Task 1: {name}
+- **Action**: {what to do}
+- **Mirror**: {pattern to follow}
+- **Validate**: {command that proves correctness}
+
+## Validation
+```bash
+{project-specific validation commands}
+```
+
+## Risks
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+
+## Acceptance
+- [ ] All tasks complete
+- [ ] Validation passes
+- [ ] Patterns mirrored, not reinvented
+````
+
+After writing the artifact, report its path and WAIT for confirmation before writing code.
+
+> **Visual review:** instead of asking for a typed confirmation, you can open the
+> artifact in the browser Plan Canvas (`/plan-canvas`, or the `plan-canvas` skill):
+> the user annotates the plan in place and clicks **Approve plan** or **Request
+> changes**, which arrives as your confirmation signal.
+
+## Example Usage
 
 ```
-User: /plan 마켓이 해결될 때 실시간 알림을 추가해야 합니다
+User: /plan I need to add real-time notifications when markets resolve
 
-Agent (planner):
-# 구현 계획: 실시간 마켓 해결 알림
+Assistant:
+# Implementation Plan: Real-Time Market Resolution Notifications
 
-## 요구사항 재확인
-- 사용자가 주시 중인 마켓이 해결될 때 알림 전송
-- 다중 알림 채널 지원 (인앱, 이메일, webhook)
-- 알림이 안정적으로 전달되도록 보장
-- 마켓 결과와 사용자의 포지션 결과 포함
+## Requirements Restatement
+- Send notifications to users when markets they're watching resolve
+- Support multiple notification channels (in-app, email, webhook)
+- Ensure notifications are delivered reliably
+- Include market outcome and user's position result
 
-## 구현 단계
+## Implementation Phases
 
-### 1단계: 데이터베이스 스키마
-- id, user_id, market_id, type, status, created_at 컬럼을 가진 notifications 테이블 추가
-- 채널 설정을 위한 user_notification_preferences 테이블 추가
-- 성능을 위해 user_id와 market_id에 인덱스 생성
+### Phase 1: Database Schema
+- Add notifications table with columns: id, user_id, market_id, type, status, created_at
+- Add user_notification_preferences table for channel preferences
+- Create indexes on user_id and market_id for performance
 
-### 2단계: 알림 서비스
-- lib/notifications.ts에 알림 서비스 생성
-- BullMQ/Redis를 사용한 알림 큐 구현
-- 전송 실패 시 재시도 로직 추가
-- 알림 템플릿 생성
+### Phase 2: Notification Service
+- Create notification service in lib/notifications.ts
+- Implement notification queue using BullMQ/Redis
+- Add retry logic for failed deliveries
+- Create notification templates
 
-### 3단계: 연동 포인트
-- 마켓 해결 로직에 연결 (status가 "resolved"로 변경될 때)
-- 해당 마켓에 포지션을 가진 모든 사용자 조회
-- 각 사용자에 대한 알림 큐에 추가
+### Phase 3: Integration Points
+- Hook into market resolution logic (when status changes to "resolved")
+- Query all users with positions in market
+- Enqueue notifications for each user
 
-### 4단계: 프론트엔드 컴포넌트
-- 헤더에 NotificationBell 컴포넌트 생성
-- NotificationList 모달 추가
-- Supabase subscriptions를 통한 실시간 업데이트 구현
-- 알림 설정 페이지 추가
+### Phase 4: Frontend Components
+- Create NotificationBell component in header
+- Add NotificationList modal
+- Implement real-time updates via Supabase subscriptions
+- Add notification preferences page
 
-## 의존성
-- Redis (큐용)
-- 이메일 서비스 (SendGrid/Resend)
-- Supabase 실시간 subscriptions
+## Dependencies
+- Redis (for queue)
+- Email service (SendGrid/Resend)
+- Supabase real-time subscriptions
 
-## 위험
-- HIGH: 이메일 전달률 (SPF/DKIM 필요)
-- MEDIUM: 마켓당 1000명 이상의 사용자 시 성능
-- MEDIUM: 마켓이 자주 해결될 경우 알림 스팸
-- LOW: 실시간 subscription 오버헤드
+## Risks
+- HIGH: Email deliverability (SPF/DKIM required)
+- MEDIUM: Performance with 1000+ users per market
+- MEDIUM: Notification spam if markets resolve frequently
+- LOW: Real-time subscription overhead
 
-## 예상 복잡도: MEDIUM
-- 백엔드: 4-6시간
-- 프론트엔드: 3-4시간
-- 테스트: 2-3시간
-- 합계: 9-13시간
+## Estimated Complexity: MEDIUM
+- Backend: 4-6 hours
+- Frontend: 3-4 hours
+- Testing: 2-3 hours
+- Total: 9-13 hours
 
-**확인 대기 중**: 이 계획으로 진행할까요? (yes/no/modify)
+**WAITING FOR CONFIRMATION**: Proceed with this plan? (yes/no/modify)
 ```
 
-## 중요 참고 사항
+## Important Notes
 
-**핵심**: planner 에이전트는 "yes"나 "proceed" 같은 긍정적 응답으로 명시적으로 계획을 확인하기 전까지 코드를 **절대 작성하지 않습니다.**
+**CRITICAL**: This command will **NOT** write any code until you explicitly confirm the plan with "yes" or "proceed" or similar affirmative response.
 
-변경을 원하면 다음과 같이 응답하세요:
-- "modify: [변경 사항]"
-- "different approach: [대안]"
+If you want changes, respond with:
+- "modify: [your changes]"
+- "different approach: [alternative]"
 - "skip phase 2 and do phase 3 first"
 
-## 다른 커맨드와의 연계
+## Integration with Other Commands
 
-계획 수립 후:
-- `/tdd`를 사용하여 테스트 주도 개발로 구현
-- 빌드 에러 발생 시 `/build-fix` 사용
-- 완성된 구현을 `/code-review`로 리뷰
+After planning:
+- Use `/plan-canvas` to run the confirmation gate visually in the browser (annotate + approve)
+- Use the `tdd-workflow` skill to implement with test-driven development
+- Use `/build-fix` if build errors occur
+- Use `/code-review` to review completed implementation
+- Use `/pr` or `/prp-pr` to open a pull request
 
-## 관련 에이전트
+> **Need requirements first?** Use `/plan-prd` for a lean PRD at `.claude/prds/{name}.prd.md`.
+>
+> **Need the legacy PRP flow?** Use `/prp-plan` for deep PRP planning with `.claude/PRPs/` artifacts. Use `/prp-implement` to execute those plans with rigorous validation loops.
 
-이 커맨드는 다음 위치의 `planner` 에이전트를 호출합니다:
-`~/.claude/agents/planner.md`
+## Optional Planner Agent
+
+ECC also provides a `planner` agent for manual installs that include agent files. Use it only when the local runtime already exposes that subagent and the user explicitly asks you to delegate planning.
+
+If the `planner` subagent is unavailable, continue planning inline instead of surfacing an "Agent type 'planner' not found" error.
+
+For manual installs, the source file lives at:
+`agents/planner.md`

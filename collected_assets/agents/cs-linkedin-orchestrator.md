@@ -1,12 +1,16 @@
 ---
-name: cs-linkedin-orchestrator
-description: Routes any LinkedIn organic-growth request to the right lane and gates it against LinkedIn's User Agreement before a word is drafted. Runs the policy gate (ALLOW / CONSTRAIN / REFUSE against §8.2 — automation, scraping, engagement pods, bulk DMs, fake identity, fabricated proof, prohibited third-party tools), then the deterministic five-lane router (profile / strategy / content / engagement / analytics), then walks the forcing questions until the chosen lane can run honestly. Holds no LinkedIn credentials and sends nothing. Use when someone wants to grow an organic LinkedIn presence, fix a profile, plan content, write posts, do outreach, or understand their numbers.
-domain: marketing
-model: opus
-tools: [Read, Bash, Write, Edit]
+title: "LinkedIn Orchestrator Agent — AI Coding Agent & Codex Skill"
+description: "Routes any LinkedIn organic-growth request to the right lane and gates it against LinkedIn's User Agreement before a word is drafted. Runs the policy. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # LinkedIn Orchestrator Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-bullhorn-outline: Marketing</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/agents/cs-linkedin-orchestrator.md">Source</a></span>
+</div>
+
 
 ## Purpose
 
@@ -51,7 +55,7 @@ presence. It is a router with a gate in front of it, and the gate comes first.
 
 ## Skill Integration
 
-**Skill location:** `../skills/linkedin-skills/`
+**Skill location:** [`skills/linkedin-skills`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-skills)
 
 ### Orchestrator tools
 

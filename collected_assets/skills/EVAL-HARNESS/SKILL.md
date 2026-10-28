@@ -4,224 +4,232 @@ description: Formal evaluation framework for Claude Code sessions implementing e
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
-# Eval Harness 技能
+# Eval Harness Skill
 
-Claude Code 工作階段的正式評估框架，實作 eval 驅動開發（EDD）原則。
+A formal evaluation framework for Claude Code sessions, implementing eval-driven development (EDD) principles.
 
-## 理念
+## When to Activate
 
-Eval 驅動開發將 evals 視為「AI 開發的單元測試」：
-- 在實作前定義預期行為
-- 開發期間持續執行 evals
-- 每次變更追蹤回歸
-- 使用 pass@k 指標進行可靠性測量
+- Setting up eval-driven development (EDD) for AI-assisted workflows
+- Defining pass/fail criteria for Claude Code task completion
+- Measuring agent reliability with pass@k metrics
+- Creating regression test suites for prompt or agent changes
+- Benchmarking agent performance across model versions
 
-## Eval 類型
+## Philosophy
 
-### 能力 Evals
-測試 Claude 是否能做到以前做不到的事：
+Eval-Driven Development treats evals as the "unit tests of AI development":
+- Define expected behavior BEFORE implementation
+- Run evals continuously during development
+- Track regressions with each change
+- Use pass@k metrics for reliability measurement
+
+## Eval Types
+
+### Capability Evals
+Test if Claude can do something it couldn't before:
 ```markdown
 [CAPABILITY EVAL: feature-name]
-任務：Claude 應完成什麼的描述
-成功標準：
-  - [ ] 標準 1
-  - [ ] 標準 2
-  - [ ] 標準 3
-預期輸出：預期結果描述
+Task: Description of what Claude should accomplish
+Success Criteria:
+  - [ ] Criterion 1
+  - [ ] Criterion 2
+  - [ ] Criterion 3
+Expected Output: Description of expected result
 ```
 
-### 回歸 Evals
-確保變更不會破壞現有功能：
+### Regression Evals
+Ensure changes don't break existing functionality:
 ```markdown
 [REGRESSION EVAL: feature-name]
-基準：SHA 或檢查點名稱
-測試：
+Baseline: SHA or checkpoint name
+Tests:
   - existing-test-1: PASS/FAIL
   - existing-test-2: PASS/FAIL
   - existing-test-3: PASS/FAIL
-結果：X/Y 通過（先前為 Y/Y）
+Result: X/Y passed (previously Y/Y)
 ```
 
-## 評分器類型
+## Grader Types
 
-### 1. 基於程式碼的評分器
-使用程式碼的確定性檢查：
+### 1. Code-Based Grader
+Deterministic checks using code:
 ```bash
-# 檢查檔案是否包含預期模式
+# Check if file contains expected pattern
 grep -q "export function handleAuth" src/auth.ts && echo "PASS" || echo "FAIL"
 
-# 檢查測試是否通過
+# Check if tests pass
 npm test -- --testPathPattern="auth" && echo "PASS" || echo "FAIL"
 
-# 檢查建置是否成功
+# Check if build succeeds
 npm run build && echo "PASS" || echo "FAIL"
 ```
 
-### 2. 基於模型的評分器
-使用 Claude 評估開放式輸出：
+### 2. Model-Based Grader
+Use Claude to evaluate open-ended outputs:
 ```markdown
 [MODEL GRADER PROMPT]
-評估以下程式碼變更：
-1. 它是否解決了陳述的問題？
-2. 結構是否良好？
-3. 邊界案例是否被處理？
-4. 錯誤處理是否適當？
+Evaluate the following code change:
+1. Does it solve the stated problem?
+2. Is it well-structured?
+3. Are edge cases handled?
+4. Is error handling appropriate?
 
-分數：1-5（1=差，5=優秀）
-理由：[解釋]
+Score: 1-5 (1=poor, 5=excellent)
+Reasoning: [explanation]
 ```
 
-### 3. 人工評分器
-標記為手動審查：
+### 3. Human Grader
+Flag for manual review:
 ```markdown
 [HUMAN REVIEW REQUIRED]
-變更：變更內容的描述
-理由：為何需要人工審查
-風險等級：LOW/MEDIUM/HIGH
+Change: Description of what changed
+Reason: Why human review is needed
+Risk Level: LOW/MEDIUM/HIGH
 ```
 
-## 指標
+## Metrics
 
 ### pass@k
-「k 次嘗試中至少一次成功」
-- pass@1：第一次嘗試成功率
-- pass@3：3 次嘗試內成功
-- 典型目標：pass@3 > 90%
+"At least one success in k attempts"
+- pass@1: First attempt success rate
+- pass@3: Success within 3 attempts
+- Typical target: pass@3 > 90%
 
 ### pass^k
-「所有 k 次試驗都成功」
-- 更高的可靠性標準
-- pass^3：連續 3 次成功
-- 用於關鍵路徑
+"All k trials succeed"
+- Higher bar for reliability
+- pass^3: 3 consecutive successes
+- Use for critical paths
 
-## Eval 工作流程
+## Eval Workflow
 
-### 1. 定義（編碼前）
+### 1. Define (Before Coding)
 ```markdown
-## EVAL 定義：feature-xyz
+## EVAL DEFINITION: feature-xyz
 
-### 能力 Evals
-1. 可以建立新使用者帳戶
-2. 可以驗證電子郵件格式
-3. 可以安全地雜湊密碼
+### Capability Evals
+1. Can create new user account
+2. Can validate email format
+3. Can hash password securely
 
-### 回歸 Evals
-1. 現有登入仍可運作
-2. 工作階段管理未變更
-3. 登出流程完整
+### Regression Evals
+1. Existing login still works
+2. Session management unchanged
+3. Logout flow intact
 
-### 成功指標
-- 能力 evals 的 pass@3 > 90%
-- 回歸 evals 的 pass^3 = 100%
+### Success Metrics
+- pass@3 > 90% for capability evals
+- pass^3 = 100% for regression evals
 ```
 
-### 2. 實作
-撰寫程式碼以通過定義的 evals。
+### 2. Implement
+Write code to pass the defined evals.
 
-### 3. 評估
+### 3. Evaluate
 ```bash
-# 執行能力 evals
-[執行每個能力 eval，記錄 PASS/FAIL]
+# Run capability evals
+[Run each capability eval, record PASS/FAIL]
 
-# 執行回歸 evals
+# Run regression evals
 npm test -- --testPathPattern="existing"
 
-# 產生報告
+# Generate report
 ```
 
-### 4. 報告
+### 4. Report
 ```markdown
-EVAL 報告：feature-xyz
+EVAL REPORT: feature-xyz
 ========================
 
-能力 Evals：
+Capability Evals:
   create-user:     PASS (pass@1)
   validate-email:  PASS (pass@2)
   hash-password:   PASS (pass@1)
-  整體：           3/3 通過
+  Overall:         3/3 passed
 
-回歸 Evals：
+Regression Evals:
   login-flow:      PASS
   session-mgmt:    PASS
   logout-flow:     PASS
-  整體：           3/3 通過
+  Overall:         3/3 passed
 
-指標：
+Metrics:
   pass@1: 67% (2/3)
   pass@3: 100% (3/3)
 
-狀態：準備審查
+Status: READY FOR REVIEW
 ```
 
-## 整合模式
+## Integration Patterns
 
-### 實作前
+### Pre-Implementation
 ```
 /eval define feature-name
 ```
-在 `.claude/evals/feature-name.md` 建立 eval 定義檔案
+Creates eval definition file at `.claude/evals/feature-name.md`
 
-### 實作期間
+### During Implementation
 ```
 /eval check feature-name
 ```
-執行當前 evals 並報告狀態
+Runs current evals and reports status
 
-### 實作後
+### Post-Implementation
 ```
 /eval report feature-name
 ```
-產生完整 eval 報告
+Generates full eval report
 
-## Eval 儲存
+## Eval Storage
 
-在專案中儲存 evals：
+Store evals in project:
 ```
 .claude/
   evals/
-    feature-xyz.md      # Eval 定義
-    feature-xyz.log     # Eval 執行歷史
-    baseline.json       # 回歸基準
+    feature-xyz.md      # Eval definition
+    feature-xyz.log     # Eval run history
+    baseline.json       # Regression baselines
 ```
 
-## 最佳實務
+## Best Practices
 
-1. **編碼前定義 evals** - 強制清楚思考成功標準
-2. **頻繁執行 evals** - 及早捕捉回歸
-3. **隨時間追蹤 pass@k** - 監控可靠性趨勢
-4. **可能時使用程式碼評分器** - 確定性 > 機率性
-5. **安全性需人工審查** - 永遠不要完全自動化安全檢查
-6. **保持 evals 快速** - 慢 evals 不會被執行
-7. **與程式碼一起版本化 evals** - Evals 是一等工件
+1. **Define evals BEFORE coding** - Forces clear thinking about success criteria
+2. **Run evals frequently** - Catch regressions early
+3. **Track pass@k over time** - Monitor reliability trends
+4. **Use code graders when possible** - Deterministic > probabilistic
+5. **Human review for security** - Never fully automate security checks
+6. **Keep evals fast** - Slow evals don't get run
+7. **Version evals with code** - Evals are first-class artifacts
 
-## 範例：新增認證
+## Example: Adding Authentication
 
 ```markdown
-## EVAL：add-authentication
+## EVAL: add-authentication
 
-### 階段 1：定義（10 分鐘）
-能力 Evals：
-- [ ] 使用者可以用電子郵件/密碼註冊
-- [ ] 使用者可以用有效憑證登入
-- [ ] 無效憑證被拒絕並顯示適當錯誤
-- [ ] 工作階段在頁面重新載入後持續
-- [ ] 登出清除工作階段
+### Phase 1: Define (10 min)
+Capability Evals:
+- [ ] User can register with email/password
+- [ ] User can login with valid credentials
+- [ ] Invalid credentials rejected with proper error
+- [ ] Sessions persist across page reloads
+- [ ] Logout clears session
 
-回歸 Evals：
-- [ ] 公開路由仍可存取
-- [ ] API 回應未變更
-- [ ] 資料庫 schema 相容
+Regression Evals:
+- [ ] Public routes still accessible
+- [ ] API responses unchanged
+- [ ] Database schema compatible
 
-### 階段 2：實作（視情況而定）
-[撰寫程式碼]
+### Phase 2: Implement (varies)
+[Write code]
 
-### 階段 3：評估
-執行：/eval check add-authentication
+### Phase 3: Evaluate
+Run: /eval check add-authentication
 
-### 階段 4：報告
-EVAL 報告：add-authentication
+### Phase 4: Report
+EVAL REPORT: add-authentication
 ==============================
-能力：5/5 通過（pass@3：100%）
-回歸：3/3 通過（pass^3：100%）
-狀態：準備發佈
+Capability: 5/5 passed (pass@3: 100%)
+Regression: 3/3 passed (pass^3: 100%)
+Status: SHIP IT
 ```

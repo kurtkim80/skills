@@ -3,121 +3,121 @@ name: tdd-workflow
 description: Use this skill when writing new features, fixing bugs, or refactoring code. Enforces test-driven development with 80%+ coverage including unit, integration, and E2E tests.
 ---
 
-# 測試驅動開發工作流程
+# Test-Driven Development Workflow
 
-此技能確保所有程式碼開發遵循 TDD 原則，並具有完整的測試覆蓋率。
+This skill ensures all code development follows TDD principles with comprehensive test coverage.
 
-## 何時啟用
+## When to Activate
 
-- 撰寫新功能或功能性程式碼
-- 修復 Bug 或問題
-- 重構現有程式碼
-- 新增 API 端點
-- 建立新元件
+- Writing new features or functionality
+- Fixing bugs or issues
+- Refactoring existing code
+- Adding API endpoints
+- Creating new components
 
-## 核心原則
+## Core Principles
 
-### 1. 測試先於程式碼
-總是先寫測試，然後實作程式碼使測試通過。
+### 1. Tests BEFORE Code
+ALWAYS write tests first, then implement code to make tests pass.
 
-### 2. 覆蓋率要求
-- 最低 80% 覆蓋率（單元 + 整合 + E2E）
-- 涵蓋所有邊界案例
-- 測試錯誤情境
-- 驗證邊界條件
+### 2. Coverage Requirements
+- Minimum 80% coverage (unit + integration + E2E)
+- All edge cases covered
+- Error scenarios tested
+- Boundary conditions verified
 
-### 3. 測試類型
+### 3. Test Types
 
-#### 單元測試
-- 個別函式和工具
-- 元件邏輯
-- 純函式
-- 輔助函式和工具
+#### Unit Tests
+- Individual functions and utilities
+- Component logic
+- Pure functions
+- Helpers and utilities
 
-#### 整合測試
-- API 端點
-- 資料庫操作
-- 服務互動
-- 外部 API 呼叫
+#### Integration Tests
+- API endpoints
+- Database operations
+- Service interactions
+- External API calls
 
-#### E2E 測試（Playwright）
-- 關鍵使用者流程
-- 完整工作流程
-- 瀏覽器自動化
-- UI 互動
+#### E2E Tests (Playwright)
+- Critical user flows
+- Complete workflows
+- Browser automation
+- UI interactions
 
-## TDD 工作流程步驟
+## TDD Workflow Steps
 
-### 步驟 1：撰寫使用者旅程
+### Step 1: Write User Journeys
 ```
-身為 [角色]，我想要 [動作]，以便 [好處]
+As a [role], I want to [action], so that [benefit]
 
-範例：
-身為使用者，我想要語意搜尋市場，
-以便即使沒有精確關鍵字也能找到相關市場。
+Example:
+As a user, I want to search for markets semantically,
+so that I can find relevant markets even without exact keywords.
 ```
 
-### 步驟 2：產生測試案例
-為每個使用者旅程建立完整的測試案例：
+### Step 2: Generate Test Cases
+For each user journey, create comprehensive test cases:
 
 ```typescript
 describe('Semantic Search', () => {
   it('returns relevant markets for query', async () => {
-    // 測試實作
+    // Test implementation
   })
 
   it('handles empty query gracefully', async () => {
-    // 測試邊界案例
+    // Test edge case
   })
 
   it('falls back to substring search when Redis unavailable', async () => {
-    // 測試回退行為
+    // Test fallback behavior
   })
 
   it('sorts results by similarity score', async () => {
-    // 測試排序邏輯
+    // Test sorting logic
   })
 })
 ```
 
-### 步驟 3：執行測試（應該失敗）
+### Step 3: Run Tests (They Should Fail)
 ```bash
 npm test
-# 測試應該失敗 - 我們還沒實作
+# Tests should fail - we haven't implemented yet
 ```
 
-### 步驟 4：實作程式碼
-撰寫最少的程式碼使測試通過：
+### Step 4: Implement Code
+Write minimal code to make tests pass:
 
 ```typescript
-// 由測試引導的實作
+// Implementation guided by tests
 export async function searchMarkets(query: string) {
-  // 實作在此
+  // Implementation here
 }
 ```
 
-### 步驟 5：再次執行測試
+### Step 5: Run Tests Again
 ```bash
 npm test
-# 測試現在應該通過
+# Tests should now pass
 ```
 
-### 步驟 6：重構
-在保持測試通過的同時改善程式碼品質：
-- 移除重複
-- 改善命名
-- 優化效能
-- 增強可讀性
+### Step 6: Refactor
+Improve code quality while keeping tests green:
+- Remove duplication
+- Improve naming
+- Optimize performance
+- Enhance readability
 
-### 步驟 7：驗證覆蓋率
+### Step 7: Verify Coverage
 ```bash
 npm run test:coverage
-# 驗證達到 80%+ 覆蓋率
+# Verify 80%+ coverage achieved
 ```
 
-## 測試模式
+## Testing Patterns
 
-### 單元測試模式（Jest/Vitest）
+### Unit Test Pattern (Jest/Vitest)
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Button } from './Button'
@@ -144,7 +144,7 @@ describe('Button Component', () => {
 })
 ```
 
-### API 整合測試模式
+### API Integration Test Pattern
 ```typescript
 import { NextRequest } from 'next/server'
 import { GET } from './route'
@@ -168,74 +168,74 @@ describe('GET /api/markets', () => {
   })
 
   it('handles database errors gracefully', async () => {
-    // Mock 資料庫失敗
+    // Mock database failure
     const request = new NextRequest('http://localhost/api/markets')
-    // 測試錯誤處理
+    // Test error handling
   })
 })
 ```
 
-### E2E 測試模式（Playwright）
+### E2E Test Pattern (Playwright)
 ```typescript
 import { test, expect } from '@playwright/test'
 
 test('user can search and filter markets', async ({ page }) => {
-  // 導航到市場頁面
+  // Navigate to markets page
   await page.goto('/')
   await page.click('a[href="/markets"]')
 
-  // 驗證頁面載入
+  // Verify page loaded
   await expect(page.locator('h1')).toContainText('Markets')
 
-  // 搜尋市場
+  // Search for markets
   await page.fill('input[placeholder="Search markets"]', 'election')
 
-  // 等待 debounce 和結果
+  // Wait for debounce and results
   await page.waitForTimeout(600)
 
-  // 驗證搜尋結果顯示
+  // Verify search results displayed
   const results = page.locator('[data-testid="market-card"]')
   await expect(results).toHaveCount(5, { timeout: 5000 })
 
-  // 驗證結果包含搜尋詞
+  // Verify results contain search term
   const firstResult = results.first()
   await expect(firstResult).toContainText('election', { ignoreCase: true })
 
-  // 依狀態篩選
+  // Filter by status
   await page.click('button:has-text("Active")')
 
-  // 驗證篩選結果
+  // Verify filtered results
   await expect(results).toHaveCount(3)
 })
 
 test('user can create a new market', async ({ page }) => {
-  // 先登入
+  // Login first
   await page.goto('/creator-dashboard')
 
-  // 填寫市場建立表單
+  // Fill market creation form
   await page.fill('input[name="name"]', 'Test Market')
   await page.fill('textarea[name="description"]', 'Test description')
   await page.fill('input[name="endDate"]', '2025-12-31')
 
-  // 提交表單
+  // Submit form
   await page.click('button[type="submit"]')
 
-  // 驗證成功訊息
+  // Verify success message
   await expect(page.locator('text=Market created successfully')).toBeVisible()
 
-  // 驗證重導向到市場頁面
+  // Verify redirect to market page
   await expect(page).toHaveURL(/\/markets\/test-market/)
 })
 ```
 
-## 測試檔案組織
+## Test File Organization
 
 ```
 src/
 ├── components/
 │   ├── Button/
 │   │   ├── Button.tsx
-│   │   ├── Button.test.tsx          # 單元測試
+│   │   ├── Button.test.tsx          # Unit tests
 │   │   └── Button.stories.tsx       # Storybook
 │   └── MarketCard/
 │       ├── MarketCard.tsx
@@ -244,14 +244,14 @@ src/
 │   └── api/
 │       └── markets/
 │           ├── route.ts
-│           └── route.test.ts         # 整合測試
+│           └── route.test.ts         # Integration tests
 └── e2e/
-    ├── markets.spec.ts               # E2E 測試
+    ├── markets.spec.ts               # E2E tests
     ├── trading.spec.ts
     └── auth.spec.ts
 ```
 
-## Mock 外部服務
+## Mocking External Services
 
 ### Supabase Mock
 ```typescript
@@ -283,19 +283,19 @@ jest.mock('@/lib/redis', () => ({
 ```typescript
 jest.mock('@/lib/openai', () => ({
   generateEmbedding: jest.fn(() => Promise.resolve(
-    new Array(1536).fill(0.1) // Mock 1536 維嵌入向量
+    new Array(1536).fill(0.1) // Mock 1536-dim embedding
   ))
 }))
 ```
 
-## 測試覆蓋率驗證
+## Test Coverage Verification
 
-### 執行覆蓋率報告
+### Run Coverage Report
 ```bash
 npm run test:coverage
 ```
 
-### 覆蓋率門檻
+### Coverage Thresholds
 ```json
 {
   "jest": {
@@ -311,69 +311,69 @@ npm run test:coverage
 }
 ```
 
-## 常見測試錯誤避免
+## Common Testing Mistakes to Avoid
 
-### ❌ 錯誤：測試實作細節
+### ❌ WRONG: Testing Implementation Details
 ```typescript
-// 不要測試內部狀態
+// Don't test internal state
 expect(component.state.count).toBe(5)
 ```
 
-### ✅ 正確：測試使用者可見行為
+### ✅ CORRECT: Test User-Visible Behavior
 ```typescript
-// 測試使用者看到的內容
+// Test what users see
 expect(screen.getByText('Count: 5')).toBeInTheDocument()
 ```
 
-### ❌ 錯誤：脆弱的選擇器
+### ❌ WRONG: Brittle Selectors
 ```typescript
-// 容易壞掉
+// Breaks easily
 await page.click('.css-class-xyz')
 ```
 
-### ✅ 正確：語意選擇器
+### ✅ CORRECT: Semantic Selectors
 ```typescript
-// 對變更有彈性
+// Resilient to changes
 await page.click('button:has-text("Submit")')
 await page.click('[data-testid="submit-button"]')
 ```
 
-### ❌ 錯誤：無測試隔離
+### ❌ WRONG: No Test Isolation
 ```typescript
-// 測試互相依賴
+// Tests depend on each other
 test('creates user', () => { /* ... */ })
-test('updates same user', () => { /* 依賴前一個測試 */ })
+test('updates same user', () => { /* depends on previous test */ })
 ```
 
-### ✅ 正確：獨立測試
+### ✅ CORRECT: Independent Tests
 ```typescript
-// 每個測試設置自己的資料
+// Each test sets up its own data
 test('creates user', () => {
   const user = createTestUser()
-  // 測試邏輯
+  // Test logic
 })
 
 test('updates user', () => {
   const user = createTestUser()
-  // 更新邏輯
+  // Update logic
 })
 ```
 
-## 持續測試
+## Continuous Testing
 
-### 開發期間的 Watch 模式
+### Watch Mode During Development
 ```bash
 npm test -- --watch
-# 檔案變更時自動執行測試
+# Tests run automatically on file changes
 ```
 
 ### Pre-Commit Hook
 ```bash
-# 每次 commit 前執行
+# Runs before every commit
 npm test && npm run lint
 ```
 
-### CI/CD 整合
+### CI/CD Integration
 ```yaml
 # GitHub Actions
 - name: Run Tests
@@ -382,28 +382,28 @@ npm test && npm run lint
   uses: codecov/codecov-action@v3
 ```
 
-## 最佳實務
+## Best Practices
 
-1. **先寫測試** - 總是 TDD
-2. **一個測試一個斷言** - 專注單一行為
-3. **描述性測試名稱** - 解釋測試內容
-4. **Arrange-Act-Assert** - 清晰的測試結構
-5. **Mock 外部依賴** - 隔離單元測試
-6. **測試邊界案例** - Null、undefined、空值、大值
-7. **測試錯誤路徑** - 不只是快樂路徑
-8. **保持測試快速** - 單元測試每個 < 50ms
-9. **測試後清理** - 無副作用
-10. **檢視覆蓋率報告** - 識別缺口
+1. **Write Tests First** - Always TDD
+2. **One Assert Per Test** - Focus on single behavior
+3. **Descriptive Test Names** - Explain what's tested
+4. **Arrange-Act-Assert** - Clear test structure
+5. **Mock External Dependencies** - Isolate unit tests
+6. **Test Edge Cases** - Null, undefined, empty, large
+7. **Test Error Paths** - Not just happy paths
+8. **Keep Tests Fast** - Unit tests < 50ms each
+9. **Clean Up After Tests** - No side effects
+10. **Review Coverage Reports** - Identify gaps
 
-## 成功指標
+## Success Metrics
 
-- 達到 80%+ 程式碼覆蓋率
-- 所有測試通過（綠色）
-- 無跳過或停用的測試
-- 快速測試執行（單元測試 < 30s）
-- E2E 測試涵蓋關鍵使用者流程
-- 測試在生產前捕捉 Bug
+- 80%+ code coverage achieved
+- All tests passing (green)
+- No skipped or disabled tests
+- Fast test execution (< 30s for unit tests)
+- E2E tests cover critical user flows
+- Tests catch bugs before production
 
 ---
 
-**記住**：測試不是可選的。它們是實現自信重構、快速開發和生產可靠性的安全網。
+**Remember**: Tests are not optional. They are the safety net that enables confident refactoring, rapid development, and production reliability.

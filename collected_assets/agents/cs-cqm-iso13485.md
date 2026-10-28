@@ -1,16 +1,12 @@
 ---
-title: "ISO 13485 QMS Auditor Agent — AI Coding Agent & Codex Skill"
-description: "ISO 13485:2016 QMS audit persona — Design Control + CAPA + Process Validation focused. Coordinates with ISO 14971 (risk file), MDR 745 (technical. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-cqm-iso13485
+description: ISO 13485:2016 QMS audit persona — Design Control + CAPA + Process Validation focused. Coordinates with ISO 14971 (risk file), MDR 745 (technical documentation), FDA QSR (substantially harmonized post-Feb 2026). NOT executive product strategy (see cs-cpo-advisor for that).
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # ISO 13485 QMS Auditor Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-cqm-iso13485.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -62,7 +58,7 @@ Differentiates clearly:
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/mdr-745-specialist/` — EU MDR technical documentation
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/fda-consultant-specialist/` — FDA QSR + 510(k) / PMA submissions
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/quality-documentation-manager/` — DHF / DMR / DHR management
-- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator
+- `../skills/compliance-os/` — Meta-orchestrator
 
 ## Workflows
 
@@ -133,14 +129,14 @@ python ${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/qms-audit-expert/scripts/audit_sc
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator (routes here for ISO 13485 audit)
 - [cs-fda-qsr-auditor](cs-fda-qsr-auditor.md) — FDA QSR auditor (substantially harmonized post-Feb 2026)
 - [cs-aims-iso42001](cs-aims-iso42001.md) — ISO 42001 AIMS (for AI-enabled medical devices, layer on top of 13485)
-- [cs-cpo-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-cpo-advisor.md) — Executive product strategy
-- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator (routes here for audit work)
+- [cs-cpo-advisor](../../c-level-agents/agents/cs-cpo-advisor.md) — Executive product strategy
+- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device orchestrator (routes here for audit work)
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/qms-audit-expert/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/qms-audit-expert/SKILL.md)
 - Playbook: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/qms-audit-expert/references/iso13485_audit_playbook.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/qms-audit-expert/references/iso13485_audit_playbook.md)
-- Sibling command: [`/compliance-os:iso13485-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/iso13485-audit-prep/SKILL.md)
+- Sibling command: [`/compliance-os:iso13485-audit-prep`](../skills/iso13485-audit-prep/SKILL.md)
 
 ---
 

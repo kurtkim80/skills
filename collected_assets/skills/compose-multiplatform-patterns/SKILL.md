@@ -1,26 +1,27 @@
 ---
 name: compose-multiplatform-patterns
-description: KMPプロジェクト向けのCompose MultiplatformおよびJetpack Composeパターン — 状態管理、ナビゲーション、テーマ設定、パフォーマンス、プラットフォーム固有のUI。
-origin: ECC
+description: Compose Multiplatform and Jetpack Compose patterns for KMP projects — state management, navigation, theming, performance, and platform-specific UI. Use when building Compose or Jetpack Compose UI, state, navigation, or theming in a KMP project.
+metadata:
+  origin: ECC
 ---
 
-# Compose Multiplatformパターン
+# Compose Multiplatform Patterns
 
-Compose MultiplatformとJetpack Composeを使用して、Android、iOS、デスクトップ、Web間で共有UIを構築するためのパターン。状態管理、ナビゲーション、テーマ設定、パフォーマンスをカバーします。
+Patterns for building shared UI across Android, iOS, Desktop, and Web using Compose Multiplatform and Jetpack Compose. Covers state management, navigation, theming, and performance.
 
-## 起動条件
+## When to Activate
 
-- Compose UIの構築（Jetpack ComposeまたはCompose Multiplatform）
-- ViewModelとCompose状態によるUI状態の管理
-- KMPまたはAndroidプロジェクトでのナビゲーション実装
-- 再利用可能なコンポーザブルとデザインシステムの設計
-- リコンポジションとレンダリングパフォーマンスの最適化
+- Building Compose UI (Jetpack Compose or Compose Multiplatform)
+- Managing UI state with ViewModels and Compose state
+- Implementing navigation in KMP or Android projects
+- Designing reusable composables and design systems
+- Optimizing recomposition and rendering performance
 
-## 状態管理
+## State Management
 
-### ViewModel + 単一状態オブジェクト
+### ViewModel + Single State Object
 
-画面状態には単一のデータクラスを使用します。`StateFlow`として公開し、Composeで収集します：
+Use a single data class for screen state. Expose it as `StateFlow` and collect in Compose:
 
 ```kotlin
 data class ItemListState(
@@ -53,7 +54,7 @@ class ItemListViewModel(
 }
 ```
 
-### Composeでの状態収集
+### Collecting State in Compose
 
 ```kotlin
 @Composable
@@ -71,13 +72,13 @@ private fun ItemListContent(
     state: ItemListState,
     onSearch: (String) -> Unit
 ) {
-    // ステートレスなコンポーザブル — プレビューとテストが容易
+    // Stateless composable — easy to preview and test
 }
 ```
 
-### イベントシンクパターン
+### Event Sink Pattern
 
-複雑な画面では、複数のコールバックラムダの代わりにイベント用のシールドインターフェースを使用します：
+For complex screens, use a sealed interface for events instead of multiple callback lambdas:
 
 ```kotlin
 sealed interface ItemListEvent {
@@ -86,7 +87,7 @@ sealed interface ItemListEvent {
     data object Refresh : ItemListEvent
 }
 
-// ViewModelの中
+// In ViewModel
 fun onEvent(event: ItemListEvent) {
     when (event) {
         is ItemListEvent.Search -> onSearch(event.query)
@@ -95,18 +96,18 @@ fun onEvent(event: ItemListEvent) {
     }
 }
 
-// コンポーザブルの中 — 多数ではなく単一ラムダ
+// In Composable — single lambda instead of many
 ItemListContent(
     state = state,
     onEvent = viewModel::onEvent
 )
 ```
 
-## ナビゲーション
+## Navigation
 
-### 型安全なナビゲーション（Compose Navigation 2.8+）
+### Type-Safe Navigation (Compose Navigation 2.8+)
 
-ルートを`@Serializable`オブジェクトとして定義します：
+Define routes as `@Serializable` objects:
 
 ```kotlin
 @Serializable data object HomeRoute
@@ -128,9 +129,9 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
 }
 ```
 
-### ダイアログとボトムシートナビゲーション
+### Dialog and Bottom Sheet Navigation
 
-命令型のshow/hideの代わりに`dialog()`とオーバーレイパターンを使用します：
+Use `dialog()` and overlay patterns instead of imperative show/hide:
 
 ```kotlin
 NavHost(navController, startDestination = HomeRoute) {
@@ -146,11 +147,11 @@ NavHost(navController, startDestination = HomeRoute) {
 }
 ```
 
-## コンポーザブル設計
+## Composable Design
 
-### スロットベースのAPI
+### Slot-Based APIs
 
-柔軟性のためにスロットパラメータを持つコンポーザブルを設計します：
+Design composables with slot parameters for flexibility:
 
 ```kotlin
 @Composable
@@ -170,24 +171,24 @@ fun AppCard(
 }
 ```
 
-### Modifier順序
+### Modifier Ordering
 
-Modifierの順序は重要です — 以下の順序で適用します：
+Modifier order matters — apply in this sequence:
 
 ```kotlin
 Text(
     text = "Hello",
     modifier = Modifier
-        .padding(16.dp)          // 1. レイアウト（パディング、サイズ）
-        .clip(RoundedCornerShape(8.dp))  // 2. 形状
-        .background(Color.White) // 3. 描画（背景、ボーダー）
-        .clickable { }           // 4. インタラクション
+        .padding(16.dp)          // 1. Layout (padding, size)
+        .clip(RoundedCornerShape(8.dp))  // 2. Shape
+        .background(Color.White) // 3. Drawing (background, border)
+        .clickable { }           // 4. Interaction
 )
 ```
 
-## KMPプラットフォーム固有のUI
+## KMP Platform-Specific UI
 
-### プラットフォームコンポーザブルのexpect/actual
+### expect/actual for Platform Composables
 
 ```kotlin
 // commonMain
@@ -204,15 +205,15 @@ actual fun PlatformStatusBar(darkIcons: Boolean) {
 // iosMain
 @Composable
 actual fun PlatformStatusBar(darkIcons: Boolean) {
-    // iOSはUIKitインターロップまたはInfo.plistで処理
+    // iOS handles this via UIKit interop or Info.plist
 }
 ```
 
-## パフォーマンス
+## Performance
 
-### スキップ可能なリコンポジションのための安定した型
+### Stable Types for Skippable Recomposition
 
-すべてのプロパティが安定している場合、クラスを`@Stable`または`@Immutable`でマークします：
+Mark classes as `@Stable` or `@Immutable` when all properties are stable:
 
 ```kotlin
 @Immutable
@@ -224,20 +225,20 @@ data class ItemUiModel(
 )
 ```
 
-### `key()`と遅延リストの正しい使用
+### Use `key()` and Lazy Lists Correctly
 
 ```kotlin
 LazyColumn {
     items(
         items = items,
-        key = { it.id }  // 安定したキーによりアイテムの再利用とアニメーションが可能
+        key = { it.id }  // Stable keys enable item reuse and animations
     ) { item ->
         ItemRow(item = item)
     }
 }
 ```
 
-### `derivedStateOf`で読み取りを遅延
+### Defer Reads with `derivedStateOf`
 
 ```kotlin
 val listState = rememberLazyListState()
@@ -246,13 +247,13 @@ val showScrollToTop by remember {
 }
 ```
 
-### リコンポジションでのアロケーションを避ける
+### Avoid Allocations in Recomposition
 
 ```kotlin
-// 悪い例 — リコンポジションのたびに新しいラムダとリストが作られる
+// BAD — new lambda and list every recomposition
 items.filter { it.isActive }.forEach { ActiveItem(it, onClick = { handle(it) }) }
 
-// 良い例 — 各アイテムにキーを付けてコールバックが正しい行に紐づくようにする
+// GOOD — key each item so callbacks stay attached to the right row
 val activeItems = remember(items) { items.filter { it.isActive } }
 activeItems.forEach { item ->
     key(item.id) {
@@ -261,9 +262,9 @@ activeItems.forEach { item ->
 }
 ```
 
-## テーマ設定
+## Theming
 
-### Material 3ダイナミックテーマ
+### Material 3 Dynamic Theming
 
 ```kotlin
 @Composable
@@ -285,15 +286,15 @@ fun AppTheme(
 }
 ```
 
-## 避けるべきアンチパターン
+## Anti-Patterns to Avoid
 
-- ライフサイクルに対してより安全な`collectAsStateWithLifecycle`を使用した`MutableStateFlow`がある場合にViewModelで`mutableStateOf`を使用すること
-- コンポーザブルの深い階層に`NavController`を渡すこと — 代わりにラムダコールバックを渡す
-- `@Composable`関数内の重い計算 — ViewModelか`remember {}`に移動する
-- 一部の設定では設定変更のたびに再実行されるため、ViewModel initの代替として`LaunchedEffect(Unit)`を使用すること
-- コンポーザブルのパラメータに新しいオブジェクトインスタンスを作成すること — 不必要なリコンポジションを引き起こす
+- Using `mutableStateOf` in ViewModels when `MutableStateFlow` with `collectAsStateWithLifecycle` is safer for lifecycle
+- Passing `NavController` deep into composables — pass lambda callbacks instead
+- Heavy computation inside `@Composable` functions — move to ViewModel or `remember {}`
+- Using `LaunchedEffect(Unit)` as a substitute for ViewModel init — it re-runs on configuration change in some setups
+- Creating new object instances in composable parameters — causes unnecessary recomposition
 
-## 参照
+## References
 
-スキル: モジュール構造とレイヤーについては`android-clean-architecture`を参照。
-スキル: コルーチンとFlowパターンについては`kotlin-coroutines-flows`を参照。
+See skill: `android-clean-architecture` for module structure and layering.
+See skill: `kotlin-coroutines-flows` for coroutine and Flow patterns.

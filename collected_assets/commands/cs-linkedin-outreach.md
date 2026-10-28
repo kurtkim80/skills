@@ -1,10 +1,15 @@
 ---
-name: "cs-linkedin-outreach"
-description: "/cs-linkedin-outreach — Build a weekly commenting roster inside a real time budget, and write one outreach message at a time that refuses to be a template. Caps volume against LinkedIn's observed invitation limits and refuses automation-shaped plans. Nothing is ever sent."
-argument-hint: "[who you want to reach, and how much time you have]"
+title: "/cs-linkedin-outreach — Slash Command for AI Coding Agents"
+description: "/cs-linkedin-outreach — Build a weekly commenting roster inside a real time budget, and write one outreach message at a time that refuses to be a. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-linkedin-outreach — Comments first, messages second
+# /cs-linkedin-outreach
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-outreach.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-linkedin-outreach [who, and how much time]`
 
@@ -65,5 +70,5 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-engagement/scripts/outreach_messag
 
 ## Related
 
-- Skill: [`linkedin-engagement`](../skills/linkedin-engagement/SKILL.md)
-- Worksheet: [`outreach_worksheet.md`](../skills/linkedin-engagement/assets/outreach_worksheet.md)
+- Skill: [`linkedin-engagement`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-engagement/SKILL.md)
+- Worksheet: [`outreach_worksheet.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-engagement/assets/outreach_worksheet.md)

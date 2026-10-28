@@ -1,15 +1,16 @@
 ---
 name: data-privacy-controls
 description: 'Data privacy control register: data category, lawful basis, retention period, access roles, encryption and consent requirement per module. Use for GDPR compliance.'
-category: business
-risk: safe
-source: self
-source_type: self
-date_added: "2026-09-26"
-author: WHOISABHISHEKADHIKARI
-tags: [sme, business, operations, database, csv, notion, sql, protect]
-tools: []
-source_repo: WHOISABHISHEKADHIKARI/sme-ops-system-builder
+metadata:
+  aas-category: business
+  aas-risk: safe
+  aas-source: self
+  aas-source-type: self
+  aas-date-added: '2026-09-26'
+  aas-author: WHOISABHISHEKADHIKARI
+  aas-tags: '["sme","business","operations","database","csv","notion","sql","protect"]'
+  aas-tools: '[]'
+  aas-source-repo: WHOISABHISHEKADHIKARI/sme-ops-system-builder
 ---
 
 # Data Privacy Controls
