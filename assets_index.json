@@ -9555,6 +9555,14 @@
       "path": "collected_assets/skills/isms-audit-expert",
       "description_ko": "ISO 27001 규정 준수 검증, 보안 통제 평가 및 인증 지원을 위한 ISMS(정보 보안 관리 시스템) 감사 전문가입니다. 사용자가 ISO 27001, ISMS 감사, 부록 A 통제, SOA(적용성 기술서), 격차 분석, 부적합 관리, 내부 감사, 감시 감사 또는 보안 인증 준비를 언급할 때 사용합니다. 제어 구현 증거를 검토하고, 감사 결과를 문서화하고, 부적합을 분류하고, 위험 기반 감사 계획을 생성하고, 제어를 부록 A 요구 사항에 매핑하고, 1단계 및 2단계 감사 문서를 준비하고, 시정 조치 워크플로를 지원하는 데 도움을 줍니다."
     },
+    "access-lifecycle": {
+      "name": "access-lifecycle",
+      "type": "skill",
+      "description": "Use when preparing or running a user access review, checking that leavers lost their access, finding orphaned or ownerless service accounts, answering an auditor's access-control request for SOC 2, ISO 27001, PCI DSS, HIPAA or NIST 800-53, or checking whether a finished review campaign will hold up. Diffs the HR roster against account exports, tests the campaign for coverage, self-review, unremoved revokes and rubber-stamping, and maps every exception to the controls it breaks.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/access-lifecycle"
+    },
     "quality-manager-qms-iso13485": {
       "name": "quality-manager-qms-iso13485",
       "type": "skill",
@@ -9700,11 +9708,10 @@
     "md-slides": {
       "name": "md-slides",
       "type": "skill",
-      "description": "Converts a markdown deck (slides separated by `",
+      "description": "Converts a markdown deck (slides separated by horizontal-rule boundaries or by `# ` H1 headings, with optional HTML-comment `notes:` presenter-notes blocks) into a single-file HTML presentation with arrow-key / space / PgDn / PgUp / Home / End / P / Esc keyboard navigation, presenter mode (split view with current slide + speaker notes + clock + next-slide preview), URL-hash deep linking, and `@media print` page-per-slide for PDF export. Triggers when the markdown-html-orchestrator classifies an input as SLIDES, or when invoked directly via /cs-md-slides. Reuses md-document's markdown parser for slide-body rendering and reads design-system tokens via config_loader.py. Refuses if input has no clear slide boundaries, produces a 1-slide deck, or `--strict-notes` is on with under 50% notes coverage. Use after orchestrator routing.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/md-slides",
-      "description_ko": "마크다운 데크를 변환합니다(`로 구분된 슬라이드"
+      "path": "collected_assets/skills/md-slides"
     },
     "md-document": {
       "name": "md-document",
@@ -10961,7 +10968,7 @@
       "description_ko": ">-"
     },
     "pw": {
-      "name": "playwright-pro",
+      "name": "pw",
       "type": "skill",
       "description": "Production-grade Playwright testing toolkit. Use when the user mentions Playwright tests, end-to-end testing, browser automation, fixing flaky tests, test migration, CI/CD testing, or test suites. Generate tests, fix flaky failures, migrate from Cypress/Selenium, sync with TestRail, run on BrowserStack. 55 templates, 3 agents, smart reporting.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
@@ -11263,6 +11270,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/self-eval",
       "description_ko": "2축 채점 시스템을 사용하여 AI 작업 품질을 솔직하게 평가합니다. 공정한 평가를 받으려면 작업, 코드 검토 또는 작업 세션을 완료한 후 사용하세요. 점수 인플레이션을 감지하고 악마의 옹호 추론을 강제하며 세션 전반에 걸쳐 점수를 유지합니다."
+    },
+    "mcp-oauth-triage": {
+      "name": "mcp-oauth-triage",
+      "type": "skill",
+      "description": "Diagnose why an MCP connector that used to authenticate now fails: classify the fault as envelope, expiry, rotation clobber, binding, or poisoned cache before changing any code. Use when a token exchange succeeds but tool calls 401, when a connector silently degrades after a refresh, when multi-account setups return another account's data, or when re-authenticating fixes the problem only until the next refresh.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/mcp-oauth-triage"
     },
     "git-worktree-manager": {
       "name": "git-worktree-manager",
@@ -24996,6 +25011,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/expense-accounting"
     },
+    "comment-to-dm-cta": {
+      "name": "comment-to-dm-cta",
+      "type": "skill",
+      "description": "Plan the \\\"Comment KEYWORD\\\" CTA of an Instagram Reel (keyword, overlay, caption, DM copy), then, after explicit user confirmation, set up the matching auto-DM in CommentKeyword.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/comment-to-dm-cta"
+    },
     "talivia-agent-kit": {
       "name": "talivia-agent-kit",
       "type": "skill",
@@ -26161,6 +26184,14 @@
       "path": "collected_assets/skills/tdd-workflows-tdd-green",
       "description_ko": "TDD 친환경 단계에서 실패한 테스트를 통과하는 데 필요한 최소한의 코드를 구현합니다."
     },
+    "web-review": {
+      "name": "web-review",
+      "type": "skill",
+      "description": "Review a website or landing page and list what to fix, most important first: message, generic AI look, consistency, copy, mobile, accessibility, speed and missing states.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/web-review"
+    },
     "k6-load-testing": {
       "name": "k6-load-testing",
       "type": "skill",
@@ -26765,6 +26796,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/grok-build",
       "description_ko": "오케스트레이션 에이전트가 계획을 세우고, 작업 사양을 작성하고, 모든 차이점을 검토하고, 결과를 소유하는 동안 헤드리스로 실행되는 xAI의 Grok Build CLI에 잘 지정된 구현 작업을 위임합니다."
+    },
+    "bifrost-gateway": {
+      "name": "bifrost-gateway",
+      "type": "skill",
+      "description": "Run and configure Bifrost, the open-source AI gateway: one OpenAI-compatible API for 20+ LLM providers with fallbacks, virtual keys and budgets, semantic caching, observability and an MCP gateway.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/bifrost-gateway"
     },
     "neon-postgres": {
       "name": "neon-postgres",
@@ -29112,6 +29151,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/loki-mode"
+    },
+    "landing-page": {
+      "name": "landing-page",
+      "type": "skill",
+      "description": "Build landing, home and pricing pages that look like a real product instead of AI output: honest copy, one design system, checked on phone and desktop.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/landing-page"
     },
     "ddd-strategic-design": {
       "name": "ddd-strategic-design",
@@ -36587,6 +36634,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/electron-drive-skill"
     },
+    "web-design-system": {
+      "name": "web-design-system",
+      "type": "skill",
+      "description": "Choose a design direction for a website from real sites and write it down as a DESIGN.md: colors with roles, type, spacing, radius, shadows and components, in light and dark.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/web-design-system"
+    },
     "traderspy-market-screener": {
       "name": "traderspy-market-screener",
       "type": "skill",
@@ -43874,6 +43929,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/update-avm-modules-in-bicep",
       "description_ko": "AVM(Azure 검증 모듈)을 Bicep 파일의 최신 버전으로 업데이트합니다."
+    },
+    "pr-artifact-explorer": {
+      "name": "pr-artifact-explorer",
+      "type": "skill",
+      "description": "Open, share, and inspect GitHub PRs, issues, workflow runs (including scheduled, manual and other runs with no PR), Actions artifacts, and local or HTTP(S) web previews in the Artifact Explorer canvas, with viewport presets, zoom, screenshots, and recoverable download jobs.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/pr-artifact-explorer"
     },
     "java-development": {
       "name": "java-development",
@@ -57282,6 +57345,14 @@
       "path": "collected_assets/commands/cs-md-review.md",
       "description_ko": "마크다운 PR 작성 또는 코드 검토(``diff 블록 및 > [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT] 심각도 설명 포함)를 단일 파일 2열 HTML 검토로 변환합니다. 상단 점프 탐색은 심각도별로 모든 결과를 나열합니다. 왼쪽의 Diff, 오른쪽의 심각도 태그 주석 카드, 이름이 지정된 검토자 바닥글입니다. --reviewer(코드 검토에서는 사람의 이름을 지정해야 함)가 없거나 차이점이 없는 경우 거부합니다."
     },
+    "cs-access-review": {
+      "name": "cs-access-review",
+      "type": "command",
+      "description": "Full access-lifecycle pass - diff the HR roster against account exports, check the review campaign, and map every exception to the controls it breaks.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-access-review.md"
+    },
     "cs-spinning-up-deep-rl": {
       "name": "cs-spinning-up-deep-rl",
       "type": "command",
@@ -57764,7 +57835,7 @@
     "index": {
       "name": "index",
       "type": "command",
-      "description": "143 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
+      "description": "145 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/index.md"
@@ -57785,6 +57856,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-claude-coach.md",
       "description_ko": "클로드 코치 기술을 활성화하세요. 나머지 대화 동안 개인 클로드 파워 유저 코칭을 받으세요."
+    },
+    "cs-access-diff": {
+      "name": "cs-access-diff",
+      "type": "command",
+      "description": "Just the roster diff - find leavers with enabled accounts, logins after exit, orphaned and ownerless service accounts, unreviewed movers and inactive accounts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-access-diff.md"
     },
     "cs-market-research": {
       "name": "cs-market-research",
@@ -62721,6 +62800,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-claude-coach.md",
       "description_ko": "사용자가 더 나은 메시지를 전달하는 방법을 배우고 있거나 명시적으로 코칭을 활성화한 Claude.ai 또는 Claude Code 세션에서 사용자 메시지 후에 적극적으로 사용하세요. 클로드 코치 스킬의 기본 페르소나입니다. 놓친 고급 사용자 기회와 팁이 다음 시도에서 실제로 10배가 될 때 최대 하나의 ⚡ 팁을 표면화할 때마다 매 턴을 관찰합니다."
+    },
+    "cs-access-reviewer": {
+      "name": "cs-access-reviewer",
+      "type": "agent",
+      "description": "Use when someone is preparing or checking a user access review, needs to prove leavers lost their access, is chasing orphaned or ownerless service accounts, or must answer an auditor's access-control request for SOC 2, ISO 27001, PCI DSS, HIPAA or NIST 800-53. Diffs the HR roster against account exports, tests the review campaign, and maps every exception to the controls it breaks through three deterministic scripts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-access-reviewer.md"
     },
     "cs-reflect": {
       "name": "cs-reflect",
