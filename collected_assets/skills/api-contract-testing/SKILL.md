@@ -1,15 +1,14 @@
 ---
 name: api-contract-testing
-description: Design and review API contract tests across providers and consumers. Use for schema changes, compatibility regressions and client integration failures.
+description: "Design and review API contract tests across providers and consumers. Use for schema changes, compatibility regressions and client integration failures."
+category: development
+risk: safe
+source: self
+source_type: self
+date_added: "2026-10-13"
+tags: [api, contracts, testing, compatibility]
+tools: [claude, codex, cursor]
 license: MIT
-metadata:
-  aas-category: development
-  aas-risk: safe
-  aas-source: self
-  aas-source-type: self
-  aas-date-added: '2026-10-13'
-  aas-tags: '["api","contracts","testing","compatibility"]'
-  aas-tools: '["claude","codex","cursor"]'
 ---
 
 # API Contract Testing

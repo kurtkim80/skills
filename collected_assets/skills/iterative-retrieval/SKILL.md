@@ -1,36 +1,37 @@
 ---
 name: iterative-retrieval
-description: 서브에이전트 컨텍스트 문제를 해결하기 위한 점진적 컨텍스트 검색 개선 패턴
-origin: ECC
+description: Pattern for progressively refining context retrieval to solve the subagent context problem. Use when a subagent lacks the context it needs and retrieval must be refined across passes.
+metadata:
+  origin: ECC
 ---
 
-# 반복적 검색 패턴
+# Iterative Retrieval Pattern
 
-서브에이전트가 작업을 시작하기 전까지 필요한 컨텍스트를 알 수 없는 멀티 에이전트 워크플로우의 "컨텍스트 문제"를 해결합니다.
+Solves the "context problem" in multi-agent workflows where subagents don't know what context they need until they start working.
 
-## 활성화 시점
+## When to Activate
 
-- 사전에 예측할 수 없는 코드베이스 컨텍스트가 필요한 서브에이전트를 생성할 때
-- 컨텍스트가 점진적으로 개선되는 멀티 에이전트 워크플로우를 구축할 때
-- 에이전트 작업에서 "컨텍스트 초과" 또는 "컨텍스트 누락" 실패를 겪을 때
-- 코드 탐색을 위한 RAG 유사 검색 파이프라인을 설계할 때
-- 에이전트 오케스트레이션에서 토큰 사용량을 최적화할 때
+- Spawning subagents that need codebase context they cannot predict upfront
+- Building multi-agent workflows where context is progressively refined
+- Encountering "context too large" or "missing context" failures in agent tasks
+- Designing RAG-like retrieval pipelines for code exploration
+- Optimizing token usage in agent orchestration
 
-## 문제
+## The Problem
 
-서브에이전트는 제한된 컨텍스트로 생성됩니다. 다음을 알 수 없습니다:
-- 관련 코드가 포함된 파일
-- 코드베이스에 존재하는 패턴
-- 프로젝트에서 사용하는 용어
+Subagents are spawned with limited context. They don't know:
+- Which files contain relevant code
+- What patterns exist in the codebase
+- What terminology the project uses
 
-표준 접근법의 실패:
-- **모든 것을 전송**: 컨텍스트 제한 초과
-- **아무것도 전송하지 않음**: 에이전트가 중요한 정보를 갖지 못함
-- **필요한 것을 추측**: 종종 잘못됨
+Standard approaches fail:
+- **Send everything**: Exceeds context limits
+- **Send nothing**: Agent lacks critical information
+- **Guess what's needed**: Often wrong
 
-## 해결책: 반복적 검색
+## The Solution: Iterative Retrieval
 
-컨텍스트를 점진적으로 개선하는 4단계 루프:
+A 4-phase loop that progressively refines context:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -48,9 +49,9 @@ origin: ECC
 └─────────────────────────────────────────────┘
 ```
 
-### 1단계: DISPATCH
+### Phase 1: DISPATCH
 
-후보 파일을 수집하기 위한 초기 광범위 쿼리:
+Initial broad query to gather candidate files:
 
 ```javascript
 // Start with high-level intent
@@ -64,9 +65,9 @@ const initialQuery = {
 const candidates = await retrieveFiles(initialQuery);
 ```
 
-### 2단계: EVALUATE
+### Phase 2: EVALUATE
 
-검색된 콘텐츠의 관련성 평가:
+Assess retrieved content for relevance:
 
 ```javascript
 function evaluateRelevance(files, task) {
@@ -79,15 +80,15 @@ function evaluateRelevance(files, task) {
 }
 ```
 
-점수 기준:
-- **높음 (0.8-1.0)**: 대상 기능을 직접 구현
-- **중간 (0.5-0.7)**: 관련 패턴이나 타입을 포함
-- **낮음 (0.2-0.4)**: 간접적으로 관련
-- **없음 (0-0.2)**: 관련 없음, 제외
+Scoring criteria:
+- **High (0.8-1.0)**: Directly implements target functionality
+- **Medium (0.5-0.7)**: Contains related patterns or types
+- **Low (0.2-0.4)**: Tangentially related
+- **None (0-0.2)**: Not relevant, exclude
 
-### 3단계: REFINE
+### Phase 3: REFINE
 
-평가를 기반으로 검색 기준 업데이트:
+Update search criteria based on evaluation:
 
 ```javascript
 function refineQuery(evaluation, previousQuery) {
@@ -112,9 +113,9 @@ function refineQuery(evaluation, previousQuery) {
 }
 ```
 
-### 4단계: LOOP
+### Phase 4: LOOP
 
-개선된 기준으로 반복 (최대 3회):
+Repeat with refined criteria (max 3 cycles):
 
 ```javascript
 async function iterativeRetrieve(task, maxCycles = 3) {
@@ -140,9 +141,9 @@ async function iterativeRetrieve(task, maxCycles = 3) {
 }
 ```
 
-## 실용적인 예시
+## Practical Examples
 
-### 예시 1: 버그 수정 컨텍스트
+### Example 1: Bug Fix Context
 
 ```
 Task: "Fix the authentication token expiry bug"
@@ -160,7 +161,7 @@ Cycle 2:
 Result: auth.ts, tokens.ts, session-manager.ts, jwt-utils.ts
 ```
 
-### 예시 2: 기능 구현
+### Example 2: Feature Implementation
 
 ```
 Task: "Add rate limiting to API endpoints"
@@ -183,9 +184,9 @@ Cycle 3:
 Result: throttle.ts, middleware/index.ts, router-setup.ts
 ```
 
-## 에이전트와의 통합
+## Integration with Agents
 
-에이전트 프롬프트에서 사용:
+Use in agent prompts:
 
 ```markdown
 When retrieving context for this task:
@@ -196,16 +197,16 @@ When retrieving context for this task:
 5. Return files with relevance >= 0.7
 ```
 
-## 모범 사례
+## Best Practices
 
-1. **광범위하게 시작하여 점진적으로 좁히기** - 초기 쿼리를 과도하게 지정하지 않기
-2. **코드베이스 용어 학습** - 첫 번째 사이클에서 주로 네이밍 컨벤션이 드러남
-3. **누락된 것 추적** - 명시적 격차 식별이 개선을 주도
-4. **"충분히 좋은" 수준에서 중단** - 관련성 높은 파일 3개가 보통 수준의 파일 10개보다 나음
-5. **자신 있게 제외** - 관련성 낮은 파일은 관련성이 높아지지 않음
+1. **Start broad, narrow progressively** - Don't over-specify initial queries
+2. **Learn codebase terminology** - First cycle often reveals naming conventions
+3. **Track what's missing** - Explicit gap identification drives refinement
+4. **Stop at "good enough"** - 3 high-relevance files beats 10 mediocre ones
+5. **Exclude confidently** - Low-relevance files won't become relevant
 
-## 관련 항목
+## Related
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 서브에이전트 오케스트레이션 섹션
-- `continuous-learning` 스킬 - 시간이 지남에 따라 개선되는 패턴
-- `~/.claude/agents/`의 에이전트 정의
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Subagent orchestration section
+- `continuous-learning` skill - For patterns that improve over time
+- Agent definitions bundled with ECC (manual install path: `agents/`)

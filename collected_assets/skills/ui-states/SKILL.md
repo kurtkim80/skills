@@ -1,18 +1,17 @@
 ---
 name: ui-states
-description: 'Design and build the UI states agents forget: first use, empty, loading, error, offline, no results, long content, permission denied and success.'
+description: "Design and build the UI states agents forget: first use, empty, loading, error, offline, no results, long content, permission denied and success."
+category: frontend
+risk: safe
+source: https://github.com/uxkin/agent/tree/main/.agents/skills/ui-states
+source_repo: uxkin/agent
+source_type: official
+date_added: "2026-10-12"
+author: UXKIN
+tags: [ui, ux, edge-cases, states, frontend, quality]
+tools: [claude, codex, cursor, copilot, gemini]
 license: MIT
-metadata:
-  aas-category: frontend
-  aas-risk: safe
-  aas-source: https://github.com/uxkin/agent/tree/main/.agents/skills/ui-states
-  aas-source-repo: uxkin/agent
-  aas-source-type: official
-  aas-date-added: '2026-10-12'
-  aas-author: UXKIN
-  aas-tags: '["ui","ux","edge-cases","states","frontend","quality"]'
-  aas-tools: '["claude","codex","cursor","copilot","gemini"]'
-  aas-license-source: https://github.com/uxkin/agent/blob/main/LICENSE
+license_source: https://github.com/uxkin/agent/blob/main/LICENSE
 ---
 
 # UI states · by UXKIN

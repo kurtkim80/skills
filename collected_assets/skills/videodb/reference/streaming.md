@@ -1,16 +1,16 @@
-# ストリーミングと再生
+# Streaming & Playback
 
-VideoDBはオンデマンドでストリーミングを生成し、任意の標準ビデオプレーヤーで即時再生できるHLS互換のURLを返す。レンダリング時間やエクスポート待ちは不要——編集、検索、合成されたコンテンツは即座にストリーミングできる。
+VideoDB generates streams on-demand, returning HLS-compatible URLs that play instantly in any standard video player. No render times or export waits - edits, searches, and compositions stream immediately.
 
-## 前提条件
+## Prerequisites
 
-ビデオはストリーミングを生成するために**コレクションにアップロードされている必要がある**。検索ベースのストリーミングには、ビデオも**インデックス化されている必要がある**（音声単語および/またはシーン）。インデックス作成の詳細については [search.md](search.md) を参照。
+Videos **must be uploaded** to a collection before streams can be generated. For search-based streams, the video must also be **indexed** (spoken words and/or scenes). See [search.md](search.md) for indexing details.
 
-## コアコンセプト
+## Core Concepts
 
-### ストリーミング生成
+### Stream Generation
 
-VideoDBのすべてのビデオ、検索結果、タイムラインは**ストリームURL**を生成できる。このURLはオンデマンドでコンパイルされるHLS（HTTPライブストリーミング）マニフェストを指す。
+Every video, search result, and timeline in VideoDB can produce a **stream URL**. This URL points to an HLS (HTTP Live Streaming) manifest that is compiled on demand.
 
 ```python
 # From a video
@@ -23,9 +23,9 @@ stream_url = timeline.generate_stream()
 stream_url = results.compile()
 ```
 
-## 単一ビデオのストリーミング
+## Streaming a Single Video
 
-### 基本再生
+### Basic Playback
 
 ```python
 import videodb
@@ -42,7 +42,7 @@ print(f"Stream: {stream_url}")
 video.play()
 ```
 
-### 字幕付き
+### With Subtitles
 
 ```python
 # Index and add subtitles first
@@ -53,9 +53,9 @@ stream_url = video.add_subtitle()
 print(f"Subtitled stream: {stream_url}")
 ```
 
-### 特定のセグメント
+### Specific Segments
 
-タイムスタンプ範囲のタイムラインを渡すことでビデオの一部のみをストリーミングする：
+Stream only a portion of a video by passing a timeline of timestamp ranges:
 
 ```python
 # Stream seconds 10-30 and 60-90
@@ -63,9 +63,9 @@ stream_url = video.generate_stream(timeline=[(10, 30), (60, 90)])
 print(f"Segment stream: {stream_url}")
 ```
 
-## タイムラインコンポジションのストリーミング
+## Streaming Timeline Compositions
 
-マルチアセットコンポジションを構築してリアルタイムでストリーミングする：
+Build a multi-asset composition and stream it in real time:
 
 ```python
 import videodb
@@ -98,13 +98,13 @@ stream_url = timeline.generate_stream()
 print(f"Composed stream: {stream_url}")
 ```
 
-**重要な注意事項：** `add_inline()` は `VideoAsset` のみを受け入れる。`AudioAsset`、`ImageAsset`、`TextAsset` には `add_overlay()` を使用する。
+**Important:** `add_inline()` only accepts `VideoAsset`. Use `add_overlay()` for `AudioAsset`, `ImageAsset`, and `TextAsset`.
 
-詳細なタイムライン編集については [editor.md](editor.md) を参照。
+For detailed timeline editing, see [editor.md](editor.md).
 
-## 検索結果のストリーミング
+## Streaming Search Results
 
-すべての一致するクリップを含む単一のストリームに検索結果をコンパイルする：
+Compile search results into a single stream of all matching segments:
 
 ```python
 from videodb import SearchType
@@ -127,7 +127,7 @@ except InvalidRequestError as exc:
         raise
 ```
 
-### 個別の検索結果をストリーミングする
+### Stream Individual Search Hits
 
 ```python
 from videodb.exceptions import InvalidRequestError
@@ -144,9 +144,9 @@ except InvalidRequestError as exc:
         raise
 ```
 
-## オーディオ再生
+## Audio Playback
 
-オーディオコンテンツの署名付き再生URLを取得する：
+Get a signed playback URL for audio content:
 
 ```python
 audio = coll.get_audio(audio_id)
@@ -154,11 +154,11 @@ playback_url = audio.generate_url()
 print(f"Audio URL: {playback_url}")
 ```
 
-## 完全なワークフロー例
+## Complete Workflow Examples
 
-### 検索からストリーミングへのパイプライン
+### Search-to-Stream Pipeline
 
-単一のワークフローで検索、タイムラインコンポジション、ストリーミングを組み合わせる：
+Combine search, timeline composition, and streaming in one workflow:
 
 ```python
 import videodb
@@ -208,9 +208,9 @@ stream_url = timeline.generate_stream()
 print(f"Dynamic compilation: {stream_url}")
 ```
 
-### マルチビデオストリーム
+### Multi-Video Stream
 
-異なるビデオからのクリップを単一のストリームに組み合わせる：
+Combine clips from different videos into a single stream:
 
 ```python
 import videodb
@@ -236,9 +236,9 @@ stream_url = timeline.generate_stream()
 print(f"Multi-video stream: {stream_url}")
 ```
 
-### 条件付きストリーミングアセンブリ
+### Conditional Stream Assembly
 
-検索結果の可用性に基づいてストリームを動的に構築する：
+Build a stream dynamically based on search availability:
 
 ```python
 import videodb
@@ -292,9 +292,9 @@ else:
     print(f"Full video stream: {stream_url}")
 ```
 
-### ライブイベントのリキャップ
+### Live Event Recap
 
-イベント録音を複数のセクションを持つストリーミング可能なリキャップに処理する：
+Process an event recording into a streamable recap with multiple sections:
 
 ```python
 import videodb
@@ -392,15 +392,15 @@ stream_url = timeline.generate_stream()
 print(f"Event recap: {stream_url}")
 ```
 
-***
+---
 
-## ヒント
+## Tips
 
-* **HLS互換性**：ストリームURLはHLSマニフェスト（`.m3u8`）を返す。Safariでネイティブに動作し、他のブラウザではhls.jsや類似のライブラリで動作する。
-* **オンデマンドコンパイル**：ストリーミングはリクエスト時にサーバーサイドでコンパイルされる。初回再生には短いコンパイル遅延が発生する場合がある；同じコンポジションの後続再生はキャッシュされる。
-* **キャッシング**：`video.generate_stream()`（引数なし）の2回目の呼び出しは再コンパイルせずにキャッシュされたストリームURLを返す。
-* **セグメントストリーム**：`video.generate_stream(timeline=[(start, end)])` は完全な `Timeline` オブジェクトを構築せずに特定のクリップをストリーミングする最速の方法。
-* **インラインとオーバーレイ**：`add_inline()` は `VideoAsset` のみを受け入れ、アセットをメイントラックに順番に配置する。`add_overlay()` は `AudioAsset`、`ImageAsset`、`TextAsset` を受け入れ、指定された開始時間にそれらを上にオーバーレイする。
-* **TextStyleのデフォルト**：`TextStyle` のデフォルトは `font='Sans'`、`fontcolor='black'`。テキストの背景色には `boxcolor`（`bgcolor` ではない）を使用する。
-* **生成との組み合わせ**：`coll.generate_music(prompt, duration)` と `coll.generate_image(prompt, aspect_ratio)` を使用してタイムラインコンポジションのアセットを作成する。
-* **再生**：`.play()` はデフォルトのシステムブラウザでストリームURLを開く。プログラム的な使用には直接URLの文字列を処理する。
+- **HLS compatibility**: Stream URLs return HLS manifests (`.m3u8`). They work in Safari natively, and in other browsers via hls.js or similar libraries.
+- **On-demand compilation**: Streams are compiled server-side when requested. The first play may have a brief compilation delay; subsequent plays of the same composition are cached.
+- **Caching**: Calling `video.generate_stream()` a second time without arguments returns the cached stream URL rather than recompiling.
+- **Segment streams**: `video.generate_stream(timeline=[(start, end)])` is the fastest way to stream a specific clip without building a full `Timeline` object.
+- **Inline vs overlay**: `add_inline()` only accepts `VideoAsset` and places assets sequentially on the main track. `add_overlay()` accepts `AudioAsset`, `ImageAsset`, and `TextAsset` and layers them on top at a given start time.
+- **TextStyle defaults**: `TextStyle` defaults to `font='Sans'`, `fontcolor='black'`. Use `boxcolor` (not `bgcolor`) for background color on text.
+- **Combine with generation**: Use `coll.generate_music(prompt, duration)` and `coll.generate_image(prompt, aspect_ratio)` to create assets for timeline compositions.
+- **Playback**: `.play()` opens the stream URL in the default system browser. For programmatic use, work with the URL string directly.

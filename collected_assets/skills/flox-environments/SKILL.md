@@ -1,84 +1,85 @@
 ---
 name: flox-environments
-description: "Floxで再現可能なクロスプラットフォーム開発環境を作成します — Nixに基づく宣言的な環境マネージャー。次の場合は必ずこのスキルを使用してください: システムレベルの依存関係（コンパイラー、データベース、openssl・libvips・BLAS・LAPACKなどのネイティブライブラリー）を持つプロジェクトを設定する場合; Python、Node.js、Rust、Go、C/C++、Java、Ruby、Elixir、PHP、その他の言語の再現可能なツールチェーンを設定する場合; macOSとLinux間で同一に動作する環境を管理する場合; チームのために正確なパッケージバージョンを固定する場合; ローカルサービス（PostgreSQL、Redis、Kafka）を開発ツールと並行して実行する場合; 単一コマンドで新しい開発者をオンボードする場合; または「自分のマシンでは動く」問題を解決する場合。AI支援やバイブコーディングに特に価値があります — Floxはエージェントがsudoなし、システム汚染なし、サンドボックス制限なしにプロジェクトスコープの環境にツールをインストールでき、結果の環境はリポジトリにコミットされるため、誰でも即座に再現できます。ユーザーがFloxに言及しない場合でも、再現可能、宣言的、クロスプラットフォームな開発環境とシステムパッケージが必要と説明した場合はこのスキルを使用してください。また、ユーザーが.flox/、manifest.toml、flox activate、またはFloxHubに言及した場合も使用してください。"
-origin: Flox
+description: "Create reproducible, cross-platform (macOS/Linux) development environments with Flox, a declarative Nix-based environment manager. Use when setting up project toolchains, installing system-level dependencies (compilers, databases, native libs), pinning exact package versions for a team, onboarding developers, running local services (PostgreSQL, Redis, Kafka), or solving 'works on my machine' problems — including agent/vibe-coding setups that need project-scoped tools without sudo. Also use when the user mentions .flox/, manifest.toml, flox activate, or FloxHub."
+metadata:
+  origin: Flox
 ---
 
-# Flox環境
+# Flox Environments
 
-Floxは単一のTOMLマニフェストで定義される再現可能な開発環境を作成します。チームのすべての開発者が同一のパッケージ、ツール、設定を取得できます — コンテナーやVMなしにmacOSとLinux間で同一です。150,000以上のパッケージにアクセスできるNixの上に構築されています。
+Flox creates reproducible development environments defined in a single TOML manifest. Every developer on the team gets identical packages, tools, and configuration — across macOS and Linux — without containers or VMs. Built on Nix with access to over 150,000 packages.
 
-## アクティベートするタイミング
+## When to Activate
 
-ユーザーが環境管理の問題を抱えている場合、Floxについて言及していなくても、このスキルを使用します。Floxが適切なツールとなるのは:
+Use this skill when the user has an environment management problem — even if they haven't mentioned Flox. Flox is the right tool when:
 
-- プロジェクトが**システムレベルのパッケージ**（コンパイラー、データベース、CLIツール）と言語固有の依存関係を必要とする場合
-- **再現性が重要な場合** — チームメイトのマシン、CI、または新しいラップトップでも同一に動作する必要がある場合
-- ユーザーが**複数のツールの共存**を必要とする場合 — 例えばPython 3.11 + PostgreSQL 16 + Redis + Node.jsを一つの環境で
-- **クロスプラットフォームサポート**が必要な場合（同一設定からmacOSとLinux）
-- **AIエージェントがツールをインストールする必要がある場合** — Floxはエージェントがsudoなし、システム汚染なし、サンドボックス制限なしにプロジェクトスコープの環境にパッケージを追加できます
+- The project needs **system-level packages** (compilers, databases, CLI tools) alongside language-specific dependencies
+- **Reproducibility matters** — the setup should work identically on a teammate's machine, in CI, or on a fresh laptop
+- The user needs **multiple tools to coexist** — e.g., Python 3.11 + PostgreSQL 16 + Redis + Node.js in one environment
+- **Cross-platform support** is needed (macOS and Linux from the same config)
+- **AI agents need to install tools** — Flox lets agents add packages to a project-scoped environment without sudo, system pollution, or sandbox restrictions
 
-ユーザーがシステム依存関係のない単一の言語ランタイムだけが必要な場合、標準ツール（nvm、pyenv、rustup単独）で十分かもしれません。完全なOSレベルの分離が必要な場合、コンテナーがより適切かもしれません。Floxはその中間に位置します: コンテナーのオーバーヘッドなしの宣言的で再現可能な環境。
+If the user just needs a single language runtime with no system dependencies, standard tooling (nvm, pyenv, rustup alone) may suffice. If they need full OS-level isolation, containers might be more appropriate. Flox sits in the sweet spot: declarative, reproducible environments without container overhead.
 
-**前提条件:** まずFloxをインストールする必要があります — macOS、Linux、Dockerについては[flox.dev/docs](https://flox.dev/docs/install-flox/install/)を参照してください。
+**Prerequisite:** Flox must be installed first — see [flox.dev/docs](https://flox.dev/docs/install-flox/install/) for macOS, Linux, and Docker.
 
-## コアコンセプト
+## Core Concepts
 
-Flox環境は`.flox/env/manifest.toml`で定義され、`flox activate`でアクティベートされます。マニフェストはパッケージ、環境変数、セットアップフック、シェル設定を宣言します — 環境をどこでも再現するために必要なすべてのものです。
+Flox environments are defined in `.flox/env/manifest.toml` and activated with `flox activate`. The manifest declares packages, environment variables, setup hooks, and shell configuration — everything needed to reproduce the environment anywhere.
 
-**主要なパス:**
-- `.flox/env/manifest.toml` — 環境定義（コミットする）
-- `$FLOX_ENV` — インストールされたパッケージへのランタイムパス（`/usr`に似ている — `bin/`、`lib/`、`include/`を含む）
-- `$FLOX_ENV_CACHE` — キャッシュ、venv、データの永続ローカルストレージ（リビルド後も存続）
-- `$FLOX_ENV_PROJECT` — プロジェクトのルートディレクトリ（`.flox/`が存在する場所）
+**Key paths:**
+- `.flox/env/manifest.toml` — Environment definition (commit this)
+- `$FLOX_ENV` — Runtime path to installed packages (like `/usr` — contains `bin/`, `lib/`, `include/`)
+- `$FLOX_ENV_CACHE` — Persistent local storage for caches, venvs, data (survives rebuilds)
+- `$FLOX_ENV_PROJECT` — Project root directory (where `.flox/` lives)
 
-## 必須コマンド
+## Essential Commands
 
 ```bash
-flox init                       # 新しい環境を作成
-flox search <package> [--all]   # パッケージを検索
-flox show <package>             # 利用可能なバージョンを表示
-flox install <package>          # パッケージを追加
-flox list                       # インストール済みパッケージを一覧表示
-flox activate                   # 環境に入る
-flox activate -- <cmd>          # サブシェルなしで環境内でコマンドを実行
-flox edit                       # マニフェストをインタラクティブに編集
+flox init                       # Create new environment
+flox search <package> [--all]   # Search for packages
+flox show <package>             # Show available versions
+flox install <package>          # Add a package
+flox list                       # List installed packages
+flox activate                   # Enter environment
+flox activate -- <cmd>          # Run a command in the environment without a subshell
+flox edit                       # Edit manifest interactively
 ```
 
-## マニフェスト構造
+## Manifest Structure
 
 ```toml
 # .flox/env/manifest.toml
 
 [install]
-# インストールするパッケージ — 環境の核心
+# Packages to install — the core of the environment
 ripgrep.pkg-path = "ripgrep"
 jq.pkg-path = "jq"
 
 [vars]
-# 静的な環境変数
+# Static environment variables
 DATABASE_URL = "postgres://localhost:5432/myapp"
 
 [hook]
-# 非インタラクティブなセットアップスクリプト（すべてのアクティベーション時に実行）
+# Non-interactive setup scripts (run every activation)
 on-activate = """
   echo "Environment ready"
 """
 
 [profile]
-# シェル関数とエイリアス（インタラクティブシェルで利用可能）
+# Shell functions and aliases (available in interactive shell)
 common = """
   alias dev="npm run dev"
 """
 
 [options]
-# サポートされているプラットフォーム
+# Supported platforms
 systems = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
 ```
 
-## パッケージインストールパターン
+## Package Installation Patterns
 
-### 基本インストール
+### Basic Installation
 
 ```toml
 [install]
@@ -87,37 +88,37 @@ python.pkg-path = "python311"
 rustup.pkg-path = "rustup"
 ```
 
-### バージョン固定
+### Version Pinning
 
 ```toml
 [install]
 nodejs.pkg-path = "nodejs"
-nodejs.version = "^20.0"          # semverレンジ: 最新の20.x
+nodejs.version = "^20.0"          # Semver range: latest 20.x
 
 postgres.pkg-path = "postgresql"
-postgres.version = "16.2"         # 正確なバージョン
+postgres.version = "16.2"         # Exact version
 ```
 
-### プラットフォーム固有のパッケージ
+### Platform-Specific Packages
 
 ```toml
 [install]
-# Linuxのみのツール
+# Linux-only tools
 valgrind.pkg-path = "valgrind"
 valgrind.systems = ["x86_64-linux", "aarch64-linux"]
 
-# macOSフレームワーク
+# macOS frameworks
 Security.pkg-path = "darwin.apple_sdk.frameworks.Security"
 Security.systems = ["x86_64-darwin", "aarch64-darwin"]
 
-# macOSでのGNUツール（BSDのデフォルトが異なる場合）
+# GNU tools on macOS (where BSD defaults differ)
 coreutils.pkg-path = "coreutils"
 coreutils.systems = ["x86_64-darwin", "aarch64-darwin"]
 ```
 
-### パッケージ競合の解消
+### Resolving Package Conflicts
 
-2つのパッケージが同じバイナリをインストールする場合、`priority`を使用します（数値が低い方が優先）:
+When two packages install the same binary, use `priority` (lower number wins):
 
 ```toml
 [install]
@@ -125,10 +126,10 @@ gcc.pkg-path = "gcc12"
 gcc.priority = 3
 
 clang.pkg-path = "clang_18"
-clang.priority = 5               # gccがファイル競合を勝つ
+clang.priority = 5               # gcc wins file conflicts
 ```
 
-一緒にバージョンを解決する必要があるパッケージをグループ化するには`pkg-group`を使用します:
+Use `pkg-group` to group packages that should resolve versions together:
 
 ```toml
 [install]
@@ -136,12 +137,12 @@ python.pkg-path = "python311"
 python.pkg-group = "python-stack"
 
 pip.pkg-path = "python311Packages.pip"
-pip.pkg-group = "python-stack"    # pythonと一緒に解決
+pip.pkg-group = "python-stack"    # Resolves together with python
 ```
 
-## 言語固有のレシピ
+## Language-Specific Recipes
 
-### uvを使ったPython
+### Python with uv
 
 ```toml
 [install]
@@ -227,7 +228,7 @@ common = """
 gcc.pkg-path = "gcc13"
 gcc.pkg-group = "compilers"
 
-# 重要: gcc単体ではlibstdc++ヘッダーを公開しません — gcc-unwrappedが必要
+# IMPORTANT: gcc alone doesn't expose libstdc++ headers — you need gcc-unwrapped
 gcc-unwrapped.pkg-path = "gcc-unwrapped"
 gcc-unwrapped.pkg-group = "libraries"
 
@@ -241,11 +242,11 @@ gdb.pkg-path = "gdb"
 gdb.systems = ["x86_64-linux", "aarch64-linux"]
 ```
 
-## フックとプロファイル
+## Hooks and Profile
 
-### フック — 非インタラクティブなセットアップ
+### Hooks — Non-Interactive Setup
 
-フックはすべてのアクティベーション時に実行されます。速くべきで冪等性を保ちます。原則として: **自動的に実行すべきものは`[hook]`に; ユーザーが入力できるべきものは`[profile]`に。**
+Hooks run on every activation. Keep them fast and idempotent. Rule of thumb: **if it should happen automatically, put it in `[hook]`; if the user should be able to type it, put it in `[profile]`.**
 
 ```toml
 [hook]
@@ -259,9 +260,9 @@ on-activate = """
 """
 ```
 
-### プロファイル — インタラクティブシェル設定
+### Profile — Interactive Shell Configuration
 
-プロファイルコードはユーザーのシェルセッションで利用可能です。
+Profile code is available in the user's shell session.
 
 ```toml
 [profile]
@@ -271,24 +272,24 @@ common = """
 """
 ```
 
-## アンチパターン
+## Anti-Patterns
 
-### 絶対パス
+### Absolute Paths
 
 ```toml
-# 悪い例 — 他のマシンで壊れる
+# BAD — breaks on other machines
 [vars]
 PROJECT_DIR = "/home/alice/projects/myapp"
 
-# 良い例 — Flox環境変数を使用
+# GOOD — use Flox environment variables
 [vars]
 PROJECT_DIR = "$FLOX_ENV_PROJECT"
 ```
 
-### フック内でのexitの使用
+### Using exit in Hooks
 
 ```toml
-# 悪い例 — シェルを終了させる
+# BAD — kills the shell
 [hook]
 on-activate = """
   if [ ! -f config.json ]; then
@@ -297,7 +298,7 @@ on-activate = """
   fi
 """
 
-# 良い例 — exitではなくreturnを使用
+# GOOD — return from hook, don't exit
 [hook]
 on-activate = """
   if [ ! -f config.json ]; then
@@ -307,29 +308,29 @@ on-activate = """
 """
 ```
 
-### マニフェストへのシークレットの保存
+### Storing Secrets in Manifest
 
 ```toml
-# 悪い例 — マニフェストはgitにコミットされる
+# BAD — manifest is committed to git
 [vars]
 API_KEY = "<set-at-runtime>"
 
-# 良い例 — 外部設定を参照するか、ランタイムで渡す
-# 使用方法: API_KEY="<your-api-key>" flox activate
+# GOOD — reference external config or pass at runtime
+# Use: API_KEY="<your-api-key>" flox activate
 [vars]
 API_KEY = "${API_KEY:-}"
 ```
 
-### 冪等性ガードなしの遅いフック
+### Slow Hooks Without Idempotency Guards
 
 ```toml
-# 悪い例 — すべてのアクティベーション時に再インストールする
+# BAD — reinstalls every activation
 [hook]
 on-activate = """
   pip install -r requirements.txt
 """
 
-# 良い例 — すでにインストール済みの場合はスキップ
+# GOOD — skip if already installed
 [hook]
 on-activate = """
   if [ ! -f "$FLOX_ENV_CACHE/.deps_installed" ]; then
@@ -339,25 +340,25 @@ on-activate = """
 """
 ```
 
-### フックへのユーザーコマンドの配置
+### Putting User Commands in Hooks
 
 ```toml
-# 悪い例 — フック関数はインタラクティブシェルで利用できない
+# BAD — hook functions aren't available in the interactive shell
 [hook]
 on-activate = """
   deploy() { kubectl apply -f k8s/; }
 """
 
-# 良い例 — ユーザーが呼び出せる関数には[profile]を使用
+# GOOD — use [profile] for user-invokable functions
 [profile]
 common = """
   deploy() { kubectl apply -f k8s/; }
 """
 ```
 
-## フルスタックの例
+## Full-Stack Example
 
-PostgreSQLを使用したPython APIの完全な環境:
+A complete environment for a Python API with PostgreSQL:
 
 ```toml
 [install]
@@ -407,90 +408,88 @@ redis.command = "redis-server --port 6379 --daemonize no"
 systems = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
 ```
 
-サービス付きでアクティベート: `flox activate --start-services`
+Activate with services: `flox activate --start-services`
 
-## 環境の共有
+## Environment Sharing
 
-Flox環境はgitネイティブです。`.flox/`ディレクトリをコミットすれば、すべての共同作業者が同じ環境を取得できます:
+Flox environments are git-native. Commit the `.flox/` directory and every collaborator gets the same environment:
 
 ```bash
 git add .flox/
 git commit -m "Add Flox environment"
-# チームメイトは以下を実行するだけ:
+# Teammates just run:
 git clone <repo> && cd <repo> && flox activate
 ```
 
-プロジェクト間で再利用可能なベース環境には、FloxHubにプッシュします:
+For reusable base environments across projects, push to FloxHub:
 
 ```bash
-flox push                         # FloxHubに環境をプッシュ
-flox activate -r owner/env-name   # どこでもリモート環境をアクティベート
+flox push                         # Push environment to FloxHub
+flox activate -r owner/env-name   # Activate remote environment anywhere
 ```
 
-`[include]`で環境を合成します:
+Compose environments with `[include]`:
 
 ```toml
 [include]
 base.floxhub = "myorg/python-base"
 
 [install]
-# ベースの上にプロジェクト固有の追加
+# Project-specific additions on top of base
 fastapi.pkg-path = "python311Packages.fastapi"
 ```
 
-## AI支援とバイブコーディング
+## AI-Assisted and Vibe Coding
 
-FloxはAI支援開発とバイブコーディングワークフローに理想的です。AIエージェントが現在の環境で利用できないツール（コンパイラー、データベース、リンター、CLIユーティリティ）を必要とする場合、sudoアクセス不要、システムパッケージの汚染なし、サンドボックス制限なしにプロジェクトのFloxマニフェストに追加できます。
+Flox is ideal for AI-assisted development and vibe coding workflows. When an AI agent needs a tool that isn't available in the current environment — a compiler, a database, a linter, a CLI utility — it can add it to the project's Flox manifest without requiring sudo access, polluting system packages, or hitting sandbox restrictions.
 
-**エージェントにとってこれが重要な理由:**
-- **sudo不要** — `flox install`は完全にユーザースペースで動作するため、エージェントは昇格した権限なしにパッケージを追加できる
-- **プロジェクトスコープ** — パッケージはグローバルにではなく、プロジェクト環境にのみインストールされるため、異なるプロジェクトが競合なく異なるバージョンを持てる
-- **サンドボックスフレンドリー** — サンドボックスまたは制限された環境で実行されるエージェントも、Floxを通じて必要なツールをインストールできる
-- **元に戻せる** — すべての変更は`manifest.toml`に記録されるため、不要なパッケージはシステム残留なしにクリーンに削除できる
-- **再現可能** — エージェントが環境をセットアップすると、その正確なセットアップがgitにコミットされ、誰でも使用できる
+**Why this matters for agents:**
+- **No sudo required** — `flox install` works entirely in user space, so agents can add packages without elevated permissions
+- **Project-scoped** — packages are installed into the project environment only, not globally, so different projects can have different versions without conflict
+- **Sandbox-friendly** — agents running in sandboxed or restricted environments can still install the tools they need through Flox
+- **Reversible** — every change is captured in `manifest.toml`, so unwanted packages can be removed cleanly with no system residue
+- **Reproducible** — when an agent sets up an environment, that exact setup is committed to git and works for everyone
 
-**エージェントのワークフローパターン:**
+**Agent workflow pattern:**
 
 ```bash
-# エージェントがツールが必要だと発見する（例: JSON処理のためのjq）
-flox search jq                    # パッケージが存在することを確認
-flox install jq                   # プロジェクト環境にインストール
+# Agent discovers it needs a tool (e.g., jq for JSON processing)
+flox search jq                    # Verify the package exists
+flox install jq                   # Install into project environment
 
-# またはより詳細な制御のために、マニフェストを直接編集する
+# Or for more control, edit the manifest directly
 tmp_manifest="$(mktemp)"
 flox list -c > "$tmp_manifest"
-# [install]セクションにパッケージを追加し、適用する
+# Add the package to [install] section, then apply
 flox edit -f "$tmp_manifest"
 
-# ツールを利用可能にしてコマンドを実行
+# Run a command with the tool available
 flox activate -- jq '.results[]' data.json
 ```
 
-これにより、FloxはClaude Codeや他のAIエージェントがプロジェクトツールをその場でブートストラップする必要があるワークフローに自然に適合します。
+This makes Flox a natural fit for any workflow where Claude Code or other AI agents need to bootstrap project tooling on the fly.
 
-## デバッグ
+## Debugging
 
 ```bash
-flox list -c                      # 生のマニフェストを表示
-flox activate -- which python     # どのバイナリが解決されるか確認
-flox activate -- env | grep FLOX  # Flox環境変数を確認
-flox search <package> --all       # より広いパッケージ検索（大文字小文字を区別）
+flox list -c                      # Show raw manifest
+flox activate -- which python     # Check which binary resolves
+flox activate -- env | grep FLOX  # See Flox environment variables
+flox search <package> --all       # Broader package search (case-sensitive)
 ```
 
-**一般的な問題:**
-- **パッケージが見つからない:** 検索は大文字小文字を区別します — `flox search --all`を試してください
-- **パッケージ間のファイル競合:** 優先されるべきパッケージに`priority`を追加する
-- **フックの失敗:** `exit`ではなく`return`を使用; `${FLOX_ENV_CACHE:-}`でガードする
-- **古い依存関係:** `$FLOX_ENV_CACHE/.deps_installed`フラグファイルを削除する
+**Common issues:**
+- **Package not found:** Search is case-sensitive — try `flox search --all`
+- **File conflicts between packages:** Add `priority` to the package that should win
+- **Hook failures:** Use `return` not `exit`; guard with `${FLOX_ENV_CACHE:-}`
+- **Stale dependencies:** Delete the `$FLOX_ENV_CACHE/.deps_installed` flag file
 
-## 関連スキル
+## Related Skills
 
-以下のスキルは、より深い統合のために[Flox Claude Codeプラグイン](https://github.com/flox/flox-agentic)の一部として利用可能です:
+The following skills are available as part of the [Flox Claude Code plugin](https://github.com/flox/flox-skills) for deeper integration:
 
-- **flox-services** — サービス管理、データベースセットアップ、バックグラウンドプロセス
-- **flox-builds** — Floxによる再現可能なビルドとパッケージング
-- **flox-containers** — Flox環境からDocker/OCIコンテナーを作成
-- **flox-sharing** — 環境の合成、リモート環境、チームパターン
-- **flox-cuda** — CUDAとGPU開発環境
+- **flox** — Environments, services and databases, builds and packaging, containers, FloxHub publishing, environment composition and sharing, and CUDA/GPU development
+- **floxify** — Onboard an existing repo to Flox by detecting its runtimes, services, and build tools
+- **flox-debug** — Diagnose catalog resolution problems when a package won't resolve to the expected version
 
-詳細とインストールは[flox.dev/docs](https://flox.dev/docs/install-flox/install/)で。
+Learn more and install at [flox.dev/docs](https://flox.dev/docs/install-flox/install/)

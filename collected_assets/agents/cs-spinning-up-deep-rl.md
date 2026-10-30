@@ -1,12 +1,16 @@
 ---
-name: cs-spinning-up-deep-rl
-description: Answers from the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Loads the master frameworks first and reads a single chapter file on demand rather than the whole source. Refuses to answer beyond what the source covers.
-domain: engineering
-model: opus
-tools: [Read, Grep, Glob]
+title: "Spinning Up in Deep RL — Knowledge Agent — AI Coding Agent & Codex Skill"
+description: "Answers from the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Loads the master frameworks first and reads a single. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Spinning Up in Deep RL — Knowledge Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/spinning-up-deep-rl/agents/cs-spinning-up-deep-rl.md">Source</a></span>
+</div>
+
 
 ## Voice
 

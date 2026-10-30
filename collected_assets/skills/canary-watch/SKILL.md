@@ -1,96 +1,108 @@
 ---
 name: canary-watch
-description: このスキルを使用して、デプロイメント、マージ、または依存関係アップグレード後にデプロイされたURLの回帰を監視します。
-origin: ECC
+description: Use this skill to monitor and verify a deployed URL after releases — checks HTTP endpoints, SSE streams, static assets, console errors, and performance regressions after deploys, merges, or dependency upgrades. Smoke / canary / post-deploy verification.
+metadata:
+  origin: ECC
 ---
 
-# カナリアウォッチ — デプロイ後の監視
+# Canary Watch — Post-Deploy Monitoring
 
-## 使用時期
+## When to Use
 
-- 本番またはステージングへのデプロイ後
-- 危険なPRをマージした後
-- 修正が実際に修正されたことを確認したい場合
-- ローンチウィンドウ中の継続的監視
-- 依存関係アップグレード後
+- After deploying to production or staging
+- After merging a risky PR
+- When you want to verify a fix actually fixed it
+- Continuous monitoring during a launch window
+- After dependency upgrades
 
-## 動作方法
+## How It Works
 
-デプロイされたURLの回帰を監視します。停止されるか監視ウィンドウが期限切れになるまで、ループで実行されます。
+Monitors a deployed URL for regressions. Runs in a loop until stopped or until the watch window expires.
 
-### 監視内容
+### What It Watches
 
 ```
-1. HTTPステータス — ページは200を返していますか？
-2. コンソールエラー — 以前なかった新しいエラーはありますか？
-3. ネットワークの障害 — 失敗したAPIコール、5xx応答？
-4. パフォーマンス — LCP/CLS/INPの回帰対ベースライン？
-5. コンテンツ — 主要な要素は消えましたか？（h1、nav、footer、CTA）
-6. API健康 — 重要なエンドポイントはSLA内で応答していますか？
+1. HTTP Status — is the page returning 200?
+2. Console Errors — new errors that weren't there before?
+3. Network Failures — failed API calls, 5xx responses?
+4. Performance — LCP/CLS/INP regression vs baseline?
+5. Content — did key elements disappear? (h1, nav, footer, CTA)
+6. API Health — are critical endpoints responding within SLA?
+7. Static Assets — are JS, CSS, image, and font requests returning 2xx/3xx with expected content types?
+8. SSE Streams — do event-stream endpoints connect and receive an initial event or heartbeat?
 ```
 
-### 監視モード
+### Watch Modes
 
-**クイックチェック**（デフォルト）：シングルパス、レポート結果
+**Quick check** (default): single pass, report results
 ```
 /canary-watch https://myapp.com
 ```
 
-**継続監視**：N分ごとにM時間チェック
+**Sustained watch**: check every N minutes for M hours
 ```
 /canary-watch https://myapp.com --interval 5m --duration 2h
 ```
 
-**差分モード**：ステージング対本番を比較
+**Diff mode**: compare staging vs production
 ```
 /canary-watch --compare https://staging.myapp.com https://myapp.com
 ```
 
-### 警告しきい値
+### Alert Thresholds
 
 ```yaml
-critical:  # 即座の警告
-  - HTTPステータス != 200
-  - コンソールエラー数 > 5（新しいエラーのみ）
+critical:  # immediate alert
+  - HTTP status != 200
+  - Console error count > 5 (new errors only)
   - LCP > 4s
-  - APIエンドポイントは5xxを返す
+  - API endpoint returns 5xx
+  - Static asset returns 4xx/5xx
+  - SSE endpoint cannot connect or drops before first heartbeat
 
-warning:   # レポートで報告
-  - LCP ベースラインから > 500ms増加
+warning:   # flag in report
+  - LCP increased > 500ms from baseline
   - CLS > 0.1
-  - 新しいコンソール警告
-  - レスポンス時間 > 2xベースライン
+  - New console warnings
+  - Response time > 2x baseline
+  - Static asset content type changed unexpectedly
+  - SSE heartbeat latency > 2x baseline
 
-info:      # ログのみ
-  - マイナーパフォーマンス分散
-  - 新しいネットワークリクエスト（サードパーティスクリプトが追加された？）
+info:      # log only
+  - Minor performance variance
+  - New network requests (third-party scripts added?)
 ```
 
-### 通知
+### Notifications
 
-重大なしきい値を超えたとき：
-- デスクトップ通知（macOS/Linux）
-- オプション：Slack/Discord Webhook
-- `~/.claude/canary-watch.log`にログ
+When a critical threshold is crossed:
+- Desktop notification (macOS/Linux)
+- Optional: Slack/Discord webhook
+- Log to `~/.claude/canary-watch.log`
 
-## 出力
+## Output
 
 ```markdown
 ## Canary Report — myapp.com — 2026-03-23 03:15 PST
 
-### Status
-- ✓ HTTP 200
-- ✓ No critical errors
-- ✓ LCP within SLA (1.8s)
+### Status: HEALTHY ✓
 
-### Diffs from Baseline
-- CLS: 0.08 (↓ 0.02)
-- Response: 245ms (↑ 12ms, OK)
-- Network: 42 requests (↑ 3, investigate third-party?)
+| Check | Result | Baseline | Delta |
+|-------|--------|----------|-------|
+| HTTP | 200 ✓ | 200 | — |
+| Console errors | 0 ✓ | 0 | — |
+| LCP | 1.8s ✓ | 1.6s | +200ms |
+| CLS | 0.01 ✓ | 0.01 | — |
+| API /health | 145ms ✓ | 120ms | +25ms |
+| Static assets | 42/42 ✓ | 42/42 | — |
+| SSE /events | connected ✓ | connected | +80ms heartbeat |
+
+### No regressions detected. Deploy is clean.
 ```
 
-## 統合
+## Integration
 
-- `/benchmark`とペアリングしてパフォーマンス比較
-- `/browser-qa`とペアリングして完全なUIテスト
-- CI/CDパイプラインに組み込んでオートメーション監視
+Pair with:
+- `/browser-qa` for pre-deploy verification
+- Hooks: add as a PostToolUse hook on `git push` to auto-check after deploys
+- CI: run in GitHub Actions after deploy step

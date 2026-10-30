@@ -1,9 +1,15 @@
 ---
-description: Just the merge gate - paired statistical comparison of a candidate eval run against baseline, with a PASS / WARN / BLOCK exit code.
-argument-hint: "baseline.jsonl candidate.jsonl [quarantine.json]"
+title: "/cs-eval-gate — Slash Command for AI Coding Agents"
+description: "Just the merge gate - paired statistical comparison of a candidate eval run against baseline, with a PASS / WARN / BLOCK exit code.. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-eval-gate
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-regression-evals/commands/cs-eval-gate.md">Source</a></span>
+</div>
+
 
 Answer one question about `$ARGUMENTS`: **is the candidate measurably worse than the baseline?**
 

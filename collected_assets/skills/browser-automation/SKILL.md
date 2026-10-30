@@ -1,10 +1,9 @@
 ---
 name: browser-automation
 description: Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification.
-metadata:
-  aas-risk: critical
-  aas-source: vibeship-spawner-skills (Apache 2.0)
-  aas-date-added: '2026-02-27'
+risk: critical
+source: vibeship-spawner-skills (Apache 2.0)
+date_added: 2026-02-27
 ---
 
 # Browser Automation

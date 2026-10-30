@@ -1,10 +1,15 @@
 ---
-name: cs-scrape
-description: Route, extract, and validate a scraping job (URL or local file) via the universal-scraping-architect skill — refuses to deliver unvalidated data.
-argument-hint: "<url-or-file-path> [desired output: csv|json|markdown]"
+title: "/cs-scrape — Slash Command for AI Coding Agents"
+description: "Route, extract, and validate a scraping job (URL or local file) via the universal-scraping-architect skill — refuses to deliver unvalidated data.. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-scrape
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/universal-scraping-architect/commands/cs-scrape.md">Source</a></span>
+</div>
+
 
 Run a gated extraction pipeline for `$ARGUMENTS` using `skills/universal-scraping-architect/SKILL.md`.
 

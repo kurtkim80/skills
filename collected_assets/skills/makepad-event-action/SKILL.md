@@ -1,20 +1,14 @@
 ---
 name: makepad-event-action
-description: 'CRITICAL: Use for Makepad event and action handling. Triggers on:
-
+description: |
+  CRITICAL: Use for Makepad event and action handling. Triggers on:
   makepad event, makepad action, Event enum, ActionTrait, handle_event,
-
   MouseDown, KeyDown, TouchUpdate, Hit, FingerDown, post_action,
-
   makepad 事件, makepad action, 事件处理
-
-  '
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-03-06'
+risk: safe
+source: community
+date_added: "2026-03-06"
 ---
-
 ## Supporting material availability
 
 This catalog copy contains the inline guidance below, but does not include the following supporting paths. They are external prerequisites, not bundled files:

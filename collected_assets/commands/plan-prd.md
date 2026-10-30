@@ -1,98 +1,98 @@
 ---
-description: "Generate a lean, problem-first PRD and hand off to /plan for implementation planning."
-argument-hint: "[product/feature idea] (blank = start with questions)"
+description: "リーンで問題起点のPRDを生成し、実装計画のために/planに引き渡します。"
+argument-hint: "[製品/機能のアイデア]（空欄 = 質問から開始）"
 ---
 
-# PRD Command
+# PRDコマンド
 
-Produces a **Product Requirements Document** — the requirements-phase artifact of the SDLC. Captures *what* must be true for success and *why*, and stops before *how*. Implementation decomposition is delegated to `/plan`.
+**プロダクト要件ドキュメント**を作成します — SDLCの要件フェーズのアーティファクトです。成功のために*何*が真でなければならないか、*なぜ*かを記録し、*どのように*の前で止まります。実装の分解は`/plan`に委任されます。
 
-**Input**: `$ARGUMENTS`
+**入力**: `$ARGUMENTS`
 
-## Scope of this command
+## このコマンドのスコープ
 
-| This command does | This command does NOT do |
+| このコマンドがすること | このコマンドがしないこと |
 |---|---|
-| Frame the problem and users | Design the architecture |
-| Capture success criteria and scope | Pick files or write patterns |
-| List open questions and risks | Enumerate implementation tasks |
-| Write `.claude/prds/{name}.prd.md` | Produce an implementation plan — that's `/plan` |
+| 問題とユーザーをフレーミング | アーキテクチャの設計 |
+| 成功基準とスコープの記録 | ファイルの選択やパターンの記述 |
+| 未解決の質問とリスクの一覧 | 実装タスクの列挙 |
+| `.claude/prds/{name}.prd.md`の書き込み | 実装計画の作成 — それは`/plan` |
 
-If you find yourself writing implementation detail, stop and cut it. It belongs in `/plan`.
+実装の詳細を書いていることに気づいたら、止めて削除してください。それは`/plan`に属します。
 
-**Anti-fluff rule**: When information is missing, write `TBD — needs validation via {method}`. Never invent plausible-sounding requirements.
+**アンチフラフルール**: 情報が不足している場合は`TBD — {方法}による検証が必要`と書く。もっともらしく聞こえる要件を作り出さないこと。
 
-## Workflow
+## ワークフロー
 
-Four phases. Each phase is a single gate — ask the questions, wait for the user, then move on. No nested loops, no parallel research ceremony.
+4つのフェーズ。各フェーズは単一のゲート — 質問し、ユーザーを待ち、次に進む。ネストしたループも並行リサーチの儀式もなし。
 
-### Phase 1 — FRAME
+### フェーズ 1 — FRAME
 
-If `$ARGUMENTS` is empty, ask:
+`$ARGUMENTS`が空の場合、質問:
 
-> What do you want to build? One or two sentences.
+> 何をビルドしたいですか？1〜2文で。
 
-If provided, restate in one sentence and ask:
+提供された場合、1文で再述し質問:
 
-> I understand: *{restated}*. Correct, or should I adjust?
+> 理解しました: *{再述}*。正しいですか、調整すべきですか？
 
-Then ask the framing questions in a single set:
+次にフレーミング質問を一度に提示:
 
-> 1. **Who** has this problem? (specific role or segment)
-> 2. **What** is the observable pain? (describe behavior, not assumed needs)
-> 3. **Why** can't they solve it with what exists today?
-> 4. **Why now?** — what changed that makes this worth doing?
+> 1. **誰が**この問題を抱えていますか？（具体的な役割またはセグメント）
+> 2. **何が**観察可能な痛みですか？（想定されるニーズではなく行動を記述）
+> 3. **なぜ**既存のもので解決できないのですか？
+> 4. **なぜ今？** — 何が変わってこれを行う価値があるのですか？
 
-Wait for the user. Do not proceed without answers (or explicit "skip").
+ユーザーを待つ。回答（または明示的な"skip"）なしに先に進まない。
 
-### Phase 2 — GROUND
+### フェーズ 2 — GROUND
 
-Ask for evidence. This is the shortest phase and the most load-bearing:
+エビデンスを求める。これは最も短いフェーズであり、最も重要:
 
-> What evidence do you have that this problem is real and worth solving? (user quotes, support tickets, metrics, observed behavior, failed workarounds — anything concrete)
+> この問題が実在し解決する価値があるというエビデンスは何ですか？（ユーザーの引用、サポートチケット、メトリクス、観察された行動、失敗したワークアラウンド — 具体的なもの何でも）
 
-If the user has none, record the PRD's Evidence section as `Assumption — needs validation via {user research | analytics | prototype}`. This keeps the PRD honest.
+ユーザーにエビデンスがない場合、PRDのEvidenceセクションを`仮説 — {ユーザーリサーチ | アナリティクス | プロトタイプ}による検証が必要`と記録。これによりPRDの誠実さが保たれる。
 
-### Phase 3 — DECIDE
+### フェーズ 3 — DECIDE
 
-Scope and hypothesis in a single set:
+スコープと仮説を一度に:
 
-> 1. **Hypothesis** — Complete: *We believe **{capability}** will **{solve problem}** for **{users}**. We'll know we're right when **{measurable outcome}**.*
-> 2. **MVP** — The minimum needed to test the hypothesis?
-> 3. **Out of scope** — What are you explicitly **not** building (even if users ask)?
-> 4. **Open questions** — Uncertainties that could change the approach?
+> 1. **仮説** — 完成させてください: *私たちは**{能力}**が**{ユーザー}**の**{問題を解決}**すると信じています。**{測定可能な成果}**が得られたら正しいとわかります。*
+> 2. **MVP** — 仮説をテストするために必要な最小限は？
+> 3. **スコープ外** — ユーザーが求めても明示的に**ビルドしない**ものは？
+> 4. **未解決の質問** — アプローチを変える可能性のある不確実性は？
 
-Wait for responses.
+回答を待つ。
 
-### Phase 4 — GENERATE & HAND OFF
+### フェーズ 4 — GENERATE & HAND OFF
 
-Create the directory if needed, write the PRD, and report.
+必要に応じてディレクトリを作成し、PRDを書き、報告。
 
 ```bash
 mkdir -p .claude/prds
 ```
 
-**Output path**: `.claude/prds/{kebab-case-name}.prd.md`
+**出力パス**: `.claude/prds/{kebab-case-name}.prd.md`
 
-#### PRD Template
+#### PRDテンプレート
 
 ```markdown
-# {Product / Feature Name}
+# {製品 / 機能名}
 
 ## Problem
-{2–3 sentences: who has what problem, and what's the cost of leaving it unsolved?}
+{2〜3文: 誰が何の問題を抱えていて、未解決のコストは何か？}
 
 ## Evidence
-- {User quote, data point, or observation}
-- {OR: "Assumption — needs validation via {method}"}
+- {ユーザーの引用、データポイント、または観察}
+- {または: "仮説 — {方法}による検証が必要"}
 
 ## Users
-- **Primary**: {role, context, what triggers the need}
-- **Not for**: {who this explicitly excludes}
+- **Primary**: {役割、コンテキスト、ニーズのトリガー}
+- **Not for**: {明示的に除外する対象}
 
 ## Hypothesis
-We believe **{capability}** will **{solve problem}** for **{users}**.
-We'll know we're right when **{measurable outcome}**.
+私たちは**{能力}**が**{ユーザー}**の**{問題を解決}**すると信じています。
+**{測定可能な成果}**が得られたら正しいとわかります。
 
 ## Success Metrics
 | Metric | Target | How measured |
@@ -100,39 +100,39 @@ We'll know we're right when **{measurable outcome}**.
 | {primary} | {number} | {method} |
 
 ## Scope
-**MVP** — {the minimum to test the hypothesis}
+**MVP** — {仮説をテストするための最小限}
 
 **Out of scope**
-- {item} — {why deferred}
+- {項目} — {延期する理由}
 
 ## Delivery Milestones
-<!-- Business outcomes, not engineering tasks. /plan turns each into a plan. -->
+<!-- ビジネス成果であり、エンジニアリングタスクではない。/planが各マイルストーンを計画に変換。 -->
 <!-- Status: pending | in-progress | complete -->
 
 | # | Milestone | Outcome | Status | Plan |
 |---|---|---|---|---|
-| 1 | {name} | {user-visible change} | pending | — |
-| 2 | {name} | {user-visible change} | pending | — |
+| 1 | {name} | {ユーザーに見える変更} | pending | — |
+| 2 | {name} | {ユーザーに見える変更} | pending | — |
 
 ## Open Questions
-- [ ] {question that could change scope or approach}
+- [ ] {スコープやアプローチを変える可能性のある質問}
 
 ## Risks
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
 
 ---
-*Status: DRAFT — requirements only. Implementation planning pending via /plan.*
+*Status: DRAFT — 要件のみ。実装計画は/planで保留中。*
 ```
 
-#### Report to user
+#### ユーザーへの報告
 
 ```
 PRD created: .claude/prds/{name}.prd.md
 
-Problem:    {one line}
-Hypothesis: {one line}
-MVP:        {one line}
+Problem:    {一行}
+Hypothesis: {一行}
+MVP:        {一行}
 
 Validation status:
   Problem  {validated | assumption}
@@ -142,21 +142,19 @@ Validation status:
 Open questions: {count}
 
 Next step: /plan .claude/prds/{name}.prd.md
-  → /plan will pick the next pending milestone and produce an implementation plan.
+  → /plan が次の保留中のマイルストーンを選択し、実装計画を作成します。
 ```
 
-## Integration
+## 統合
 
-- `/plan <prd-path>` — consume the PRD and produce an implementation plan for the next pending milestone.
-- `tdd-workflow` skill — implement the plan test-first.
-- `/pr` — open a PR that references the PRD and plan.
+- `/plan <prd-path>` — PRDを消費し、次の保留中のマイルストーンの実装計画を作成。
+- `tdd-workflow`スキル — テストファーストで計画を実装。
+- `/pr` — PRDと計画を参照するPRを作成。
 
-## Success criteria
+## 成功基準
 
-- **PROBLEM_CLEAR**: problem is specific and evidenced (or flagged as assumption).
-- **USER_CONCRETE**: primary user is a specific role, not "users".
-- **HYPOTHESIS_TESTABLE**: measurable outcome included.
-- **SCOPE_BOUNDED**: explicit MVP and explicit out-of-scope.
-- **NO_IMPLEMENTATION_DETAIL**: file paths, libraries, or task breakdowns are absent — if they appeared, move them to the `/plan` step.
-
-Background on the staged markdown flow: [docs/PLAN-PRD-PATTERN.md](../docs/PLAN-PRD-PATTERN.md).
+- **PROBLEM_CLEAR**: 問題が具体的でエビデンスがある（または仮説としてフラグ付き）。
+- **USER_CONCRETE**: プライマリユーザーが具体的な役割であり、"ユーザー"ではない。
+- **HYPOTHESIS_TESTABLE**: 測定可能な成果が含まれている。
+- **SCOPE_BOUNDED**: 明示的なMVPと明示的なスコープ外。
+- **NO_IMPLEMENTATION_DETAIL**: ファイルパス、ライブラリ、タスクの分解が含まれていない — もし含まれていたら`/plan`ステップに移動。

@@ -1,84 +1,72 @@
----
-description: Run a deterministic repository harness audit and return a prioritized scorecard.
----
+# 工具链审计命令
 
-# Harness Audit Command
+运行确定性仓库框架审计并返回优先级评分卡。
 
-Run a deterministic repository harness audit and return a prioritized scorecard.
+## 使用方式
 
-## Usage
+`/harness-audit [scope] [--format text|json]`
 
-`/harness-audit [scope] [--format text|json] [--root path]`
+* `scope` (可选): `repo` (默认), `hooks`, `skills`, `commands`, `agents`
+* `--format`: 输出样式 (`text` 默认, `json` 用于自动化)
 
-- `scope` (optional): `repo` (default), `hooks`, `skills`, `commands`, `agents`
-- `--format`: output style (`text` default, `json` for automation)
-- `--root`: audit a specific path instead of the current working directory
+## 确定性引擎
 
-## Deterministic Engine
-
-Always run:
+始终运行：
 
 ```bash
-node scripts/harness-audit.js <scope> --format <text|json> [--root <path>]
+node scripts/harness-audit.js <scope> --format <text|json>
 ```
 
-This script is the source of truth for scoring and checks. Do not invent additional dimensions or ad-hoc points.
+此脚本是评分和检查的单一事实来源。不要发明额外的维度或临时添加评分点。
 
-Rubric version: `2026-05-19`.
+评分标准版本：`2026-03-16`。
 
-The script computes up to 12 fixed categories (`0-10` normalized each). The first seven are always applicable; GitHub Integration is always applicable; deploy-target categories are applicable only when a matching marker is detected.
+该脚本计算 7 个固定类别（每个类别标准化为 `0-10`）：
 
-1. Tool Coverage
-2. Context Efficiency
-3. Quality Gates
-4. Memory Persistence
-5. Eval Coverage
-6. Security Guardrails
-7. Cost Efficiency
-8. GitHub Integration
-9. Vercel Integration *(when `vercel.json` or `.vercel/` is present)*
-10. Netlify Integration *(when `netlify.toml` or `.netlify/` is present)*
-11. Cloudflare Integration *(when `wrangler.toml` or `wrangler.jsonc` is present)*
-12. Fly Integration *(when `fly.toml` is present)*
+1. 工具覆盖度
+2. 上下文效率
+3. 质量门禁
+4. 记忆持久化
+5. 评估覆盖度
+6. 安全护栏
+7. 成本效率
 
-Scores are derived from explicit file/rule checks and are reproducible for the same commit.
-The script audits the current working directory by default and auto-detects whether the target is the ECC repo itself or a consumer project using ECC.
+分数源自显式的文件/规则检查，并且对于同一提交是可复现的。
 
-## Output Contract
+## 输出约定
 
-Return:
+返回：
 
-1. `overall_score` out of `max_score`. `max_score` depends on which categories are applicable to the target; never assume a fixed total.
-2. `applicable_categories[]` and `category_count` describing which categories contributed.
-3. Category scores and concrete findings.
-4. Failed checks with exact file paths.
-5. Top 3 actions from the deterministic output (`top_actions`).
-6. Suggested ECC skills to apply next.
+1. `overall_score` 分（满分 `max_score` 分；`repo` 为 70 分；范围限定审计则分数更小）
+2. 类别分数及具体发现项
+3. 失败的检查及其确切的文件路径
+4. 确定性输出的前 3 项行动（`top_actions`）
+5. 建议接下来应用的 ECC 技能
 
-## Checklist
+## 检查清单
 
-- Use script output directly; do not rescore manually.
-- If `--format json` is requested, return the script JSON unchanged.
-- If text is requested, summarize failing checks and top actions.
-- Include exact file paths from `checks[]` and `top_actions[]`.
+* 直接使用脚本输出；不要手动重新评分。
+* 如果请求 `--format json`，则原样返回脚本的 JSON 输出。
+* 如果请求文本输出，则总结失败的检查和首要行动。
+* 包含来自 `checks[]` 和 `top_actions[]` 的确切文件路径。
 
-## Example Result
+## 结果示例
 
 ```text
-Harness Audit (repo, repo): 71/80
-- Tool Coverage: 10/10 (10/10 pts)
-- Context Efficiency: 9/10 (9/10 pts)
-- Quality Gates: 10/10 (10/10 pts)
-- GitHub Integration: 2/10 (2/10 pts)
+Harness 审计 (代码库): 66/70
+- 工具覆盖率: 10/10 (10/10 分)
+- 上下文效率: 9/10 (9/10 分)
+- 质量门禁: 10/10 (10/10 分)
 
-Top 3 Actions:
-1) [GitHub Integration] Add at least one workflow under .github/workflows/. (.github/workflows/)
-2) [Security Guardrails] Add prompt/tool preflight security guards in hooks/hooks.json. (hooks/hooks.json)
-3) [Eval Coverage] Increase automated test coverage across scripts/hooks/lib. (tests/)
+首要三项行动:
+1) [安全防护] 在 hooks/hooks.json 中添加提示/工具预检安全防护。 (hooks/hooks.json)
+2) [工具覆盖率] 同步 commands/harness-audit.md 和 .opencode/commands/harness-audit.md。 (.opencode/commands/harness-audit.md)
+3) [评估覆盖率] 提升 scripts/hooks/lib 目录下的自动化测试覆盖率。 (tests/)
 ```
 
-## Arguments
+## 参数
 
 $ARGUMENTS:
-- `repo|hooks|skills|commands|agents` (optional scope)
-- `--format text|json` (optional output format)
+
+* `repo|hooks|skills|commands|agents` (可选范围)
+* `--format text|json` (可选输出格式)

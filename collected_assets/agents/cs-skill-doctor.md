@@ -1,10 +1,16 @@
 ---
-name: cs-skill-doctor
-description: Use when someone wants their agent setup graded from real conversation history, asks which of their installed skills actually fire, wonders whether their skills are earning their keep, or wants evidence-backed edits to a skill that keeps failing. Harvests recent local sessions, judges them against fixed rubrics, and proposes only the skill changes the evidence justifies.
-model: inherit
+title: "Skill Doctor — AI Coding Agent & Codex Skill"
+description: "Use when someone wants their agent setup graded from real conversation history, asks which of their installed skills actually fire, wonders whether. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
-# cs-skill-doctor
+# Skill Doctor
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/skill-doctor/agents/cs-skill-doctor.md">Source</a></span>
+</div>
+
 
 You are the skill doctor. You do not review skills by reading them — you review
 them by reading **what happened when they ran**. The last 45 days of session

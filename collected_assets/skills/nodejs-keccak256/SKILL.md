@@ -1,23 +1,24 @@
 ---
 name: nodejs-keccak256
-description: JavaScriptとTypeScriptにおけるEthereumハッシュバグを防ぐ。NodeのSHA3-256はNIST SHA3であり、Ethereum Keccak-256ではなく、セレクター、署名、ストレージスロット、アドレス導出を静かに破壊する。
-origin: ECC direct-port adaptation
-version: "1.0.0"
+description: Prevent Ethereum hashing bugs in JavaScript and TypeScript. Node's sha3-256 is NIST SHA3, not Ethereum Keccak-256, and silently breaks selectors, signatures, storage slots, and address derivation. Use when hashing for Ethereum in JavaScript or TypeScript, or when a selector, signature, storage slot, or derived address is wrong.
+metadata:
+  version: "1.0.0"
+  origin: ECC direct-port adaptation
 ---
 
 # Node.js Keccak-256
 
-EthereumはKeccak-256を使用し、Nodeの`crypto.createHash('sha3-256')`が公開するNIST標準化SHA3バリアントではない。
+Ethereum uses Keccak-256, not the NIST-standardized SHA3 variant exposed by Node's `crypto.createHash('sha3-256')`.
 
-## 使用するタイミング
+## When to Use
 
-- Ethereum関数セレクターやイベントトピックの計算
-- JS/TSでEIP-712、署名、Merkle、またはストレージスロットヘルパーの構築
-- Nodeのcryptoを直接使用してEthereumデータをハッシュするコードのレビュー
+- Computing Ethereum function selectors or event topics
+- Building EIP-712, signature, Merkle, or storage-slot helpers in JS/TS
+- Reviewing any code that hashes Ethereum data with Node crypto directly
 
-## 仕組み
+## How It Works
 
-2つのアルゴリズムは同じ入力に対して異なる出力を生成し、Nodeは警告しない。
+The two algorithms produce different outputs for the same input, and Node will not warn you.
 
 ```javascript
 import crypto from 'crypto';
@@ -30,7 +31,7 @@ const keccak = keccak256(toUtf8Bytes(data)).slice(2);
 console.log(nistSha3 === keccak); // false
 ```
 
-## 例
+## Examples
 
 ### ethers v6
 
@@ -64,7 +65,7 @@ const packed = web3.utils.soliditySha3(
 );
 ```
 
-### 一般的なパターン
+### Common patterns
 
 ```typescript
 import { id, keccak256, AbiCoder } from 'ethers';
@@ -79,7 +80,7 @@ function getMappingSlot(key: string, mappingSlot: number): string {
 }
 ```
 
-### 公開鍵からアドレス
+### Address from public key
 
 ```typescript
 import { keccak256 } from 'ethers';
@@ -90,13 +91,13 @@ function pubkeyToAddress(pubkeyBytes: Uint8Array): string {
 }
 ```
 
-### コードベースの監査
+### Audit your codebase
 
 ```bash
 grep -rn "createHash.*sha3" --include="*.ts" --include="*.js" --exclude-dir=node_modules .
 grep -rn "keccak256" --include="*.ts" --include="*.js" . | grep -v node_modules
 ```
 
-## ルール
+## Rule
 
-Ethereumコンテキストでは、`crypto.createHash('sha3-256')`を絶対に使用しない。`ethers`、`viem`、`web3`、または別の明示的なKeccak実装のKeccak対応ヘルパーを使用すること。
+For Ethereum contexts, never use `crypto.createHash('sha3-256')`. Use Keccak-aware helpers from `ethers`, `viem`, `web3`, or another explicit Keccak implementation.

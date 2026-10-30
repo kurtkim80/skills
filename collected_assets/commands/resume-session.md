@@ -1,156 +1,154 @@
 ---
-description: ~/.claude/session-data/ から最新のセッションファイルを読み込み、前回のセッションが終了した時点の完全なコンテキストを使って作業を再開します。
+description: 从 ~/.claude/session-data/ 加载最新的会话文件，并从上次会话结束的地方恢复工作，保留完整上下文。
 ---
 
-# セッション再開コマンド
+# 恢复会话命令
 
-最後に保存されたセッション状態を読み込み、作業を開始する前に完全に状況を把握します。
-このコマンドは `/save-session` の対になるものです。
+加载最后保存的会话状态，并在开始任何工作前完全熟悉情况。
+此命令是 `/save-session` 的对应命令。
 
-## 使用するタイミング
+## 何时使用
 
-- 前日の作業を引き継いで新しいセッションを開始するとき
-- コンテキストの上限に達して新しいセッションを開始した後
-- 別のソースからセッションファイルを受け渡されたとき（ファイルパスを指定するだけです）
-- セッションファイルがあり、Claude に作業を続行する前に完全に内容を把握させたいとき
+* 开始新会话以继续前一天的工作时
+* 因上下文限制而开始全新会话后
+* 当从其他来源移交会话文件时（只需提供文件路径）
+* 任何拥有会话文件并希望 Claude 在继续前完全吸收其内容的时候
 
-## 使い方
+## 用法
 
 ```
-/resume-session                                                      # ~/.claude/session-data/ の最新ファイルを読み込む
-/resume-session 2024-01-15                                           # その日付の最新セッションを読み込む
-/resume-session ~/.claude/session-data/2024-01-15-abc123de-session.tmp  # 現在の短縮IDセッションファイルを読み込む
-/resume-session ~/.claude/sessions/2024-01-15-session.tmp               # レガシー形式の特定ファイルを読み込む
+/resume-session                                                      # 加载 ~/.claude/session-data/ 目录下最新的文件
+/resume-session 2024-01-15                                           # 加载该日期最新的会话
+/resume-session ~/.claude/sessions/2024-01-15-session.tmp           # 加载特定的旧格式文件
+/resume-session ~/.claude/session-data/2024-01-15-abc123de-session.tmp  # 加载当前短ID格式的会话文件
 ```
 
-## プロセス
+## 流程
 
-### ステップ 1: セッションファイルを見つける
+### 步骤 1：查找会话文件
 
-引数が指定されていない場合:
+如果未提供参数：
 
-1. `~/.claude/session-data/` を確認する
-2. 最も新しく更新された `*-session.tmp` ファイルを選択する
-3. フォルダが存在しないか、一致するファイルがない場合、ユーザーに以下を通知する:
+1. 检查 `~/.claude/session-data/`
+2. 选择最近修改的 `*-session.tmp` 文件
+3. 如果文件夹不存在或没有匹配的文件，告知用户：
    ```
-   No session files found in ~/.claude/session-data/
-   Run /save-session at the end of a session to create one.
+   在 ~/.claude/session-data/ 中未找到会话文件。
+   请在会话结束时运行 /save-session 来创建一个。
    ```
-   その後停止する。
+   然后停止。
 
-引数が指定されている場合:
+如果提供了参数：
 
-- 日付形式（`YYYY-MM-DD`）の場合、まず `~/.claude/session-data/` を検索し、次にレガシーの
-  `~/.claude/sessions/` を検索して、`YYYY-MM-DD-session.tmp`（レガシー形式）または
-  `YYYY-MM-DD-<shortid>-session.tmp`（現在の形式）に一致するファイルを探し、
-  その日付で最も新しく更新されたものを読み込む
-- ファイルパスの場合、そのファイルを直接読み取る
-- 見つからない場合、明確に報告して停止する
+* 如果看起来像日期 (`YYYY-MM-DD`)，则先在 `~/.claude/session-data/` 中搜索，再回退到旧的 `~/.claude/sessions/`，匹配
+  `YYYY-MM-DD-session.tmp`（旧格式）或 `YYYY-MM-DD-<shortid>-session.tmp`（当前格式）的文件，
+  并加载该日期最近修改的版本
+* 如果看起来像文件路径，则直接读取该文件
+* 如果未找到，清晰报告并停止
 
-### ステップ 2: セッションファイル全体を読み取る
+### 步骤 2：读取整个会话文件
 
-ファイル全体を読み取る。まだ要約はしない。
+读取完整的文件。暂时不要总结。
 
-### ステップ 3: 理解を確認する
+### 步骤 3：确认理解
 
-以下の正確な形式で構造化されたブリーフィングを返答する:
+使用以下确切格式回复一份结构化简报：
 
 ```
-SESSION LOADED: [ファイルへの実際の解決済みパス]
+会话已加载：[文件的实际解析路径]
 ════════════════════════════════════════════════
 
-PROJECT: [ファイルに記載されたプロジェクト名 / トピック]
+项目：[文件中的项目名称/主题]
 
-WHAT WE'RE BUILDING:
-[自分の言葉で2〜3文の要約]
+我们正在构建什么：
+[用你自己的话总结 2-3 句话]
 
-CURRENT STATE:
-PASS: Working: [数] 件確認済み
- In Progress: [進行中のファイル一覧]
- Not Started: [計画済みだが未着手の一覧]
+当前状态：
+PASS: 已完成：[数量] 项已确认
+ 进行中：[列出进行中的文件]
+ 未开始：[列出计划但未开始的文件]
 
-WHAT NOT TO RETRY:
-[失敗したアプローチとその理由をすべて列挙 -- これは非常に重要]
+不应重试的内容：
+[列出每个失败的方法及其原因——此部分至关重要]
 
-OPEN QUESTIONS / BLOCKERS:
-[ブロッカーや未回答の質問を列挙]
+待解决问题/阻碍：
+[列出任何阻碍或未解答的问题]
 
-NEXT STEP:
-[ファイルに定義されている場合は正確な次のステップ]
-[定義されていない場合: "No next step defined -- recommend reviewing 'What Has NOT Been Tried Yet' together before starting"]
+下一步：
+[如果文件中已定义，则列出确切下一步]
+[如果未定义："未定义下一步——建议在开始前共同回顾'尚未尝试的方法'"]
 
 ════════════════════════════════════════════════
-Ready to continue. What would you like to do?
+准备就绪。您希望做什么？
 ```
 
-### ステップ 4: ユーザーを待つ
+### 步骤 4：等待用户
 
-自動的に作業を開始しない。ファイルに触れない。ユーザーの指示を待つ。
+请**不要**自动开始工作。请**不要**触碰任何文件。等待用户指示下一步做什么。
 
-次のステップがセッションファイルに明確に定義されており、ユーザーが「続けて」「はい」などと言った場合、その正確な次のステップを実行する。
+如果会话文件中明确定义了下一步，并且用户说"继续"或"是"或类似内容 — 则执行该确切步骤。
 
-次のステップが定義されていない場合、どこから始めるかをユーザーに尋ね、必要に応じて「まだ試していないこと」セクションからアプローチを提案する。
+如果未定义下一步 — 询问用户从哪里开始，并可选择性地从"尚未尝试的内容"部分提出建议。
 
----
+***
 
-## エッジケース
+## 边界情况
 
-**同じ日付に複数のセッションがある場合** (`2024-01-15-session.tmp`, `2024-01-15-abc123de-session.tmp`):
-レガシーのID無し形式か現在の短縮ID形式かに関係なく、その日付で最も新しく更新された一致ファイルを読み込む。
+**同一日期有多个会话** (`2024-01-15-session.tmp`, `2024-01-15-abc123de-session.tmp`)：
+加载该日期最近修改的匹配文件，无论其使用的是旧的无ID格式还是当前的短ID格式。
 
-**セッションファイルが存在しないファイルを参照している場合:**
-ブリーフィング中にこれを注記する -- "WARNING: `path/to/file.ts` referenced in session but not found on disk."
+**会话文件引用了已不存在的文件：**
+在简报中注明 — "WARNING: 会话中引用了 `path/to/file.ts`，但在磁盘上未找到。"
 
-**セッションファイルが7日以上前のものである場合:**
-間隔を注記する -- "WARNING: This session is from N days ago (threshold: 7 days). Things may have changed." -- その後通常通り進める。
+**会话文件来自超过7天前：**
+注明时间间隔 — "WARNING: 此会话来自 N 天前（阈值：7天）。情况可能已发生变化。" — 然后正常继续。
 
-**ユーザーがファイルパスを直接指定した場合（例: チームメイトから転送された場合）:**
-それを読み取り、同じブリーフィングプロセスに従う -- ソースに関係なく形式は同じ。
+**用户直接提供了文件路径（例如，从队友处转发而来）：**
+读取它并遵循相同的简报流程 — 无论来源如何，格式都是相同的。
 
-**セッションファイルが空または不正な形式の場合:**
-報告する: "Session file found but appears empty or unreadable. You may need to create a new one with /save-session."
+**会话文件为空或格式错误：**
+报告："找到会话文件，但似乎为空或无法读取。您可能需要使用 /save-session 创建一个新的。"
 
----
+***
 
-## 出力例
+## 示例输出
 
 ```
 SESSION LOADED: /Users/you/.claude/session-data/2024-01-15-abc123de-session.tmp
 ════════════════════════════════════════════════
 
-PROJECT: my-app — JWT Authentication
+项目：my-app — JWT 认证
 
-WHAT WE'RE BUILDING:
-User authentication with JWT tokens stored in httpOnly cookies.
-Register and login endpoints are partially done. Route protection
-via middleware hasn't been started yet.
+构建目标：
+使用存储在 httpOnly cookie 中的 JWT 令牌实现用户认证。
+注册和登录端点已部分完成。通过中间件进行路由保护尚未开始。
 
-CURRENT STATE:
-PASS: Working: 3 items (register endpoint, JWT generation, password hashing)
- In Progress: app/api/auth/login/route.ts (token works, cookie not set yet)
- Not Started: middleware.ts, app/login/page.tsx
+当前状态：
+PASS: 已完成：3 项（注册端点、JWT 生成、密码哈希）
+ 进行中：app/api/auth/login/route.ts（令牌有效，但 cookie 尚未设置）
+ 未开始：middleware.ts、app/login/page.tsx
 
-WHAT NOT TO RETRY:
-FAIL: Next-Auth — conflicts with custom Prisma adapter, threw adapter error on every request
-FAIL: localStorage for JWT — causes SSR hydration mismatch, incompatible with Next.js
+需避免的事项：
+FAIL: Next-Auth — 与自定义 Prisma 适配器冲突，每次请求均抛出适配器错误
+FAIL: localStorage 存储 JWT — 导致 SSR 水合不匹配，与 Next.js 不兼容
 
-OPEN QUESTIONS / BLOCKERS:
-- Does cookies().set() work inside a Route Handler or only Server Actions?
+待解决问题 / 阻碍：
+- cookies().set() 在路由处理器中是否有效，还是仅适用于服务器操作？
 
-NEXT STEP:
-In app/api/auth/login/route.ts — set the JWT as an httpOnly cookie using
+下一步：
+在 app/api/auth/login/route.ts 中 — 使用以下方式将 JWT 设置为 httpOnly cookie：
 cookies().set('token', jwt, { httpOnly: true, secure: true, sameSite: 'strict' })
-then test with Postman for a Set-Cookie header in the response.
+随后使用 Postman 测试响应中是否包含 Set-Cookie 标头。
 
 ════════════════════════════════════════════════
-Ready to continue. What would you like to do?
+准备继续。您希望做什么？
 ```
 
----
+***
 
-## 注意事項
+## 注意事项
 
-- セッションファイルを読み込む際に変更しない -- 読み取り専用の履歴記録である
-- ブリーフィングの形式は固定 -- セクションが空であっても省略しない
-- 「再試行してはいけないこと」は常に表示する。たとえ「なし」であっても -- 見落とすには重要すぎる
-- 再開後、ユーザーは新しいセッションの終了時に `/save-session` を再度実行して、新しい日付のファイルを作成したい場合がある
+* 加载时切勿修改会话文件 — 它是一个只读的历史记录
+* 简报格式是固定的 — 即使某些部分为空，也不要跳过
+* "不应重试的内容"必须始终显示，即使它只是说"无" — 这太重要了，不容遗漏
+* 恢复后，用户可能希望在新的会话结束时再次运行 `/save-session`，以创建一个新的带日期文件

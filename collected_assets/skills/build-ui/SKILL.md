@@ -1,18 +1,17 @@
 ---
 name: build-ui
-description: 'Step-by-step workflow for UI work: read the project, follow the plan for the job (new screen, dashboard, polish, simplify, review), then render, fix and check again.'
+description: "Step-by-step workflow for UI work: read the project, follow the plan for the job (new screen, dashboard, polish, simplify, review), then render, fix and check again."
+category: frontend
+risk: safe
+source: https://github.com/uxkin/agent/tree/main/.agents/skills/build-ui
+source_repo: uxkin/agent
+source_type: official
+date_added: "2026-10-12"
+author: UXKIN
+tags: [ui, ux, frontend, design, workflow, review]
+tools: [claude, codex, cursor, copilot, gemini]
 license: MIT
-metadata:
-  aas-category: frontend
-  aas-risk: safe
-  aas-source: https://github.com/uxkin/agent/tree/main/.agents/skills/build-ui
-  aas-source-repo: uxkin/agent
-  aas-source-type: official
-  aas-date-added: '2026-10-12'
-  aas-author: UXKIN
-  aas-tags: '["ui","ux","frontend","design","workflow","review"]'
-  aas-tools: '["claude","codex","cursor","copilot","gemini"]'
-  aas-license-source: https://github.com/uxkin/agent/blob/main/LICENSE
+license_source: https://github.com/uxkin/agent/blob/main/LICENSE
 ---
 
 # Build UI · by UXKIN

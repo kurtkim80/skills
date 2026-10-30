@@ -1,18 +1,17 @@
 ---
 name: ios-screens
-description: 'Build iPhone app screens that feel native: navigation, sheets, Dynamic Type, dark mode, permissions and paywalls, checked on small and large iPhones.'
+description: "Build iPhone app screens that feel native: navigation, sheets, Dynamic Type, dark mode, permissions and paywalls, checked on small and large iPhones."
+category: frontend
+risk: safe
+source: https://github.com/uxkin/agent/tree/main/.agents/skills/ios-screens
+source_repo: uxkin/agent
+source_type: official
+date_added: "2026-10-12"
+author: UXKIN
+tags: [ios, iphone, swiftui, react-native, mobile, ui]
+tools: [claude, codex, cursor, copilot, gemini]
 license: MIT
-metadata:
-  aas-category: frontend
-  aas-risk: safe
-  aas-source: https://github.com/uxkin/agent/tree/main/.agents/skills/ios-screens
-  aas-source-repo: uxkin/agent
-  aas-source-type: official
-  aas-date-added: '2026-10-12'
-  aas-author: UXKIN
-  aas-tags: '["ios","iphone","swiftui","react-native","mobile","ui"]'
-  aas-tools: '["claude","codex","cursor","copilot","gemini"]'
-  aas-license-source: https://github.com/uxkin/agent/blob/main/LICENSE
+license_source: https://github.com/uxkin/agent/blob/main/LICENSE
 ---
 
 # iOS screens · by UXKIN

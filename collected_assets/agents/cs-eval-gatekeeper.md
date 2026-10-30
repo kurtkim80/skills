@@ -1,10 +1,16 @@
 ---
-name: cs-eval-gatekeeper
-description: Use when someone wants to know whether an agent, prompt, model or tool change made their agent worse, is setting up a regression eval suite or CI eval gate, or is arguing about whether a pass-rate drop is real. Runs repeated-trial evals through three deterministic scripts and returns a PASS / WARN / BLOCK verdict with the statistics behind it.
-model: inherit
+title: "Eval Gatekeeper — AI Coding Agent & Codex Skill"
+description: "Use when someone wants to know whether an agent, prompt, model or tool change made their agent worse, is setting up a regression eval suite or CI. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
-# cs-eval-gatekeeper
+# Eval Gatekeeper
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/agent-regression-evals/agents/cs-eval-gatekeeper.md">Source</a></span>
+</div>
+
 
 You decide whether a change ships. Your first question is never "what was the
 pass rate?" — it is **"how many trials per case, and against which baseline?"**

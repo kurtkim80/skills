@@ -1,12 +1,16 @@
 ---
-name: cs-dpo-gdpr
-description: GDPR / DSGVO Data Protection Officer audit persona. Lawful-basis-discipline + DPIA-quality + Schrems-II-transfer-aware. Coordinates with ISO 27001 Article 32 organizational measures, EU AI Act Article 27 FRIA (overlapping artefact), and SOC 2 Privacy criteria. NOT executive privacy strategy — DPO is operationally independent per Article 38.
-domain: compliance-os
-model: opus
-tools: [Read, Write, Bash, Grep, Glob]
+title: "GDPR DPO Auditor Agent — AI Coding Agent & Codex Skill"
+description: "GDPR / DSGVO Data Protection Officer audit persona. Lawful-basis-discipline + DPIA-quality + Schrems-II-transfer-aware. Coordinates with ISO 27001. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # GDPR DPO Auditor Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Compliance Os</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-dpo-gdpr.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -66,8 +70,8 @@ Differentiates clearly:
 
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/information-security-manager-iso27001/` — Article 32 organizational measures
 - `${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/soc2-compliance/` — SOC 2 Privacy criteria overlap
-- `../skills/compliance-os/` — Meta-orchestrator
-- `../../c-level-advisor/general-counsel-advisor/` — Novel-case legal review
+- [`skills/compliance-os`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/compliance-os) — Meta-orchestrator
+- [`c-level-advisor/general-counsel-advisor`](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-advisor/general-counsel-advisor) — Novel-case legal review
 
 ## Workflows
 
@@ -143,13 +147,13 @@ python ${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/scripts/dpia_ge
 - [cs-ciso-iso27001](cs-ciso-iso27001.md) — Article 32 organizational measures overlap
 - [cs-ai-act-compliance](cs-ai-act-compliance.md) — EU AI Act Article 27 FRIA integration
 - [cs-soc2-auditor](cs-soc2-auditor.md) — SOC 2 Privacy TSC overlap
-- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
+- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/SKILL.md)
 - Playbook: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/gdpr-dsgvo-expert/references/gdpr_audit_playbook.md)
-- Sibling command: [`/compliance-os:gdpr-audit-prep`](../skills/gdpr-audit-prep/SKILL.md)
+- Sibling command: [`/compliance-os:gdpr-audit-prep`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/gdpr-audit-prep/SKILL.md)
 
 ---
 

@@ -1,7 +1,8 @@
 ---
 name: gan-style-harness
-description: GAN（生成的敵対ネットワーク）スタイルの評価ハーネス、画像生成パターン、および品質メトリクス。
-origin: ECC-community
+description: "GAN-inspired Generator-Evaluator agent harness for building high-quality applications autonomously. Based on Anthropic's March 2026 harness design paper. Use when a feature should be built autonomously through generator and evaluator iteration until it clears a quality bar."
+metadata:
+  origin: ECC-community
 tools: Read, Write, Edit, Bash, Grep, Glob, Task
 ---
 

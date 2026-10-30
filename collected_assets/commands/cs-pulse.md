@@ -1,9 +1,15 @@
 ---
-name: "cs-pulse"
-description: "/cs-pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per platform), optional X/Twitter, cross-platform synthesis. Output: ${RESEARCH_DIR}/pulse/<slug>-<date>.md + full briefing in chat."
+title: "/cs-pulse — Slash Command for AI Coding Agents"
+description: "/cs-pulse <topic> — Multi-source recency research. Grill-me intake (topic / angle / window / scope), then parallel Reddit + HN + Web (1 q/sec per. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-pulse — Multi-Source Recency Research
+# /cs-pulse
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/pulse/commands/cs-pulse.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-pulse <topic>`
 
@@ -122,8 +128,8 @@ python ${CLAUDE_PLUGIN_ROOT}/skills/pulse/scripts/citation_tracker.py --action c
 
 ## Related
 
-- Agent: [`cs-pulse`](../agents/cs-pulse.md)
-- Skill: [`pulse`](../skills/pulse/SKILL.md)
+- Agent: [`cs-pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/agents/cs-pulse.md)
+- Skill: [`pulse`](https://github.com/alirezarezvani/claude-skills/tree/main/research/pulse/skills/pulse/SKILL.md)
 - Source spec: `megaprompts/01-pulse-megaprompt.md` (maintainer-local draft spec — gitignored, not in the public repo)
 - Sibling research skills (after build): `/cs-litreview`, `/cs-grants`, `/cs-syllabus`, `/cs-patent`, `/cs-dossier`, `/cs-research` (router)
 

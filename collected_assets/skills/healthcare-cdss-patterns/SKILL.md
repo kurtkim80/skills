@@ -1,8 +1,9 @@
 ---
 name: healthcare-cdss-patterns
-description: 臨床意思決定支援システム（CDSS）パターン、医学的推論、およびエビデンスベースの実装。
-origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
-version: "1.0.0"
+description: Clinical Decision Support System (CDSS) development patterns. Drug interaction checking, dose validation, clinical scoring (NEWS2, qSOFA), alert severity classification, and integration into EMR workflows. Use when building clinical decision support — drug interaction checks, dose validation, clinical scoring, or alert severity.
+metadata:
+  version: "1.0.0"
+  origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
 ---
 
 # Healthcare CDSS Development Patterns

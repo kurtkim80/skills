@@ -1,10 +1,15 @@
 ---
-name: "cs-dl-reading-path"
-description: "/cs-dl-reading-path — Build a prerequisite-closed reading path through the Deep Learning book from a goal, a background and the hours you actually have. Refuses to route a goal the 2016 book does not cover, and names what covers it instead."
-argument-hint: "[your goal — what you want to be able to do after reading]"
+title: "/cs-dl-reading-path — Slash Command for AI Coding Agents"
+description: "/cs-dl-reading-path — Build a prerequisite-closed reading path through the Deep Learning book from a goal, a background and the hours you actually. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-dl-reading-path — A route, not a page count
+# /cs-dl-reading-path
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/deep-learning-book/commands/cs-dl-reading-path.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-dl-reading-path [goal]`
 

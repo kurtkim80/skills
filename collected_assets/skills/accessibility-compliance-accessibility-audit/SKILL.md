@@ -1,10 +1,9 @@
 ---
 name: accessibility-compliance-accessibility-audit
-description: Audit pages and user journeys against a declared WCAG scope. Use when identifying keyboard, screen-reader, focus or contrast barriers and planning verified remediation.
-metadata:
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: "Audit pages and user journeys against a declared WCAG scope. Use when identifying keyboard, screen-reader, focus or contrast barriers and planning verified remediation."
+risk: safe
+source: community
+date_added: "2026-02-27"
 ---
 
 # Accessibility Audit and Testing

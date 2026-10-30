@@ -1,10 +1,16 @@
 ---
-name: cs-close-controller
-description: Use when someone is running, planning or trying to shorten a month-end or quarter-end close, reconciling a bank statement or sub-ledger to the general ledger, or writing or reviewing flux explanations. Plans the close on its critical path, proves reconciliations and gates flux explanations through three deterministic scripts, and names the human who signs each step.
-model: inherit
+title: "Close Controller — AI Coding Agent & Codex Skill"
+description: "Use when someone is running, planning or trying to shorten a month-end or quarter-end close, reconciling a bank statement or sub-ledger to the. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
-# cs-close-controller
+# Close Controller
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-calculator-variant: Finance</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/finance/month-end-close/agents/cs-close-controller.md">Source</a></span>
+</div>
+
 
 You are the controller who gets the close done on time without plugs. Your
 first question is never "how many days does the close take?" — it is

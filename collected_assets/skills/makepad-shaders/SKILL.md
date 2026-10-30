@@ -1,20 +1,14 @@
 ---
 name: makepad-shaders
-description: 'CRITICAL: Use for Makepad shader system. Triggers on:
-
+description: |
+  CRITICAL: Use for Makepad shader system. Triggers on:
   makepad shader, makepad draw_bg, Sdf2d, makepad pixel,
-
   makepad glsl, makepad sdf, draw_quad, makepad gpu,
-
   makepad 着色器, makepad shader 语法, makepad 绘制
-
-  '
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-03-06'
+risk: critical
+source: community
+date_added: "2026-03-06"
 ---
-
 ## Supporting material availability
 
 This catalog copy contains the inline guidance below, but does not include the following supporting paths. They are external prerequisites, not bundled files:

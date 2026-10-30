@@ -1,160 +1,164 @@
-# Backend - バックエンド中心の開発
+# 后端 - 后端导向开发
 
-バックエンド中心のワークフロー(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)、Codex主導。
+后端导向的工作流程（研究 → 构思 → 规划 → 执行 → 优化 → 评审），由 Codex 主导。
 
-> **前提条件:** このコマンドは外部の `ccg-workflow` ランタイムを必要とします。これはベースの ECC インストールには**含まれていません**。`npx ccg-workflow` を実行して初期化し、このコマンドが依存する `~/.claude/bin/codeagent-wrapper` と `~/.claude/.ccg/prompts/*` ロールファイルをプロビジョニングしてください。このランタイムがないと、このコマンドは正しく動作しません。
+> **前提条件：** 此命令需要外部的 `ccg-workflow` 运行时，它**不**包含在基础 ECC 安装中。请运行 `npx ccg-workflow` 进行初始化，以配置此命令所依赖的 `~/.claude/bin/codeagent-wrapper` 和 `~/.claude/.ccg/prompts/*` 角色文件。没有该运行时，此命令将无法正常运行。
 
 ## 使用方法
 
 ```bash
-/backend <バックエンドタスクの説明>
+/backend <backend task description>
 ```
 
-## コンテキスト
+## 上下文
 
-- バックエンドタスク: $ARGUMENTS
-- Codex主導、Geminiは補助的な参照用
-- 適用範囲: API設計、アルゴリズム実装、データベース最適化、ビジネスロジック
+* 后端任务：$ARGUMENTS
+* Codex 主导，Gemini 作为辅助参考
+* 适用场景：API 设计、算法实现、数据库优化、业务逻辑
 
-## 役割
+## 你的角色
 
-あなたは**バックエンドオーケストレーター**として、サーバーサイドタスクのためのマルチモデル連携を調整します(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)。
+你是 **后端协调者**，为服务器端任务协调多模型协作（研究 → 构思 → 规划 → 执行 → 优化 → 评审）。
 
-**連携モデル**:
-- **Codex** – バックエンドロジック、アルゴリズム(**バックエンドの権威、信頼できる**)
-- **Gemini** – フロントエンドの視点(**バックエンドの意見は参考のみ**)
-- **Claude(自身)** – オーケストレーション、計画、実装、配信
+**协作模型**：
 
----
+* **Codex** – 后端逻辑、算法（**后端权威，可信赖**）
+* **Gemini** – 前端视角（**后端意见仅供参考**）
+* **Claude (自身)** – 协调、规划、执行、交付
 
-## マルチモデル呼び出し仕様
+***
 
-**呼び出し構文**:
+## 多模型调用规范
+
+**调用语法**：
 
 ```
-# 新規セッション呼び出し
+# 新会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（若未增强则为 $ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文与分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: false,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 
-# セッション再開呼び出し
+# 恢复会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend codex resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（若未增强则为 $ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文与分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: false,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 ```
 
-**ロールプロンプト**:
+**角色提示词**：
 
-| フェーズ | Codex |
+| 阶段 | Codex |
 |-------|-------|
 | 分析 | `~/.claude/.ccg/prompts/codex/analyzer.md` |
-| 計画 | `~/.claude/.ccg/prompts/codex/architect.md` |
-| レビュー | `~/.claude/.ccg/prompts/codex/reviewer.md` |
+| 规划 | `~/.claude/.ccg/prompts/codex/architect.md` |
+| 评审 | `~/.claude/.ccg/prompts/codex/reviewer.md` |
 
-**セッション再利用**: 各呼び出しは`SESSION_ID: xxx`を返します。後続のフェーズでは`resume xxx`を使用してください。フェーズ2で`CODEX_SESSION`を保存し、フェーズ3と5で`resume`を使用します。
+**会话复用**：每次调用返回 `SESSION_ID: xxx`，在后续阶段使用 `resume xxx`。在第 2 阶段保存 `CODEX_SESSION`，在第 3 和第 5 阶段使用 `resume`。
 
----
+***
 
-## コミュニケーションガイドライン
+## 沟通准则
 
-1. レスポンスの開始時にモードラベル`[Mode: X]`を付ける、初期は`[Mode: Research]`
-2. 厳格な順序に従う: `Research → Ideation → Plan → Execute → Optimize → Review`
-3. 必要に応じて`AskUserQuestion`ツールを使用してユーザーとやり取りする(例: 確認/選択/承認)
+1. 在回复开头使用模式标签 `[Mode: X]`，初始值为 `[Mode: Research]`
+2. 遵循严格序列：`Research → Ideation → Plan → Execute → Optimize → Review`
+3. 需要时（例如确认/选择/批准）使用 `AskUserQuestion` 工具进行用户交互
 
----
+***
 
-## コアワークフロー
+## 核心工作流程
 
-### フェーズ 0: プロンプト強化(オプション)
+### 阶段 0：提示词增强（可选）
 
-`[Mode: Prepare]` - ace-tool MCPが利用可能な場合、`mcp__ace-tool__enhance_prompt`を呼び出し、**後続のCodex呼び出しのために元の$ARGUMENTSを強化結果で置き換える**。利用できない場合は`$ARGUMENTS`をそのまま使用。
+`[Mode: Prepare]` - 如果 ace-tool MCP 可用，调用 `mcp__ace-tool__enhance_prompt`，**将原始的 $ARGUMENTS 替换为增强后的结果，用于后续的 Codex 调用**。如果不可用，则按原样使用 `$ARGUMENTS`。
 
-### フェーズ 1: 調査
+### 阶段 1：研究
 
-`[Mode: Research]` - 要件の理解とコンテキストの収集
+`[Mode: Research]` - 理解需求并收集上下文
 
-1. **コード取得**(ace-tool MCPが利用可能な場合): `mcp__ace-tool__search_context`を呼び出して既存のAPI、データモデル、サービスアーキテクチャを取得。利用できない場合は組み込みツールを使用: `Glob`でファイル検索、`Grep`でシンボル/API検索、`Read`でコンテキスト収集、`Task`(Exploreエージェント)でより深い探索。
-2. 要件の完全性スコア(0-10): >=7で継続、<7で停止して補足
+1. **代码检索**（如果 ace-tool MCP 可用）：调用 `mcp__ace-tool__search_context` 来检索现有的 API、数据模型、服务架构。如果不可用，则使用内置工具：`Glob` 用于文件发现，`Grep` 用于符号/API 搜索，`Read` 用于上下文收集，`Task`（探索代理）用于更深入的探索。
+2. 需求完整性评分（0-10）：>=7 继续，<7 停止并补充
 
-### フェーズ 2: アイデア創出
+### 阶段 2：构思
 
-`[Mode: Ideation]` - Codex主導の分析
+`[Mode: Ideation]` - Codex 主导的分析
 
-**Codexを呼び出す必要があります**(上記の呼び出し仕様に従う):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
-- Requirement: 強化された要件(または強化されていない場合は$ARGUMENTS)
-- Context: フェーズ1からのプロジェクトコンテキスト
-- OUTPUT: 技術的な実現可能性分析、推奨ソリューション(少なくとも2つ)、リスク評価
+**必须调用 Codex**（遵循上述调用规范）：
 
-**SESSION_ID**(`CODEX_SESSION`)を保存して後続のフェーズで再利用します。
+* ROLE\_FILE：`~/.claude/.ccg/prompts/codex/analyzer.md`
+* 需求：增强后的需求（或未增强时的 $ARGUMENTS）
+* 上下文：来自阶段 1 的项目上下文
+* 输出：技术可行性分析、推荐解决方案（至少 2 个）、风险评估
 
-ソリューション(少なくとも2つ)を出力し、ユーザーの選択を待ちます。
+**保存 SESSION\_ID**（`CODEX_SESSION`）以供后续阶段复用。
 
-### フェーズ 3: 計画
+输出解决方案（至少 2 个），等待用户选择。
 
-`[Mode: Plan]` - Codex主導の計画
+### 阶段 3：规划
 
-**Codexを呼び出す必要があります**(`resume <CODEX_SESSION>`を使用してセッションを再利用):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
-- Requirement: ユーザーが選択したソリューション
-- Context: フェーズ2からの分析結果
-- OUTPUT: ファイル構造、関数/クラス設計、依存関係
+`[Mode: Plan]` - Codex 主导的规划
 
-Claudeが計画を統合し、ユーザーの承認後に`.claude/plan/task-name.md`に保存します。
+**必须调用 Codex**（使用 `resume <CODEX_SESSION>` 以复用会话）：
 
-### フェーズ 4: 実装
+* ROLE\_FILE：`~/.claude/.ccg/prompts/codex/architect.md`
+* 需求：用户选择的解决方案
+* 上下文：阶段 2 的分析结果
+* 输出：文件结构、函数/类设计、依赖关系
 
-`[Mode: Execute]` - コード開発
+Claude 综合规划，在用户批准后保存到 `.claude/plan/task-name.md`。
 
-- 承認された計画に厳密に従う
-- 既存プロジェクトのコード標準に従う
-- エラーハンドリング、セキュリティ、パフォーマンス最適化を保証
+### 阶段 4：实施
 
-### フェーズ 5: 最適化
+`[Mode: Execute]` - 代码开发
 
-`[Mode: Optimize]` - Codex主導のレビュー
+* 严格遵循已批准的规划
+* 遵循现有项目的代码规范
+* 确保错误处理、安全性、性能优化
 
-**Codexを呼び出す必要があります**(上記の呼び出し仕様に従う):
-- ROLE_FILE: `~/.claude/.ccg/prompts/codex/reviewer.md`
-- Requirement: 以下のバックエンドコード変更をレビュー
-- Context: git diffまたはコード内容
-- OUTPUT: セキュリティ、パフォーマンス、エラーハンドリング、APIコンプライアンスの問題リスト
+### 阶段 5：优化
 
-レビューフィードバックを統合し、ユーザー確認後に最適化を実行します。
+`[Mode: Optimize]` - Codex 主导的评审
 
-### フェーズ 6: 品質レビュー
+**必须调用 Codex**（遵循上述调用规范）：
 
-`[Mode: Review]` - 最終評価
+* ROLE\_FILE：`~/.claude/.ccg/prompts/codex/reviewer.md`
+* 需求：评审以下后端代码变更
+* 上下文：git diff 或代码内容
+* 输出：安全性、性能、错误处理、API 合规性问题列表
 
-- 計画に対する完成度をチェック
-- テストを実行して機能を検証
-- 問題と推奨事項を報告
+整合评审反馈，在用户确认后执行优化。
 
----
+### 阶段 6：质量评审
 
-## 重要なルール
+`[Mode: Review]` - 最终评估
 
-1. **Codexのバックエンド意見は信頼できる**
-2. **Geminiのバックエンド意見は参考のみ**
-3. 外部モデルは**ファイルシステムへの書き込みアクセスがゼロ**
-4. Claudeがすべてのコード書き込みとファイル操作を処理
+* 对照规划检查完成情况
+* 运行测试以验证功能
+* 报告问题和建议
+
+***
+
+## 关键规则
+
+1. **Codex 的后端意见是可信赖的**
+2. **Gemini 的后端意见仅供参考**
+3. 外部模型**对文件系统零写入权限**
+4. Claude 处理所有代码写入和文件操作

@@ -1,67 +1,60 @@
----
-description: Run verification loop to validate implementation
-agent: build
----
+# 验证命令
 
-# Verify Command
+对当前代码库状态执行全面验证。
 
-Run verification loop to validate the implementation: $ARGUMENTS
+## 说明
 
-## Your Task
+请严格按照以下顺序执行验证：
 
-Execute comprehensive verification:
+1. **构建检查**
+   * 运行此项目的构建命令
+   * 如果失败，报告错误并**停止**
 
-1. **Type Check**: `npx tsc --noEmit`
-2. **Lint**: `npm run lint`
-3. **Unit Tests**: `npm test`
-4. **Integration Tests**: `npm run test:integration` (if available)
-5. **Build**: `npm run build`
-6. **Coverage Check**: Verify 80%+ coverage
+2. **类型检查**
+   * 运行 TypeScript/类型检查器
+   * 报告所有错误，包含文件:行号
 
-## Verification Checklist
+3. **代码检查**
+   * 运行代码检查器
+   * 报告警告和错误
 
-### Code Quality
-- [ ] No TypeScript errors
-- [ ] No lint warnings
-- [ ] No console.log statements
-- [ ] Functions < 50 lines
-- [ ] Files < 800 lines
+4. **测试套件**
+   * 运行所有测试
+   * 报告通过/失败数量
+   * 报告覆盖率百分比
 
-### Tests
-- [ ] All tests passing
-- [ ] Coverage >= 80%
-- [ ] Edge cases covered
-- [ ] Error conditions tested
+5. **Console.log 审计**
+   * 在源文件中搜索 console.log
+   * 报告位置
 
-### Security
-- [ ] No hardcoded secrets
-- [ ] Input validation present
-- [ ] No SQL injection risks
-- [ ] No XSS vulnerabilities
+6. **Git 状态**
+   * 显示未提交的更改
+   * 显示自上次提交以来修改的文件
 
-### Build
-- [ ] Build succeeds
-- [ ] No warnings
-- [ ] Bundle size acceptable
+## 输出
 
-## Verification Report
+生成一份简洁的验证报告：
 
-### Summary
-- Status: PASS: PASS / FAIL: FAIL
-- Score: X/Y checks passed
+```
+验证： [通过/失败]
 
-### Details
-| Check | Status | Notes |
-|-------|--------|-------|
-| TypeScript | PASS:/FAIL: | [details] |
-| Lint | PASS:/FAIL: | [details] |
-| Tests | PASS:/FAIL: | [details] |
-| Coverage | PASS:/FAIL: | XX% (target: 80%) |
-| Build | PASS:/FAIL: | [details] |
+构建：    [成功/失败]
+类型：    [成功/X 错误]
+代码检查： [成功/X 问题]
+测试：    [X/Y 通过，Z% 覆盖率]
+密钥检查： [成功/X 发现]
+日志：     [成功/X console.logs]
 
-### Action Items
-[If FAIL, list what needs to be fixed]
+准备提交 PR： [是/否]
+```
 
----
+如果存在任何关键问题，列出它们并提供修复建议。
 
-**NOTE**: Verification loop should be run before every commit and PR.
+## 参数
+
+$ARGUMENTS 可以是：
+
+* `quick` - 仅构建 + 类型检查
+* `full` - 所有检查（默认）
+* `pre-commit` - 与提交相关的检查
+* `pre-pr` - 完整检查加安全扫描

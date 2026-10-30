@@ -1,123 +1,123 @@
 ---
 name: tinystruct-patterns
-description: tinystruct Java フレームワークで開発する際の専門ガイダンス。tinystruct コードベース、または tinystruct 上に構築されたあらゆるプロジェクトで作業する際に使用します — プロジェクトに存在しない場合の bin/dispatcher・bin/dispatcher.cmd 起動スクリプトの生成、Application クラスの作成、@Action によるルート定義、ユニットテスト、ActionRegistry、HTTP/CLI デュアルモード対応、組み込み HTTP サーバー、イベントシステム、Builder/Builders による JSON 処理、AbstractData によるデータベース永続化、POJO 生成、Server-Sent Events (SSE)、ファイルアップロード、アウトバウンド HTTP 通信を含みます。
+description: Expert guidance for developing with the tinystruct Java framework. Use when working on the tinystruct codebase or any project built on tinystruct — including generating the bin/dispatcher and bin/dispatcher.cmd launcher scripts when a project lacks them, creating Application classes, @Action-mapped routes, unit tests, ActionRegistry, HTTP/CLI dual-mode handling, the built-in HTTP server, the event system, JSON with Builder/Builders, database persistence with AbstractData, POJO generation, Server-Sent Events (SSE), file uploads, and outbound HTTP networking.
 metadata:
   origin: ECC
-  upstream: tinystruct==1.7.34
+  upstream: tinystruct==1.7.37
 ---
 
-# tinystruct 開発パターン
+# tinystruct Development Patterns
 
-**tinystruct** Java フレームワークを使用してモジュールをビルドするためのアーキテクチャと実装パターン。CLI と HTTP を等しく扱う軽量・高性能なフレームワークで、`main()` メソッドを必要とせず、最小限の設定で動作します。
+Architecture and implementation patterns for building modules with the **tinystruct** Java framework – a lightweight, high-performance framework that treats CLI and HTTP as equal citizens, requiring no `main()` method and minimal configuration.
 
-## コア原則
+## Core Principle
 
-**CLI と HTTP は等しい市民（equal citizens）です。** `@Action` でアノテーションされたすべてのメソッドは、理想的には変更なしでターミナルとWebブラウザの両方から実行可能であるべきです。この「デュアルモード」対応能力が tinystruct のコア設計思想です。
+**CLI and HTTP are equal citizens.** A transport-neutral `@Action` uses `Mode.DEFAULT` (or omits `mode`) and has no HTTP-only dependencies. Such an action can run from both a terminal and a web browser. `Mode.DEFAULT` removes the transport restriction; it does not make an HTTP-dependent method CLI-compatible. `Request` and `Response` parameters come from HTTP context attributes and remain null when those attributes are absent, as in an ordinary CLI invocation. Keep shared logic independent of HTTP objects, sessions, and uploads, and call it from transport-specific entry points when needed. This "dual-mode" capability is the core design philosophy of tinystruct. An action with a transport-specific mode (`Mode.CLI`, `Mode.HTTP_GET`, `Mode.HTTP_POST`, ...) is deliberately bound to that transport: the framework rejects it from the other one with "The action is not allowed to be executed."
 
-## 主要な開発ツール：`bin/dispatcher`
+## Primary Development Tool: `bin/dispatcher`
 
-**`bin/dispatcher` は tinystruct アプリケーションを開発・実行・テスト・デバッグするためのデフォルトかつ最優先のツールです — IDE の実行構成、手書きの `main()`、curl、ブラウザよりも先にこれを使ってください。** すべての `@Action` は設計上デュアルモードであるため、`bin/dispatcher` を使うことでサーバーやブラウザを必要とせず、ターミナルから直接ルーティング・引数バインディング・ビジネスロジックを、最速のフィードバックループで検証できます。
+**`bin/dispatcher` is the default, highest-priority tool for developing, running, testing, and debugging a tinystruct application — reach for it before an IDE run configuration, a hand-written `main()`, curl, or a browser.** Because transport-neutral `@Action` methods are dual-mode by design, `bin/dispatcher` lets you exercise routing, argument binding, and business logic directly from the terminal, with the fastest possible feedback loop and no server/browser required. Actions bound to an HTTP method (`Mode.HTTP_POST`, `Mode.HTTP_GET`, ...) cannot be reached from `bin/dispatcher`; test those through an HTTP client against the running server.
 
 ```bash
-# @Action を直接実行 - 新しいアクションが動作するか確認する最速の方法
-# （クラスをインポートする必要があります。--import または application.properties の default.import.applications を参照してください）
+# Run a CLI-compatible @Action directly to verify a new action
+# (the class must be imported; see --import or default.import.applications in application.properties)
 bin/dispatcher greet/James --import com.example.MyService
 bin/dispatcher echo --words "Praise the Lord"
 
-# Web向けの対応部分を検証する必要があるときに HTTP サーバーを起動
+# Start the HTTP server when you need the web-facing counterpart
 bin/dispatcher start --import org.tinystruct.system.HttpServer
 
-# 今回の実行のために追加の Application/MCP クラスをインポート
-# （クラスごとに --import を1つ。カンマ区切りのリストは ClassNotFoundException になる）
+# Import additional Application/MCP classes for the current run
+# (one --import per class; a comma-separated list fails with ClassNotFoundException)
 bin/dispatcher start --import org.tinystruct.system.HttpServer --import com.example.MyService
 
-# 利用可能な内容を確認
+# Discover what's available
 bin/dispatcher --help
 bin/dispatcher --version
 ```
 
-このワークフローをデフォルトにしてください：`@Action` を実装したら、`bin/dispatcher <action>` ですぐに実行して CLI モードで正しく動作することを確認し、Web向けのパス（例：`mode = Mode.HTTP_POST`、セッション、ファイルアップロードなど）を検証する必要があるときだけ HTTP サーバー（これも `bin/dispatcher start ...` で）を起動します。アプリのエントリポイントとして `main(String[] args)` を決してハードコードしないでください — `bin/dispatcher`（Windows では `bin/dispatcher.cmd`）がすべてのモジュールの唯一のエントリポイントです。
+Default to this workflow: implement a transport-neutral `@Action`, run it immediately via `bin/dispatcher <action>` to confirm it behaves correctly in CLI mode, and only start the HTTP server (also via `bin/dispatcher start ...`) once you need to verify the web-facing path (e.g. `mode = Mode.HTTP_POST`, sessions, file uploads). For HTTP-only actions skip the CLI step and test them over HTTP; for `Mode.CLI` actions no server is needed. Never hardcode a `main(String[] args)` as an app's entry point — `bin/dispatcher` (or `bin/dispatcher.cmd` on Windows) is the one entry point for every module.
 
-### `bin/dispatcher` と `bin/dispatcher.cmd` の生成
+### Generating `bin/dispatcher` and `bin/dispatcher.cmd`
 
-すべての tinystruct プロジェクトは `bin/` に起動スクリプトを必要とします。**フレームワークがこれを生成します — 手で書いたり、他のプロジェクトからコピーしたり、`main()` で代用したりしないでください。** `ApplicationManager.init()` は、起動スクリプトが存在しない場合、tinystruct jar 内のテンプレートからそのjarのバージョンを埋め込んだ、実行中のOS用のスクリプトを作業ディレクトリ配下の `bin/` に書き出します。改行コードと実行権限はすでに正しく設定されています。
+Every tinystruct project needs its launcher in `bin/`. **The framework generates it — never write it by hand, and never copy it from another project or substitute a `main()`.** `ApplicationManager.init()` writes the launcher for the current operating system into `bin/` under the working directory whenever it is missing, from templates inside the tinystruct jar, with that jar's version filled in. Line endings and the executable bit are already right.
 
-**1. プロジェクトがビルド対象とする tinystruct のバージョンを確認する**：`pom.xml` の `<tinystruct.version>` プロパティ、または `org.tinystruct:tinystruct` 依存関係です。jar は `~/.m2/repository/org/tinystruct/tinystruct/<version>/`（なければ `mvn dependency:resolve` を実行）か、プロジェクトの `lib/` に存在している必要があります。
+**1. Find the tinystruct version** the project builds against: the `<tinystruct.version>` property or the `org.tinystruct:tinystruct` dependency in `pom.xml`. The jar must be reachable, in `~/.m2/repository/org/tinystruct/tinystruct/<version>/` (run `mvn dependency:resolve` if it is not) or in the project's `lib/`.
 
-**2. プロジェクトルートから、フレームワークを一度実行します：**
+**2. From the project root, run the framework once:**
 
 ```bash
 java -cp ~/.m2/repository/org/tinystruct/tinystruct/<version>/tinystruct-<version>.jar \
      org.tinystruct.system.Dispatcher --version
 ```
 
-`<version>` をステップ1で確認したバージョンに置き換えてください。Windows では `%USERPROFILE%\.m2\repository\org\tinystruct\tinystruct\<version>\tinystruct-<version>.jar` と同じクラスを使用します。これにより**実行したOS用のスクリプトだけ**が、まだ存在しない場合にのみ作成されます：
+Replace `<version>` with the version found in step 1. On Windows use `%USERPROFILE%\.m2\repository\org\tinystruct\tinystruct\<version>\tinystruct-<version>.jar` and the same class. This creates **only the script for the OS you ran it on**, and only if it is not already there:
 
-| 実行環境 | 作成されるもの |
+| Run on | Creates |
 |---|---|
-| Linux, macOS | `bin/dispatcher`（実行可能、LF） |
-| Windows | `bin\dispatcher.cmd`（CRLF） |
+| Linux, macOS | `bin/dispatcher` (executable, LF) |
+| Windows | `bin\dispatcher.cmd` (CRLF) |
 
-**3. 検証する。** プロジェクトルートから `bin/dispatcher --version`（Windows では `bin\dispatcher.cmd --version`）を実行します。`Dispatcher (cli) (built on tinystruct-<version>)` と表示され、スクリプト内の `VERSION` は jar のバージョンと一致します。続けて `bin/dispatcher --help` を実行すると、コマンド一覧とインポートされたすべてのアクションが表示されます。作成したファイルをユーザーに見せてください。
+**3. Verify.** From the project root run `bin/dispatcher --version` (Windows: `bin\dispatcher.cmd --version`). It prints `Dispatcher (cli) (built on tinystruct-<version>)`, and the `VERSION` inside the script equals the jar's version. Then `bin/dispatcher --help` lists the commands and every imported action. Show the user the file you created.
 
-**4. 両方のスクリプトを取得するには**、各OSでステップ2を実行するか、もう一方のOSでチームメイトやCIに実行させてその結果をコミットしてもらいます。どちらのOSでチェックアウトしても動作するよう、両方をコミットしてください。`-Dos.name=…` で別のOSを偽装しようとしないでください：Windows では `setPosixFilePermissions` の `UnsupportedOperationException` で失敗し、空の `bin/dispatcher` が残ります。チェックアウト時に改行コードが壊れないよう、以下の `.gitattributes` を推奨します：
+**4. Get both scripts by running step 2 on each OS**, or let a teammate or CI on the other OS run it and commit the result. Commit both, so a checkout on either OS works. Do not try to fake the other OS with `-Dos.name=…`: on Windows it fails (`UnsupportedOperationException` from `setPosixFilePermissions`) and leaves an empty `bin/dispatcher`. Recommended `.gitattributes`, so a checkout does not corrupt the line endings:
 
 ```
 bin/dispatcher     text eol=lf
 bin/dispatcher.cmd text eol=crlf
 ```
 
-**tinystruct のアップグレード：** `pom.xml` のバージョンを変更し、古いスクリプトを削除して、新しい jar でステップ2を繰り返します。あるいは `bin/dispatcher update` が Maven Central で最新リリースを確認し、プロジェクトの依存関係をアップグレードしてスクリプトを強制的に再生成します。これにはネットワークが必要で、`pom.xml` を編集し、選択したバージョンではなく*最新*バージョンに移行します。
+**Upgrading tinystruct:** change the version in `pom.xml`, delete the old script, and repeat step 2 with the new jar. Alternatively `bin/dispatcher update` checks Maven Central for the latest release, upgrades the project's dependency and regenerates the script with force; it needs the network, edits the `pom.xml`, and goes to the *latest* version, not a chosen one.
 
-**これは暗黙的にも発生します。** `ApplicationManager.init()` に到達するコード（dispatcher 自体、またはユニットテスト内の `ApplicationManager.install(app, config)`）は、スクリプトが存在しない場合、*カレントディレクトリ*にそれを作成します。ユニットテストが `bin/dispatcher.cmd` を各モジュールのディレクトリに散らかしてしまう場合は、ビルドディレクトリから実行してください：surefire の設定で `<workingDirectory>${project.build.directory}</workingDirectory>` を設定します。
+**It also happens implicitly.** Any code that reaches `ApplicationManager.init()` (the dispatcher itself, or `ApplicationManager.install(app, config)` in a unit test) creates the script in the *current directory* if it is missing. If unit tests scatter `bin/dispatcher.cmd` into module directories, run them from the build directory: in the surefire configuration set `<workingDirectory>${project.build.directory}</workingDirectory>`.
 
-**スクリプトの動作内容**（ほとんどの問題を説明します）：
+**What the scripts do**, which explains most problems:
 
-- 必ず**プロジェクトルートから**実行してください：シェルスクリプトはカレントディレクトリをルートとみなし、`.cmd` は `bin/` の親ディレクトリをルートとみなします。
-- クラスパスは `target/classes`、`lib/*.jar`、`WEB-INF/lib/*`、`WEB-INF/classes`、そして tinystruct の jar（`lib/` になければ `~/.m2`）で構成され、その後 `org.tinystruct.system.Dispatcher` を引数付きで実行します。
-- 初回実行時、`mvnw` / `mvnw.cmd` が存在しない場合は、プロジェクトルートに Maven Wrapper を展開します（Unix では `unzip`、Windows では PowerShell）。これが起こることをユーザーに伝えてください。ファイルはコミットしても、無視してもかまいません。
-- `-D…` や `-X…` 引数を JVM オプションとして扱うのはシェルスクリプトのみです。
+- Run them **from the project root**: the shell script takes the current directory as the root, the `.cmd` takes the parent of `bin/`.
+- The classpath is `target/classes`, `lib/*.jar`, `WEB-INF/lib/*`, `WEB-INF/classes` and the tinystruct jar (from `lib/`, else `~/.m2`), then they run `org.tinystruct.system.Dispatcher` with your arguments.
+- On the first run, if `mvnw` / `mvnw.cmd` is missing, they extract the Maven Wrapper into the project root (`unzip` on Unix, PowerShell on Windows). Tell the user this happens; the files can be committed or ignored.
+- Only the shell script treats `-D…` and `-X…` arguments as JVM options.
 
-**注意点：**
+**Gotchas:**
 
-- **Windows では `bin\dispatcher.cmd` を使ってください。** シェルスクリプトはクラスパスを `:` で結合するため、Git Bash/MSYS 上では `ClassNotFoundException: org.tinystruct.system.Dispatcher` で失敗します。WSL か `.cmd` を使用してください。
-- **クラスパスに含まれるのは tinystruct の jar のみです。** フレームワークはデフォルトで fat jar を提供しなくなったため、他のモジュール、JDBCドライバ、ライブラリ（jjwt、lettuce など）は `lib/` に置く必要があります：`mvn dependency:copy-dependencies -DoutputDirectory=lib`（`lib/` は git-ignore してください）。マルチモジュールビルドでは、起動スクリプトを `target/classes` と `lib/` を持つディレクトリに置き、兄弟モジュールの jar をその `lib/` にコピーしてください。兄弟モジュールがクラスパスに含まれないディレクトリから実行すると `NoClassDefFoundError` になります。
-- **アプリケーションは `--import` または設定でロードしてください。** クラスごとに `--import` を1つ（`--import a.A,b.B` は失敗します。`--import a.A --import b.B` と書いてください）、または `application.properties` に一度だけ列挙します：`default.import.applications=a.A;b.B`（`;` 区切り）。
-- **`.cmd` には `JAVA_HOME` の設定が必要です**。設定されていないとエラーで停止します。
-- **`bin/` は `target/classes` と `lib/` を持つディレクトリの直下に置いてください。** `.cmd` は `bin/` の親ディレクトリをルートとみなすため、`bin/` が誤った場所にネストしていると、間違ったクラスパスが `Dispatcher` の前に付与されます。
+- **On Windows use `bin\dispatcher.cmd`.** The shell script joins the classpath with `:`, so under Git Bash/MSYS it fails with `ClassNotFoundException: org.tinystruct.system.Dispatcher`. Use WSL, or the `.cmd`.
+- **Only the tinystruct jar is on the classpath.** The framework no longer ships a fat jar by default, so your other modules, JDBC drivers and libraries (jjwt, lettuce, …) must be in `lib/`: `mvn dependency:copy-dependencies -DoutputDirectory=lib` (and git-ignore `lib/`). In a multi-module build, keep the launcher in the directory that holds `target/classes` and `lib/`, and copy the sibling modules' jars into that `lib/`; running it from a module whose siblings are not on its classpath fails with `NoClassDefFoundError`.
+- **Load applications with `--import` or configuration.** One `--import` per class (`--import a.A,b.B` fails; write `--import a.A --import b.B`), or list them once in `application.properties`: `default.import.applications=a.A;b.B` (`;`-separated).
+- **`JAVA_HOME` must be set** for the `.cmd`; it stops with an error otherwise.
+- **`bin/` sits directly under the directory that holds `target/classes` and `lib/`.** The `.cmd` treats the parent of `bin/` as the root, so a `bin/` nested in the wrong directory puts the wrong classpath in front of `Dispatcher`.
 
-## 使用するタイミング
+## When to Activate
 
-### 使用する場面
+### When to Use
 
-- `bin/dispatcher` を通じて `@Action` を実行・テスト・デバッグするとき — これは HTTP や IDE の実行構成に頼る前の、tinystruct アプリを扱うデフォルトの方法です。
-- `bin/dispatcher` / `bin/dispatcher.cmd` が存在しないプロジェクトをセットアップするとき — フレームワークに生成させてください（「`bin/dispatcher` と `bin/dispatcher.cmd` の生成」を参照）。
-- `AbstractApplication` を拡張して新しい `Application` モジュールを作成するとき。
-- `@Action` を使用してルートとコマンドラインアクションを定義するとき。
-- `Context` を通じてリクエストごとの状態を処理するとき。
-- ネイティブの `Builder` と `Builders` コンポーネントを使用してJSONシリアライゼーションを行うとき。
-- `AbstractData` POJO を使用してデータベース永続化を行うとき。
-- `generate` コマンドを使用してデータベーステーブルから POJO を生成するとき（XML マッピングファイルまたはアノテーション `--mapping annotation`）。
-- リアルタイムプッシュのために Server-Sent Events (SSE) を実装するとき。
-- multipart データによるファイルアップロードを処理するとき。
-- `URLRequest` と `HTTPHandler` を使用してアウトバウンドHTTPリクエストを行うとき。
-- `application.properties` でデータベース接続やシステム設定を構成するとき。
-- ルーティングの競合（Action）や CLI 引数解析をデバッグするとき。
+- Running, testing, or debugging any transport-neutral or `Mode.CLI` `@Action` via `bin/dispatcher` — this is the default way to work with a tinystruct app, before reaching for HTTP or an IDE run configuration. HTTP-only actions are tested over HTTP instead.
+- Setting up a project that has no `bin/dispatcher` / `bin/dispatcher.cmd` — have the framework generate it (see "Generating `bin/dispatcher` and `bin/dispatcher.cmd`").
+- Creating new `Application` modules by extending `AbstractApplication`.
+- Defining routes and command-line actions using `@Action`.
+- Handling per-request state via `Context`.
+- Performing JSON serialization using the native `Builder` and `Builders` components.
+- Working with database persistence via `AbstractData` POJOs.
+- Generating POJOs from database tables using the `generate` command, with an XML mapping file or annotations (`--mapping annotation`).
+- Implementing Server-Sent Events (SSE) for real-time push.
+- Handling file uploads via multipart data.
+- Making outbound HTTP requests with `URLRequest` and `HTTPHandler`.
+- Configuring database connections or system settings in `application.properties`.
+- Debugging routing conflicts (Actions) or CLI argument parsing.
 
-## 動作の仕組み
+## How It Works
 
-tinystruct フレームワークは、`@Action` でアノテーションされたメソッドをターミナルとWeb環境の両方でルーティング可能なエンドポイントとして扱います。アプリケーションは `AbstractApplication` を拡張することで作成され、`init()` などのコアライフサイクルフックとリクエスト `Context` へのアクセスが提供されます。
+The tinystruct framework treats any method annotated with `@Action` as a routable endpoint. Without a `mode`, dispatch is not restricted to one transport, but its parameters and implementation still need to support that environment. Ordinary CLI calls do not supply HTTP `Request` or `Response` objects. With `mode = Mode.CLI` or an HTTP mode such as `Mode.HTTP_POST`, dispatch is restricted to that transport. Applications are created by extending `AbstractApplication`, which provides core lifecycle hooks like `init()` and access to the request `Context`.
 
-ルーティングは `ActionRegistry` によって処理され、パスセグメントをメソッド引数に自動的にマッピングして依存関係を注入します。データのみのサービスでは、ゼロ依存のフットプリントを維持するために、JSONシリアライゼーションにネイティブの `Builder` と `Builders` コンポーネントを使用すべきです。データベース層は `@Table`/`@Column` アノテーションまたは XML マッピングファイルでテーブルにマッピングされた `AbstractData` POJO を使用し、外部 ORM ライブラリなしで CRUD 操作を行います。不足しているテーブルは `database.autocreate=true` で自動的に作成できます。
+Routing is handled by the `ActionRegistry`, which automatically maps path segments to method arguments and injects dependencies. For data-only services, the native `Builder` and `Builders` components should be used for JSON serialization to maintain a zero-dependency footprint. The database layer uses `AbstractData` POJOs mapped to tables with `@Table`/`@Column` annotations or XML mapping files for CRUD operations without external ORM libraries. Missing tables can be created automatically with `database.autocreate=true`.
 
-## 例
+## Examples
 
-### 基本アプリケーション（MyService）
+### Basic Application (MyService)
 ```java
 public class MyService extends AbstractApplication {
     @Override
     public void init() {
-        this.setTemplateRequired(false); // データ/APIアプリの .view 参照を無効化
+        this.setTemplateRequired(false); // Disable .view lookup for data/API apps
     }
 
     @Override public String version() { return "1.0.0"; }
@@ -127,7 +127,7 @@ public class MyService extends AbstractApplication {
         return "Hello from tinystruct!";
     }
 
-    // パスパラメータ： GET /?q=greet/James  または  bin/dispatcher greet/James
+    // Path parameter: GET /?q=greet/James  OR  bin/dispatcher greet/James
     @Action("greet")
     public String greet(String name) {
         return "Hello, " + name + "!";
@@ -135,16 +135,37 @@ public class MyService extends AbstractApplication {
 }
 ```
 
-### HTTPモード分岐（login）
+### HTTP Mode Disambiguation (login)
+
+The limits below are example application policy measured in UTF-16 code units, not tinystruct defaults. Align them with your authentication service. Reject blank credentials without trimming or otherwise changing the values passed to authentication.
+
 ```java
 @Action(value = "login", mode = Mode.HTTP_POST)
 public String doLogin(Request<?, ?> request) throws ApplicationException {
-    request.getSession().setAttribute("userId", "42");
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+
+    final int maxUsernameLength = 256;
+    final int maxPasswordLength = 1024;
+    if (username == null || password == null
+            || username.length() > maxUsernameLength || password.length() > maxPasswordLength
+            || username.isBlank() || password.isBlank()) {
+        throw new ApplicationException("Invalid credentials");
+    }
+
+    // AuthService is your application's own class, not part of tinystruct
+    String userId = AuthService.getInstance().authenticate(username, password); // null on failure
+    if (userId == null) {
+        throw new ApplicationException("Invalid credentials");
+    }
+
+    // Only touch the session after a successful authentication
+    request.getSession().setAttribute("userId", userId);
     return "Logged in";
 }
 ```
 
-### ネイティブJSONデータ処理（Builder + Builders）
+### Native JSON Data Handling (Builder + Builders)
 ```java
 import org.tinystruct.data.component.Builder;
 import org.tinystruct.data.component.Builders;
@@ -164,7 +185,7 @@ public String getData() throws ApplicationException {
 }
 ```
 
-### SSE（Server-Sent Events）
+### SSE (Server-Sent Events)
 ```java
 import org.tinystruct.http.SSEPushManager;
 
@@ -173,17 +194,18 @@ public String connect() {
     return "{\"type\":\"connect\",\"message\":\"Connected to SSE\"}";
 }
 
-// 特定のクライアントへプッシュ
+// Push to a specific client
 String sessionId = getContext().getId();
 Builder msg = new Builder();
 msg.put("text", "Hello, user!");
 SSEPushManager.getInstance().push(sessionId, msg);
 
-// 全員へブロードキャスト
+// Broadcast to all
+// Broadcast to all
 SSEPushManager.getInstance().broadcast(msg);
 ```
 
-### ファイルアップロード
+### File Upload
 ```java
 import org.tinystruct.data.FileEntity;
 
@@ -199,8 +221,8 @@ public String upload(Request<?, ?> request) throws ApplicationException {
 }
 ```
 
-### データベースメタデータ操作
-`DatabaseOperator` は、接続レベルのカタログ、スキーマ、メタデータへの直接アクセスを提供します：
+### Database Metadata Operations
+`DatabaseOperator` provides direct access to connection-level catalog, schema, and metadata:
 ```java
 import org.tinystruct.data.DatabaseOperator;
 
@@ -215,25 +237,25 @@ try {
 }
 ```
 
-## MCP サーバーとツールの統合
+## MCP Server and Tools Integration
 
-tinystruct は SDK バージョン **`1.7.0`** から Model Context Protocol (MCP) のネイティブサポートを提供しています。
-MCP API（例：`org.tinystruct.mcp.MCPTool`、`org.tinystruct.mcp.MCPServer`、`org.tinystruct.mcp.MCPException`）はコアの依存関係に直接含まれています：
+tinystruct provides native support for the Model Context Protocol (MCP) starting with SDK version **`1.7.0`**.
+The MCP APIs (e.g., `org.tinystruct.mcp.MCPTool`, `org.tinystruct.mcp.MCPServer`, `org.tinystruct.mcp.MCPException`) are included directly in the core dependency:
 ```xml
 <dependency>
     <groupId>org.tinystruct</groupId>
     <artifactId>tinystruct</artifactId>
-    <version>1.7.34</version>
+    <version>1.7.37</version>
 </dependency>
 ```
 
-> **セキュリティ警告（プロンプトインジェクション）：**
-> MCPクライアントまたはモデルホストがツールの戻り値をモデルのコンテキストに渡す場合、その戻り値は信頼できないデータです。呼び出し元から渡された引数だけでなく、データベース、ファイル、ネットワークなどから取得した**すべてのツール出力を検証し、モデルの指示と分離する必要があります**。戻り値内の命令を信頼できる指示として扱うと、攻撃者がモデルの挙動を上書きするプロンプトインジェクションを許してしまいます。
+> **SECURITY WARNING (Prompt Injection):**
+> Tool return values are fed directly back into the AI model's context window. You **MUST** validate and sanitize all caller-supplied arguments before including them in the tool's return string. Failure to sanitize inputs can allow an attacker to inject adversarial instructions (Prompt Injection) that override the model's behavior. Always validate length, character sets, and nullity.
 
-**MCP ツールを作成するには：**
-1. `org.tinystruct.mcp.MCPTool` を拡張する。
-2. `@Action` で操作にアノテーションを付け、`arguments` 配列内で `@Argument` を使ってパラメータを宣言する。
-3. パラメータは `@Argument` のキーに対応する明示的なメソッド引数として受け取る（ツールの引数に `getContext().getAttribute(...)` を使用**しないでください**）。
+**To create an MCP Tool:**
+1. Extend `org.tinystruct.mcp.MCPTool`.
+2. Annotate operations with `@Action` and declare parameters using `@Argument` within the `arguments` array.
+3. Accept parameters as explicit method arguments matching the keys in `@Argument`. (Do **not** use `getContext().getAttribute(...)` for tool arguments).
 
 ```java
 import org.tinystruct.mcp.MCPTool;
@@ -254,8 +276,8 @@ public class MyCustomTool extends MCPTool {
         }
     )
     public String hello(String name) throws MCPException {
-        // SECURITY: モデルに返す前にツール入力を検証・サニタイズし、
-        // プロンプトインジェクションの脆弱性を防止する。
+        // SECURITY: Validate/sanitize tool inputs before returning to the model
+        // to prevent prompt injection vulnerabilities.
         if (name == null || name.length() > 50 || !name.matches("^[a-zA-Z0-9 ]+$")) {
             throw new MCPException("Invalid name provided");
         }
@@ -264,9 +286,9 @@ public class MyCustomTool extends MCPTool {
 }
 ```
 
-**MCP サーバーをデプロイするには：**
-1. `org.tinystruct.mcp.MCPServer` を拡張する。
-2. `init()` をオーバーライドし、`this.registerTool()` を使ってツールを登録する。フレームワークが `@Action` メソッドを自動的にスキャンしてマッピングします。
+**To deploy an MCP Server:**
+1. Extend `org.tinystruct.mcp.MCPServer`.
+2. Override `init()` and register your tools using `this.registerTool()`. The framework automatically scans and maps the `@Action` methods.
 
 ```java
 import org.tinystruct.mcp.MCPServer;
@@ -285,115 +307,144 @@ public class MyMCPServer extends MCPServer {
 }
 ```
 
-dispatcher 経由でサーバーを実行します：
+Run the server via the dispatcher:
 ```bash
 bin/dispatcher start --import org.tinystruct.system.HttpServer --import com.example.MyMCPServer
 ```
 
-### オーバーロードされたツールメソッド
-tinystruct は `MCPTool` 内で同一ツール名に対するオーバーロードメソッド（同じツール名を共有しつつ異なるパラメータシグネチャを受け取る）をサポートしています。
-- **スキーママージ**：同じ名前を持つすべてのオーバーロードの入力スキーマは、動的に統合されたひとつの JSON スキーマにマージされます。プロパティは和集合として扱われ、必須プロパティは積集合として扱われます（*すべての*オーバーロードで必須とされているフィールドのみが必須として残ります）。
-- **実行ルーティング**：ツールを実行する際、サーバーは利用可能なオーバーロードメソッドを順に試行します。各メソッドのスキーマ検証が最初に行われ、提供された引数に対して最初に検証を通過したオーバーロードが実行されます。どのシグネチャも一致・成功しない場合、フレームワークは適切な例外をスローします。
+### Overloaded Tool Methods
+tinystruct supports overloaded methods for the same tool name in `MCPTool` (sharing the same tool name but accepting different parameter signatures).
+- **Schema Merging**: Input schemas of all overloads with the same name are dynamically merged into a unified JSON schema. Properties are unioned, and required properties are intersected (only fields required across *all* overloads remain marked mandatory).
+- **Execution Routing**: When executing a tool, the server iterates sequentially through the available overloaded methods, attempting execution. Each method's schema validation is performed first, and the first overload that validates against the provided arguments successfully executes. If no signature matches or succeeds, the framework throws an appropriate exception.
 
-## 設定
+## Configuration
 
-設定は `src/main/resources/application.properties` で管理されます。
+Settings are managed in `src/main/resources/application.properties`.
 
 ```properties
-# データベース
+# Database
 driver=org.h2.Driver
 database.url=jdbc:h2:~/mydb
 database.user=sa
 database.password=
-# 任意：初回利用時にクラスのマッピングから不足しているテーブルを作成する（デフォルトはオフ）
+# Optional: create missing tables from the class mapping on first use (off by default)
 # database.autocreate=true
 
-# サーバー
+# Server
 default.home.page=hello
 server.port=8080
 default.server.open_browser=true
+# Static files are served only from these directories (comma- or semicolon-separated),
+# Use real public directories without symlinked root components.
+# Do not expose the working directory or its ancestors. Default: static
+# server.static.dirs=static,public
 
-# ロケール
+# Locale
 default.language=en_US
 
-# セッション（クラスタ環境向けの Redis）
+# Session (Redis for clustered environments)
 # default.session.repository=org.tinystruct.http.RedisSessionRepository
 # redis.host=127.0.0.1
 # redis.port=6379
 
-# プログラムによるロギング設定
+# Programmatic Logging Configuration
 logging.enabled=true
 logging.level=INFO
 org.tinystruct.level=FINE
+# Handlers to create (comma- or whitespace-separated). Default: ConsoleHandler only
+handlers=java.util.logging.ConsoleHandler
+# To also write rotating log files, append the FileHandler:
+# handlers=java.util.logging.ConsoleHandler, java.util.logging.FileHandler
+# java.util.logging.FileHandler.pattern=logs/tinystruct-%g.log
+# java.util.logging.FileHandler.limit=10485760
+# java.util.logging.FileHandler.count=5
+# java.util.logging.FileHandler.level=INFO
+# java.util.logging.FileHandler.formatter=org.tinystruct.system.logging.LogFormatter
+# java.util.logging.FileHandler.encoding=UTF-8
 ```
 
-アプリケーション内で設定値にアクセスする：
+Access config values in your application:
 ```java
 String port = this.getConfiguration("server.port");
 ```
 
-## ロギングと診断
+## Logging and Diagnostics
 
-フレームワークには `java.util.logging`（JUL）を包む形のプログラム的なラッパーが含まれており、標準で見やすいコンソール出力と高度な呼び出し元トレースを提供します。
+The framework includes a programmatic wrapper around `java.util.logging` (JUL) that provides beautiful console output and advanced caller tracing out of the box.
 
-- **ANSI コンソールカラー**：コンソール出力はログレベルに応じて色分けされます（SEVERE は赤、WARNING は黄、INFO は緑、CONFIG はシアン、FINE/デバッグログはグレー）。
-- **正確な呼び出し元トレース**：Java の `StackWalker` API を使用して実行時のコールスタックをトレースします。ログを発生させた呼び出し元の正確なクラス、メソッド、ファイル名、行番号を特定してログに記録します（内部のユーティリティ層やロギング層は経由しません）。
-- **パッケージ/ロガーレベルの上書き**：`application.properties` にパッケージ単位の上書きを直接設定できます（例：`org.tinystruct.level=FINE`）。
+- **ANSI Console Colors**: Console output is color-coded based on the log level (red for SEVERE, yellow for WARNING, green for INFO, cyan for CONFIG, and grey for FINE/debug logs).
+- **Precise Caller Tracing**: Uses Java's `StackWalker` API to trace the call stack at runtime. It identifies and logs the exact class, method, filename, and line number of the caller that initiated the log (bypassing internal utility and logging layers).
+- **Package/Logger Level Overrides**: Set package-specific overrides directly in `application.properties` (e.g., `org.tinystruct.level=FINE`).
+- **Switch and Level**: `logging.enabled=false` turns all logging off. `logging.level` sets the root logger level and accepts `OFF`, `SEVERE`/`ERROR`, `WARNING`/`WARN`, `INFO`, `CONFIG`, `FINE`/`DEBUG`, `FINER`, `FINEST`/`TRACE` and `ALL` (default `INFO`).
+- **Configurable Handlers**: The `handlers` property lists the handlers to create (comma- or whitespace-separated); it defaults to `java.util.logging.ConsoleHandler`. Each handler reads its own `<handler>.level` (default `ALL`), `<handler>.formatter` and `<handler>.encoding`. Any `java.util.logging.Handler` or `Formatter` class with a public no-argument constructor can be named; an unknown formatter falls back to the built-in `LogFormatter`, and a handler that cannot be created is reported on stderr while the others still start.
+- **FileHandler**: Opt-in. `java.util.logging.FileHandler.pattern` is optional (default `%h/java%u.log`, in the user's home directory) and its parent directory is created if missing. A relative pattern such as `logs/tinystruct-%g.log` resolves against the directory the application is launched from (the project root when you run `bin/dispatcher` there). `limit` (default `0`, unlimited; otherwise the maximum bytes per file), `count` (default `1`, the number of files to keep) and `append` (default `true`) control rotation. `%g` in the pattern is the rotation number, so `count=5` produces `tinystruct-0.log` through `tinystruct-4.log`. To enable it: add `java.util.logging.FileHandler` to `handlers`, set the properties above, and restart. ANSI colors are applied to console output only, never to log files.
+- **Two Level Gates**: A record must pass both the logger level and the handler level. Raising a handler to `FINE` shows nothing until the logger allows it too, for example `logging.level=FINE` or a package override such as `org.tinystruct.level=FINE`.
+- **When It Applies**: The logging configuration is read once from `application.properties` when `ApplicationManager` initializes; restart the application after changing it.
 
-## レッドフラグとアンチパターン
+## Static Files
 
-| 症状 | 正しいパターン |
+The built-in `HttpServer` serves static files from the roots named by `server.static.dirs` (comma- or semicolon-separated) or, failing that, `server.static.dir`; the default is `static`. In 1.7.37, the working-directory/ancestor check compares normalized path names before resolving symlinks. It rejects ordinary roots such as `.` or `..`, but a configured root that symlinks to the project directory or an ancestor can pass that check. Sibling directories outside the working directory are also allowed; a descendants-only policy is not enforced.
+
+Use a real, dedicated public-assets directory such as `static/`, containing only files intended for public access. Check that the configured root and its parent path components do not symlink to a broader or private directory. Requests containing `.` or `..` segments, hidden names such as `.git` or `.env`, or names ending in `.` or a space are rejected. Candidate files must remain within the configured root's resolved path. That containment does not prevent project-root exposure when the configured root itself resolves there: the handler serves a matching static file before the later `isProjectRootFile` check. Do not rely on a blanket project-root-file denial with symlinked configured roots. See the [pinned v1.7.37 implementation](https://github.com/tinystruct/tinystruct/blob/089ec19022f3bb5d87f1e83e30b2034b24f7e77f/src/main/java/org/tinystruct/system/HttpServer.java#L569-L720).
+
+## Red Flags & Anti-patterns
+
+| Symptom | Correct Pattern |
 |---|---|
-| `com.google.gson` や `com.fasterxml.jackson` のインポート | `org.tinystruct.data.component.Builder` / `Builders` を使用する。 |
-| JSON配列に `List<Builder>` を使用する | ジェネリックの型消去の問題を避けるため `Builders` を使用する。 |
-| `ApplicationRuntimeException: template not found` | API専用アプリでは `init()` 内で `setTemplateRequired(false)` を呼び出す。 |
-| `private` メソッドへの `@Action` アノテーション | アクションはフレームワークに登録されるために `public` である必要がある。 |
-| アプリ内で `main(String[] args)` をハードコードする、または curl/ブラウザ/IDE の実行構成だけでテストする | すべてのモジュールのエントリポイント兼デフォルトの開発/テストツールとして `bin/dispatcher` を使用する。 |
-| `bin/dispatcher` が存在しない、または手書き・コピーされた起動スクリプトになっている | フレームワークに生成させる：プロジェクトルートから `org.tinystruct.system.Dispatcher --version` を一度実行する（現在のOS用のスクリプトが作成される）。 |
-| Windows で `bin/dispatcher` が `ClassNotFoundException: org.tinystruct.system.Dispatcher` で失敗する | シェルスクリプトは Git Bash/MSYS 上では実行できない。`bin\dispatcher.cmd` または WSL を使用する。 |
-| `--import a.A,b.B` で `ClassNotFoundException` が発生する | クラスごとに `--import` を1つ：`--import a.A --import b.B`。 |
-| シェルスクリプトの起動ファイルが `\r: command not found` で失敗する | ファイルが CRLF 改行になっている。`bin/dispatcher` を LF に変換する。 |
-| 手動での `ActionRegistry` 登録 | 自動検出のために `@Action` アノテーションを優先する。 |
-| 実行時にアクションが見つからない | クラスが `--import` でインポートされているか、`application.properties` に列挙されているか確認する。 |
-| CLI引数が認識されない | `--key value` の形で渡し、`getContext().getAttribute("--key")` でアクセスする。 |
-| 同じパスの2つのメソッドで、意図しない方が呼ばれる | 明示的な `mode`（例：`HTTP_GET` と `HTTP_POST`）を設定して区別する。 |
+| Importing `com.google.gson` or `com.fasterxml.jackson` | Use `org.tinystruct.data.component.Builder` / `Builders`. |
+| Using `List<Builder>` for JSON arrays | Use `Builders` to avoid generic type erasure issues. |
+| `ApplicationRuntimeException: template not found` | Call `setTemplateRequired(false)` in `init()` for API-only apps. |
+| Annotating `private` methods with `@Action` | Actions must be `public` to be registered by the framework. |
+| Hardcoding `main(String[] args)` in apps, or testing only via curl/browser/IDE run configs | Use `bin/dispatcher` as the entry point for all modules and the default dev/test tool for transport-neutral and CLI actions (HTTP-only actions are tested over HTTP against the server it starts). |
+| `bin/dispatcher` is missing, or a hand-written or copied launcher script | Let the framework generate it: run `org.tinystruct.system.Dispatcher --version` once from the project root (creates the current OS's script). |
+| `bin/dispatcher` fails with `ClassNotFoundException: org.tinystruct.system.Dispatcher` on Windows | The shell script cannot run under Git Bash/MSYS; use `bin\dispatcher.cmd` or WSL. |
+| `ClassNotFoundException` for `--import a.A,b.B` | One `--import` per class: `--import a.A --import b.B`. |
+| A shell-script launcher that fails with `\r: command not found` | The file has CRLF endings; convert `bin/dispatcher` to LF. |
+| Manual `ActionRegistry` registration | Prefer the `@Action` annotation for automatic discovery. |
+| Action not found at runtime | Ensure class is imported via `--import` or listed in `application.properties`. |
+| CLI arg not visible | Pass with `--key value`; access via `getContext().getAttribute("--key")`. |
+| Two methods same path, wrong one fires | Set explicit `mode` (e.g., `HTTP_GET` vs `HTTP_POST`) to disambiguate. |
+| `bin/dispatcher` fails with "The action is not allowed to be executed." | The action has an HTTP-specific mode; it is not reachable from the CLI. Test it over HTTP. To support both transports, first separate HTTP-only dependencies from shared logic, then use `Mode.DEFAULT` for a CLI-compatible entry point. |
+| A static file returns 404 though it exists | Check `server.static.dirs` / `server.static.dir` (default `static/`), forbidden request names, and resolved-root containment. Use a real public directory; symlinked configured roots can expose project or ancestor files before the project-root check. |
+| No log file is written | `FileHandler` is opt-in: add `java.util.logging.FileHandler` to `handlers`. Set `java.util.logging.FileHandler.pattern` or the file lands in `%h/java%u.log` (your home directory). |
+| `FINE` / debug messages never appear | Both gates must allow them: set `logging.level=FINE` (or a package override like `org.tinystruct.level=FINE`) and make sure the handler's `.level` is not stricter. |
 
-## ベストプラクティス
+## Best Practices
 
-1. **`bin/dispatcher` を最優先に**：何よりもまず `bin/dispatcher` に対して開発・検証を行ってください — CLI からアクションを実行して挙動を確認し、その後 HTTP/モードに関する関心事を積み重ねます。これが最速のインナーループであり、フレームワークが実際にルーティングと引数バインディングを行う方法と確実に一致する唯一のツールです。
-2. **粒度の細かいアプリケーション**：巨大な単一クラスではなく、ロジックを小さく焦点を絞ったアプリケーションに分割する。
-3. **`init()` でのセットアップ**：コンストラクタではなく `init()` をセットアップ（設定、DB など）に活用する。`setAction()` を呼び出さず、`@Action` アノテーションを使用する。
-4. **モードへの意識**：`@Action` の `Mode` パラメータを使用して、機密性の高い操作を `CLI` のみ、または特定の HTTP メソッドに制限する。
-5. **パラメータより Context を優先**：任意の CLI フラグには、メソッドシグネチャにパラメータを追加するのではなく `getContext().getAttribute("--flag")` を使用する。
-6. **非同期イベント**：イベントによってトリガーされる重い処理には、イベントハンドラ内で `CompletableFuture.runAsync()` を使用する。
+1. **`bin/dispatcher` first**: For transport-neutral and `Mode.CLI` actions, develop and verify against `bin/dispatcher` before anything else — run the action from the CLI, confirm behavior, then layer on HTTP/mode concerns. Actions with an HTTP mode (`Mode.HTTP_POST`, ...) are rejected from the CLI, so start the server and test them over HTTP instead. It's the fastest inner-loop and the one tool guaranteed to match how the framework actually routes and binds arguments.
+2. **Granular Applications**: Break logic into smaller, focused applications rather than one monolithic class.
+3. **Setup in `init()`**: Leverage `init()` for setup (config, DB) rather than the constructor. Do NOT call `setAction()` — use `@Action` annotation.
+4. **Mode Awareness**: Use the `Mode` parameter in `@Action` to restrict sensitive operations to `CLI` only or specific HTTP methods.
+5. **Context over Params**: For optional CLI flags, use `getContext().getAttribute("--flag")` rather than adding parameters to the method signature.
+6. **Asynchronous Events**: For heavy tasks triggered by events, use `CompletableFuture.runAsync()` inside the event handler.
 
-## テクニカルリファレンス
+## Technical Reference
 
-詳細なガイドは `references/` ディレクトリにあります：
+Detailed guides are available in the `references/` directory:
 
-- [アーキテクチャと設定](references/architecture.md) — 抽象化、パッケージマップ、プロパティ
-- [ルーティングと@Action](references/routing.md) — アノテーションの詳細、モード、パラメータ
-- [データ処理](references/data-handling.md) — Builder、Builders、JSONのシリアライズ・パース
-- [データベース永続化](references/database.md) — AbstractData POJO、CRUD、アノテーションとXMLマッピング、POJO生成、テーブルの自動作成
-- [システムと使用方法](references/system-usage.md) — Context、セッション、SSE、ファイルアップロード、イベント、ネットワーキング
-- [テストパターン](references/testing.md) — JUnit 5 によるユニットテストとHTTP統合テスト
+- [Architecture & Config](references/architecture.md) — Abstractions, Package Map, Properties
+- [Routing & @Action](references/routing.md) — Annotation details, Modes, Parameters
+- [Data Handling](references/data-handling.md) — Builder, Builders, JSON serialization & parsing
+- [Database Persistence](references/database.md) — AbstractData POJOs, CRUD, annotation and XML mapping, POJO generation, table auto-creation
+- [System & Usage](references/system-usage.md) — Context, Sessions, SSE, File Uploads, Events, Networking
+- [Testing Patterns](references/testing.md) — JUnit 5 unit and HTTP integration testing
 
-## 参照元ソースファイル（内部用）
+## Reference Source Files (Internal)
 
-- `src/main/java/org/tinystruct/AbstractApplication.java` — ライフサイクルフックを持つコアベースクラス
-- `src/main/java/org/tinystruct/system/annotation/Action.java` — アノテーションとモード
-- `src/main/java/org/tinystruct/application/ActionRegistry.java` — ルーティングエンジン
-- `src/main/java/org/tinystruct/data/component/Builder.java` — JSONオブジェクトのシリアライザ
-- `src/main/java/org/tinystruct/data/component/Builders.java` — JSON配列のシリアライザ
-- `src/main/java/org/tinystruct/data/component/AbstractData.java` — CRUDを持つ基底POJOクラス
-- `src/main/java/org/tinystruct/data/Mapping.java` — マッピングメタデータ（アノテーションまたはXML）、クラスごとにキャッシュ
-- `src/main/java/org/tinystruct/data/annotation/Table.java` — `@Table`（`@Id` と `@Column` も同梱）
-- `src/main/java/org/tinystruct/data/tools/TableCreator.java` — 不足しているテーブルを作成する（`database.autocreate`）
-- `src/main/java/org/tinystruct/data/tools/MySQLGenerator.java` — POJOジェネレータのリファレンス（`MappingMode` でXMLかアノテーションかを選択）
-- `src/main/java/org/tinystruct/data/component/FieldType.java` — SQLからJavaへの型マッピング
-- `src/main/java/org/tinystruct/data/component/Condition.java` — 流暢なSQLクエリビルダー
-- `src/main/java/org/tinystruct/http/SSEPushManager.java` — SSE接続管理
-- `src/main/java/org/tinystruct/system/logging/LogFormatter.java` — ANSIコンソールカラーとStackWalkerベースの呼び出し元トレースを備えたカスタムログフォーマッタ
-- `src/main/java/org/tinystruct/system/logging/LoggerConfigurer.java` — アプリケーションプロパティからのプログラムによるロギング構成
-- `src/test/java/org/tinystruct/application/ActionRegistryTest.java` — レジストリのテスト例
-- `src/test/java/org/tinystruct/system/HttpServerHttpModeTest.java` — HTTP統合テストパターン
+- `src/main/java/org/tinystruct/AbstractApplication.java` — Core base class with lifecycle hooks
+- `src/main/java/org/tinystruct/system/annotation/Action.java` — Annotation & Modes
+- `src/main/java/org/tinystruct/application/ActionRegistry.java` — Routing Engine
+- `src/main/java/org/tinystruct/data/component/Builder.java` — JSON object serializer
+- `src/main/java/org/tinystruct/data/component/Builders.java` — JSON array serializer
+- `src/main/java/org/tinystruct/data/component/AbstractData.java` — Base POJO class with CRUD
+- `src/main/java/org/tinystruct/data/Mapping.java` — Mapping metadata (annotations or XML), cached per class
+- `src/main/java/org/tinystruct/data/annotation/Table.java` — `@Table`, with `@Id` and `@Column` alongside it
+- `src/main/java/org/tinystruct/data/tools/TableCreator.java` — Creates missing tables (`database.autocreate`)
+- `src/main/java/org/tinystruct/data/tools/MySQLGenerator.java` — POJO generator reference (`MappingMode` selects XML or annotations)
+- `src/main/java/org/tinystruct/data/component/FieldType.java` — SQL-to-Java type mappings
+- `src/main/java/org/tinystruct/data/component/Condition.java` — Fluent SQL query builder
+- `src/main/java/org/tinystruct/http/SSEPushManager.java` — SSE connection management
+- `src/main/java/org/tinystruct/system/logging/LogFormatter.java` — Custom log formatter with ANSI console colors and StackWalker-based caller tracing
+- `src/main/java/org/tinystruct/system/logging/LoggerConfigurer.java` — Programmatic logging configurator from application properties
+- `src/test/java/org/tinystruct/application/ActionRegistryTest.java` — Registry test examples
+- `src/test/java/org/tinystruct/system/HttpServerHttpModeTest.java` — HTTP integration test patterns

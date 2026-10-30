@@ -1,32 +1,45 @@
 ---
 name: continuous-learning
-description: Claude Code 세션에서 재사용 가능한 패턴을 자동으로 추출하여 향후 사용을 위한 학습된 스킬로 저장합니다.
-origin: ECC
+description: "[DEPRECATED - use continuous-learning-v2] Legacy v1 stop-hook skill extractor. v2 is a strict superset with instinct-based, project-scoped, hook-reliable learning. Do not invoke v1: when continuous learning, session learning, or pattern extraction is requested, route to continuous-learning-v2 instead."
+metadata:
+  origin: ECC
 ---
 
-# 지속적 학습 스킬
+# Continuous Learning Skill - DEPRECATED
 
-Claude Code 세션 종료 시 자동으로 평가하여 학습된 스킬로 저장할 수 있는 재사용 가능한 패턴을 추출합니다.
+> **DEPRECATED 2026-04-28.** Use `continuous-learning-v2` instead. v2 is a strict superset: stop-hook observation becomes PreToolUse/PostToolUse observation, full skills become atomic instincts with confidence scoring, and global-only storage becomes project-scoped plus global promotion.
+>
+> This file is kept for archival reference and backward compatibility with existing installs.
 
-## 활성화 시점
+---
 
-- Claude Code 세션에서 자동 패턴 추출을 설정할 때
-- 세션 평가를 위한 Stop Hook을 구성할 때
-- `~/.claude/skills/learned/`에서 학습된 스킬을 검토하거나 큐레이션할 때
-- 추출 임계값이나 패턴 카테고리를 조정할 때
-- v1 (이 방식)과 v2 (본능 기반) 접근법을 비교할 때
+## Original v1 Documentation (archival)
 
-## 작동 방식
+Automatically evaluates Claude Code sessions on end to extract reusable patterns that can be saved as learned skills.
 
-이 스킬은 각 세션 종료 시 **Stop Hook**으로 실행됩니다:
+## When to Activate
 
-1. **세션 평가**: 세션에 충분한 메시지가 있는지 확인 (기본값: 10개 이상)
-2. **패턴 감지**: 세션에서 추출 가능한 패턴을 식별
-3. **스킬 추출**: 유용한 패턴을 `~/.claude/skills/learned/`에 저장
+- Setting up automatic pattern extraction from Claude Code sessions
+- Configuring the Stop hook for session evaluation
+- Reviewing or curating learned skills in `~/.claude/skills/learned/`
+- Adjusting extraction thresholds or pattern categories
+- Comparing v1 (this) vs v2 (instinct-based) approaches
 
-## 구성
+## Status
 
-`config.json`을 편집하여 사용자 지정합니다:
+This v1 skill is still supported, but `continuous-learning-v2` is the preferred path for new installs. Keep v1 when you explicitly want the simpler Stop-hook extraction flow or need compatibility with older learned-skill workflows.
+
+## How It Works
+
+This skill runs as a **Stop hook** at the end of each session:
+
+1. **Session Evaluation**: Checks if session has enough messages (default: 10+)
+2. **Pattern Detection**: Identifies extractable patterns from the session
+3. **Skill Extraction**: Saves useful patterns to `~/.claude/skills/learned/`
+
+## Configuration
+
+Edit `config.json` to customize:
 
 ```json
 {
@@ -49,48 +62,19 @@ Claude Code 세션 종료 시 자동으로 평가하여 학습된 스킬로 저�
 }
 ```
 
-## 패턴 유형
+## Pattern Types
 
-| 패턴 | 설명 |
+| Pattern | Description |
 |---------|-------------|
-| `error_resolution` | 특정 에러가 어떻게 해결되었는지 |
-| `user_corrections` | 사용자 수정으로부터의 패턴 |
-| `workarounds` | 프레임워크/라이브러리 특이점에 대한 해결책 |
-| `debugging_techniques` | 효과적인 디버깅 접근법 |
-| `project_specific` | 프로젝트 고유 컨벤션 |
+| `error_resolution` | How specific errors were resolved |
+| `user_corrections` | Patterns from user corrections |
+| `workarounds` | Solutions to framework/library quirks |
+| `debugging_techniques` | Effective debugging approaches |
+| `project_specific` | Project-specific conventions |
 
-## Hook 설정
+## Hook Setup
 
-`~/.claude/settings.json`에 추가합니다:
-
-```json
-{
-  "hooks": {
-    "Stop": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "~/.claude/skills/continuous-learning/evaluate-session.sh"
-      }]
-    }]
-  }
-}
-```
-
-## 예시
-
-### 자동 패턴 추출 설정 예시
-
-```json
-{
-  "min_session_length": 10,
-  "extraction_threshold": "medium",
-  "auto_approve": false,
-  "learned_skills_path": "~/.claude/skills/learned/"
-}
-```
-
-### Stop Hook 연결 예시
+Add to your `~/.claude/settings.json`:
 
 ```json
 {
@@ -106,43 +90,43 @@ Claude Code 세션 종료 시 자동으로 평가하여 학습된 스킬로 저�
 }
 ```
 
-## Stop Hook을 사용하는 이유
+## Why Stop Hook?
 
-- **경량**: 세션 종료 시 한 번만 실행
-- **비차단**: 모든 메시지에 지연을 추가하지 않음
-- **완전한 컨텍스트**: 전체 세션 트랜스크립트에 접근 가능
+- **Lightweight**: Runs once at session end
+- **Non-blocking**: Doesn't add latency to every message
+- **Complete context**: Has access to full session transcript
 
-## 관련 항목
+## Related
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - 지속적 학습 섹션
-- `/learn` 명령어 - 세션 중 수동 패턴 추출
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Section on continuous learning
+- `/learn` command - Manual pattern extraction mid-session
 
 ---
 
-## 비교 노트 (연구: 2025년 1월)
+## Comparison Notes (Research: Jan 2025)
 
 ### vs Homunculus
 
-Homunculus v2는 더 정교한 접근법을 취합니다:
+Homunculus v2 takes a more sophisticated approach:
 
-| 기능 | 우리의 접근법 | Homunculus v2 |
+| Feature | Our Approach | Homunculus v2 |
 |---------|--------------|---------------|
-| 관찰 | Stop Hook (세션 종료 시) | PreToolUse/PostToolUse Hook (100% 신뢰) |
-| 분석 | 메인 컨텍스트 | 백그라운드 에이전트 (Haiku) |
-| 세분성 | 완전한 스킬 | 원자적 "본능" |
-| 신뢰도 | 없음 | 0.3-0.9 가중치 |
-| 진화 | 스킬로 직접 | 본능 -> 클러스터 -> 스킬/명령어/에이전트 |
-| 공유 | 없음 | 본능 내보내기/가져오기 |
+| Observation | Stop hook (end of session) | PreToolUse/PostToolUse hooks (100% reliable) |
+| Analysis | Main context | Background agent (Haiku) |
+| Granularity | Full skills | Atomic "instincts" |
+| Confidence | None | 0.3-0.9 weighted |
+| Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
+| Sharing | None | Export/import instincts |
 
-**Homunculus의 핵심 통찰:**
-> "v1은 관찰을 스킬에 의존했습니다. 스킬은 확률적이어서 약 50-80%의 확률로 실행됩니다. v2는 관찰에 Hook(100% 신뢰)을 사용하고 본능을 학습된 행동의 원자 단위로 사용합니다."
+**Key insight from homunculus:**
+> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time. v2 uses hooks for observation (100% reliable) and instincts as the atomic unit of learned behavior."
 
-### 잠재적 v2 개선 사항
+### Potential v2 Enhancements
 
-1. **본능 기반 학습** - 신뢰도 점수가 있는 더 작고 원자적인 행동
-2. **백그라운드 관찰자** - 병렬로 분석하는 Haiku 에이전트
-3. **신뢰도 감쇠** - 반박 시 본능의 신뢰도 감소
-4. **도메인 태깅** - code-style, testing, git, debugging 등
-5. **진화 경로** - 관련 본능을 스킬/명령어로 클러스터링
+1. **Instinct-based learning** - Smaller, atomic behaviors with confidence scoring
+2. **Background observer** - Haiku agent analyzing in parallel
+3. **Confidence decay** - Instincts lose confidence if contradicted
+4. **Domain tagging** - code-style, testing, git, debugging, etc.
+5. **Evolution path** - Cluster related instincts into skills/commands
 
-자세한 사양은 [`continuous-learning-v2-spec.md`](../../../continuous-learning-v2-spec.md)를 참조하세요.
+See: `docs/continuous-learning-v2-spec.md` for full spec.

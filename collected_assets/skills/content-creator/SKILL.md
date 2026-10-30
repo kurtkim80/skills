@@ -1,11 +1,10 @@
 ---
 name: content-creator
-description: Draft and review audience-specific content using supplied brand examples, local text diagnostics, and adaptable channel templates.
-metadata:
-  aas-category: marketing
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: "Draft and review audience-specific content using supplied brand examples, local text diagnostics, and adaptable channel templates."
+category: marketing
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # Content Creator

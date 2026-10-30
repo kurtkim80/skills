@@ -1,9 +1,15 @@
 ---
-description: Full close pass - plan the calendar on its critical path, prove each reconciliation, and gate flux explanations, with a BLOCKED / AT RISK / READY verdict.
-argument-hint: "close_plan.json [gl.csv source.csv] [tb_compare.csv]"
+title: "/cs-month-end-close — Slash Command for AI Coding Agents"
+description: "Full close pass - plan the calendar on its critical path, prove each reconciliation, and gate flux explanations, with a BLOCKED / AT RISK / READY. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-month-end-close
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/finance/month-end-close/commands/cs-month-end-close.md">Source</a></span>
+</div>
+
 
 Run the close gates over `$ARGUMENTS`. Skip any step whose input was not given and say so.
 

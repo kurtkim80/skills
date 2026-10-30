@@ -1,9 +1,15 @@
 ---
-description: Full Claude Code team-rollout audit - settings across scopes, MCP/plugin inventory, CLAUDE.md layering, and adoption stage.
-argument-hint: "[repo path] [managed-settings.json] [approved-components.json]"
+title: "/cs-claude-rollout — Slash Command for AI Coding Agents"
+description: "Full Claude Code team-rollout audit - settings across scopes, MCP/plugin inventory, CLAUDE.md layering, and adoption stage.. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-claude-rollout
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/coding-agent-rollout/commands/cs-claude-rollout.md">Source</a></span>
+</div>
+
 
 Audit the Claude Code setup for `$ARGUMENTS` (default: the current repository) as a team policy.
 

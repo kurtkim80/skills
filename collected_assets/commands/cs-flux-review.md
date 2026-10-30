@@ -1,9 +1,15 @@
 ---
-description: Just the flux gate - mark material fluctuations by your threshold rule and return every explanation that is missing, boilerplate, unquantified or unevidenced.
-argument-hint: "tb_compare.csv [--pct N --abs N --rule and|or --compare prior|budget --reviewer NAME]"
+title: "/cs-flux-review — Slash Command for AI Coding Agents"
+description: "Just the flux gate - mark material fluctuations by your threshold rule and return every explanation that is missing, boilerplate, unquantified or. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-flux-review
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/finance/month-end-close/commands/cs-flux-review.md">Source</a></span>
+</div>
+
 
 Answer one question about `$ARGUMENTS`: **is every material fluctuation explained well enough to sign?**
 

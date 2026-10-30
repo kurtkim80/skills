@@ -1,160 +1,164 @@
-# Frontend - フロントエンド中心の開発
+# 前端 - 前端聚焦开发
 
-フロントエンド中心のワークフロー(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)、Gemini主導。
+前端聚焦的工作流（研究 → 构思 → 规划 → 执行 → 优化 → 评审），由 Gemini 主导。
 
-> **前提条件:** このコマンドは外部の `ccg-workflow` ランタイムを必要とします。これはベースの ECC インストールには**含まれていません**。`npx ccg-workflow` を実行して初期化し、このコマンドが依存する `~/.claude/bin/codeagent-wrapper` と `~/.claude/.ccg/prompts/*` ロールファイルをプロビジョニングしてください。このランタイムがないと、このコマンドは正しく動作しません。
+> **前提条件：** 此命令需要外部的 `ccg-workflow` 运行时，它**不**包含在基础 ECC 安装中。请运行 `npx ccg-workflow` 进行初始化，以配置此命令所依赖的 `~/.claude/bin/codeagent-wrapper` 和 `~/.claude/.ccg/prompts/*` 角色文件。没有该运行时，此命令将无法正常运行。
 
 ## 使用方法
 
 ```bash
-/frontend <UIタスクの説明>
+/frontend <UI task description>
 ```
 
-## コンテキスト
+## 上下文
 
-- フロントエンドタスク: $ARGUMENTS
-- Gemini主導、Codexは補助的な参照用
-- 適用範囲: コンポーネント設計、レスポンシブレイアウト、UIアニメーション、スタイル最適化
+* 前端任务: $ARGUMENTS
+* Gemini 主导，Codex 作为辅助参考
+* 适用场景: 组件设计、响应式布局、UI 动画、样式优化
 
-## 役割
+## 您的角色
 
-あなたは**フロントエンドオーケストレーター**として、UI/UXタスクのためのマルチモデル連携を調整します(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)。
+您是 **前端协调器**，为 UI/UX 任务协调多模型协作（研究 → 构思 → 规划 → 执行 → 优化 → 评审）。
 
-**連携モデル**:
-- **Gemini** – フロントエンドUI/UX(**フロントエンドの権威、信頼できる**)
-- **Codex** – バックエンドの視点(**フロントエンドの意見は参考のみ**)
-- **Claude(自身)** – オーケストレーション、計画、実装、配信
+**协作模型**:
 
----
+* **Gemini** – 前端 UI/UX（**前端权威，可信赖**）
+* **Codex** – 后端视角（**前端意见仅供参考**）
+* **Claude（自身）** – 协调、规划、执行、交付
 
-## マルチモデル呼び出し仕様
+***
 
-**呼び出し構文**:
+## 多模型调用规范
+
+**调用语法**:
 
 ```
-# 新規セッション呼び出し
+# 新会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend gemini --gemini-model gemini-3-pro-preview - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示文件路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（若未增强则为$ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文与分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: false,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 
-# セッション再開呼び出し
+# 恢复会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend gemini --gemini-model gemini-3-pro-preview resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示文件路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（若未增强则为$ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文与分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: false,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 ```
 
-**ロールプロンプト**:
+**角色提示词**:
 
-| フェーズ | Gemini |
+| 阶段 | Gemini |
 |-------|--------|
 | 分析 | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
-| 計画 | `~/.claude/.ccg/prompts/gemini/architect.md` |
-| レビュー | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
+| 规划 | `~/.claude/.ccg/prompts/gemini/architect.md` |
+| 评审 | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
 
-**セッション再利用**: 各呼び出しは`SESSION_ID: xxx`を返します。後続のフェーズでは`resume xxx`を使用してください。フェーズ2で`GEMINI_SESSION`を保存し、フェーズ3と5で`resume`を使用します。
+**会话重用**: 每次调用返回 `SESSION_ID: xxx`，在后续阶段使用 `resume xxx`。在阶段 2 保存 `GEMINI_SESSION`，在阶段 3 和 5 使用 `resume`。
 
----
+***
 
-## コミュニケーションガイドライン
+## 沟通指南
 
-1. レスポンスの開始時にモードラベル`[Mode: X]`を付ける、初期は`[Mode: Research]`
-2. 厳格な順序に従う: `Research → Ideation → Plan → Execute → Optimize → Review`
-3. 必要に応じて`AskUserQuestion`ツールを使用してユーザーとやり取りする(例: 確認/選択/承認)
+1. 以模式标签 `[Mode: X]` 开始响应，初始为 `[Mode: Research]`
+2. 遵循严格顺序: `Research → Ideation → Plan → Execute → Optimize → Review`
+3. 需要时（例如确认/选择/批准）使用 `AskUserQuestion` 工具进行用户交互
 
----
+***
 
-## コアワークフロー
+## 核心工作流
 
-### フェーズ 0: プロンプト強化(オプション)
+### 阶段 0: 提示词增强（可选）
 
-`[Mode: Prepare]` - ace-tool MCPが利用可能な場合、`mcp__ace-tool__enhance_prompt`を呼び出し、**後続のGemini呼び出しのために元の$ARGUMENTSを強化結果で置き換える**。利用できない場合は`$ARGUMENTS`をそのまま使用。
+`[Mode: Prepare]` - 如果 ace-tool MCP 可用，调用 `mcp__ace-tool__enhance_prompt`，**用增强后的结果替换原始的 $ARGUMENTS，供后续 Gemini 调用使用**。如果不可用，则按原样使用 `$ARGUMENTS`。
 
-### フェーズ 1: 調査
+### 阶段 1: 研究
 
-`[Mode: Research]` - 要件の理解とコンテキストの収集
+`[Mode: Research]` - 理解需求并收集上下文
 
-1. **コード取得**(ace-tool MCPが利用可能な場合): `mcp__ace-tool__search_context`を呼び出して既存のコンポーネント、スタイル、デザインシステムを取得。利用できない場合は組み込みツールを使用: `Glob`でファイル検索、`Grep`でコンポーネント/スタイル検索、`Read`でコンテキスト収集、`Task`(Exploreエージェント)でより深い探索。
-2. 要件の完全性スコア(0-10): >=7で継続、<7で停止して補足
+1. **代码检索**（如果 ace-tool MCP 可用）：调用 `mcp__ace-tool__search_context` 来检索现有的组件、样式、设计系统。如果不可用，使用内置工具：`Glob` 用于文件发现，`Grep` 用于组件/样式搜索，`Read` 用于上下文收集，`Task`（探索代理）用于更深层次的探索。
+2. 需求完整性评分（0-10分）：>=7 继续，<7 停止并补充
 
-### フェーズ 2: アイデア創出
+### 阶段 2: 构思
 
-`[Mode: Ideation]` - Gemini主導の分析
+`[Mode: Ideation]` - Gemini 主导的分析
 
-**Geminiを呼び出す必要があります**(上記の呼び出し仕様に従う):
-- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/analyzer.md`
-- Requirement: 強化された要件(または強化されていない場合は$ARGUMENTS)
-- Context: フェーズ1からのプロジェクトコンテキスト
-- OUTPUT: UIの実現可能性分析、推奨ソリューション(少なくとも2つ)、UX評価
+**必须调用 Gemini**（遵循上述调用规范）:
 
-**SESSION_ID**(`GEMINI_SESSION`)を保存して後続のフェーズで再利用します。
+* ROLE\_FILE: `~/.claude/.ccg/prompts/gemini/analyzer.md`
+* 需求: 增强后的需求（或未经增强的 $ARGUMENTS）
+* 上下文: 来自阶段 1 的项目上下文
+* 输出: UI 可行性分析、推荐解决方案（至少 2 个）、UX 评估
 
-ソリューション(少なくとも2つ)を出力し、ユーザーの選択を待ちます。
+**保存 SESSION\_ID**（`GEMINI_SESSION`）以供后续阶段重用。
 
-### フェーズ 3: 計画
+输出解决方案（至少 2 个），等待用户选择。
 
-`[Mode: Plan]` - Gemini主導の計画
+### 阶段 3: 规划
 
-**Geminiを呼び出す必要があります**(`resume <GEMINI_SESSION>`を使用してセッションを再利用):
-- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/architect.md`
-- Requirement: ユーザーが選択したソリューション
-- Context: フェーズ2からの分析結果
-- OUTPUT: コンポーネント構造、UIフロー、スタイリングアプローチ
+`[Mode: Plan]` - Gemini 主导的规划
 
-Claudeが計画を統合し、ユーザーの承認後に`.claude/plan/task-name.md`に保存します。
+**必须调用 Gemini**（使用 `resume <GEMINI_SESSION>` 来重用会话）:
 
-### フェーズ 4: 実装
+* ROLE\_FILE: `~/.claude/.ccg/prompts/gemini/architect.md`
+* 需求: 用户选择的解决方案
+* 上下文: 阶段 2 的分析结果
+* 输出: 组件结构、UI 流程、样式方案
 
-`[Mode: Execute]` - コード開発
+Claude 综合规划，在用户批准后保存到 `.claude/plan/task-name.md`。
 
-- 承認された計画に厳密に従う
-- 既存プロジェクトのデザインシステムとコード標準に従う
-- レスポンシブ性、アクセシビリティを保証
+### 阶段 4: 实现
 
-### フェーズ 5: 最適化
+`[Mode: Execute]` - 代码开发
 
-`[Mode: Optimize]` - Gemini主導のレビュー
+* 严格遵循批准的规划
+* 遵循现有项目设计系统和代码标准
+* 确保响应式设计、可访问性
 
-**Geminiを呼び出す必要があります**(上記の呼び出し仕様に従う):
-- ROLE_FILE: `~/.claude/.ccg/prompts/gemini/reviewer.md`
-- Requirement: 以下のフロントエンドコード変更をレビュー
-- Context: git diffまたはコード内容
-- OUTPUT: アクセシビリティ、レスポンシブ性、パフォーマンス、デザインの一貫性の問題リスト
+### 阶段 5: 优化
 
-レビューフィードバックを統合し、ユーザー確認後に最適化を実行します。
+`[Mode: Optimize]` - Gemini 主导的评审
 
-### フェーズ 6: 品質レビュー
+**必须调用 Gemini**（遵循上述调用规范）:
 
-`[Mode: Review]` - 最終評価
+* ROLE\_FILE: `~/.claude/.ccg/prompts/gemini/reviewer.md`
+* 需求: 评审以下前端代码变更
+* 上下文: git diff 或代码内容
+* 输出: 可访问性、响应式设计、性能、设计一致性等问题列表
 
-- 計画に対する完成度をチェック
-- レスポンシブ性とアクセシビリティを検証
-- 問題と推奨事項を報告
+整合评审反馈，在用户确认后执行优化。
 
----
+### 阶段 6: 质量评审
 
-## 重要なルール
+`[Mode: Review]` - 最终评估
 
-1. **Geminiのフロントエンド意見は信頼できる**
-2. **Codexのフロントエンド意見は参考のみ**
-3. 外部モデルは**ファイルシステムへの書き込みアクセスがゼロ**
-4. Claudeがすべてのコード書き込みとファイル操作を処理
+* 对照规划检查完成情况
+* 验证响应式设计和可访问性
+* 报告问题与建议
+
+***
+
+## 关键规则
+
+1. **Gemini 的前端意见是可信赖的**
+2. **Codex 的前端意见仅供参考**
+3. 外部模型**没有文件系统写入权限**
+4. Claude 处理所有代码写入和文件操作

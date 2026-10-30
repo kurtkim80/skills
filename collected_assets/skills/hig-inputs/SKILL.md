@@ -1,10 +1,9 @@
 ---
 name: hig-inputs
-description: Design Apple-platform input interactions for touch, keyboard, pointer, Pencil, controllers, spatial gestures and supported device sensors, with accessible alternatives.
-metadata:
-  aas-risk: none
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: "Design Apple-platform input interactions for touch, keyboard, pointer, Pencil, controllers, spatial gestures and supported device sensors, with accessible alternatives."
+risk: none
+source: community
+date_added: '2026-02-27'
 ---
 
 # Apple HIG: Inputs

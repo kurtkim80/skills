@@ -1,9 +1,15 @@
 ---
-description: Full regression-eval pass on an agent change - trajectories, flaky cases, and the paired baseline-vs-candidate gate.
-argument-hint: "[baseline.jsonl candidate.jsonl] [cases.json]"
+title: "/cs-agent-evals — Slash Command for AI Coding Agents"
+description: "Full regression-eval pass on an agent change - trajectories, flaky cases, and the paired baseline-vs-candidate gate.. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
 # /cs-agent-evals
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-regression-evals/commands/cs-agent-evals.md">Source</a></span>
+</div>
+
 
 Decide whether the change in `$ARGUMENTS` made the agent worse.
 

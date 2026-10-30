@@ -1,185 +1,199 @@
-# Workflow - マルチモデル協調開発
+# 工作流程 - 多模型协同开发
 
-マルチモデル協調開発ワークフロー(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)、インテリジェントルーティング: フロントエンド → Gemini、バックエンド → Codex。
+多模型协同开发工作流程（研究 → 构思 → 规划 → 执行 → 优化 → 审查），带有智能路由：前端 → Gemini，后端 → Codex。
 
-> **前提条件:** このコマンドは外部の `ccg-workflow` ランタイムを必要とします。これはベースの ECC インストールには**含まれていません**。`npx ccg-workflow` を実行して初期化し、このコマンドが依存する `~/.claude/bin/codeagent-wrapper` と `~/.claude/.ccg/prompts/*` ロールファイルをプロビジョニングしてください。このランタイムがないと、このコマンドは正しく動作しません。
+> **前提条件：** 此命令需要外部的 `ccg-workflow` 运行时，它**不**包含在基础 ECC 安装中。请运行 `npx ccg-workflow` 进行初始化，以配置此命令所依赖的 `~/.claude/bin/codeagent-wrapper` 和 `~/.claude/.ccg/prompts/*` 角色文件。没有该运行时，此命令将无法正常运行。
 
-品質ゲート、MCPサービス、マルチモデル連携を備えた構造化開発ワークフロー。
+结构化开发工作流程，包含质量门控、MCP 服务和多模型协作。
 
 ## 使用方法
 
 ```bash
-/workflow <タスクの説明>
+/workflow <task description>
 ```
 
-## コンテキスト
+## 上下文
 
-- 開発するタスク: $ARGUMENTS
-- 品質ゲートを備えた構造化された6フェーズワークフロー
-- マルチモデル連携: Codex(バックエンド) + Gemini(フロントエンド) + Claude(オーケストレーション)
-- MCPサービス統合(ace-tool、オプション)による機能強化
+* 待开发任务：$ARGUMENTS
+* 结构化的 6 阶段工作流程，带有质量关卡
+* 多模型协作：Codex（后端） + Gemini（前端） + Claude（编排）
+* 集成 MCP 服务（ace-tool，可选）以增强能力
 
-## 役割
+## 你的角色
 
-あなたは**オーケストレーター**として、マルチモデル協調システムを調整します(調査 → アイデア創出 → 計画 → 実装 → 最適化 → レビュー)。経験豊富な開発者向けに簡潔かつ専門的にコミュニケーションします。
+你是**编排者**，协调一个多模型协作系统（研究 → 构思 → 规划 → 执行 → 优化 → 审查）。为有经验的开发者进行简洁、专业的沟通。
 
-**連携モデル**:
-- **ace-tool MCP**(オプション) – コード取得 + プロンプト強化
-- **Codex** – バックエンドロジック、アルゴリズム、デバッグ(**バックエンドの権威、信頼できる**)
-- **Gemini** – フロントエンドUI/UX、ビジュアルデザイン(**フロントエンドエキスパート、バックエンドの意見は参考のみ**)
-- **Claude(自身)** – オーケストレーション、計画、実装、配信
+**协作模型**：
 
----
+* **ace-tool MCP**（可选） – 代码检索 + 提示增强
+* **Codex** – 后端逻辑、算法、调试（**后端权威，值得信赖**）
+* **Gemini** – 前端 UI/UX、视觉设计（**前端专家，后端意见仅供参考**）
+* **Claude（自身）** – 编排、规划、执行、交付
 
-## マルチモデル呼び出し仕様
+***
 
-**呼び出し構文**(並列: `run_in_background: true`、順次: `false`):
+## 多模型调用规范
+
+**调用语法**（并行：`run_in_background: true`，串行：`false`）：
 
 ```
-# 新規セッション呼び出し
+# 新会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend <codex|gemini> - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示文件路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（如未增强则为$ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文和分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: true,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 
-# セッション再開呼び出し
+# 恢复会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper --backend <codex|gemini> resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <ロールプロンプトパス>
+ROLE_FILE: <角色提示文件路径>
 <TASK>
-Requirement: <強化された要件(または強化されていない場合は$ARGUMENTS)>
-Context: <前のフェーズからのプロジェクトコンテキストと分析>
+需求: <增强后的需求（如未增强则为$ARGUMENTS）>
+上下文: <来自先前阶段的项目上下文和分析>
 </TASK>
-OUTPUT: 期待される出力形式
+OUTPUT: 期望的输出格式
 EOF",
   run_in_background: true,
   timeout: 3600000,
-  description: "簡潔な説明"
+  description: "简要描述"
 })
 ```
 
-**モデルパラメータの注意事項**:
-- ``: `--backend gemini`を使用する場合、`--gemini-model gemini-3-pro-preview`で置き換える(末尾のスペースに注意); codexの場合は空文字列を使用
+**模型参数说明**：
 
-**ロールプロンプト**:
+* ``: 当使用 `--backend gemini` 时，替换为 `--gemini-model gemini-3-pro-preview`（注意末尾空格）；对于 codex 使用空字符串
 
-| フェーズ | Codex | Gemini |
+**角色提示词**：
+
+| 阶段 | Codex | Gemini |
 |-------|-------|--------|
 | 分析 | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
-| 計画 | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/architect.md` |
-| レビュー | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
+| 规划 | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/architect.md` |
+| 审查 | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
 
-**セッション再利用**: 各呼び出しは`SESSION_ID: xxx`を返し、後続のフェーズでは`resume xxx`サブコマンドを使用します(注意: `resume`、`--resume`ではない)。
+**会话复用**：每次调用返回 `SESSION_ID: xxx`，在后续阶段使用 `resume xxx` 子命令（注意：`resume`，而非 `--resume`）。
 
-**並列呼び出し**: `run_in_background: true`で開始し、`TaskOutput`で結果を待ちます。**次のフェーズに進む前にすべてのモデルが結果を返すまで待つ必要があります**。
+**并行调用**：使用 `run_in_background: true` 启动，使用 `TaskOutput` 等待结果。**必须等待所有模型返回后才能进入下一阶段**。
 
-**バックグラウンドタスクの待機**(最大タイムアウト600000ms = 10分を使用):
+**等待后台任务**（使用最大超时 600000ms = 10 分钟）：
 
 ```
 TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 ```
 
-**重要**:
-- `timeout: 600000`を指定する必要があります。指定しないとデフォルトの30秒で早期タイムアウトが発生します。
-- 10分後もまだ完了していない場合、`TaskOutput`でポーリングを継続し、**プロセスを強制終了しない**。
-- タイムアウトにより待機がスキップされた場合、**`AskUserQuestion`を呼び出してユーザーに待機を継続するか、タスクを強制終了するかを尋ねる必要があります。直接強制終了しない。**
+**重要**：
 
----
+* 必须指定 `timeout: 600000`，否则默认 30 秒会导致过早超时。
+* 如果 10 分钟后仍未完成，继续使用 `TaskOutput` 轮询，**切勿终止进程**。
+* 如果因超时而跳过等待，**必须调用 `AskUserQuestion` 询问用户是继续等待还是终止任务。切勿直接终止。**
 
-## コミュニケーションガイドライン
+***
 
-1. レスポンスの開始時にモードラベル`[Mode: X]`を付ける、初期は`[Mode: Research]`。
-2. 厳格な順序に従う: `Research → Ideation → Plan → Execute → Optimize → Review`。
-3. 各フェーズ完了後にユーザー確認を要求。
-4. スコア < 7またはユーザーが承認しない場合は強制停止。
-5. 必要に応じて`AskUserQuestion`ツールを使用してユーザーとやり取りする(例: 確認/選択/承認)。
+## 沟通指南
 
----
+1. 回复以模式标签 `[Mode: X]` 开头，初始为 `[Mode: Research]`。
+2. 遵循严格顺序：`Research → Ideation → Plan → Execute → Optimize → Review`。
+3. 每个阶段完成后请求用户确认。
+4. 当评分 < 7 或用户不批准时强制停止。
+5. 需要时（例如确认/选择/批准）使用 `AskUserQuestion` 工具进行用户交互。
 
-## 実行ワークフロー
+## 何时使用外部编排
 
-**タスクの説明**: $ARGUMENTS
+当工作必须拆分给需要隔离的 git 状态、独立终端或独立构建/测试执行的并行工作器时，请使用外部 tmux/工作树编排。对于轻量级分析、规划或审查（其中主会话是唯一的写入者），请使用进程内子代理。
 
-### フェーズ 1: 調査と分析
+```bash
+node scripts/orchestrate-worktrees.js .claude/plan/workflow-e2e-test.json --execute
+```
 
-`[Mode: Research]` - 要件の理解とコンテキストの収集:
+***
 
-1. **プロンプト強化**(ace-tool MCPが利用可能な場合): `mcp__ace-tool__enhance_prompt`を呼び出し、**後続のすべてのCodex/Gemini呼び出しのために元の$ARGUMENTSを強化結果で置き換える**。利用できない場合は`$ARGUMENTS`をそのまま使用。
-2. **コンテキスト取得**(ace-tool MCPが利用可能な場合): `mcp__ace-tool__search_context`を呼び出す。利用できない場合は組み込みツールを使用: `Glob`でファイル検索、`Grep`でシンボル検索、`Read`でコンテキスト収集、`Task`(Exploreエージェント)でより深い探索。
-3. **要件完全性スコア**(0-10):
-   - 目標の明確性(0-3)、期待される結果(0-3)、スコープの境界(0-2)、制約(0-2)
-   - ≥7: 継続 | <7: 停止、明確化の質問を尋ねる
+## 执行工作流程
 
-### フェーズ 2: ソリューションのアイデア創出
+**任务描述**：$ARGUMENTS
 
-`[Mode: Ideation]` - マルチモデル並列分析:
+### 阶段 1：研究与分析
 
-**並列呼び出し**(`run_in_background: true`):
-- Codex: アナライザープロンプトを使用、技術的な実現可能性、ソリューション、リスクを出力
-- Gemini: アナライザープロンプトを使用、UIの実現可能性、ソリューション、UX評価を出力
+`[Mode: Research]` - 理解需求并收集上下文：
 
-`TaskOutput`で結果を待ちます。**SESSION_ID**(`CODEX_SESSION`と`GEMINI_SESSION`)を保存します。
+1. **提示增强**（如果 ace-tool MCP 可用）：调用 `mcp__ace-tool__enhance_prompt`，**用增强后的结果替换原始的 $ARGUMENTS，用于所有后续的 Codex/Gemini 调用**。如果不可用，直接使用 `$ARGUMENTS`。
+2. **上下文检索**（如果 ace-tool MCP 可用）：调用 `mcp__ace-tool__search_context`。如果不可用，使用内置工具：`Glob` 用于文件发现，`Grep` 用于符号搜索，`Read` 用于上下文收集，`Task`（探索代理）用于更深入的探索。
+3. **需求完整性评分**（0-10）：
+   * 目标清晰度（0-3）、预期结果（0-3）、范围边界（0-2）、约束条件（0-2）
+   * ≥7：继续 | <7：停止，询问澄清性问题
 
-**上記の`マルチモデル呼び出し仕様`の`重要`指示に従ってください**
+### 阶段 2：解决方案构思
 
-両方の分析を統合し、ソリューション比較(少なくとも2つのオプション)を出力し、ユーザーの選択を待ちます。
+`[Mode: Ideation]` - 多模型并行分析：
 
-### フェーズ 3: 詳細な計画
+**并行调用** (`run_in_background: true`)：
 
-`[Mode: Plan]` - マルチモデル協調計画:
+* Codex：使用分析器提示词，输出技术可行性、解决方案、风险
+* Gemini：使用分析器提示词，输出 UI 可行性、解决方案、UX 评估
 
-**並列呼び出し**(`resume <SESSION_ID>`でセッションを再開):
-- Codex: アーキテクトプロンプト + `resume $CODEX_SESSION`を使用、バックエンドアーキテクチャを出力
-- Gemini: アーキテクトプロンプト + `resume $GEMINI_SESSION`を使用、フロントエンドアーキテクチャを出力
+使用 `TaskOutput` 等待结果。**保存 SESSION\_ID** (`CODEX_SESSION` 和 `GEMINI_SESSION`)。
 
-`TaskOutput`で結果を待ちます。
+**遵循上方 `Multi-Model Call Specification` 中的 `IMPORTANT` 说明**
 
-**上記の`マルチモデル呼び出し仕様`の`重要`指示に従ってください**
+综合两项分析，输出解决方案比较（至少 2 个选项），等待用户选择。
 
-**Claude統合**: Codexのバックエンド計画 + Geminiのフロントエンド計画を採用し、ユーザーの承認後に`.claude/plan/task-name.md`に保存します。
+### 阶段 3：详细规划
 
-### フェーズ 4: 実装
+`[Mode: Plan]` - 多模型协作规划：
 
-`[Mode: Execute]` - コード開発:
+**并行调用**（使用 `resume <SESSION_ID>` 恢复会话）：
 
-- 承認された計画に厳密に従う
-- 既存プロジェクトのコード標準に従う
-- 主要なマイルストーンでフィードバックを要求
+* Codex：使用架构师提示词 + `resume $CODEX_SESSION`，输出后端架构
+* Gemini：使用架构师提示词 + `resume $GEMINI_SESSION`，输出前端架构
 
-### フェーズ 5: コード最適化
+使用 `TaskOutput` 等待结果。
 
-`[Mode: Optimize]` - マルチモデル並列レビュー:
+**遵循上方 `Multi-Model Call Specification` 中的 `IMPORTANT` 说明**
 
-**並列呼び出し**:
-- Codex: レビュアープロンプトを使用、セキュリティ、パフォーマンス、エラーハンドリングに焦点
-- Gemini: レビュアープロンプトを使用、アクセシビリティ、デザインの一貫性に焦点
+**Claude 综合**：采纳 Codex 后端计划 + Gemini 前端计划，在用户批准后保存到 `.claude/plan/task-name.md`。
 
-`TaskOutput`で結果を待ちます。レビューフィードバックを統合し、ユーザー確認後に最適化を実行します。
+### 阶段 4：实施
 
-**上記の`マルチモデル呼び出し仕様`の`重要`指示に従ってください**
+`[Mode: Execute]` - 代码开发：
 
-### フェーズ 6: 品質レビュー
+* 严格遵循批准的计划
+* 遵循现有项目代码标准
+* 在关键里程碑请求反馈
 
-`[Mode: Review]` - 最終評価:
+### 阶段 5：代码优化
 
-- 計画に対する完成度をチェック
-- テストを実行して機能を検証
-- 問題と推奨事項を報告
-- 最終的なユーザー確認を要求
+`[Mode: Optimize]` - 多模型并行审查：
 
----
+**并行调用**：
 
-## 重要なルール
+* Codex：使用审查者提示词，关注安全性、性能、错误处理
+* Gemini：使用审查者提示词，关注可访问性、设计一致性
 
-1. フェーズの順序はスキップできません(ユーザーが明示的に指示しない限り)
-2. 外部モデルは**ファイルシステムへの書き込みアクセスがゼロ**、すべての変更はClaudeが実行
-3. スコア < 7またはユーザーが承認しない場合は**強制停止**
+使用 `TaskOutput` 等待结果。整合审查反馈，在用户确认后执行优化。
+
+**遵循上方 `Multi-Model Call Specification` 中的 `IMPORTANT` 说明**
+
+### 阶段 6：质量审查
+
+`[Mode: Review]` - 最终评估：
+
+* 对照计划检查完成情况
+* 运行测试以验证功能
+* 报告问题和建议
+* 请求最终用户确认
+
+***
+
+## 关键规则
+
+1. 阶段顺序不可跳过（除非用户明确指示）
+2. 外部模型**对文件系统零写入权限**，所有修改由 Claude 执行
+3. 当评分 < 7 或用户不批准时**强制停止**

@@ -1,10 +1,15 @@
 ---
-name: "cs-deep-learning"
-description: "/cs-deep-learning — Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Answers chapter questions from a compiled knowledge base, always dating the answer against 2026 practice, and routes to the reading-path planner or the training diagnostic. Points at the free official chapters; never reproduces them."
-argument-hint: "[a topic, a chapter number, a question about the book, or 'where do I start']"
+title: "/cs-deep-learning — Slash Command for AI Coding Agents"
+description: "/cs-deep-learning — Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Answers chapter questions from a compiled. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-deep-learning — Navigate the book, and date its advice
+# /cs-deep-learning
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/deep-learning-book/commands/cs-deep-learning.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-deep-learning [topic | chNN | question]`
 

@@ -1,63 +1,63 @@
-# PM2 初期化
+# PM2 初始化
 
-プロジェクトを自動分析し、PM2サービスコマンドを生成します。
+自动分析项目并生成 PM2 服务命令。
 
-**コマンド**: `$ARGUMENTS`
+**命令**: `$ARGUMENTS`
 
----
+***
 
-## ワークフロー
+## 工作流程
 
-1. PM2をチェック(欠落している場合は`npm install -g pm2`でインストール)
-2. プロジェクトをスキャンしてサービスを識別(フロントエンド/バックエンド/データベース)
-3. 設定ファイルと個別のコマンドファイルを生成
+1. 检查 PM2（如果缺失，通过 `npm install -g pm2` 安装）
+2. 扫描项目以识别服务（前端/后端/数据库）
+3. 生成配置文件和各命令文件
 
----
+***
 
-## サービス検出
+## 服务检测
 
-| タイプ | 検出 | デフォルトポート |
+| 类型 | 检测方式 | 默认端口 |
 |------|-----------|--------------|
-| Vite | vite.config.* | 5173 |
-| Next.js | next.config.* | 3000 |
-| Nuxt | nuxt.config.* | 3000 |
-| CRA | package.jsonにreact-scripts | 3000 |
-| Express/Node | server/backend/apiディレクトリ + package.json | 3000 |
+| Vite | vite.config.\* | 5173 |
+| Next.js | next.config.\* | 3000 |
+| Nuxt | nuxt.config.\* | 3000 |
+| CRA | package.json 中的 react-scripts | 3000 |
+| Express/Node | server/backend/api 目录 + package.json | 3000 |
 | FastAPI/Flask | requirements.txt / pyproject.toml | 8000 |
 | Go | go.mod / main.go | 8080 |
 
-**ポート検出優先順位**: ユーザー指定 > .env > 設定ファイル > スクリプト引数 > デフォルトポート
+**端口检测优先级**: 用户指定 > .env 文件 > 配置文件 > 脚本参数 > 默认端口
 
----
+***
 
-## 生成されるファイル
+## 生成的文件
 
 ```
 project/
-├── ecosystem.config.cjs              # PM2設定
-├── {backend}/start.cjs               # Pythonラッパー(該当する場合)
+├── ecosystem.config.cjs              # PM2 配置文件
+├── {backend}/start.cjs               # Python 包装器（如适用）
 └── .claude/
     ├── commands/
-    │   ├── pm2-all.md                # すべて起動 + monit
-    │   ├── pm2-all-stop.md           # すべて停止
-    │   ├── pm2-all-restart.md        # すべて再起動
-    │   ├── pm2-{port}.md             # 単一起動 + ログ
-    │   ├── pm2-{port}-stop.md        # 単一停止
-    │   ├── pm2-{port}-restart.md     # 単一再起動
-    │   ├── pm2-logs.md               # すべてのログを表示
-    │   └── pm2-status.md             # ステータスを表示
+    │   ├── pm2-all.md                # 启动所有 + 监控
+    │   ├── pm2-all-stop.md           # 停止所有
+    │   ├── pm2-all-restart.md        # 重启所有
+    │   ├── pm2-{port}.md             # 启动单个 + 日志
+    │   ├── pm2-{port}-stop.md        # 停止单个
+    │   ├── pm2-{port}-restart.md     # 重启单个
+    │   ├── pm2-logs.md               # 查看所有日志
+    │   └── pm2-status.md             # 查看状态
     └── scripts/
-        ├── pm2-logs-{port}.ps1       # 単一サービスログ
-        └── pm2-monit.ps1             # PM2モニター
+        ├── pm2-logs-{port}.ps1       # 单个服务日志
+        └── pm2-monit.ps1             # PM2 监控器
 ```
 
----
+***
 
-## Windows設定(重要)
+## Windows 配置（重要）
 
 ### ecosystem.config.cjs
 
-**`.cjs`拡張子を使用する必要があります**
+**必须使用 `.cjs` 扩展名**
 
 ```javascript
 module.exports = {
@@ -83,16 +83,16 @@ module.exports = {
 }
 ```
 
-**フレームワークスクリプトパス:**
+**框架脚本路径:**
 
-| フレームワーク | script | args |
+| 框架 | script | args |
 |-----------|--------|------|
 | Vite | `node_modules/vite/bin/vite.js` | `--port {port}` |
 | Next.js | `node_modules/next/dist/bin/next` | `dev -p {port}` |
 | Nuxt | `node_modules/nuxt/bin/nuxt.mjs` | `dev --port {port}` |
-| Express | `src/index.js`または`server.js` | - |
+| Express | `src/index.js` 或 `server.js` | - |
 
-### Pythonラッパースクリプト(start.cjs)
+### Python 包装脚本 (start.cjs)
 
 ```javascript
 const { spawn } = require('child_process');
@@ -102,171 +102,182 @@ const proc = spawn('python', ['-m', 'uvicorn', 'app.main:app', '--host', '0.0.0.
 proc.on('close', (code) => process.exit(code));
 ```
 
----
+***
 
-## コマンドファイルテンプレート(最小限の内容)
+## 命令文件模板（最简内容）
 
-### pm2-all.md(すべて起動 + monit)
+### pm2-all.md (启动所有 + 监控)
+
 ````markdown
-すべてのサービスを起動し、PM2モニターを開きます。
+启动所有服务并打开 PM2 监控器。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 start ecosystem.config.cjs && start wt.exe -d "{PROJECT_ROOT}" pwsh -NoExit -c "pm2 monit"
 ```
 ````
 
 ### pm2-all-stop.md
+
 ````markdown
-すべてのサービスを停止します。
+停止所有服务。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 stop all
 ```
 ````
 
 ### pm2-all-restart.md
+
 ````markdown
-すべてのサービスを再起動します。
+重启所有服务。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 restart all
 ```
 ````
 
-### pm2-{port}.md(単一起動 + ログ)
+### pm2-{port}.md (启动单个 + 日志)
+
 ````markdown
-{name}({port})を起動し、ログを開きます。
+启动 {name} ({port}) 并打开日志。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 start ecosystem.config.cjs --only {name} && start wt.exe -d "{PROJECT_ROOT}" pwsh -NoExit -c "pm2 logs {name}"
 ```
 ````
 
 ### pm2-{port}-stop.md
+
 ````markdown
-{name}({port})を停止します。
+停止 {name} ({port})。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 stop {name}
 ```
 ````
 
 ### pm2-{port}-restart.md
+
 ````markdown
-{name}({port})を再起動します。
+重启 {name} ({port})。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 restart {name}
 ```
 ````
 
 ### pm2-logs.md
+
 ````markdown
-すべてのPM2ログを表示します。
+查看所有 PM2 日志。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 logs
 ```
 ````
 
 ### pm2-status.md
+
 ````markdown
-PM2ステータスを表示します。
+查看 PM2 状态。
 ```bash
 cd "{PROJECT_ROOT}" && pm2 status
 ```
 ````
 
-### PowerShellスクリプト(pm2-logs-{port}.ps1)
+### PowerShell 脚本 (pm2-logs-{port}.ps1)
+
 ```powershell
 Set-Location "{PROJECT_ROOT}"
 pm2 logs {name}
 ```
 
-### PowerShellスクリプト(pm2-monit.ps1)
+### PowerShell 脚本 (pm2-monit.ps1)
+
 ```powershell
 Set-Location "{PROJECT_ROOT}"
 pm2 monit
 ```
 
----
+***
 
-## 重要なルール
+## 关键规则
 
-1. **設定ファイル**: `ecosystem.config.cjs`(.jsではない)
-2. **Node.js**: binパスを直接指定 + インタープリター
-3. **Python**: Node.jsラッパースクリプト + `windowsHide: true`
-4. **新しいウィンドウを開く**: `start wt.exe -d "{path}" pwsh -NoExit -c "command"`
-5. **最小限の内容**: 各コマンドファイルには1-2行の説明 + bashブロックのみ
-6. **直接実行**: AI解析不要、bashコマンドを実行するだけ
+1. **配置文件**: `ecosystem.config.cjs` (不是 .js)
+2. **Node.js**: 直接指定 bin 路径 + 解释器
+3. **Python**: Node.js 包装脚本 + `windowsHide: true`
+4. **打开新窗口**: `start wt.exe -d "{path}" pwsh -NoExit -c "command"`
+5. **最简内容**: 每个命令文件只有 1-2 行描述 + bash 代码块
+6. **直接执行**: 无需 AI 解析，直接运行 bash 命令
 
----
+***
 
-## 実行
+## 执行
 
-`$ARGUMENTS`に基づいて初期化を実行:
+基于 `$ARGUMENTS`，执行初始化：
 
-1. プロジェクトのサービスをスキャン
-2. `ecosystem.config.cjs`を生成
-3. Pythonサービス用の`{backend}/start.cjs`を生成(該当する場合)
-4. `.claude/commands/`にコマンドファイルを生成
-5. `.claude/scripts/`にスクリプトファイルを生成
-6. **プロジェクトのCLAUDE.md**をPM2情報で更新(下記参照)
-7. ターミナルコマンドを含む**完了サマリーを表示**
+1. 扫描项目服务
+2. 生成 `ecosystem.config.cjs`
+3. 为 Python 服务生成 `{backend}/start.cjs`（如果适用）
+4. 在 `.claude/commands/` 中生成命令文件
+5. 在 `.claude/scripts/` 中生成脚本文件
+6. **更新项目 CLAUDE.md**，添加 PM2 信息（见下文）
+7. **显示完成摘要**，包含终端命令
 
----
+***
 
-## 初期化後: CLAUDE.mdの更新
+## 初始化后：更新 CLAUDE.md
 
-ファイル生成後、プロジェクトの`CLAUDE.md`にPM2セクションを追加(存在しない場合は作成):
+生成文件后，将 PM2 部分追加到项目的 `CLAUDE.md`（如果不存在则创建）：
 
 ````markdown
-## PM2サービス
+## PM2 服务
 
-| ポート | 名前 | タイプ |
+| 端口 | 名称 | 类型 |
 |------|------|------|
 | {port} | {name} | {type} |
 
-**ターミナルコマンド:**
+**终端命令：**
 ```bash
-pm2 start ecosystem.config.cjs   # 初回
-pm2 start all                    # 初回以降
+pm2 start ecosystem.config.cjs   # First time
+pm2 start all                    # After first time
 pm2 stop all / pm2 restart all
 pm2 start {name} / pm2 stop {name}
 pm2 logs / pm2 status / pm2 monit
-pm2 save                         # プロセスリストを保存
-pm2 resurrect                    # 保存したリストを復元
+pm2 save                         # Save process list
+pm2 resurrect                    # Restore saved list
 ```
 ````
 
-**CLAUDE.md更新のルール:**
-- PM2セクションが存在する場合、置き換える
-- 存在しない場合、末尾に追加
-- 内容は最小限かつ必須のもののみ
+**更新 CLAUDE.md 的规则：**
 
----
+* 如果存在 PM2 部分，替换它
+* 如果不存在，追加到末尾
+* 保持内容精简且必要
 
-## 初期化後: サマリーの表示
+***
 
-すべてのファイル生成後、以下を出力:
+## 初始化后：显示摘要
+
+所有文件生成后，输出：
 
 ```
-## PM2初期化完了
+## PM2 初始化完成
 
-**サービス:**
+**服务列表：**
 
-| ポート | 名前 | タイプ |
+| 端口 | 名称 | 类型 |
 |------|------|------|
 | {port} | {name} | {type} |
 
-**Claudeコマンド:** /pm2-all, /pm2-all-stop, /pm2-{port}, /pm2-{port}-stop, /pm2-logs, /pm2-status
+**Claude 指令：** /pm2-all, /pm2-all-stop, /pm2-{port}, /pm2-{port}-stop, /pm2-logs, /pm2-status
 
-**ターミナルコマンド:**
-## 初回(設定ファイル使用)
+**终端命令：**
+## 首次运行（使用配置文件）
 pm2 start ecosystem.config.cjs && pm2 save
 
-## 初回以降(簡略化)
-pm2 start all          # すべて起動
-pm2 stop all           # すべて停止
-pm2 restart all        # すべて再起動
-pm2 start {name}       # 単一起動
-pm2 stop {name}        # 単一停止
-pm2 logs               # ログを表示
-pm2 monit              # モニターパネル
-pm2 resurrect          # 保存したプロセスを復元
+## 首次之后（简化命令）
+pm2 start all          # 启动全部
+pm2 stop all           # 停止全部
+pm2 restart all        # 重启全部
+pm2 start {name}       # 启动单个
+pm2 stop {name}        # 停止单个
+pm2 logs               # 查看日志
+pm2 monit              # 监控面板
+pm2 resurrect          # 恢复已保存进程
 
-**ヒント:** 初回起動後に`pm2 save`を実行すると、簡略化されたコマンドが使用できます。
+**提示：** 首次启动后运行 `pm2 save` 以启用简化命令。
 ```

@@ -1,30 +1,38 @@
-# Sessionsコマンド
+---
+description: 管理Claude Code会话历史、别名和会话元数据。
+---
 
-Claude Codeセッション履歴を管理 - `~/.claude/session-data/` に保存されたセッションのリスト表示、読み込み、エイリアス設定、編集を行います。旧 `~/.claude/sessions/` のファイルも後方互換のために読み取ります。
+# Sessions 命令
 
-## 使用方法
+管理 Claude Code 会话历史 - 列出、加载、设置别名和编辑存储在 `~/.claude/session-data/` 中的会话，同时兼容读取旧的 `~/.claude/sessions/` 文件。
 
-`/sessions [list|load|alias|info|help] [オプション]`
+## 用法
 
-## アクション
+`/sessions [list|load|alias|info|help] [options]`
 
-### セッションのリスト表示
+## 操作
 
-メタデータ、フィルタリング、ページネーション付きですべてのセッションを表示します。
+### 列出会话
+
+显示所有会话及其元数据，支持筛选和分页。
+
+当您需要群组的操作员表层上下文时，使用 `/sessions info`：分支、工作树路径和会话最近性。
 
 ```bash
-/sessions                              # すべてのセッションをリスト表示（デフォルト）
-/sessions list                         # 上記と同じ
-/sessions list --limit 10              # 10件のセッションを表示
-/sessions list --date 2026-02-01       # 日付でフィルタリング
-/sessions list --search abc            # セッションIDで検索
+/sessions                              # List all sessions (default)
+/sessions list                         # Same as above
+/sessions list --limit 10              # Show 10 sessions
+/sessions list --date 2026-02-01       # Filter by date
+/sessions list --search abc            # Search by session ID
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const sm = require('./scripts/lib/session-manager');
-const aa = require('./scripts/lib/session-aliases');
+const sm = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-manager');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
+const path = require('path');
 
 const result = sm.getAllSessions({ limit: 20 });
 const aliases = aa.listAliases();
@@ -33,37 +41,39 @@ for (const a of aliases) aliasMap[a.sessionPath] = a.name;
 
 console.log('Sessions (showing ' + result.sessions.length + ' of ' + result.total + '):');
 console.log('');
-console.log('ID        Date        Time     Size     Lines  Alias');
-console.log('────────────────────────────────────────────────────');
+console.log('ID        Date        Time     Branch       Worktree           Alias');
+console.log('────────────────────────────────────────────────────────────────────');
 
 for (const s of result.sessions) {
   const alias = aliasMap[s.filename] || '';
-  const size = sm.getSessionSize(s.sessionPath);
-  const stats = sm.getSessionStats(s.sessionPath);
+  const metadata = sm.parseSessionMetadata(sm.getSessionContent(s.sessionPath));
   const id = s.shortId === 'no-id' ? '(none)' : s.shortId.slice(0, 8);
   const time = s.modifiedTime.toTimeString().slice(0, 5);
+  const branch = (metadata.branch || '-').slice(0, 12);
+  const worktree = metadata.worktree ? path.basename(metadata.worktree).slice(0, 18) : '-';
 
-  console.log(id.padEnd(8) + ' ' + s.date + '  ' + time + '   ' + size.padEnd(7) + '  ' + String(stats.lineCount).padEnd(5) + '  ' + alias);
+  console.log(id.padEnd(8) + ' ' + s.date + '  ' + time + '   ' + branch.padEnd(12) + ' ' + worktree.padEnd(18) + ' ' + alias);
 }
 "
 ```
 
-### セッションの読み込み
+### 加载会话
 
-セッションの内容を読み込んで表示します（IDまたはエイリアスで指定）。
+加载并显示会话内容（通过 ID 或别名）。
 
 ```bash
-/sessions load <id|alias>             # セッションを読み込む
-/sessions load 2026-02-01             # 日付で指定（IDなしセッションの場合）
-/sessions load a1b2c3d4               # 短縮IDで指定
-/sessions load my-alias               # エイリアス名で指定
+/sessions load <id|alias>             # Load session
+/sessions load 2026-02-01             # By date (for no-id sessions)
+/sessions load a1b2c3d4               # By short ID
+/sessions load my-alias               # By alias name
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const sm = require('./scripts/lib/session-manager');
-const aa = require('./scripts/lib/session-aliases');
+const sm = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-manager');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
 const id = process.argv[1];
 
 // First try to resolve as alias
@@ -108,23 +118,36 @@ if (session.metadata.started) {
 if (session.metadata.lastUpdated) {
   console.log('Last Updated: ' + session.metadata.lastUpdated);
 }
+
+if (session.metadata.project) {
+  console.log('Project: ' + session.metadata.project);
+}
+
+if (session.metadata.branch) {
+  console.log('Branch: ' + session.metadata.branch);
+}
+
+if (session.metadata.worktree) {
+  console.log('Worktree: ' + session.metadata.worktree);
+}
 " "$ARGUMENTS"
 ```
 
-### エイリアスの作成
+### 创建别名
 
-セッションに覚えやすいエイリアスを作成します。
+为会话创建一个易记的别名。
 
 ```bash
-/sessions alias <id> <name>           # エイリアスを作成
-/sessions alias 2026-02-01 today-work # "today-work"という名前のエイリアスを作成
+/sessions alias <id> <name>           # Create alias
+/sessions alias 2026-02-01 today-work # Create alias named "today-work"
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const sm = require('./scripts/lib/session-manager');
-const aa = require('./scripts/lib/session-aliases');
+const sm = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-manager');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
 
 const sessionId = process.argv[1];
 const aliasName = process.argv[2];
@@ -151,19 +174,20 @@ if (result.success) {
 " "$ARGUMENTS"
 ```
 
-### エイリアスの削除
+### 移除别名
 
-既存のエイリアスを削除します。
+删除现有的别名。
 
 ```bash
-/sessions alias --remove <name>        # エイリアスを削除
-/sessions unalias <name>               # 上記と同じ
+/sessions alias --remove <name>        # Remove alias
+/sessions unalias <name>               # Same as above
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const aa = require('./scripts/lib/session-aliases');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
 
 const aliasName = process.argv[1];
 if (!aliasName) {
@@ -181,19 +205,20 @@ if (result.success) {
 " "$ARGUMENTS"
 ```
 
-### セッション情報
+### 会话信息
 
-セッションの詳細情報を表示します。
+显示会话的详细信息。
 
 ```bash
-/sessions info <id|alias>              # セッション詳細を表示
+/sessions info <id|alias>              # Show session details
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const sm = require('./scripts/lib/session-manager');
-const aa = require('./scripts/lib/session-aliases');
+const sm = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-manager');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
 
 const id = process.argv[1];
 const resolved = aa.resolveAlias(id);
@@ -215,6 +240,9 @@ console.log('ID:          ' + (session.shortId === 'no-id' ? '(none)' : session.
 console.log('Filename:    ' + session.filename);
 console.log('Date:        ' + session.date);
 console.log('Modified:    ' + session.modifiedTime.toISOString().slice(0, 19).replace('T', ' '));
+console.log('Project:     ' + (session.metadata.project || '-'));
+console.log('Branch:      ' + (session.metadata.branch || '-'));
+console.log('Worktree:    ' + (session.metadata.worktree || '-'));
 console.log('');
 console.log('Content:');
 console.log('  Lines:         ' + stats.lineCount);
@@ -228,18 +256,19 @@ if (aliases.length > 0) {
 " "$ARGUMENTS"
 ```
 
-### エイリアスのリスト表示
+### 列出别名
 
-すべてのセッションエイリアスを表示します。
+显示所有会话别名。
 
 ```bash
-/sessions aliases                      # すべてのエイリアスをリスト表示
+/sessions aliases                      # List all aliases
 ```
 
-**スクリプト:**
+**脚本：**
+
 ```bash
 node -e "
-const aa = require('./scripts/lib/session-aliases');
+const aa = require((function(){var p=require('path'),f=require('fs'),o=require('os');var e=process.env.CLAUDE_PLUGIN_ROOT;if(e&&e.trim())return e.trim();var d=p.join(o.homedir(),'.claude');function L(x){try{return require(p.join(x,'scripts','lib','resolve-ecc-root')).resolveEccRoot()}catch(_){return null}}var r=L(d);if(r)return r;var s=['ecc','ecc@ecc','marketplaces/ecc','everything-claude-code','everything-claude-code@everything-claude-code','marketplaces/everything-claude-code'];for(var i=0;i<s.length;i++){r=L(p.join(d,'plugins',s[i]));if(r)return r}function D(x){try{return f.readdirSync(x,{withFileTypes:true}).filter(function(z){return z.isDirectory()}).map(function(z){return z.name})}catch(e){if(e.code==='ENOENT')return [];throw e}}var g=['ecc','everything-claude-code'];for(var j=0;j<g.length;j++){var c=p.join(d,'plugins','cache',g[j]);var O=D(c);for(var k=0;k<O.length;k++){var q=p.join(c,O[k]);var V=D(q);for(var m=0;m<V.length;m++){r=L(p.join(q,V[m]));if(r)return r}}}return d})()+'/scripts/lib/session-aliases');
 
 const aliases = aa.listAliases();
 console.log('Session Aliases (' + aliases.length + '):');
@@ -260,46 +289,52 @@ if (aliases.length === 0) {
 "
 ```
 
-## 引数
+## 操作员笔记
+
+* 会话文件在头部持久化 `Project`、`Branch` 和 `Worktree`，以便 `/sessions info` 可以区分并行 tmux/工作树运行。
+* 对于指挥中心式监控，请结合使用 `/sessions info`、`git diff --stat` 以及由 `scripts/hooks/cost-tracker.js` 发出的成本指标。
+
+## 参数
 
 $ARGUMENTS:
-- `list [オプション]` - セッションをリスト表示
-  - `--limit <n>` - 表示する最大セッション数（デフォルト: 50）
-  - `--date <YYYY-MM-DD>` - 日付でフィルタリング
-  - `--search <パターン>` - セッションIDで検索
-- `load <id|alias>` - セッション内容を読み込む
-- `alias <id> <name>` - セッションのエイリアスを作成
-- `alias --remove <name>` - エイリアスを削除
-- `unalias <name>` - `--remove`と同じ
-- `info <id|alias>` - セッション統計を表示
-- `aliases` - すべてのエイリアスをリスト表示
-- `help` - このヘルプを表示
 
-## 例
+* `list [options]` - 列出会话
+  * `--limit <n>` - 最大显示会话数（默认：50）
+  * `--date <YYYY-MM-DD>` - 按日期筛选
+  * `--search <pattern>` - 在会话 ID 中搜索
+* `load <id|alias>` - 加载会话内容
+* `alias <id> <name>` - 为会话创建别名
+* `alias --remove <name>` - 移除别名
+* `unalias <name>` - 与 `--remove` 相同
+* `info <id|alias>` - 显示会话统计信息
+* `aliases` - 列出所有别名
+* `help` - 显示此帮助信息
+
+## 示例
 
 ```bash
-# すべてのセッションをリスト表示
+# List all sessions
 /sessions list
 
-# 今日のセッションにエイリアスを作成
+# Create an alias for today's session
 /sessions alias 2026-02-01 today
 
-# エイリアスでセッションを読み込む
+# Load session by alias
 /sessions load today
 
-# セッション情報を表示
+# Show session info
 /sessions info today
 
-# エイリアスを削除
+# Remove alias
 /sessions alias --remove today
 
-# すべてのエイリアスをリスト表示
+# List all aliases
 /sessions aliases
 ```
 
-## 備考
+## 备注
 
-- セッションは `~/.claude/session-data/` にMarkdownファイルとして保存され、旧 `~/.claude/sessions/` のファイルも引き続き読み取られます
-- エイリアスは `~/.claude/session-aliases.json` に保存されます
-- セッションIDは短縮できます（通常、最初の4〜8文字で一意になります）
-- 頻繁に参照するセッションにはエイリアスを使用してください
+* 会话以 Markdown 文件形式存储在 `~/.claude/session-data/`，并继续兼容读取旧的 `~/.claude/sessions/`
+* 别名存储在 `~/.claude/session-aliases.json`
+* 会话 ID 可以缩短（通常前 4-8 个字符就足够唯一）
+* 为经常引用的会话使用别名

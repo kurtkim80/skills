@@ -1,10 +1,15 @@
 ---
-name: "cs-dl-diagnose"
-description: "/cs-dl-diagnose — Diagnose a training run against Chapter 11's decision tree: read training error before deciding anything, and never diagnose a NaN as overfitting. Returns a ranked cause, the specific next action, and the chapter that justifies it."
-argument-hint: "[what the run is doing — losses, gradient norm, or a description]"
+title: "/cs-dl-diagnose — Slash Command for AI Coding Agents"
+description: "/cs-dl-diagnose — Diagnose a training run against Chapter 11's decision tree: read training error before deciding anything, and never diagnose a NaN. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-dl-diagnose — Measurement first, hypothesis second
+# /cs-dl-diagnose
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/deep-learning-book/commands/cs-dl-diagnose.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-dl-diagnose [symptoms]`
 

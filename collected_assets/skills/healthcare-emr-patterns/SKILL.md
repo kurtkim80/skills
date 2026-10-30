@@ -1,8 +1,9 @@
 ---
 name: healthcare-emr-patterns
-description: 電子医療記録（EMR）パターン、相互運用性、およびHL7/FHIR統合。
-origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
-version: "1.0.0"
+description: EMR/EHR development patterns for healthcare applications. Clinical safety, encounter workflows, prescription generation, clinical decision support integration, and accessibility-first UI for medical data entry. Use when building EMR or EHR features such as encounter workflows, prescription generation, or clinical data entry UI.
+metadata:
+  version: "1.0.0"
+  origin: Health1 Super Speciality Hospitals — contributed by Dr. Keyur Patel
 ---
 
 # Healthcare EMR Development Patterns

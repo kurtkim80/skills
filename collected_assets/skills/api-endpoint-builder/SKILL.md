@@ -1,11 +1,10 @@
 ---
 name: api-endpoint-builder
-description: Builds reviewable REST API endpoint scaffolds with validation, error handling, authentication, and documentation. Follows best practices for security and scalability.
-metadata:
-  aas-category: development
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-03-05'
+description: "Builds reviewable REST API endpoint scaffolds with validation, error handling, authentication, and documentation. Follows best practices for security and scalability."
+category: development
+risk: critical
+source: community
+date_added: "2026-03-05"
 ---
 
 # API Endpoint Builder

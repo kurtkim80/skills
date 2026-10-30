@@ -1,10 +1,9 @@
 ---
 name: 3d-web-experience
-description: Use when building or debugging web 3D scenes, product configurators or portfolios with Three.js, React Three Fiber or Spline; review assets, loading, controls, fallbacks and performance.
-metadata:
-  aas-risk: critical
-  aas-source: vibeship-spawner-skills (Apache 2.0)
-  aas-date-added: '2026-02-27'
+description: "Use when building or debugging web 3D scenes, product configurators or portfolios with Three.js, React Three Fiber or Spline; review assets, loading, controls, fallbacks and performance."
+risk: critical
+source: vibeship-spawner-skills (Apache 2.0)
+date_added: 2026-02-27
 ---
 
 # 3D Web Experience

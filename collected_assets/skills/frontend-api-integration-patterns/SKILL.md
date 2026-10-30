@@ -1,14 +1,22 @@
 ---
 name: frontend-api-integration-patterns
-description: Production-ready patterns for integrating frontend applications with backend APIs, including race condition handling, request cancellation, retry strategies, error normalization, and UI state management.
-metadata:
-  aas-category: frontend
-  aas-risk: safe
-  aas-source: community
-  aas-date-added: '2026-04-23'
-  aas-author: avij1109
-  aas-tags: '["frontend","api-integration","javascript","react","async"]'
-  aas-tools: '["claude","cursor","gemini","codex"]'
+description: "Production-ready patterns for integrating frontend applications with backend APIs, including race condition handling, request cancellation, retry strategies, error normalization, and UI state management."
+category: frontend
+risk: safe
+source: community
+date_added: "2026-04-23"
+author: avij1109
+tags:
+  - frontend
+  - api-integration
+  - javascript
+  - react
+  - async
+tools:
+  - claude
+  - cursor
+  - gemini
+  - codex
 ---
 
 # Frontend API Integration Patterns

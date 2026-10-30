@@ -1,14 +1,13 @@
 ---
 name: expo-deployment
-description: 'Deploy Expo apps with EAS: build and submit iOS and Android releases, configure build and submit profiles, manage versions and store metadata, and deploy web bundles or API routes.'
+description: "Deploy Expo apps with EAS: build and submit iOS and Android releases, configure build and submit profiles, manage versions and store metadata, and deploy web bundles or API routes."
+risk: critical
+source: https://github.com/expo/skills/tree/main/plugins/expo/skills/expo-deployment
+source_repo: expo/skills
+source_type: official
+date_added: 2026-07-01
 license: MIT
-metadata:
-  aas-risk: critical
-  aas-source: https://github.com/expo/skills/tree/main/plugins/expo/skills/expo-deployment
-  aas-source-repo: expo/skills
-  aas-source-type: official
-  aas-date-added: '2026-07-01'
-  aas-license-source: https://github.com/expo/skills/blob/main/LICENSE
+license_source: https://github.com/expo/skills/blob/main/LICENSE
 ---
 
 # Deployment

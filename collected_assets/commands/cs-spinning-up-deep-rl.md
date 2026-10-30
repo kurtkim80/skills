@@ -1,9 +1,15 @@
 ---
-name: "cs-spinning-up-deep-rl"
-description: "/cs-spinning-up-deep-rl [topic | framework | chNN] — query the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Use when applying its frameworks while working, looking up a term, or reading one chapter's summary."
+title: "/cs-spinning-up-deep-rl — Slash Command for AI Coding Agents"
+description: "/cs-spinning-up-deep-rl [topic | framework | chNN] — query the knowledge base compiled from Spinning Up in Deep RL by Joshua Achiam (OpenAI). Use. Slash command for Claude Code, Codex CLI, Gemini CLI."
 ---
 
-# /cs-spinning-up-deep-rl — Spinning Up in Deep RL
+# /cs-spinning-up-deep-rl
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-console: Slash Command</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/spinning-up-deep-rl/commands/cs-spinning-up-deep-rl.md">Source</a></span>
+</div>
+
 
 **Command:** `/cs-spinning-up-deep-rl [topic | framework name | chNN]`
 

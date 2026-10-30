@@ -1,20 +1,11 @@
 ---
-description: Legacy slash-entry shim for the rules-distill skill. Prefer the skill directly.
+description: "扫描技能以提取跨领域原则并将其提炼为规则"
 ---
 
-# Rules Distill (Legacy Shim)
+# /rules-distill — 从技能中提炼原则为规则
 
-Use this only if you still invoke `/rules-distill`. The maintained workflow lives in `skills/rules-distill/SKILL.md`.
+扫描已安装的技能，提取跨领域原则，并将其提炼为规则。
 
-## Canonical Surface
+## 流程
 
-- Prefer the `rules-distill` skill directly.
-- Keep this file only as a compatibility entry point.
-
-## Arguments
-
-`$ARGUMENTS`
-
-## Delegation
-
-Apply the `rules-distill` skill and follow its inventory, cross-read, and verdict workflow instead of duplicating that logic here.
+遵循 `rules-distill` 技能中定义的完整工作流程。

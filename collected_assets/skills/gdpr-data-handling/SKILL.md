@@ -1,10 +1,9 @@
 ---
 name: gdpr-data-handling
-description: Practical implementation guide for GDPR-oriented data-processing design, consent management, and privacy controls.
-metadata:
-  aas-risk: critical
-  aas-source: community
-  aas-date-added: '2026-02-27'
+description: "Practical implementation guide for GDPR-oriented data-processing design, consent management, and privacy controls."
+risk: critical
+source: community
+date_added: "2026-02-27"
 ---
 
 # GDPR Data Handling

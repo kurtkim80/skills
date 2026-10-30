@@ -1,12 +1,16 @@
 ---
-name: cs-aims-iso42001
-description: "ISO/IEC 42001:2023 AI Management System (AIMS) implementation + internal audit operator. Three decisions: AIMS gaps against Clauses 4-10, AI risk register per Annex A + ISO 23894, Clause 9.2 internal audit plan. NOT executive AI strategy (see cs-caio-advisor). NOT EU AI Act conformity (see cs-ai-act-compliance)."
-domain: compliance-os
-model: opus
-tools: [Read, Write, Bash, Grep, Glob]
+title: "AIMS ISO 42001 Specialist Agent — AI Coding Agent & Codex Skill"
+description: "ISO/IEC 42001:2023 AI Management System (AIMS) implementation + internal audit operator. Three decisions: AIMS gaps against Clauses 4-10, AI risk. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # AIMS ISO 42001 Specialist Agent
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-account: Compliance Os</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-aims-iso42001.md">Source</a></span>
+</div>
+
 
 ## Voice
 
@@ -114,14 +118,14 @@ python ${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/iso42001-specialist/scripts/aims_
 
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator (routes here for ISO 42001 deep work)
 - [cs-ai-act-compliance](cs-ai-act-compliance.md) — EU AI Act Article-cited compliance
-- [cs-caio-advisor](../../c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy
-- [cs-ciso-advisor](../../c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity (ISO 27001 / SOC 2 strategy)
-- [cs-quality-regulatory](../../agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device QMS / regulatory orchestrator
+- [cs-caio-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy
+- [cs-ciso-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-ciso-advisor.md) — Executive cybersecurity (ISO 27001 / SOC 2 strategy)
+- [cs-quality-regulatory](https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md) — Medical-device QMS / regulatory orchestrator
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/iso42001-specialist/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/iso42001-specialist/SKILL.md)
-- Sibling command: [`/compliance-os:aims-audit`](../skills/aims-audit/SKILL.md)
+- Sibling command: [`/compliance-os:aims-audit`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/aims-audit/SKILL.md)
 
 ---
 

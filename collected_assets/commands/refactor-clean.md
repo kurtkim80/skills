@@ -1,84 +1,83 @@
----
-description: Safely identify and remove dead code with verification after each change.
----
+# 重构清理
 
-# Refactor Clean
+通过测试验证安全识别和删除死代码的每一步。
 
-Safely identify and remove dead code with test verification at every step.
+## 步骤 1：检测死代码
 
-## Step 1: Detect Dead Code
+根据项目类型运行分析工具：
 
-Run analysis tools based on project type:
-
-| Tool | What It Finds | Command |
+| 工具 | 查找内容 | 命令 |
 |------|--------------|---------|
-| knip | Unused exports, files, dependencies | `npx knip` |
-| depcheck | Unused npm dependencies | `npx depcheck` |
-| ts-prune | Unused TypeScript exports | `npx ts-prune` |
-| vulture | Unused Python code | `vulture src/` |
-| deadcode | Unused Go code | `deadcode ./...` |
-| cargo-udeps | Unused Rust dependencies | `cargo +nightly udeps` |
+| knip | 未使用的导出、文件、依赖项 | `npx knip` |
+| depcheck | 未使用的 npm 依赖项 | `npx depcheck` |
+| ts-prune | 未使用的 TypeScript 导出 | `npx ts-prune` |
+| vulture | 未使用的 Python 代码 | `vulture src/` |
+| deadcode | 未使用的 Go 代码 | `deadcode ./...` |
+| cargo-udeps | 未使用的 Rust 依赖项 | `cargo +nightly udeps` |
 
-If no tool is available, use Grep to find exports with zero imports:
+如果没有可用工具，使用 Grep 查找零次导入的导出：
+
 ```
-# Find exports, then check if they're imported anywhere
+# 查找导出项，然后检查是否有任何地方导入了它们
 ```
 
-## Step 2: Categorize Findings
+## 步骤 2：分类发现结果
 
-Sort findings into safety tiers:
+将发现结果按安全层级分类：
 
-| Tier | Examples | Action |
+| 层级 | 示例 | 操作 |
 |------|----------|--------|
-| **SAFE** | Unused utilities, test helpers, internal functions | Delete with confidence |
-| **CAUTION** | Components, API routes, middleware | Verify no dynamic imports or external consumers |
-| **DANGER** | Config files, entry points, type definitions | Investigate before touching |
+| **安全** | 未使用的工具函数、测试辅助函数、内部函数 | 放心删除 |
+| **谨慎** | 组件、API 路由、中间件 | 验证没有动态导入或外部使用者 |
+| **危险** | 配置文件、入口点、类型定义 | 在操作前仔细调查 |
 
-## Step 3: Safe Deletion Loop
+## 步骤 3：安全删除循环
 
-For each SAFE item:
+对于每个 **安全** 项：
 
-1. **Run full test suite** — Establish baseline (all green)
-2. **Delete the dead code** — Use Edit tool for surgical removal
-3. **Re-run test suite** — Verify nothing broke
-4. **If tests fail** — Immediately revert with `git checkout -- <file>` and skip this item
-5. **If tests pass** — Move to next item
+1. **运行完整测试套件** — 建立基准（全部通过）
+2. **删除死代码** — 使用编辑工具进行精确删除
+3. **重新运行测试套件** — 验证没有破坏任何功能
+4. **如果测试失败** — 立即使用 `git checkout -- <file>` 回滚并跳过此项
+5. **如果测试通过** — 处理下一项
 
-## Step 4: Handle CAUTION Items
+## 步骤 4：处理谨慎项
 
-Before deleting CAUTION items:
-- Search for dynamic imports: `import()`, `require()`, `__import__`
-- Search for string references: route names, component names in configs
-- Check if exported from a public package API
-- Verify no external consumers (check dependents if published)
+在删除 **谨慎** 项之前：
 
-## Step 5: Consolidate Duplicates
+* 搜索动态导入：`import()`、`require()`、`__import__`
+* 搜索字符串引用：配置中的路由名称、组件名称
+* 检查是否从公共包 API 导出
+* 验证没有外部使用者（如果已发布，请检查依赖项）
 
-After removing dead code, look for:
-- Near-duplicate functions (>80% similar) — merge into one
-- Redundant type definitions — consolidate
-- Wrapper functions that add no value — inline them
-- Re-exports that serve no purpose — remove indirection
+## 步骤 5：合并重复项
 
-## Step 6: Summary
+删除死代码后，查找：
 
-Report results:
+* 近似的重复函数（>80% 相似）— 合并为一个
+* 冗余的类型定义 — 整合
+* 没有增加价值的包装函数 — 内联它们
+* 没有作用的重新导出 — 移除间接引用
+
+## 步骤 6：总结
+
+报告结果：
 
 ```
-Dead Code Cleanup
+无用代码清理
 ──────────────────────────────
-Deleted:   12 unused functions
-           3 unused files
-           5 unused dependencies
-Skipped:   2 items (tests failed)
-Saved:     ~450 lines removed
+已删除：   12 个未使用函数
+           3 个未使用文件
+           5 个未使用依赖项
+已跳过：   2 个项目（测试失败）
+已节省：   ~450 行代码被移除
 ──────────────────────────────
-All tests passing PASS:
+所有测试通过 PASS:
 ```
 
-## Rules
+## 规则
 
-- **Never delete without running tests first**
-- **One deletion at a time** — Atomic changes make rollback easy
-- **Skip if uncertain** — Better to keep dead code than break production
-- **Don't refactor while cleaning** — Separate concerns (clean first, refactor later)
+* **切勿在不先运行测试的情况下删除代码**
+* **一次只删除一个** — 原子化的变更便于回滚
+* **如果不确定就跳过** — 保留死代码总比破坏生产环境好
+* **清理时不要重构** — 分离关注点（先清理，后重构）

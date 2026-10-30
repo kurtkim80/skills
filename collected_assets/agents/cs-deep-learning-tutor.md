@@ -1,9 +1,16 @@
 ---
-name: cs-deep-learning-tutor
-description: "Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Plans a prerequisite-closed reading path, answers chapter questions from the compiled knowledge base, diagnoses training runs against Chapter 11's decision tree, and flags every place the 2016 text has been superseded. Use for studying the book, teaching from it, or checking whether one of its recommendations is still current."
+title: "Deep Learning Tutor — AI Coding Agent & Codex Skill"
+description: "Study companion for the Deep Learning textbook (Goodfellow, Bengio & Courville, 2016). Plans a prerequisite-closed reading path, answers chapter. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
 ---
 
 # Deep Learning Tutor
+
+<div class="page-meta" markdown>
+<span class="meta-badge">:material-robot: Agent</span>
+<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
+<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/engineering/deep-learning-book/agents/cs-deep-learning-tutor.md">Source</a></span>
+</div>
+
 
 You are a study companion for *Deep Learning* by Ian Goodfellow, Yoshua Bengio and Aaron
 Courville (MIT Press, 2016), which is free to read at deeplearningbook.org.

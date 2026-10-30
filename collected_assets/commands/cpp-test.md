@@ -1,39 +1,40 @@
 ---
-description: Enforce TDD workflow for C++. Write GoogleTest tests first, then implement. Verify coverage with gcov/lcov.
+description: 为 C++ 强制执行 TDD 工作流程。先编写 GoogleTest 测试，然后实现。使用 gcov/lcov 验证覆盖率。
 ---
 
-# C++ TDD Command
+# C++ TDD 命令
 
-This command enforces test-driven development methodology for C++ code using GoogleTest/GoogleMock with CMake/CTest.
+此命令使用 GoogleTest/GoogleMock 与 CMake/CTest，为 C++ 代码强制执行测试驱动开发方法。
 
-## What This Command Does
+## 此命令的作用
 
-1. **Define Interfaces**: Scaffold class/function signatures first
-2. **Write Tests**: Create comprehensive GoogleTest test cases (RED)
-3. **Run Tests**: Verify tests fail for the right reason
-4. **Implement Code**: Write minimal code to pass (GREEN)
-5. **Refactor**: Improve while keeping tests green
-6. **Check Coverage**: Ensure 80%+ coverage
+1. **定义接口**：首先搭建类/函数签名
+2. **编写测试**：创建全面的 GoogleTest 测试用例（RED 阶段）
+3. **运行测试**：验证测试因正确原因失败
+4. **实现代码**：编写最少代码以通过测试（GREEN 阶段）
+5. **重构**：在保持测试通过的同时改进代码
+6. **检查覆盖率**：确保覆盖率在 80% 以上
 
-## When to Use
+## 何时使用
 
-Use `/cpp-test` when:
-- Implementing new C++ functions or classes
-- Adding test coverage to existing code
-- Fixing bugs (write failing test first)
-- Building critical business logic
-- Learning TDD workflow in C++
+在以下情况使用 `/cpp-test`：
 
-## TDD Cycle
+* 实现新的 C++ 函数或类时
+* 为现有代码增加测试覆盖率时
+* 修复错误时（先编写失败的测试）
+* 构建关键业务逻辑时
+* 学习 C++ 中的 TDD 工作流时
+
+## TDD 循环
 
 ```
-RED     → Write failing GoogleTest test
-GREEN   → Implement minimal code to pass
-REFACTOR → Improve code, tests stay green
-REPEAT  → Next test case
+RED     → 编写失败的 GoogleTest 测试
+GREEN   → 实现最小化代码以通过测试
+REFACTOR → 改进代码，测试保持通过
+REPEAT  → 下一个测试用例
 ```
 
-## Example Session
+## 示例会话
 
 ````
 User: /cpp-test I need a function to validate email addresses
@@ -156,9 +157,10 @@ validator/email.cpp     | 100%
 ## TDD Complete!
 ````
 
-## Test Patterns
+## 测试模式
 
-### Basic Tests
+### 基础测试
+
 ```cpp
 TEST(SuiteName, TestName) {
     EXPECT_EQ(add(2, 3), 5);
@@ -168,7 +170,8 @@ TEST(SuiteName, TestName) {
 }
 ```
 
-### Fixtures
+### 测试夹具
+
 ```cpp
 class DatabaseTest : public ::testing::Test {
 protected:
@@ -183,7 +186,8 @@ TEST_F(DatabaseTest, InsertsRecord) {
 }
 ```
 
-### Parameterized Tests
+### 参数化测试
+
 ```cpp
 class PrimeTest : public ::testing::TestWithParam<std::pair<int, bool>> {};
 
@@ -199,7 +203,7 @@ INSTANTIATE_TEST_SUITE_P(Primes, PrimeTest, ::testing::Values(
 ));
 ```
 
-## Coverage Commands
+## 覆盖率命令
 
 ```bash
 # Build with coverage
@@ -214,38 +218,40 @@ lcov --remove coverage.info '/usr/*' --output-file coverage.info
 genhtml coverage.info --output-directory coverage_html
 ```
 
-## Coverage Targets
+## 覆盖率目标
 
-| Code Type | Target |
+| 代码类型 | 目标 |
 |-----------|--------|
-| Critical business logic | 100% |
-| Public APIs | 90%+ |
-| General code | 80%+ |
-| Generated code | Exclude |
+| 关键业务逻辑 | 100% |
+| 公共 API | 90%+ |
+| 通用代码 | 80%+ |
+| 生成的代码 | 排除 |
 
-## TDD Best Practices
+## TDD 最佳实践
 
-**DO:**
-- Write test FIRST, before any implementation
-- Run tests after each change
-- Use `EXPECT_*` (continues) over `ASSERT_*` (stops) when appropriate
-- Test behavior, not implementation details
-- Include edge cases (empty, null, max values, boundary conditions)
+**应做：**
 
-**DON'T:**
-- Write implementation before tests
-- Skip the RED phase
-- Test private methods directly (test through public API)
-- Use `sleep` in tests
-- Ignore flaky tests
+* 先编写测试，再进行任何实现
+* 每次更改后运行测试
+* 在适当时使用 `EXPECT_*`（继续）而非 `ASSERT_*`（停止）
+* 测试行为，而非实现细节
+* 包含边界情况（空值、null、最大值、边界条件）
 
-## Related Commands
+**不应做：**
 
-- `/cpp-build` - Fix build errors
-- `/cpp-review` - Review code after implementation
-- `verification-loop` skill - Run full verification loop
+* 在编写测试之前实现代码
+* 跳过 RED 阶段
+* 直接测试私有方法（通过公共 API 进行测试）
+* 在测试中使用 `sleep`
+* 忽略不稳定的测试
 
-## Related
+## 相关命令
 
-- Skill: `skills/cpp-testing/`
-- Skill: `skills/tdd-workflow/`
+* `/cpp-build` - 修复构建错误
+* `/cpp-review` - 在实现后审查代码
+* `/verify` - 运行完整的验证循环
+
+## 相关
+
+* 技能：`skills/cpp-testing/`
+* 技能：`skills/tdd-workflow/`
