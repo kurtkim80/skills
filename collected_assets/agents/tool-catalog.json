@@ -1275,7 +1275,7 @@
           "name": "--name",
           "type": "string",
           "required": true,
-          "description": "The station's formal AS2 name."
+          "description": "The station's formal AS2 name, unique across all Workspaces on the Site."
         },
         {
           "name": "--workspace-id",
@@ -1331,7 +1331,7 @@
           "name": "--name",
           "type": "string",
           "required": false,
-          "description": "The station's formal AS2 name."
+          "description": "The station's formal AS2 name, unique across all Workspaces on the Site."
         },
         {
           "name": "--public-certificate",
@@ -5030,13 +5030,13 @@
           "name": "--sort-by",
           "type": "object",
           "required": false,
-          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `event_type`."
+          "description": "If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status`, `event_type` or `workspace_id`."
         },
         {
           "name": "--filter",
           "type": "object",
           "required": false,
-          "description": "If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `status`. Valid field combinations are `[ status, created_at ]`."
+          "description": "If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`."
         },
         {
           "name": "--filter-gt",
@@ -5410,7 +5410,7 @@
           "name": "--custom-metadata",
           "type": "object",
           "required": false,
-          "description": "Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value."
+          "description": "Custom metadata map. Replaces existing metadata; an empty map clears it. Requires Full or Admin permission. Uploaders with Write permission can supply custom metadata when completing an upload instead."
         },
         {
           "name": "--provided-mtime",
