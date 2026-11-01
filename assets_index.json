@@ -20224,11 +20224,10 @@
     "review-animations": {
       "name": "review-animations",
       "type": "skill",
-      "description": "Use when reviewing animation and motion code against a strict craft, performance, accessibility, and interaction-quality bar.",
+      "description": "Review motion code against a craft, performance, accessibility, and interaction-quality standard with evidence.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/review-animations",
-      "description_ko": "엄격한 기술, 성능, 접근성 및 상호 작용 품질 기준을 기준으로 애니메이션 및 모션 코드를 검토할 때 사용합니다."
+      "path": "collected_assets/skills/review-animations"
     },
     "architect-review": {
       "name": "architect-review",
@@ -25860,11 +25859,10 @@
     "emil-design-eng": {
       "name": "emil-design-eng",
       "type": "skill",
-      "description": "Use when designing or reviewing polished product UI with Emil Kowalski-inspired animation, interaction, and component craft guidance.",
+      "description": "Design and review polished UI with Emil Kowalski’s guidance on animation, interaction feedback, component craft, and accessibility.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/emil-design-eng",
-      "description_ko": "Emil Kowalski에서 영감을 받은 애니메이션, 상호 작용 및 구성 요소 제작 지침을 통해 세련된 제품 UI를 디자인하거나 검토할 때 사용하세요."
+      "path": "collected_assets/skills/emil-design-eng"
     },
     "ai-agent-security": {
       "name": "ai-agent-security",
@@ -36383,6 +36381,14 @@
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
     },
+    "reverse-any-video": {
+      "name": "reverse-any-video",
+      "type": "skill",
+      "description": "Reconstruct authorized video as an editable HyperFrames project, with measured timing, rights and likeness boundaries.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/reverse-any-video"
+    },
     "gemini-deep-research": {
       "name": "gemini-deep-research",
       "type": "skill",
@@ -36471,6 +36477,14 @@
       "path": "collected_assets/skills/dos-verify-done-claims",
       "description_ko": "에이전트의 '완료/배송/수정' 주장을 수락하기 전에 DOS 커널의 `dos verify` 및 `dos commit-audit`를 사용하여 실제 사실(git ancestry + 커밋 자체 diff)에 대해 검증하십시오. 절대 에이전트 자체 설명이 아닙니다."
     },
+    "pick-ui-library": {
+      "name": "pick-ui-library",
+      "type": "skill",
+      "description": "Choose a frontend library from Emil Kowalski’s curated list after checking the project’s existing stack and requirements.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pick-ui-library"
+    },
     "bifrost-gateway": {
       "name": "bifrost-gateway",
       "type": "skill",
@@ -36515,6 +36529,14 @@
       "path": "collected_assets/skills/news-sentiment-engine",
       "description_ko": "Claude 기반 감정 분석 및 구조화된 브리핑 출력을 갖춘 다중 소스 RSS 뉴스 집계"
     },
+    "emil-ui-prototype": {
+      "name": "emil-ui-prototype",
+      "type": "skill",
+      "description": "Build distinct UI variants behind a development-only picker and integrate the variant the user selects.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/emil-ui-prototype"
+    },
     "manage-skills": {
       "name": "manage-skills",
       "type": "skill",
@@ -36533,6 +36555,14 @@
       "path": "collected_assets/skills/molykit",
       "description_ko": "|"
     },
+    "mobile-native": {
+      "name": "mobile-native",
+      "type": "skill",
+      "description": "Improve mobile web behavior for touch, viewport sizing, safe areas, inputs, scrolling, and native-feeling interaction.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/mobile-native"
+    },
     "mercury-mcp": {
       "name": "mercury-mcp",
       "type": "skill",
@@ -36550,6 +36580,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/screenstudio-alt",
       "description_ko": "오픈 소스 헤드리스 Screen Studio 대안: 유휴 상태의 자동 속도 향상, 클릭 클러스터의 자동 확대/축소, 키 입력 오버레이 칩, 부드러운 합성 커서 및 작업을 따르는 9:16 수직 내보내기(CLI에서 화면 녹화를 위한 포스트 프로덕션)."
+    },
+    "animation-performance": {
+      "name": "animation-performance",
+      "type": "skill",
+      "description": "Diagnose dropped animation frames and choose properties, rendering paths, and profiling checks for smooth web motion.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/animation-performance"
+    },
+    "remotion-to-hyperframes": {
+      "name": "remotion-to-hyperframes",
+      "type": "skill",
+      "description": "Migrate Remotion or other animation code and footage into HyperFrames, recording editability and frame comparison limits.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remotion-to-hyperframes"
     },
     "tokenwise": {
       "name": "tokenwise",
@@ -36578,6 +36624,14 @@
       "path": "collected_assets/skills/anywrite",
       "description_ko": "Anytype 로컬 API의 52개 엔드포인트(객체, 속성, 태그, 검색, 채팅, 파일)를 모두 포괄하는 컴파일된 CLI - 하나의 바이너리, MCP 서버가 필요하지 않습니다."
     },
+    "break-ui": {
+      "name": "break-ui",
+      "type": "skill",
+      "description": "Stress-test a component with realistic worst-case data through a development-only fixture toggle and report verified failures.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/break-ui"
+    },
     "longbridge": {
       "name": "longbridge",
       "type": "skill",
@@ -36594,6 +36648,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/antigravity-agent-manager",
       "description_ko": "독립형 Antigravity 2.0 Agent Manager 및 Antigravity IDE를 사용하여 병렬 에이전트를 구성하고 조정합니다."
+    },
+    "write-swift": {
+      "name": "write-swift",
+      "type": "skill",
+      "description": "Write and review modern Swift with value types, concurrency, protocols, API design, memory management, and testing.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/write-swift"
     },
     "sql-sentinel": {
       "name": "sql-sentinel",
@@ -36658,6 +36720,14 @@
       "path": "collected_assets/skills/skill-optimizer",
       "description_ko": "실제 세션 데이터와 연구 지원 정적 분석을 통해 상담원 기술(SKILL.md)을 진단하고 최적화합니다. Claude Code, Codex 및 모든 Agent Skills 호환 에이전트와 함께 작동합니다."
     },
+    "unslop-ui": {
+      "name": "unslop-ui",
+      "type": "skill",
+      "description": "Audit and redesign AI-generated interfaces with product-specific visual direction, structured design passes, and optional snapshots or story video.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/unslop-ui"
+    },
     "postgres-readonly-queries": {
       "name": "postgres-readonly-queries",
       "type": "skill",
@@ -36666,6 +36736,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/postgres-readonly-queries",
       "description_ko": "다중 연결 지원 및 심층 방어 쓰기 보호 기능을 통해 PostgreSQL 데이터베이스에 대해 안전한 읽기 전용 SQL 쿼리를 실행합니다."
+    },
+    "hyperframes": {
+      "name": "hyperframes",
+      "type": "skill",
+      "description": "Create and review editable HTML-to-video projects with the HyperFrames timeline, composition and rendering contract.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/hyperframes"
     },
     "hugging-face-dataset-viewer": {
       "name": "hugging-face-dataset-viewer",
@@ -36694,6 +36772,14 @@
       "path": "collected_assets/skills/gh-attach",
       "description_ko": "GitHub 사용자 첨부 파일에 로컬 파일(스크린샷, 이미지, PDF, zip, 비디오)을 업로드하고, GitHub 사용자 첨부 파일을 다운로드하며, PR, 이슈 또는 댓글에 로컬 파일을 포함합니다. \"PR에 스크린샷 첨부\", \"이슈에 이미지 추가\", \"스크린샷 전후 삽입\", \"이 파일 첨부\" 또는 \"이 GitHub 첨부 파일 다운로드\"를 묻는 메시지가 표시될 때 사용합니다. 'gh-attach'에 의해 구동됩니다."
     },
+    "animate-expo": {
+      "name": "animate-expo",
+      "type": "skill",
+      "description": "Build React Native and Expo motion with gestures, Reanimated, haptics, accessible fallbacks, and device verification.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/animate-expo"
+    },
     "atlas-contract": {
       "name": "atlas-contract",
       "type": "skill",
@@ -36711,6 +36797,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/claude-in-chrome-troubleshooting",
       "description_ko": "Chrome MCP 확장 연결 문제에서 Claude를 진단하고 수정합니다. mcp__claude-in-chrome__* 도구가 실패할 때 사용하거나 \"브라우저 확장이 연결되지 않았습니다\"를 반환하거나 비정상적으로 동작합니다."
+    },
+    "figma": {
+      "name": "figma",
+      "type": "skill",
+      "description": "Import Figma assets, tokens, components and motion into editable HyperFrames videos with source and fidelity checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/figma"
     },
     "apple-notes-search": {
       "name": "apple-notes-search",
@@ -36730,6 +36824,14 @@
       "path": "collected_assets/skills/blockrun",
       "description_ko": "BlockRun은 Claude Code 및 Google Antigravity와 함께 작동합니다."
     },
+    "apple-design": {
+      "name": "apple-design",
+      "type": "skill",
+      "description": "Apply Apple-inspired interface and motion principles to gestures, typography, depth, feedback, and accessibility on the web.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/apple-design"
+    },
     "ejentum-reasoning-harness": {
       "name": "ejentum-reasoning-harness",
       "type": "skill",
@@ -36738,6 +36840,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ejentum-reasoning-harness",
       "description_ko": "네 가지 인지 활용 모드(추론, 코드, 사기 방지, 메모리)를 노출하는 MCP 서버입니다. 각 호출은 에이전트가 생성하기 전에 수집하는 엔지니어링된 스캐폴드(실패 패턴, 절차, 억제 벡터, 위조 테스트)를 반환합니다."
+    },
+    "find-animation-opportunities": {
+      "name": "find-animation-opportunities",
+      "type": "skill",
+      "description": "Propose purposeful motion opportunities from a read-only codebase review, with evidence and explicit exclusions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/find-animation-opportunities"
     },
     "atlas-ledger": {
       "name": "atlas-ledger",
@@ -36748,6 +36858,14 @@
       "path": "collected_assets/skills/atlas-ledger",
       "description_ko": "아틀라스 계약의 동반자. 적발된 드리프트에 대한 최종 감사를 통해 자동 호출됩니다. 또한 게시물 리뷰 또는 사용자가 실수를 기록하도록 요청한 후에도 사용합니다. WHEN/DON'T/INSTEAD 절로 드리프트를 추출하고 확인 후 Atlas.md에 씁니다."
     },
+    "animate": {
+      "name": "animate",
+      "type": "skill",
+      "description": "Build purposeful web animations with appropriate tools, easing, duration, interruption, exits, and reduced-motion support.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/animate"
+    },
     "claude-settings-audit": {
       "name": "claude-settings-audit",
       "type": "skill",
@@ -36757,6 +36875,14 @@
       "path": "collected_assets/skills/claude-settings-audit",
       "description_ko": "리포지토리를 분석하여 권장 Claude Code settings.json 권한을 생성하세요. 새 프로젝트를 설정하거나, 기존 설정을 감사하거나, 허용할 읽기 전용 bash 명령을 결정할 때 사용합니다. 기술 스택, 빌드 도구 및 모노레포 구조를 감지합니다."
     },
+    "hyperframes-cli": {
+      "name": "hyperframes-cli",
+      "type": "skill",
+      "description": "Scaffold, inspect, preview and render HyperFrames projects; use local or explicitly authorized hosted workflows.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/hyperframes-cli"
+    },
     "bilig-workpaper": {
       "name": "bilig-workpaper",
       "type": "skill",
@@ -36765,6 +36891,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/bilig-workpaper",
       "description_ko": "Excel이나 브라우저 UI를 구동하지 않고도 상담원 스프레드시트 작업을 위해 수식 지원 WorkPaper JSON 및 MCP 도구를 사용하세요."
+    },
+    "hyperframes-registry": {
+      "name": "hyperframes-registry",
+      "type": "skill",
+      "description": "Find and integrate editable HyperFrames blocks and components for video scenes, transitions and effects.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/hyperframes-registry"
     },
     "macos-screen-recorder": {
       "name": "macos-screen-recorder",
@@ -36792,6 +36926,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/analyze-project"
     },
+    "remove-animations": {
+      "name": "remove-animations",
+      "type": "skill",
+      "description": "Remove unnecessary interface motion while preserving final states, focus, layout, and animation-dependent behavior.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/remove-animations"
+    },
+    "ask-sonner": {
+      "name": "ask-sonner",
+      "type": "skill",
+      "description": "Set up and troubleshoot Sonner React toasts, including promises, loading states, updates, styling, theming, and placement.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ask-sonner"
+    },
     "auri-core": {
       "name": "auri-core",
       "type": "skill",
@@ -36818,6 +36968,14 @@
       "path": "collected_assets/skills/fp-backend",
       "description_ko": "fp-ts, ReaderTaskEither 및 기능적 종속성 주입을 사용한 Node.js/Deno 백엔드 개발을 위한 기능적 프로그래밍 패턴"
     },
+    "improve-animations": {
+      "name": "improve-animations",
+      "type": "skill",
+      "description": "Audit existing motion and write prioritized implementation plans with exact evidence, scope, and verification steps.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/improve-animations"
+    },
     "x-twitter-scraper": {
       "name": "x-twitter-scraper",
       "type": "skill",
@@ -36843,6 +37001,30 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/polis-protocol",
       "description_ko": "다중 공급업체 AI 에이전트를 자체 개선 팀으로 조정합니다. 학습 라우터는 실적에 따라 작업을 할당하고 시민들은 프로토콜의 자체 규칙을 수정할 수 있습니다."
+    },
+    "media-use": {
+      "name": "media-use",
+      "type": "skill",
+      "description": "Resolve and prepare licensed media, voice, music, captions and sound for HyperFrames with explicit provider and cost boundaries.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/media-use"
+    },
+    "slideshow": {
+      "name": "slideshow",
+      "type": "skill",
+      "description": "Build live HyperFrames slide decks with fragments, branching hotspots and presenter notes.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/slideshow"
+    },
+    "stageshow": {
+      "name": "stageshow",
+      "type": "skill",
+      "description": "Create React product illustrations and cursor demos using a reusable UI kit, examples, motion guidance, and visual verification tools.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/stageshow"
     },
     "sfxmint": {
       "name": "sfxmint",
@@ -36886,6 +37068,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/tools-page-seo-optimizer",
       "description_ko": "여러 도구, 제품 또는 기능 페이지가 있는 모든 사이트에 대한 프레임워크에 구애받지 않는 SEO 워크플로우입니다. 중복 콘텐츠, 고유 메타 태그, 제목 계층 구조, 내부 연결, URL 슬러그, E-E-A-T, 50~500페이지 확장을 위한 콘텐츠 레지스트리 패턴, 위치 50~68 키워드에 대한 블로그 콘텐츠 전략을 다룹니다."
+    },
+    "animation-vocabulary": {
+      "name": "animation-vocabulary",
+      "type": "skill",
+      "description": "Name a described animation effect using a reverse-lookup motion glossary.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/animation-vocabulary"
     },
     "odw": {
       "name": "odw",
