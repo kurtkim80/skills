@@ -68,8 +68,10 @@ absent from storage, code that spreads a local variable persists a **partial**
 settings record — and the next reader's `stored || DEFAULTS` keeps the truthy
 partial, so a missing nested key throws.
 
-Re-read inside the write path, and rebuild over the defaults rather than over
-whatever snapshot you happen to be holding:
+Re-read inside the write path to avoid carrying an old selection-time snapshot,
+and rebuild over the defaults rather than over whatever snapshot you happen to
+be holding. This narrows the stale-read window; it does **not** make the update
+atomic:
 
 ```js
 async function persistLastIndex(category, index) {
@@ -93,6 +95,18 @@ Two things that snippet is doing deliberately:
   `DEFAULTS.enabledCategories` — it is the same object, typically a module
   global shared by worker and popup. Mutating the stored copy later reaches back
   and rewrites your defaults for the rest of the process.
+
+A fresh read still races: worker A reads, popup B saves, then A writes its
+whole object and overwrites B's change. Awaiting A's `set` proves completion,
+not isolation. If both contexts can update the same key, route their writes
+through one owner and serialize the **whole read–merge–write sequence** there;
+serializing only `set` leaves both callers free to read the same old value.
+Every writer must use that route, including the popup's save handler.
+
+Test this with a controlled interleaving: hold A after its read, request B's
+save, then release A and await both acknowledgements. Assert the final settings
+contain both independent changes. A synchronous storage mock or a test that
+places B's save only *before* A's fresh read cannot expose the remaining race.
 
 The cleanest version of this rule: **make selection pure and persistence
 explicit.** A function that picks a random item should return
@@ -219,6 +233,35 @@ A finite but oversized value (`1e20`) passes `Number.isFinite`, then
 `new Date(raw)` is `Invalid Date` and the popup renders "Paused until Invalid Date"
 forever. `null`/`NaN`/strings must read as "not paused", never as a deadline. Test
 the exact-expiry boundary (`deadline === now` is expired) and an over-range value.
+
+## Calendar summaries need calendar-boundary tests
+
+A local activity calendar groups by local day, not by elapsed 24-hour buckets.
+Test the actual popup summarizer rather than a second implementation of its date
+math. Launch it in a Node child process with an explicit timezone so the test does
+not inherit the developer's or CI runner's zone:
+
+```js
+const result = spawnSync(process.execPath, ['tests/calendar-probe.cjs'], {
+  env: { ...process.env, TZ: 'America/New_York' },
+  encoding: 'utf8',
+});
+expect(result.status).toBe(0);
+expect(JSON.parse(result.stdout)).toEqual(expectedDailyTotals);
+```
+
+Import `spawnSync` from `node:child_process`. The probe loads the production
+summarizer and emits its result as JSON; keep assertions in the parent so a probe
+failure cannot look like an empty successful summary. Fix the summarizer's notion
+of "now" inside that process as well; setting `TZ` does not freeze time.
+
+Use distinct values for records just before midnight, exactly at midnight,
+within today, and later than the fixed current instant. Assert the entire daily
+result: a matching grand total can hide a record assigned to the wrong day.
+Test midnight inclusion and future exclusion separately so an implementation
+that drops both cannot pass. Include a spring-forward date such as 2025-03-09
+in that zone, whose local day is 23 hours; a UTC-only fixture cannot expose
+subtracting a fixed 24 hours to find the previous local midnight.
 
 ## A throw during `DOMContentLoaded` kills the whole popup
 
