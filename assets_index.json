@@ -371,7 +371,7 @@
     "rag-architect": {
       "name": "rag-architect",
       "type": "skill",
-      "description": "Use when designing a RAG pipeline, choosing chunk size, embedding model or vector database, or measuring retrieval quality (precision@k, recall@k, NDCG). Gives sized recommendations and an evaluation plan against ground truth.",
+      "description": "Design a RAG pipeline: chunk size, embedding model, vector database and retrieval quality metrics. Use whenever the user builds search over their docs, picks a vector store or finds answers miss the right context.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/rag-architect"
@@ -3557,7 +3557,7 @@
     "ai-act-readiness": {
       "name": "ai-act-readiness",
       "type": "skill",
-      "description": "Use for /compliance-os:ai-act-readiness, or EU AI Act readiness questions during AI-system intake or before EU deployment.",
+      "description": "EU AI Act readiness for an AI system. Use when launching AI in the EU, at AI intake, or /compliance-os:ai-act-readiness.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ai-act-readiness"
@@ -3573,7 +3573,7 @@
     "aims-audit": {
       "name": "aims-audit",
       "type": "skill",
-      "description": "Use for /compliance-os:aims-audit, or ISO 42001 readiness before stage 1 or an internal audit cycle.",
+      "description": "ISO 42001 AI readiness check. Use before a stage 1 or internal audit, or /compliance-os:aims-audit.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/aims-audit"
@@ -3597,7 +3597,7 @@
     "fix": {
       "name": "fix",
       "type": "skill",
-      "description": "Use when a Playwright test fails or is flaky ('fix test', 'flaky test', 'test passes sometimes', 'intermittent failure'). Diagnoses the cause and fixes it.",
+      "description": "Diagnose and fix a failing or flaky Playwright test. Use whenever a test fails, passes only sometimes, breaks intermittently or needs fixing.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/fix"
@@ -3605,7 +3605,7 @@
     "coverage": {
       "name": "coverage",
       "type": "skill",
-      "description": "Use when asked what's not tested or for test coverage gaps ('test coverage', 'coverage gaps', 'missing tests', 'what needs testing'). Maps untested pages and flows.",
+      "description": "Find what is not tested: map untested pages and flows and coverage gaps. Use whenever the user asks what needs tests, about missing tests or test coverage.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/coverage"
@@ -3646,7 +3646,7 @@
     "report": {
       "name": "report",
       "type": "skill",
-      "description": "Use when asked for a test report or results summary ('test report', 'test status', 'how did tests go').",
+      "description": "Summarize Playwright results. Use whenever the user asks how tests went, for a test report or status.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/report"
@@ -3711,7 +3711,7 @@
     "security-pen-testing": {
       "name": "security-pen-testing",
       "type": "skill",
-      "description": "Use for an authorized penetration test, vulnerability scan or OWASP Top 10 check of an app or API. Scans with vulnerability_scanner.py, audits dependencies with dependency_auditor.py and writes the report with pentest_report_generator.py.",
+      "description": "Authorized penetration testing of an app or API: vulnerability scans, OWASP Top 10 checks, dependency audits and a pentest report. Use whenever the user asks if their app is secure or hackable, wants a security scan or a pentest report.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/security-pen-testing"
@@ -3735,7 +3735,7 @@
     "senior-prompt-engineer": {
       "name": "senior-prompt-engineer",
       "type": "skill",
-      "description": "Use when optimizing a prompt, building an eval set, measuring RAG retrieval quality or validating an agent's tool config. Iterates with prompt_optimizer.py, scores RAG with rag_evaluator.py and checks agents with agent_orchestrator.py.",
+      "description": "Improve prompts and measure LLM quality: fix inconsistent prompts, build eval sets, score RAG retrieval, check agent tool configs. Use whenever the user's prompt, chatbot or RAG answers are unreliable or they ask how to test them.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-prompt-engineer"
@@ -3751,7 +3751,7 @@
     "senior-security": {
       "name": "senior-security",
       "type": "skill",
-      "description": "Use for STRIDE threat modeling, DREAD scoring or a quick secret scan, or to route a security request to the right specialist. Models threats with threat_modeler.py and scans with secret_scanner.py.",
+      "description": "Check if a design or code is secure: STRIDE threat model, DREAD risk scores, leaked secret scan. Use whenever the user asks what could be attacked, how risky a feature is, or to find exposed keys.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-security"
@@ -3759,7 +3759,7 @@
     "tech-stack-evaluator": {
       "name": "tech-stack-evaluator",
       "type": "skill",
-      "description": "Use when comparing frameworks or technology stacks, or deciding on a migration, before committing. Compares with stack_comparator.py, computes TCO with tco_calculator.py, scores ecosystem health with ecosystem_analyzer.py and assesses migration with migration_analyzer.py.",
+      "description": "Compare frameworks or tech stacks before committing: side-by-side scoring, total cost of ownership, ecosystem health and migration risk. Use whenever the user asks which framework to pick, X vs Y, whether to switch stacks, or if a migration is worth it.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/tech-stack-evaluator"
@@ -3783,7 +3783,7 @@
     "senior-backend": {
       "name": "senior-backend",
       "type": "skill",
-      "description": "Use for backend work: REST or GraphQL APIs, auth, microservices, PostgreSQL queries, migrations or load tests. Decides with backend_decision_engine.py, scaffolds with api_scaffolder.py, migrates with database_migration_tool.py and load-tests with api_load_tester.py.",
+      "description": "Build and fix backend services: REST or GraphQL APIs, auth, microservices, PostgreSQL queries, migrations and load tests. Use whenever the user's API is slow or broken, needs login or auth added, a schema change, or a new endpoint or service scaffolded.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-backend"
@@ -3791,7 +3791,7 @@
     "senior-qa": {
       "name": "senior-qa",
       "type": "skill",
-      "description": "Use for generating or improving tests in React or Next.js apps (Jest, React Testing Library, MSW, Playwright, coverage gaps). Generates suites with test_suite_generator.py, scaffolds E2E with e2e_test_scaffolder.py and reads coverage with coverage_analyzer.py.",
+      "description": "Write and improve tests for React or Next.js apps: Jest, React Testing Library, MSW mocks, Playwright E2E, coverage gaps. Use whenever the user asks to add tests to a component or page, mock an API, set up end-to-end tests or raise coverage.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-qa"
@@ -3866,7 +3866,7 @@
     "engineering-skills": {
       "name": "engineering-skills",
       "type": "skill",
-      "description": "Use when looking for which engineering-team skill fits a task (architecture, frontend, backend, QA, DevOps, security, AI/ML, data, cloud). Lists them and routes to one; load only that skill.",
+      "description": "Find which engineering skill fits a task: architecture, frontend, backend, QA, DevOps, security, AI/ML, data, cloud. Use whenever the user is unsure which skill to use; load only that one.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/engineering-skills"
@@ -3874,7 +3874,7 @@
     "adversarial-reviewer": {
       "name": "adversarial-reviewer",
       "type": "skill",
-      "description": "Use before merging a PR or when a self-review feels too agreeable and the change needs a genuinely critical read. Reviews the diff through hostile reviewer personas that catch blind spots the author and a friendly reviewer share.",
+      "description": "Tough, critical review of a diff or PR before merge, through hostile reviewer personas that catch shared blind spots. Use whenever the user wants a change torn apart, a harsh second opinion, or a self-review felt too agreeable.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/adversarial-reviewer"
@@ -3898,7 +3898,7 @@
     "senior-devops": {
       "name": "senior-devops",
       "type": "skill",
-      "description": "Use for CI/CD pipelines, infrastructure as code, containers and deployments on AWS, GCP or Azure. Generates pipelines with pipeline_generator.py, scaffolds Terraform with terraform_scaffolder.py and manages releases with deployment_manager.py.",
+      "description": "Set up CI/CD pipelines, infrastructure as code, containers and deployments on AWS, GCP or Azure. Use whenever the user needs a build or deploy pipeline, Terraform, a Dockerfile, or wants to manage a release to the cloud.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-devops"
@@ -3906,7 +3906,7 @@
     "gcp-cloud-architect": {
       "name": "gcp-cloud-architect",
       "type": "skill",
-      "description": "Use when designing or costing a Google Cloud architecture (Cloud Run, GKE, Functions, Cloud SQL, BigQuery, migration to GCP). Designs it with architecture_designer.py, deploys with deployment_manager.py and finds savings with cost_optimizer.py.",
+      "description": "Design, deploy and cut the cost of Google Cloud setups: Cloud Run, GKE, Functions, Cloud SQL, BigQuery, moving to GCP. Use whenever the user asks how to host or run something on GCP, why their GCP bill is high, or plans a GCP migration.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/gcp-cloud-architect"
@@ -3914,7 +3914,7 @@
     "tdd-guide": {
       "name": "tdd-guide",
       "type": "skill",
-      "description": "Use when writing tests first, generating tests, fixtures or mocks, or closing coverage gaps in Jest, Pytest, JUnit, Vitest or Mocha. Drives red-green-refactor with tdd_workflow.py, generates tests with test_generator.py and reads coverage with coverage_analyzer.py.",
+      "description": "Test-first development and test generation for Jest, Pytest, JUnit, Vitest or Mocha: red-green-refactor, fixtures and mocks, coverage gaps. Use whenever the user asks to write tests (before or after the code), mock a dependency or raise coverage.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/tdd-guide"
@@ -3938,7 +3938,7 @@
     "senior-computer-vision": {
       "name": "senior-computer-vision",
       "type": "skill",
-      "description": "Use for computer vision work: object detection, segmentation, training a custom model, or optimizing and deploying inference (YOLO, DETR, SAM, ONNX, TensorRT). Builds datasets with dataset_pipeline_builder.py, trains with vision_model_trainer.py and tunes inference with inference_optimizer.py.",
+      "description": "Computer vision models: object detection, segmentation, training a custom model, and optimizing or deploying inference (YOLO, DETR, SAM, ONNX, TensorRT). Use whenever the user wants to detect objects in images or video, train on their own labeled images, or speed up a slow vision model.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-computer-vision"
@@ -3954,7 +3954,7 @@
     "senior-secops": {
       "name": "senior-secops",
       "type": "skill",
-      "description": "Use for application security operations: security reviews, CVE remediation, hardening, secrets and auth, or SOC 2, PCI-DSS, HIPAA and GDPR checks. Scans with security_scanner.py, assesses CVEs with vulnerability_assessor.py and checks controls with compliance_checker.py.",
+      "description": "Find and fix application security problems: security reviews, CVE remediation, hardening, secrets and auth, SOC 2, PCI-DSS, HIPAA and GDPR checks. Use whenever the user asks if their app is secure, needs to patch a vulnerable dependency or prepares for an audit.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-secops"
@@ -3962,7 +3962,7 @@
     "senior-data-scientist": {
       "name": "senior-data-scientist",
       "type": "skill",
-      "description": "Use for experiment design, causal inference, feature engineering or predictive model evaluation on tabular data. Designs A/B tests with experiment_designer.py, builds features with feature_engineering_pipeline.py and evaluates models with model_evaluation_suite.py.",
+      "description": "Design experiments and analyze tabular data: A/B tests, causal inference, feature engineering, model evaluation. Use whenever the user asks how to set up or read an A/B test, whether a change caused a lift, which features to build, or how good a model is.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-data-scientist"
@@ -3987,20 +3987,18 @@
     "memory-review": {
       "name": "memory-review",
       "type": "skill",
-      "description": "Analyze auto-memory for promotion candidates, stale entries, consolidation opportunities, and health metrics. Use when the user runs /si:memory-review or asks what has been learned and what should be promoted or pruned.",
+      "description": "Review what the agent has learned in auto-memory: what to promote to permanent rules, stale entries to prune, duplicates to merge. Use whenever the user runs /si:memory-review or asks what you learned or what to keep.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/memory-review",
-      "description_ko": "승진 후보자, 오래된 항목, 통합 기회 및 상태 지표에 대한 자동 메모리를 분석합니다. 사용자가 /si:memory-review를 실행하거나 학습한 내용과 승격 또는 정리해야 할 내용을 묻는 경우에 사용합니다."
+      "path": "collected_assets/skills/memory-review"
     },
     "memory-status": {
       "name": "memory-status",
       "type": "skill",
-      "description": "Memory health dashboard showing line counts, topic files, capacity, stale entries, and recommendations. Use when the user runs /si:memory-status or asks how full or healthy the agent memory is.",
+      "description": "Health check of agent auto-memory: line counts, topic files, capacity, stale entries and what to prune. Use whenever the user asks how full or healthy memory is, or runs /si:memory-status.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/memory-status",
-      "description_ko": "줄 수, 항목 파일, 용량, 오래된 항목 및 권장 사항을 표시하는 메모리 상태 대시보드입니다. 사용자가 /si:memory-status를 실행하거나 에이전트 메모리가 얼마나 찼는지 또는 정상인지 물을 때 사용합니다."
+      "path": "collected_assets/skills/memory-status"
     },
     "promote": {
       "name": "promote",
@@ -4014,16 +4012,15 @@
     "extract": {
       "name": "extract",
       "type": "skill",
-      "description": "Turn a proven pattern or debugging solution into a standalone reusable skill with SKILL.md, reference docs, and examples. Use when the user runs /si:extract or asks to package a recurring solution from memory into a skill.",
+      "description": "Turn a fix or pattern that keeps coming up into a reusable skill with SKILL.md, reference docs and examples. Use whenever the user runs /si:extract or wants to package a recurring solution or lesson as a skill.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/extract",
-      "description_ko": "SKILL.md, 참조 문서 및 예제를 통해 입증된 패턴 또는 디버깅 솔루션을 독립형 재사용 가능 기술로 전환하세요. 사용자가 /si:extract를 실행하거나 메모리의 반복 솔루션을 기술로 패키징하도록 요청할 때 사용합니다."
+      "path": "collected_assets/skills/extract"
     },
     "self-improving-agent": {
       "name": "self-improving-agent",
       "type": "skill",
-      "description": "Curate the agent's own memory into durable project knowledge. Reviews Claude Code auto-memory (MEMORY.md and its topic files) for learnings worth keeping, promotes proven ones into CLAUDE.md or .claude/rules/, records a correction as a lesson that persists across sessions, prunes stale or duplicate entries, and turns a recurring fix into a reusable skill. Use whenever the user asks what you have learned or saved about the project, which memories should become permanent rules, to remember a lesson or stop repeating a mistake, or to clean up, audit or check the health of memory.",
+      "description": "Curate what the agent has learned into durable project knowledge. Reviews Claude Code auto-memory (MEMORY.md and its topic files) for learnings worth keeping, promotes proven ones into CLAUDE.md or .claude/rules/, records a correction as a lesson that persists across sessions, prunes stale or duplicate entries, and turns a recurring fix into a reusable skill. Use whenever the user asks what you have learned or saved about the project, which memories should become permanent rules, to remember a lesson or stop repeating a mistake, or to clean up, audit or check memory health.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/self-improving-agent"
@@ -4031,7 +4028,7 @@
     "revenue-operations": {
       "name": "revenue-operations",
       "type": "skill",
-      "description": "Use for pipeline coverage, forecast accuracy or GTM efficiency (magic number, CAC payback). Runs pipeline_analyzer.py, forecast_accuracy_tracker.py and gtm_efficiency_calculator.py.",
+      "description": "Check sales pipeline and forecasts: pipeline coverage, forecast accuracy, magic number, CAC payback. Use whenever the user asks if pipeline is enough or how good forecasts are.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/revenue-operations"
@@ -4087,7 +4084,7 @@
     "stress-test": {
       "name": "stress-test",
       "type": "skill",
-      "description": "Use before betting on a plan whose core assumptions are unvalidated (a hockey-stick model, a long enterprise pilot).",
+      "description": "Stress-test a plan built on untested assumptions. Use whenever the user bets on a hockey-stick model or long pilot.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/stress-test"
@@ -4095,7 +4092,7 @@
     "challenge": {
       "name": "challenge",
       "type": "skill",
-      "description": "Use before committing serious resources to a plan, or when feedback has been suspiciously positive. Runs a pre-mortem: assume it failed in 12 months and work back to the assumptions, dependencies and execution risks.",
+      "description": "Pre-mortem a plan: assume it failed in 12 months and work back to the assumptions, dependencies and execution risks. Use whenever the user will commit serious resources or feedback seems too positive.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/challenge"
@@ -4151,7 +4148,7 @@
     "general-counsel-advisor": {
       "name": "general-counsel-advisor",
       "type": "skill",
-      "description": "Use when reviewing a contract or term sheet (MSA, SaaS, NDA, DPA, employment), setting IP strategy or mapping regulatory exposure (HIPAA, GDPR, FDA, fintech). Scans with contract_risk_scanner.py and term_sheet_analyzer.py; not a substitute for licensed counsel.",
+      "description": "Legal review of contracts and term sheets (MSA, SaaS, NDA, DPA, employment), IP strategy and regulatory exposure (HIPAA, GDPR, FDA, fintech). Use whenever the user asks if a contract is risky or what to watch in a deal; not a substitute for licensed counsel.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/general-counsel-advisor"
@@ -4175,7 +4172,7 @@
     "chro-advisor": {
       "name": "chro-advisor",
       "type": "skill",
-      "description": "Use for people strategy: hiring plans, comp bands, org structure, performance or retention. Models hiring with hiring_plan_modeler.py and benchmarks pay with comp_benchmarker.py.",
+      "description": "People strategy: hiring plans, comp bands, org structure, performance, retention. Use whenever the user asks who to hire, what to pay, how to structure teams or why staff leave.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/chro-advisor"
@@ -4191,7 +4188,7 @@
     "cpo-advisor": {
       "name": "cpo-advisor",
       "type": "skill",
-      "description": "Use for product leadership: product vision, PMF measurement, portfolio prioritization, product org design or board product reporting. Scores PMF with pmf_scorer.py and the portfolio with portfolio_analyzer.py.",
+      "description": "Product leadership: PMF measurement, product vision, portfolio investment, product org design, board product reporting. Use whenever the user asks if they have PMF or how to split investment across products.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cpo-advisor"
@@ -4199,7 +4196,7 @@
     "c-level-skills": {
       "name": "c-level-skills",
       "type": "skill",
-      "description": "Use when looking for which C-level advisor skill fits a question (14 C-suite roles, board meetings, culture, M&A). Lists them and routes to one.",
+      "description": "Find which C-level advisor fits a question: 14 C-suite roles, board meetings, culture, M&A. Use whenever the user asks which advisor to use.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/c-level-skills"
@@ -4207,7 +4204,7 @@
     "cmo-advisor": {
       "name": "cmo-advisor",
       "type": "skill",
-      "description": "Use for marketing leadership decisions: positioning, PLG vs sales-led vs community-led, budget allocation or marketing team design. Simulates growth with growth_model_simulator.py and budgets with marketing_budget_modeler.py.",
+      "description": "Marketing leadership: positioning, product-led vs sales-led vs community-led growth, budget split across channels, marketing team design. Use whenever the user asks how to grow, which go-to-market fits or where to spend.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cmo-advisor"
@@ -4249,7 +4246,7 @@
     "ma-playbook": {
       "name": "ma-playbook",
       "type": "skill",
-      "description": "Use when buying a company or preparing to be bought: due diligence, valuation, deal structure and integration.",
+      "description": "Buy a company or sell yours: diligence, valuation, terms, integration. Use whenever M&A or an exit comes up.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ma-playbook"
@@ -4321,7 +4318,7 @@
     "cfo-advisor": {
       "name": "cfo-advisor",
       "type": "skill",
-      "description": "Use for startup finance decisions: unit economics (LTV, CAC), burn and runway, fundraising and dilution, or board financials. Runs unit_economics_analyzer.py, burn_rate_calculator.py and fundraising_model.py.",
+      "description": "Startup finance: runway and burn, unit economics (LTV, CAC, payback), fundraising and dilution, board financials. Use whenever the user shares burn, cash, ARR or CAC numbers or asks if they can raise.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cfo-advisor"
@@ -4337,7 +4334,7 @@
     "ceo-advisor": {
       "name": "ceo-advisor",
       "type": "skill",
-      "description": "Use for CEO-level questions: company strategy, board and investor management, fundraising, org design or culture. Models scenarios with financial_scenario_analyzer.py and strategy with strategy_analyzer.py.",
+      "description": "CEO and founder advice: company strategy, board and investor management, fundraising, org design, culture. Use whenever a CEO asks how to run the company, handle investors or board, or make a big bet.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ceo-advisor"
@@ -4465,7 +4462,7 @@
     "linkedin-strategy": {
       "name": "linkedin-strategy",
       "type": "skill",
-      "description": "Use when someone needs a LinkedIn plan rather than a post: content pillars, positioning, a sustainable cadence or a newsletter decision. Runs positioning_brief.py, cadence_planner.py and newsletter_planner.py.",
+      "description": "Build a LinkedIn plan rather than a post: content pillars, positioning, a sustainable cadence, whether to start a newsletter. Use whenever the user asks what to post about, how often, or how to grow.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/linkedin-strategy"
@@ -4489,7 +4486,7 @@
     "linkedin-content": {
       "name": "linkedin-content",
       "type": "skill",
-      "description": "Use when writing, editing or reviewing a LinkedIn post (story, how-to, carousel, video script, poll) or repurposing content into posts. Picks the format with format_picker.py and lints with post_linter.py.",
+      "description": "Write, edit or review a LinkedIn post: story, how-to, carousel, video script or poll. Use whenever the user wants a LinkedIn post, asks if their draft is good, or wants a blog or talk turned into posts.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/linkedin-content"
@@ -4545,7 +4542,7 @@
     "md-slides": {
       "name": "md-slides",
       "type": "skill",
-      "description": "Use when converting a markdown deck into a single-file HTML presentation with keyboard navigation, presenter notes and print-to-PDF. Splits slides with slide_splitter.py and renders with deck_html_renderer.py.",
+      "description": "Turn a markdown file into a single-file HTML slide deck with keyboard navigation, presenter notes and print-to-PDF. Use whenever the user wants slides or a presentation from markdown or notes.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/md-slides"
@@ -4569,7 +4566,7 @@
     "stock-analysis": {
       "name": "stock-analysis",
       "type": "skill",
-      "description": "Use when asked to analyze, research or value a listed stock or company (US, global, NSE or BSE). Verifies data with verify_data.py, computes ratios, scores and valuation, and checks the report with lint_report.py.",
+      "description": "Analyze, research or value a listed stock or company (US, global, NSE or BSE) with verified data, ratios, scores and valuation. Use whenever asked if a stock is a buy, what it is worth, or how a company looks.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/stock-analysis"
@@ -4577,7 +4574,7 @@
     "financial-analyst": {
       "name": "financial-analyst",
       "type": "skill",
-      "description": "Use for financial statement analysis, DCF valuation, budget variance or rolling forecasts. Runs ratio_calculator.py, dcf_valuation.py, budget_variance_analyzer.py and forecast_builder.py.",
+      "description": "Analyze financial statements, value a company with a DCF, explain budget variance, build rolling forecasts. Use whenever the user asks what a business is worth or why spend missed budget.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/financial-analyst"
@@ -4593,7 +4590,7 @@
     "finance-skills": {
       "name": "finance-skills",
       "type": "skill",
-      "description": "Use when a finance request needs routing between financial-analyst (ratios, DCF, variance, forecasts), saas-metrics-coach (ARR, churn, CAC, LTV, NRR) and month-end-close.",
+      "description": "Pick the right finance skill: ratios, DCF, forecasts (financial-analyst), ARR, churn, CAC, LTV (saas-metrics-coach), month-end-close. Use whenever a finance ask is vague.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/finance-skills"
@@ -4609,7 +4606,7 @@
     "minimalist": {
       "name": "minimalist",
       "type": "skill",
-      "description": "Use when asked to avoid over-engineering, cut dependencies or write the least code. Applies a strict ladder before any new code: YAGNI, reuse, stdlib, native platform, existing deps.",
+      "description": "Write the least code: no over-engineering, fewer dependencies. Use whenever the user wants it simpler; applies a ladder first: YAGNI, reuse, stdlib, native platform, existing deps.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/minimalist"
@@ -4650,7 +4647,7 @@
     "behuman": {
       "name": "behuman",
       "type": "skill",
-      "description": "Use when the user asks for less robotic, more human replies ('be real', 'talk like a person', 'mirror mode'), or the conversation is emotionally heavy (grief, job loss, fear). Drops lists and hedging for a direct, warm voice. Not for code or factual lookups.",
+      "description": "Reply like a real person, direct and warm, without lists or hedging. Use whenever the user says you sound robotic, asks you to be real or talk like a person, wants mirror mode, or is going through grief, job loss or fear. Not for code or factual lookups.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/behuman"
@@ -4658,7 +4655,7 @@
     "spinning-up-deep-rl": {
       "name": "spinning-up-deep-rl",
       "type": "skill",
-      "description": "Use when learning or applying deep RL from OpenAI's Spinning Up: MDPs, policy gradients, VPG, TRPO, PPO, DDPG, TD3, SAC, debugging RL code that fails silently, or multi-seed experiments. Indexes the 20 chapters for on-demand reading.",
+      "description": "Learn or apply deep reinforcement learning with OpenAI Spinning Up: policy gradients, VPG, PPO, SAC, TD3, DDPG, TRPO. Use whenever an RL agent will not learn, reward stays flat, or the user asks how PPO or SAC works.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/spinning-up-deep-rl"
@@ -4692,7 +4689,7 @@
     "agenthub": {
       "name": "agenthub",
       "type": "skill",
-      "description": "Use when a task should be attempted by several agents in parallel and the best result kept (code speed, copy variants, research angles). Spawns N agents in git worktrees, ranks results by metric or judge with result_ranker.py and merges the winner.",
+      "description": "Run several agents on one task in parallel and keep the best result: faster code, copy variants, research angles. Use whenever the user wants multiple attempts compared or best of N; spawns agents in git worktrees, ranks and merges the winner.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/agenthub"
@@ -4708,7 +4705,7 @@
     "spawn": {
       "name": "spawn",
       "type": "skill",
-      "description": "Use to launch the competing agents for an initialized AgentHub session in isolated worktrees.",
+      "description": "Launch the competing agents in isolated worktrees. Use when an AgentHub session is set up.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/spawn"
@@ -4740,7 +4737,7 @@
     "eval": {
       "name": "eval",
       "type": "skill",
-      "description": "Use to score and pick a winner among finished AgentHub agents by metric or judge.",
+      "description": "Rank finished AgentHub agents by metric or judge. Use when asked which agent won.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/eval"
@@ -4822,7 +4819,7 @@
     "autoresearch-agent": {
       "name": "autoresearch-agent",
       "type": "skill",
-      "description": "Use when a file should be improved against a measurable metric (speed, bundle size, pass rate, prompt or headline score), before hand-tuning it. Loops edit, run_experiment.py, keep or git reset on a fixed evaluator; needs an eval command and a git repo.",
+      "description": "Make a file measurably better by trial: faster code, smaller bundle, higher pass rate or prompt score. Use whenever the user wants something optimized against a metric, before hand-tuning; loops edits, keeps wins, resets losses. Needs an eval command.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/autoresearch-agent"
@@ -4847,7 +4844,7 @@
     "ar-status": {
       "name": "ar-status",
       "type": "skill",
-      "description": "Use for /ar-status, or to see an autoresearch experiment's results, active loops and progress.",
+      "description": "Show autoresearch results and progress. Use when asked how an experiment runs, or /ar-status.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ar-status"
@@ -4871,10 +4868,19 @@
     "commit-craft": {
       "name": "commit-craft",
       "type": "skill",
-      "description": "Use when committing a mix of changes, before a push, or when asked to split work into commits or write commit messages. Plans a reviewable series, blocks staged secrets and .env files, and lints messages with commit_planner.py, secret_gate.py and message_linter.py.",
+      "description": "Turn a mix of changes into clean, reviewable commits with good messages, blocking staged secrets and .env files. Use whenever the user says commit this, wants to split work into commits, write a commit message, or is about to push.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/commit-craft"
+    },
+    "i18n-localization": {
+      "name": "i18n-localization",
+      "type": "skill",
+      "description": "Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/i18n-localization",
+      "description_ko": "국제화 및 지역화 패턴. 하드코딩된 문자열 감지, 번역 관리, 로케일 파일, RTL 지원."
     },
     "helm-chart-builder": {
       "name": "helm-chart-builder",
@@ -4887,7 +4893,7 @@
     "universal-scraping-architect": {
       "name": "universal-scraping-architect",
       "type": "skill",
-      "description": "Use for web scraping, crawling, document extraction or API parsing pipelines that must validate what they extract. Builds the extractor with Firecrawl or local Python and checks output with validate_extraction.py.",
+      "description": "Scrape websites, crawl pages, extract documents or parse APIs, and validate what was extracted, via Firecrawl or local Python. Use whenever the user wants data pulled from a site, PDF or API, or a scraper breaks.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/universal-scraping-architect"
@@ -4895,7 +4901,7 @@
     "statistical-analyst": {
       "name": "statistical-analyst",
       "type": "skill",
-      "description": "Use when checking whether a difference is real (A/B results, hypothesis tests) or sizing an experiment, before declaring a winner. Runs tests with hypothesis_tester.py, intervals with confidence_interval.py and sample sizes with sample_size_calculator.py.",
+      "description": "Tell whether a difference is real: A/B results, hypothesis tests, confidence intervals, how many users a test needs. Use whenever the user asks if a result is significant, which variant won, or how long to run a test before calling a winner.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/statistical-analyst"
@@ -5049,16 +5055,15 @@
     "caveman": {
       "name": "caveman",
       "type": "skill",
-      "description": ">",
+      "description": "Ultra-short replies that cut tokens about 75% by dropping filler, articles and pleasantries while staying technically accurate. Use whenever the user says caveman mode, talk like caveman, use caveman, less tokens, be brief, too wordy, or invokes /caveman.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/caveman",
-      "description_ko": ">"
+      "path": "collected_assets/skills/caveman"
     },
     "coding-agent-rollout": {
       "name": "coding-agent-rollout",
       "type": "skill",
-      "description": "Use when rolling Claude Code out to a team or reviewing a rollout: shared or managed settings, MCP and plugin approval, layered CLAUDE.md, adoption. Lints settings with settings_linter.py, inventories MCP servers and plugins, and audits CLAUDE.md layering.",
+      "description": "Roll out Claude Code to a team: shared or managed settings, MCP and plugin approval, layered CLAUDE.md, adoption. Use whenever the user sets up Claude Code for their team or org, or asks if a rollout or settings file is right.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/coding-agent-rollout"
@@ -5066,7 +5071,7 @@
     "karpathy-coder": {
       "name": "karpathy-coder",
       "type": "skill",
-      "description": "Use before committing or while reviewing a diff, or when code may be overbuilt. Checks it against Karpathy's four principles with complexity_checker.py, diff_surgeon.py and assumption_linter.py: surface assumptions, keep it simple, change surgically, verify goals.",
+      "description": "Check code against Karpathy's four principles: surface assumptions, keep it simple, change surgically, verify goals. Use whenever the user is about to commit, reviews a diff, or worries code is overbuilt or too complex; runs complexity_checker.py.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/karpathy-coder"
@@ -5090,7 +5095,7 @@
     "sql-database-assistant": {
       "name": "sql-database-assistant",
       "type": "skill",
-      "description": "Use for writing or optimizing SQL, exploring a schema, generating migrations or working with Prisma, Drizzle, TypeORM or SQLAlchemy. Analyzes queries with query_optimizer.py and schemas with schema_explorer.py.",
+      "description": "Write and tune SQL, explore schemas, make migrations: Prisma, Drizzle, TypeORM, SQLAlchemy. Use whenever a query is slow or returns wrong rows, the user needs one written or asks what tables exist.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/sql-database-assistant"
@@ -5098,7 +5103,7 @@
     "engineering-advanced-skills": {
       "name": "engineering-advanced-skills",
       "type": "skill",
-      "description": "Use when looking for which advanced engineering skill fits a task (agents, RAG, MCP, CI/CD, databases, observability, release, reliability). Lists them and routes to one.",
+      "description": "Pick the right advanced engineering skill: agents, RAG, MCP, CI/CD, databases, observability, release. Use whenever the user asks which skill fits a task.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/engineering-advanced-skills"
@@ -5106,7 +5111,7 @@
     "changelog-generator": {
       "name": "changelog-generator",
       "type": "skill",
-      "description": "Use when cutting a release, writing CHANGELOG.md or deciding the next version from commits, before writing notes by hand. Lints commits with commit_linter.py, picks the semver bump with version_bumper.py and renders notes with generate_changelog.py.",
+      "description": "Write release notes and CHANGELOG.md from commits and pick the next semver version. Use whenever the user is cutting a release, asks what changed since the last one or what version comes next, or wants commits linted first.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/changelog-generator"
@@ -5122,7 +5127,7 @@
     "pr-review-expert": {
       "name": "pr-review-expert",
       "type": "skill",
-      "description": "Use when asked to review a pull request or diff for correctness, security and quality. Reviews the change file by file with a severity-ranked checklist.",
+      "description": "Review a pull request or diff for bugs, security and quality, file by file. Use whenever the user asks to review a PR or look over their changes.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/pr-review-expert"
@@ -5138,7 +5143,7 @@
     "dependency-auditor": {
       "name": "dependency-auditor",
       "type": "skill",
-      "description": "Use before a release, during a CVE investigation, before a major version bump or for a license review. Scans dependencies with dep_scanner.py, checks licenses with license_checker.py and plans safe upgrades with upgrade_planner.py.",
+      "description": "Audit project dependencies for CVEs and licenses and plan safe upgrades. Use whenever the user asks if their packages are safe, before a release or major version bump, while chasing a CVE, or for a license review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/dependency-auditor"
@@ -5146,7 +5151,7 @@
     "tech-debt-tracker": {
       "name": "tech-debt-tracker",
       "type": "skill",
-      "description": "Use when asked about tech debt, refactoring priority, a cleanup sprint or legacy modernization. Scans the code with debt_scanner.py, ranks items with debt_prioritizer.py and tracks trends with debt_dashboard.py.",
+      "description": "Find, rank and track tech debt in a codebase. Use whenever the user asks what to refactor first, plans a cleanup sprint, modernizes legacy code or wants to know how messy the code is.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/tech-debt-tracker"
@@ -5194,7 +5199,7 @@
     "agent-designer": {
       "name": "agent-designer",
       "type": "skill",
-      "description": "Use when designing a multi-agent system (supervisor, swarm, pipeline), writing agent tool schemas, or reading agent run logs for cost, latency or failure bottlenecks. Not for Claude Code workflow files (workflow-builder).",
+      "description": "Design multi-agent systems (supervisor, swarm, pipeline) and tool schemas; find bottlenecks in run logs. Use whenever agents split work or a run is slow or costly. Not for Claude Code workflow files (workflow-builder).",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/agent-designer"
@@ -5210,7 +5215,7 @@
     "self-eval": {
       "name": "self-eval",
       "type": "skill",
-      "description": "Use after finishing a task, review or session to grade the work honestly. Scores it on two axes, forces a devil's-advocate pass against score inflation and keeps scores across sessions.",
+      "description": "Grade finished work honestly on two axes with a devil's-advocate pass against inflation. Use whenever the user asks how well a task went, to rate the work or for an honest self-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/self-eval"
@@ -5226,7 +5231,7 @@
     "migration-architect": {
       "name": "migration-architect",
       "type": "skill",
-      "description": "Use before planning any database, schema, service or data migration, especially zero-downtime ones. Generates a phased plan, a compatibility check and rollback scripts with migration_planner.py, compatibility_checker.py and rollback_generator.py.",
+      "description": "Plan a safe database, schema, service or data migration: phased plan, compatibility check and rollback scripts. Use whenever the user must move data, change a live schema, switch databases or migrate without downtime.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/migration-architect"
@@ -5242,7 +5247,7 @@
     "database-designer": {
       "name": "database-designer",
       "type": "skill",
-      "description": "Use when designing a database schema, choosing SQL vs NoSQL, modeling relationships or planning a data migration, before writing DDL. Applies normalization, index strategy and a database selection decision tree.",
+      "description": "Design a database schema: tables, relationships, indexes, normalization, SQL vs NoSQL, migration plans. Use whenever the user asks how to structure their data, which database to pick, or before writing DDL.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/database-designer"
@@ -5348,7 +5353,7 @@
     "ci-cd-pipeline-builder": {
       "name": "ci-cd-pipeline-builder",
       "type": "skill",
-      "description": "Use when setting up or refactoring CI/CD for a repo, before writing workflow YAML. Detects the stack with stack_detector.py and generates the pipeline with pipeline_generator.py.",
+      "description": "Set up or refactor CI/CD for a repo: detect the stack, generate pipeline YAML. Use whenever the user wants builds or tests to run on each push or needs a CI workflow file.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ci-cd-pipeline-builder"
@@ -5405,11 +5410,10 @@
     "roast": {
       "name": "roast",
       "type": "skill",
-      "description": "Use when someone asks to roast an idea, pressure-test or stress-test an idea, validate a business idea, \"convene the panel\", get a brutal second opinion before building something, or says \"/roast\". Spins up a 5-angle panel (Critic, Champion, Analyst, Investigator, Customer) that attacks the idea from every angle, then a Judge returns one GO / RESHAPE / KILL verdict with the cheapest test to de-risk it.",
+      "description": "Roast an idea: a 5-angle panel (Critic, Champion, Analyst, Investigator, Customer) attacks it, then a Judge returns one GO / RESHAPE / KILL verdict with the cheapest test to de-risk it. Use whenever the user wants to pressure-test or validate a business idea, asks for a brutal second opinion before building, asks is this a good idea, says convene the panel, or runs /roast.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/roast",
-      "description_ko": "누군가가 아이디어 로스팅, 압력 테스트 또는 스트레스 테스트, 비즈니스 아이디어 검증, \"패널 소집\", 무언가를 구축하기 전에 잔혹한 2차 의견 얻기 또는 \"/로스트\"라고 말할 때 사용합니다. 모든 각도에서 아이디어를 공격하는 5각 패널(비평가, 챔피언, 분석가, 조사자, 고객)을 회전시킨 다음 판사는 위험을 제거하기 위해 가장 저렴한 테스트로 하나의 GO / RESHAPE / KILL 평결을 반환합니다."
+      "path": "collected_assets/skills/roast"
     },
     "capture": {
       "name": "capture",
@@ -5454,7 +5458,7 @@
     "andreessen": {
       "name": "andreessen",
       "type": "skill",
-      "description": "Use when the user wants a blunt market-first verdict on an idea, venture or career bet ('is there a market', 'are we at PMF', 'pmarca mode'), or a 3x5-card daily plan. Scores with market_first_evaluator.py and pmf_signal_scorer.py; leads with the strongest counterargument.",
+      "description": "Blunt market-first verdict on an idea, venture or career bet, leading with the strongest counterargument, or a 3x5-card daily plan. Use whenever the user asks is there a market, are we at PMF, should I do this, or says pmarca mode.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/andreessen"
@@ -6048,15 +6052,6 @@
       "path": "collected_assets/skills/wiki-lint",
       "description_ko": "LLM Wiki 저장소에서 상태 검사를 실행합니다. 기계적 검사(고아, 끊어진 링크, 오래된 페이지, 본문 누락, 로그 간격, 중복)와 의미 체계 검사(모순, 상호 참조 간격, 자체 페이지 누락 개념)를 수행합니다. 제안된 작업이 포함된 마크다운 보고서를 출력합니다. 사용법 /wiki-lint [--stale-days N] [--log-gap-days N]"
     },
-    "deep-research": {
-      "name": "deep-research",
-      "type": "skill",
-      "description": "Multi-source deep research using firecrawl and exa MCPs. Searches the web, synthesizes findings, and delivers cited reports with source attribution. Use when the user wants thorough research on any topic with evidence and citations.",
-      "source_repo": "https://github.com/affaan-m/ECC.git",
-      "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/deep-research",
-      "description_ko": "Firecrawl 및 Exa MCP를 사용한 다중 소스 심층 연구. 웹을 검색하고, 결과를 종합하고, 소스 속성이 포함된 인용 보고서를 제공합니다. 사용자가 증거와 인용이 포함된 주제에 대한 철저한 조사를 원할 때 사용합니다."
-    },
     "syllabus": {
       "name": "syllabus",
       "type": "skill",
@@ -6113,6 +6108,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/grants"
+    },
+    "meta-research": {
+      "name": "meta-research",
+      "type": "skill",
+      "description": "Use when a wrong answer is expensive: strategy research, comparing several products or markets, validating a hypothesis with outside data. Fans out searches and sub-agents, triangulates each claim across 3+ sources and saves every source with quotes. Quick facts: answer directly.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/meta-research"
     },
     "dossier": {
       "name": "dossier",
@@ -6174,7 +6177,7 @@
     "jira-expert": {
       "name": "jira-expert",
       "type": "skill",
-      "description": "Use for Jira configuration and queries: JQL, workflows, custom fields, automation, dashboards. Builds JQL with jql_query_builder.py and checks workflows with workflow_validator.py.",
+      "description": "Jira setup and queries: JQL, workflows, custom fields, automation, dashboards. Use whenever the user needs a Jira search, filter, dashboard or rule set up, or a workflow fixed.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/jira-expert"
@@ -6198,7 +6201,7 @@
     "senior-pm": {
       "name": "senior-pm",
       "type": "skill",
-      "description": "Use for project or portfolio management: plans, status reports, risk registers, capacity or executive reporting on multi-workstream programs. Runs project_health_dashboard.py, risk_matrix_analyzer.py and resource_capacity_planner.py.",
+      "description": "Project and portfolio management for multi-workstream programs: plans, status reports, risk registers, capacity, executive reporting. Use whenever the user asks how a project is tracking, what the risks are or who has capacity.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/senior-pm"
@@ -6206,7 +6209,7 @@
     "pm-skills": {
       "name": "pm-skills",
       "type": "skill",
-      "description": "Use when a delivery request needs routing across the project-management skills (sprints, portfolio health, Jira, Confluence, comms), or to run a delivery loop. Routes with pm_goal_router.py, bridges Jira data with jira_snapshot_bridge.py and gates with delivery_loop_gate.py.",
+      "description": "Router for project-management skills: sprints, portfolio health, Jira, Confluence, stakeholder comms, plus a delivery loop. Use whenever a delivery request is unclear about which PM skill fits, or the user asks to run a delivery loop or pull Jira data into one.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/pm-skills"
@@ -6258,7 +6261,7 @@
     "social-media-analyzer": {
       "name": "social-media-analyzer",
       "type": "skill",
-      "description": "Use for any social performance question (engagement rate, campaign ROI, which platform works best), before answering. Calculates the metrics and benchmarks them with calculate_metrics.py and analyze_performance.py.",
+      "description": "Measure how social posts and campaigns perform: engagement rate, campaign ROI, benchmarks, which platform works best. Use whenever the user asks if their posts are working, why engagement is low, or where to focus.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/social-media-analyzer"
@@ -6266,7 +6269,7 @@
     "campaign-analytics": {
       "name": "campaign-analytics",
       "type": "skill",
-      "description": "Use for any campaign performance, ROAS, CPA, attribution or funnel question, before answering from intuition. Runs multi-touch attribution, funnel and ROI math on the user's numbers with attribution_analyzer.py, funnel_analyzer.py and campaign_roi_calculator.py.",
+      "description": "Analyze campaign performance on the user's numbers: ROAS, CPA, ROI, multi-touch attribution and funnel drop-off. Use whenever the user asks which channel or ad is working, where spend is wasted, why conversions dropped, or shares campaign results to review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/campaign-analytics"
@@ -6300,7 +6303,7 @@
     "content-humanizer": {
       "name": "content-humanizer",
       "type": "skill",
-      "description": "Use when a draft sounds like AI, generic or robotic, or needs the brand's voice, before editing it. Scores AI tells with humanizer_scorer.py and rewrites for rhythm, specifics and personality, then rescores.",
+      "description": "Make a draft sound less like AI: fix generic, robotic text with rhythm, specifics, personality and brand voice. Use whenever the user says copy sounds like ChatGPT, bland or stiff, or not like them.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/content-humanizer"
@@ -6410,7 +6413,7 @@
     "social-media-manager": {
       "name": "social-media-manager",
       "type": "skill",
-      "description": "Use for social media strategy, a content calendar, community management or follower growth across platforms. Generates the calendar with social_calendar_generator.py. Single posts: social-content.",
+      "description": "Plan social media: strategy, content calendar, community management, follower growth. Use whenever the user asks what to post and when, or how to grow followers. Single posts: social-content.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/social-media-manager"
@@ -6556,7 +6559,7 @@
     "content-production": {
       "name": "content-production",
       "type": "skill",
-      "description": "Use for any blog post, article or guide to write end to end, before drafting. Runs research, outline, draft and SEO passes, then gates the piece with content_scorer.py, seo_optimizer.py and content_quality_gates.py.",
+      "description": "Write a blog post, article or guide end to end: research, outline, draft, SEO pass and quality gates. Use whenever the user asks to write a blog post, draft an article on a topic, or turn notes into a full piece.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/content-production"
@@ -6684,7 +6687,7 @@
     "competitive-teardown": {
       "name": "competitive-teardown",
       "type": "skill",
-      "description": "Use for a deep competitor teardown (pricing, reviews, hiring, SEO, UX) or a response to a competitor's move. Scores products across 12 dimensions with competitive_matrix_builder.py and produces SWOT and positioning maps.",
+      "description": "Deep competitor teardown: pricing, reviews, hiring, SEO, UX, scored across 12 dimensions with SWOT and positioning maps. Use whenever the user asks how they compare to a rival or how to respond to a competitor's move.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/competitive-teardown"
@@ -6692,11 +6695,10 @@
     "experiment-designer": {
       "name": "experiment-designer",
       "type": "skill",
-      "description": "Use when planning product experiments, writing testable hypotheses, estimating sample size, prioritizing tests, or interpreting A/B outcomes with practical statistical rigor.",
+      "description": "Plan A/B tests and product experiments: hypotheses, sample size, priority, reading results. Use whenever the user asks if a test won, how long to run it or what to test.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/experiment-designer",
-      "description_ko": "제품 실험을 계획하고, 테스트 가능한 가설을 작성하고, 샘플 크기를 추정하고, 테스트 우선 순위를 지정하거나, 실용적인 통계적 엄격함으로 A/B 결과를 해석할 때 사용합니다."
+      "path": "collected_assets/skills/experiment-designer"
     },
     "saas-scaffolder": {
       "name": "saas-scaffolder",
@@ -6735,11 +6737,10 @@
     "product-discovery": {
       "name": "product-discovery",
       "type": "skill",
-      "description": "Use when validating product opportunities, mapping assumptions, planning discovery sprints, or testing problem-solution fit before committing delivery resources.",
+      "description": "Validate product ideas: map assumptions, plan discovery sprints, test problem-solution fit. Use whenever the user asks if an idea is worth building.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/product-discovery",
-      "description_ko": "제품 기회를 검증하고, 가정을 매핑하고, 발견 스프린트를 계획하거나, 제공 리소스를 투입하기 전에 문제 해결 적합성을 테스트할 때 사용하세요."
+      "path": "collected_assets/skills/product-discovery"
     },
     "spec-to-repo": {
       "name": "spec-to-repo",
@@ -6780,11 +6781,10 @@
     "roadmap-communicator": {
       "name": "roadmap-communicator",
       "type": "skill",
-      "description": "Use when preparing roadmap narratives, release notes, changelogs, or stakeholder updates tailored for executives, engineering teams, and customers.",
+      "description": "Write roadmap narratives, release notes, changelogs, stakeholder updates. Use whenever the user explains plans to execs, engineers or customers.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/skills/roadmap-communicator",
-      "description_ko": "경영진, 엔지니어링 팀, 고객을 위한 맞춤형 로드맵 설명, 릴리스 노트, 변경 로그 또는 이해관계자 업데이트를 준비할 때 사용하세요."
+      "path": "collected_assets/skills/roadmap-communicator"
     },
     "interview-mapper": {
       "name": "interview-mapper",
@@ -6847,7 +6847,7 @@
     "capacity-planner": {
       "name": "capacity-planner",
       "type": "skill",
-      "description": "Use when sizing an ops or support team, building a headcount plan or checking utilization risk. Models queues with Erlang C in capacity_modeler.py, analyzes utilization with utilization_analyzer.py and orders hires with hiring_sequencer.py.",
+      "description": "Size an ops or support team and plan headcount: Erlang C queue models, utilization risk, hiring order. Use whenever the user asks how many agents or staff they need, if the team is overloaded, or who to hire first.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/capacity-planner"
@@ -6855,7 +6855,7 @@
     "procurement-optimizer": {
       "name": "procurement-optimizer",
       "type": "skill",
-      "description": "Use for a SaaS audit, category spend review or supplier consolidation. Categorizes spend with spend_categorizer.py, finds slow purchasing with purchasing_cycle_analyzer.py and sizes consolidation with supplier_consolidation.py.",
+      "description": "Cut spend on software and suppliers: SaaS audit, category spend review, slow purchasing cycles, supplier consolidation. Use whenever the user asks which tools or vendors to cut, where money goes, or why buying takes so long.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/procurement-optimizer"
@@ -6871,7 +6871,7 @@
     "business-operations-skills": {
       "name": "business-operations-skills",
       "type": "skill",
-      "description": "Use when an internal operations request needs routing (process, vendors, capacity, internal comms, SOPs, procurement): 'where's the bottleneck', 'vendor health'. Lists the BizOps skills and routes to one.",
+      "description": "Route internal operations requests to the right BizOps skill: process, vendors, capacity, internal comms, SOPs, procurement. Use whenever the user asks where the bottleneck is or about vendor health.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/business-operations-skills"
@@ -6895,7 +6895,7 @@
     "cto-review": {
       "name": "cto-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:cto-review, or to challenge an architecture commitment, a 10x scaling plan or rebuild vs buy.",
+      "description": "Challenge an architecture bet, 10x scaling plan or rebuild vs buy. Use whenever asked or /c-level-agents:cto-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cto-review"
@@ -6903,7 +6903,7 @@
     "cfo-review": {
       "name": "cfo-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:cfo-review, or to challenge a plan that commits real money (a hiring wave, a raise, a channel budget).",
+      "description": "Challenge a plan that spends real money: hiring wave, raise, channel budget. Use whenever asked or /c-level-agents:cfo-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cfo-review"
@@ -6959,7 +6959,7 @@
     "cro-review": {
       "name": "cro-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:cro-review, or to challenge a forecast, win-rate drop or sales-team scale-up.",
+      "description": "Challenge a forecast, win-rate drop or sales hires. Use whenever asked or /c-level-agents:cro-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cro-review"
@@ -6975,7 +6975,7 @@
     "vpe-review": {
       "name": "vpe-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:vpe-review, or to challenge a plan touching delivery speed, eng hiring, team structure or on-call.",
+      "description": "Challenge a plan on delivery speed, eng hiring, team structure or on-call. Use when asked or /c-level-agents:vpe-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/vpe-review"
@@ -6983,7 +6983,7 @@
     "ciso-review": {
       "name": "ciso-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:ciso-review, or to challenge a plan touching customer data, compliance or production access.",
+      "description": "Challenge a plan touching customer data, compliance or prod access. Use when asked or /c-level-agents:ciso-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ciso-review"
@@ -7015,7 +7015,7 @@
     "cco-review": {
       "name": "cco-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:cco-review, or to challenge a plan touching retention, segmentation or CS headcount.",
+      "description": "Challenge a churn, retention, segment or CS hiring plan. Use whenever asked or /c-level-agents:cco-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cco-review"
@@ -7048,7 +7048,7 @@
     "cpo-review": {
       "name": "cpo-review",
       "type": "skill",
-      "description": "Use for /c-level-agents:cpo-review, or to challenge a roadmap, a PMF claim or a feature-kill decision.",
+      "description": "Challenge a roadmap, PMF claim or feature kill. Use whenever asked or /c-level-agents:cpo-review.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/cpo-review"
@@ -7161,7 +7161,7 @@
     "quality-manager-qms-iso13485": {
       "name": "quality-manager-qms-iso13485",
       "type": "skill",
-      "description": "Use when building or maintaining an ISO 13485 QMS for medical devices, or preparing for its certification audit. Covers QMS design, documentation and CAPA and runs qms_audit_checklist.py.",
+      "description": "Build or maintain an ISO 13485 medical device QMS: design, documentation, CAPA, audit prep. Use whenever the user faces a 13485 certification audit or needs quality procedures.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/quality-manager-qms-iso13485"
@@ -7177,7 +7177,7 @@
     "ra-qm-skills": {
       "name": "ra-qm-skills",
       "type": "skill",
-      "description": "Use when a regulatory or quality request doesn't clearly match one skill (ISO 13485, MDR, FDA, ISO 14971, CAPA, ISO 27001, ISO 42001, EU AI Act, GDPR, SOC 2). Lists them and routes to one.",
+      "description": "Router for regulatory and quality skills: ISO 13485, MDR, FDA, ISO 14971, CAPA, ISO 27001, ISO 42001, EU AI Act, GDPR, SOC 2. Use whenever a compliance request fits no single one.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ra-qm-skills"
@@ -9012,6 +9012,15 @@
       "path": "collected_assets/skills/caching",
       "description_ko": ">"
     },
+    "desktop-mvvm": {
+      "name": "desktop-mvvm",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/skills/desktop-mvvm",
+      "description_ko": ">"
+    },
     "resilience": {
       "name": "resilience",
       "type": "skill",
@@ -9028,6 +9037,15 @@
       "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
       "source_name": "codewithmukesh/dotnet-claude-kit",
       "path": "collected_assets/skills/plan",
+      "description_ko": ">"
+    },
+    "avalonia": {
+      "name": "avalonia",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/skills/avalonia",
       "description_ko": ">"
     },
     "scalar": {
@@ -9164,6 +9182,15 @@
       "path": "collected_assets/skills/modern-csharp",
       "description_ko": ">"
     },
+    "token-report": {
+      "name": "token-report",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/skills/token-report",
+      "description_ko": ">"
+    },
     "ef-core": {
       "name": "ef-core",
       "type": "skill",
@@ -9209,6 +9236,15 @@
       "path": "collected_assets/skills/spec",
       "description_ko": ">"
     },
+    "native-aot": {
+      "name": "native-aot",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/skills/native-aot",
+      "description_ko": ">"
+    },
     "outdated": {
       "name": "outdated",
       "type": "skill",
@@ -9216,6 +9252,15 @@
       "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
       "source_name": "codewithmukesh/dotnet-claude-kit",
       "path": "collected_assets/skills/outdated",
+      "description_ko": ">"
+    },
+    "console-cli": {
+      "name": "console-cli",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/skills/console-cli",
       "description_ko": ">"
     },
     "docker": {
@@ -9867,6 +9912,15 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/tg-responder",
       "description_ko": "텔레그램 응답 초안을 검토 및 보내고, 응답하지 않은 아웃바운드 메시지에 대한 후속 조치를 관리합니다. 사용자가 \"/tg-responder 검토\", \"/tg-responder 상태\", \"/tg-responder 후속 조치\", \"전보 초안 확인\", \"보류 메시지 검토\", \"전보 받은 편지함\", \"응답하지 않은 사람\" 또는 \"후속 조치\"라고 말할 때 사용합니다."
+    },
+    "deep-research": {
+      "name": "deep-research",
+      "type": "skill",
+      "description": "Multi-source deep research using firecrawl and exa MCPs. Searches the web, synthesizes findings, and delivers cited reports with source attribution. Use when the user wants thorough research on any topic with evidence and citations.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/deep-research",
+      "description_ko": "Firecrawl 및 Exa MCP를 사용한 다중 소스 심층 연구. 웹을 검색하고, 결과를 종합하고, 소스 속성이 포함된 인용 보고서를 제공합니다. 사용자가 증거와 인용이 포함된 주제에 대한 철저한 조사를 원할 때 사용합니다."
     },
     "thinking-patterns": {
       "name": "thinking-patterns",
@@ -20595,7 +20649,7 @@
     "pixeltable": {
       "name": "pixeltable",
       "type": "skill",
-      "description": "Build Pixeltable apps in app.py with tables, computed columns, embedding search, and HTTP routes. Use for RAG, media pipelines, and tool-calling agents.",
+      "description": "Build Pixeltable apps for multimodal RAG, video and image search, audio transcription, agent memory, embeddings stored with the data, incremental pipelines, dataset versioning, and tool-calling agents.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/pixeltable"
@@ -23827,15 +23881,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-monitor-opentelemetry-exporter-py",
       "description_ko": "Python용 Azure Monitor OpenTelemetry 내보내기입니다. Application Insights로 낮은 수준의 OpenTelemetry 내보내기에 사용합니다."
-    },
-    "i18n-localization": {
-      "name": "i18n-localization",
-      "type": "skill",
-      "description": "Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/i18n-localization",
-      "description_ko": "국제화 및 지역화 패턴. 하드코딩된 문자열 감지, 번역 관리, 로케일 파일, RTL 지원."
     },
     "stripe-automation": {
       "name": "stripe-automation",
@@ -27767,11 +27812,10 @@
     "career-ops": {
       "name": "career-ops",
       "type": "skill",
-      "description": "Multi-CLI job-search command center: evaluate offers, scan portals,",
+      "description": "Open-source AI job search agent for AI coding CLIs: evaluate offers,",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/career-ops",
-      "description_ko": "다중 CLI 구직 명령 센터: 제안 평가, 포털 검색,"
+      "path": "collected_assets/skills/career-ops"
     },
     "radar-satellite-analysis": {
       "name": "radar-satellite-analysis",
@@ -36070,6 +36114,14 @@
       "path": "collected_assets/skills/frontend-slides-frontend-slides",
       "description_ko": "처음부터 또는 PowerPoint 파일을 변환하여 멋진 애니메이션이 풍부한 HTML 프레젠테이션을 만드세요. 사용자가 프레젠테이션을 작성하거나, PPT/PPTX를 웹으로 변환하거나, 강연/피칭을 위한 슬라이드를 만들고 싶을 때 사용하세요."
     },
+    "nano-settlement-verify": {
+      "name": "nano-settlement-verify",
+      "type": "skill",
+      "description": "Check that a Nano (XNO) payment settled before a seller serves a paid call: one inline read-only script asks a public node about a send block and returns a verdict. No seed, no wallet.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nano-settlement-verify"
+    },
     "cursor-delegate": {
       "name": "cursor-delegate",
       "type": "skill",
@@ -36165,6 +36217,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/news-sentiment-engine",
       "description_ko": "Claude 기반 감정 분석 및 구조화된 브리핑 출력을 갖춘 다중 소스 RSS 뉴스 집계"
+    },
+    "bowmark": {
+      "name": "bowmark",
+      "type": "skill",
+      "description": "Use Bowmark when a task depends on what a live website shows right now: current prices, availability or stock, fares and quotes, a site search, or data behind a form or a login. The agent writes a short JavaScript script against typed site functions and gets typed results back.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/bowmark"
     },
     "manage-skills": {
       "name": "manage-skills",
@@ -36327,6 +36387,14 @@
       "path": "collected_assets/skills/hugging-face-dataset-viewer",
       "description_ko": "포옹하는 얼굴 데이터세트 뷰어"
     },
+    "landing-page-design": {
+      "name": "landing-page-design",
+      "type": "skill",
+      "description": "Plan and build conversion-focused landing pages with intake, proof-based copy, explicit page structure, and the ELAYA visual system.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/landing-page-design"
+    },
     "using-git-worktrees": {
       "name": "using-git-worktrees",
       "type": "skill",
@@ -36443,6 +36511,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/analyze-project"
     },
+    "figma-designer": {
+      "name": "figma-designer",
+      "type": "skill",
+      "description": "Create structured Figma screens and libraries with ELAYA spacing, radius, semantic color variables, text styles, auto layout, and component states.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/figma-designer"
+    },
     "auri-core": {
       "name": "auri-core",
       "type": "skill",
@@ -36486,6 +36562,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/polis-protocol",
       "description_ko": "다중 공급업체 AI 에이전트를 자체 개선 팀으로 조정합니다. 학습 라우터는 실적에 따라 작업을 할당하고 시민들은 프로토콜의 자체 규칙을 수정할 수 있습니다."
+    },
+    "sequenzy-email-marketing": {
+      "name": "sequenzy-email-marketing",
+      "type": "skill",
+      "description": "Operate Sequenzy email campaigns through an authorized CLI or MCP connection: inspect audiences, prepare drafts, schedule approved sends, and verify delivery results.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/sequenzy-email-marketing"
     },
     "stageshow": {
       "name": "stageshow",
@@ -51665,6 +51749,22 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-commit-craft.md"
     },
+    "cs-pseudo-locale": {
+      "name": "cs-pseudo-locale",
+      "type": "command",
+      "description": "Generate an en-XA (or ar-XB right-to-left) pseudo-locale from the source strings to find hardcoded text, truncation and concatenation in the running. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-pseudo-locale.md"
+    },
+    "cs-i18n-check": {
+      "name": "cs-i18n-check",
+      "type": "command",
+      "description": "Check translation files and code before a release - missing keys, broken placeholders, CLDR plural forms, hardcoded UI strings.. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-i18n-check.md"
+    },
     "cs-scrape": {
       "name": "cs-scrape",
       "type": "command",
@@ -51944,23 +52044,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/commands/update-docs.md"
     },
-    "review": {
-      "name": "review",
+    "quality-gate": {
+      "name": "quality-gate",
       "type": "command",
-      "description": "Run the local review gate before pushing.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/review.md",
-      "description_ko": "푸시하기 전에 로컬 검토 게이트를 실행하십시오."
-    },
-    "README": {
-      "name": "README",
-      "type": "command",
-      "description": "コマンドはスラッシュ（`/command-name`）で起動するユーザー起動アクションです。有用なワークフローと開発タスクを実行します。",
+      "description": "按需对文件或项目范围运行 ECC 质量管道。",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/commands/README.md",
-      "description_ko": "코만드は스랏슈(`/command-name`)를 사용하여 이동하는 유자운동액션입니다.유용한 작업프로토는 開発타스크를 수행합니다."
+      "path": "collected_assets/commands/quality-gate.md",
+      "description_ko": "按需对文件或项目范围运行 ECC 质weight管道."
     },
     "security-scan": {
       "name": "security-scan",
@@ -52006,14 +52097,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cm.md",
       "description_ko": "작업 트리 변경 사항을 준비하고 기존 커밋(푸시 없음)을 만듭니다."
-    },
-    "cs-deep-research": {
-      "name": "cs-deep-research",
-      "type": "command",
-      "description": "/cs-deep-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans. Slash command for Claude Code, Codex CLI, Gemini CLI.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/commands/cs-deep-research.md"
     },
     "cs-syllabus": {
       "name": "cs-syllabus",
@@ -52062,6 +52145,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-grants.md"
+    },
+    "cs-meta-research": {
+      "name": "cs-meta-research",
+      "type": "command",
+      "description": "/cs-meta-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans. Slash command for Claude Code, Codex CLI, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-meta-research.md"
     },
     "cs-dossier": {
       "name": "cs-dossier",
@@ -52329,7 +52420,7 @@
     "index": {
       "name": "index",
       "type": "command",
-      "description": "153 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
+      "description": "155 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/index.md"
@@ -54223,15 +54314,6 @@
       "path": "collected_assets/commands/rust-build.md",
       "description_ko": "逐步修复 Rust는 Rust와 함께 사용되며, 借用检查器问题와 依赖问题를 사용합니다."
     },
-    "quality-gate": {
-      "name": "quality-gate",
-      "type": "command",
-      "description": "按需对文件或项目范围运行 ECC 质量管道。",
-      "source_repo": "https://github.com/affaan-m/ECC.git",
-      "source_name": "affaan-m/ECC",
-      "path": "collected_assets/commands/quality-gate.md",
-      "description_ko": "按需对文件或项目范围运行 ECC 质weight管道."
-    },
     "react-test": {
       "name": "react-test",
       "type": "command",
@@ -54887,6 +54969,15 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/commands/security.md",
       "description_ko": "포괄적인 보안 검토 실행"
+    },
+    "README": {
+      "name": "README",
+      "type": "command",
+      "description": "コマンドはスラッシュ（`/command-name`）で起動するユーザー起動アクションです。有用なワークフローと開発タスクを実行します。",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/commands/README.md",
+      "description_ko": "코만드は스랏슈(`/command-name`)를 사용하여 이동하는 유자운동액션입니다.유용한 작업프로토는 開発타스크를 수행합니다."
     }
   },
   "agents": {
@@ -56742,6 +56833,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-commit-craft.md"
     },
+    "cs-i18n-engineer": {
+      "name": "cs-i18n-engineer",
+      "type": "agent",
+      "description": "Use when an app is adding or shipping a language, when translation files changed, or when UI text is being added to a localized app. Checks. Agent-native orchestrator for Claude Code, Codex, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-i18n-engineer.md"
+    },
     "cs-scraping-architect": {
       "name": "cs-scraping-architect",
       "type": "agent",
@@ -56957,14 +57056,6 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-andreessen.md"
     },
-    "cs-deep-research": {
-      "name": "cs-deep-research",
-      "type": "agent",
-      "description": "Rigor-first meta-research persona for high-stakes questions. Reframes the question into 2-4 falsifiable hypotheses, writes a plan, discovers. Agent-native orchestrator for Claude Code, Codex, Gemini CLI.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
-      "path": "collected_assets/agents/cs-deep-research.md"
-    },
     "cs-syllabus": {
       "name": "cs-syllabus",
       "type": "agent",
@@ -57012,6 +57103,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-grants.md"
+    },
+    "cs-meta-research": {
+      "name": "cs-meta-research",
+      "type": "agent",
+      "description": "Rigor-first meta-research persona for high-stakes questions. Reframes the question into 2-4 falsifiable hypotheses, writes a plan, discovers. Agent-native orchestrator for Claude Code, Codex, Gemini CLI.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-meta-research.md"
     },
     "cs-dossier": {
       "name": "cs-dossier",
@@ -57705,6 +57804,15 @@
       "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
       "source_name": "codewithmukesh/dotnet-claude-kit",
       "path": "collected_assets/agents/api-designer.md",
+      "description_ko": ">"
+    },
+    "app-engineer": {
+      "name": "app-engineer",
+      "type": "agent",
+      "description": ">",
+      "source_repo": "https://github.com/codewithmukesh/dotnet-claude-kit.git",
+      "source_name": "codewithmukesh/dotnet-claude-kit",
+      "path": "collected_assets/agents/app-engineer.md",
       "description_ko": ">"
     },
     "code-architecture-reviewer": {
