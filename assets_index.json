@@ -8028,10 +8028,19 @@
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/msbuild"
     },
+    "dotnet-breaking-changes": {
+      "name": "dotnet-breaking-changes",
+      "type": "skill",
+      "description": ">",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/dotnet-breaking-changes",
+      "description_ko": ">"
+    },
     "csharp-refactoring": {
       "name": "csharp-refactoring",
       "type": "skill",
-      "description": "Safely refactors C#/.NET code without changing behavior. USE FOR any request to refactor, rename, move, extract, inline, merge, consolidate, deduplicate, split, or modernize C# code, including partial/generated declarations, wrappers, public APIs, serialization/reflection/configuration names, friend assemblies, conditional compilation, and multi-targeted projects. Also use when a request calls a feature, bug fix, package/framework upgrade, or public nullability change a refactor and the behavior-changing part must be separated or declined. DO NOT USE FOR ordinary feature or bug fixes not presented as refactoring; standalone upgrades after reclassification (use dotnet-upgrade); adding tests; or formatting-only work.",
+      "description": "Safely refactors C#/.NET code without changing behavior. USE FOR any request to refactor, rename, move, extract, inline, merge, consolidate, deduplicate, split, or modernize C# code, even a small extract, inline, or rename, or merging near-identical types; green builds miss drift in #if branches, generated partials, and reflection/config names. When a changed member is visible outside the assembly (PublicAPI.*.txt, InternalsVisibleTo, shipped package), also invoke dotnet-breaking-changes; local/private renames do not need it. Also use when a request calls a feature, bug fix, package/framework upgrade, or public nullability change a refactor and the behavior-changing part must be separated or declined. DO NOT USE FOR ordinary feature or bug fixes not presented as refactoring; standalone upgrades after reclassification (use dotnet-upgrade); adding tests; or formatting-only work.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/csharp-refactoring"
@@ -15897,6 +15906,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/robots-txt-creator"
     },
+    "nano-settlement-verify": {
+      "name": "nano-settlement-verify",
+      "type": "skill",
+      "description": "Check that a Nano (XNO) payment settled before a seller serves a paid call: one inline read-only script asks a public node about a send block and returns a verdict. No seed, no wallet.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nano-settlement-verify"
+    },
     "us-watchlist-alerts": {
       "name": "us-watchlist-alerts",
       "type": "skill",
@@ -19822,6 +19839,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-communication-callautomation-java",
       "description_ko": "IVR 시스템, 통화 라우팅, 녹음, AI 기반 상호 작용을 포함한 서버 측 통화 자동화 워크플로를 구축하세요."
+    },
+    "bowmark": {
+      "name": "bowmark",
+      "type": "skill",
+      "description": "Use Bowmark when a task depends on what a live website shows right now: current prices, availability or stock, fares and quotes, a site search, or data behind a form or a login. The agent writes a short JavaScript script against typed site functions and gets typed results back.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/bowmark"
     },
     "performance-tuning": {
       "name": "performance-tuning",
@@ -24082,6 +24107,14 @@
       "path": "collected_assets/skills/web-project-brainstorming",
       "description_ko": "웹 개발 프로젝트 및 페이지 디자인 브레인스토밍을 위한 마스터클래스 프레임워크입니다. 컨셉, UX 흐름, 스타일링 미학, 기술 아키텍처 및 SEO에 대한 구조적 단계를 간략하게 설명합니다."
     },
+    "landing-page-design": {
+      "name": "landing-page-design",
+      "type": "skill",
+      "description": "Plan and build conversion-focused landing pages with intake, proof-based copy, explicit page structure, and the ELAYA visual system.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/landing-page-design"
+    },
     "hunt-misc": {
       "name": "hunt-misc",
       "type": "skill",
@@ -24413,6 +24446,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/auto-research",
       "description_ko": "사용자가 승인한 명시적인 웹 검색이나 ChatGPT 상담을 통해 불확실한 질문을 조사한 다음 옵션을 제시하고 구현 승인을 기다립니다."
+    },
+    "coupler-marketing-analytics": {
+      "name": "coupler-marketing-analytics",
+      "type": "skill",
+      "description": "Analyze cross-channel marketing performance from live Coupler.io data through its hosted MCP server: channel and campaign comparison, ROI, anomalies and budget insights.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/coupler-marketing-analytics"
     },
     "hunt-forgot-password": {
       "name": "hunt-forgot-password",
@@ -29813,6 +29854,14 @@
       "path": "collected_assets/skills/aws-secrets-manager",
       "description_ko": "AWS Secrets Manager에 비밀을 저장하고 교체하세요."
     },
+    "figma-designer": {
+      "name": "figma-designer",
+      "type": "skill",
+      "description": "Create structured Figma screens and libraries with ELAYA spacing, radius, semantic color variables, text styles, auto layout, and component states.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/figma-designer"
+    },
     "ai-image-realism": {
       "name": "ai-image-realism",
       "type": "skill",
@@ -34213,6 +34262,14 @@
       "path": "collected_assets/skills/drizzle-migration-conflict",
       "description_ko": "생성된 SQL, 스냅샷, 저널, 병합 대기열 및 팀 워크플로와 관련된 Drizzle Kit 마이그레이션 충돌을 진단, 복구 및 방지합니다."
     },
+    "sequenzy-email-marketing": {
+      "name": "sequenzy-email-marketing",
+      "type": "skill",
+      "description": "Operate Sequenzy email campaigns through an authorized CLI or MCP connection: inspect audiences, prepare drafts, schedule approved sends, and verify delivery results.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/sequenzy-email-marketing"
+    },
     "azure-vms": {
       "name": "azure-vms",
       "type": "skill",
@@ -36114,14 +36171,6 @@
       "path": "collected_assets/skills/frontend-slides-frontend-slides",
       "description_ko": "처음부터 또는 PowerPoint 파일을 변환하여 멋진 애니메이션이 풍부한 HTML 프레젠테이션을 만드세요. 사용자가 프레젠테이션을 작성하거나, PPT/PPTX를 웹으로 변환하거나, 강연/피칭을 위한 슬라이드를 만들고 싶을 때 사용하세요."
     },
-    "nano-settlement-verify": {
-      "name": "nano-settlement-verify",
-      "type": "skill",
-      "description": "Check that a Nano (XNO) payment settled before a seller serves a paid call: one inline read-only script asks a public node about a send block and returns a verdict. No seed, no wallet.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/nano-settlement-verify"
-    },
     "cursor-delegate": {
       "name": "cursor-delegate",
       "type": "skill",
@@ -36217,14 +36266,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/news-sentiment-engine",
       "description_ko": "Claude 기반 감정 분석 및 구조화된 브리핑 출력을 갖춘 다중 소스 RSS 뉴스 집계"
-    },
-    "bowmark": {
-      "name": "bowmark",
-      "type": "skill",
-      "description": "Use Bowmark when a task depends on what a live website shows right now: current prices, availability or stock, fares and quotes, a site search, or data behind a form or a login. The agent writes a short JavaScript script against typed site functions and gets typed results back.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/bowmark"
     },
     "manage-skills": {
       "name": "manage-skills",
@@ -36387,14 +36428,6 @@
       "path": "collected_assets/skills/hugging-face-dataset-viewer",
       "description_ko": "포옹하는 얼굴 데이터세트 뷰어"
     },
-    "landing-page-design": {
-      "name": "landing-page-design",
-      "type": "skill",
-      "description": "Plan and build conversion-focused landing pages with intake, proof-based copy, explicit page structure, and the ELAYA visual system.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/landing-page-design"
-    },
     "using-git-worktrees": {
       "name": "using-git-worktrees",
       "type": "skill",
@@ -36430,6 +36463,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/claude-in-chrome-troubleshooting",
       "description_ko": "Chrome MCP 확장 연결 문제에서 Claude를 진단하고 수정합니다. mcp__claude-in-chrome__* 도구가 실패할 때 사용하거나 \"브라우저 확장이 연결되지 않았습니다\"를 반환하거나 비정상적으로 동작합니다."
+    },
+    "time-machine-recovery": {
+      "name": "time-machine-recovery",
+      "type": "skill",
+      "description": "Diagnose failed or stalled macOS Time Machine backups and recover space on local APFS destinations that remain full after backup deletion.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/time-machine-recovery"
     },
     "apple-notes-search": {
       "name": "apple-notes-search",
@@ -36511,14 +36552,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/analyze-project"
     },
-    "figma-designer": {
-      "name": "figma-designer",
-      "type": "skill",
-      "description": "Create structured Figma screens and libraries with ELAYA spacing, radius, semantic color variables, text styles, auto layout, and component states.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/figma-designer"
-    },
     "auri-core": {
       "name": "auri-core",
       "type": "skill",
@@ -36563,18 +36596,10 @@
       "path": "collected_assets/skills/polis-protocol",
       "description_ko": "다중 공급업체 AI 에이전트를 자체 개선 팀으로 조정합니다. 학습 라우터는 실적에 따라 작업을 할당하고 시민들은 프로토콜의 자체 규칙을 수정할 수 있습니다."
     },
-    "sequenzy-email-marketing": {
-      "name": "sequenzy-email-marketing",
-      "type": "skill",
-      "description": "Operate Sequenzy email campaigns through an authorized CLI or MCP connection: inspect audiences, prepare drafts, schedule approved sends, and verify delivery results.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/sequenzy-email-marketing"
-    },
     "stageshow": {
       "name": "stageshow",
       "type": "skill",
-      "description": "Create React product illustrations and cursor demos using a reusable UI kit, examples, motion guidance, and visual verification tools.",
+      "description": "Use when a user asks for a React product illustration, animated walkthrough, product demo, or cursor-led UI animation. Build from the reusable UI kit and verify the result in the browser.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/stageshow"
@@ -39308,6 +39333,14 @@
       "path": "collected_assets/skills/dotnet-upgrade",
       "description_ko": "포괄적인 .NET 프레임워크 업그레이드 분석 및 실행을 위해 즉시 사용 가능한 프롬프트"
     },
+    "adobe-illustrator-integrations": {
+      "name": "adobe-illustrator-integrations",
+      "type": "skill",
+      "description": "Build, debug, package, and document Adobe Illustrator integrations: CEP extension panels, C++ SDK plug-ins (.aip), the coming UXP plugins, MCP servers that drive Illustrator, computer-use automation, and OS scripts (batch, PowerShell, bash, AppleScript) that run ExtendScript in Illustrator. Use when creating or fixing an Illustrator extension or plug-in, choosing between a script, extension, or plug-in, connecting an AI tool to Illustrator, automating Illustrator from the command line, or writing install and usage docs for an Illustrator tool someone will publish. Pairs with adobe-illustrator-scripting for the ExtendScript DOM.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/adobe-illustrator-integrations"
+    },
     "gtm-product-led-growth": {
       "name": "gtm-product-led-growth",
       "type": "skill",
@@ -39786,6 +39819,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/skills/refactor-method-complexity-reduce",
       "description_ko": "도우미 메서드를 추출하여 인지 복잡성을 `${input:complexityThreshold}` 이하로 줄이려면 주어진 메서드 `${input:methodName}`을 리팩터링하세요."
+    },
+    "diagnose-ci-gate": {
+      "name": "diagnose-ci-gate",
+      "type": "skill",
+      "description": "Determine whether a failing CI check was caused by the current change, then recommend exactly one action. Use when a required check fails on a pull request, when asked \"is this failure mine?\", when a job passes locally but fails in CI, or before retrying a red build. Covers fetching the real log, reading the first error instead of the tail, classifying bug / flaky / environment / pipeline, comparing against the base branch and recent runs, reproducing with CI versions, and fixing a flaky test rather than re-running it forever.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/diagnose-ci-gate"
     },
     "java-hibernate-jpa": {
       "name": "java-hibernate-jpa",
@@ -59771,6 +59812,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/terraform-aws-planning.agent.md",
       "description_ko": "AWS Terraform 코드형 인프라 작업의 구현 계획자 역할을 합니다."
+    },
+    "adobe-creative-cloud.agent": {
+      "name": "adobe-creative-cloud.agent",
+      "type": "agent",
+      "description": "Expert technical artist for Adobe Creative Cloud: picks the right app or combination of apps (Illustrator, Photoshop, InDesign, After Effects, and more), knows Creative Cloud storage (cloud documents, Projects, Libraries, Stock, local files), moving work off discontinued apps, and how each app is extended (scripts, CEP extensions, UXP and C++ plug-ins, MCP servers). Leads the adobe-illustrator-scripting and adobe-illustrator-integrations skills for Illustrator scripts, extensions, plug-ins, automation, and asset management.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/agents/adobe-creative-cloud.agent.md"
     },
     "se-security-reviewer.agent": {
       "name": "se-security-reviewer.agent",
