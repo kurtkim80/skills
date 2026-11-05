@@ -1,16 +1,12 @@
 ---
-title: "Content Creator Agent — AI Coding Agent & Codex Skill"
-description: "Long-form marketing content producer orchestrating the content-production skill (research → brief → draft → optimize → gate). Use when content must. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-content-creator
+description: Long-form marketing content producer orchestrating the content-production skill (research → brief → draft → optimize → gate). Use when content must be written, scored, or made publish-ready — e.g., drafting a 2,000-word blog post against a target keyword and blocking publish until content_quality_gates.py passes, or auditing a draft for brand-voice drift with brand_voice_analyzer.py before it ships. Routes planning requests (topic clusters, calendars) to content-strategy. Supersedes the deprecated content-creator skill.
+domain: marketing
+model: sonnet
+tools: [Read, Write, Bash, Grep]
 ---
 
 # Content Creator Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-bullhorn-outline: Marketing</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-content-creator.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -36,36 +32,36 @@ If it exists, it contains brand voice, target audience, keyword targets, and wri
 
 ## Skill Integration
 
-**Skill location:** [`skills/content-production`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production) ([SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/SKILL.md))
+**Skill location:** `../../marketing-skill/skills/content-production/` ([SKILL.md](../../marketing-skill/skills/content-production/SKILL.md))
 
 ### Python Tools (stdlib only — all pass `--help`)
 
 1. **Content Scorer** — 0-100 composite on readability, SEO, structure, engagement
-   - **Path:** [`scripts/content_scorer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/scripts/content_scorer.py)
+   - **Path:** `../../marketing-skill/skills/content-production/scripts/content_scorer.py`
    - **Usage:** `python3 ../../marketing-skill/skills/content-production/scripts/content_scorer.py draft.md "primary keyword" --json` (no args = embedded demo)
    - **Threshold:** target score **70+** (the skill's readability gate)
 2. **SEO Optimizer** — keyword placement, title/H1/meta audit with fixes
-   - **Path:** [`scripts/seo_optimizer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/scripts/seo_optimizer.py)
+   - **Path:** `../../marketing-skill/skills/content-production/scripts/seo_optimizer.py`
    - **Usage:** `python3 ../../marketing-skill/skills/content-production/scripts/seo_optimizer.py draft.md --keyword "primary keyword" --secondary "phrase one,phrase two"`
 3. **Brand Voice Analyzer** — tone markers, sentence-rhythm stats, vocabulary fingerprint
-   - **Path:** [`scripts/brand_voice_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/scripts/brand_voice_analyzer.py)
+   - **Path:** `../../marketing-skill/skills/content-production/scripts/brand_voice_analyzer.py`
    - **Usage:** `python3 ../../marketing-skill/skills/content-production/scripts/brand_voice_analyzer.py draft.md --format json`
    - **Use:** compare output against the brand profile in `.claude/product-marketing-context.md`; rewrite sections that drift
 4. **Quality Gates** — non-negotiable pre-publish checks (keyword usage, sourced claims, intro cliché, link integrity, readability ≥ 70, word-count tolerance)
-   - **Path:** [`scripts/content_quality_gates.py`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/scripts/content_quality_gates.py)
+   - **Path:** `../../marketing-skill/skills/content-production/scripts/content_quality_gates.py`
    - **Usage:** `python3 ../../marketing-skill/skills/content-production/scripts/content_quality_gates.py draft.md --json` (`--demo` for a sample article)
    - **Rule:** any failing gate blocks publish
 
 ### Knowledge Bases
 
-- [`references/content-brief-guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/references/content-brief-guide.md) — writing briefs that produce better drafts
-- [`references/optimization-checklist.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/references/optimization-checklist.md) — full pre-publish checklist behind the gates
-- [`references/content-templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/references/content-templates.md) — long-form structure templates
-- [`references/ai-citation-readiness.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/references/ai-citation-readiness.md) — AEO-adjacent readiness checks (pair with cs-aeo)
+- `../../marketing-skill/skills/content-production/references/content-brief-guide.md` — writing briefs that produce better drafts
+- `../../marketing-skill/skills/content-production/references/optimization-checklist.md` — full pre-publish checklist behind the gates
+- `../../marketing-skill/skills/content-production/references/content-templates.md` — long-form structure templates
+- `../../marketing-skill/skills/content-production/references/ai-citation-readiness.md` — AEO-adjacent readiness checks (pair with cs-aeo)
 
 ### Templates
 
-- [`templates/content-brief-template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/templates/content-brief-template.md) — fill before drafting (Mode 1 output)
+- `../../marketing-skill/skills/content-production/templates/content-brief-template.md` — fill before drafting (Mode 1 output)
 
 ## Workflows
 
@@ -75,7 +71,7 @@ If it exists, it contains brand voice, target audience, keyword targets, and wri
 
 **Steps:**
 1. **Context** — read `.claude/product-marketing-context.md`; collect topic, primary keyword, audience, goal, length.
-2. **Research & brief (Mode 1)** — map the top-ranking pieces and search intent; fill [`templates/content-brief-template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/templates/content-brief-template.md) following [`references/content-brief-guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/references/content-brief-guide.md).
+2. **Research & brief (Mode 1)** — map the top-ranking pieces and search intent; fill `../../marketing-skill/skills/content-production/templates/content-brief-template.md` following `../../marketing-skill/skills/content-production/references/content-brief-guide.md`.
 3. **Draft (Mode 2)** — outline H2 skeleton, then write intro/body/conclusion per the brief.
 4. **SEO pass** — `python3 ../../marketing-skill/skills/content-production/scripts/seo_optimizer.py draft.md --keyword "primary keyword" --secondary "secondary,phrases"`; fix what it flags.
 5. **Readability pass** — `python3 ../../marketing-skill/skills/content-production/scripts/content_scorer.py draft.md "primary keyword" --json`; revise until composite ≥ 70.
@@ -110,7 +106,7 @@ If it exists, it contains brand voice, target audience, keyword targets, and wri
 
 ## Proactive Routing
 
-- "What should we write?" / topic clusters / calendar → [`skills/content-strategy`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-strategy) (out of this agent's lane).
+- "What should we write?" / topic clusters / calendar → `../../marketing-skill/skills/content-strategy/` (out of this agent's lane).
 - Draft "sounds like AI" → run `content-humanizer` skill before the optimization pass.
 - Optimizing for ChatGPT/Perplexity citation → hand off to [cs-aeo](cs-aeo.md).
 - Landing-page or CTA copy → `copywriting` skill, not long-form production.
@@ -130,10 +126,10 @@ If it exists, it contains brand voice, target audience, keyword targets, and wri
 
 ## References
 
-- **Skill documentation:** [../../marketing-skill/skills/content-production/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-production/SKILL.md)
-- **Planning sibling:** [../../marketing-skill/skills/content-strategy/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/content-strategy/SKILL.md)
-- **Marketing domain guide:** [../../marketing-skill/CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/CLAUDE.md)
-- **Agent development guide:** [../CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/agents/CLAUDE.md)
+- **Skill documentation:** [../../marketing-skill/skills/content-production/SKILL.md](../../marketing-skill/skills/content-production/SKILL.md)
+- **Planning sibling:** [../../marketing-skill/skills/content-strategy/SKILL.md](../../marketing-skill/skills/content-strategy/SKILL.md)
+- **Marketing domain guide:** [../../marketing-skill/CLAUDE.md](../../marketing-skill/CLAUDE.md)
+- **Agent development guide:** [../CLAUDE.md](../CLAUDE.md)
 
 ---
 

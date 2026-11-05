@@ -1,16 +1,12 @@
 ---
-title: "Agile Product Owner Agent — AI Coding Agent & Codex Skill"
-description: "Agile product owner agent for epic breakdown, sprint planning, backlog refinement, and INVEST-compliant user story generation. Use when preparing. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-agile-product-owner
+description: Agile product owner agent for epic breakdown, sprint planning, backlog refinement, and INVEST-compliant user story generation. Use when preparing work for a development team — e.g., decomposing a large epic into INVEST-compliant stories with acceptance criteria, or refining a messy backlog ahead of sprint planning.
+domain: product
+model: sonnet
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # Agile Product Owner Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-lightbulb-outline: Product</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/product/cs-agile-product-owner.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -22,27 +18,27 @@ The cs-agile-product-owner agent bridges strategic product goals with sprint-lev
 
 ## Skill Integration
 
-**Primary Skill:** [`product-team/agile-product-owner`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner)
+**Primary Skill:** `../../product-team/agile-product-owner/`
 
 ### All Orchestrated Skills
 
 | # | Skill | Location | Primary Tool |
 |---|-------|----------|-------------|
-| 1 | Agile Product Owner | [`product-team/agile-product-owner`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner) | user_story_generator.py |
-| 2 | Product Manager Toolkit | [`skills/product-manager-toolkit`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/skills/product-manager-toolkit) | rice_prioritizer.py |
+| 1 | Agile Product Owner | `../../product-team/agile-product-owner/` | user_story_generator.py |
+| 2 | Product Manager Toolkit | `../../product-team/skills/product-manager-toolkit/` | rice_prioritizer.py |
 
 ### Python Tools
 
 1. **User Story Generator**
    - **Purpose:** Break epics into INVEST-compliant user stories with acceptance criteria in Given/When/Then format
-   - **Path:** [`scripts/user_story_generator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/scripts/user_story_generator.py)
+   - **Path:** `../../product-team/agile-product-owner/skills/agile-product-owner/scripts/user_story_generator.py`
    - **Usage:** `python ../../product-team/agile-product-owner/skills/agile-product-owner/scripts/user_story_generator.py epic.yaml`
    - **Features:** Epic decomposition, acceptance criteria generation, story point estimation, dependency mapping
    - **Use Cases:** Sprint planning, backlog refinement, story writing workshops
 
 2. **RICE Prioritizer**
    - **Purpose:** RICE framework for backlog prioritization with portfolio analysis
-   - **Path:** [`scripts/rice_prioritizer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/skills/product-manager-toolkit/scripts/rice_prioritizer.py)
+   - **Path:** `../../product-team/skills/product-manager-toolkit/scripts/rice_prioritizer.py`
    - **Usage:** `python ../../product-team/skills/product-manager-toolkit/scripts/rice_prioritizer.py backlog.csv --capacity 20`
    - **Features:** Portfolio quadrant analysis, capacity planning, quarterly roadmap generation
    - **Use Cases:** Backlog ordering, sprint scope decisions, stakeholder alignment
@@ -50,32 +46,32 @@ The cs-agile-product-owner agent bridges strategic product goals with sprint-lev
 ### Knowledge Bases
 
 1. **Sprint Planning Guide**
-   - **Location:** [`references/sprint-planning-guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/references/sprint-planning-guide.md)
+   - **Location:** `../../product-team/agile-product-owner/skills/agile-product-owner/references/sprint-planning-guide.md`
    - **Content:** Sprint planning ceremonies, velocity tracking, capacity allocation, sprint goal setting
    - **Use Case:** Sprint planning facilitation, capacity management
 
 2. **User Story Templates**
-   - **Location:** [`references/user-story-templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/references/user-story-templates.md)
+   - **Location:** `../../product-team/agile-product-owner/skills/agile-product-owner/references/user-story-templates.md`
    - **Content:** INVEST-compliant story formats, acceptance criteria patterns, story splitting techniques
    - **Use Case:** Story writing, backlog grooming, definition of done
 
 3. **PRD Templates**
-   - **Location:** [`references/prd_templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/skills/product-manager-toolkit/references/prd_templates.md)
+   - **Location:** `../../product-team/skills/product-manager-toolkit/references/prd_templates.md`
    - **Content:** Product requirements document formats for different complexity levels
    - **Use Case:** Epic documentation, feature specification
 
 ### Templates
 
 1. **Sprint Planning Template**
-   - **Location:** [`assets/sprint_planning_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/assets/sprint_planning_template.md)
+   - **Location:** `../../product-team/agile-product-owner/skills/agile-product-owner/assets/sprint_planning_template.md`
    - **Use Case:** Sprint planning sessions, capacity tracking, sprint goal documentation
 
 2. **User Story Template**
-   - **Location:** [`assets/user_story_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/assets/user_story_template.md)
+   - **Location:** `../../product-team/agile-product-owner/skills/agile-product-owner/assets/user_story_template.md`
    - **Use Case:** Consistent story format, acceptance criteria structure
 
 3. **RICE Input Template**
-   - **Location:** [`assets/rice_input_template.csv`](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/skills/product-manager-toolkit/assets/rice_input_template.csv)
+   - **Location:** `../../product-team/skills/product-manager-toolkit/assets/rice_input_template.csv`
    - **Use Case:** Structuring backlog items for RICE prioritization
 
 ## Workflows
@@ -402,15 +398,15 @@ echo "Location: ../../product-team/agile-product-owner/skills/agile-product-owne
 - [cs-product-manager](cs-product-manager.md) - Full product management lifecycle (RICE, interviews, PRDs)
 - [cs-product-strategist](cs-product-strategist.md) - OKR cascade and strategic planning for roadmap alignment
 - [cs-ux-researcher](cs-ux-researcher.md) - User research to inform story requirements and acceptance criteria
-- Scrum Master - Velocity context and sprint execution (see [`skills/scrum-master`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master))
+- Scrum Master - Velocity context and sprint execution (see `../../project-management/skills/scrum-master/`)
 
 ## References
 
-- **Primary Skill:** [../../product-team/agile-product-owner/skills/agile-product-owner/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/agile-product-owner/skills/agile-product-owner/SKILL.md)
-- **RICE Framework:** [../../product-team/skills/product-manager-toolkit/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/skills/product-manager-toolkit/SKILL.md)
-- **Product Domain Guide:** [../../product-team/CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/product-team/CLAUDE.md)
-- **Agent Development Guide:** [../CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/agents/CLAUDE.md)
-- **Scrum Master Skill:** [../../project-management/skills/scrum-master/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/SKILL.md)
+- **Primary Skill:** [../../product-team/agile-product-owner/skills/agile-product-owner/SKILL.md](../../product-team/agile-product-owner/skills/agile-product-owner/SKILL.md)
+- **RICE Framework:** [../../product-team/skills/product-manager-toolkit/SKILL.md](../../product-team/skills/product-manager-toolkit/SKILL.md)
+- **Product Domain Guide:** [../../product-team/CLAUDE.md](../../product-team/CLAUDE.md)
+- **Agent Development Guide:** [../CLAUDE.md](../CLAUDE.md)
+- **Scrum Master Skill:** [../../project-management/skills/scrum-master/SKILL.md](../../project-management/skills/scrum-master/SKILL.md)
 
 ---
 

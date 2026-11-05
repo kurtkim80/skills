@@ -1,61 +1,60 @@
 ---
-description: 为Go强制执行TDD工作流程。首先编写表驱动测试，然后实现。使用go test -cover验证80%以上的覆盖率。
+description: Enforce TDD workflow for Go. Write table-driven tests first, then implement. Verify 80%+ coverage with go test -cover.
 ---
 
-# Go TDD 命令
+# Go TDD Command
 
-此命令使用惯用的 Go 测试模式，为 Go 代码强制执行测试驱动开发方法。
+This command enforces test-driven development methodology for Go code using idiomatic Go testing patterns.
 
-## 此命令的作用
+## What This Command Does
 
-1. **定义类型/接口**：首先搭建函数签名
-2. **编写表驱动测试**：创建全面的测试用例（RED 阶段）
-3. **运行测试**：验证测试因正确原因而失败
-4. **实现代码**：编写最少的代码以通过测试（GREEN 阶段）
-5. **重构**：改进代码，同时保持测试通过
-6. **检查覆盖率**：确保 80% 以上的覆盖率
+1. **Define Types/Interfaces**: Scaffold function signatures first
+2. **Write Table-Driven Tests**: Create comprehensive test cases (RED)
+3. **Run Tests**: Verify tests fail for the right reason
+4. **Implement Code**: Write minimal code to pass (GREEN)
+5. **Refactor**: Improve while keeping tests green
+6. **Check Coverage**: Ensure 80%+ coverage
 
-## 何时使用
+## When to Use
 
-在以下情况下使用 `/go-test`：
+Use `/go-test` when:
+- Implementing new Go functions
+- Adding test coverage to existing code
+- Fixing bugs (write failing test first)
+- Building critical business logic
+- Learning TDD workflow in Go
 
-* 实现新的 Go 函数时
-* 为现有代码添加测试覆盖率时
-* 修复 bug 时（先编写失败的测试）
-* 构建关键业务逻辑时
-* 学习 Go 中的 TDD 工作流程时
-
-## TDD 循环
+## TDD Cycle
 
 ```
-RED     → 编写失败的表格驱动测试
-GREEN   → 实现最小化代码以通过测试
-REFACTOR → 改进代码，保持测试通过
-REPEAT  → 下一个测试用例
+RED     → Write failing table-driven test
+GREEN   → Implement minimal code to pass
+REFACTOR → Improve code, tests stay green
+REPEAT  → Next test case
 ```
 
-## 示例会话
+## Example Session
 
 ````
-用户: /go-test 我需要一个验证电子邮箱地址的函数
+User: /go-test I need a function to validate email addresses
 
-代理:
-# TDD 会话: 电子邮件验证器
+Agent:
+# TDD Session: Email Validator
 
-## 步骤 1: 定义接口
+## Step 1: Define Interface
 
 ```go
 // validator/email.go
 package validator
 
-// ValidateEmail 检查给定的字符串是否为有效的电子邮件地址。
-// 如果有效则返回 nil，否则返回描述问题的错误。
+// ValidateEmail checks if the given string is a valid email address.
+// Returns nil if valid, error describing the issue otherwise.
 func ValidateEmail(email string) error {
     panic("not implemented")
 }
 ```
 
-## 步骤 2: 编写表驱动测试 (RED)
+## Step 2: Write Table-Driven Tests (RED)
 
 ```go
 // validator/email_test.go
@@ -71,13 +70,13 @@ func TestValidateEmail(t *testing.T) {
         email   string
         wantErr bool
     }{
-        // 有效邮箱
+        // Valid emails
         {"simple email", "user@example.com", false},
         {"with subdomain", "user@mail.example.com", false},
         {"with plus", "user+tag@example.com", false},
         {"with dots", "first.last@example.com", false},
 
-        // 无效邮箱
+        // Invalid emails
         {"empty string", "", true},
         {"no at sign", "userexample.com", true},
         {"no domain", "user@", true},
@@ -101,7 +100,7 @@ func TestValidateEmail(t *testing.T) {
 }
 ```
 
-## 步骤 3: 运行测试 - 验证失败
+## Step 3: Run Tests - Verify FAIL
 
 ```bash
 $ go test ./validator/...
@@ -113,9 +112,9 @@ $ go test ./validator/...
 FAIL
 ```
 
-✓ 测试按预期失败 (panic)。
+✓ Tests fail as expected (panic).
 
-## 步骤 4: 实现最小化代码 (GREEN)
+## Step 4: Implement Minimal Code (GREEN)
 
 ```go
 // validator/email.go
@@ -144,7 +143,7 @@ func ValidateEmail(email string) error {
 }
 ```
 
-## 步骤 5: 运行测试 - 验证通过
+## Step 5: Run Tests - Verify PASS
 
 ```bash
 $ go test ./validator/...
@@ -153,9 +152,9 @@ PASS
 ok      project/validator    0.003s
 ```
 
-✓ 所有测试通过！
+✓ All tests passing!
 
-## 步骤 6: 检查覆盖率
+## Step 6: Check Coverage
 
 ```bash
 $ go test -cover ./validator/...
@@ -165,15 +164,14 @@ coverage: 100.0% of statements
 ok      project/validator    0.003s
 ```
 
-✓ 覆盖率: 100%
+✓ Coverage: 100%
 
-## TDD 完成！
+## TDD Complete!
 ````
 
-## 测试模式
+## Test Patterns
 
-### 表驱动测试
-
+### Table-Driven Tests
 ```go
 tests := []struct {
     name     string
@@ -193,8 +191,7 @@ for _, tt := range tests {
 }
 ```
 
-### 并行测试
-
+### Parallel Tests
 ```go
 for _, tt := range tests {
     tt := tt // Capture
@@ -205,8 +202,7 @@ for _, tt := range tests {
 }
 ```
 
-### 测试辅助函数
-
+### Test Helpers
 ```go
 func setupTestDB(t *testing.T) *sql.DB {
     t.Helper()
@@ -216,7 +212,7 @@ func setupTestDB(t *testing.T) *sql.DB {
 }
 ```
 
-## 覆盖率命令
+## Coverage Commands
 
 ```bash
 # Basic coverage
@@ -235,40 +231,38 @@ go tool cover -func=coverage.out
 go test -race -cover ./...
 ```
 
-## 覆盖率目标
+## Coverage Targets
 
-| 代码类型 | 目标 |
+| Code Type | Target |
 |-----------|--------|
-| 关键业务逻辑 | 100% |
-| 公共 API | 90%+ |
-| 通用代码 | 80%+ |
-| 生成的代码 | 排除 |
+| Critical business logic | 100% |
+| Public APIs | 90%+ |
+| General code | 80%+ |
+| Generated code | Exclude |
 
-## TDD 最佳实践
+## TDD Best Practices
 
-**应该做：**
+**DO:**
+- Write test FIRST, before any implementation
+- Run tests after each change
+- Use table-driven tests for comprehensive coverage
+- Test behavior, not implementation details
+- Include edge cases (empty, nil, max values)
 
-* 先编写测试，再编写任何实现
-* 每次更改后运行测试
-* 使用表驱动测试以获得全面的覆盖率
-* 测试行为，而非实现细节
-* 包含边界情况（空值、nil、最大值）
+**DON'T:**
+- Write implementation before tests
+- Skip the RED phase
+- Test private functions directly
+- Use `time.Sleep` in tests
+- Ignore flaky tests
 
-**不应该做：**
+## Related Commands
 
-* 在编写测试之前编写实现
-* 跳过 RED 阶段
-* 直接测试私有函数
-* 在测试中使用 `time.Sleep`
-* 忽略不稳定的测试
+- `/go-build` - Fix build errors
+- `/go-review` - Review code after implementation
+- `verification-loop` skill - Run full verification loop
 
-## 相关命令
+## Related
 
-* `/go-build` - 修复构建错误
-* `/go-review` - 在实现后审查代码
-* `/verify` - 运行完整的验证循环
-
-## 相关
-
-* 技能：`skills/golang-testing/`
-* 技能：`skills/tdd-workflow/`
+- Skill: `skills/golang-testing/`
+- Skill: `skills/tdd-workflow/`

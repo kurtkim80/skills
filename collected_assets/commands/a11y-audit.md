@@ -1,15 +1,10 @@
 ---
-title: "/a11y-audit — Slash Command for AI Coding Agents"
-description: "Scan a frontend project for WCAG 2.2 accessibility violations and fix them. Usage: /a11y-audit [path]. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: a11y-audit
+description: "Scan a frontend project for WCAG 2.2 accessibility violations and fix them. Usage: /a11y-audit [path]"
+argument-hint: "[path]"
 ---
 
 # /a11y-audit
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/a11y-audit.md">Source</a></span>
-</div>
-
 
 Scan a frontend project for WCAG 2.2 accessibility issues, show fixes, and optionally check color contrast.
 

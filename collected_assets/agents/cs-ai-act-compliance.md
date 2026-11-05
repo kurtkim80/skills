@@ -1,16 +1,12 @@
 ---
-title: "EU AI Act Compliance Agent — AI Coding Agent & Codex Skill"
-description: "EU AI Act (Regulation (EU) 2024/1689) Article-cited compliance operator. Three decisions: AI system risk tier (Article 5 / 6+ Annex III / 50 /. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-ai-act-compliance
+description: "EU AI Act (Regulation (EU) 2024/1689) Article-cited compliance operator. Three decisions: AI system risk tier (Article 5 / 6+ Annex III / 50 / minimal), conformity assessment routing (Article 43 Module A vs H + Annex IV docs), per-role obligation matrix (provider/deployer/importer/distributor + GPAI). NOT executive AI strategy (see cs-caio-advisor). NOT a legal substitute (engage counsel for novel cases)."
+domain: compliance-os
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # EU AI Act Compliance Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-account: Compliance Os</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/agents/cs-ai-act-compliance.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -126,13 +122,13 @@ python ${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/eu-ai-act-specialist/scripts/conf
 
 - [cs-compliance-officer](cs-compliance-officer.md) — Multi-framework orchestrator (routes here for EU AI Act deep work)
 - [cs-aims-iso42001](cs-aims-iso42001.md) — ISO 42001 AIMS specialist
-- [cs-caio-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy
-- [cs-general-counsel-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
+- [cs-caio-advisor](../../c-level-agents/agents/cs-caio-advisor.md) — Executive AI strategy
+- [cs-general-counsel-advisor](../../c-level-agents/agents/cs-general-counsel-advisor.md) — Novel-case legal review
 
 ## References
 
 - Skill: [${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/eu-ai-act-specialist/SKILL.md](${CLAUDE_PLUGIN_ROOT}/vendor/ra-qm-team/eu-ai-act-specialist/SKILL.md)
-- Sibling command: [`/compliance-os:ai-act-readiness`](https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os/skills/ai-act-readiness/SKILL.md)
+- Sibling command: [`/compliance-os:ai-act-readiness`](../skills/ai-act-readiness/SKILL.md)
 
 ---
 

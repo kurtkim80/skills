@@ -1,61 +1,60 @@
 ---
-description: 强制执行测试驱动开发工作流。首先搭建接口，生成测试，然后实现最小化代码以通过测试。确保 80%+ 覆盖率。
+description: Aplicar el flujo de trabajo de desarrollo guiado por pruebas (TDD). Diseña interfaces, crea las pruebas PRIMERO, luego implementa el código mínimo. Garantiza 80%+ de cobertura de código.
 ---
 
-# TDD 命令
+# Comando TDD
 
-此命令调用 **tdd-guide** 代理来强制执行测试驱动开发方法。
+Este comando invoca al agente **tdd-guide** para aplicar la metodología de desarrollo guiado por pruebas.
 
-## 此命令的作用
+## Qué Hace Este Comando
 
-1. **搭建接口** - 首先定义类型/接口
-2. **首先生成测试** - 编写失败的测试（红）
-3. **实现最小化代码** - 编写刚好足够的代码以通过测试（绿）
-4. **重构** - 改进代码，同时保持测试通过（重构）
-5. **验证覆盖率** - 确保 80%+ 的测试覆盖率
+1. **Diseñar Interfaces** - Definir primero los tipos/interfaces
+2. **Crear Pruebas Primero** - Escribir pruebas que fallan (RED)
+3. **Implementar Código Mínimo** - Escribir el código justo para que pasen (GREEN)
+4. **Refactorizar** - Mejorar el código mientras las pruebas siguen en verde (REFACTOR)
+5. **Verificar Cobertura** - Garantizar 80%+ de cobertura de pruebas
 
-## 何时使用
+## Cuándo Usarlo
 
-在以下情况下使用 `/tdd`：
+Usa el comando `/tdd` cuando:
+- Implementes nuevas features
+- Agregues nuevas funciones/componentes
+- Corrijas bugs (primero escribe la prueba que reproduce el bug)
+- Refactorices código existente
+- Construyas lógica de negocio crítica
 
-* 实现新功能时
-* 添加新函数/组件时
-* 修复错误时（首先编写重现错误的测试）
-* 重构现有代码时
-* 构建关键业务逻辑时
+## Cómo Funciona
 
-## 工作原理
+El agente tdd-guide:
 
-tdd-guide 代理将：
+1. **Definirá las interfaces** para entradas/salidas
+2. **Escribirá pruebas que FALLARÁN** (porque el código aún no existe)
+3. **Ejecutará las pruebas** y verificará que fallen por la razón correcta
+4. **Escribirá la implementación mínima** para que las pruebas pasen
+5. **Ejecutará las pruebas** y verificará que pasen
+6. **Refactorizará el código** mientras las pruebas siguen en verde
+7. **Verificará la cobertura** y agregará más pruebas si está por debajo del 80%
 
-1. 为输入/输出**定义接口**
-2. **编写将会失败的测试**（因为代码尚不存在）
-3. **运行测试**并验证它们因正确的原因而失败
-4. **编写最小化实现**以使测试通过
-5. **运行测试**并验证它们通过
-6. **重构**代码，同时保持测试通过
-7. **检查覆盖率**，如果低于 80% 则添加更多测试
-
-## TDD 循环
+## El Ciclo TDD
 
 ```
-RED → GREEN → REFACTOR → REPEAT
+ROJO → VERDE → REFACTORIZAR → REPETIR
 
-RED:      编写一个失败测试
-GREEN:    编写通过测试的最简代码
-REFACTOR: 改进代码，保持测试通过
-REPEAT:   开始下一个功能/场景
+ROJO:        Escribir una prueba que falla
+VERDE:       Escribir el código mínimo para que pase
+REFACTORIZAR: Mejorar el código, las pruebas siguen pasando
+REPETIR:     Siguiente feature/escenario
 ```
 
-## 使用示例
+## Ejemplo de Uso
 
-````
-User: /tdd I need a function to calculate market liquidity score
+```
+Usuario: /tdd Necesito una función para calcular el puntaje de liquidez de un mercado
 
-Agent (tdd-guide):
-# TDD Session: Market Liquidity Score Calculator
+Agente (tdd-guide):
+# Sesión TDD: Calculadora de Puntaje de Liquidez de Mercado
 
-## Step 1: Define Interface (SCAFFOLD)
+## Paso 1: Definir Interface (SCAFFOLD)
 
 ```typescript
 // lib/liquidity.ts
@@ -67,19 +66,19 @@ export interface MarketData {
 }
 
 export function calculateLiquidityScore(market: MarketData): number {
-  // TODO: Implementation
+  // TODO: Implementación
   throw new Error('Not implemented')
 }
-````
+```
 
-## 步骤 2：编写失败的测试（红）
+## Paso 2: Escribir Prueba que Falla (ROJO)
 
 ```typescript
 // lib/liquidity.test.ts
 import { calculateLiquidityScore } from './liquidity'
 
 describe('calculateLiquidityScore', () => {
-  it('should return high score for liquid market', () => {
+  it('debe retornar puntaje alto para mercado líquido', () => {
     const market = {
       totalVolume: 100000,
       bidAskSpread: 0.01,
@@ -93,12 +92,12 @@ describe('calculateLiquidityScore', () => {
     expect(score).toBeLessThanOrEqual(100)
   })
 
-  it('should return low score for illiquid market', () => {
+  it('debe retornar puntaje bajo para mercado poco líquido', () => {
     const market = {
       totalVolume: 100,
       bidAskSpread: 0.5,
       activeTraders: 2,
-      lastTradeTime: new Date(Date.now() - 86400000) // 1 day ago
+      lastTradeTime: new Date(Date.now() - 86400000) // hace 1 día
     }
 
     const score = calculateLiquidityScore(market)
@@ -107,7 +106,7 @@ describe('calculateLiquidityScore', () => {
     expect(score).toBeGreaterThanOrEqual(0)
   })
 
-  it('should handle edge case: zero volume', () => {
+  it('debe manejar caso límite: volumen cero', () => {
     const market = {
       totalVolume: 0,
       bidAskSpread: 0,
@@ -122,40 +121,40 @@ describe('calculateLiquidityScore', () => {
 })
 ```
 
-## 步骤 3：运行测试 - 验证失败
+## Paso 3: Ejecutar Pruebas - Verificar el Fallo
 
 ```bash
 npm test lib/liquidity.test.ts
 
 FAIL lib/liquidity.test.ts
-  ✕ should return high score for liquid market (2 ms)
+  ✕ debe retornar puntaje alto para mercado líquido (2 ms)
     Error: Not implemented
 
 1 test failed, 0 passed
 ```
 
-PASS: 测试按预期失败。准备实施。
+PASS: Las pruebas fallan como se esperaba. Listo para implementar.
 
-## 步骤 4：实现最小化代码（绿）
+## Paso 4: Implementar Código Mínimo (VERDE)
 
 ```typescript
 // lib/liquidity.ts
 export function calculateLiquidityScore(market: MarketData): number {
-  // Handle zero volume edge case
+  // Manejar caso límite de volumen cero
   if (market.totalVolume === 0) {
     return 0
   }
 
-  // Calculate component scores (0-100 scale)
+  // Calcular puntajes de componentes (escala 0-100)
   const volumeScore = Math.min(market.totalVolume / 1000, 100)
   const spreadScore = Math.max(100 - (market.bidAskSpread * 1000), 0)
   const traderScore = Math.min(market.activeTraders / 10, 100)
 
-  // Recent activity bonus
+  // Bonus por actividad reciente
   const hoursSinceLastTrade = (Date.now() - market.lastTradeTime.getTime()) / (1000 * 60 * 60)
   const recencyScore = Math.max(100 - (hoursSinceLastTrade * 10), 0)
 
-  // Weighted average
+  // Promedio ponderado
   const score = (
     volumeScore * 0.4 +
     spreadScore * 0.3 +
@@ -163,29 +162,29 @@ export function calculateLiquidityScore(market: MarketData): number {
     recencyScore * 0.1
   )
 
-  return Math.min(Math.max(score, 0), 100) // Clamp to 0-100
+  return Math.min(Math.max(score, 0), 100) // Limitar entre 0-100
 }
 ```
 
-## 步骤 5：运行测试 - 验证通过
+## Paso 5: Ejecutar Pruebas - Verificar el Éxito
 
 ```bash
 npm test lib/liquidity.test.ts
 
 PASS lib/liquidity.test.ts
-  ✓ should return high score for liquid market (3 ms)
-  ✓ should return low score for illiquid market (2 ms)
-  ✓ should handle edge case: zero volume (1 ms)
+  ✓ debe retornar puntaje alto para mercado líquido (3 ms)
+  ✓ debe retornar puntaje bajo para mercado poco líquido (2 ms)
+  ✓ debe manejar caso límite: volumen cero (1 ms)
 
 3 tests passed
 ```
 
-PASS: 所有测试通过！
+PASS: ¡Todas las pruebas pasan!
 
-## 步骤 6：重构（改进）
+## Paso 6: Refactorizar (MEJORAR)
 
 ```typescript
-// lib/liquidity.ts - Refactored with constants and better readability
+// lib/liquidity.ts - Refactorizado con constantes y mejor legibilidad
 const WEIGHTS = {
   VOLUME: 0.4,
   SPREAD: 0.3,
@@ -224,22 +223,22 @@ export function calculateLiquidityScore(market: MarketData): number {
 }
 ```
 
-## 步骤 7：验证测试仍然通过
+## Paso 7: Verificar que las Pruebas Siguen Pasando
 
 ```bash
 npm test lib/liquidity.test.ts
 
 PASS lib/liquidity.test.ts
-  ✓ should return high score for liquid market (3 ms)
-  ✓ should return low score for illiquid market (2 ms)
-  ✓ should handle edge case: zero volume (1 ms)
+  ✓ debe retornar puntaje alto para mercado líquido (3 ms)
+  ✓ debe retornar puntaje bajo para mercado poco líquido (2 ms)
+  ✓ debe manejar caso límite: volumen cero (1 ms)
 
 3 tests passed
 ```
 
-PASS: 重构完成，测试仍然通过！
+PASS: ¡Refactoring completo, las pruebas siguen pasando!
 
-## 步骤 8：检查覆盖率
+## Paso 8: Verificar Cobertura
 
 ```bash
 npm test -- --coverage lib/liquidity.test.ts
@@ -248,83 +247,82 @@ File           | % Stmts | % Branch | % Funcs | % Lines
 ---------------|---------|----------|---------|--------
 liquidity.ts   |   100   |   100    |   100   |   100
 
-Coverage: 100% PASS: (Target: 80%)
+Coverage: 100% PASS (Objetivo: 80%)
 ```
 
-PASS: TDD 会话完成！
-
+PASS: ¡Sesión TDD completada!
 ```
-## TDD 最佳实践
 
-**应做：**
-- PASS: 先写测试，再写实现
-- PASS: 运行测试并确认失败，再实现功能
-- PASS: 编写最少代码使测试通过
-- PASS: 仅在测试通过后进行重构
-- PASS: 添加边界情况和错误场景
-- PASS: 目标覆盖率 80% 以上（关键代码 100%）
+## Buenas Prácticas de TDD
 
-**不应做：**
-- FAIL: 先写实现再写测试
-- FAIL: 每次更改后跳过运行测试
-- FAIL: 一次性编写过多代码
-- FAIL: 忽略失败的测试
-- FAIL: 测试实现细节（应测试行为）
-- FAIL: 过度模拟（优先使用集成测试）
+**HAZ:**
+- PASS: Escribe la prueba ANTES de cualquier implementación
+- PASS: Ejecuta las pruebas y verifica que fallen antes de implementar
+- PASS: Escribe el código mínimo para que las pruebas pasen
+- PASS: Refactoriza después de que las pruebas estén en verde
+- PASS: Agrega casos límite y escenarios de error
+- PASS: Apunta a 80%+ de cobertura (100% para código crítico)
 
-## 应包含的测试类型
+**NO HAGAS:**
+- FAIL: No escribas implementación antes de las pruebas
+- FAIL: No omitas ejecutar las pruebas después de cada cambio
+- FAIL: No escribas demasiado código de una vez
+- FAIL: No ignores pruebas que fallan
+- FAIL: No pruebes detalles de implementación (prueba el comportamiento)
+- FAIL: No hagas mock de todo (prefiere pruebas de integración)
 
-**单元测试**（函数级别）：
-- 正常路径场景
-- 边界情况（空值、null、最大值）
-- 错误条件
-- 边界值
+## Tipos de Pruebas a Incluir
 
-**集成测试**（组件级别）：
-- API 端点
-- 数据库操作
-- 外部服务调用
-- 包含钩子的 React 组件
+**Pruebas Unitarias** (nivel de función):
+- Escenarios de camino feliz
+- Casos límite (vacío, null, valores máximos)
+- Condiciones de error
+- Valores límite
 
-**端到端测试**（使用 `/e2e` 命令）：
-- 关键用户流程
-- 多步骤流程
-- 全栈集成
+**Pruebas de Integración** (nivel de componente):
+- Endpoints de API
+- Operaciones de base de datos
+- Llamadas a servicios externos
+- Componentes React con hooks
 
-## 覆盖率要求
+**Pruebas E2E** (usar el comando `/e2e`):
+- Flujos de usuario críticos
+- Procesos de múltiples pasos
+- Integración full stack
 
-- 所有代码**最低 80%**
-- **必须达到 100%** 的代码：
-  - 财务计算
-  - 认证逻辑
-  - 安全关键代码
-  - 核心业务逻辑
+## Requisitos de Cobertura
 
-## 重要说明
+- **Mínimo 80%** para todo el código
+- **100% requerido**:
+  - Cálculos financieros
+  - Lógica de autenticación
+  - Código crítico de seguridad
+  - Lógica de negocio principal
 
-**强制要求**：测试必须在实现之前编写。TDD 循环是：
+## Notas Importantes
 
-1. **红** - 编写失败的测试
-2. **绿** - 实现功能使测试通过
-3. **重构** - 改进代码
+**OBLIGATORIO**: Las pruebas deben escribirse ANTES de la implementación. El ciclo TDD:
 
-切勿跳过红阶段。切勿在测试之前编写代码。
+1. **ROJO** - Escribir prueba que falla
+2. **VERDE** - Implementar para que pase
+3. **REFACTORIZAR** - Mejorar el código
 
-## 与其他命令的集成
+Nunca omitas la fase ROJO. Nunca escribas código antes de las pruebas.
 
-- 首先使用 `/plan` 来了解要构建什么
-- 使用 `/tdd` 进行带测试的实现
-- 如果出现构建错误，请使用 `/build-fix`
-- 使用 `/code-review` 审查实现
-- 使用 `/test-coverage` 验证覆盖率
+## Integración con Otros Comandos
 
-## 相关代理
+- Usa `/plan` primero para entender qué construir
+- Usa `/tdd` para implementar con pruebas
+- Usa `/build-fix` si surgen errores de build
+- Usa `/code-review` para revisar la implementación
+- Usa `/test-coverage` para verificar la cobertura
 
-此命令调用由 ECC 提供的 `tdd-guide` 代理。
+## Agentes Relacionados
 
-相关的 `tdd-workflow` 技能也随 ECC 捆绑提供。
+Este comando invoca al agente `tdd-guide` proporcionado por ECC.
 
-对于手动安装，源文件位于：
+La skill relacionada `tdd-workflow` también viene incluida con ECC.
+
+Para instalaciones manuales, los archivos fuente se encuentran en:
 - `agents/tdd-guide.md`
 - `skills/tdd-workflow/SKILL.md`
-```

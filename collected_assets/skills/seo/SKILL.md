@@ -1,153 +1,152 @@
 ---
 name: seo
-description: Audit, plan, and implement SEO improvements across technical SEO, on-page optimization, structured data, Core Web Vitals, and content strategy. Use when the user wants better search visibility, SEO remediation, schema markup, sitemap/robots work, or keyword mapping.
-metadata:
-  origin: ECC
+description: テクニカル SEO、オンページ最適化、構造化データ、Core Web Vitals、およびコンテンツ戦略にわたる SEO 改善の監査、計画、実施。ユーザーが検索可視性の向上、SEO 修正、スキーママークアップ、サイトマップ/robots の作業、またはキーワードマッピングを希望する場合に使用します。
+origin: ECC
 ---
 
 # SEO
 
-Improve search visibility through technical correctness, performance, and content relevance, not gimmicks.
+小手先の技巧ではなく、技術的な正確さ、パフォーマンス、コンテンツの関連性を通じて検索可視性を向上させます。
 
-## When to Use
+## 使用するタイミング
 
-Use this skill when:
-- auditing crawlability, indexability, canonicals, or redirects
-- improving title tags, meta descriptions, and heading structure
-- adding or validating structured data
-- improving Core Web Vitals
-- doing keyword research and mapping keywords to URLs
-- planning internal linking or sitemap / robots changes
+以下の場合にこのスキルを使用します:
+- クロール可能性、インデックス可能性、カノニカル、またはリダイレクトを監査する場合
+- タイトルタグ、メタディスクリプション、見出し構造を改善する場合
+- 構造化データを追加または検証する場合
+- Core Web Vitals を改善する場合
+- キーワード調査を行い、キーワードを URL にマッピングする場合
+- 内部リンクまたはサイトマップ/robots の変更を計画する場合
 
-## How It Works
+## 動作の仕組み
 
-### Principles
+### 原則
 
-1. Fix technical blockers before content optimization.
-2. One page should have one clear primary search intent.
-3. Prefer long-term quality signals over manipulative patterns.
-4. Mobile-first assumptions matter because indexing is mobile-first.
-5. Recommendations should be page-specific and implementable.
+1. コンテンツ最適化の前に技術的なブロッカーを修正する。
+2. 1つのページには1つの明確な主要検索意図があるべき。
+3. 操作的なパターンよりも長期的な品質シグナルを優先する。
+4. インデックスがモバイルファーストであるため、モバイルファーストの前提が重要。
+5. 推奨事項はページ固有で実装可能であるべき。
 
-### Technical SEO checklist
+### テクニカル SEO チェックリスト
 
-#### Crawlability
+#### クロール可能性
 
-- `robots.txt` should allow important pages and block low-value surfaces
-- no important page should be unintentionally `noindex`
-- important pages should be reachable within a shallow click depth
-- avoid redirect chains longer than two hops
-- canonical tags should be self-consistent and non-looping
+- `robots.txt` は重要なページを許可し、低価値なサーフェスをブロックする必要がある
+- 重要なページが意図せず `noindex` になっていない
+- 重要なページはクリック数が少ない深さで到達可能
+- 2ホップ以上のリダイレクトチェーンを避ける
+- カノニカルタグは自己一貫性があり、ループしていない
 
-#### Indexability
+#### インデックス可能性
 
-- preferred URL format should be consistent
-- multilingual pages need correct hreflang if used
-- sitemaps should reflect the intended public surface
-- no duplicate URLs should compete without canonical control
+- 優先 URL 形式は一貫している必要がある
+- 多言語ページには使用される場合は正しい hreflang が必要
+- サイトマップは意図された公開サーフェスを反映する必要がある
+- カノニカル制御なしに競合する重複 URL がない
 
-#### Performance
+#### パフォーマンス
 
 - LCP < 2.5s
 - INP < 200ms
 - CLS < 0.1
-- common fixes: preload hero assets, reduce render-blocking work, reserve layout space, trim heavy JS
+- 一般的な修正: ヒーローアセットをプリロード、レンダーブロッキング作業を削減、レイアウトスペースを確保、重い JS を削減
 
-#### Structured data
+#### 構造化データ
 
-- homepage: organization or business schema where appropriate
-- editorial pages: `Article` / `BlogPosting`
-- product pages: `Product` and `Offer`
-- interior pages: `BreadcrumbList`
-- Q&A sections: `FAQPage` only when the content truly matches
+- ホームページ: 適切な場合は組織またはビジネススキーマ
+- 編集ページ: `Article` / `BlogPosting`
+- 商品ページ: `Product` と `Offer`
+- 内部ページ: `BreadcrumbList`
+- Q&A セクション: コンテンツが本当に一致する場合のみ `FAQPage`
 
-### On-page rules
+### オンページルール
 
-#### Title tags
+#### タイトルタグ
 
-- aim for roughly 50-60 characters
-- put the primary keyword or concept near the front
-- make the title legible to humans, not stuffed for bots
+- 約 50〜60 文字を目標にする
+- 主要キーワードまたは概念を前に置く
+- ボット用に詰め込まれたものではなく、人間が読めるタイトルにする
 
-#### Meta descriptions
+#### メタディスクリプション
 
-- aim for roughly 120-160 characters
-- describe the page honestly
-- include the main topic naturally
+- 約 120〜160 文字を目標にする
+- ページを正直に説明する
+- 主要なトピックを自然に含める
 
-#### Heading structure
+#### 見出し構造
 
-- one clear `H1`
-- `H2` and `H3` should reflect actual content hierarchy
-- do not skip structure just for visual styling
+- 明確な `H1` が1つ
+- `H2` と `H3` は実際のコンテンツ階層を反映する必要がある
+- ビジュアルスタイリングのためだけに構造をスキップしない
 
-### Keyword mapping
+### キーワードマッピング
 
-1. define the search intent
-2. gather realistic keyword variants
-3. prioritize by intent match, likely value, and competition
-4. map one primary keyword/theme to one URL
-5. detect and avoid cannibalization
+1. 検索意図を定義する
+2. 現実的なキーワードバリアントを収集する
+3. 意図の一致、推定価値、競合度で優先順位を付ける
+4. 1つの主要キーワード/テーマを1つの URL にマッピングする
+5. カニバリゼーションを検知して回避する
 
-### Internal linking
+### 内部リンク
 
-- link from strong pages to pages you want to rank
-- use descriptive anchor text
-- avoid generic anchors when a more specific one is possible
-- backfill links from new pages to relevant existing ones
+- 強力なページからランキングさせたいページにリンクする
+- 説明的なアンカーテキストを使用する
+- より具体的なものが可能な場合は一般的なアンカーを避ける
+- 新しいページから関連する既存ページへのリンクを補完する
 
-## Examples
+## 例
 
-### Title formula
-
-```text
-Primary Topic - Specific Modifier | Brand
-```
-
-### Meta description formula
+### タイトルフォーミュラ
 
 ```text
-Action + topic + value proposition + one supporting detail
+主要トピック - 具体的な修飾語 | ブランド
 ```
 
-### JSON-LD example
+### メタディスクリプションフォーミュラ
+
+```text
+アクション + トピック + 価値提案 + 1つのサポート詳細
+```
+
+### JSON-LD の例
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Page Title Here",
+  "headline": "ページタイトルをここに",
   "author": {
     "@type": "Person",
-    "name": "Author Name"
+    "name": "著者名"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Brand Name"
+    "name": "ブランド名"
   }
 }
 ```
 
-### Audit output shape
+### 監査の出力形式
 
 ```text
-[HIGH] Duplicate title tags on product pages
-Location: src/routes/products/[slug].tsx
-Issue: Dynamic titles collapse to the same default string, which weakens relevance and creates duplicate signals.
-Fix: Generate a unique title per product using the product name and primary category.
+[HIGH] 商品ページで重複するタイトルタグ
+場所: src/routes/products/[slug].tsx
+問題: 動的タイトルが同じデフォルト文字列に折りたたまれており、関連性が弱まり重複シグナルが生じます。
+修正: 商品名と主要カテゴリを使用して商品ごとにユニークなタイトルを生成する。
 ```
 
-## Anti-Patterns
+## アンチパターン
 
-| Anti-pattern | Fix |
+| アンチパターン | 修正 |
 | --- | --- |
-| keyword stuffing | write for users first |
-| thin near-duplicate pages | consolidate or differentiate them |
-| schema for content that is not actually present | match schema to reality |
-| content advice without checking the actual page | read the real page first |
-| generic “improve SEO” outputs | tie every recommendation to a page or asset |
+| キーワードスタッフィング | まずユーザーのために書く |
+| 薄い準重複ページ | 統合するかまたは差別化する |
+| 実際には存在しないコンテンツのスキーマ | スキーマを現実に合わせる |
+| 実際のページを確認せずにコンテンツアドバイスを提供 | まず実際のページを読む |
+| 一般的な「SEO を改善する」出力 | すべての推奨事項をページまたはアセットに結びつける |
 
-## Related Skills
+## 関連スキル
 
 - `seo-specialist`
 - `frontend-patterns`

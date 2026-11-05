@@ -1,183 +1,166 @@
 ---
-description: 逐步修复Go构建错误、go vet警告和linter问题。调用go-build-resolver代理进行最小化、精确的修复。
+description: Corregir errores de build de Go, advertencias de go vet y problemas del linter de forma incremental. Invoca al agente go-build-resolver para correcciones mínimas y quirúrgicas.
 ---
 
-# Go 构建与修复
+# Go Build y Corrección
 
-此命令调用 **go-build-resolver** 代理，以最小的更改增量修复 Go 构建错误。
+Este comando invoca al agente **go-build-resolver** para corregir incrementalmente errores de build de Go con cambios mínimos.
 
-## 此命令的作用
+## Qué Hace Este Comando
 
-1. **运行诊断**：执行 `go build`、`go vet`、`staticcheck`
-2. **解析错误**：按文件分组并按严重性排序
-3. **增量修复**：一次修复一个错误
-4. **验证每次修复**：每次更改后重新运行构建
-5. **报告摘要**：显示已修复的内容和剩余问题
+1. **Ejecutar Diagnósticos**: Ejecutar `go build`, `go vet`, `staticcheck`
+2. **Parsear Errores**: Agrupar por archivo y ordenar por severidad
+3. **Corregir Incrementalmente**: Un error a la vez
+4. **Verificar Cada Corrección**: Re-ejecutar el build después de cada cambio
+5. **Reportar Resumen**: Mostrar qué se corrigió y qué queda pendiente
 
-## 何时使用
+## Cuándo Usar
 
-在以下情况使用 `/go-build`：
+Usar `/go-build` cuando:
+- `go build ./...` falla con errores
+- `go vet ./...` reporta problemas
+- `golangci-lint run` muestra advertencias
+- Las dependencias de módulos están rotas
+- Después de hacer pull de cambios que rompen el build
 
-* `go build ./...` 因错误而失败
-* `go vet ./...` 报告问题
-* `golangci-lint run` 显示警告
-* 模块依赖关系损坏
-* 拉取更改后导致构建失败
-
-## 运行的诊断命令
+## Comandos de Diagnóstico Ejecutados
 
 ```bash
-# Primary build check
+# Verificación de build principal
 go build ./...
 
-# Static analysis
+# Análisis estático
 go vet ./...
 
-# Extended linting (if available)
+# Linting extendido (si está disponible)
 staticcheck ./...
 golangci-lint run
 
-# Module issues
+# Problemas de módulos
 go mod verify
 go mod tidy -v
 ```
 
-## 示例会话
+## Ejemplo de Sesión
 
-````text
-# Go Build 解析
+```text
+Usuario: /go-build
 
-## 初始诊断
+Agente:
+# Resolución de Build de Go
 
-```bash
+## Diagnósticos Iniciales
+
 $ go build ./...
 internal/service/user.go:25:15: undefined: UserRepository
 internal/handler/api.go:42:9: cannot use x (type string) as type int
 internal/handler/api.go:58:2: missing return at end of function
 
-````
+Errores encontrados: 3
 
-发现错误：3
+## Corrección 1: Identificador Indefinido
 
-## 修复 1：未定义的标识符
+Archivo: internal/service/user.go:25
+Error: undefined: UserRepository
+Causa: Import faltante
 
-文件：internal/service/user.go:25
-错误：undefined: UserRepository
-原因：缺少导入
-
-```go
-// Added import
+// Import añadido
 import "project/internal/repository"
 
-// Changed
+// Cambiado
 var repo UserRepository
-// To
+// A
 var repo repository.UserRepository
-```
 
-```bash
 $ go build ./...
-# 2 errors remaining
-```
+# 2 errores restantes
 
-## 修复 2：类型不匹配
+## Corrección 2: Incompatibilidad de Tipos
 
-文件：internal/handler/api.go:42
-错误：cannot use x (type string) as type int
+Archivo: internal/handler/api.go:42
+Error: cannot use x (type string) as type int
 
-```go
-// Changed
+// Cambiado
 count := params.Get("count")
-// To
+// A
 countStr := params.Get("count")
 count, _ := strconv.Atoi(countStr)
-```
 
-```bash
 $ go build ./...
-# 1 error remaining
-```
+# 1 error restante
 
-## 修复 3：缺少返回
+## Corrección 3: Return Faltante
 
-文件：internal/handler/api.go:58
-错误：missing return at end of function
+Archivo: internal/handler/api.go:58
+Error: missing return at end of function
 
-```go
 func GetUser(id string) (*User, error) {
     if id == "" {
         return nil, ErrInvalidID
     }
     user := findUser(id)
-    // Added missing return
+    // Return añadido
     return user, nil
 }
-```
 
-```bash
 $ go build ./...
-# Build successful!
-```
+# ¡Build exitoso!
 
-## 最终验证
+## Verificación Final
 
-```bash
 $ go vet ./...
-# No issues
+# Sin problemas
 
 $ go test ./...
 ok      project/internal/service   0.015s
 ok      project/internal/handler   0.023s
+
+## Resumen
+
+| Métrica | Cantidad |
+|---------|---------|
+| Errores de build corregidos | 3 |
+| Advertencias de vet corregidas | 0 |
+| Archivos modificados | 2 |
+| Problemas restantes | 0 |
+
+Estado del Build: ÉXITO
 ```
 
-## 摘要
+## Errores Comunes Corregidos
 
-| 指标 | 数量 |
-|--------|-------|
-| 已修复的构建错误 | 3 |
-| 已修复的 Vet 警告 | 0 |
-| 已修改的文件 | 2 |
-| 剩余问题 | 0 |
+| Error | Corrección Típica |
+|-------|-----------------|
+| `undefined: X` | Añadir import o corregir typo |
+| `cannot use X as Y` | Conversión de tipo o corregir asignación |
+| `missing return` | Añadir sentencia return |
+| `X does not implement Y` | Añadir método faltante |
+| `import cycle` | Reestructurar paquetes |
+| `declared but not used` | Eliminar o usar la variable |
+| `cannot find package` | `go get` o `go mod tidy` |
 
-构建状态：PASS: 成功
+## Estrategia de Corrección
 
-```
-## 常见错误修复
+1. **Errores de build primero** - El código debe compilar
+2. **Advertencias de vet segundo** - Corregir construcciones sospechosas
+3. **Advertencias del linter tercero** - Estilo y mejores prácticas
+4. **Una corrección a la vez** - Verificar cada cambio
+5. **Cambios mínimos** - No refactorizar, solo corregir
 
-| 错误 | 典型修复 |
-|-------|-------------|
-| `undefined: X` | 添加导入或修正拼写错误 |
-| `cannot use X as Y` | 类型转换或修正赋值 |
-| `missing return` | 添加返回语句 |
-| `X does not implement Y` | 添加缺失的方法 |
-| `import cycle` | 重构包结构 |
-| `declared but not used` | 移除或使用变量 |
-| `cannot find package` | `go get` 或 `go mod tidy` |
+## Condiciones de Parada
 
-## 修复策略
+El agente se detendrá e informará si:
+- El mismo error persiste después de 3 intentos
+- La corrección introduce más errores
+- Requiere cambios arquitectónicos
+- Faltan dependencias externas
 
-1. **优先处理构建错误** - 代码必须能够编译
-2. **其次处理 vet 警告** - 修复可疑结构
-3. **再次处理 lint 警告** - 风格和最佳实践
-4. **一次修复一个问题** - 验证每个更改
-5. **最小化更改** - 不要重构，只修复
+## Comandos Relacionados
 
-## 停止条件
+- `/go-test` - Ejecutar pruebas después de que el build tenga éxito
+- `/go-review` - Revisar la calidad del código
 
-在以下情况下，代理将停止并报告：
-- 相同错误经过 3 次尝试后仍然存在
-- 修复引入了更多错误
-- 需要架构性更改
-- 缺少外部依赖
+## Relacionado
 
-## 相关命令
-
-- `/go-test` - 构建成功后运行测试
-- `/go-review` - 审查代码质量
-- `/verify` - 完整验证循环
-
-## 相关
-
-- 代理: `agents/go-build-resolver.md`
-- 技能: `skills/golang-patterns/`
-```
+- Agente: `agents/go-build-resolver.md`
+- Skill: `skills/golang-patterns/`

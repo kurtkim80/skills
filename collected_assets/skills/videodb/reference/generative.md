@@ -1,10 +1,10 @@
-# Generative Media Guide
+# 生成メディアガイド
 
-VideoDB provides AI-powered generation of images, videos, music, sound effects, voice, and text content. All generation methods are on the **Collection** object.
+VideoDBはAI駆動の画像、ビデオ、音楽、効果音、音声、テキストコンテンツ生成を提供する。すべての生成メソッドは**Collection**オブジェクト上にある。
 
-## Prerequisites
+## 前提条件
 
-You need a connection and a collection reference before calling any generation method:
+生成メソッドを呼び出す前に、接続とコレクションの参照が必要：
 
 ```python
 import videodb
@@ -13,9 +13,9 @@ conn = videodb.connect()
 coll = conn.get_collection()
 ```
 
-## Image Generation
+## 画像生成
 
-Generate images from text prompts:
+テキストプロンプトから画像を生成する：
 
 ```python
 image = coll.generate_image(
@@ -28,21 +28,21 @@ print(image.id)
 print(image.generate_url())  # returns a signed download URL
 ```
 
-### generate_image Parameters
+### generate\_imageのパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the image to generate |
-| `aspect_ratio` | `str` | `"1:1"` | Aspect ratio: `"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, or `"3:4"` |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必須 | 生成する画像のテキスト説明 |
+| `aspect_ratio` | `str` | `"1:1"` | アスペクト比：`"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, または `"3:4"` |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-Returns an `Image` object with `.id`, `.name`, and `.collection_id`. The `.url` property may be `None` for generated images — always use `image.generate_url()` to get a reliable signed download URL.
+`.id`、`.name`、`.collection_id` を含む `Image` オブジェクトを返す。生成された画像の `.url` 属性は `None` になる可能性がある——信頼できる署名付きダウンロードURLを取得するには常に `image.generate_url()` を使用すること。
 
-> **Note:** Unlike `Video` objects (which use `.generate_stream()`), `Image` objects use `.generate_url()` to retrieve the image URL. The `.url` property is only populated for some image types (e.g. thumbnails).
+> **注意：** `Video` オブジェクト（`.generate_stream()` を使用）と異なり、`Image` オブジェクトは画像URLを取得するために `.generate_url()` を使用する。`.url` 属性は特定の画像タイプ（例：サムネイル）に対してのみ設定される。
 
-## Video Generation
+## ビデオ生成
 
-Generate short video clips from text prompts:
+テキストプロンプトから短いビデオクリップを生成する：
 
 ```python
 video = coll.generate_video(
@@ -54,23 +54,23 @@ stream_url = video.generate_stream()
 video.play()
 ```
 
-### generate_video Parameters
+### generate\_videoのパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the video to generate |
-| `duration` | `int` | `5` | Duration in seconds (must be integer value, 5-8) |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必須 | 生成するビデオのテキスト説明 |
+| `duration` | `int` | `5` | 長さ（秒）（整数値、5〜8でなければならない） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-Returns a `Video` object. Generated videos are automatically added to the collection and can be used in timelines, searches, and compilations like any uploaded video.
+`Video` オブジェクトを返す。生成されたビデオは自動的にコレクションに追加され、アップロードされたビデオと同様にタイムライン、検索、コンパイルで使用できる。
 
-## Audio Generation
+## オーディオ生成
 
-VideoDB provides three separate methods for different audio types.
+VideoDBは異なるオーディオタイプのために3つの独立したメソッドを提供する。
 
-### Music
+### 音楽
 
-Generate background music from text descriptions:
+テキスト説明からバックグラウンドミュージックを生成する：
 
 ```python
 music = coll.generate_music(
@@ -81,15 +81,15 @@ music = coll.generate_music(
 print(music.id)
 ```
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the music |
-| `duration` | `int` | `5` | Duration in seconds |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必須 | 音楽のテキスト説明 |
+| `duration` | `int` | `5` | 長さ（秒） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-### Sound Effects
+### 効果音
 
-Generate specific sound effects:
+特定の効果音を生成する：
 
 ```python
 sfx = coll.generate_sound_effect(
@@ -98,16 +98,16 @@ sfx = coll.generate_sound_effect(
 )
 ```
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Text description of the sound effect |
-| `duration` | `int` | `2` | Duration in seconds |
-| `config` | `dict` | `{}` | Additional configuration |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `prompt` | `str` | 必須 | 効果音のテキスト説明 |
+| `duration` | `int` | `2` | 長さ（秒） |
+| `config` | `dict` | `{}` | 追加設定 |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-### Voice (Text-to-Speech)
+### 音声（テキスト読み上げ）
 
-Generate speech from text:
+テキストから音声を生成する：
 
 ```python
 voice = coll.generate_voice(
@@ -116,18 +116,18 @@ voice = coll.generate_voice(
 )
 ```
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `text` | `str` | required | Text to convert to speech |
-| `voice_name` | `str` | `"Default"` | Voice to use |
-| `config` | `dict` | `{}` | Additional configuration |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `text` | `str` | 必須 | 音声に変換するテキスト |
+| `voice_name` | `str` | `"Default"` | 使用する音声 |
+| `config` | `dict` | `{}` | 追加設定 |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-All three audio methods return an `Audio` object with `.id`, `.name`, `.length`, and `.collection_id`.
+3つのオーディオメソッドはすべて `.id`、`.name`、`.length`、`.collection_id` を含む `Audio` オブジェクトを返す。
 
-## Text Generation (LLM Integration)
+## テキスト生成（LLM統合）
 
-Use `coll.generate_text()` to run LLM analysis. This is a **Collection-level** method -- pass any context (transcripts, descriptions) directly in the prompt string.
+`coll.generate_text()` を使用してLLM分析を実行する。これは**コレクションレベル**のメソッド——プロンプト文字列に任意のコンテキスト（トランスクリプト、説明）を直接渡す。
 
 ```python
 # Get transcript from a video first
@@ -142,24 +142,24 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-### generate_text Parameters
+### generate\_textのパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `prompt` | `str` | required | Prompt with context for the LLM |
-| `model_name` | `str` | `"basic"` | Model tier: `"basic"`, `"pro"`, or `"ultra"` |
-| `response_type` | `str` | `"text"` | Response format: `"text"` or `"json"` |
+| `prompt` | `str` | 必須 | LLMコンテキストを含むプロンプト |
+| `model_name` | `str` | `"basic"` | モデル層：`"basic"`、`"pro"`、または `"ultra"` |
+| `response_type` | `str` | `"text"` | レスポンスフォーマット：`"text"` または `"json"` |
 
-Returns a `dict` with an `output` key. When `response_type="text"`, `output` is a `str`. When `response_type="json"`, `output` is a `dict`.
+`output` キーを持つ `dict` を返す。`response_type="text"` の場合、`output` は `str`。`response_type="json"` の場合、`output` は `dict`。
 
 ```python
 result = coll.generate_text(prompt="Summarize this", model_name="pro")
 print(result["output"])  # access the actual text/dict
 ```
 
-### Analyze Scenes with LLM
+### LLMを使用したシーン分析
 
-Combine scene extraction with text generation:
+シーン抽出とテキスト生成を組み合わせる：
 
 ```python
 from videodb import SceneExtractionType
@@ -195,11 +195,11 @@ result = coll.generate_text(
 print(result["output"])
 ```
 
-## Dubbing and Translation
+## 吹き替えと翻訳
 
-### Dub a Video
+### ビデオの吹き替え
 
-Dub a video into another language using the collection method:
+コレクションメソッドを使用してビデオを別の言語に吹き替える：
 
 ```python
 dubbed_video = coll.dub_video(
@@ -210,19 +210,19 @@ dubbed_video = coll.dub_video(
 dubbed_video.play()
 ```
 
-### dub_video Parameters
+### dub\_videoのパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `video_id` | `str` | required | ID of the video to dub |
-| `language_code` | `str` | required | Target language code (e.g., `"es"`, `"fr"`, `"de"`) |
-| `callback_url` | `str\|None` | `None` | URL to receive async callback |
+| `video_id` | `str` | 必須 | 吹き替えるビデオのID |
+| `language_code` | `str` | 必須 | ターゲット言語コード（例：`"es"`、`"fr"`、`"de"`） |
+| `callback_url` | `str\|None` | `None` | 非同期コールバックを受信するURL |
 
-Returns a `Video` object with the dubbed content.
+吹き替えられたコンテンツを含む `Video` オブジェクトを返す。
 
-### Translate Transcript
+### トランスクリプトの翻訳
 
-Translate a video's transcript without dubbing:
+吹き替えなしでビデオのトランスクリプトを翻訳する：
 
 ```python
 translated = video.translate_transcript(
@@ -234,11 +234,11 @@ for entry in translated:
     print(entry)
 ```
 
-**Supported languages** include: `en`, `es`, `fr`, `de`, `it`, `pt`, `ja`, `ko`, `zh`, `hi`, `ar`, and more.
+**サポートされる言語**：`en`、`es`、`fr`、`de`、`it`、`pt`、`ja`、`ko`、`zh`、`hi`、`ar` など。
 
-## Complete Workflow Examples
+## 完全なワークフロー例
 
-### Generate Narration for a Video
+### ビデオのナレーション生成
 
 ```python
 import videodb
@@ -265,7 +265,7 @@ narration = coll.generate_voice(text=script)
 print(f"Narration audio: {narration.id}")
 ```
 
-### Generate Thumbnail from Prompt
+### プロンプトからサムネイルを生成する
 
 ```python
 thumbnail = coll.generate_image(
@@ -275,7 +275,7 @@ thumbnail = coll.generate_image(
 print(f"Thumbnail URL: {thumbnail.generate_url()}")
 ```
 
-### Add Generated Music to Video
+### ビデオに生成された音楽を追加する
 
 ```python
 import videodb
@@ -301,7 +301,7 @@ stream_url = timeline.generate_stream()
 print(f"Video with music: {stream_url}")
 ```
 
-### Structured JSON Output
+### 構造化JSON出力
 
 ```python
 transcript_text = video.get_transcript_text()
@@ -320,12 +320,12 @@ print(result["output"]["summary"])
 print(result["output"]["topics"])
 ```
 
-## Tips
+## ヒント
 
-- **Generated media is persistent**: All generated content is stored in your collection and can be reused.
-- **Three audio methods**: Use `generate_music()` for background music, `generate_sound_effect()` for SFX, and `generate_voice()` for text-to-speech. There is no unified `generate_audio()` method.
-- **Text generation is collection-level**: `coll.generate_text()` does not have access to video content automatically. Fetch the transcript with `video.get_transcript_text()` and pass it in the prompt.
-- **Model tiers**: `"basic"` is fastest, `"pro"` is balanced, `"ultra"` is highest quality. Use `"pro"` for most analysis tasks.
-- **Combine generation types**: Generate images for overlays, music for backgrounds, and voice for narration, then compose using timelines (see [editor.md](editor.md)).
-- **Prompt quality matters**: Descriptive, specific prompts produce better results across all generation types.
-- **Aspect ratios for images**: Choose from `"1:1"`, `"9:16"`, `"16:9"`, `"4:3"`, or `"3:4"`.
+* **生成されたメディアは永続的**：すべての生成されたコンテンツはコレクションに保存され、再利用できる。
+* **3つのオーディオメソッド**：バックグラウンドミュージックには `generate_music()`、効果音には `generate_sound_effect()`、テキスト読み上げには `generate_voice()` を使用する。統一された `generate_audio()` メソッドはない。
+* **テキスト生成はコレクションレベル**：`coll.generate_text()` はビデオコンテンツに自動的にアクセスしない。`video.get_transcript_text()` でトランスクリプトを取得し、プロンプトに渡す。
+* **モデル層**：`"basic"` が最速、`"pro"` がバランスの取れたオプション、`"ultra"` が最高品質。ほとんどの分析タスクには `"pro"` を使用する。
+* **生成タイプを組み合わせる**：オーバーレイ用に画像を生成し、バックグラウンド用に音楽を生成し、ナレーション用に音声を生成し、タイムラインを使用してそれらを組み合わせる（[editor.md](editor.md) を参照）。
+* **プロンプトの品質が重要**：説明的で具体的なプロンプトはすべての生成タイプでより良い結果を生む。
+* **画像のアスペクト比**：`"1:1"`、`"9:16"`、`"16:9"`、`"4:3"`、または `"3:4"` から選択する。

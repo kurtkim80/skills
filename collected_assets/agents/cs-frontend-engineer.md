@@ -1,16 +1,11 @@
 ---
-title: "cs-frontend-engineer — Frontend Orchestrator — AI Coding Agent & Codex Skill"
-description: "Frontend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-frontend-engineer
+description: Frontend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design system, WCAG), picks the framework/rendering profile, forks into specialists (a11y-audit, apple-hig-expert, epic-design, performance-profiler, playwright-pro — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs-frontend-review or Agent({subagent_type:"cs-frontend-engineer",...}).
+domain: engineering
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # cs-frontend-engineer — Frontend Orchestrator
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering/cs-frontend-engineer.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -28,34 +23,34 @@ Do not skip ahead. Do not bundle. The primary device decides every downstream ch
 
 ## Skill Integration
 
-**Skill Location:** [`skills/senior-frontend`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend)
+**Skill Location:** `../../engineering-team/skills/senior-frontend/`
 
 ### Python Tools
 
 1. **Frontend Decision Engine**
    - **Purpose:** Deterministic framework + rendering picker from the 7 forcing-question answers
-   - **Path:** [`scripts/frontend_decision_engine.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/scripts/frontend_decision_engine.py)
+   - **Path:** `../../engineering-team/skills/senior-frontend/scripts/frontend_decision_engine.py`
    - **Usage:** `python ../../engineering-team/skills/senior-frontend/scripts/frontend_decision_engine.py --primary-device mobile-4g --lcp-target-ms 2000 --seo-dependent true --auth-walled false --team-size 5`
 
 2. **Frontend Scaffolder** (existing)
-   - **Path:** [`scripts/frontend_scaffolder.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/scripts/frontend_scaffolder.py)
+   - **Path:** `../../engineering-team/skills/senior-frontend/scripts/frontend_scaffolder.py`
    - **When:** Only AFTER the 7 questions are answered and the profile is locked.
 
 3. **Component Generator** (existing)
-   - **Path:** [`scripts/component_generator.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/scripts/component_generator.py)
+   - **Path:** `../../engineering-team/skills/senior-frontend/scripts/component_generator.py`
 
 4. **Bundle Analyzer** (existing)
-   - **Path:** [`scripts/bundle_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/scripts/bundle_analyzer.py)
+   - **Path:** `../../engineering-team/skills/senior-frontend/scripts/bundle_analyzer.py`
 
 ### Knowledge Bases
 
-1. **Forcing-Question Library** — [`references/forcing_questions.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/references/forcing_questions.md)
-2. **Composition Map** — [`references/composition_map.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/references/composition_map.md)
-3. **React Patterns / Next.js Optimization / Frontend Best Practices** (existing) — [`references/{react_patterns,nextjs_optimization_guide,frontend_best_practices}.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/references/{react_patterns,nextjs_optimization_guide,frontend_best_practices}.md)
+1. **Forcing-Question Library** — `../../engineering-team/skills/senior-frontend/references/forcing_questions.md`
+2. **Composition Map** — `../../engineering-team/skills/senior-frontend/references/composition_map.md`
+3. **React Patterns / Next.js Optimization / Frontend Best Practices** (existing) — `../../engineering-team/skills/senior-frontend/references/{react_patterns,nextjs_optimization_guide,frontend_best_practices}.md`
 
 ### Templates / Profiles
 
-1. **Profile JSONs:** [`profiles/{next-app-router,remix-or-sveltekit,vite-spa,astro-or-static}.json`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/profiles/{next-app-router,remix-or-sveltekit,vite-spa,astro-or-static}.json)
+1. **Profile JSONs:** `../../engineering-team/skills/senior-frontend/profiles/{next-app-router,remix-or-sveltekit,vite-spa,astro-or-static}.json`
 
 ## Workflows
 
@@ -127,7 +122,7 @@ python ../../engineering/karpathy-coder/skills/karpathy-coder/scripts/diff_surge
 - [cs-fullstack-engineer](cs-fullstack-engineer.md) — parent orchestrator for stack-spanning decisions
 - [cs-backend-engineer](cs-backend-engineer.md) — fork into for API contract design
 - [cs-karpathy-reviewer](cs-karpathy-reviewer.md) — invoke before every commit
-- [cs-content-creator](https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-content-creator.md) — escalate for marketing copy + brand voice
+- [cs-content-creator](../marketing/cs-content-creator.md) — escalate for marketing copy + brand voice
 
 ## Invocation Contract
 
@@ -139,7 +134,7 @@ When invoked from another agent, ALWAYS return a ≤ 200-word digest with: match
 
 ## References
 
-- Skill: [`senior-frontend/SKILL.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-frontend/SKILL.md)
-- Karpathy 4 principles: [`references/karpathy-principles.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/karpathy-coder/skills/karpathy-coder/references/karpathy-principles.md)
-- Matt Pocock canon: [`references/forcing_question_patterns.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/skills/grill-me/references/forcing_question_patterns.md)
+- Skill: `../../engineering-team/skills/senior-frontend/SKILL.md`
+- Karpathy 4 principles: `../../engineering/karpathy-coder/skills/karpathy-coder/references/karpathy-principles.md`
+- Matt Pocock canon: `../../engineering/grill-me/skills/grill-me/references/forcing_question_patterns.md`
 - Web Vitals (Google): web.dev/vitals

@@ -1,16 +1,11 @@
 ---
-title: "cs-fullstack-engineer — Fullstack Orchestrator — AI Coding Agent & Codex Skill"
-description: "Fullstack-engineering orchestrator. Walks the Matt Pocock 7-question forcing-question grill, runs the deterministic profile picker, then forks into. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-fullstack-engineer
+description: Fullstack-engineering orchestrator. Walks the Matt Pocock 7-question forcing-question grill, runs the deterministic profile picker, then forks into the POWERFUL-tier specialists (api-design-reviewer, ci-cd-pipeline-builder, database-designer, performance-profiler, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context so heavy ingestion does not pollute parent thread. Invoke via /cs-fullstack-review or Agent({subagent_type:"cs-fullstack-engineer",...}).
+domain: engineering
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # cs-fullstack-engineer — Fullstack Orchestrator
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-rocket-launch: Engineering - POWERFUL</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering/cs-fullstack-engineer.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -28,40 +23,40 @@ Do not skip ahead. Do not bundle. The user may push for "just pick something" �
 
 ## Skill Integration
 
-**Skill Location:** [`skills/senior-fullstack`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack)
+**Skill Location:** `../../engineering-team/skills/senior-fullstack/`
 
 ### Python Tools
 
 1. **Fullstack Decision Engine**
    - **Purpose:** Deterministic profile matching from the seven forcing-question answers
-   - **Path:** [`scripts/fullstack_decision_engine.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/scripts/fullstack_decision_engine.py)
+   - **Path:** `../../engineering-team/skills/senior-fullstack/scripts/fullstack_decision_engine.py`
    - **Usage:** `python ../../engineering-team/skills/senior-fullstack/scripts/fullstack_decision_engine.py --team-size 6 --team-size-12mo 12 --cadence daily --user-facing true --budget 5000 --traffic-p99-rps 45 --data-sensitivity pii-only`
    - **Important:** Refuses to run without the four core inputs. Never auto-approves; always names the human approver chain.
 
 2. **Project Scaffolder** (existing)
-   - **Path:** [`scripts/project_scaffolder.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/scripts/project_scaffolder.py)
+   - **Path:** `../../engineering-team/skills/senior-fullstack/scripts/project_scaffolder.py`
    - **When:** Only AFTER the seven forcing questions are answered and the profile is locked.
 
 3. **Code Quality Analyzer** (existing)
-   - **Path:** [`scripts/code_quality_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/scripts/code_quality_analyzer.py)
+   - **Path:** `../../engineering-team/skills/senior-fullstack/scripts/code_quality_analyzer.py`
 
 ### Knowledge Bases
 
 1. **Forcing-Question Library**
-   - **Location:** [`references/forcing_questions.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/references/forcing_questions.md)
+   - **Location:** `../../engineering-team/skills/senior-fullstack/references/forcing_questions.md`
    - **Content:** 7 questions, each with recommended answer, canon citation, kill criterion. Walk one per turn.
 
 2. **Composition Map**
-   - **Location:** [`references/composition_map.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/references/composition_map.md)
+   - **Location:** `../../engineering-team/skills/senior-fullstack/references/composition_map.md`
    - **Content:** routing table — which POWERFUL specialist to fork into for each sub-concern.
 
 3. **Tech Stack Guide / Workflows / Architecture Patterns** (existing)
-   - Paths: [`references/{tech_stack_guide,development_workflows,architecture_patterns}.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/references/{tech_stack_guide,development_workflows,architecture_patterns}.md)
+   - Paths: `../../engineering-team/skills/senior-fullstack/references/{tech_stack_guide,development_workflows,architecture_patterns}.md`
 
 ### Templates / Profiles
 
 1. **Profile JSONs (customization surface)**
-   - **Location:** [`profiles/{saas-startup,enterprise-scale,internal-tool,marketing-site}.json`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/profiles/{saas-startup,enterprise-scale,internal-tool,marketing-site}.json)
+   - **Location:** `../../engineering-team/skills/senior-fullstack/profiles/{saas-startup,enterprise-scale,internal-tool,marketing-site}.json`
    - **Use case:** copy any of the four into your repo to define your org's defaults; the decision engine reads them dynamically.
 
 ## Workflows
@@ -165,8 +160,8 @@ python ../../engineering/karpathy-coder/skills/karpathy-coder/scripts/diff_surge
 - [cs-backend-engineer](cs-backend-engineer.md) — fork into for any backend-only sub-concern
 - [cs-karpathy-reviewer](cs-karpathy-reviewer.md) — invoke before every commit
 - [cs-senior-engineer](cs-senior-engineer.md) — cross-cutting engineering lead (use for non-stack questions like CI/CD, security review)
-- [cs-cto-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-cto-advisor.md) — escalate for strategic build-vs-buy or technical debt prioritization
-- [cs-vpe-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/c-level-agents/agents/cs-vpe-advisor.md) — escalate for org-design + throughput
+- [cs-cto-advisor](../c-level/cs-cto-advisor.md) — escalate for strategic build-vs-buy or technical debt prioritization
+- [cs-vpe-advisor](../../c-level-agents/agents/cs-vpe-advisor.md) — escalate for org-design + throughput
 
 ## Invocation Contract
 
@@ -180,7 +175,7 @@ When invoked from another agent, ALWAYS return a ≤ 200-word digest with: match
 
 ## References
 
-- Skill documentation: [`senior-fullstack/SKILL.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/skills/senior-fullstack/SKILL.md)
-- Karpathy 4 principles: [`references/karpathy-principles.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/karpathy-coder/skills/karpathy-coder/references/karpathy-principles.md)
-- Matt Pocock grill canon: [`references/forcing_question_patterns.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/grill-me/skills/grill-me/references/forcing_question_patterns.md)
-- Path-B 11-file contract: [`business-operations/CLAUDE.md`](https://github.com/alirezarezvani/claude-skills/tree/main/business-operations/CLAUDE.md)
+- Skill documentation: `../../engineering-team/skills/senior-fullstack/SKILL.md`
+- Karpathy 4 principles: `../../engineering/karpathy-coder/skills/karpathy-coder/references/karpathy-principles.md`
+- Matt Pocock grill canon: `../../engineering/grill-me/skills/grill-me/references/forcing_question_patterns.md`
+- Path-B 11-file contract: `../../business-operations/CLAUDE.md`

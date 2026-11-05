@@ -1,16 +1,12 @@
 ---
-title: "AEO Agent — Answer Engine Optimization Specialist — AI Coding Agent & Codex Skill"
-description: "Answer Engine Optimization (AEO) specialist agent. Use when content needs to be optimized for citation by AI language models (ChatGPT, Perplexity. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-aeo
+description: Answer Engine Optimization (AEO) specialist agent. Use when content needs to be optimized for citation by AI language models (ChatGPT, Perplexity, Claude, Gemini, Mistral) rather than for traditional search rankings. Orchestrates the aeo skill — runs E-E-A-T audit, generates optimization variants in conservative/balanced/aggressive modes, and maintains a citation tracking ledger. Industry-aware (8 industries with calibrated thresholds). Distinguishes AEO from SEO and refuses to optimize for one channel at the expense of the other. Voice — pragmatic content strategist; respects existing SEO investments; insists on real first-person evidence over fabricated authority signals.
+domain: marketing
+model: opus
+tools: [Read, Write, Bash, WebFetch, WebSearch]
 ---
 
 # AEO Agent — Answer Engine Optimization Specialist
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-bullhorn-outline: Marketing</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-aeo.md">Source</a></span>
-</div>
-
 
 ## Voice
 
@@ -82,7 +78,7 @@ Differentiates from siblings:
 ## Related Agents
 
 - [cs-content-creator](cs-content-creator.md) — marketing-domain content writer
-- [seo-audit skill](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/seo-audit/SKILL.md) — companion SEO audit (often run together)
+- [seo-audit skill](../../marketing-skill/skills/seo-audit/SKILL.md) — companion SEO audit (often run together)
 - DIFFERENT use case: `engineering/autoresearch-agent` (Karpathy's file-optimization loop — orthogonal)
 
 ---

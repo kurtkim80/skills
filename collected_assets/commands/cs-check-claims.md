@@ -1,15 +1,10 @@
 ---
-title: "/cs-check-claims — Slash Command for AI Coding Agents"
-description: "Check an agent's summary, handoff or 'tests pass' against what its recorded run actually did.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Check an agent's summary, handoff or "tests pass" against what its recorded run actually did.
+argument-hint: "[--session ID | --trace PATH] <claims or summary text>"
 ---
 
 # /cs-check-claims
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-run-forensics/commands/cs-check-claims.md">Source</a></span>
-</div>
-
 
 Turn each factual sentence of the summary in `$ARGUMENTS` (default: your own last
 report in this session) into a typed claim and check it.

@@ -1,57 +1,56 @@
 ---
-description: 逐步修复 Rust 构建错误、借用检查器问题和依赖问题。调用 rust-build-resolver 代理以进行最小化、精确的修复。
+description: Rustビルドエラー、ボローチェッカーの問題、依存関係の問題をインクリメンタルに修正します。最小限の外科的修正のためにrust-build-resolverエージェントを呼び出します。
 ---
 
-# Rust 构建与修复
+# Rustビルドと修正
 
-此命令调用 **rust-build-resolver** 代理，以最小改动逐步修复 Rust 构建错误。
+このコマンドは**rust-build-resolver**エージェントを呼び出し、Rustビルドエラーを最小限の変更でインクリメンタルに修正します。
 
-## 此命令的作用
+## このコマンドの動作
 
-1. **运行诊断**：执行 `cargo check`、`cargo clippy`、`cargo fmt --check`
-2. **解析错误**：识别错误代码和受影响的文件
-3. **逐步修复**：一次修复一个错误
-4. **验证每次修复**：每次更改后重新运行 `cargo check`
-5. **报告摘要**：显示已修复的内容和剩余问题
+1. **診断を実行**: `cargo check`、`cargo clippy`、`cargo fmt --check`を実行
+2. **エラーを解析**: エラーコードと影響を受けるファイルを特定
+3. **インクリメンタルに修正**: 一度に1つのエラー
+4. **各修正を検証**: 各変更後に`cargo check`を再実行
+5. **サマリーを報告**: 修正されたものと残りを表示
 
-## 使用时机
+## 使用するタイミング
 
-在以下情况下使用 `/rust-build`：
+`/rust-build`を使用するのは:
+- `cargo build`または`cargo check`がエラーで失敗する場合
+- `cargo clippy`が警告を報告する場合
+- ボローチェッカーやライフタイムエラーがコンパイルをブロックする場合
+- Cargo依存関係の解決が失敗する場合
+- ビルドを壊す変更をプルした後
 
-* `cargo build` 或 `cargo check` 因错误而失败时
-* `cargo clippy` 报告警告时
-* 借用检查器或生命周期错误阻碍编译时
-* Cargo 依赖项解析失败时
-* 拉取导致构建破坏的更改后
-
-## 运行的诊断命令
+## 実行される診断コマンド
 
 ```bash
-# Primary build check
+# プライマリビルドチェック
 cargo check 2>&1
 
-# Lints and suggestions
+# リントと提案
 cargo clippy -- -D warnings 2>&1
 
-# Formatting check
+# フォーマットチェック
 cargo fmt --check 2>&1
 
-# Dependency issues
+# 依存関係の問題
 cargo tree --duplicates
 
-# Security audit (if available)
+# セキュリティ監査（利用可能な場合）
 if command -v cargo-audit >/dev/null; then cargo audit; else echo "cargo-audit not installed"; fi
 ```
 
-## 示例会话
+## セッション例
 
 ````text
 User: /rust-build
 
 Agent:
-# Rust Build Resolution
+# Rustビルド解決
 
-## Initial Diagnostics
+## 初期診断
 
 ```bash
 $ cargo check
@@ -63,16 +62,16 @@ error[E0425]: cannot find value `db` in this scope
   --> src/handler/api.rs:58:9
 ```
 
-Errors found: 3
+検出されたエラー: 3
 
-## Fix 1: Borrow Checker Error
+## 修正 1: ボローチェッカーエラー
 
 File: src/service/cache.rs:25
-Error: E0502 — cannot borrow `map` as mutable because also borrowed as immutable
-Cause: Immutable borrow still active during mutable insert
+Error: E0502 — イミュータブルとしてもボローされているため、`map`をミュータブルとしてボローできない
+Cause: ミュータブルなinsert中にイミュータブルなボローがまだアクティブ
 
 ```rust
-// Changed: restructured to end immutable borrow before mutable access
+// 変更: ミュータブルアクセス前にイミュータブルなボローを終了するよう再構築
 if !map.contains_key("key") {
     map.insert("key".into(), default);
 }
@@ -80,18 +79,18 @@ if !map.contains_key("key") {
 
 ```bash
 $ cargo check
-# 2 errors remaining
+# 残りエラー: 2
 ```
 
-## Fix 2: Type Mismatch
+## 修正 2: 型の不一致
 
 File: src/handler/api.rs:42
 Error: E0308 — mismatched types: expected `usize`, found `&str`
 
 ```rust
-// Changed
+// 変更前
 let count = params.get("count");
-// To
+// 変更後
 let count: usize = params.get("count")
     .and_then(|s| s.parse().ok())
     .unwrap_or(0);
@@ -99,30 +98,30 @@ let count: usize = params.get("count")
 
 ```bash
 $ cargo check
-# 1 error remaining
+# 残りエラー: 1
 ```
 
-## Fix 3: Unresolved Name
+## 修正 3: 未解決の名前
 
 File: src/handler/api.rs:58
 Error: E0425 — cannot find value `db` in this scope
-Cause: Missing import
+Cause: importの欠落
 
 ```rust
-// Added
+// 追加
 use crate::db;
 ```
 
 ```bash
 $ cargo check
-# Build successful!
+# ビルド成功！
 ```
 
-## Final Verification
+## 最終検証
 
 ```bash
 $ cargo clippy -- -D warnings
-# No warnings
+# 警告なし
 
 $ cargo test
 running 6 tests
@@ -136,54 +135,53 @@ test handler::api::tests::test_response ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored
 ```
 
-## Summary
+## サマリー
 
-| Metric | Count |
-|--------|-------|
-| Build errors fixed | 3 |
-| Clippy warnings fixed | 0 |
-| Files modified | 2 |
-| Remaining issues | 0 |
+| メトリクス | 件数 |
+|-----------|------|
+| 修正されたビルドエラー | 3 |
+| 修正されたClippy警告 | 0 |
+| 変更されたファイル | 2 |
+| 残りの問題 | 0 |
 
-Build Status: SUCCESS
+ビルドステータス: SUCCESS
 ````
 
-## 修复的常见错误
+## 一般的に修正されるエラー
 
-| 错误 | 典型修复方法 |
-|-------|-------------|
-| `cannot borrow as mutable` | 重构以先结束不可变借用；仅在合理情况下克隆 |
-| `does not live long enough` | 使用拥有所有权的类型或添加生命周期注解 |
-| `cannot move out of` | 重构以获取所有权；仅作为最后手段进行克隆 |
-| `mismatched types` | 添加 `.into()`、`as` 或显式转换 |
-| `trait X not implemented` | 添加 `#[derive(Trait)]` 或手动实现 |
-| `unresolved import` | 添加到 Cargo.toml 或修复 `use` 路径 |
-| `cannot find value` | 添加导入或修复路径 |
+| エラー | 典型的な修正 |
+|--------|-------------|
+| `cannot borrow as mutable` | イミュータブルなボローを先に終了するよう再構築。cloneは正当化された場合のみ |
+| `does not live long enough` | 所有型を使用またはライフタイム注釈を追加 |
+| `cannot move out of` | 所有権を取るよう再構築。cloneは最後の手段としてのみ |
+| `mismatched types` | `.into()`、`as`、または明示的な変換を追加 |
+| `trait X not implemented` | `#[derive(Trait)]`を追加または手動で実装 |
+| `unresolved import` | Cargo.tomlに追加または`use`パスを修正 |
+| `cannot find value` | importを追加またはパスを修正 |
 
-## 修复策略
+## 修正戦略
 
-1. **首先解决构建错误** - 代码必须能够编译
-2. **其次解决 Clippy 警告** - 修复可疑的构造
-3. **第三处理格式化** - 符合 `cargo fmt` 标准
-4. **一次修复一个** - 验证每次更改
-5. **最小化改动** - 不进行重构，仅修复问题
+1. **ビルドエラーを最初に** — コードがコンパイルされなければならない
+2. **Clippy警告を次に** — 疑わしい構造を修正
+3. **フォーマットを3番目に** — `cargo fmt`準拠
+4. **一度に1つの修正** — 各変更を検証
+5. **最小限の変更** — リファクタリングせず、修正のみ
 
 ## 停止条件
 
-代理将在以下情况下停止并报告：
+エージェントは以下の場合に停止して報告する:
+- 3回の試行後も同じエラーが持続
+- 修正がより多くのエラーを導入
+- アーキテクチャ変更が必要
+- ボローチェッカーエラーがデータ所有権の再設計を必要とする
 
-* 同一错误尝试 3 次后仍然存在
-* 修复引入了更多错误
-* 需要架构性更改
-* 借用检查器错误需要重新设计数据所有权
+## 関連コマンド
 
-## 相关命令
+- `/rust-test` — ビルド成功後にテストを実行
+- `/rust-review` — コード品質をレビュー
+- `verification-loop`スキル — 完全な検証ループ
 
-* `/rust-test` - 构建成功后运行测试
-* `/rust-review` - 审查代码质量
-* `/verify` - 完整验证循环
+## 関連
 
-## 相关
-
-* 代理：`agents/rust-build-resolver.md`
-* 技能：`skills/rust-patterns/`
+- エージェント: `agents/rust-build-resolver.md`
+- スキル: `skills/rust-patterns/`

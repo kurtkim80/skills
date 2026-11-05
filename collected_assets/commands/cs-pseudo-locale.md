@@ -1,15 +1,10 @@
 ---
-title: "/cs-pseudo-locale — Slash Command for AI Coding Agents"
-description: "Generate an en-XA (or ar-XB right-to-left) pseudo-locale from the source strings to find hardcoded text, truncation and concatenation in the running. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Generate an en-XA (or ar-XB right-to-left) pseudo-locale from the source strings to find hardcoded text, truncation and concatenation in the running UI.
+argument-hint: "<source locale file> [--bidi]"
 ---
 
 # /cs-pseudo-locale
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/i18n-localization/commands/cs-pseudo-locale.md">Source</a></span>
-</div>
-
 
 Generate a pseudo-locale from the source locale file in `$ARGUMENTS` and register it for development builds.
 

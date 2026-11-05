@@ -1,146 +1,142 @@
 ---
-description: 全面的Rust代码审查，涵盖所有权、生命周期、错误处理、不安全代码使用以及惯用模式。调用rust-reviewer代理。
+description: Rustコードの所有権、ライフタイム、エラーハンドリング、unsafeの使用、イディオマティックパターンに関する包括的なコードレビュー。rust-reviewerエージェントを呼び出します。
 ---
 
-# Rust 代码审查
+# Rustコードレビュー
 
-此命令调用 **rust-reviewer** 代理进行全面的 Rust 专项代码审查。
+このコマンドは**rust-reviewer**エージェントを呼び出し、Rust固有の包括的なコードレビューを行います。
 
-## 此命令的作用
+## このコマンドの動作
 
-1. **验证自动化检查**：运行 `cargo check`、`cargo clippy -- -D warnings`、`cargo fmt --check` 和 `cargo test` —— 任何一项失败则停止
-2. **识别 Rust 变更**：通过 `git diff HEAD~1`（或针对 PR 使用 `git diff main...HEAD`）查找修改过的 `.rs` 文件
-3. **运行安全审计**：如果可用，则执行 `cargo audit`
-4. **安全扫描**：检查不安全使用、命令注入、硬编码密钥
-5. **所有权审查**：分析不必要的克隆、生命周期问题、借用模式
-6. **生成报告**：按严重性对问题进行分类
+1. **自動チェックを検証**: `cargo check`、`cargo clippy -- -D warnings`、`cargo fmt --check`、`cargo test`を実行 — いずれか失敗したら停止
+2. **Rustの変更を特定**: `git diff HEAD~1`（PRの場合は`git diff main...HEAD`）で変更された`.rs`ファイルを検出
+3. **セキュリティ監査を実行**: 利用可能な場合`cargo audit`を実行
+4. **セキュリティスキャン**: unsafe使用、コマンドインジェクション、ハードコードされたシークレットを確認
+5. **所有権レビュー**: 不要なclone、ライフタイムの問題、ボローイングパターンを分析
+6. **レポートを生成**: 重大度別に問題を分類
 
-## 何时使用
+## 使用するタイミング
 
-在以下情况下使用 `/rust-review`：
+`/rust-review`を使用するのは:
+- Rustコードを書いたり変更した後
+- Rustの変更をコミットする前
+- Rustコードを含むプルリクエストをレビューする時
+- 新しいRustコードベースにオンボーディングする時
+- イディオマティックなRustパターンを学ぶ時
 
-* 编写或修改 Rust 代码之后
-* 提交 Rust 变更之前
-* 审查包含 Rust 代码的拉取请求时
-* 接手新的 Rust 代码库时
-* 学习惯用的 Rust 模式时
+## レビューカテゴリ
 
-## 审查类别
+### CRITICAL（修正必須）
+- プロダクションコードパスでの未チェック`unwrap()`/`expect()`
+- 不変条件を文書化する`// SAFETY:`コメントなしの`unsafe`
+- クエリでの文字列補間によるSQLインジェクション
+- `std::process::Command`での未検証入力によるコマンドインジェクション
+- ハードコードされた認証情報
+- rawポインタ経由のuse-after-free
 
-### 关键（必须修复）
+### HIGH（修正すべき）
+- ボローチェッカーを満たすための不要な`.clone()`
+- `&str`や`impl AsRef<str>`で十分な場合の`String`パラメータ
+- asyncコンテキストでのブロッキング（`std::thread::sleep`、`std::fs`）
+- 共有型での`Send`/`Sync`バウンドの欠落
+- ビジネスクリティカルなenumでのワイルドカード`_ =>`マッチ
+- 大きな関数（50行超）
 
-* 生产代码路径中未经检查的 `unwrap()`/`expect()`
-* 没有 `// SAFETY:` 注释记录不变量的 `unsafe`
-* 查询中通过字符串插值导致的 SQL 注入
-* 在 `std::process::Command` 中通过未经验证的输入导致的命令注入
-* 硬编码凭据
-* 通过原始指针导致的释放后使用
+### MEDIUM（検討すべき）
+- ホットパスでの不要なアロケーション
+- サイズが既知の場合の`with_capacity`の欠落
+- 正当化なしの抑制されたclippy警告
+- `///`ドキュメントなしのパブリックAPI
+- 値を無視することがバグになりやすい非`must_use`戻り値型での`#[must_use]`の検討
 
-### 高（应该修复）
-
-* 为满足借用检查器而进行的不必要的 `.clone()`
-* 参数为 `String`，而 `&str` 或 `impl AsRef<str>` 即可满足
-* 在异步上下文中的阻塞操作（`std::thread::sleep`、`std::fs`）
-* 共享类型上缺少 `Send`/`Sync` 约束
-* 对业务关键枚举使用通配符 `_ =>` 匹配
-* 大型函数（>50 行）
-
-### 中（考虑）
-
-* 在热点路径中不必要的分配
-* 已知大小时缺少 `with_capacity`
-* 未说明理由就抑制 clippy 警告
-* 公共 API 缺少 `///` 文档
-* 对于忽略返回值很可能是错误的非 `must_use` 返回类型，考虑使用 `#[must_use]`
-
-## 运行的自动化检查
+## 実行される自動チェック
 
 ```bash
-# Build gate (must pass before review)
+# ビルドゲート（レビュー前に通る必要あり）
 cargo check
 
-# Lints and suggestions
+# リントと提案
 cargo clippy -- -D warnings
 
-# Formatting
+# フォーマット
 cargo fmt --check
 
-# Tests
+# テスト
 cargo test
 
-# Security audit (if available)
+# セキュリティ監査（利用可能な場合）
 if command -v cargo-audit >/dev/null; then cargo audit; else echo "cargo-audit not installed"; fi
 ```
 
-## 使用示例
+## 使用例
 
 ````text
 User: /rust-review
 
 Agent:
-# Rust Code Review Report
+# Rustコードレビューレポート
 
-## Files Reviewed
-- src/service/user.rs (modified)
-- src/handler/api.rs (modified)
+## レビュー対象ファイル
+- src/service/user.rs（変更）
+- src/handler/api.rs（変更）
 
-## Static Analysis Results
-- Build: Successful
-- Clippy: No warnings
-- Formatting: Passed
-- Tests: All passing
+## 静的解析結果
+- ビルド: 成功
+- Clippy: 警告なし
+- フォーマット: 通過
+- テスト: 全通過
 
-## Issues Found
+## 検出された問題
 
-[CRITICAL] Unchecked unwrap in Production Path
+[CRITICAL] プロダクションパスでの未チェックunwrap
 File: src/service/user.rs:28
-Issue: Using `.unwrap()` on database query result
+Issue: データベースクエリ結果に`.unwrap()`を使用
 ```rust
-let user = db.find_by_id(id).unwrap();  // Panics on missing user
+let user = db.find_by_id(id).unwrap();  // ユーザーが見つからない場合にパニック
 ```
-Fix: Propagate error with context
+Fix: コンテキスト付きでエラーを伝搬
 ```rust
 let user = db.find_by_id(id)
     .context("failed to fetch user")?;
 ```
 
-[HIGH] Unnecessary Clone
+[HIGH] 不要なClone
 File: src/handler/api.rs:45
-Issue: Cloning String to satisfy borrow checker
+Issue: ボローチェッカーを満たすためにStringをクローン
 ```rust
 let name = user.name.clone();
 process(&user, &name);
 ```
-Fix: Restructure to avoid clone
+Fix: cloneを回避するよう再構築
 ```rust
 let result = process_name(&user.name);
 use_user(&user, result);
 ```
 
-## Summary
+## サマリー
 - CRITICAL: 1
 - HIGH: 1
 - MEDIUM: 0
 
-Recommendation: Block merge until CRITICAL issue is fixed
+推奨: CRITICALの問題が修正されるまでマージをブロック
 ````
 
-## 批准标准
+## 承認基準
 
-| 状态 | 条件 |
-|--------|-----------|
-| 批准 | 无关键或高优先级问题 |
-| 警告 | 仅存在中优先级问题（谨慎合并） |
-| 阻止 | 发现关键或高优先级问题 |
+| ステータス | 条件 |
+|-----------|------|
+| 承認 | CRITICALまたはHIGHの問題がない |
+| 警告 | MEDIUMの問題のみ（注意してマージ） |
+| ブロック | CRITICALまたはHIGHの問題が検出 |
 
-## 与其他命令的集成
+## 他のコマンドとの統合
 
-* 首先使用 `/rust-test` 确保测试通过
-* 如果出现构建错误，使用 `/rust-build`
-* 提交前使用 `/rust-review`
-* 对于非 Rust 专项问题，使用 `/code-review`
+- まず`/rust-test`を使用してテストが通ることを確認
+- ビルドエラーが発生した場合は`/rust-build`を使用
+- コミット前に`/rust-review`を使用
+- Rust固有でない懸念には`/code-review`を使用
 
-## 相关
+## 関連
 
-* 代理：`agents/rust-reviewer.md`
-* 技能：`skills/rust-patterns/`、`skills/rust-testing/`
+- エージェント: `agents/rust-reviewer.md`
+- スキル: `skills/rust-patterns/`、`skills/rust-testing/`

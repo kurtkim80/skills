@@ -1,28 +1,28 @@
-# Capture Reference
+# キャプチャリファレンス
 
-Code-level details for VideoDB capture sessions. For workflow guide, see [capture.md](capture.md).
+VideoDBキャプチャセッションのコードレベルの詳細。ワークフローガイドは [capture.md](capture.md) を参照。
 
----
+***
 
-## WebSocket Events
+## WebSocketイベント
 
-Real-time events from capture sessions and AI pipelines. No webhooks or polling required.
+キャプチャセッションとAIパイプラインからのリアルタイムイベント。WebhookやポーリングLiveEventを使用しない。
 
-Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump events to `${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}/videodb_events.jsonl`.
+[scripts/ws\_listener.py](../../../../../skills/videodb/scripts/ws_listener.py) を使用して接続し、イベントを `${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}/videodb_events.jsonl` にダンプする。
 
-### Event Channels
+### イベントチャネル
 
-| Channel | Source | Content |
+| チャネル | ソース | コンテンツ |
 |---------|--------|---------|
-| `capture_session` | Session lifecycle | Status changes |
-| `transcript` | `start_transcript()` | Speech-to-text |
-| `visual_index` / `scene_index` | `index_visuals()` | Visual analysis |
-| `audio_index` | `index_audio()` | Audio analysis |
-| `alert` | `create_alert()` | Alert notifications |
+| `capture_session` | セッションライフサイクル | 状態変更 |
+| `transcript` | `start_transcript()` | 音声テキスト変換 |
+| `visual_index` / `scene_index` | `index_visuals()` | ビジュアル分析 |
+| `audio_index` | `index_audio()` | オーディオ分析 |
+| `alert` | `create_alert()` | アラート通知 |
 
-### Session Lifecycle Events
+### セッションライフサイクルイベント
 
-| Event | Status | Key Data |
+| イベント | 状態 | 主要データ |
 |-------|--------|----------|
 | `capture_session.created` | `created` | — |
 | `capture_session.starting` | `starting` | — |
@@ -32,9 +32,10 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 | `capture_session.exported` | `exported` | `exported_video_id`, `stream_url`, `player_url` |
 | `capture_session.failed` | `failed` | `error` |
 
-### Event Structures
+### イベント構造
 
-**Transcript event:**
+**転写イベント：**
+
 ```json
 {
   "channel": "transcript",
@@ -49,7 +50,8 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 }
 ```
 
-**Visual index event:**
+**ビジュアルインデックスイベント：**
+
 ```json
 {
   "channel": "visual_index",
@@ -63,7 +65,8 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 }
 ```
 
-**Audio index event:**
+**オーディオインデックスイベント：**
+
 ```json
 {
   "channel": "audio_index",
@@ -77,7 +80,8 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 }
 ```
 
-**Session active event:**
+**セッションアクティブイベント：**
+
 ```json
 {
   "event": "capture_session.active",
@@ -93,7 +97,8 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 }
 ```
 
-**Session exported event:**
+**セッションエクスポートイベント：**
+
 ```json
 {
   "event": "capture_session.exported",
@@ -107,15 +112,15 @@ Use [scripts/ws_listener.py](../scripts/ws_listener.py) to connect and dump even
 }
 ```
 
-> For latest details, see [VideoDB Realtime Context docs](https://docs.videodb.io/pages/ingest/capture-sdks/realtime-context.md).
+> 最新の詳細については [VideoDB リアルタイムコンテキストドキュメント](https://docs.videodb.io/pages/ingest/capture-sdks/realtime-context.md) を参照。
 
----
+***
 
-## Event Persistence
+## イベント永続化
 
-Use `ws_listener.py` to dump all WebSocket events to a JSONL file for later analysis.
+`ws_listener.py` を使用してすべてのWebSocketイベントをJSONLファイルにダンプして後で分析する。
 
-### Start Listener and Get WebSocket ID
+### リスナーを起動してWebSocket IDを取得する
 
 ```bash
 # Start with --clear to clear old events (recommended for new sessions)
@@ -125,7 +130,7 @@ python scripts/ws_listener.py --clear &
 python scripts/ws_listener.py &
 ```
 
-Or specify a custom output directory:
+またはカスタム出力ディレクトリを指定する：
 
 ```bash
 python scripts/ws_listener.py --clear /path/to/output &
@@ -133,46 +138,50 @@ python scripts/ws_listener.py --clear /path/to/output &
 VIDEODB_EVENTS_DIR=/path/to/output python scripts/ws_listener.py --clear &
 ```
 
-The script outputs `WS_ID=<connection_id>` on the first line, then listens indefinitely.
+スクリプトは最初の行に `WS_ID=<connection_id>` を出力し、その後無限にリッスンする。
 
-**Get the ws_id:**
+**ws\_idを取得する：**
+
 ```bash
 cat "${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}/videodb_ws_id"
 ```
 
-**Stop the listener:**
+**リスナーを停止する：**
+
 ```bash
 kill "$(cat "${VIDEODB_EVENTS_DIR:-$HOME/.local/state/videodb}/videodb_ws_pid")"
 ```
 
-**Functions that accept `ws_connection_id`:**
+**`ws_connection_id` を受け入れる関数：**
 
-| Function | Purpose |
+| 関数 | 目的 |
 |----------|---------|
-| `conn.create_capture_session()` | Session lifecycle events |
-| RTStream methods | See [rtstream-reference.md](rtstream-reference.md) |
+| `conn.create_capture_session()` | セッションライフサイクルイベント |
+| RTStreamメソッド | [rtstream-reference.md](rtstream-reference.md) を参照 |
 
-**Output files** (in output directory, default `${XDG_STATE_HOME:-$HOME/.local/state}/videodb`):
-- `videodb_ws_id` - WebSocket connection ID
-- `videodb_events.jsonl` - All events
-- `videodb_ws_pid` - Process ID for easy termination
+**出力ファイル**（出力ディレクトリ内、デフォルトは `${XDG_STATE_HOME:-$HOME/.local/state}/videodb`）：
 
-**Features:**
-- `--clear` flag to clear events file on start (use for new sessions)
-- Auto-reconnect with exponential backoff on connection drops
-- Graceful shutdown on SIGINT/SIGTERM
-- Connection status logging
+* `videodb_ws_id` - WebSocket接続ID
+* `videodb_events.jsonl` - すべてのイベント
+* `videodb_ws_pid` - 停止用のプロセスID
 
-### JSONL Format
+**機能：**
 
-Each line is a JSON object with added timestamps:
+* 起動時にイベントファイルをクリアするための `--clear` フラグ（新しいセッション用）
+* 接続が切れた場合の指数バックオフによる自動再接続
+* SIGINT/SIGTERMでのグレースフルシャットダウン
+* 接続状態のログ記録
+
+### JSONLフォーマット
+
+各行はタイムスタンプが付加されたJSONオブジェクト：
 
 ```json
 {"ts": "2026-03-02T10:15:30.123Z", "unix_ts": 1772446530.123, "channel": "visual_index", "data": {"text": "..."}}
 {"ts": "2026-03-02T10:15:31.456Z", "unix_ts": 1772446531.456, "event": "capture_session.active", "capture_session_id": "cap-xxx"}
 ```
 
-### Reading Events
+### イベントの読み取り
 
 ```python
 import json
@@ -199,11 +208,11 @@ with events_path.open(encoding="utf-8") as handle:
             visual.append(event)
 ```
 
----
+***
 
-## WebSocket Connection
+## WebSocket接続
 
-Connect to receive real-time AI results from transcription and indexing pipelines.
+転写とインデックスパイプラインからリアルタイムのAI結果を受信するために接続する。
 
 ```python
 ws_wrapper = conn.connect_websocket()
@@ -211,24 +220,24 @@ ws = await ws_wrapper.connect()
 ws_id = ws.connection_id
 ```
 
-| Property / Method | Type | Description |
+| 属性 / メソッド | 型 | 説明 |
 |-------------------|------|-------------|
-| `ws.connection_id` | `str` | Unique connection ID (pass to AI pipeline methods) |
-| `ws.receive()` | `AsyncIterator[dict]` | Async iterator yielding real-time messages |
+| `ws.connection_id` | `str` | 一意の接続ID（AIパイプラインメソッドに渡す） |
+| `ws.receive()` | `AsyncIterator[dict]` | リアルタイムメッセージを生成する非同期イテレータ |
 
----
+***
 
 ## CaptureSession
 
-### Connection Methods
+### 接続メソッド
 
-| Method | Returns | Description |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `conn.create_capture_session(end_user_id, collection_id, ws_connection_id, metadata)` | `CaptureSession` | Create a new capture session |
-| `conn.get_capture_session(capture_session_id)` | `CaptureSession` | Retrieve an existing capture session |
-| `conn.generate_client_token()` | `str` | Generate a client-side authentication token |
+| `conn.create_capture_session(end_user_id, collection_id, ws_connection_id, metadata)` | `CaptureSession` | 新しいキャプチャセッションを作成する |
+| `conn.get_capture_session(capture_session_id)` | `CaptureSession` | 既存のキャプチャセッションを取得する |
+| `conn.generate_client_token()` | `str` | クライアント認証トークンを生成する |
 
-### Create a Capture Session
+### キャプチャセッションの作成
 
 ```python
 from pathlib import Path
@@ -244,31 +253,31 @@ session = conn.create_capture_session(
 print(f"Session ID: {session.id}")
 ```
 
-> **Note:** `end_user_id` is required and identifies the user initiating the capture. For testing or demo purposes, any unique string identifier works (e.g., `"demo-user"`, `"test-123"`).
+> **注意：** `end_user_id` は必須で、キャプチャを開始するユーザーを識別するために使用される。テストやデモ目的には任意の一意の文字列識別子が有効（例：`"demo-user"`、`"test-123"`）。
 
-### CaptureSession Properties
+### CaptureSession属性
 
-| Property | Type | Description |
+| 属性 | 型 | 説明 |
 |----------|------|-------------|
-| `session.id` | `str` | Unique capture session ID |
+| `session.id` | `str` | 一意のキャプチャセッションID |
 
-### CaptureSession Methods
+### CaptureSessionメソッド
 
-| Method | Returns | Description |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `session.get_rtstream(type)` | `list[RTStream]` | Get RTStreams by type: `"mic"`, `"screen"`, or `"system_audio"` |
+| `session.get_rtstream(type)` | `list[RTStream]` | タイプ別にRTStreamを取得：`"mic"`、`"screen"`、または `"system_audio"` |
 
-### Generate a Client Token
+### クライアントトークンの生成
 
 ```python
 token = conn.generate_client_token()
 ```
 
----
+***
 
 ## CaptureClient
 
-The client runs on the user's machine and handles permissions, channel discovery, and streaming.
+クライアントはユーザーのマシン上で動作し、権限、チャネルの発見、ストリーミングを処理する。
 
 ```python
 from videodb.capture import CaptureClient
@@ -276,24 +285,24 @@ from videodb.capture import CaptureClient
 client = CaptureClient(client_token=token)
 ```
 
-### CaptureClient Methods
+### CaptureClientメソッド
 
-| Method | Returns | Description |
+| メソッド | 戻り値 | 説明 |
 |--------|---------|-------------|
-| `await client.request_permission(type)` | `None` | Request device permission (`"microphone"`, `"screen_capture"`) |
-| `await client.list_channels()` | `Channels` | Discover available audio/video channels |
-| `await client.start_capture_session(capture_session_id, channels, primary_video_channel_id)` | `None` | Start streaming selected channels |
-| `await client.stop_capture()` | `None` | Gracefully stop the capture session |
-| `await client.shutdown()` | `None` | Clean up client resources |
+| `await client.request_permission(type)` | `None` | デバイスの権限をリクエストする（`"microphone"`、`"screen_capture"`） |
+| `await client.list_channels()` | `Channels` | 利用可能なオーディオ/ビデオチャネルを発見する |
+| `await client.start_capture_session(capture_session_id, channels, primary_video_channel_id)` | `None` | 選択したチャネルのストリーミングを開始する |
+| `await client.stop_capture()` | `None` | キャプチャセッションをグレースフルに停止する |
+| `await client.shutdown()` | `None` | クライアントリソースをクリーンアップする |
 
-### Request Permissions
+### 権限のリクエスト
 
 ```python
 await client.request_permission("microphone")
 await client.request_permission("screen_capture")
 ```
 
-### Start a Session
+### セッションの開始
 
 ```python
 selected_channels = [c for c in [mic, display, system_audio] if c]
@@ -304,18 +313,18 @@ await client.start_capture_session(
 )
 ```
 
-### Stop a Session
+### セッションの停止
 
 ```python
 await client.stop_capture()
 await client.shutdown()
 ```
 
----
+***
 
-## Channels
+## チャネル
 
-Returned by `client.list_channels()`. Groups available devices by type.
+`client.list_channels()` によって返される。利用可能なデバイスをタイプ別にグループ化する。
 
 ```python
 channels = await client.list_channels()
@@ -327,43 +336,43 @@ display = channels.displays.default
 system_audio = channels.system_audio.default
 ```
 
-### Channel Groups
+### チャネルグループ
 
-| Property | Type | Description |
+| 属性 | 型 | 説明 |
 |----------|------|-------------|
-| `channels.mics` | `ChannelGroup` | Available microphones |
-| `channels.displays` | `ChannelGroup` | Available screen displays |
-| `channels.system_audio` | `ChannelGroup` | Available system audio sources |
+| `channels.mics` | `ChannelGroup` | 利用可能なマイク |
+| `channels.displays` | `ChannelGroup` | 利用可能な画面ディスプレイ |
+| `channels.system_audio` | `ChannelGroup` | 利用可能なシステムオーディオソース |
 
-### ChannelGroup Methods & Properties
+### ChannelGroupメソッドと属性
 
-| Member | Type | Description |
+| メンバー | 型 | 説明 |
 |--------|------|-------------|
-| `group.default` | `Channel` | Default channel in the group (or `None`) |
-| `group.all()` | `list[Channel]` | All channels in the group |
+| `group.default` | `Channel` | グループのデフォルトチャネル（または `None`） |
+| `group.all()` | `list[Channel]` | グループのすべてのチャネル |
 
-### Channel Properties
+### チャネル属性
 
-| Property | Type | Description |
+| 属性 | 型 | 説明 |
 |----------|------|-------------|
-| `ch.id` | `str` | Unique channel ID |
-| `ch.type` | `str` | Channel type (`"mic"`, `"display"`, `"system_audio"`) |
-| `ch.name` | `str` | Human-readable channel name |
-| `ch.store` | `bool` | Whether to persist the recording (set to `True` to save) |
+| `ch.id` | `str` | 一意のチャネルID |
+| `ch.type` | `str` | チャネルタイプ（`"mic"`、`"display"`、`"system_audio"`） |
+| `ch.name` | `str` | 人間が読めるチャネル名 |
+| `ch.store` | `bool` | 録画を永続化するかどうか（保存するには `True` に設定） |
 
-Without `store = True`, streams are processed in real-time but not saved.
+`store = True` がない場合、ストリームはリアルタイムで処理されるが保存されない。
 
----
+***
 
-## RTStreams and AI Pipelines
+## RTStreamとAIパイプライン
 
-After session is active, retrieve RTStream objects with `session.get_rtstream()`.
+セッションがアクティブになったら、`session.get_rtstream()` を使用してRTStreamオブジェクトを取得する。
 
-For RTStream methods (indexing, transcription, alerts, batch config), see [rtstream-reference.md](rtstream-reference.md).
+RTStreamメソッド（インデックス作成、転写、アラート、バッチ設定）については [rtstream-reference.md](rtstream-reference.md) を参照。
 
----
+***
 
-## Session Lifecycle
+## セッションライフサイクル
 
 ```
   create_capture_session()

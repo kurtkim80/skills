@@ -1,16 +1,12 @@
 ---
-title: "Project Manager Agent — AI Coding Agent & Codex Skill"
-description: "Project Manager agent for sprint planning, Jira/Confluence workflows, Scrum ceremonies, and stakeholder reporting. Orchestrates project-management. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-project-manager
+description: Project Manager agent for sprint planning, Jira/Confluence workflows, Scrum ceremonies, and stakeholder reporting. Orchestrates project-management skills. Use when running delivery operations — e.g., planning a sprint with capacity and carry-over math in Jira, or assembling a portfolio health report for stakeholders from ticket and velocity data.
+domain: pm
+model: sonnet
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 # Project Manager Agent
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-clipboard-check-outline: Project Management</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/project-management/cs-project-manager.md">Source</a></span>
-</div>
-
 
 ## Purpose
 
@@ -24,103 +20,103 @@ The cs-project-manager agent bridges the gap between project execution and strat
 
 ### Senior PM
 
-**Skill Location:** [`skills/senior-pm`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm)
+**Skill Location:** `../../project-management/skills/senior-pm/`
 
 **Python Tools:**
 
 1. **Project Health Dashboard**
    - **Purpose:** Generate portfolio-level health dashboard with RAG status across all active projects
-   - **Path:** [`scripts/project_health_dashboard.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/scripts/project_health_dashboard.py)
+   - **Path:** `../../project-management/skills/senior-pm/scripts/project_health_dashboard.py`
    - **Usage:** `python ../../project-management/skills/senior-pm/scripts/project_health_dashboard.py sample_project_data.json`
    - **Features:** Schedule variance, budget tracking, risk exposure, milestone status, RAG indicators
 
 2. **Risk Matrix Analyzer**
    - **Purpose:** Quantitative risk analysis with probability-impact matrices and Expected Monetary Value (EMV)
-   - **Path:** [`scripts/risk_matrix_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/scripts/risk_matrix_analyzer.py)
+   - **Path:** `../../project-management/skills/senior-pm/scripts/risk_matrix_analyzer.py`
    - **Usage:** `python ../../project-management/skills/senior-pm/scripts/risk_matrix_analyzer.py risks.json`
    - **Features:** Risk scoring, heat map generation, mitigation tracking, EMV calculation
 
 3. **Resource Capacity Planner**
    - **Purpose:** Team resource allocation and capacity forecasting across sprints and projects
-   - **Path:** [`scripts/resource_capacity_planner.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/scripts/resource_capacity_planner.py)
+   - **Path:** `../../project-management/skills/senior-pm/scripts/resource_capacity_planner.py`
    - **Usage:** `python ../../project-management/skills/senior-pm/scripts/resource_capacity_planner.py team_data.json`
    - **Features:** Utilization analysis, over-allocation detection, capacity forecasting, cross-project balancing
 
 **Knowledge Bases:**
 
-- [`references/portfolio-prioritization-models.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/references/portfolio-prioritization-models.md) -- WSJF, MoSCoW, Cost of Delay, portfolio scoring frameworks
-- [`references/risk-management-framework.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/references/risk-management-framework.md) -- Risk identification, qualitative/quantitative analysis, response strategies
-- [`references/portfolio-kpis.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/references/portfolio-kpis.md) -- KPI definitions, tracking cadences, executive reporting metrics
+- `../../project-management/skills/senior-pm/references/portfolio-prioritization-models.md` -- WSJF, MoSCoW, Cost of Delay, portfolio scoring frameworks
+- `../../project-management/skills/senior-pm/references/risk-management-framework.md` -- Risk identification, qualitative/quantitative analysis, response strategies
+- `../../project-management/skills/senior-pm/references/portfolio-kpis.md` -- KPI definitions, tracking cadences, executive reporting metrics
 
 **Templates:**
 
-- [`assets/executive_report_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/assets/executive_report_template.md) -- Executive status report with RAG, risks, decisions needed
-- [`assets/project_charter_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/assets/project_charter_template.md) -- Project charter with scope, objectives, constraints, stakeholders
-- [`assets/raci_matrix_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/assets/raci_matrix_template.md) -- Responsibility assignment matrix for cross-functional teams
+- `../../project-management/skills/senior-pm/assets/executive_report_template.md` -- Executive status report with RAG, risks, decisions needed
+- `../../project-management/skills/senior-pm/assets/project_charter_template.md` -- Project charter with scope, objectives, constraints, stakeholders
+- `../../project-management/skills/senior-pm/assets/raci_matrix_template.md` -- Responsibility assignment matrix for cross-functional teams
 
 ### Scrum Master
 
-**Skill Location:** [`skills/scrum-master`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master)
+**Skill Location:** `../../project-management/skills/scrum-master/`
 
 **Python Tools:**
 
 1. **Sprint Health Scorer**
    - **Purpose:** Quantitative sprint health assessment across scope, velocity, quality, and team morale
-   - **Path:** [`scripts/sprint_health_scorer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/scripts/sprint_health_scorer.py)
+   - **Path:** `../../project-management/skills/scrum-master/scripts/sprint_health_scorer.py`
    - **Usage:** `python ../../project-management/skills/scrum-master/scripts/sprint_health_scorer.py sample_sprint_data.json`
    - **Features:** Multi-dimensional scoring (0-100), trend analysis, health indicators, actionable recommendations
 
 2. **Velocity Analyzer**
    - **Purpose:** Historical velocity analysis with forecasting and confidence intervals
-   - **Path:** [`scripts/velocity_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/scripts/velocity_analyzer.py)
+   - **Path:** `../../project-management/skills/scrum-master/scripts/velocity_analyzer.py`
    - **Usage:** `python ../../project-management/skills/scrum-master/scripts/velocity_analyzer.py sprint_history.json`
    - **Features:** Rolling averages, standard deviation, sprint-over-sprint trends, capacity prediction
 
 3. **Retrospective Analyzer**
    - **Purpose:** Structured retrospective analysis with action item tracking and theme extraction
-   - **Path:** [`scripts/retrospective_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/scripts/retrospective_analyzer.py)
+   - **Path:** `../../project-management/skills/scrum-master/scripts/retrospective_analyzer.py`
    - **Usage:** `python ../../project-management/skills/scrum-master/scripts/retrospective_analyzer.py retro_notes.json`
    - **Features:** Theme clustering, sentiment analysis, action item extraction, trend tracking across sprints
 
 **Knowledge Bases:**
 
-- [`references/retro-formats.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/references/retro-formats.md) -- Start/Stop/Continue, 4Ls, Sailboat, Mad/Sad/Glad, Starfish formats
-- [`references/team-dynamics-framework.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/references/team-dynamics-framework.md) -- Tuckman stages, psychological safety, conflict resolution
-- [`references/velocity-forecasting-guide.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/references/velocity-forecasting-guide.md) -- Monte Carlo simulation, confidence ranges, capacity planning
+- `../../project-management/skills/scrum-master/references/retro-formats.md` -- Start/Stop/Continue, 4Ls, Sailboat, Mad/Sad/Glad, Starfish formats
+- `../../project-management/skills/scrum-master/references/team-dynamics-framework.md` -- Tuckman stages, psychological safety, conflict resolution
+- `../../project-management/skills/scrum-master/references/velocity-forecasting-guide.md` -- Monte Carlo simulation, confidence ranges, capacity planning
 
 **Templates:**
 
-- [`assets/sprint_report_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/assets/sprint_report_template.md) -- Sprint review report with burndown, velocity, demo notes
-- [`assets/team_health_check_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/assets/team_health_check_template.md) -- Spotify-style team health check across 8 dimensions
+- `../../project-management/skills/scrum-master/assets/sprint_report_template.md` -- Sprint review report with burndown, velocity, demo notes
+- `../../project-management/skills/scrum-master/assets/team_health_check_template.md` -- Spotify-style team health check across 8 dimensions
 
 ### Jira Expert
 
-**Skill Location:** [`skills/jira-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert)
+**Skill Location:** `../../project-management/skills/jira-expert/`
 
 **Knowledge Bases:**
 
-- [`references/jql-examples.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/jql-examples.md) -- JQL query patterns for backlog grooming, sprint reporting, SLA tracking
-- [`references/automation-examples.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/automation-examples.md) -- Jira automation rule templates for common workflows
-- [`references/AUTOMATION.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/AUTOMATION.md) -- Comprehensive automation guide with triggers, conditions, actions
-- [`references/WORKFLOWS.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/WORKFLOWS.md) -- Workflow design patterns, transition rules, validators, post-functions
+- `../../project-management/skills/jira-expert/references/jql-examples.md` -- JQL query patterns for backlog grooming, sprint reporting, SLA tracking
+- `../../project-management/skills/jira-expert/references/automation-examples.md` -- Jira automation rule templates for common workflows
+- `../../project-management/skills/jira-expert/references/AUTOMATION.md` -- Comprehensive automation guide with triggers, conditions, actions
+- `../../project-management/skills/jira-expert/references/WORKFLOWS.md` -- Workflow design patterns, transition rules, validators, post-functions
 
 ### Confluence Expert
 
-**Skill Location:** [`skills/confluence-expert`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/confluence-expert)
+**Skill Location:** `../../project-management/skills/confluence-expert/`
 
 **Knowledge Bases:**
 
-- [`references/templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/confluence-expert/references/templates.md) -- Page templates for sprint plans, meeting notes, decision logs, architecture docs
+- `../../project-management/skills/confluence-expert/references/templates.md` -- Page templates for sprint plans, meeting notes, decision logs, architecture docs
 
 ### Atlassian Admin
 
-**Skill Location:** [`skills/atlassian-admin`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/atlassian-admin)
+**Skill Location:** `../../project-management/skills/atlassian-admin/`
 
 Covers user provisioning, permission schemes, project configuration, and integration setup. No scripts or references yet -- relies on SKILL.md workflows.
 
 ### Atlassian Templates
 
-**Skill Location:** [`skills/atlassian-templates`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/atlassian-templates)
+**Skill Location:** `../../project-management/skills/atlassian-templates/`
 
 Covers blueprint creation, custom page layouts, and reusable Confluence/Jira components. No scripts or references yet -- relies on SKILL.md workflows.
 
@@ -141,7 +137,7 @@ Covers blueprint creation, custom page layouts, and reusable Confluence/Jira com
    - Set sprint capacity at 80% of average velocity (buffer for unknowns)
 
 2. **Query Backlog via JQL** - Use jira-expert JQL patterns to pull prioritized candidates:
-   - Reference: [`references/jql-examples.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/jql-examples.md)
+   - Reference: `../../project-management/skills/jira-expert/references/jql-examples.md`
    - Filter by priority, story points estimated, team assignment
    - Identify blocked items, external dependencies, carry-overs from previous sprint
 
@@ -154,17 +150,17 @@ Covers blueprint creation, custom page layouts, and reusable Confluence/Jira com
    - Adjust sprint capacity based on actual availability
 
 4. **Select Sprint Backlog** - Commit items within capacity:
-   - Apply WSJF or priority-based selection (ref: [`references/portfolio-prioritization-models.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/references/portfolio-prioritization-models.md))
+   - Apply WSJF or priority-based selection (ref: `../../project-management/skills/senior-pm/references/portfolio-prioritization-models.md`)
    - Ensure sprint goal alignment -- every item should contribute to 1-2 goals
    - Include 10-15% capacity for bug fixes and operational work
 
 5. **Document Sprint Plan** - Create Confluence sprint plan page:
-   - Use template from [`references/templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/confluence-expert/references/templates.md)
+   - Use template from `../../project-management/skills/confluence-expert/references/templates.md`
    - Include sprint goal, committed stories, capacity breakdown, risks
    - Link to Jira sprint board for live tracking
 
 6. **Set Up Sprint Tracking** - Configure dashboards and automation:
-   - Create burndown/burnup dashboard (ref: [`references/AUTOMATION.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/AUTOMATION.md))
+   - Create burndown/burnup dashboard (ref: `../../project-management/skills/jira-expert/references/AUTOMATION.md`)
    - Set up daily standup reminder automation
    - Configure sprint scope change alerts
 
@@ -220,13 +216,13 @@ cat capacity_report.txt
    - Forecast resource needs for next quarter
 
 5. **Prepare Executive Report** - Assemble findings into report:
-   - Use template: [`assets/executive_report_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/assets/executive_report_template.md)
+   - Use template: `../../project-management/skills/senior-pm/assets/executive_report_template.md`
    - Include RAG summary, risk heatmap, resource utilization chart
    - Highlight decisions needed from leadership
    - Provide recommendations with supporting data
 
 6. **Publish to Confluence** - Create executive dashboard page:
-   - Reference KPI definitions from [`references/portfolio-kpis.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/references/portfolio-kpis.md)
+   - Reference KPI definitions from `../../project-management/skills/senior-pm/references/portfolio-kpis.md`
    - Embed Jira macros for live data
    - Set up weekly refresh cadence
 
@@ -260,7 +256,7 @@ cat resource_report.txt
    - Compare against previous sprint scores for trend analysis
 
 2. **Select Retro Format** - Choose format based on team needs:
-   - Reference: [`references/retro-formats.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/references/retro-formats.md)
+   - Reference: `../../project-management/skills/scrum-master/references/retro-formats.md`
    - **Start/Stop/Continue**: General-purpose, good for new teams
    - **4Ls (Liked/Learned/Lacked/Longed For)**: Focuses on learning and growth
    - **Sailboat**: Visual metaphor for anchors (blockers) and wind (accelerators)
@@ -271,7 +267,7 @@ cat resource_report.txt
    - Present sprint metrics as context (not judgment)
    - Time-box each section (5 min brainstorm, 10 min discuss, 5 min vote)
    - Use dot voting to prioritize discussion topics
-   - Reference team dynamics from [`references/team-dynamics-framework.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/references/team-dynamics-framework.md)
+   - Reference team dynamics from `../../project-management/skills/scrum-master/references/team-dynamics-framework.md`
 
 4. **Analyze Retro Output** - Extract structured insights:
    ```bash
@@ -288,7 +284,7 @@ cat resource_report.txt
    - Add action items to next sprint backlog
 
 6. **Document in Confluence** - Publish retro summary:
-   - Use sprint report template: [`assets/sprint_report_template.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/assets/sprint_report_template.md)
+   - Use sprint report template: `../../project-management/skills/scrum-master/assets/sprint_report_template.md`
    - Include sprint health score, retro themes, action items, metrics trends
    - Link to previous retro pages for longitudinal tracking
 
@@ -331,22 +327,22 @@ cat retro_analysis.txt
    - Define priority scheme and SLA targets
 
 3. **Design Workflows** - Build workflows matching team process:
-   - Reference: [`references/WORKFLOWS.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/WORKFLOWS.md)
+   - Reference: `../../project-management/skills/jira-expert/references/WORKFLOWS.md`
    - Map states: Backlog > Ready > In Progress > Review > QA > Done
    - Add transitions with conditions (e.g., assignee required for In Progress)
    - Configure validators (e.g., story points required before Done)
    - Set up post-functions (e.g., auto-assign reviewer, notify channel)
 
 4. **Configure Automation** - Set up time-saving automation rules:
-   - Reference: [`references/AUTOMATION.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/AUTOMATION.md)
-   - Examples from: [`references/automation-examples.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/automation-examples.md)
+   - Reference: `../../project-management/skills/jira-expert/references/AUTOMATION.md`
+   - Examples from: `../../project-management/skills/jira-expert/references/automation-examples.md`
    - Auto-transition: Move to In Progress when branch created
    - Auto-assign: Rotate assignments based on workload
    - Notifications: Slack alerts for blocked items, SLA breaches
    - Cleanup: Auto-close stale items after 30 days
 
 5. **Set Up Confluence Space** - Create team knowledge base:
-   - Reference: [`references/templates.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/confluence-expert/references/templates.md)
+   - Reference: `../../project-management/skills/confluence-expert/references/templates.md`
    - Create space with standard page hierarchy:
      - Home (team overview, quick links)
      - Sprint Plans (per-sprint documentation)
@@ -360,7 +356,7 @@ cat retro_analysis.txt
    - Burndown/burnup chart gadget
    - Velocity chart for historical tracking
    - SLA compliance tracker
-   - Use JQL patterns from [`references/jql-examples.md`](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/references/jql-examples.md)
+   - Use JQL patterns from `../../project-management/skills/jira-expert/references/jql-examples.md`
 
 7. **Onboard Team** - Walk team through the setup:
    - Document workflow rules and why they exist
@@ -497,19 +493,19 @@ echo "Template: ../../project-management/skills/senior-pm/assets/executive_repor
 
 ## Related Agents
 
-- [cs-product-manager](https://github.com/alirezarezvani/claude-skills/tree/main/agents/product/cs-product-manager.md) -- Product prioritization with RICE, customer discovery, PRD development
-- [cs-agile-product-owner](https://github.com/alirezarezvani/claude-skills/tree/main/agents/product/cs-agile-product-owner.md) -- User story generation, backlog management, acceptance criteria (planned)
+- [cs-product-manager](../product/cs-product-manager.md) -- Product prioritization with RICE, customer discovery, PRD development
+- [cs-agile-product-owner](../product/cs-agile-product-owner.md) -- User story generation, backlog management, acceptance criteria (planned)
 - cs-scrum-master -- Dedicated Scrum ceremony facilitation and team coaching (planned)
 
 ## References
 
-- **Senior PM Skill:** [../../project-management/skills/senior-pm/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/senior-pm/SKILL.md)
-- **Scrum Master Skill:** [../../project-management/skills/scrum-master/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/scrum-master/SKILL.md)
-- **Jira Expert Skill:** [../../project-management/skills/jira-expert/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/jira-expert/SKILL.md)
-- **Confluence Expert Skill:** [../../project-management/skills/confluence-expert/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/confluence-expert/SKILL.md)
-- **Atlassian Admin Skill:** [../../project-management/skills/atlassian-admin/SKILL.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/skills/atlassian-admin/SKILL.md)
-- **PM Domain Guide:** [../../project-management/CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/project-management/CLAUDE.md)
-- **Agent Development Guide:** [../CLAUDE.md](https://github.com/alirezarezvani/claude-skills/tree/main/agents/CLAUDE.md)
+- **Senior PM Skill:** [../../project-management/skills/senior-pm/SKILL.md](../../project-management/skills/senior-pm/SKILL.md)
+- **Scrum Master Skill:** [../../project-management/skills/scrum-master/SKILL.md](../../project-management/skills/scrum-master/SKILL.md)
+- **Jira Expert Skill:** [../../project-management/skills/jira-expert/SKILL.md](../../project-management/skills/jira-expert/SKILL.md)
+- **Confluence Expert Skill:** [../../project-management/skills/confluence-expert/SKILL.md](../../project-management/skills/confluence-expert/SKILL.md)
+- **Atlassian Admin Skill:** [../../project-management/skills/atlassian-admin/SKILL.md](../../project-management/skills/atlassian-admin/SKILL.md)
+- **PM Domain Guide:** [../../project-management/CLAUDE.md](../../project-management/CLAUDE.md)
+- **Agent Development Guide:** [../CLAUDE.md](../CLAUDE.md)
 
 ---
 

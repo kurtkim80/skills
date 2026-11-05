@@ -1,16 +1,12 @@
 ---
-title: "Financial Analyst — AI Coding Agent & Codex Skill"
-description: "Financial Analyst agent for DCF valuation, financial modeling, budgeting, forecasting, and SaaS metrics (ARR, MRR, churn, CAC, LTV, NRR). Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-financial-analyst
+description: Financial Analyst agent for DCF valuation, financial modeling, budgeting, forecasting, and SaaS metrics (ARR, MRR, churn, CAC, LTV, NRR). Orchestrates finance skills. Spawn when users need financial analysis, valuation models, budget planning, ratio analysis, SaaS health checks, or unit economics projections.
+domain: finance
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
-# Financial Analyst
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-calculator-variant: Finance</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/finance/cs-financial-analyst.md">Source</a></span>
-</div>
-
+# cs-financial-analyst
 
 ## Role & Expertise
 
@@ -109,5 +105,5 @@ python ../../finance/skills/financial-analyst/scripts/dcf_valuation.py valuation
 
 ## Related Agents
 
-- [cs-ceo-advisor](https://github.com/alirezarezvani/claude-skills/tree/main/agents/c-level/cs-ceo-advisor.md) -- Strategic financial decisions, board reporting, and fundraising planning
-- [cs-growth-strategist](https://github.com/alirezarezvani/claude-skills/tree/main/agents/business-growth/cs-growth-strategist.md) -- Revenue operations data and pipeline forecasting inputs
+- [cs-ceo-advisor](../c-level/cs-ceo-advisor.md) -- Strategic financial decisions, board reporting, and fundraising planning
+- [cs-growth-strategist](../business-growth/cs-growth-strategist.md) -- Revenue operations data and pipeline forecasting inputs

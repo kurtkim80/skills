@@ -1,16 +1,12 @@
 ---
-title: "Quality Regulatory — AI Coding Agent & Codex Skill"
-description: "Quality & Regulatory agent for ISO 13485 QMS, MDR compliance, FDA submissions, GDPR/DSGVO, and ISMS audits. Orchestrates ra-qm-team skills. Spawn. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-quality-regulatory
+description: Quality & Regulatory agent for ISO 13485 QMS, MDR compliance, FDA submissions, GDPR/DSGVO, and ISMS audits. Orchestrates ra-qm-team skills. Spawn when users need regulatory strategy, audit preparation, CAPA management, risk management, or compliance documentation.
+domain: ra-qm
+model: sonnet
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
-# Quality Regulatory
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-shield-check-outline: Regulatory & Quality</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/ra-qm-team/cs-quality-regulatory.md">Source</a></span>
-</div>
-
+# cs-quality-regulatory
 
 ## Role & Expertise
 
@@ -85,5 +81,5 @@ Regulatory affairs and quality management specialist for medical device and heal
 
 ## Related Agents
 
-- [cs-engineering-lead](https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering-team/cs-engineering-lead.md) -- Engineering process alignment for design controls and software validation
-- [cs-product-manager](https://github.com/alirezarezvani/claude-skills/tree/main/agents/product/cs-product-manager.md) -- Product requirements traceability and risk-benefit analysis coordination
+- [cs-engineering-lead](../engineering-team/cs-engineering-lead.md) -- Engineering process alignment for design controls and software validation
+- [cs-product-manager](../product/cs-product-manager.md) -- Product requirements traceability and risk-benefit analysis coordination

@@ -1,15 +1,9 @@
 ---
-title: "/cs-webinar — Slash Command for AI Coding Agents"
-description: "/cs-webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-webinar"
+description: "/cs-webinar — Webinar & virtual-event marketing workflow. Plan a webinar from scratch (sized backward from the business goal), rescue one whose numbers disappointed (score the funnel, fix the broken stage), or turn a past webinar into an evergreen on-demand lead engine. Covers the full funnel: registration, promotion runway, show-up, live engagement, live-to-close, and segmented follow-up. Treats a webinar as a funnel, not an event."
 ---
 
-# /cs-webinar
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/cs-webinar.md">Source</a></span>
-</div>
-
+# /cs-webinar — Webinar & Virtual Event Marketing
 
 **Command:** `/cs-webinar [mode] [args]`
 
@@ -143,8 +137,8 @@ The scorer calibrates per audience temperature (warmer audiences convert better 
 
 ## Related
 
-- Agent: [`cs-webinar-marketer`](https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-webinar-marketer.md)
-- Skill: [`webinar-marketing`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/webinar-marketing/SKILL.md)
+- Agent: [`cs-webinar-marketer`](../agents/marketing/cs-webinar-marketer.md)
+- Skill: [`webinar-marketing`](../marketing-skill/skills/webinar-marketing/SKILL.md)
 - Companion: `/cs-aeo` (get supporting content cited by AI search), launch-strategy (full launches)
 
 ---

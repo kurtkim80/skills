@@ -1,60 +1,59 @@
-# 验证命令
+# Comando Verify
 
-对当前代码库状态执行全面验证。
+Ejecutar verificación exhaustiva sobre el estado actual del código base.
 
-## 说明
+## Instrucciones
 
-请严格按照以下顺序执行验证：
+Ejecutar la verificación exactamente en este orden:
 
-1. **构建检查**
-   * 运行此项目的构建命令
-   * 如果失败，报告错误并**停止**
+1. **Verificación de Build**
+   - Ejecutar el comando de build para este proyecto
+   - Si falla, reportar los errores y DETENER
 
-2. **类型检查**
-   * 运行 TypeScript/类型检查器
-   * 报告所有错误，包含文件:行号
+2. **Verificación de Tipos**
+   - Ejecutar TypeScript/verificador de tipos
+   - Reportar todos los errores con archivo:línea
 
-3. **代码检查**
-   * 运行代码检查器
-   * 报告警告和错误
+3. **Verificación de Lint**
+   - Ejecutar el linter
+   - Reportar advertencias y errores
 
-4. **测试套件**
-   * 运行所有测试
-   * 报告通过/失败数量
-   * 报告覆盖率百分比
+4. **Suite de Pruebas**
+   - Ejecutar todas las pruebas
+   - Reportar cantidad de pasadas/fallidas
+   - Reportar porcentaje de cobertura
 
-5. **Console.log 审计**
-   * 在源文件中搜索 console.log
-   * 报告位置
+5. **Auditoría de console.log**
+   - Buscar console.log en los archivos fuente
+   - Reportar las ubicaciones
 
-6. **Git 状态**
-   * 显示未提交的更改
-   * 显示自上次提交以来修改的文件
+6. **Estado de Git**
+   - Mostrar cambios no confirmados
+   - Mostrar archivos modificados desde el último commit
 
-## 输出
+## Salida
 
-生成一份简洁的验证报告：
+Generar un reporte de verificación resumido:
 
 ```
-验证： [通过/失败]
+VERIFICACIÓN: [PASÓ/FALLÓ]
 
-构建：    [成功/失败]
-类型：    [成功/X 错误]
-代码检查： [成功/X 问题]
-测试：    [X/Y 通过，Z% 覆盖率]
-密钥检查： [成功/X 发现]
-日志：     [成功/X console.logs]
+Build:    [OK/FALLÓ]
+Tipos:    [OK/X errores]
+Lint:     [OK/X problemas]
+Pruebas:  [X/Y pasaron, Z% cobertura]
+Secretos: [OK/X encontrados]
+Logs:     [OK/X console.log]
 
-准备提交 PR： [是/否]
+Listo para PR: [SÍ/NO]
 ```
 
-如果存在任何关键问题，列出它们并提供修复建议。
+Si hay algún problema crítico, listarlos con sugerencias de corrección.
 
-## 参数
+## Argumentos
 
-$ARGUMENTS 可以是：
-
-* `quick` - 仅构建 + 类型检查
-* `full` - 所有检查（默认）
-* `pre-commit` - 与提交相关的检查
-* `pre-pr` - 完整检查加安全扫描
+$ARGUMENTS puede ser:
+- `quick` - Solo build + tipos
+- `full` - Todas las verificaciones (por defecto)
+- `pre-commit` - Verificaciones relevantes para commits
+- `pre-pr` - Escaneo de seguridad más verificaciones completas

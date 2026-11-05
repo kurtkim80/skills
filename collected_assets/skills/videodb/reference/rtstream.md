@@ -1,39 +1,33 @@
-# RTStream Guide
+# RTStreamガイド
 
-## Overview
+## 概要
 
-RTStream enables real-time ingestion of live video streams (RTSP/RTMP) and desktop capture sessions. Once connected, you can record, index, search, and export content from live sources.
+RTStreamはライブビデオストリーム（RTSP/RTMP）とデスクトップキャプチャセッションのリアルタイム取り込みをサポートする。接続後は、ライブフィードのコンテンツを録画、インデックス作成、検索、エクスポートできる。
 
-For code-level details (SDK methods, parameters, examples), see [rtstream-reference.md](rtstream-reference.md).
+コードレベルの詳細（SDKメソッド、パラメータ、例）については [rtstream-reference.md](rtstream-reference.md) を参照。
 
-## Use Cases
+## ユースケース
 
-- **Security & Monitoring**: Connect RTSP cameras, detect events, trigger alerts
-- **Live Broadcasts**: Ingest RTMP streams, index in real-time, enable instant search
-- **Meeting Recording**: Capture desktop screen and audio, transcribe live, export recordings
-- **Event Processing**: Monitor live feeds, run AI analysis, respond to detected content
+* **セキュリティと監視**：RTSPカメラに接続し、イベントを検出し、アラートをトリガーする
+* **ライブブロードキャスト**：RTMPストリームを取り込み、リアルタイムでインデックス化し、即時検索を実現する
+* **会議録画**：デスクトップ画面とオーディオをキャプチャし、リアルタイムで転写し、録画をエクスポートする
+* **イベント処理**：ライブビデオストリームを監視し、AI分析を実行し、検出されたコンテンツに応答する
 
-## Quick Start
+## クイックスタート
 
-1. **Connect to a live stream** (RTSP/RTMP URL) or get RTStream from a capture session
+1. **ライブストリームに接続する**（RTSP/RTMP URL）またはキャプチャセッションからRTStreamを取得する
+2. **取り込みを開始する**ことでライブコンテンツの録画を始める
+3. **AIパイプラインを起動する**ことでリアルタイムインデックス作成（オーディオ、ビジュアル、転写）を行う
+4. **WebSocketでイベントを監視する**ことでリアルタイムAI結果とアラートを取得する
+5. **完了したら取り込みを停止する**
+6. **ビデオとしてエクスポートする**ことで永続ストレージとさらなる処理を行う
+7. **録画を検索する**ことで特定のモーメントを見つける
 
-2. **Start ingestion** to begin recording the live content
+## RTStreamソース
 
-3. **Start AI pipelines** for real-time indexing (audio, visual, transcription)
+### RTSP/RTMPストリームから
 
-4. **Monitor events** via WebSocket for live AI results and alerts
-
-5. **Stop ingestion** when done
-
-6. **Export to video** for permanent storage and further processing
-
-7. **Search the recording** to find specific moments
-
-## RTStream Sources
-
-### From RTSP/RTMP Streams
-
-Connect directly to a live video source:
+ライブビデオフィードに直接接続する：
 
 ```python
 rtstream = coll.connect_rtstream(
@@ -42,9 +36,9 @@ rtstream = coll.connect_rtstream(
 )
 ```
 
-### From Capture Sessions
+### キャプチャセッションから
 
-Get RTStreams from desktop capture (mic, screen, system audio):
+デスクトップキャプチャ（マイク、画面、システムオーディオ）からRTStreamを取得する：
 
 ```python
 session = conn.get_capture_session(session_id)
@@ -54,12 +48,12 @@ displays = session.get_rtstream("screen")
 system_audios = session.get_rtstream("system_audio")
 ```
 
-For capture session workflow, see [capture.md](capture.md).
+キャプチャセッションのワークフローについては [capture.md](capture.md) を参照。
 
----
+***
 
-## Scripts
+## スクリプト
 
-| Script | Description |
+| スクリプト | 説明 |
 |--------|-------------|
-| `scripts/ws_listener.py` | WebSocket event listener for real-time AI results |
+| `scripts/ws_listener.py` | リアルタイムAI結果のためのWebSocketイベントリスナー |

@@ -1,8 +1,7 @@
 ---
 name: rust-patterns
-description: Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and best practices for building safe, performant applications. Use when writing or reviewing Rust code and ownership, error handling, traits, or concurrency is in question.
-metadata:
-  origin: ECC
+description: Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and best practices for building safe, performant applications.
+origin: ECC
 ---
 
 # Rust Development Patterns
@@ -367,7 +366,7 @@ async fn fetch_all(urls: Vec<String>) -> Vec<Result<String>> {
 ### When Unsafe Is Acceptable
 
 ```rust
-// Acceptable: FFI boundary with documented invariants (Rust 2024+)
+// Acceptable: FFI boundary with documented invariants
 /// # Safety
 /// `ptr` must be a valid, aligned pointer to an initialized `Widget`.
 unsafe fn widget_from_raw<'a>(ptr: *const Widget) -> &'a Widget {

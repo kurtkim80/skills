@@ -1,70 +1,74 @@
-# /learn - 提取可重用模式
+---
+description: Extraer patrones reutilizables de la sesión actual y guardarlos como skills candidatas o guía.
+---
 
-分析当前会话，提取值得保存为技能的任何模式。
+# /learn - Extraer Patrones Reutilizables
 
-## 触发时机
+Analizar la sesión actual y extraer cualquier patrón que valga la pena guardar como skills.
 
-在会话期间的任何时刻，当你解决了一个非平凡问题时，运行 `/learn`。
+## Activador
 
-## 提取内容
+Ejecutar `/learn` en cualquier momento durante una sesión cuando se haya resuelto un problema no trivial.
 
-寻找：
+## Qué Extraer
 
-1. **错误解决模式**
-   * 出现了什么错误？
-   * 根本原因是什么？
-   * 什么方法修复了它？
-   * 这对解决类似错误是否可重用？
+Buscar:
 
-2. **调试技术**
-   * 不明显的调试步骤
-   * 有效的工具组合
-   * 诊断模式
+1. **Patrones de Resolución de Errores**
+   - ¿Qué error ocurrió?
+   - ¿Cuál fue la causa raíz?
+   - ¿Qué lo solucionó?
+   - ¿Es reutilizable para errores similares?
 
-3. **变通方法**
-   * 库的怪癖
-   * API 限制
-   * 特定版本的修复
+2. **Técnicas de Depuración**
+   - Pasos de depuración no obvios
+   - Combinaciones de herramientas que funcionaron
+   - Patrones de diagnóstico
 
-4. **项目特定模式**
-   * 发现的代码库约定
-   * 做出的架构决策
-   * 集成模式
+3. **Soluciones Alternativas**
+   - Peculiaridades de librerías
+   - Limitaciones de API
+   - Correcciones específicas de versión
 
-## 输出格式
+4. **Patrones Específicos del Proyecto**
+   - Convenciones de la base de código descubiertas
+   - Decisiones arquitectónicas tomadas
+   - Patrones de integración
 
-在 `~/.claude/skills/learned/[pattern-name].md` 创建一个技能文件：
+## Formato de Salida
+
+Crear un archivo de skill en `~/.claude/skills/learned/[nombre-del-patron].md`:
 
 ```markdown
-# [Descriptive Pattern Name]
+# [Nombre Descriptivo del Patrón]
 
-**Extracted:** [Date]
-**Context:** [Brief description of when this applies]
+**Extraído:** [Fecha]
+**Contexto:** [Breve descripción de cuándo aplica]
 
-## Problem
-[What problem this solves - be specific]
+## Problema
+[Qué problema resuelve - ser específico]
 
-## Solution
-[The pattern/technique/workaround]
+## Solución
+[El patrón/técnica/solución alternativa]
 
-## Example
-[Code example if applicable]
+## Ejemplo
+[Ejemplo de código si aplica]
 
-## When to Use
-[Trigger conditions - what should activate this skill]
+## Cuándo Usar
+[Condiciones de activación - qué debe activar esta skill]
 ```
 
-## 流程
+## Proceso
 
-1. 回顾会话，寻找可提取的模式
-2. 识别最有价值/可重用的见解
-3. 起草技能文件
-4. 在保存前请用户确认
-5. 保存到 `~/.claude/skills/learned/`
+1. Revisar la sesión en busca de patrones extraíbles
+2. Identificar el insight más valioso/reutilizable
+3. Redactar el archivo de skill
+4. Pedir al usuario que confirme antes de guardar
+5. Guardar en `~/.claude/skills/learned/`
 
-## 注意事项
+## Notas
 
-* 不要提取琐碎的修复（拼写错误、简单的语法错误）
-* 不要提取一次性问题（特定的 API 中断等）
-* 专注于那些将在未来会话中节省时间的模式
-* 保持技能的专注性 - 一个技能对应一个模式
+- No extraer correcciones triviales (typos, errores de sintaxis simples)
+- No extraer problemas puntuales (interrupciones específicas de API, etc.)
+- Enfocarse en patrones que ahorrarán tiempo en sesiones futuras
+- Mantener las skills enfocadas - un patrón por skill

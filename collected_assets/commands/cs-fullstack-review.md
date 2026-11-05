@@ -1,15 +1,10 @@
 ---
-title: "/cs-fullstack-review — Slash Command for AI Coding Agents"
-description: "Fullstack engineering review — walks the 7 Matt Pocock forcing questions, picks the profile, forks into POWERFUL specialists (api-design-reviewer. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: cs-fullstack-review
+description: Fullstack engineering review — walks the 7 Matt Pocock forcing questions, picks the profile, forks into POWERFUL specialists (api-design-reviewer, database-designer, slo-architect). Invokes the cs-fullstack-engineer agent with context fork.
+argument-hint: "<problem or codebase to review>"
 ---
 
-# /cs-fullstack-review
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/cs-fullstack-review.md">Source</a></span>
-</div>
-
+# /cs-fullstack-review — Fullstack engineering review
 
 Use the `cs-fullstack-engineer` agent (which uses `context: fork` to keep the parent thread clean) to handle this inquiry:
 

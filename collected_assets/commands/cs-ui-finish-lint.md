@@ -1,15 +1,10 @@
 ---
-title: "/cs-ui-finish-lint — Slash Command for AI Coding Agents"
-description: "Lint UI source for unfinished work - controls that do nothing, dead links, placeholder copy, removed focus rings - and flag template defaults.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Lint UI source for unfinished work - controls that do nothing, dead links, placeholder copy, removed focus rings - and flag template defaults.
+argument-hint: "<file or directory with UI source>"
 ---
 
 # /cs-ui-finish-lint
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/product-team/design-qa/commands/cs-ui-finish-lint.md">Source</a></span>
-</div>
-
 
 Lint `$ARGUMENTS` for unfinished work.
 

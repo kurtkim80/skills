@@ -1,15 +1,11 @@
 ---
-title: "/cs-meta-research — Slash Command for AI Coding Agents"
-description: "/cs-meta-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+name: "cs-meta-research"
+description: "/cs-meta-research <question> — Disciplined multi-source investigation for a high-stakes question. Reframes into falsifiable hypotheses, plans, fans out parallel search sub-agents, triangulates every thesis against >=3 independent sources, saves each source to its own file with verbatim quotes, runs an adversarial pass, and emits an auditable, reusable research folder with a refresh protocol. The heavyweight alternative to the fast research router."
+argument-hint: "[the question or decision to research]"
 ---
 
-# /cs-meta-research
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/research/meta-research/commands/cs-meta-research.md">Source</a></span>
-</div>
-
+# /cs-meta-research — Disciplined Meta-Research
 
 **Command:** `/cs-meta-research <question>`
 
@@ -58,8 +54,8 @@ The `cs-meta-research` persona turns "research this" into an auditable, reusable
 
 ## Related
 
-- Agent: [`cs-meta-research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/meta-research/agents/cs-meta-research.md)
-- Skill: [`meta-research`](https://github.com/alirezarezvani/claude-skills/tree/main/research/meta-research/skills/meta-research/SKILL.md)
+- Agent: [`cs-meta-research`](../agents/cs-meta-research.md)
+- Skill: [`meta-research`](../skills/meta-research/SKILL.md)
 - Siblings: `/cs-pulse` (recency), the research router, `litreview` / `dossier` / `patent`
 
 ---

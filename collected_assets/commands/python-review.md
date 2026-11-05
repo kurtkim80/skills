@@ -1,277 +1,257 @@
 ---
-description: 全面的Python代码审查，确保符合PEP 8标准、类型提示、安全性以及Pythonic惯用法。调用python-reviewer代理。
+description: PEP 8準拠、型ヒント、セキュリティ、Pythonic慣用句についての包括的なPythonコードレビュー。python-reviewerエージェントを呼び出します。
 ---
 
-# Python 代码审查
+# Python Code Review
 
-此命令调用 **python-reviewer** 代理进行全面的 Python 专项代码审查。
+このコマンドは、Python固有の包括的なコードレビューのために**python-reviewer**エージェントを呼び出します。
 
-## 此命令的功能
+## このコマンドの機能
 
-1. **识别 Python 变更**：通过 `git diff` 查找修改过的 `.py` 文件
-2. **运行静态分析**：执行 `ruff`、`mypy`、`pylint`、`black --check`
-3. **安全扫描**：检查 SQL 注入、命令注入、不安全的反序列化
-4. **类型安全审查**：分析类型提示和 mypy 错误
-5. **Pythonic 代码检查**：验证代码是否遵循 PEP 8 和 Python 最佳实践
-6. **生成报告**：按严重程度对问题进行归类
+1. **Python変更の特定**: `git diff`で変更された`.py`ファイルを検出
+2. **静的解析の実行**: `ruff`、`mypy`、`pylint`、`black --check`を実行
+3. **セキュリティスキャン**: SQLインジェクション、コマンドインジェクション、安全でないデシリアライゼーションをチェック
+4. **型安全性のレビュー**: 型ヒントとmypyエラーを分析
+5. **Pythonicコードチェック**: コードがPEP 8とPythonベストプラクティスに従っていることを確認
+6. **レポート生成**: 問題を重要度別に分類
 
-## 使用时机
+## 使用するタイミング
 
-在以下情况使用 `/python-review`：
+以下の場合に`/python-review`を使用します:
+- Pythonコードを作成または変更した後
+- Python変更をコミットする前
+- Pythonコードを含むプルリクエストのレビュー時
+- 新しいPythonコードベースへのオンボーディング時
+- Pythonicパターンと慣用句の学習時
 
-* 编写或修改 Python 代码后
-* 提交 Python 变更前
-* 审查包含 Python 代码的拉取请求时
-* 接手新的 Python 代码库时
-* 学习 Pythonic 模式和惯用法时
+## レビューカテゴリ
 
-## 审查类别
+### CRITICAL(必須修正)
+- SQL/コマンドインジェクションの脆弱性
+- 安全でないeval/execの使用
+- Pickleの安全でないデシリアライゼーション
+- ハードコードされた資格情報
+- YAMLの安全でないロード
+- エラーを隠す素のexcept句
 
-### 关键 (必须修复)
+### HIGH(修正推奨)
+- 公開関数での型ヒントの欠落
+- 可変デフォルト引数
+- 例外を静かに飲み込む
+- リソースにコンテキストマネージャーを使用していない
+- 内包表記の代わりにCスタイルループ
+- isinstance()の代わりにtype()を使用
+- ロックなしの競合状態
 
-* SQL/命令注入漏洞
-* 不安全的 eval/exec 使用
-* Pickle 不安全反序列化
-* 硬编码的凭证
-* YAML 不安全加载
-* 隐藏错误的裸 except 子句
+### MEDIUM(検討)
+- PEP 8フォーマット違反
+- 公開関数でのdocstringの欠落
+- loggingの代わりにprint文
+- 非効率的な文字列操作
+- 名前付き定数のないマジックナンバー
+- フォーマットにf-stringsを使用していない
+- 不要なリスト作成
 
-### 高 (应该修复)
-
-* 公共函数缺少类型提示
-* 可变默认参数
-* 静默吞掉异常
-* 未对资源使用上下文管理器
-* 使用 C 风格循环而非推导式
-* 使用 type() 而非 isinstance()
-* 无锁的竞态条件
-
-### 中 (考虑)
-
-* 违反 PEP 8 格式规范
-* 公共函数缺少文档字符串
-* 使用 print 语句而非 logging
-* 低效的字符串操作
-* 未使用命名常量的魔法数字
-* 未使用 f-strings 进行格式化
-* 不必要的列表创建
-
-## 运行的自动化检查
+## 実行される自動チェック
 
 ```bash
-# Type checking
+# 型チェック
 mypy .
 
-# Linting and formatting
+# リンティングとフォーマット
 ruff check .
 black --check .
 isort --check-only .
 
-# Security scanning
+# セキュリティスキャン
 bandit -r .
 
-# Dependency audit
+# 依存関係監査
 pip-audit
 safety check
 
-# Testing
+# テスト
 pytest --cov=app --cov-report=term-missing
 ```
 
-## 使用示例
+## 使用例
 
-````text
+```text
 User: /python-review
 
 Agent:
-# Python Code Review Report
+# Pythonコードレビューレポート
 
-## Files Reviewed
-- app/routes/user.py (modified)
-- app/services/auth.py (modified)
+## レビューされたファイル
+- app/routes/user.py (変更)
+- app/services/auth.py (変更)
 
-## Static Analysis Results
-✓ ruff: No issues
-✓ mypy: No errors
-WARNING: black: 2 files need reformatting
-✓ bandit: No security issues
+## 静的解析結果
+✓ ruff: 問題なし
+✓ mypy: エラーなし
+WARNING: black: 2ファイルが再フォーマット必要
+✓ bandit: セキュリティ問題なし
 
-## Issues Found
+## 発見された問題
 
-[CRITICAL] SQL Injection vulnerability
-File: app/routes/user.py:42
-Issue: User input directly interpolated into SQL query
+[CRITICAL] SQLインジェクション脆弱性
+ファイル: app/routes/user.py:42
+問題: ユーザー入力が直接SQLクエリに挿入されている
 ```python
-query = f"SELECT * FROM users WHERE id = {user_id}"  # Bad
-````
-
-修复：使用参数化查询
-
+query = f"SELECT * FROM users WHERE id = {user_id}"  # 悪い
+```
+修正: パラメータ化クエリを使用
 ```python
-query = "SELECT * FROM users WHERE id = %s"  # Good
+query = "SELECT * FROM users WHERE id = %s"  # 良い
 cursor.execute(query, (user_id,))
 ```
 
-\[高] 可变默认参数
-文件：app/services/auth.py:18
-问题：可变默认参数导致共享状态
-
+[HIGH] 可変デフォルト引数
+ファイル: app/services/auth.py:18
+問題: 可変デフォルト引数が共有状態を引き起こす
 ```python
-def process_items(items=[]):  # Bad
+def process_items(items=[]):  # 悪い
     items.append("new")
     return items
 ```
-
-修复：使用 None 作为默认值
-
+修正: デフォルトにNoneを使用
 ```python
-def process_items(items=None):  # Good
+def process_items(items=None):  # 良い
     if items is None:
         items = []
     items.append("new")
     return items
 ```
 
-\[中] 缺少类型提示
-文件：app/services/auth.py:25
-问题：公共函数缺少类型注解
-
+[MEDIUM] 型ヒントの欠落
+ファイル: app/services/auth.py:25
+問題: 型アノテーションのない公開関数
 ```python
-def get_user(user_id):  # Bad
+def get_user(user_id):  # 悪い
+    return db.find(user_id)
+```
+修正: 型ヒントを追加
+```python
+def get_user(user_id: str) -> Optional[User]:  # 良い
     return db.find(user_id)
 ```
 
-修复：添加类型提示
-
+[MEDIUM] コンテキストマネージャーを使用していない
+ファイル: app/routes/user.py:55
+問題: 例外時にファイルがクローズされない
 ```python
-def get_user(user_id: str) -> Optional[User]:  # Good
-    return db.find(user_id)
-```
-
-\[中] 未使用上下文管理器
-文件：app/routes/user.py:55
-问题：异常时文件未关闭
-
-```python
-f = open("config.json")  # Bad
+f = open("config.json")  # 悪い
 data = f.read()
 f.close()
 ```
-
-修复：使用上下文管理器
-
+修正: コンテキストマネージャーを使用
 ```python
-with open("config.json") as f:  # Good
+with open("config.json") as f:  # 良い
     data = f.read()
 ```
 
-## 摘要
+## サマリー
+- CRITICAL: 1
+- HIGH: 1
+- MEDIUM: 2
 
-* 关键：1
-* 高：1
-* 中：2
+推奨: FAIL: CRITICAL問題が修正されるまでマージをブロック
 
-建议：FAIL: 在关键问题修复前阻止合并
+## フォーマット必要
+実行: `black app/routes/user.py app/services/auth.py`
+```
 
-## 所需的格式化
+## 承認基準
 
-运行：`black app/routes/user.py app/services/auth.py`
-
-````
-## 审批标准
-
-| 状态 | 条件 |
+| ステータス | 条件 |
 |--------|-----------|
-| PASS: 批准 | 无 CRITICAL 或 HIGH 级别问题 |
-| WARNING: 警告 | 仅存在 MEDIUM 级别问题（谨慎合并） |
-| FAIL: 阻止 | 发现 CRITICAL 或 HIGH 级别问题 |
+| PASS: 承認 | CRITICALまたはHIGH問題なし |
+| WARNING: 警告 | MEDIUM問題のみ(注意してマージ) |
+| FAIL: ブロック | CRITICALまたはHIGH問題が発見された |
 
-## 与其他命令的集成
+## 他のコマンドとの統合
 
-- 首先使用 `/tdd` 确保测试通过
-- 使用 `/code-review` 处理非 Python 特定问题
-- 在提交前使用 `/python-review`
-- 如果静态分析工具失败，请使用 `/build-fix`
+- まず`/python-test`を使用してテストが合格することを確認
+- `/code-review`をPython固有でない問題に使用
+- `/python-review`をコミット前に使用
+- `/build-fix`を静的解析ツールが失敗した場合に使用
 
-## 框架特定审查
+## フレームワーク固有のレビュー
 
-### Django 项目
-审查员检查：
-- N+1 查询问题（使用 `select_related` 和 `prefetch_related`）
-- 模型更改缺少迁移
-- 在 ORM 可用时使用原始 SQL
-- 多步骤操作缺少 `transaction.atomic()`
+### Djangoプロジェクト
+レビューアは以下をチェックします:
+- N+1クエリ問題(`select_related`と`prefetch_related`を使用)
+- モデル変更のマイグレーション欠落
+- ORMで可能な場合の生SQLの使用
+- 複数ステップ操作での`transaction.atomic()`の欠落
 
-### FastAPI 项目
-审查员检查：
-- CORS 配置错误
-- 用于请求验证的 Pydantic 模型
-- 响应模型的正确性
-- 正确的 async/await 使用
-- 依赖注入模式
+### FastAPIプロジェクト
+レビューアは以下をチェックします:
+- CORSの誤設定
+- リクエスト検証のためのPydanticモデル
+- レスポンスモデルの正確性
+- 適切なasync/awaitの使用
+- 依存性注入パターン
 
-### Flask 项目
-审查员检查：
-- 上下文管理（应用上下文、请求上下文）
-- 正确的错误处理
-- Blueprint 组织
-- 配置管理
+### Flaskプロジェクト
+レビューアは以下をチェックします:
+- コンテキスト管理(appコンテキスト、requestコンテキスト)
+- 適切なエラーハンドリング
+- Blueprintの構成
+- 設定管理
 
-## 相关
+## 関連
 
 - Agent: `agents/python-reviewer.md`
 - Skills: `skills/python-patterns/`, `skills/python-testing/`
 
-## 常见修复
+## 一般的な修正
 
-### 添加类型提示
+### 型ヒントの追加
 ```python
-# Before
+# 変更前
 def calculate(x, y):
     return x + y
 
-# After
+# 変更後
 from typing import Union
 
 def calculate(x: Union[int, float], y: Union[int, float]) -> Union[int, float]:
     return x + y
-````
+```
 
-### 使用上下文管理器
-
+### コンテキストマネージャーの使用
 ```python
-# Before
+# 変更前
 f = open("file.txt")
 data = f.read()
 f.close()
 
-# After
+# 変更後
 with open("file.txt") as f:
     data = f.read()
 ```
 
-### 使用列表推导式
-
+### リスト内包表記の使用
 ```python
-# Before
+# 変更前
 result = []
 for item in items:
     if item.active:
         result.append(item.name)
 
-# After
+# 変更後
 result = [item.name for item in items if item.active]
 ```
 
-### 修复可变默认参数
-
+### 可変デフォルトの修正
 ```python
-# Before
+# 変更前
 def append(value, items=[]):
     items.append(value)
     return items
 
-# After
+# 変更後
 def append(value, items=None):
     if items is None:
         items = []
@@ -279,41 +259,39 @@ def append(value, items=None):
     return items
 ```
 
-### 使用 f-strings (Python 3.6+)
-
+### f-stringsの使用(Python 3.6+)
 ```python
-# Before
+# 変更前
 name = "Alice"
 greeting = "Hello, " + name + "!"
 greeting2 = "Hello, {}".format(name)
 
-# After
+# 変更後
 greeting = f"Hello, {name}!"
 ```
 
-### 修复循环中的字符串连接
-
+### ループ内の文字列連結の修正
 ```python
-# Before
+# 変更前
 result = ""
 for item in items:
     result += str(item)
 
-# After
+# 変更後
 result = "".join(str(item) for item in items)
 ```
 
-## Python 版本兼容性
+## Pythonバージョン互換性
 
-审查者会指出代码何时使用了新 Python 版本的功能：
+レビューアは、コードが新しいPythonバージョンの機能を使用する場合に通知します:
 
-| 功能 | 最低 Python 版本 |
+| 機能 | 最小Python |
 |---------|----------------|
-| 类型提示 | 3.5+ |
+| 型ヒント | 3.5+ |
 | f-strings | 3.6+ |
-| 海象运算符 (`:=`) | 3.8+ |
-| 仅限位置参数 | 3.8+ |
-| Match 语句 | 3.10+ |
-| 类型联合 (`x \| None`) | 3.10+ |
+| セイウチ演算子(`:=`) | 3.8+ |
+| 位置専用パラメータ | 3.8+ |
+| Match文 | 3.10+ |
+| 型ユニオン(&#96;x &#124; None&#96;) | 3.10+ |
 
-确保你的项目 `pyproject.toml` 或 `setup.py` 指定了正确的最低 Python 版本。
+プロジェクトの`pyproject.toml`または`setup.py`が正しい最小Pythonバージョンを指定していることを確認してください。

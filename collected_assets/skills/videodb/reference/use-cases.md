@@ -1,118 +1,142 @@
-# Use Cases
+# ユースケース
 
-Common workflows and what VideoDB enables. For code details, see [api-reference.md](api-reference.md), [capture.md](capture.md), [editor.md](editor.md), and [search.md](search.md).
+VideoDBが実現する一般的なワークフローと機能。コードの詳細については [api-reference.md](api-reference.md)、[capture.md](capture.md)、[editor.md](editor.md)、[search.md](search.md) を参照。
 
----
+***
 
-## Video Search & Highlights
+## ビデオ検索とハイライト
 
-### Create Highlight Reels
-Upload a long video (conference talk, lecture, meeting recording), search for key moments by topic ("product announcement", "Q&A session", "demo"), and automatically compile matching segments into a shareable highlight reel.
+### ハイライトリールの作成
 
-### Build Searchable Video Libraries
-Batch upload videos to a collection, index them for spoken word search, then query across the entire library. Find specific topics across hundreds of hours of content instantly.
+長いビデオ（会議講演、講義、カンファレンス録画）をアップロードし、トピック別（「製品発表」「Q&Aセッション」「デモ」）に主要なモーメントを検索し、一致するクリップを共有可能なハイライトリールに自動的にアセンブルする。
 
-### Extract Specific Clips
-Search for moments matching a query ("budget discussion", "action items") and extract each matching segment as an individual clip with its own stream URL.
+### 検索可能なビデオライブラリの構築
 
----
+ビデオをコレクションに一括アップロードし、検索のために音声コンテンツをインデックス化し、ライブラリ全体でクエリを実行する。数百時間のコンテンツから特定のトピックを即座に見つける。
 
-## Video Enhancement
+### 特定のクリップの抽出
 
-### Add Professional Polish
-Take raw footage and enhance it with:
-- Auto-generated subtitles from speech
-- Custom thumbnails at specific timestamps
-- Background music overlays
-- Intro/outro sequences with generated images
+クエリに一致するセグメントを検索し（「予算の議論」「アクションアイテム」）、各一致するセグメントを独自のストリームURLを持つ独立したクリップとして抽出する。
 
-### AI-Enhanced Content
-Combine existing video with generative AI:
-- Generate text summaries from transcript
-- Create background music matching video duration
-- Generate title cards and overlay images
-- Mix all elements into a polished final output
+***
 
----
+## ビデオの強化
 
-## Real-Time Capture (Desktop/Meeting)
+### プロフェッショナルな仕上げを追加する
 
-### Screen + Audio Recording with AI
-Capture screen, microphone, and system audio simultaneously. Get real-time:
-- **Live transcription** - Speech to text as it happens
-- **Audio summaries** - Periodic AI-generated summaries of discussions
-- **Visual indexing** - AI descriptions of screen activity
+生の素材を取得して強化する：
 
-### Meeting Capture with Summarization
-Record meetings with live transcription of all participants. Get periodic summaries with key discussion points, decisions, and action items delivered in real-time.
+* 音声に基づいて字幕を自動生成する
+* 特定のタイムスタンプにカスタムサムネイルを追加する
+* バックグラウンドミュージックオーバーレイ
+* 生成された画像を使用したオープニング/エンディングシーケンス
 
-### Screen Activity Tracking
-Track what's happening on screen with AI-generated descriptions:
-- "User is browsing a spreadsheet in Google Sheets"
-- "User switched to a code editor with a Python file"
-- "Video call with screen sharing enabled"
+### AIで強化されたコンテンツ
 
-### Post-Session Processing
-After capture ends, the recording is exported as a permanent video. Then:
-- Generate searchable transcript
-- Search for specific topics within the recording
-- Extract clips of important moments
-- Share via stream URL or player link
+既存のビデオと生成AIを組み合わせる：
 
----
+* トランスクリプトコンテンツからテキストサマリーを生成する
+* ビデオの長さに合わせたバックグラウンドミュージックを作成する
+* タイトルカードとオーバーレイ画像を生成する
+* すべての要素を磨き上げた最終出力にミックスする
 
-## Live Stream Intelligence (RTSP/RTMP)
+***
 
-### Connect External Streams
-Ingest live video from RTSP/RTMP sources (security cameras, encoders, broadcasts). Process and index content in real-time.
+## リアルタイム録画（デスクトップ/会議）
 
-### Real-Time Event Detection
-Define events to detect in live streams:
-- "Person entering restricted area"
-- "Traffic violation at intersection"
-- "Product visible on shelf"
+### AIによる画面+オーディオ録画
 
-Get alerts via WebSocket or webhook when events occur.
+画面、マイク、システムオーディオを同時にキャプチャする。リアルタイムで取得：
 
-### Live Stream Search
-Search across recorded live stream content. Find specific moments and generate clips from hours of continuous footage.
+* **ライブ転写** - 音声を即座にテキストに変換
+* **オーディオサマリー** - 定期的に生成されるAIによる議論サマリー
+* **ビジュアルインデックス** - 画面アクティビティのAI説明
 
----
+### サマリー機能付き会議録画
 
-## Content Moderation & Safety
+会議を録画して全参加者の発言をリアルタイムで転写する。主要な議論のポイント、決定事項、アクションアイテムを含む定期的なサマリーをリアルタイムで受け取る。
 
-### Automated Content Review
-Index video scenes with AI and search for problematic content. Flag videos containing violence, inappropriate content, or policy violations.
+### 画面アクティビティ追跡
 
-### Profanity Detection
-Detect and locate profanity in audio. Optionally overlay beep sounds at detected timestamps.
+AIが生成した説明で画面アクティビティを追跡する：
 
----
+* 「ユーザーはGoogle Sheetsでスプレッドシートを閲覧しています」
+* 「ユーザーはPythonファイルを含むコードエディターに切り替えました」
+* 「画面共有付きのビデオ通話が進行中です」
 
-## Platform Integration
+### セッション後の処理
 
-### Social Media Formatting
-Reframe videos for different platforms:
-- Vertical (9:16) for TikTok, Reels, Shorts
-- Square (1:1) for Instagram feed
-- Landscape (16:9) for YouTube
+録画が終わると、録音は永続的なビデオとしてエクスポートされる。その後：
 
-### Transcode for Delivery
-Change resolution, bitrate, or quality for different delivery targets. Output optimized streams for web, mobile, or broadcast.
+* 検索可能なトランスクリプトを生成する
+* 録画内の特定のトピックを検索する
+* 重要なモーメントのクリップを抽出する
+* ストリームURLまたはプレーヤーリンクで共有する
 
-### Generate Shareable Links
-Every operation produces playable stream URLs. Embed in web players, share directly, or integrate with existing platforms.
+***
 
----
+## ライブストリームインテリジェンス（RTSP/RTMP）
 
-## Workflow Summary
+### 外部ストリームへの接続
 
-| Goal | VideoDB Approach |
+RTSPまたはRTMPソース（セキュリティカメラ、エンコーダー、ブロードキャスト）からライブビデオを取り込む。コンテンツをリアルタイムで処理してインデックス化する。
+
+### リアルタイムイベント検出
+
+ライブストリームで検出するイベントを定義する：
+
+* 「制限区域に人が入った」
+* 「交差点での交通違反」
+* 「棚に製品が見える」
+
+イベントが発生したときにWebSocketまたはWebhook経由でアラートを受け取る。
+
+### ライブストリーム検索
+
+録画されたライブストリームコンテンツ内を検索する。数時間の連続した素材から特定のモーメントを見つけてクリップを生成する。
+
+***
+
+## コンテンツモデレーションとセキュリティ
+
+### 自動化されたコンテンツレビュー
+
+AIを使用してビデオシーンをインデックス化し、問題のあるコンテンツを検索する。暴力、不適切なコンテンツ、またはポリシー違反を含むビデオにフラグを立てる。
+
+### 不適切な言葉の検出
+
+オーディオ内の不適切な言葉を検出して特定する。検出されたタイムスタンプにビープ音をオーバーレイするオプションもある。
+
+***
+
+## プラットフォーム統合
+
+### ソーシャルメディア向けフォーマット変換
+
+異なるプラットフォーム向けにビデオのフォーマットを変換する：
+
+* 縦型（9:16）：TikTok、Reels、Shorts向け
+* 正方形（1:1）：Instagramフィード向け
+* 横型（16:9）：YouTube向け
+
+### 配信のためのトランスコード
+
+異なる配信ターゲットに向けて解像度、ビットレート、品質を変更する。Web、モバイル、ブロードキャスト出力に最適化されたストリーム。
+
+### 共有可能なリンクの生成
+
+すべての操作は再生可能なストリームURLを生成する。Webプレーヤーへの埋め込み、直接共有、または既存のプラットフォームとの統合が可能。
+
+***
+
+## ワークフローのサマリー
+
+| 目標 | VideoDBのアプローチ |
 |------|------------------|
-| Find moments in video | Index spoken words/scenes → Search → Compile clips |
-| Create highlights | Search multiple topics → Build timeline → Generate stream |
-| Add subtitles | Index spoken words → Add subtitle overlay |
-| Record screen + AI | Start capture → Run AI pipelines → Export video |
-| Monitor live streams | Connect RTSP → Index scenes → Create alerts |
-| Reformat for social | Reframe to target aspect ratio |
-| Combine clips | Build timeline with multiple assets → Generate stream |
+| ビデオ内のセグメントを見つける | 音声/シーンをインデックス化 → 検索 → クリップをアセンブル |
+| ハイライトリールを作成する | 複数のトピックを検索 → タイムラインを構築 → ストリームを生成 |
+| 字幕を追加する | 音声をインデックス化 → 字幕オーバーレイを追加 |
+| 画面録画 + AI | 録画を開始 → AIパイプラインを実行 → ビデオをエクスポート |
+| ライブストリームを監視する | RTSPに接続 → シーンをインデックス化 → アラートを作成 |
+| ソーシャルメディア向けにフォーマット変換 | ターゲットのアスペクト比にリフレーム |
+| クリップをマージする | 複数のアセットでタイムラインを構築 → ストリームを生成 |

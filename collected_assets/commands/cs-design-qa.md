@@ -1,15 +1,10 @@
 ---
-title: "/cs-design-qa — Slash Command for AI Coding Agents"
-description: "Run the full UI finish gate on a screen - source lint, interaction states and a rendered audit at 320 px and desktop - and say whether it is done.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Run the full UI finish gate on a screen - source lint, interaction states and a rendered audit at 320 px and desktop - and say whether it is done.
+argument-hint: "<source path> [running URL] [state matrix CSV]"
 ---
 
 # /cs-design-qa
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/product-team/design-qa/commands/cs-design-qa.md">Source</a></span>
-</div>
-
 
 Gate `$ARGUMENTS` before it is called done.
 

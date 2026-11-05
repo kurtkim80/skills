@@ -1,15 +1,9 @@
 ---
-title: "/cs-aeo — Slash Command for AI Coding Agents"
-description: "/cs-aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude. Slash command for Claude Code, Codex CLI, Gemini CLI."
+name: "cs-aeo"
+description: "/cs-aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude, Gemini, Mistral). Optimize content in 3 modes (conservative/balanced/aggressive). Track which LLMs cite which pages via local ledger. Industry-aware thresholds (8 industries with YMYL calibration). Distinct from SEO — refuses to optimize one at expense of the other."
 ---
 
-# /cs-aeo
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/commands/cs-aeo.md">Source</a></span>
-</div>
-
+# /cs-aeo — Answer Engine Optimization
 
 **Command:** `/cs-aeo [action] [args]`
 
@@ -160,8 +154,8 @@ Content for YMYL topics scoring below threshold is unlikely to be cited regardle
 
 ## Related
 
-- Agent: [`cs-aeo`](https://github.com/alirezarezvani/claude-skills/tree/main/agents/marketing/cs-aeo.md)
-- Skill: [`aeo`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing-skill/skills/aeo/SKILL.md)
+- Agent: [`cs-aeo`](agents/marketing/cs-aeo.md)
+- Skill: [`aeo`](marketing-skill/skills/aeo/SKILL.md)
 - Companion: `/seo-audit` (SEO + AEO often run together)
 - Source: ported from [`alirezarezvani/aeo-box`](https://github.com/alirezarezvani/aeo-box)
 

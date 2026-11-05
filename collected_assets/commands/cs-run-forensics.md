@@ -1,15 +1,10 @@
 ---
-title: "/cs-run-forensics — Slash Command for AI Coding Agents"
-description: "Answer a question about a past agent run from its recorded transcript - find the run, walk back from the step, separate recorded from inferred.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Answer a question about a past agent run from its recorded transcript - find the run, walk back from the step, separate recorded from inferred.
+argument-hint: "<question> [--session ID | --trace PATH]"
 ---
 
 # /cs-run-forensics
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/agent-run-forensics/commands/cs-run-forensics.md">Source</a></span>
-</div>
-
 
 Answer `$ARGUMENTS` from the recording, not from memory.
 

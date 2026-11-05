@@ -1,76 +1,76 @@
-# Capture Guide
+# キャプチャガイド
 
-## Overview
+## 概要
 
-VideoDB Capture enables real-time screen and audio recording with AI processing. Desktop capture currently supports **macOS** only.
+VideoDB CaptureはAI処理機能を備えたリアルタイムの画面とオーディオの録画をサポートする。デスクトップキャプチャは現在**macOS**のみサポートされている。
 
-For code-level details (SDK methods, event structures, AI pipelines), see [capture-reference.md](capture-reference.md).
+コードレベルの詳細（SDKメソッド、イベント構造、AIパイプライン）については [capture-reference.md](capture-reference.md) を参照。
 
-## Quick Start
+## クイックスタート
 
-1. **Start WebSocket listener**: `python scripts/ws_listener.py --clear &`
-2. **Run capture code** (see Complete Capture Workflow below)
-3. **Events written to**: `/tmp/videodb_events.jsonl`
+1. **WebSocketリスナーを起動する**：`python scripts/ws_listener.py --clear &`
+2. **キャプチャコードを実行する**（以下の完全なキャプチャワークフローを参照）
+3. **イベントの書き込み先**：`/tmp/videodb_events.jsonl`
 
----
+***
 
-## Complete Capture Workflow
+## 完全なキャプチャワークフロー
 
-No webhooks or polling required. WebSocket delivers all events including session lifecycle.
+WebhookやポーリングLiveEventは不要。WebSocketがセッションライフサイクルイベントを含むすべてのイベントを配信する。
 
-> **CRITICAL:** The `CaptureClient` must remain running for the entire duration of the capture. It runs the local recorder binary that streams screen/audio data to VideoDB. If the Python process that created the `CaptureClient` exits, the recorder binary is killed and capture stops silently. Always run the capture code as a **long-lived background process** (e.g. `nohup python capture_script.py &`) and use signal handling (`asyncio.Event` + `SIGINT`/`SIGTERM`) to keep it alive until you explicitly stop it.
+> **重要な注意事項：** `CaptureClient` はキャプチャ全体を通じて実行し続ける必要がある。ローカルレコーダーバイナリを実行し、画面/オーディオデータをVideoDBにストリーミングする。`CaptureClient` を作成したPythonプロセスが終了すると、レコーダーバイナリが終了し、キャプチャが静かに停止する。常にキャプチャコードを**長期実行バックグラウンドプロセス**として実行し（例：`nohup python capture_script.py &`）、明示的に停止するまで生き続けるようにシグナル処理（`asyncio.Event` + `SIGINT`/`SIGTERM`）を使用すること。
 
-1. **Start WebSocket listener** in background with `--clear` flag to clear old events. Wait for it to create the WebSocket ID file.
+1. バックグラウンドで**WebSocketリスナーを起動する**。古いイベントをクリアするために `--clear` フラグを使用する。WebSocket IDファイルが作成されるまで待つ。
 
-2. **Read the WebSocket ID**. This ID is required for capture session and AI pipelines.
+2. **WebSocket IDを読み取る**。このIDはキャプチャセッションとAIパイプラインに必要。
 
-3. **Create a capture session** and generate a client token for the desktop client.
+3. **キャプチャセッションを作成する**。デスクトップクライアント用のクライアントトークンを生成する。
 
-4. **Initialize CaptureClient** with the token. Request permissions for microphone and screen capture.
+4. トークンを使用して**CaptureClientを初期化する**。マイクと画面キャプチャの権限をリクエストする。
 
-5. **List and select channels** (mic, display, system_audio). Set `store = True` on channels you want to persist as a video.
+5. **チャネルをリストアップして選択する**（マイク、ディスプレイ、システムオーディオ）。ビデオとして永続化したいチャネルに `store = True` を設定する。
 
-6. **Start the session** with selected channels.
+6. 選択したチャネルで**セッションを開始する**。
 
-7. **Wait for session active** by reading events until you see `capture_session.active`. This event contains the `rtstreams` array. Save session info (session ID, RTStream IDs) to a file (e.g. `/tmp/videodb_capture_info.json`) so other scripts can read it.
+7. `capture_session.active` が見えるまでイベントを読み取ることで**セッションがアクティブになるまで待つ**。このイベントには `rtstreams` 配列が含まれる。セッション情報（セッションID、RTStream ID）をファイルに保存する（例：`/tmp/videodb_capture_info.json`）。他のスクリプトがそれを読み取れるようにする。
 
-8. **Keep the process alive.** Use `asyncio.Event` with signal handlers for `SIGINT`/`SIGTERM` to block until explicitly stopped. Write a PID file (e.g. `/tmp/videodb_capture_pid`) so the process can be stopped later with `kill $(cat /tmp/videodb_capture_pid)`. The PID file should be overwritten on every run so reruns always have the correct PID.
+8. **プロセスを生かし続ける**。明示的に停止されるまでプロセスをブロックするために、`SIGINT`/`SIGTERM` のシグナルハンドラーで `asyncio.Event` を使用する。後で `kill $(cat /tmp/videodb_capture_pid)` でプロセスを停止できるようにPIDファイルを書く（例：`/tmp/videodb_capture_pid`）。PIDファイルは実行のたびに上書きして、再実行時に常に正しいPIDを持つようにする。
 
-9. **Start AI pipelines** (in a separate command/script) on each RTStream for audio indexing and visual indexing. Read the RTStream IDs from the saved session info file.
+9. 各RTStreamの音声インデックスとビジュアルインデックスを作成する**AIパイプラインを起動する**（別のコマンド/スクリプトで）。保存されたセッション情報ファイルからRTStream IDを読み取る。
 
-10. **Write custom event processing logic** (in a separate command/script) to read real-time events based on your use case. Examples:
-    - Log Slack activity when `visual_index` mentions "Slack"
-    - Summarize discussions when `audio_index` events arrive
-    - Trigger alerts when specific keywords appear in `transcript`
-    - Track application usage from screen descriptions
+10. ユースケースに応じてリアルタイムイベントを読み取る**カスタムイベント処理ロジックを書く**（別のコマンド/スクリプトで）。例：
+    * `visual_index` が「Slack」を言及したときにSlackアクティビティをログに記録する
+    * `audio_index` イベントが到着したときに議論をサマリーする
+    * `transcript` に特定のキーワードが現れたときにアラートをトリガーする
+    * 画面の説明からアプリの使用状況を追跡する
 
-11. **Stop capture** when done — send SIGTERM to the capture process. It should call `client.stop_capture()` and `client.shutdown()` in its signal handler.
+11. **キャプチャを停止する** - 完了したら、キャプチャプロセスにSIGTERMを送信する。シグナルハンドラーで `client.stop_capture()` と `client.shutdown()` を呼び出すべき。
 
-12. **Wait for export** by reading events until you see `capture_session.exported`. This event contains `exported_video_id`, `stream_url`, and `player_url`. This may take several seconds after stopping capture.
+12. **エクスポートを待つ** - `capture_session.exported` が見えるまでイベントを読み取る。このイベントには `exported_video_id`、`stream_url`、`player_url` が含まれる。キャプチャを停止した後、これには数秒かかる場合がある。
 
-13. **Stop WebSocket listener** after receiving the export event. Use `kill $(cat /tmp/videodb_ws_pid)` to cleanly terminate it.
+13. **WebSocketリスナーを停止する** - エクスポートイベントを受信したら、`kill $(cat /tmp/videodb_ws_pid)` でクリーンに終了させる。
 
----
+***
 
-## Shutdown Sequence
+## シャットダウンシーケンス
 
-Proper shutdown order is important to ensure all events are captured:
+すべてのイベントがキャプチャされることを確認するために、適切なシャットダウンシーケンスが重要：
 
-1. **Stop the capture session** — `client.stop_capture()` then `client.shutdown()`
-2. **Wait for export event** — poll `/tmp/videodb_events.jsonl` for `capture_session.exported`
-3. **Stop the WebSocket listener** — `kill $(cat /tmp/videodb_ws_pid)`
+1. **キャプチャセッションを停止する** — `client.stop_capture()` 次に `client.shutdown()`
+2. **エクスポートイベントを待つ** — `capture_session.exported` を `/tmp/videodb_events.jsonl` でポーリングする
+3. **WebSocketリスナーを停止する** — `kill $(cat /tmp/videodb_ws_pid)`
 
-Do NOT kill the WebSocket listener before receiving the export event, or you will miss the final video URLs.
+エクスポートイベントを受信する前にWebSocketリスナーを**停止しないこと**。そうしないと最終的なビデオURLを受け取れなくなる。
 
----
+***
 
-## Scripts
+## スクリプト
 
-| Script | Description |
+| スクリプト | 説明 |
 |--------|-------------|
-| `scripts/ws_listener.py` | WebSocket event listener (dumps to JSONL) |
+| `scripts/ws_listener.py` | WebSocketイベントリスナー（JSONLにダンプ） |
 
-### ws_listener.py Usage
+### ws\_listener.pyの使用方法
 
 ```bash
 # Start listener in background (append to existing events)
@@ -86,16 +86,19 @@ python scripts/ws_listener.py --clear /path/to/events &
 kill $(cat /tmp/videodb_ws_pid)
 ```
 
-**Options:**
-- `--clear`: Clear the events file before starting. Use when starting a new capture session.
+**オプション：**
 
-**Output files:**
-- `videodb_events.jsonl` - All WebSocket events
-- `videodb_ws_id` - WebSocket connection ID (for `ws_connection_id` parameter)
-- `videodb_ws_pid` - Process ID (for stopping the listener)
+* `--clear`：起動前にイベントファイルをクリアする。新しいキャプチャセッションを開始するときに使用する。
 
-**Features:**
-- Auto-reconnect with exponential backoff on connection drops
-- Graceful shutdown on SIGINT/SIGTERM
-- PID file for easy process management
-- Connection status logging
+**出力ファイル：**
+
+* `videodb_events.jsonl` - すべてのWebSocketイベント
+* `videodb_ws_id` - WebSocket接続ID（`ws_connection_id` パラメータに使用）
+* `videodb_ws_pid` - プロセスID（リスナーの停止に使用）
+
+**機能：**
+
+* 接続が切れた場合の指数バックオフによる自動再接続
+* SIGINT/SIGTERMでのグレースフルシャットダウン
+* プロセス管理のためのPIDファイル
+* 接続状態のログ記録

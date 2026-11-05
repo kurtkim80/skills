@@ -1,118 +1,116 @@
 ---
-description: 审查 Flutter/Dart 代码，检查惯用模式、小部件最佳实践、状态管理、性能、可访问性和安全性。调用 flutter-reviewer 代理。
+description: Flutter/Dartコードのイディオムパターン、ウィジェットのベストプラクティス、状態管理、パフォーマンス、アクセシビリティ、セキュリティをレビューします。flutter-reviewerエージェントを呼び出します。
 ---
 
-# Flutter 代码审查
+# Flutterコードレビュー
 
-此命令调用 **flutter-reviewer** 智能体来审查 Flutter/Dart 代码变更。
+このコマンドは**flutter-reviewer**エージェントを呼び出し、Flutter/Dartコードの変更をレビューします。
 
-## 此命令的功能
+## このコマンドの動作
 
-1. **收集上下文**：审查 `git diff --staged` 和 `git diff`
-2. **检查项目**：检查 `pubspec.yaml`、`analysis_options.yaml`、状态管理方案
-3. **安全预扫描**：检查硬编码密钥和关键安全问题
-4. **全面审查**：应用完整的审查清单
-5. **报告发现**：按严重程度分组输出问题，并附带修复指导
+1. **コンテキストを収集**: `git diff --staged`と`git diff`をレビュー
+2. **プロジェクトを調査**: `pubspec.yaml`、`analysis_options.yaml`、状態管理ソリューションを確認
+3. **セキュリティ事前スキャン**: ハードコードされたシークレットと重大なセキュリティ問題を確認
+4. **フルレビュー**: 完全なレビューチェックリストを適用
+5. **所見を報告**: 重大度別にグループ化された問題を修正ガイダンス付きで出力
 
-## 前置条件
+## 前提条件
 
-在运行 `/flutter-review` 之前，请确保：
+`/flutter-review`を実行する前に、以下を確認してください:
+1. **ビルドが通る** — まず`/flutter-build`を実行。壊れたコードのレビューは不完全です
+2. **テストが通る** — `/flutter-test`を実行してリグレッションがないことを確認
+3. **マージコンフリクトがない** — すべてのコンフリクトを解決し、diffが意図的な変更のみを反映するようにする
+4. **`flutter analyze`がクリーン** — レビュー前にアナライザーの警告を修正
 
-1. **构建通过** — 先运行 `/flutter-build`；对损坏的代码进行审查是不完整的
-2. **测试通过** — 运行 `/flutter-test` 以确认没有回归问题
-3. **无合并冲突** — 解决所有冲突，使差异仅反映有意的更改
-4. **`flutter analyze` 干净** — 在审查前修复分析器警告
+## 使用するタイミング
 
-## 使用时机
+`/flutter-review`を使用するのは:
+- Flutter/Dartの変更を含むPRを提出する前（ビルドとテストが通った後）
+- 新機能を実装した後に問題を早期に発見するため
+- 他の人のFlutterコードをレビューする時
+- ウィジェット、状態管理コンポーネント、またはサービスクラスを監査する時
+- プロダクションリリースの前
 
-在以下情况下使用 `/flutter-review`：
+## レビュー領域
 
-* 提交包含 Flutter/Dart 变更的 PR 之前（在构建和测试通过后）
-* 实现新功能后，尽早发现问题
-* 审查他人的 Flutter 代码时
-* 审计 widget、状态管理组件或服务类时
-* 生产发布之前
+| 領域 | 重大度 |
+|------|--------|
+| ハードコードされたシークレット、平文HTTP | CRITICAL |
+| アーキテクチャ違反、状態管理アンチパターン | CRITICAL |
+| ウィジェットの再ビルド問題、リソースリーク | HIGH |
+| `dispose()`の欠落、await後の`BuildContext` | HIGH |
+| Dartのnullセーフティ、エラー/ローディング状態の欠落 | HIGH |
+| Const伝搬、ウィジェットのコンポジション | HIGH |
+| パフォーマンス: `build()`内の高コストな処理 | HIGH |
+| アクセシビリティ、セマンティックラベル | MEDIUM |
+| 状態遷移のテスト欠落 | HIGH |
+| ハードコードされた文字列（l10n） | MEDIUM |
+| Pub依存関係の衛生管理 | LOW |
 
-## 审查领域
+## セッション例
 
-| 领域 | 严重程度 |
-|------|----------|
-| 硬编码密钥、明文 HTTP | 严重 |
-| 架构违规、状态管理反模式 | 严重 |
-| Widget 重建问题、资源泄漏 | 高 |
-| `dispose()`、`BuildContext` 后缺少 await | 高 |
-| Dart 空安全、缺少错误/加载状态 | 高 |
-| Const 传播、Widget 组合 | 高 |
-| 性能：`build()` 中的耗时操作 | 高 |
-| 无障碍、语义标签 | 中 |
-| 缺少状态转换测试 | 高 |
-| 硬编码字符串（l10n） | 中 |
-| Pub 依赖卫生 | 低 |
+````text
+User: /flutter-review
 
-## 示例会话
+Agent:
+# Flutterコードレビュー
 
-```text
-用户：/flutter-review
+## コンテキスト
 
-代理：
-# Flutter 代码审查
-
-## 上下文
-
-变更文件：
+変更されたファイル:
 - lib/features/auth/presentation/login_page.dart
 - lib/features/auth/data/auth_repository_impl.dart
 
-状态管理：Riverpod（从 pubspec.yaml 检测到）
-架构：功能优先
+状態管理: Riverpod（pubspec.yamlから検出）
+アーキテクチャ: feature-first
 
-## 安全预扫描
+## セキュリティ事前スキャン
 
-✓ 未检测到硬编码密钥
-✓ 未检测到明文 HTTP 调用
+✓ ハードコードされたシークレットは検出されませんでした
+✓ 平文HTTPコールはありません
 
-## 审查发现
+## レビュー所見
 
-[高] 异步间隙后使用 BuildContext 但未进行 mounted 检查
-文件：lib/features/auth/presentation/login_page.dart:67
-问题：`context.go('/home')` 在 `await auth.login(...)` 之后调用，但未进行 `mounted` 检查。
-修复：在所有 await 之后的导航前添加 `if (!context.mounted) return;`（Flutter 3.7+）。
+[HIGH] 非同期ギャップ後にmountedチェックなしでBuildContextを使用
+File: lib/features/auth/presentation/login_page.dart:67
+Issue: `context.go('/home')`が`await auth.login(...)`の後に`mounted`チェックなしで呼び出されている。
+Fix: await後のナビゲーション前に`if (!context.mounted) return;`を追加（Flutter 3.7+）。
 
-[高] AsyncValue 错误状态未处理
-文件：lib/features/auth/presentation/login_page.dart:42
-问题：`ref.watch(authProvider)` 在 switch 中处理了 loading/data 状态，但没有 `error` 分支。
-修复：在 switch 表达式或 `when()` 调用中添加错误情况，以显示面向用户的错误消息。
+[HIGH] AsyncValueのエラー状態が未処理
+File: lib/features/auth/presentation/login_page.dart:42
+Issue: `ref.watch(authProvider)`がloading/dataでswitchしているが、`error`ブランチがない。
+Fix: switch式または`when()`コールにerrorケースを追加してユーザー向けエラーメッセージを表示。
 
-[中] 硬编码字符串未本地化
-文件：lib/features/auth/presentation/login_page.dart:89
-问题：`Text('Login')` — 用户可见字符串未使用本地化系统。
-修复：使用项目的 l10n 访问器：`Text(context.l10n.loginButton)`。
+[MEDIUM] ハードコードされた文字列がローカライズされていない
+File: lib/features/auth/presentation/login_page.dart:89
+Issue: `Text('Login')` — ユーザーに表示される文字列がローカライゼーションシステムを使用していない。
+Fix: プロジェクトのl10nアクセサを使用: `Text(context.l10n.loginButton)`。
 
-## 审查总结
+## レビューサマリー
 
-| 严重程度 | 数量 | 状态 |
-|----------|------|------|
-| 严重     | 0    | 通过 |
-| 高       | 2    | 阻塞 |
-| 中       | 1    | 信息 |
-| 低       | 0    | 备注 |
+| 重大度 | 件数 | ステータス |
+|--------|------|-----------|
+| CRITICAL | 0     | pass   |
+| HIGH     | 2     | block  |
+| MEDIUM   | 1     | info   |
+| LOW      | 0     | note   |
 
-结论：阻塞 — 高严重性问题必须在合并前修复。
-```
+判定: BLOCK — HIGH問題はマージ前に修正が必要です。
+````
 
-## 批准标准
+## 承認基準
 
-* **批准**：无严重或高等级问题
-* **阻止**：任何严重或高等级问题必须在合并前修复
+- **承認**: CRITICALまたはHIGHの問題がない
+- **ブロック**: CRITICALまたはHIGHの問題はマージ前に修正が必要
 
-## 相关命令
+## 関連コマンド
 
-* `/flutter-build` — 先修复构建错误
-* `/flutter-test` — 审查前运行测试
-* `/code-review` — 通用代码审查（语言无关）
+- `/flutter-build` — まずビルドエラーを修正
+- `/flutter-test` — レビュー前にテストを実行
+- `/code-review` — 一般的なコードレビュー（言語非依存）
 
-## 相关
+## 関連
 
-* 智能体：`agents/flutter-reviewer.md`
-* 技能：`skills/flutter-dart-code-review/`
-* 规则：`rules/dart/`
+- エージェント: `agents/flutter-reviewer.md`
+- スキル: `skills/flutter-dart-code-review/`
+- ルール: `rules/dart/`

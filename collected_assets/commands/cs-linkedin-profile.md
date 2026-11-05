@@ -1,15 +1,11 @@
 ---
-title: "/cs-linkedin-profile — Slash Command for AI Coding Agents"
-description: "/cs-linkedin-profile — Audit a LinkedIn profile 0-100, rank every fix by points per hour, score the headline on five dimensions against the. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+name: "cs-linkedin-profile"
+description: "/cs-linkedin-profile — Audit a LinkedIn profile 0-100, rank every fix by points per hour, score the headline on five dimensions against the 220-character cap, and assemble an About section that survives the '…see more' fold."
+argument-hint: "[your headline, or a description of your profile section by section]"
 ---
 
-# /cs-linkedin-profile
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/marketing/linkedin/commands/cs-linkedin-profile.md">Source</a></span>
-</div>
-
+# /cs-linkedin-profile — Audit first, rewrite what pays
 
 **Command:** `/cs-linkedin-profile [headline or profile description]`
 
@@ -65,5 +61,5 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/linkedin-profile/scripts/about_section_buil
 
 ## Related
 
-- Skill: [`linkedin-profile`](https://github.com/alirezarezvani/claude-skills/tree/main/marketing/linkedin/skills/linkedin-profile/SKILL.md)
+- Skill: [`linkedin-profile`](../skills/linkedin-profile/SKILL.md)
 - Run [`/cs-linkedin-plan`](cs-linkedin-plan.md) first if the audience answer is still fuzzy

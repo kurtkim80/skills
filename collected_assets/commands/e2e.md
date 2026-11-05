@@ -1,61 +1,60 @@
 ---
-description: 使用 Playwright 生成并运行端到端测试。创建测试旅程、运行测试、捕获截图/视频/跟踪，并上传工件。
+description: Crear y ejecutar pruebas end-to-end con Playwright. Genera flujos de prueba, ejecuta los tests, captura capturas de pantalla/videos/trazas y sube artefactos.
 ---
 
-# E2E 命令
+# Comando E2E
 
-此命令调用 **e2e-runner** 代理来使用 Playwright 生成、维护和执行端到端测试。
+Este comando invoca al agente **e2e-runner** para crear, mantener y ejecutar pruebas end-to-end usando Playwright.
 
-## 此命令的作用
+## Qué Hace Este Comando
 
-1. **生成测试旅程** - 为用户流程创建 Playwright 测试
-2. **运行 E2E 测试** - 跨浏览器执行测试
-3. **捕获工件** - 失败时的截图、视频、跟踪
-4. **上传结果** - HTML 报告和 JUnit XML
-5. **识别不稳定测试** - 隔离不稳定的测试
+1. **Crear Flujos de Prueba** - Generar pruebas Playwright para flujos de usuario
+2. **Ejecutar Pruebas E2E** - Ejecutar los tests en múltiples navegadores
+3. **Capturar Artefactos** - Capturas de pantalla, videos y trazas en caso de error
+4. **Subir Resultados** - Reportes HTML y JUnit XML
+5. **Identificar Pruebas Inestables** - Poner en cuarentena tests no deterministas
 
-## 何时使用
+## Cuándo Usarlo
 
-在以下情况使用 `/e2e`：
+Usa el comando `/e2e` cuando:
+- Pruebes flujos de usuario críticos (login, transacciones, pagos)
+- Verifiques que flujos de múltiples pasos funcionen de extremo a extremo
+- Pruebes interacciones de UI y navegación
+- Valides la integración entre frontend y backend
+- Te prepares para despliegue a producción
 
-* 测试关键用户旅程（登录、交易、支付）
-* 验证多步骤流程端到端工作
-* 测试 UI 交互和导航
-* 验证前端和后端之间的集成
-* 为生产部署做准备
+## Cómo Funciona
 
-## 工作原理
+El agente e2e-runner:
 
-e2e-runner 代理将：
+1. **Analizará el flujo de usuario** e identificará los escenarios de prueba
+2. **Generará la prueba Playwright** usando el patrón Page Object Model
+3. **Ejecutará las pruebas** (Chrome, Firefox, Safari)
+4. **Capturará los fallos** con capturas de pantalla, videos y trazas
+5. **Generará un reporte** con los resultados y artefactos
+6. **Identificará pruebas inestables** y sugerirá correcciones
 
-1. **分析用户流程**并识别测试场景
-2. **使用页面对象模型模式生成 Playwright 测试**
-3. **跨多个浏览器（Chrome、Firefox、Safari）运行测试**
-4. **捕获失败**，包括截图、视频和跟踪
-5. **生成包含结果和工件的报告**
-6. **识别不稳定测试**并推荐修复方法
+## Ejemplo de Uso
 
-## 使用示例
+```
+Usuario: /e2e Probar el flujo de búsqueda y visualización de mercados
 
-````
-用户：/e2e 测试市场搜索和查看流程
+Agente (e2e-runner):
+# Creación de Prueba E2E: Flujo de Búsqueda y Visualización de Mercados
 
-代理（e2e-runner）：
-# E2E 测试生成：市场搜索和查看流程
+## Escenario de Prueba Identificado
 
-## 已识别测试场景
+**Flujo de Usuario:** Búsqueda de Mercados → Ver Resultados → Click en Mercado → Ver Detalles
 
-**用户旅程：** 市场搜索 → 查看结果 → 点击市场 → 查看详情
+**Cobertura de Prueba:**
+1. Ir a la página de mercados
+2. Realizar búsqueda semántica
+3. Validar resultados de búsqueda
+4. Click en el primer resultado
+5. Validar que carga la página de detalles del mercado
+6. Validar que el gráfico se renderiza
 
-**测试覆盖范围：**
-1. 导航至市场页面
-2. 执行语义搜索
-3. 验证搜索结果
-4. 点击第一个结果
-5. 验证市场详情页面加载
-6. 验证图表渲染
-
-## 生成的测试代码
+## Código de Prueba Generado
 
 ```typescript
 // tests/e2e/markets/search-and-view.spec.ts
@@ -64,64 +63,64 @@ import { MarketsPage } from '../../pages/MarketsPage'
 import { MarketDetailsPage } from '../../pages/MarketDetailsPage'
 
 test.describe('Market Search and View Flow', () => {
-  test('user can search markets and view details', async ({ page }) => {
-    // 1. Navigate to markets page
+  test('el usuario puede buscar mercados y ver detalles', async ({ page }) => {
+    // 1. Ir a la página de mercados
     const marketsPage = new MarketsPage(page)
     await marketsPage.goto()
 
-    // Verify page loaded
+    // Validar que la página cargó
     await expect(page).toHaveTitle(/Markets/)
     await expect(page.locator('h1')).toContainText('Markets')
 
-    // 2. Perform semantic search
+    // 2. Realizar búsqueda semántica
     await marketsPage.searchMarkets('election')
 
-    // Wait for API response
+    // Esperar respuesta de la API
     await page.waitForResponse(resp =>
       resp.url().includes('/api/markets/search') && resp.status() === 200
     )
 
-    // 3. Verify search results
+    // 3. Validar resultados de búsqueda
     const marketCards = marketsPage.marketCards
     await expect(marketCards.first()).toBeVisible()
     const resultCount = await marketCards.count()
     expect(resultCount).toBeGreaterThan(0)
 
-    // Take screenshot of search results
+    // Tomar captura de pantalla de los resultados
     await page.screenshot({ path: 'artifacts/search-results.png' })
 
-    // 4. Click on first result
+    // 4. Click en el primer resultado
     const firstMarketTitle = await marketCards.first().textContent()
     await marketCards.first().click()
 
-    // 5. Verify market details page loads
+    // 5. Validar que carga la página de detalles del mercado
     await expect(page).toHaveURL(/\/markets\/[a-z0-9-]+/)
 
     const detailsPage = new MarketDetailsPage(page)
     await expect(detailsPage.marketName).toBeVisible()
     await expect(detailsPage.marketDescription).toBeVisible()
 
-    // 6. Verify chart renders
+    // 6. Validar que el gráfico se renderiza
     await expect(detailsPage.priceChart).toBeVisible()
 
-    // Verify market name matches
+    // Verificar que el nombre del mercado coincide
     const detailsTitle = await detailsPage.marketName.textContent()
     expect(detailsTitle?.toLowerCase()).toContain(
       firstMarketTitle?.toLowerCase().substring(0, 20) || ''
     )
 
-    // Take screenshot of market details
+    // Tomar captura de pantalla de los detalles del mercado
     await page.screenshot({ path: 'artifacts/market-details.png' })
   })
 
-  test('search with no results shows empty state', async ({ page }) => {
+  test('búsqueda sin resultados debe mostrar estado vacío', async ({ page }) => {
     const marketsPage = new MarketsPage(page)
     await marketsPage.goto()
 
-    // Search for non-existent market
+    // Buscar un mercado que no existe
     await marketsPage.searchMarkets('xyznonexistentmarket123456')
 
-    // Verify empty state
+    // Validar estado vacío
     await expect(page.locator('[data-testid="no-results"]')).toBeVisible()
     await expect(page.locator('[data-testid="no-results"]')).toContainText(
       /no.*results|no.*markets/i
@@ -131,143 +130,140 @@ test.describe('Market Search and View Flow', () => {
     expect(marketCount).toBe(0)
   })
 
-  test('can clear search and see all markets again', async ({ page }) => {
+  test('puede limpiar la búsqueda y ver todos los mercados de nuevo', async ({ page }) => {
     const marketsPage = new MarketsPage(page)
     await marketsPage.goto()
 
-    // Initial market count
+    // Cantidad inicial de mercados
     const initialCount = await marketsPage.marketCards.count()
 
-    // Perform search
+    // Realizar búsqueda
     await marketsPage.searchMarkets('trump')
     await page.waitForLoadState('networkidle')
 
-    // Verify filtered results
+    // Validar resultados filtrados
     const filteredCount = await marketsPage.marketCards.count()
     expect(filteredCount).toBeLessThan(initialCount)
 
-    // Clear search
+    // Limpiar búsqueda
     await marketsPage.searchInput.clear()
     await page.waitForLoadState('networkidle')
 
-    // Verify all markets shown again
+    // Validar que se muestran todos los mercados de nuevo
     const finalCount = await marketsPage.marketCards.count()
     expect(finalCount).toBe(initialCount)
   })
 })
+```
 
-````
-
-## 运行测试
+## Ejecutar las Pruebas
 
 ```bash
-# Run the generated test
+# Ejecutar la prueba generada
 npx playwright test tests/e2e/markets/search-and-view.spec.ts
 
-Running 3 tests using 3 workers
+Corriendo 3 pruebas usando 3 workers
 
-  ✓  [chromium] › search-and-view.spec.ts:5:3 › user can search markets and view details (4.2s)
-  ✓  [chromium] › search-and-view.spec.ts:52:3 › search with no results shows empty state (1.8s)
-  ✓  [chromium] › search-and-view.spec.ts:67:3 › can clear search and see all markets again (2.9s)
+  ✓  [chromium] › search-and-view.spec.ts:5:3 › el usuario puede buscar mercados y ver detalles (4.2s)
+  ✓  [chromium] › search-and-view.spec.ts:52:3 › búsqueda sin resultados muestra estado vacío (1.8s)
+  ✓  [chromium] › search-and-view.spec.ts:67:3 › puede limpiar búsqueda y ver todos los mercados (2.9s)
 
   3 passed (9.1s)
 
-Artifacts generated:
+Artefactos generados:
 - artifacts/search-results.png
 - artifacts/market-details.png
 - playwright-report/index.html
 ```
 
-## 测试报告
+## Reporte de Pruebas
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║                    E2E 测试结果                          ║
+║                 Resultados de Pruebas E2E                    ║
 ╠══════════════════════════════════════════════════════════════╣
-║ 状态：     PASS: 所有测试通过                              ║
-║ 总计：      3 项测试                                          ║
-║ 通过：     3 (100%)                                         ║
-║ 失败：     0                                                ║
-║ 不稳定：    0                                                ║
-║ 耗时：   9.1s                                             ║
+║ Estado:     PASS: TODAS LAS PRUEBAS PASARON                  ║
+║ Total:      3 pruebas                                        ║
+║ Pasaron:    3 (100%)                                         ║
+║ Fallaron:   0                                                ║
+║ Inestables: 0                                                ║
+║ Duración:   9.1s                                             ║
 ╚══════════════════════════════════════════════════════════════╝
 
-产物：
- 截图： 2 个文件
- 视频： 0 个文件（仅在失败时生成）
- 追踪文件： 0 个文件（仅在失败时生成）
- HTML 报告： playwright-report/index.html
+Artefactos:
+ Capturas de pantalla: 2 archivos
+ Videos: 0 archivos (solo en fallo)
+ Trazas: 0 archivos (solo en fallo)
+ Reporte HTML: playwright-report/index.html
 
-查看报告： npx playwright show-report
+Ver reporte: npx playwright show-report
 ```
 
-PASS: E2E 测试套件已准备好进行 CI/CD 集成！
+PASS: ¡Suite de pruebas E2E lista para integración CI/CD!
+```
 
-````
-## 测试产物
+## Artefactos de Prueba
 
-当测试运行时，会捕获以下产物：
+Cuando las pruebas se ejecutan, se capturan estos artefactos:
 
-**所有测试：**
-- 包含时间线和结果的 HTML 报告
-- 用于 CI 集成的 JUnit XML 文件
+**En Todas las Pruebas:**
+- Reporte HTML con cronología y resultados
+- JUnit XML para integración CI
 
-**仅在失败时：**
-- 失败状态的截图
-- 测试的视频录制
-- 用于调试的追踪文件（逐步重放）
-- 网络日志
-- 控制台日志
+**Solo en Caso de Fallo:**
+- Captura de pantalla del estado fallido
+- Grabación de video de la prueba
+- Archivo de traza para depuración (reproducción paso a paso)
+- Logs de red
+- Logs de consola
 
-## 查看产物
+## Ver Artefactos
 
 ```bash
-# 在浏览器中查看 HTML 报告
+# Ver reporte HTML en el navegador
 npx playwright show-report
 
-# 查看特定的追踪文件
+# Ver archivo de traza específico
 npx playwright show-trace artifacts/trace-abc123.zip
 
-# 截图保存在 artifacts/ 目录中
+# Las capturas de pantalla se guardan en el directorio artifacts/
 open artifacts/search-results.png
-
-````
-
-## 不稳定测试检测
-
-如果测试间歇性失败：
-
-```
-WARNING:  FLAKY TEST DETECTED: tests/e2e/markets/trade.spec.ts
-
-测试通过了 7/10 次运行 (70% 通过率)
-
-常见失败原因:
-"等待元素 '[data-testid="confirm-btn"]' 超时"
-
-推荐修复方法:
-1. 添加显式等待: await page.waitForSelector('[data-testid="confirm-btn"]')
-2. 增加超时时间: { timeout: 10000 }
-3. 检查组件中的竞争条件
-4. 确认元素未被动画遮挡
-
-隔离建议: 在修复前标记为 test.fixme()
 ```
 
-## 浏览器配置
+## Detección de Pruebas Inestables
 
-默认情况下，测试在多个浏览器上运行：
+Si una prueba falla de forma intermitente:
 
-* PASS: Chromium（桌面版 Chrome）
-* PASS: Firefox（桌面版）
-* PASS: WebKit（桌面版 Safari）
-* PASS: 移动版 Chrome（可选）
+```
+ADVERTENCIA: PRUEBA INESTABLE DETECTADA: tests/e2e/markets/trade.spec.ts
 
-在 `playwright.config.ts` 中配置以调整浏览器。
+La prueba pasó 7 de 10 ejecuciones (70% de tasa de éxito)
 
-## CI/CD 集成
+Fallo más frecuente:
+"Timeout esperando elemento '[data-testid="confirm-btn"]'"
 
-添加到您的 CI 流水线：
+Correcciones sugeridas:
+1. Agregar espera explícita: await page.waitForSelector('[data-testid="confirm-btn"]')
+2. Aumentar timeout: { timeout: 10000 }
+3. Verificar condiciones de carrera en el componente
+4. Validar que el elemento no está oculto por animación
+
+Sugerencia de cuarentena: Marcar como test.fixme() hasta que se corrija
+```
+
+## Configuración de Navegadores
+
+Las pruebas se ejecutan en múltiples navegadores por defecto:
+- PASS: Chromium (Desktop Chrome)
+- PASS: Firefox (Desktop)
+- PASS: WebKit (Desktop Safari)
+- PASS: Mobile Chrome (opcional)
+
+Configura `playwright.config.ts` para ajustar los navegadores.
+
+## Integración CI/CD
+
+Agregar a tu pipeline CI:
 
 ```yaml
 # .github/workflows/e2e.yml
@@ -285,90 +281,56 @@ WARNING:  FLAKY TEST DETECTED: tests/e2e/markets/trade.spec.ts
     path: playwright-report/
 ```
 
-## PMX 特定的关键流程
+## Buenas Prácticas
 
-对于 PMX，请优先考虑以下 E2E 测试：
+**HAZ:**
+- PASS: Usa Page Object Model para mantenibilidad
+- PASS: Usa atributos data-testid para los selectores
+- PASS: Espera respuestas de API, no timeouts arbitrarios
+- PASS: Prueba los flujos de usuario críticos de extremo a extremo
+- PASS: Ejecuta las pruebas antes de hacer merge a main
+- PASS: Inspecciona los artefactos cuando las pruebas fallen
 
-**关键（必须始终通过）：**
+**NO HAGAS:**
+- FAIL: No uses selectores frágiles (las clases CSS pueden cambiar)
+- FAIL: No pruebes detalles de implementación
+- FAIL: No ejecutes pruebas contra producción
+- FAIL: No ignores pruebas inestables
+- FAIL: No omitas la inspección de artefactos en fallos
+- FAIL: No pruebes todos los casos límite con E2E (usa pruebas unitarias)
 
-1. 用户可以连接钱包
-2. 用户可以浏览市场
-3. 用户可以搜索市场（语义搜索）
-4. 用户可以查看市场详情
-5. 用户可以下交易单（使用测试资金）
-6. 市场正确结算
-7. 用户可以提取资金
-
-**重要：**
-
-1. 市场创建流程
-2. 用户资料更新
-3. 实时价格更新
-4. 图表渲染
-5. 过滤和排序市场
-6. 移动端响应式布局
-
-## 最佳实践
-
-**应该：**
-
-* PASS: 使用页面对象模型以提高可维护性
-* PASS: 使用 data-testid 属性作为选择器
-* PASS: 等待 API 响应，而不是使用任意超时
-* PASS: 测试关键用户旅程的端到端
-* PASS: 在合并到主分支前运行测试
-* PASS: 在测试失败时审查工件
-
-**不应该：**
-
-* FAIL: 使用不稳定的选择器（CSS 类可能会改变）
-* FAIL: 测试实现细节
-* FAIL: 针对生产环境运行测试
-* FAIL: 忽略不稳定测试
-* FAIL: 在失败时跳过工件审查
-* FAIL: 使用 E2E 测试每个边缘情况（使用单元测试）
-
-## 重要注意事项
-
-**对 PMX 至关重要：**
-
-* 涉及真实资金的 E2E 测试**必须**仅在测试网/暂存环境中运行
-* 切勿针对生产环境运行交易测试
-* 为金融测试设置 `test.skip(process.env.NODE_ENV === 'production')`
-* 仅使用带有少量测试资金的测试钱包
-
-## 与其他命令的集成
-
-* 使用 `/plan` 来识别要测试的关键旅程
-* 使用 `/tdd` 进行单元测试（更快、更细粒度）
-* 使用 `/e2e` 进行集成和用户旅程测试
-* 使用 `/code-review` 来验证测试质量
-
-## 相关代理
-
-此命令调用由 ECC 提供的 `e2e-runner` 代理。
-
-对于手动安装，源文件位于：
-`agents/e2e-runner.md`
-
-## 快速命令
+## Comandos Rápidos
 
 ```bash
-# Run all E2E tests
+# Ejecutar todas las pruebas E2E
 npx playwright test
 
-# Run specific test file
+# Ejecutar archivo de prueba específico
 npx playwright test tests/e2e/markets/search.spec.ts
 
-# Run in headed mode (see browser)
+# Ejecutar en modo headed (ver el navegador)
 npx playwright test --headed
 
-# Debug test
+# Depurar prueba
 npx playwright test --debug
 
-# Generate test code
+# Generar código de prueba
 npx playwright codegen http://localhost:3000
 
-# View report
+# Ver reporte
 npx playwright show-report
 ```
+
+## Agentes Relacionados
+
+Este comando invoca al agente `e2e-runner` proporcionado por ECC.
+
+Para instalaciones manuales, el archivo fuente se encuentra en:
+`agents/e2e-runner.md`
+
+## Integración con Otros Comandos
+
+- Usa `/plan` para identificar los flujos críticos a probar
+- Usa `/tdd` para pruebas unitarias (más rápidas, más detalladas)
+- Usa `/e2e` para pruebas de integración y flujos de usuario
+- Usa `/code-review` para validar la calidad de las pruebas

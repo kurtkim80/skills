@@ -1,16 +1,12 @@
 ---
-title: "Workspace Admin — AI Coding Agent & Codex Skill"
-description: "Google Workspace administration agent using the gws CLI. Orchestrates workspace setup, Gmail/Drive/Sheets/Calendar automation, security audits, and. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-workspace-admin
+description: Google Workspace administration agent using the gws CLI. Orchestrates workspace setup, Gmail/Drive/Sheets/Calendar automation, security audits, and recipe execution. Spawn when users need Google Workspace automation, gws CLI help, or workspace administration.
+domain: engineering
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
-# Workspace Admin
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-code-braces: Engineering - Core</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering-team/cs-workspace-admin.md">Source</a></span>
-</div>
-
+# cs-workspace-admin
 
 ## Role & Expertise
 
@@ -19,49 +15,49 @@ Google Workspace administration specialist orchestrating the gws CLI for email a
 ## Skill Integration
 
 ### Skill Location
-[`engineering-team/google-workspace-cli`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli)
+`../../engineering-team/google-workspace-cli/`
 
 ### Python Tools
 
 1. **GWS Doctor**
-   - **Path:** [`scripts/gws_doctor.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_doctor.py)
+   - **Path:** `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_doctor.py`
    - **Usage:** `python3 ../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_doctor.py [--json]`
    - **Purpose:** Pre-flight diagnostics — checks installation, auth, and service connectivity
 
 2. **Auth Setup Guide**
-   - **Path:** [`scripts/auth_setup_guide.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/auth_setup_guide.py)
+   - **Path:** `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/auth_setup_guide.py`
    - **Usage:** `python3 ../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/auth_setup_guide.py --guide oauth`
    - **Purpose:** Guided auth setup, scope listing, .env generation, validation
 
 3. **Recipe Runner**
-   - **Path:** [`scripts/gws_recipe_runner.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_recipe_runner.py)
+   - **Path:** `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_recipe_runner.py`
    - **Usage:** `python3 ../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/gws_recipe_runner.py --list`
    - **Purpose:** Catalog, search, and execute 43 built-in recipes with persona filtering
 
 4. **Workspace Audit**
-   - **Path:** [`scripts/workspace_audit.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/workspace_audit.py)
+   - **Path:** `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/workspace_audit.py`
    - **Usage:** `python3 ../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/workspace_audit.py [--json]`
    - **Purpose:** Security and configuration audit across Workspace services
 
 5. **Output Analyzer**
-   - **Path:** [`scripts/output_analyzer.py`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/output_analyzer.py)
+   - **Path:** `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/output_analyzer.py`
    - **Usage:** `gws ... --json | python3 ../../engineering-team/google-workspace-cli/skills/google-workspace-cli/scripts/output_analyzer.py --count`
    - **Purpose:** Parse, filter, and aggregate JSON/NDJSON output from any gws command
 
 ### Knowledge Bases
 
-1. **Command Reference** — [`references/gws-command-reference.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/references/gws-command-reference.md)
+1. **Command Reference** — `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/references/gws-command-reference.md`
    - 18 services, 22 helpers, global flags, environment variables
-2. **Recipes Cookbook** — [`references/recipes-cookbook.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/references/recipes-cookbook.md)
+2. **Recipes Cookbook** — `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/references/recipes-cookbook.md`
    - 43 recipes organized by category with persona mapping
-3. **Troubleshooting** — [`references/troubleshooting.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/references/troubleshooting.md)
+3. **Troubleshooting** — `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/references/troubleshooting.md`
    - Common errors, auth issues, platform-specific fixes
 
 ### Templates
 
-1. **Workspace Config** — [`assets/workspace-config.json`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/assets/workspace-config.json)
+1. **Workspace Config** — `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/assets/workspace-config.json`
    - Automation config template with auth, defaults, scheduled tasks
-2. **Persona Profiles** — [`assets/persona-profiles.md`](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/assets/persona-profiles.md)
+2. **Persona Profiles** — `../../engineering-team/google-workspace-cli/skills/google-workspace-cli/assets/persona-profiles.md`
    - 10 role-based workflow bundles
 
 ## Core Workflows
@@ -155,9 +151,9 @@ gws helpers morning-briefing --json | python3 ../../engineering-team/google-work
 ## Related Agents
 
 - [cs-engineering-lead](cs-engineering-lead.md) — Engineering team coordination
-- [cs-senior-engineer](https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering/cs-senior-engineer.md) — Architecture and CI/CD
+- [cs-senior-engineer](../engineering/cs-senior-engineer.md) — Architecture and CI/CD
 
 ## References
 
-- [Skill Documentation](https://github.com/alirezarezvani/claude-skills/tree/main/engineering-team/google-workspace-cli/skills/google-workspace-cli/SKILL.md)
+- [Skill Documentation](../../engineering-team/google-workspace-cli/skills/google-workspace-cli/SKILL.md)
 - [gws CLI Repository](https://github.com/googleworkspace/cli)

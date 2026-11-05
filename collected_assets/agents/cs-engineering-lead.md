@@ -1,16 +1,12 @@
 ---
-title: "Engineering Lead — AI Coding Agent & Codex Skill"
-description: "Engineering Team Lead agent for coordinating QA, security, data engineering, ML, and frontend/backend teams. Orchestrates engineering-team skills for. Agent-native orchestrator for Claude Code, Codex, Gemini CLI."
+name: cs-engineering-lead
+description: Engineering Team Lead agent for coordinating QA, security, data engineering, ML, and frontend/backend teams. Orchestrates engineering-team skills for team-level technical decisions. Spawn when users need team coordination, tech stack evaluation, incident response, or cross-functional engineering work.
+domain: engineering
+model: opus
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
-# Engineering Lead
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-robot: Agent</span>
-<span class="meta-badge">:material-code-braces: Engineering - Core</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering-team/cs-engineering-lead.md">Source</a></span>
-</div>
-
+# cs-engineering-lead
 
 ## Role & Expertise
 
@@ -85,5 +81,5 @@ Engineering team lead coordinating across specializations: frontend, backend, QA
 
 ## Related Agents
 
-- [cs-senior-engineer](https://github.com/alirezarezvani/claude-skills/tree/main/agents/engineering/cs-senior-engineer.md) -- Architecture decisions, code review, and CI/CD pipeline setup
-- [cs-product-manager](https://github.com/alirezarezvani/claude-skills/tree/main/agents/product/cs-product-manager.md) -- Feature prioritization and requirements alignment
+- [cs-senior-engineer](../engineering/cs-senior-engineer.md) -- Architecture decisions, code review, and CI/CD pipeline setup
+- [cs-product-manager](../product/cs-product-manager.md) -- Feature prioritization and requirements alignment

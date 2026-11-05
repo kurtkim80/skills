@@ -1,15 +1,10 @@
 ---
-title: "/cs-commit-check — Slash Command for AI Coding Agents"
-description: "Check what is staged, or a range about to be pushed, for secrets, sensitive files, vague messages and leftover fixup commits.. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Check what is staged, or a range about to be pushed, for secrets, sensitive files, vague messages and leftover fixup commits.
+argument-hint: "[commit range, e.g. origin/main..HEAD]"
 ---
 
 # /cs-commit-check
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/commit-craft/commands/cs-commit-check.md">Source</a></span>
-</div>
-
 
 With no argument, check what is staged. With a range, check the series before push.
 

@@ -1,15 +1,10 @@
 ---
-title: "/cs-commit-craft — Slash Command for AI Coding Agents"
-description: "Turn the current working tree into a clean commit series - plan the groups, gate each one for secrets, write messages that say why, and lint the. Slash command for Claude Code, Codex CLI, Gemini CLI."
+disable-model-invocation: true
+description: Turn the current working tree into a clean commit series - plan the groups, gate each one for secrets, write messages that say why, and lint the series before push.
+argument-hint: "[repo path] [--push]"
 ---
 
 # /cs-commit-craft
-
-<div class="page-meta" markdown>
-<span class="meta-badge">:material-console: Slash Command</span>
-<span class="meta-badge">:material-github: <a href="https://github.com/alirezarezvani/2-claude-skills/tree/main/engineering/commit-craft/commands/cs-commit-craft.md">Source</a></span>
-</div>
-
 
 Turn the uncommitted work in `$ARGUMENTS` (default: the current repo) into a reviewable series.
 
