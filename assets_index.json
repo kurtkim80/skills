@@ -7432,7 +7432,7 @@
     "build-perf-baseline": {
       "name": "build-perf-baseline",
       "type": "skill",
-      "description": "Establish MSBuild/.NET build performance baselines before optimizing. USE FOR: unranked slow builds; cold, warm, incremental or no-op measurements; before/after comparisons; CI output caching; static graph, artifacts output and dependency graph trimming. Start here before build-perf-diagnostics, incremental-build or build-parallelism. DO NOT USE FOR: known repeated-restore fixes (use eliminate-redundant-restores), non-MSBuild builds. For measured target/task/analyzer bottlenecks, use build-perf-diagnostics.",
+      "description": "Establish MSBuild/.NET baselines before optimizing. USE FOR: unranked slow builds; cold/warm/incremental/no-op measurements; before/after comparisons; CI caching; static graph, artifacts output, dependency graph trimming. DO NOT USE FOR: measured bottlenecks (build-perf-diagnostics), known repeated restores (eliminate-redundant-restores), within-build duplicate calls (find-repeated-work-within-one-build), non-MSBuild builds.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/build-perf-baseline"
@@ -7440,16 +7440,15 @@
     "eval-performance": {
       "name": "eval-performance",
       "type": "skill",
-      "description": "Guide for diagnosing and improving MSBuild project evaluation performance. USE FOR: builds slow before any compilation starts, high evaluation time in binlog analysis, expensive glob patterns walking large directories (node_modules, .git, bin/obj), deep import chains (>20 levels), preprocessed output >10K lines indicating heavy evaluation, property functions with file I/O ($([System.IO.File]::ReadAllText(...))), multiple evaluations per project. Covers the 5 MSBuild evaluation phases, glob optimization via DefaultItemExcludes, import chain analysis with /pp preprocessing. DO NOT USE FOR: compilation-time slowness (use build-perf-diagnostics), incremental build issues (use incremental-build), non-MSBuild build systems.",
+      "description": "Diagnose measured MSBuild evaluation cost before targets run. USE FOR: evaluation-only repeats under global-property variants, expensive node_modules/.git/bin/obj globs, import depth >20, /pp >10K lines, file-I/O property functions, five-phase evaluation. DO NOT USE FOR: duplicate executions (find-repeated-work-within-one-build), execution bottlenecks (build-perf-diagnostics), incremental rebuilds (incremental-build), non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/eval-performance",
-      "description_ko": "MSBuild 프로젝트 평가 성능 진단 및 개선을 위한 가이드입니다. 사용 대상: 컴파일 시작 전 느린 빌드, binlog 분석의 긴 평가 시간, 큰 디렉터리(node_modules, .git, bin/obj)를 탐색하는 값비싼 glob 패턴, 깊은 가져오기 체인(>20 수준), 과도한 평가를 나타내는 사전 처리된 출력 >10K 라인, 파일 I/O($([System.IO.File]::ReadAllText(...)))가 있는 속성 함수($([System.IO.File]::ReadAllText(...))), 프로젝트당 여러 평가. 5가지 MSBuild 평가 단계, DefaultItemExcludes를 통한 전역 최적화, /pp 사전 처리를 통한 가져오기 체인 분석을 다룹니다. 사용하지 마십시오: 컴파일 시간 속도 저하(build-perf-diagnostics 사용), 증분 빌드 문제(incremental-build 사용), 비MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/eval-performance"
     },
     "build-parallelism": {
       "name": "build-parallelism",
       "type": "skill",
-      "description": "Analyze an MSBuild solution, solution filter, or Build.proj that schedules multiple project files. USE FOR: measured idle worker nodes, `-m` that does not scale, a serial ProjectReference critical path, graph builds, or an MSBuild task that builds a Projects list. Requires at least two distinct project files whose scheduling or throughput must be analyzed. DO NOT USE for non-MSBuild build systems.",
+      "description": "Analyze MSBuild scheduling across at least two distinct projects in a solution/filter/Build.proj. USE FOR: measured idle workers, -m not scaling, serial ProjectReference critical paths, graph builds, MSBuild Projects-list scheduling. DO NOT USE FOR: duplicate executions or invariant-generation races (find-repeated-work-within-one-build), non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/build-parallelism"
@@ -7457,11 +7456,10 @@
     "check-bin-obj-clash": {
       "name": "check-bin-obj-clash",
       "type": "skill",
-      "description": "Detects MSBuild projects with conflicting OutputPath or IntermediateOutputPath. USE FOR: builds failing with 'Cannot create a file when that file already exists', 'The process cannot access the file because it is being used by another process', intermittent build failures that succeed on retry, or missing/overwritten outputs in multi-project or multi-targeting builds where bin/obj (or project.assets.json) collide. Common causes: shared OutputPath, missing AppendTargetFrameworkToOutputPath, extra global properties (e.g. PublishReadyToRun), or SetTargetFramework on a ProjectReference to a single-targeting project. DO NOT USE FOR: file access errors unrelated to MSBuild (OS-level locking), single-project single-TFM builds, non-MSBuild build systems.",
+      "description": "Find OutputPath/IntermediateOutputPath collisions between distinct projects or required property/TFM variants. USE FOR: missing/overwritten bin/obj or project.assets.json, parallel 'Cannot create a file when that file already exists' or 'file is being used by another process', shared paths, missing AppendTargetFrameworkToOutputPath, PublishReadyToRun, SetTargetFramework on single-target references. DO NOT USE FOR: duplicates or invariant-generation races (find-repeated-work-within-one-build), OS locking, single-instance builds, non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/check-bin-obj-clash",
-      "description_ko": "OutputPath 또는 IntermediateOutputPath가 충돌하는 MSBuild 프로젝트를 검색합니다. 사용 대상: '해당 파일이 이미 존재하면 파일을 생성할 수 없습니다.', '파일이 다른 프로세스에서 사용되고 있기 때문에 프로세스가 파일에 액세스할 수 없습니다.', 재시도에 성공한 간헐적인 빌드 실패, bin/obj(또는 project.assets.json)가 충돌하는 다중 프로젝트 또는 다중 대상 빌드에서 출력 누락/덮어쓰기 등으로 인해 빌드가 실패합니다. 일반적인 원인: 공유 OutputPath, AppendTargetFrameworkToOutputPath 누락, 추가 전역 속성(예: PublishReadyToRun) 또는 단일 대상 프로젝트에 대한 ProjectReference의 SetTargetFramework. 사용하지 마세요: MSBuild(OS 수준 잠금)와 관련 없는 파일 액세스 오류, 단일 프로젝트 단일 TFM 빌드, MSBuild가 아닌 빌드 시스템."
+      "path": "collected_assets/skills/check-bin-obj-clash"
     },
     "item-management": {
       "name": "item-management",
@@ -7499,11 +7497,10 @@
     "incremental-build": {
       "name": "incremental-build",
       "type": "skill",
-      "description": "Guide for optimizing MSBuild incremental builds. USE FOR: builds slower than expected on subsequent runs, 'nothing changed but it rebuilds anyway', diagnosing why targets re-execute unnecessarily, fixing broken no-op builds. Covers 8 common causes: missing Inputs/Outputs on custom targets, volatile properties in output paths (timestamps/GUIDs), file writes outside tracked Outputs, missing FileWrites registration, glob changes, Visual Studio Fast Up-to-Date Check (FUTDC) issues. Key diagnostic: look for 'Building target completely' vs 'Skipping target' in binlog. DO NOT USE FOR: first-time build slowness (use build-perf-baseline), parallelism issues (use build-parallelism), evaluation-phase slowness (use eval-performance), non-MSBuild build systems.",
+      "description": "Fix MSBuild incremental/no-op builds: 'nothing changed but it rebuilds anyway'. USE FOR: targets re-executing on subsequent builds, missing Inputs/Outputs or FileWrites, volatile output paths, untracked writes, glob changes, Visual Studio Fast Up-to-Date Check (FUTDC); 'Building target completely' vs 'Skipping target' in binlog. DO NOT USE FOR: within-build duplicates (find-repeated-work-within-one-build), first-build slowness (build-perf-baseline), parallelism (build-parallelism), slow evaluation (eval-performance), non-MSBuild systems.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
-      "path": "collected_assets/skills/incremental-build",
-      "description_ko": "MSBuild 증분 빌드 최적화를 위한 가이드입니다. 사용 대상: 후속 실행에서 예상보다 느린 빌드, '아무것도 변경되지 않았지만 어쨌든 다시 빌드됨', 대상이 불필요하게 재실행되는 이유를 진단하고 손상된 무작동 빌드를 수정합니다. 8가지 일반적인 원인을 다룹니다. 사용자 지정 대상의 입력/출력 누락, 출력 경로의 휘발성 속성(타임스탬프/GUID), 추적된 출력 외부의 파일 쓰기, FileWrites 등록 누락, glob 변경, Visual Studio 빠른 최신 확인(FUTDC) 문제. 주요 진단: binlog에서 '대상을 완전히 빌드 중'과 '대상 건너뛰기'를 찾습니다. 사용하지 마십시오: 최초 빌드 속도 저하(build-perf-baseline 사용), 병렬 처리 문제(빌드 병렬 처리 사용), 평가 단계 속도 저하(eval-performance 사용), 비 MSBuild 빌드 시스템."
+      "path": "collected_assets/skills/incremental-build"
     },
     "binlog-failure-analysis": {
       "name": "binlog-failure-analysis",
@@ -7524,7 +7521,7 @@
     "build-perf-diagnostics": {
       "name": "build-perf-diagnostics",
       "type": "skill",
-      "description": "Diagnose MSBuild bottlenecks from binlog timelines and Target/Task Performance Summaries after build-perf-baseline establishes measurements. USE FOR: unknown build slowness, RAR >5s, analyzers >30% of Csc, one target >50% of build time, node utilization <80%, excessive Copy tasks, finding restore overhead. DO NOT USE FOR: known repeated-restore fixes (use eliminate-redundant-restores), initial baselines (use build-perf-baseline), incremental rebuilds (use incremental-build), parallelism tuning (use build-parallelism), non-MSBuild builds.",
+      "description": "Diagnose MSBuild bottlenecks from binlog timelines and Target/Task Performance Summaries after baseline measurements. USE FOR: unknown build slowness, RAR >5s, analyzers >30% of Csc, a target >50% of build, node utilization below 80%, excessive Copy, restore overhead. DO NOT USE FOR: within-build duplicates (find-repeated-work-within-one-build), known repeated restores (eliminate-redundant-restores), initial baselines (build-perf-baseline), incremental rebuilds (incremental-build), parallelism tuning (build-parallelism), non-MSBuild builds.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/build-perf-diagnostics"
@@ -7594,6 +7591,14 @@
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/extension-points"
+    },
+    "find-repeated-work-within-one-build": {
+      "name": "find-repeated-work-within-one-build",
+      "type": "skill",
+      "description": "Use ONLY for auditing executed-task counts or batching/hoisting costs within ONE MSBuild invocation: per-project Exec, duplicate dependency builds, per-item generators, run-once races. NEVER load for evaluation-only global-property variants with once-only target/task execution, idle-node/serial-chain investigations, second/unchanged builds, restores across commands, required-variant bin/obj collisions or unranked slowness. Do not load to check scope or replace an unavailable specialist; answer directly.",
+      "source_repo": "https://github.com/dotnet/skills.git",
+      "source_name": "dotnet/skills",
+      "path": "collected_assets/skills/find-repeated-work-within-one-build"
     },
     "system-text-json-net11": {
       "name": "system-text-json-net11",
@@ -7670,7 +7675,7 @@
     "msbuild": {
       "name": "msbuild",
       "type": "skill",
-      "description": "Use only for MSBuild failure investigation, build-performance analysis, or review of existing build XML/extension contracts. A plan to convert a working legacy/non-SDK project to SDK style or migrate packages.config is a project-system migration, NOT a build-file review: do not activate, even to check scope. Framework/API upgrades are also excluded. Activate for advisory Import/Exists hook and NuGet packed-import questions even without a checkout or failed build; .csproj/.fsproj/.vbproj/.props/.targets conditions; custom-target inputs/outputs; .binlog capture/replay; failing dotnet build/restore/pack/publish or MSBuild-based test builds; slow evaluation, compilation, copying, or no-change builds; and controlled timing comparisons. Exclude SDK installation alone, C# refactoring, runtime profiling, assertions after successful builds, and non-MSBuild builds.",
+      "description": "Use before MSBuild custom-target or incremental-generation repairs, XML/import/hook review, .binlog capture/replay, or assessing supported/unsupported build-speedup claims and controlled timings, even without a checkout. For MSBuild authoring itself, activate before reviewing/editing .proj/.props/.targets/.csproj/.fsproj/.vbproj or Directory.Build files, including no-change import reviews. Framework/API/.NET/ASP.NET upgrade plans and working non-SDK-to-SDK/packages.config conversions are migrations, even if they mention .csproj/NuGet: DO NOT activate. A failing assertion after a successful build is code/test debugging: DO NOT activate. Check Import/Exists, required and NuGet build/buildTransitive/nuspec imports, conditions, Inputs/Outputs, stale outputs and incorrect skips. Build checks use copies; source inputs stay read-only. Diagnose failed dotnet build/restore/pack/publish or slow evaluation/compilation/copying. Exclude SDK installation alone, C# refactoring, runtime CPU profiling and non-MSBuild builds.",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/msbuild"
@@ -9247,6 +9252,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/repo-prep",
       "description_ko": "LICENSE, NOTICE, AUTHORSHIP, README 섹션, 패키지 메타데이터, .gitignore, 커뮤니티 문서(CONTRIBUTING/CODE_OF_CONDUCT/SECURITY/CHANGELOG), .github 템플릿(issues/PR/CI/dependentabot), 프로모션 \"저자 정보\" 블록 및 조건부 EU/독일 법률 준수(CRA, AI Act, GDPR, Impressum, 제조물 책임). 관할권을 인식하는 법적 체계를 통해 인간의 결정, 판단, 방향 및 아트 디렉션을 문서화하는 전용 저작 마법사가 포함되어 있습니다. 릴리스를 위한 새 저장소를 설정하거나, 누락된 법률/메타/커뮤니티 파일을 추가하거나, AI 지원 작업을 위한 AUTHORSHIP 레코드를 작성하거나, \"GitHub/오픈 소스용으로 이 저장소를 준비\"하도록 요청할 때 사용합니다."
+    },
+    "app-map": {
+      "name": "app-map",
+      "type": "skill",
+      "description": "This skill should be used when mapping an application's screens, workflows and tests into one interactive page. It inventories every screen and touchpoint from the code, writes test scenarios and jobs to be done, reads the project's real tests, and builds a self-contained HTML map with a ranked \"Test next\" list, a flow graph, a state-by-state testing matrix, a jobs view and agent hand-off prompts. Trigger on \"map this app\", \"app map\", \"screen inventory\", \"what should we test next\", \"map the workflows\", \"which jobs are underrepresented\", or refreshing an existing map after tests change.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/app-map"
     },
     "elevenlabs-tts": {
       "name": "elevenlabs-tts",
@@ -35541,6 +35554,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/second-deposit-igaming"
     },
+    "rea-growth": {
+      "name": "rea-growth",
+      "type": "skill",
+      "description": "Analyze a company’s public growth and content through Treg, distinguish observations from hypotheses, and produce an evidence-linked playbook within an approved budget.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/rea-growth"
+    },
     "tokenwise": {
       "name": "tokenwise",
       "type": "skill",
@@ -35566,6 +35587,38 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/minicut-film-studio"
+    },
+    "teardown": {
+      "name": "teardown",
+      "type": "skill",
+      "description": "Creates technical illustrations of physical objects and of how things work, such as display pixels or interface layers, with coherent views, fine linework and part fills.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/teardown"
+    },
+    "interface-review": {
+      "name": "interface-review",
+      "type": "skill",
+      "description": "Reviews a branch, pull request or uncommitted change for the interface problems it introduced or regressed, across accessibility, layout, writing, typography, color and UI.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/interface-review"
+    },
+    "explain-interface": {
+      "name": "explain-interface",
+      "type": "skill",
+      "description": "Explains how a website, a visual effect or an animation was built, from a live URL or a screenshot.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/explain-interface"
+    },
+    "build-design": {
+      "name": "build-design",
+      "type": "skill",
+      "description": "Builds UI from a Figma file or a design image so it matches the design, using the project's existing tokens and components.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/build-design"
     },
     "claude-in-chrome-troubleshooting": {
       "name": "claude-in-chrome-troubleshooting",
@@ -35612,6 +35665,14 @@
       "path": "collected_assets/skills/hugging-face-dataset-viewer",
       "description_ko": "포옹하는 얼굴 데이터세트 뷰어"
     },
+    "better-colors": {
+      "name": "better-colors",
+      "type": "skill",
+      "description": "Builds and checks color systems by generating palettes, naming semantic tokens, converting between formats and measuring contrast.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-colors"
+    },
     "gh-attach": {
       "name": "gh-attach",
       "type": "skill",
@@ -35630,6 +35691,14 @@
       "path": "collected_assets/skills/unship",
       "description_ko": "AI 에이전트가 만든 UI 변형을 실제 앱에서 로컬로 비교한 다음 하나를 유지하고 사용하지 않는 임시 코드를 정리합니다."
     },
+    "untangle-codebase": {
+      "name": "untangle-codebase",
+      "type": "skill",
+      "description": "Untangle a whole codebase in one pass, so agents working in it read less per change, break less without noticing, and debug faster.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/untangle-codebase"
+    },
     "cowork-to-code-bridge": {
       "name": "cowork-to-code-bridge",
       "type": "skill",
@@ -35638,6 +35707,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cowork-to-code-bridge",
       "description_ko": "이미 설치되어 있고 독립적으로 검증된 동료-코드 브리지를 사용하여 로컬 파일 대기열을 통해 사용자 자신의 macOS, Linux 또는 WSL2 시스템에서 제한적으로 승인된 작업을 실행하세요."
+    },
+    "treg": {
+      "name": "treg",
+      "type": "skill",
+      "description": "Use the Treg CLI or MCP catalog to discover, price and call authorized external tools with team-scoped credentials and a user-approved budget.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/treg"
     },
     "gh-image": {
       "name": "gh-image",
@@ -35656,6 +35733,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/apple-notes-search",
       "description_ko": "apple-notes MCP 서버를 통해 사용자 자신의 Apple Notes 전반에 걸쳐 의미론적 + 키워드 검색 및 연결 검색이 가능합니다. 사용자가 자신의 노트에서 무언가를 찾고, 회상하고, 종합하고 싶거나 명확하지 않은 연결/관련 노트를 표면화하려는 경우에 사용하세요. macOS, 온디바이스."
+    },
+    "lead-signals": {
+      "name": "lead-signals",
+      "type": "skill",
+      "description": "Find and qualify public buying signals through Treg, rank fitting business accounts and optionally enrich authorized business contact information.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/lead-signals"
     },
     "cursor-delegate": {
       "name": "cursor-delegate",
@@ -35693,6 +35778,14 @@
       "path": "collected_assets/skills/fp-backend",
       "description_ko": "fp-ts, ReaderTaskEither 및 기능적 종속성 주입을 사용한 Node.js/Deno 백엔드 개발을 위한 기능적 프로그래밍 패턴"
     },
+    "break": {
+      "name": "break",
+      "type": "skill",
+      "description": "Renders a component you choose under every scenario that can reach it on a temporary page and stress tests it.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/break"
+    },
     "anywrite": {
       "name": "anywrite",
       "type": "skill",
@@ -35711,6 +35804,14 @@
       "path": "collected_assets/skills/audit-skills",
       "description_ko": "AI 기술 및 번들에 대한 전문 보안 감사자입니다. 비침해적 정적 분석을 수행하여 Windows, macOS, Linux/Unix 및 모바일(Android/iOS) 전반에 걸쳐 악성 패턴, 데이터 유출, 시스템 안정성 위험 및 난독화된 페이로드를 식별합니다."
     },
+    "better-layout": {
+      "name": "better-layout",
+      "type": "skill",
+      "description": "Sets grouping, alignment, reading order, responsive structure and room for translated text, so a layout holds up when it is resized, translated or mirrored.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-layout"
+    },
     "screenstudio-alt": {
       "name": "screenstudio-alt",
       "type": "skill",
@@ -35719,6 +35820,30 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/screenstudio-alt",
       "description_ko": "오픈 소스 헤드리스 Screen Studio 대안: 유휴 상태의 자동 속도 향상, 클릭 클러스터의 자동 확대/축소, 키 입력 오버레이 칩, 부드러운 합성 커서 및 작업을 따르는 9:16 수직 내보내기(CLI에서 화면 녹화를 위한 포스트 프로덕션)."
+    },
+    "web-access": {
+      "name": "web-access",
+      "type": "skill",
+      "description": "Use Treg for public web or platform data only when existing search, browser and connected tools cannot cover the task, with explicit cost and data boundaries.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/web-access"
+    },
+    "better-accessibility": {
+      "name": "better-accessibility",
+      "type": "skill",
+      "description": "Reviews and fixes keyboard and focus behavior, ARIA, accessible names, forms, screen-reader announcements, motion and zoom against WCAG 2.2.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-accessibility"
+    },
+    "state-machine": {
+      "name": "state-machine",
+      "type": "skill",
+      "description": "Renders every state of a component you choose on a throwaway page, with mock data and a switcher, so you can work on each state.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/state-machine"
     },
     "claude-settings-audit": {
       "name": "claude-settings-audit",
@@ -35738,6 +35863,14 @@
       "path": "collected_assets/skills/using-git-worktrees",
       "description_ko": "Git 작업 트리는 동일한 저장소를 공유하는 격리된 작업 공간을 생성하므로 전환 없이 동시에 여러 분기에서 작업할 수 있습니다."
     },
+    "better-interface": {
+      "name": "better-interface",
+      "type": "skill",
+      "description": "Reviews a screen, flow or whole interface across accessibility, layout, writing, typography, color and UI polish, and returns one ranked report.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-interface"
+    },
     "atlas-ledger": {
       "name": "atlas-ledger",
       "type": "skill",
@@ -35746,6 +35879,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/atlas-ledger",
       "description_ko": "아틀라스 계약의 동반자. 적발된 드리프트에 대한 최종 감사를 통해 자동 호출됩니다. 또한 게시물 리뷰 또는 사용자가 실수를 기록하도록 요청한 후에도 사용합니다. WHEN/DON'T/INSTEAD 절로 드리프트를 추출하고 확인 후 Atlas.md에 씁니다."
+    },
+    "variant": {
+      "name": "variant",
+      "type": "skill",
+      "description": "Builds multiple variants of a component you're working on and helps you iterate and pick one.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/variant"
     },
     "codex-subagent": {
       "name": "codex-subagent",
@@ -35781,6 +35922,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/auri-core"
+    },
+    "better-writing": {
+      "name": "better-writing",
+      "type": "skill",
+      "description": "Writes and reviews interface copy, from labels and errors to empty states and confirmations, so it matches the product's voice and tells people what to do next.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-writing"
     },
     "mock-hunter": {
       "name": "mock-hunter",
@@ -35843,6 +35992,14 @@
       "path": "collected_assets/skills/android-cli",
       "description_ko": "`android` 명령줄 도구를 사용하여 프로젝트 생성, 배포, SDK 관리, 환경 진단을 포함한 Android 개발 작업을 조율합니다."
     },
+    "recruit": {
+      "name": "recruit",
+      "type": "skill",
+      "description": "Turn a job description into an evidence-linked candidate shortlist through Treg, with job-related ranking and optional authorized business contact enrichment.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/recruit"
+    },
     "socialclaw": {
       "name": "socialclaw",
       "type": "skill",
@@ -35878,6 +36035,14 @@
       "path": "collected_assets/skills/codex-fable5",
       "description_ko": "Fable에서 영감을 받은 규율을 Codex 작업에 적용합니다. 먼저 검사하고, 목표와 결과를 추적하고, 증거에 근거한 결론을 내리고, 완료 전에 확인하고, 신원이나 제공자 주장 없이 Claude/Fable의 즉각적인 지침을 적용합니다."
     },
+    "better-typography": {
+      "name": "better-typography",
+      "type": "skill",
+      "description": "Sets and reviews how text renders, from the type scale and spacing to font features, wrapping, truncation and punctuation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-typography"
+    },
     "postgres-readonly-queries": {
       "name": "postgres-readonly-queries",
       "type": "skill",
@@ -35904,6 +36069,22 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/skill-issue",
       "description_ko": "코딩 에이전트 스킬이 실행되지 않는 이유를 알아보세요. 활성화 시 각 SKILL.md A~F 등급을 매기고, 프롬프트가 트리거하는 스킬을 시뮬레이션하고, 자동으로 다른 스킬을 그림자로 표시하는 충돌에 플래그를 지정합니다."
+    },
+    "jev-memory": {
+      "name": "jev-memory",
+      "type": "skill",
+      "description": "Set up an explicitly requested Claude Code memory mod using Treg and Jev, with informed consent for prompt transmission, recurring charges and local preference storage.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/jev-memory"
+    },
+    "better-ui": {
+      "name": "better-ui",
+      "type": "skill",
+      "description": "Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/better-ui"
     },
     "news-sentiment-engine": {
       "name": "news-sentiment-engine",
@@ -36010,6 +36191,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/frontend-slides-frontend-slides",
       "description_ko": "처음부터 또는 PowerPoint 파일을 변환하여 멋진 애니메이션이 풍부한 HTML 프레젠테이션을 만드세요. 사용자가 프레젠테이션을 작성하거나, PPT/PPTX를 웹으로 변환하거나, 강연/피칭을 위한 슬라이드를 만들고 싶을 때 사용하세요."
+    },
+    "make-ugc": {
+      "name": "make-ugc",
+      "type": "skill",
+      "description": "Create original AI UGC-style product videos through Treg: research hooks, approve a licensed presenter and voice, generate clips, add captions and report costs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/make-ugc"
     },
     "agy-auto": {
       "name": "agy-auto",
