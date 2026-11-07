@@ -9576,6 +9576,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/decision-to-delivery"
     },
+    "sessiondex": {
+      "name": "sessiondex",
+      "type": "skill",
+      "description": "This skill should be used when finding, listing, or reading past AI agent sessions across Codex, Claude Code, OpenCode, and Pi from one local full-text index. Triggers on \"recent sessions\", \"recent Codex sessions\", \"what did I work on\", \"find the session where\", \"which agent did I ask about X\", \"show that Codex session\", \"resume that session\", and any search of past agent conversations that is not limited to Claude Code.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/sessiondex"
+    },
     "github-gist": {
       "name": "github-gist",
       "type": "skill",
@@ -10066,6 +10074,14 @@
       "path": "collected_assets/skills/nano-banana",
       "description_ko": "Google의 Gemini 이미지 생성 모델(Nano Banana 제품군)을 사용하여 이미지를 생성하고 편집합니다. 스타일 사전 설정, 플랫폼별 크기 조정(YouTube/슬라이드/블로그), 변형, inlineData를 통한 이미지 편집, 스타일 전송을 위한 참조 이미지, 메타데이터로 구성된 출력을 지원합니다. 기본 모델은 Nano Banana 2(gemini-3.1-flash-image-preview)입니다. 키는 SOPS를 통해 자동으로 해독됩니다."
     },
+    "pii-pdf": {
+      "name": "pii-pdf",
+      "type": "skill",
+      "description": "Detect and replace personal names, addresses, contacts, bank accounts and IBANs in PDF files or folders using the local pii-pdf JSON CLI. Use for PDF anonymization, coordinate-based PII review, and setup of this PDF engine; not for general PDF editing or ordinary text anonymization.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/pii-pdf"
+    },
     "jtbd": {
       "name": "jtbd",
       "type": "skill",
@@ -10200,6 +10216,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/telegram-post",
       "description_ko": "초안 마크다운 파일에서 서식이 지정된 텔레그램 게시물을 생성하고, 미리 보고, 보낼 수 있습니다. 사용자가 텔레그램 채널 게시물 초안을 요청하거나, 보내기 전에 초안을 미리 보거나, Channels/*/drafts/에서 저장된 메시지나 채널에 초안을 게시하도록 요청할 때 사용합니다. \"텔레그램 게시\", \"저장된 메시지로 보내기\", \"초안 게시\", \"텔레그램 게시물\"에 대해 트리거됩니다."
+    },
+    "research-to-integration": {
+      "name": "research-to-integration",
+      "type": "skill",
+      "description": "Research technical approaches, execute a bounded comparison, and deliver reusable integration-quality code with a reproducible experiment. Use when the user wants to investigate open/local tools, compare models or libraries, test feasibility, or turn research into a component for an external product. Supports cloud execution and handoff to local/GPU environments, configurable communication and autonomy. Examples include PDF anonymization, knowledge retrieval and video-to-Gaussian-Splatting pipelines.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/research-to-integration"
     },
     "browser-mate": {
       "name": "browser-mate",
