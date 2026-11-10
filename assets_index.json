@@ -9340,6 +9340,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/risograph-covers"
     },
+    "bridgework": {
+      "name": "bridgework",
+      "type": "skill",
+      "description": "This skill should be used when someone wants to see what their tech stack could do in combination. It first audits the stack (an optional, consent-gated, read-only scan of this Mac plus a short interview), then builds and serves Bridgework, a local canvas for practising \"what could these two capabilities do together?\", with a prompt for an agent at every step. Triggers on \"audit my stack\", \"what could my tools do together\", \"map my tech stack\", \"find combinations in my stack\", \"bridgework\", \"open the bridgework canvas\", or \"show the bridgework demo\".",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/bridgework"
+    },
     "pre-session-portrait": {
       "name": "pre-session-portrait",
       "type": "skill",
@@ -9411,6 +9419,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/automation-advisor",
       "description_ko": "자동화 결정 매트릭스 프레임워크를 사용하는 대화형 자동화 결정 조언자입니다. 사용자가 \"이것을 자동화해야 할까요?\"라고 묻거나, 자동화 기회를 평가하거나, 자동화 ROI 또는 손익분기점을 계산하거나, 자동화 결정 분석을 요청하려는 경우에 사용하세요. 구조화된 설문지를 안내하고, 4가지 차원에 점수를 매기고, 재정의 검사를 적용하고, 시각적 결정 다이어그램이 포함된 흑요석 형식의 보고서를 생성합니다."
+    },
+    "luma-event": {
+      "name": "luma-event",
+      "type": "skill",
+      "description": "End-to-end AGENCY Community event on Lu.ma - cover image, Zoom meeting, the Lu.ma event page, invites to calendar contacts, and a social announcement draft. Use when creating a community meetup, talk, workshop or discussion on Lu.ma, or when the user says \"/luma-event\", \"set up a luma event\", \"create the meetup on luma\".",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/luma-event"
     },
     "ecosystem": {
       "name": "ecosystem",
