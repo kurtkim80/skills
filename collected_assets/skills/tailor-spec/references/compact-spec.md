@@ -2,11 +2,17 @@
 
 Status: Draft
 
-## Goal
+## Intent
 
-As a [type of user] I want [goal] so that [value].
+<!-- For infrastructure or platform work, state the capability instead: the system needs to
+[capability] so that [operational value]. -->
+
+As a [type of user]
+I want [goal]
+So that [reason / value]
 
 - **Current pain point:**
+- **Desired outcome:**
 - **Out of scope:**
 
 ## Acceptance Criteria
@@ -15,16 +21,23 @@ As a [type of user] I want [goal] so that [value].
 - **R2:** [criterion]
 - **R3:** [criterion covering an invalid or edge case]
 
-## Approach
+## Design
 
 [The technical approach in a few sentences: what changes, where, and why it fits.]
 
 - **[Decision]:** [Rationale] _(R1, R3)_
 - **[Data model change, new dependency, or constraint worth recording]** _(R2)_
 
+## Risks
+
+<!-- Delete if nothing here could plausibly go wrong beyond the criteria above. Tag the IDs a
+risk threatens, when it threatens any. -->
+
+- [Risk or regression exposure] — [mitigation, or accepted and why] _(R2)_
+
 ## Verification
 
-<!-- Status is filled during implementation, not while planning. -->
+<!-- The proof the plan commits to. Status is filled during implementation, not while planning. -->
 
 | ID | Level | Mode | Means | Observable evidence | Status |
 |---|---|---|---|---|---|
@@ -49,7 +62,7 @@ As a [type of user] I want [goal] so that [value].
 
 - [Requirement ID]: [Blocker] — [proposed follow-up]
 
-## Tasks
+## Plan
 
 - [ ] 1. [Implementation task] _(R1, R2)_
   - [ ] Unit tests for [component] — [behavior they pin down]

@@ -35,7 +35,9 @@ shape, change shape before continuing.
 
 If the user asks for a specific weight, or for a single phase, do that instead.
 
-A compact spec that outgrows itself mid-flight gets split into the full set. Say why. Keep the
+A compact spec that outgrows itself mid-flight gets split into the full set. Say why. The
+sections map one to one: intent and acceptance criteria into `requirements.md`, design and
+risks into `design.md`, verification into `test-plan.md`, plan into `tasks.md`. Keep the
 requirement IDs and their wording for every criterion whose meaning still holds, since
 everything downstream references them; where the promotion changed what a criterion actually
 demands, withdraw the old ID and add a new one rather than editing it in place. Everything
@@ -116,11 +118,12 @@ status is a rollup of those, not a second place to record them.
 ## Compact — one document
 
 Create `.specs/<feature-name>/compact-spec.md` using `references/compact-spec.md`. One
-document covering goal, acceptance criteria, approach, verification, and tasks — the same
+document covering intent, acceptance criteria, design, risks, verification, and plan — the same
 ground the four full-path documents cover, in one place.
 
 Everything the full path requires still holds, at lower fidelity — testable criteria with IDs,
-approach decisions tagged with the IDs they serve, a verification row per active ID, unit
+design decisions tagged with the IDs they serve, risks named with their mitigation or why they
+are accepted, a verification row per active ID, unit
 tests owned by the task that produces the code, written steps for anything checked manually,
 and an explicit deferral for anything that cannot be verified as planned.
 
@@ -130,7 +133,7 @@ Stop and ask: "Does this look right? Should I start implementing?"
 
 Use `references/requirements.md`. Focus on user value and externally visible behavior.
 
-- Capture who benefits, what they need, and why it matters
+- Write the intent: who benefits, what they need, and why it matters
 - Write acceptance criteria that are testable and specific
 - Include edge cases, failure modes, and explicit out-of-scope items
 - Resolve ambiguity before moving on; call out assumptions the user has not confirmed

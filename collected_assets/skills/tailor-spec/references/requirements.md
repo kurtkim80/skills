@@ -2,7 +2,7 @@
 
 Status: Draft
 
-## Problem Statement
+## Intent
 
 <!-- For infrastructure or platform work, state the capability instead: the system needs to
 [capability] so that [operational value]. -->
