@@ -4424,6 +4424,14 @@
       "path": "collected_assets/skills/schema-markup",
       "description_ko": "적격성, 정확성 및 측정 가능한 SEO 영향을 위해 Schema.org 구조화된 데이터를 설계, 검증 및 최적화합니다."
     },
+    "cinematic-shot-prompting": {
+      "name": "cinematic-shot-prompting",
+      "type": "skill",
+      "description": "Use when creating camera movement, cinematic angles, or motion prompts for AI video generators like Runway Gen-3, Kling, and Luma. Compiles narrative prose into a strict 7-slot camera motion contract.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/cinematic-shot-prompting"
+    },
     "video-content-strategist": {
       "name": "video-content-strategist",
       "type": "skill",
@@ -22298,6 +22306,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/monthly-closing-statements"
     },
+    "lumify-odds": {
+      "name": "lumify-odds",
+      "type": "skill",
+      "description": "Lumify's hosted sports MCP/REST API for sportsbook odds, line-movement history, public betting splits, and player props across MLB, NFL, NBA, NHL, soccer, tennis, NCAAF, NCAAB. Read-only market data.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/lumify-odds"
+    },
     "options-flow-analyzer": {
       "name": "options-flow-analyzer",
       "type": "skill",
@@ -22474,7 +22490,7 @@
     "same-idea-both-platforms": {
       "name": "same-idea-both-platforms",
       "type": "skill",
-      "description": "Write one idea as a Twitter/X post and a LinkedIn post that read as written separately, not pasted twice. Use when someone wants to cross-post or adapt a post for the other platform.",
+      "description": "Write one idea as a Twitter post and a LinkedIn post that read as written separately, not pasted twice. Use when someone wants to cross-post or adapt a post for the other platform.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/same-idea-both-platforms"
@@ -25488,7 +25504,7 @@
     "get-seen-in-replies": {
       "name": "get-seen-in-replies",
       "type": "skill",
-      "description": "Write a reply to someone else's tweet that is worth reading on its own. Use when someone asks what to reply, wants to grow by replying on Twitter/X, or says their replies go nowhere.",
+      "description": "Write a reply to someone else's tweet that is worth reading on its own. Use when someone asks what to reply, wants to grow by replying on Twitter, or says their replies go nowhere.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/get-seen-in-replies"
@@ -26494,7 +26510,7 @@
     "write-in-my-voice": {
       "name": "write-in-my-voice",
       "type": "skill",
-      "description": "Draft a Twitter/X or LinkedIn post that sounds like the person asking, from posts they already wrote. Use when someone asks for a post or rewrite in their voice, or asks if text sounds like them.",
+      "description": "Draft a Twitter or LinkedIn post that sounds like the person asking, from posts they already wrote. Use when someone asks for a post or rewrite in their voice, or asks if text sounds like them.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/write-in-my-voice"
@@ -27324,7 +27340,7 @@
     "why-did-this-post-flop": {
       "name": "why-did-this-post-flop",
       "type": "skill",
-      "description": "Diagnose why one Twitter/X or LinkedIn post underperformed: not seen, seen and skipped, or read and ignored. Use when someone asks why a post did badly or got no engagement.",
+      "description": "Diagnose why one Twitter or LinkedIn post underperformed: not seen, seen and skipped, or read and ignored. Use when someone asks why a post did badly or got no engagement.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/why-did-this-post-flop"
@@ -28174,7 +28190,7 @@
     "turn-this-into-a-thread": {
       "name": "turn-this-into-a-thread",
       "type": "skill",
-      "description": "Turn a long idea, transcript, article or draft into a Twitter/X thread where every tweet stands alone. Use when someone asks for a thread or to break long writing into tweets.",
+      "description": "Turn a long idea, transcript, article or draft into a Twitter thread where every tweet stands alone. Use when someone asks for a thread or to break long writing into tweets.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/turn-this-into-a-thread"
@@ -29958,6 +29974,14 @@
       "path": "collected_assets/skills/gpt-taste",
       "description_ko": "엄격한 AIDA 구조, 넓은 히어로 타이포그래피 및 틈 없는 도시락 그리드를 사용하여 GSAP가 많은 엘리트 프런트엔드 페이지를 생성할 때 사용합니다."
     },
+    "scrapely-scrape": {
+      "name": "scrapely-scrape",
+      "type": "skill",
+      "description": "Collect web data with ready-made Scrape.ly scrapers: Google Maps places, Amazon products, LinkedIn jobs, reviews, social posts. Use when the user wants structured data from a site.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/scrapely-scrape"
+    },
     "code-polish": {
       "name": "code-polish",
       "type": "skill",
@@ -30834,7 +30858,7 @@
     "repurpose-into-a-post": {
       "name": "repurpose-into-a-post",
       "type": "skill",
-      "description": "Turn an article, newsletter, transcript or video into a Twitter/X or LinkedIn post that stands on its own. Use when someone wants to repurpose, share or promote content they already made.",
+      "description": "Turn an article, newsletter, transcript or video into a Twitter or LinkedIn post that stands on its own. Use when someone wants to repurpose, share or promote content they already made.",
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/repurpose-into-a-post"
@@ -47158,6 +47182,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/create-template",
+      "description_ko": ">-"
+    },
+    "enable-code-coverage": {
+      "name": "enable-code-coverage",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/enable-code-coverage",
       "description_ko": ">-"
     },
     "create-environment": {
