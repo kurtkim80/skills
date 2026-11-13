@@ -39433,6 +39433,14 @@
       "path": "collected_assets/skills/memory-merger",
       "description_ko": "도메인 메모리 파일의 성숙한 학습 내용을 해당 지침 파일에 병합합니다. 구문: `/memory-merger >domain [scope]` 여기서 범위는 `global`(기본값), `user`, `workspace` 또는 `ws`입니다."
     },
+    "sap-cloud-integration": {
+      "name": "sap-cloud-integration",
+      "type": "skill",
+      "description": "SAP Cloud Integration (CPI, part of SAP Integration Suite) runtime-specific guidance for building and troubleshooting iFlows. Use when writing or reviewing CPI Groovy scripts, choosing headers vs. exchange properties, designing exception subprocesses, JMS retry, idempotency or data store patterns, or diagnosing adapter errors (SFTP, HTTP/OAuth, SOAP, IDoc, OData, AS2, Cloud Connector) from Message Processing Log (MPL) text. Not for SAP PI/PO, ABAP development, or generic Java/Groovy outside CPI.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/sap-cloud-integration"
+    },
     "ai-ready": {
       "name": "ai-ready",
       "type": "skill",
@@ -40126,6 +40134,14 @@
       "source_name": "CODE-SAURABH/OpenSkills",
       "path": "collected_assets/skills/java-development",
       "description_ko": "프로덕션 Java 애플리케이션, 라이브러리, 서비스 및 API를 구축, 검토, 디버그 및 유지 관리합니다. Java, Spring Boot, Jakarta, Maven, Gradle, JUnit, 동시성, JVM 성능, 지속성, 종속성 주입, 구성, 탄력성 또는 Java 보안 작업에 사용됩니다."
+    },
+    "on-device-delegate": {
+      "name": "on-device-delegate",
+      "type": "skill",
+      "description": "Saves cloud-model context by briefing one bounded, read-heavy sub-task (more than about 25 KB of prose, or many files that no single command can answer) to the local-coding plugin''s on-device worker, which runs on the local MAI Code 1.1 Flash model. Use for log and test triage, summarizing many files, or extracting facts from large inputs. When the user names this skill, call the skill tool in the same response as your first other tool call, never as a separate step.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/skills/on-device-delegate"
     },
     "exam-ready": {
       "name": "exam-ready",
@@ -59940,6 +59956,14 @@
       "path": "collected_assets/agents/adr-generator.agent.md",
       "description_ko": "AI 사용 및 사람의 가독성에 최적화된 구조화된 형식으로 포괄적인 ADR(건축 결정 기록)을 생성하기 위한 전문 에이전트입니다."
     },
+    "on-device-offload.agent": {
+      "name": "on-device-offload.agent",
+      "type": "agent",
+      "description": "Experimental. Worker on the local MAI Code 1.1 Flash model. Its tokens do not use GitHub AI Credits. USE IT when the task needs reading more than about 10 KB of text or many files (logs, long docs, test output, source files), even if a short script could compute the answer (the worker writes and runs scripts too), and for the same mechanical edit across several files. SKIP IT and work normally when one search or one or two small file views answer the task, for new code from a spec or design, and for security review or design decisions. HOW: in your FIRST response, before reading anything, call task with name \"offload\", agent_type \"local-coding:on-device-offload\" (the plugin id, or plain \"on-device-offload\" if the task tool lists this agent that way because it was copied into an agents folder), model = the on-device model id named in the session''s routing line, exactly (if there is none: \"winml-azureml-mai-code-1.1-flash-on-device/MAI-Code-1.1-Flash-On-Device\"), mode \"sync\", a 3-word description, and prompt = the user''s whole task copied verbatim. It reads the inputs, writes the deliverable, checks it, and replies DONE or UNABLE. Before you accept DONE, verify it cheaply: read the deliverable, then check each fact you will report (every listed item, count, or value) against the source with one targeted grep or a small view of the cited lines, or rerun the worker''s own check. Never re-read the whole input or redo the task. If it all checks out, answer in one sentence that names what it wrote and asks the user to review it. If any fact is wrong or missing, treat the reply as UNABLE. Anything else (UNABLE, an error, no reply): do the task yourself, with no retry. Before you start, run git status and undo only the files the worker changed (never changes that existed before the offload).",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/agents/on-device-offload.agent.md"
+    },
     "github-actions-node-upgrade.agent": {
       "name": "github-actions-node-upgrade.agent",
       "type": "agent",
@@ -60111,6 +60135,14 @@
       "path": "collected_assets/agents/salesforce-aura-lwc.agent.md",
       "description_ko": "Lightning 프레임워크 모범 사례에 따라 Lightning 웹 구성 요소 및 Aura 구성 요소를 사용하여 Salesforce UI 구성 요소를 구현합니다."
     },
+    "on-device-worker.agent": {
+      "name": "on-device-worker.agent",
+      "type": "agent",
+      "description": "Bounded worker on the local MAI Code 1.1 Flash model, briefed by the on-device-delegate skill. Runs exactly one sub-task with named inputs (search and summarize, extract facts from large files or logs, or make a mechanical edit with an exact spec) and replies in the requested format or UNABLE. Not for security review, design decisions, or multi-step coding.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/agents/on-device-worker.agent.md"
+    },
     "se-responsible-ai-code.agent": {
       "name": "se-responsible-ai-code.agent",
       "type": "agent",
@@ -60226,6 +60258,14 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/bicep-plan.agent.md",
       "description_ko": "Azure Bicep 인프라로서의 코드 작업에 대한 구현 플래너 역할을 합니다."
+    },
+    "sap-integration-suite-copilot.agent": {
+      "name": "sap-integration-suite-copilot.agent",
+      "type": "agent",
+      "description": "Design, build, review and troubleshoot SAP BTP Integration Suite work: CPI iFlows, Groovy, XSLT/message mapping, adapters, API Management, Event Mesh, B2B/EDI, MCP and API-to-AI integrations.",
+      "source_repo": "https://github.com/github/awesome-copilot.git",
+      "source_name": "github/awesome-copilot",
+      "path": "collected_assets/agents/sap-integration-suite-copilot.agent.md"
     },
     "mentoring-juniors.agent": {
       "name": "mentoring-juniors.agent",
