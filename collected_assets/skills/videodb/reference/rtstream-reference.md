@@ -1,24 +1,24 @@
-# RTStreamリファレンス
+# RTStream Reference
 
-RTStream操作のコードレベルの詳細。ワークフローガイドは [rtstream.md](rtstream.md) を参照。
-使用ガイダンスとフロー選択については、[../SKILL.md](../SKILL.md) から始めること。
+Code-level details for RTStream operations. For workflow guide, see [rtstream.md](rtstream.md).
+For usage guidance and workflow selection, start with [../SKILL.md](../SKILL.md).
 
-[docs.videodb.io](https://docs.videodb.io/pages/ingest/live-streams/realtime-apis.md) に基づく。
+Based on [docs.videodb.io](https://docs.videodb.io/pages/ingest/live-streams/realtime-apis.md).
 
-***
+---
 
-## CollectionのRTStreamメソッド
+## Collection RTStream Methods
 
-`Collection` 上でRTStreamを管理するメソッド：
+Methods on `Collection` for managing RTStreams:
 
-| メソッド | 戻り値 | 説明 |
+| Method | Returns | Description |
 |--------|---------|-------------|
-| `coll.connect_rtstream(url, name, ...)` | `RTStream` | RTSP/RTMP URLから新しいRTStreamを作成する |
-| `coll.get_rtstream(id)` | `RTStream` | IDで既存のRTStreamを取得する |
-| `coll.list_rtstreams(limit, offset, status, name, ordering)` | `List[RTStream]` | コレクション内のすべてのRTStreamをリストする |
-| `coll.search(query, namespace="rtstream")` | `RTStreamSearchResult` | すべてのRTStreamで検索する |
+| `coll.connect_rtstream(url, name, ...)` | `RTStream` | Create new RTStream from RTSP/RTMP URL |
+| `coll.get_rtstream(id)` | `RTStream` | Get existing RTStream by ID |
+| `coll.list_rtstreams(limit, offset, status, name, ordering)` | `List[RTStream]` | List all RTStreams in collection |
+| `coll.search(query, namespace="rtstream")` | `RTStreamSearchResult` | Search across all RTStreams |
 
-### RTStreamへの接続
+### Connect RTStream
 
 ```python
 import videodb
@@ -37,13 +37,13 @@ rtstream = coll.connect_rtstream(
 )
 ```
 
-### 既存のRTStreamを取得する
+### Get Existing RTStream
 
 ```python
 rtstream = coll.get_rtstream("rts-xxx")
 ```
 
-### RTStreamをリストする
+### List RTStreams
 
 ```python
 rtstreams = coll.list_rtstreams(
@@ -58,9 +58,9 @@ for rts in rtstreams:
     print(f"{rts.id}: {rts.name} - {rts.status}")
 ```
 
-### キャプチャセッションから取得する
+### From Capture Session
 
-キャプチャセッションがアクティブになったら、RTStreamオブジェクトを取得する：
+After a capture session is active, retrieve RTStream objects:
 
 ```python
 session = conn.get_capture_session(session_id)
@@ -70,35 +70,35 @@ displays = session.get_rtstream("screen")
 system_audios = session.get_rtstream("system_audio")
 ```
 
-または `capture_session.active` WebSocketイベントの `rtstreams` データを使用する：
+Or use the `rtstreams` data from the `capture_session.active` WebSocket event:
 
 ```python
 for rts in rtstreams:
     rtstream = coll.get_rtstream(rts["rtstream_id"])
 ```
 
-***
+---
 
-## RTStreamメソッド
+## RTStream Methods
 
-| メソッド | 戻り値 | 説明 |
+| Method | Returns | Description |
 |--------|---------|-------------|
-| `rtstream.start()` | `None` | 取り込みを開始する |
-| `rtstream.stop()` | `None` | 取り込みを停止する |
-| `rtstream.generate_stream(start, end)` | `str` | 録画されたセグメントをストリーミングする（Unixタイムスタンプ） |
-| `rtstream.export(name=None)` | `RTStreamExportResult` | 永続的なビデオとしてエクスポートする |
-| `rtstream.index_visuals(prompt, ...)` | `RTStreamSceneIndex` | AI分析付きのビジュアルインデックスを作成する |
-| `rtstream.index_audio(prompt, ...)` | `RTStreamSceneIndex` | LLMサマリー付きのオーディオインデックスを作成する |
-| `rtstream.list_scene_indexes()` | `List[RTStreamSceneIndex]` | ストリーム上のすべてのシーンインデックスをリストする |
-| `rtstream.get_scene_index(index_id)` | `RTStreamSceneIndex` | 特定のシーンインデックスを取得する |
-| `rtstream.search(query, ...)` | `RTStreamSearchResult` | インデックス化されたコンテンツを検索する |
-| `rtstream.start_transcript(ws_connection_id, engine)` | `dict` | リアルタイム転写を開始する |
-| `rtstream.get_transcript(page, page_size, start, end, since)` | `dict` | 転写ページを取得する |
-| `rtstream.stop_transcript(engine)` | `dict` | 転写を停止する |
+| `rtstream.start()` | `None` | Begin ingestion |
+| `rtstream.stop()` | `None` | Stop ingestion |
+| `rtstream.generate_stream(start, end)` | `str` | Stream recorded segment (Unix timestamps) |
+| `rtstream.export(name=None)` | `RTStreamExportResult` | Export to permanent video |
+| `rtstream.index_visuals(prompt, ...)` | `RTStreamSceneIndex` | Create visual index with AI analysis |
+| `rtstream.index_audio(prompt, ...)` | `RTStreamSceneIndex` | Create audio index with LLM summarization |
+| `rtstream.list_scene_indexes()` | `List[RTStreamSceneIndex]` | List all scene indexes on the stream |
+| `rtstream.get_scene_index(index_id)` | `RTStreamSceneIndex` | Get a specific scene index |
+| `rtstream.search(query, ...)` | `RTStreamSearchResult` | Search indexed content |
+| `rtstream.start_transcript(ws_connection_id, engine)` | `dict` | Start live transcription |
+| `rtstream.get_transcript(page, page_size, start, end, since)` | `dict` | Get transcript pages |
+| `rtstream.stop_transcript(engine)` | `dict` | Stop transcription |
 
-***
+---
 
-## 開始と停止
+## Starting and Stopping
 
 ```python
 # Begin ingestion
@@ -110,11 +110,11 @@ rtstream.start()
 rtstream.stop()
 ```
 
-***
+---
 
-## ストリームの生成
+## Generating Streams
 
-秒数オフセットではなくUnixタイムスタンプを使用して録画から再生ストリームを生成する：
+Use Unix timestamps (not seconds offsets) to generate a playback stream from recorded content:
 
 ```python
 import time
@@ -133,11 +133,11 @@ stream_url = rtstream.generate_stream(start=start_ts, end=end_ts)
 print(f"Recorded stream: {stream_url}")
 ```
 
-***
+---
 
-## ビデオとしてエクスポートする
+## Exporting to Video
 
-録画されたストリームをコレクション内の永続的なビデオとしてエクスポートする：
+Export the recorded stream to a permanent video in the collection:
 
 ```python
 export_result = rtstream.export(name="Meeting Recording 2024-01-15")
@@ -148,32 +148,32 @@ print(f"Player URL: {export_result.player_url}")
 print(f"Duration: {export_result.duration}s")
 ```
 
-### RTStreamExportResult属性
+### RTStreamExportResult Properties
 
-| 属性 | 型 | 説明 |
+| Property | Type | Description |
 |----------|------|-------------|
-| `video_id` | `str` | エクスポートされたビデオのID |
-| `stream_url` | `str` | HLSストリームURL |
-| `player_url` | `str` | Webプレーヤー URL |
-| `name` | `str` | ビデオ名 |
-| `duration` | `float` | 長さ（秒） |
+| `video_id` | `str` | ID of the exported video |
+| `stream_url` | `str` | HLS stream URL |
+| `player_url` | `str` | Web player URL |
+| `name` | `str` | Video name |
+| `duration` | `float` | Duration in seconds |
 
-***
+---
 
-## AIパイプライン
+## AI Pipelines
 
-AIパイプラインはライブストリームを処理し、WebSocket経由で結果を送信する。
+AI pipelines process live streams and send results via WebSocket.
 
-### RTStream AIパイプラインメソッド
+### RTStream AI Pipeline Methods
 
-| メソッド | 戻り値 | 説明 |
+| Method | Returns | Description |
 |--------|---------|-------------|
-| `rtstream.index_audio(prompt, batch_config, ...)` | `RTStreamSceneIndex` | LLMサマリー付きのオーディオインデックスを開始する |
-| `rtstream.index_visuals(prompt, batch_config, ...)` | `RTStreamSceneIndex` | 画面コンテンツのビジュアルインデックスを開始する |
+| `rtstream.index_audio(prompt, batch_config, ...)` | `RTStreamSceneIndex` | Start audio indexing with LLM summarization |
+| `rtstream.index_visuals(prompt, batch_config, ...)` | `RTStreamSceneIndex` | Start visual indexing of screen content |
 
-### オーディオインデックス
+### Audio Indexing
 
-一定間隔でオーディオコンテンツのLLMサマリーを生成する：
+Generate LLM summaries of audio content at intervals:
 
 ```python
 audio_index = rtstream.index_audio(
@@ -185,27 +185,26 @@ audio_index = rtstream.index_audio(
 )
 ```
 
-**オーディオのbatch\_configオプション：**
+**Audio batch_config options:**
 
-| タイプ | 値 | 説明 |
+| Type | Value | Description |
 |------|-------|-------------|
-| `"word"` | count | N単語ごとにセグメント化 |
-| `"sentence"` | count | N文ごとにセグメント化 |
-| `"time"` | seconds | N秒ごとにセグメント化 |
+| `"word"` | count | Segment every N words |
+| `"sentence"` | count | Segment every N sentences |
+| `"time"` | seconds | Segment every N seconds |
 
-例：
-
+Examples:
 ```python
 {"type": "word", "value": 50}      # every 50 words
 {"type": "sentence", "value": 5}   # every 5 sentences
 {"type": "time", "value": 30}      # every 30 seconds
 ```
 
-結果は `audio_index` WebSocketチャネル経由で届く。
+Results arrive on the `audio_index` WebSocket channel.
 
-### ビジュアルインデックス
+### Visual Indexing
 
-ビジュアルコンテンツのAI説明を生成する：
+Generate AI descriptions of visual content:
 
 ```python
 scene_index = rtstream.index_visuals(
@@ -217,29 +216,29 @@ scene_index = rtstream.index_visuals(
 )
 ```
 
-**パラメータ：**
+**Parameters:**
 
-| パラメータ | 型 | 説明 |
+| Parameter | Type | Description |
 |-----------|------|-------------|
-| `prompt` | `str` | AIモデルへの指示（構造化JSON出力をサポート） |
-| `batch_config` | `dict` | フレームサンプリングを制御する（以下を参照） |
-| `model_name` | `str` | モデル層：`"mini"`、`"basic"`、`"pro"`、`"ultra"` |
-| `name` | `str` | インデックス名（オプション） |
-| `ws_connection_id` | `str` | 結果を受信するWebSocket接続ID |
+| `prompt` | `str` | Instructions for the AI model (supports structured JSON output) |
+| `batch_config` | `dict` | Controls frame sampling (see below) |
+| `model_name` | `str` | Model tier: `"mini"`, `"basic"`, `"pro"`, `"ultra"` |
+| `name` | `str` | Name for the index (optional) |
+| `ws_connection_id` | `str` | WebSocket connection ID for receiving results |
 
-**ビジュアルのbatch\_config：**
+**Visual batch_config:**
 
-| キー | 型 | 説明 |
+| Key | Type | Description |
 |-----|------|-------------|
-| `type` | `str` | ビジュアルインデックスでは `"time"` のみサポート |
-| `value` | `int` | ウィンドウサイズ（秒） |
-| `frame_count` | `int` | 各ウィンドウで抽出するフレーム数 |
+| `type` | `str` | Only `"time"` is supported for visuals |
+| `value` | `int` | Window size in seconds |
+| `frame_count` | `int` | Number of frames to extract per window |
 
-例：`{"type": "time", "value": 2, "frame_count": 5}` は2秒ごとに5フレームをサンプリングしてモデルに送信する。
+Example: `{"type": "time", "value": 2, "frame_count": 5}` samples 5 frames every 2 seconds and sends them to the model.
 
-**構造化JSON出力：**
+**Structured JSON output:**
 
-構造化されたレスポンスを得るためにJSONフォーマットをリクエストするプロンプトを使用する：
+Use a prompt that requests JSON format for structured responses:
 
 ```python
 scene_index = rtstream.index_visuals(
@@ -258,19 +257,18 @@ Return only valid JSON.""",
 )
 ```
 
-結果は `scene_index` WebSocketチャネル経由で届く。
+Results arrive on the `scene_index` WebSocket channel.
 
-***
+---
 
-## バッチ設定のサマリー
+## Batch Config Summary
 
-| インデックスタイプ | `type` オプション | `value` | 追加キー |
+| Indexing Type | `type` Options | `value` | Extra Keys |
 |---------------|----------------|---------|------------|
-| **オーディオ** | `"word"`、`"sentence"`、`"time"` | words/sentences/seconds | - |
-| **ビジュアル** | `"time"` のみ | seconds | `frame_count` |
+| **Audio** | `"word"`, `"sentence"`, `"time"` | words/sentences/seconds | - |
+| **Visual** | `"time"` only | seconds | `frame_count` |
 
-例：
-
+Examples:
 ```python
 # Audio: every 50 words
 {"type": "word", "value": 50}
@@ -282,11 +280,11 @@ Return only valid JSON.""",
 {"type": "time", "value": 2, "frame_count": 5}
 ```
 
-***
+---
 
-## 転写
+## Transcription
 
-WebSocket経由のリアルタイム転写：
+Real-time transcription via WebSocket:
 
 ```python
 # Start live transcription
@@ -309,13 +307,13 @@ transcript = rtstream.get_transcript(
 rtstream.stop_transcript(engine=None)
 ```
 
-転写結果は `transcript` WebSocketチャネル経由で届く。
+Transcript results arrive on the `transcript` WebSocket channel.
 
-***
+---
 
 ## RTStreamSceneIndex
 
-`index_audio()` または `index_visuals()` を呼び出すと、メソッドは `RTStreamSceneIndex` オブジェクトを返す。このオブジェクトは実行中のインデックスを表し、シーンとアラートを管理するためのメソッドを提供する。
+When you call `index_audio()` or `index_visuals()`, the method returns an `RTStreamSceneIndex` object. This object represents the running index and provides methods for managing scenes and alerts.
 
 ```python
 # index_visuals returns an RTStreamSceneIndex
@@ -331,33 +329,33 @@ audio_index = rtstream.index_audio(
 )
 ```
 
-### RTStreamSceneIndex属性
+### RTStreamSceneIndex Properties
 
-| 属性 | 型 | 説明 |
+| Property | Type | Description |
 |----------|------|-------------|
-| `rtstream_index_id` | `str` | インデックスの一意ID |
-| `rtstream_id` | `str` | 親RTStreamのID |
-| `extraction_type` | `str` | 抽出タイプ（`time` または `transcript`） |
-| `extraction_config` | `dict` | 抽出設定 |
-| `prompt` | `str` | 分析に使用するプロンプト |
-| `name` | `str` | インデックス名 |
-| `status` | `str` | 状態（`connected`、`stopped`） |
+| `rtstream_index_id` | `str` | Unique ID of the index |
+| `rtstream_id` | `str` | ID of the parent RTStream |
+| `extraction_type` | `str` | Type of extraction (`time` or `transcript`) |
+| `extraction_config` | `dict` | Extraction configuration |
+| `prompt` | `str` | The prompt used for analysis |
+| `name` | `str` | Name of the index |
+| `status` | `str` | Status (`connected`, `stopped`) |
 
-### RTStreamSceneIndexメソッド
+### RTStreamSceneIndex Methods
 
-| メソッド | 戻り値 | 説明 |
+| Method | Returns | Description |
 |--------|---------|-------------|
-| `index.get_scenes(start, end, page, page_size)` | `dict` | インデックス化されたシーンを取得する |
-| `index.start()` | `None` | インデックスを開始/再開する |
-| `index.stop()` | `None` | インデックスを停止する |
-| `index.create_alert(event_id, callback_url, ws_connection_id)` | `str` | イベント検出アラートを作成する |
-| `index.list_alerts()` | `list` | このインデックスのすべてのアラートをリストする |
-| `index.enable_alert(alert_id)` | `None` | アラートを有効にする |
-| `index.disable_alert(alert_id)` | `None` | アラートを無効にする |
+| `index.get_scenes(start, end, page, page_size)` | `dict` | Get indexed scenes |
+| `index.start()` | `None` | Start/resume the index |
+| `index.stop()` | `None` | Stop the index |
+| `index.create_alert(event_id, callback_url, ws_connection_id)` | `str` | Create alert for event detection |
+| `index.list_alerts()` | `list` | List all alerts on this index |
+| `index.enable_alert(alert_id)` | `None` | Enable an alert |
+| `index.disable_alert(alert_id)` | `None` | Disable an alert |
 
-### シーンの取得
+### Getting Scenes
 
-インデックスからインデックス化されたシーンをポーリングする：
+Poll indexed scenes from the index:
 
 ```python
 result = scene_index.get_scenes(
@@ -375,7 +373,7 @@ if result["next_page"]:
     pass
 ```
 
-### シーンインデックスの管理
+### Managing Scene Indexes
 
 ```python
 # List all indexes on the stream
@@ -391,20 +389,20 @@ scene_index.stop()
 scene_index.start()
 ```
 
-***
+---
 
-## イベント
+## Events
 
-イベントは再利用可能な検出ルール。一度作成すれば、アラートを通じて任意のインデックスに添付できる。
+Events are reusable detection rules. Create them once, attach to any index via alerts.
 
-### 接続イベントメソッド
+### Connection Event Methods
 
-| メソッド | 戻り値 | 説明 |
+| Method | Returns | Description |
 |--------|---------|-------------|
-| `conn.create_event(event_prompt, label)` | `str` (event\_id) | 検出イベントを作成する |
-| `conn.list_events()` | `list` | すべてのイベントをリストする |
+| `conn.create_event(event_prompt, label)` | `str` (event_id) | Create detection event |
+| `conn.list_events()` | `list` | List all events |
 
-### イベントの作成
+### Creating an Event
 
 ```python
 event_id = conn.create_event(
@@ -413,7 +411,7 @@ event_id = conn.create_event(
 )
 ```
 
-### イベントのリスト
+### Listing Events
 
 ```python
 events = conn.list_events()
@@ -421,13 +419,13 @@ for event in events:
     print(f"{event['event_id']}: {event['label']}")
 ```
 
-***
+---
 
-## アラート
+## Alerts
 
-アラートはイベントをインデックスに接続してリアルタイム通知を実現する。AIがイベントの説明に一致するコンテンツを検出すると、アラートが送信される。
+Alerts wire events to indexes for real-time notifications. When the AI detects content matching the event description, an alert is sent.
 
-### アラートの作成
+### Creating an Alert
 
 ```python
 # Get the RTStreamSceneIndex from index_visuals
@@ -444,9 +442,9 @@ alert_id = scene_index.create_alert(
 )
 ```
 
-**注意：** `callback_url` は必須。WebSocket配信のみを使用する場合は空文字列 `""` を渡す。
+**Note:** `callback_url` is required. Pass an empty string `""` if only using WebSocket delivery.
 
-### アラートの管理
+### Managing Alerts
 
 ```python
 # List all alerts on an index
@@ -457,14 +455,14 @@ scene_index.disable_alert(alert_id)
 scene_index.enable_alert(alert_id)
 ```
 
-### アラート配信
+### Alert Delivery
 
-| 方法 | 遅延 | ユースケース |
+| Method | Latency | Use Case |
 |--------|---------|----------|
-| WebSocket | リアルタイム | ダッシュボード、ライブUI |
-| Webhook | < 1秒 | サーバー間、自動化 |
+| WebSocket | Real-time | Dashboards, live UI |
+| Webhook | < 1 second | Server-to-server, automation |
 
-### WebSocketアラートイベント
+### WebSocket Alert Event
 
 ```json
 {
@@ -478,7 +476,7 @@ scene_index.enable_alert(alert_id)
 }
 ```
 
-### Webhookペイロード
+### Webhook Payload
 
 ```json
 {
@@ -494,31 +492,30 @@ scene_index.enable_alert(alert_id)
 }
 ```
 
-***
+---
 
-## WebSocket統合
+## WebSocket Integration
 
-すべてのリアルタイムAI結果はWebSocket経由で配信される。以下に `ws_connection_id` を渡す：
+All real-time AI results are delivered via WebSocket. Pass `ws_connection_id` to:
+- `rtstream.start_transcript()`
+- `rtstream.index_audio()`
+- `rtstream.index_visuals()`
+- `scene_index.create_alert()`
 
-* `rtstream.start_transcript()`
-* `rtstream.index_audio()`
-* `rtstream.index_visuals()`
-* `scene_index.create_alert()`
+### WebSocket Channels
 
-### WebSocketチャネル
-
-| チャネル | ソース | コンテンツ |
+| Channel | Source | Content |
 |---------|--------|---------|
-| `transcript` | `start_transcript()` | リアルタイム音声テキスト変換 |
-| `scene_index` | `index_visuals()` | ビジュアル分析結果 |
-| `audio_index` | `index_audio()` | オーディオ分析結果 |
-| `alert` | `create_alert()` | アラート通知 |
+| `transcript` | `start_transcript()` | Real-time speech-to-text |
+| `scene_index` | `index_visuals()` | Visual analysis results |
+| `audio_index` | `index_audio()` | Audio analysis results |
+| `alert` | `create_alert()` | Alert notifications |
 
-WebSocketイベント構造とws\_listenerの使用については [capture-reference.md](capture-reference.md) を参照。
+For WebSocket event structures and ws_listener usage, see [capture-reference.md](capture-reference.md).
 
-***
+---
 
-## 完全なワークフロー
+## Complete Workflow
 
 ```python
 import time

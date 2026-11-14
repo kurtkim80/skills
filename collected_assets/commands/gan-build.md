@@ -1,103 +1,109 @@
 ---
-description: 実装タスクに対して、制限付きイテレーションとスコアリングによるジェネレーター/エバリュエータービルドループを実行します。
+description: 运行生成器/评估器构建循环，用于实现任务，具有有限迭代和评分。
 ---
 
-$ARGUMENTSから以下を解析:
-1. `brief` — 何をビルドするかのユーザーの一行説明
-2. `--max-iterations N` — （オプション、デフォルト15）ジェネレーター-エバリュエーターサイクルの最大回数
-3. `--pass-threshold N` — （オプション、デフォルト7.0）合格するための重み付きスコア
-4. `--skip-planner` — （オプション）プランナーをスキップし、spec.mdが既に存在すると想定
-5. `--eval-mode MODE` — （オプション、デフォルト"playwright"）次のいずれか: playwright, screenshot, code-only
+从 $ARGUMENTS 中解析以下内容：
 
-## GANスタイルハーネスビルド
+1. `brief` — 用户对构建内容的一行描述
+2. `--max-iterations N` — （可选，默认15）最大生成器-评估器循环次数
+3. `--pass-threshold N` — （可选，默认7.0）通过所需的加权分数
+4. `--skip-planner` — （可选）跳过规划器，假设 spec.md 已存在
+5. `--eval-mode MODE` — （可选，默认"playwright"）可选值：playwright、screenshot、code-only
 
-このコマンドは、Anthropicの2026年3月のハーネス設計論文に触発された3エージェントビルドループをオーケストレーションします。
+## GAN 风格构建框架
 
-### フェーズ 0: セットアップ
-1. プロジェクトルートに`gan-harness/`ディレクトリを作成
-2. サブディレクトリを作成: `gan-harness/feedback/`、`gan-harness/screenshots/`
-3. gitが未初期化なら初期化
-4. 開始時刻と設定をログ
+该命令协调一个受 Anthropic 2026年3月框架设计论文启发的三智能体构建循环。
 
-### フェーズ 1: プランニング（プランナーエージェント）
-`--skip-planner`が設定されていない場合:
-1. ユーザーのブリーフでTaskツール経由で`gan-planner`エージェントを起動
-2. `gan-harness/spec.md`と`gan-harness/eval-rubric.md`の生成を待機
-3. 仕様のサマリーをユーザーに表示
-4. フェーズ 2に進む
+### 阶段0：设置
 
-### フェーズ 2: ジェネレーター-エバリュエーターループ
+1. 在项目根目录创建 `gan-harness/` 目录
+2. 创建子目录：`gan-harness/feedback/`、`gan-harness/screenshots/`
+3. 如果尚未初始化 git，则进行初始化
+4. 记录开始时间和配置
+
+### 阶段1：规划（规划器智能体）
+
+除非设置了 `--skip-planner`：
+
+1. 通过任务工具启动 `gan-planner` 智能体，并传入用户的简要说明
+2. 等待其生成 `gan-harness/spec.md` 和 `gan-harness/eval-rubric.md`
+3. 向用户显示规范摘要
+4. 进入阶段2
+
+### 阶段2：生成器-评估器循环
+
 ```
 iteration = 1
 while iteration <= max_iterations:
 
     # 生成
-    Taskツール経由でgan-generatorエージェントを起動:
-    - spec.mdを読む
-    - iteration > 1の場合: feedback/feedback-{iteration-1}.mdを読む
-    - アプリケーションをビルド/改善
-    - devサーバーが実行中であることを確認
-    - 変更をコミット
+    通过 Task 工具启动 gan-generator agent：
+    - 读取 spec.md
+    - 如果 iteration > 1：读取 feedback/feedback-{iteration-1}.md
+    - 构建/改进应用程序
+    - 确保开发服务器正在运行
+    - 提交更改
 
-    # ジェネレーターの完了を待機
+    # 等待生成器完成
 
-    # 評価
-    Taskツール経由でgan-evaluatorエージェントを起動:
-    - eval-rubric.mdとspec.mdを読む
-    - ライブアプリケーションをテスト（モード: playwright/screenshot/code-only）
-    - ルーブリックに対してスコアリング
-    - feedback/feedback-{iteration}.mdにフィードバックを書き込み
+    # 评估
+    通过 Task 工具启动 gan-evaluator agent：
+    - 读取 eval-rubric.md 和 spec.md
+    - 测试正在运行的应用程序（模式：playwright/screenshot/code-only）
+    - 根据评分标准打分
+    - 将反馈写入 feedback/feedback-{iteration}.md
 
-    # エバリュエーターの完了を待機
+    # 等待评估器完成
 
-    # スコアチェック
-    feedback/feedback-{iteration}.mdを読む
-    重み付き合計スコアを抽出
+    # 检查分数
+    读取 feedback/feedback-{iteration}.md
+    提取加权总分
 
     if score >= pass_threshold:
-        "イテレーション {iteration} でスコア {score} で合格" をログ
-        中断
+        记录 "在第 {iteration} 次迭代中通过，分数为 {score}"
+        跳出循环
 
-    if iteration >= 3 and 直近2イテレーションでスコアが改善していない:
-        "プラトー検出 — 早期停止" をログ
-        中断
+    if iteration >= 3 且最近 2 次迭代分数未提升:
+        记录 "检测到平台期 — 提前停止"
+        跳出循环
 
     iteration += 1
 ```
 
-### フェーズ 3: サマリー
-1. すべてのフィードバックファイルを読む
-2. 最終スコアとイテレーション履歴を表示
-3. スコア推移を表示: `iteration 1: 4.2 → iteration 2: 5.8 → ... → iteration N: 7.5`
-4. 最終評価からの残りの問題を一覧
-5. 合計時間と推定コストを報告
+### 阶段3：总结
 
-### 出力
+1. 读取所有反馈文件
+2. 显示最终分数和迭代历史
+3. 展示分数进展：`iteration 1: 4.2 → iteration 2: 5.8 → ... → iteration N: 7.5`
+4. 列出最终评估中遗留的任何问题
+5. 报告总时间和预估成本
+
+### 输出
 
 ```markdown
-## GANハーネスビルドレポート
+## GAN 框架构建报告
 
-**ブリーフ:** [元のプロンプト]
-**結果:** PASS/FAIL
-**イテレーション:** N / max
-**最終スコア:** X.X / 10
+**简述：** [原始提示]
+**结果：** 通过/失败
+**迭代次数：** N / 最大次数
+**最终得分：** X.X / 10
 
-### スコア推移
-| Iter | Design | Originality | Craft | Functionality | Total |
-|------|--------|-------------|-------|---------------|-------|
+### 得分进展
+| 迭代 | 设计 | 原创性 | 工艺 | 功能性 | 总分 |
+|------|------|--------|------|--------|------|
 | 1 | ... | ... | ... | ... | X.X |
 | 2 | ... | ... | ... | ... | X.X |
 | N | ... | ... | ... | ... | X.X |
 
-### 残りの問題
-- [最終評価からの問題]
+### 剩余问题
+- [最终评估中的任何问题]
 
-### 作成されたファイル
+### 已创建文件
 - gan-harness/spec.md
 - gan-harness/eval-rubric.md
-- gan-harness/feedback/feedback-001.md ～ feedback-NNN.md
+- gan-harness/feedback/feedback-001.md 至 feedback-NNN.md
 - gan-harness/generator-state.md
 - gan-harness/build-report.md
 ```
 
-完全なレポートを`gan-harness/build-report.md`に書き込みます。
+将完整报告写入 `gan-harness/build-report.md`。

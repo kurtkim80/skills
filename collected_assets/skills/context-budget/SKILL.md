@@ -1,135 +1,133 @@
 ---
 name: context-budget
-description: エージェント、スキル、MCPサーバー、ルールにわたってClaude Codeのコンテキストウィンドウ消費を監査します。肥大化、冗長なコンポーネントを特定し、優先順位付けされたトークン節約の推奨事項を生成します。
-origin: ECC
+description: Routes live context checks to the native Codex or Claude Code meter without scanning files, and performs a bounded static component audit only when explicitly requested. Use for context-budget requests about remaining capacity or installed context overhead.
+metadata:
+  origin: ECC
 ---
 
-# コンテキストバジェット
+# Context Budget
 
-Claude Codeセッションで読み込まれたすべてのコンポーネントのトークンオーバーヘッドを分析し、コンテキストスペースを取り戻すための実用的な最適化を表示します。
+Use the provider's native meter for live session usage. Keep the separate,
+estimated installation audit behind an explicit opt-in.
 
-## 使用時期
+## Default: Live Context
 
-- セッションのパフォーマンスが低下しているか、出力品質が低下している場合
-- 多くのスキル、エージェント、またはMCPサーバーを追加した後
-- 実際に持っているコンテキストのヘッドルームを確認したい場合
-- コンポーネントを追加する計画があり、スペースがあるか確認したい場合
-- `/context-budget`コマンドを実行する場合（このスキルがそれをサポートします）
+Treat an invocation with no audit request as a live-context request. This
+includes requests for the current window, remaining capacity, headroom, token
+usage, or a context breakdown.
 
-## 動作方法
+For this default path:
 
-### フェーズ1: インベントリ
+- Do not call or use tools.
+- Do not scan or read files.
+- Do not run shell commands, provider CLIs, debug logging, or MCP discovery.
+- Reply with only the native command and one short explanation.
 
-すべてのコンポーネントディレクトリをスキャンしてトークン消費を推定します：
+Route by the active harness:
 
-**エージェント** (`agents/*.md`)
-- ファイルごとの行数とトークンをカウント（単語数 × 1.3）
-- `description`フロントマターの長さを抽出
-- フラグ: 200行超のファイル（重い）、30単語超のdescription（肥大化したフロントマター）
+| Harness | Native command | Guidance |
+| --- | --- | --- |
+| Codex CLI | `/status` | Shows current token usage and remaining context capacity. Use `/statusline` and enable **Context stats** plus **Token counters** for a persistent footer meter. |
+| Codex app | `/status` | Shows current thread context usage and rate limits. |
+| Claude Code | `/context` | Shows the live context breakdown. Use `/context all` for expanded items. |
+| Other or unknown | None verified | State that ECC cannot read live provider state and ask which harness is active. |
 
-**スキル** (`skills/*/SKILL.md`)
-- SKILL.mdごとのトークンをカウント
-- フラグ: 400行超のファイル
-- `.agents/skills/`の重複コピーを確認 — 二重カウントを避けるために同一コピーをスキップ
+These commands are documented in the [Codex command reference](https://developers.openai.com/codex/cli/slash-commands) and [Claude Code command reference](https://code.claude.com/docs/en/commands).
 
-**ルール** (`rules/**/*.md`)
-- ファイルごとのトークンをカウント
-- フラグ: 100行超のファイル
-- 同一言語モジュール内のルールファイル間のコンテンツの重複を検出
+A skill cannot invoke a TUI slash command on the user's behalf. Never replace
+the native command with an estimated scan and never infer an audit request from
+phrases such as “context is heavy” or “how much is left.”
 
-**MCPサーバー** (`.mcp.json`またはアクティブなMCP設定)
-- 設定されたサーバー数と合計ツール数をカウント
-- スキーマオーバーヘッドをツールあたり約500トークンと推定
-- フラグ: 20以上のツールを持つサーバー、シンプルなCLIコマンド（`gh`、`git`、`npm`、`supabase`、`vercel`）をラップするサーバー
+## Explicit Static Audit
 
-**CLAUDE.md** (プロジェクト + ユーザーレベル)
-- CLAUDE.mdチェーンのファイルごとのトークンをカウント
-- フラグ: 合計300行超
+Run an installation/configuration audit only when the user explicitly says
+`--audit`, “audit installed components,” or equivalent unambiguous wording.
+`--verbose` changes report detail; it does not opt into an audit by itself.
 
-### フェーズ2: 分類
+If the audit scope is ambiguous, ask for the harness and installation root
+before reading anything. Keep every audit bounded and read-only:
 
-すべてのコンポーネントをバケットに分類します：
+1. Inspect only the named plugin/install root and the named harness's known
+   configuration files.
+2. Never recursively enumerate the workspace root, home directory, provider
+   cache, transcripts, debug logs, or unrelated worktrees.
+3. Never launch a provider CLI, MCP server, or debug session to count tools.
+4. Cap inventory output at 50 entries per component class. Summarize the rest.
+5. Do not write temporary logs or copy configuration content into the report.
 
-| バケット | 基準 | アクション |
-|--------|----------|--------|
-| **常に必要** | CLAUDE.mdで参照されている、アクティブなコマンドをサポート、または現在のプロジェクトタイプに一致 | 保持 |
-| **時々必要** | ドメイン固有（例：言語パターン）、CLAUDE.mdで未参照 | オンデマンドアクティベーションを検討 |
-| **めったに必要でない** | コマンド参照なし、コンテンツ重複、または明らかなプロジェクト一致なし | 削除または遅延ロード |
+Audit only the component metadata relevant to eager discovery:
 
-### フェーズ3: 問題の検出
+- agent and skill descriptions;
+- command descriptions when the harness discovers them eagerly;
+- always-loaded instruction files in the explicitly named scope;
+- configured MCP tool schemas when an existing bounded manifest exposes them.
 
-以下の問題パターンを特定します：
+Full skill, agent, command, and rule bodies are generally on-demand content.
+Report their disk size separately from estimated eager overhead instead of
+adding every body to the session baseline.
 
-- **肥大化したエージェントdescription** — フロントマターに30単語超のdescriptionはすべてのTaskツール呼び出しで読み込まれる
-- **重いエージェント** — 200行超のファイルはすべてのスポーン時にTaskツールのコンテキストを膨らませる
-- **冗長なコンポーネント** — エージェントロジックを複製するスキル、CLAUDE.mdを複製するルール
-- **MCPの過剰サブスクリプション** — 10以上のサーバー、または無料で利用できるCLIツールをラップするサーバー
-- **CLAUDE.mdの肥大化** — 冗長な説明、古いセクション、ルールであるべき指示
+## Audit Output
 
-### フェーズ4: レポート
+Return a compact report containing:
 
-コンテキストバジェットレポートを生成します：
+- harness and exact paths inspected;
+- estimated eager/discovery overhead by component class;
+- installed counts and the heaviest metadata entries;
+- assumptions, unavailable measurements, and up to three optimizations.
 
-```
-Context Budget Report
-═══════════════════════════════════════
+Every calculated token number is an estimate of static configuration overhead,
+not live session context. Do not claim that an estimate is provider-reported,
+current, exact, or evidence of realized savings. Direct the user back to the
+native live-context command for current usage.
 
-Total estimated overhead: ~XX,XXX tokens
-Context model: Claude Sonnet (200K window)
-Effective available context: ~XXX,XXX tokens (XX%)
+## Optional Selected-Record Diagnostic
 
-Component Breakdown:
-┌─────────────────┬────────┬───────────┐
-│ Component       │ Count  │ Tokens    │
-├─────────────────┼────────┼───────────┤
-│ Agents          │ N      │ ~X,XXX    │
-│ Skills          │ N      │ ~X,XXX    │
-│ Rules           │ N      │ ~X,XXX    │
-│ MCP tools       │ N      │ ~XX,XXX   │
-│ CLAUDE.md       │ N      │ ~X,XXX    │
-└─────────────────┴────────┴───────────┘
+Inspect a persisted record only when the user explicitly selects that file for this diagnostic. This is separate from the default live-context request and the installation audit.
 
-WARNING: Issues Found (N):
-[ranked by token savings]
+For a local file diagnostic, explicitly select a stable, regular JSONL file or a snapshot you
+intend to inspect. Replace the example path below; this does not find or reconnect a session.
+The snippet prints aggregate byte counts only. It reads one line at a time, so memory use depends
+on the largest record; avoid very large records and actively growing files.
 
-Top 3 Optimizations:
-1. [action] → save ~X,XXX tokens
-2. [action] → save ~X,XXX tokens
-3. [action] → save ~X,XXX tokens
+```sh
+python3 - "/path/to/selected-session.jsonl" <<'EOF'
+import json
+import sys
 
-Potential savings: ~XX,XXX tokens (XX% of current overhead)
-```
+total = attachment = other = unclassified = 0
+try:
+    with open(sys.argv[1], "rb") as source:
+        for raw in source:
+            size = len(raw)
+            total += size
+            try:
+                record = json.loads(raw.decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError):
+                unclassified += size
+                continue
+            record_type = record.get("type") if isinstance(record, dict) else None
+            if not isinstance(record_type, str):
+                unclassified += size
+            elif record_type == "attachment":
+                attachment += size
+            else:
+                other += size
+except OSError:
+    print("Cannot read selected JSONL file.", file=sys.stderr)
+    raise SystemExit(1)
 
-詳細モードでは、ファイルごとのトークン数、最も重いファイルの行ごとの内訳、重複するコンポーネント間の特定の冗長行、ツールごとのスキーマサイズ推定を含むMCPツールリストも出力します。
-
-## 例
-
-**基本監査**
-```
-User: /context-budget
-Skill: Scans setup → 16 agents (12,400 tokens), 28 skills (6,200), 87 MCP tools (43,500), 2 CLAUDE.md (1,200)
-       Flags: 3 heavy agents, 14 MCP servers (3 CLI-replaceable)
-       Top saving: remove 3 MCP servers → -27,500 tokens (47% overhead reduction)
-```
-
-**詳細モード**
-```
-User: /context-budget --verbose
-Skill: Full report + per-file breakdown showing planner.md (213 lines, 1,840 tokens),
-       MCP tool list with per-tool sizes, duplicated rule lines side by side
-```
-
-**拡張前の確認**
-```
-User: I want to add 5 more MCP servers, do I have room?
-Skill: Current overhead 33% → adding 5 servers (~50 tools) would add ~25,000 tokens → pushes to 45% overhead
-       Recommendation: remove 2 CLI-replaceable servers first to stay under 40%
+pct = attachment * 100.0 / total if total else 0.0
+print(f"persisted {total}B | attachment records {attachment}B ({pct:.1f}%) | "
+      f"other records {other}B | unclassified {unclassified}B")
+EOF
 ```
 
-## ベストプラクティス
+The three categories add up to the original file bytes, including line endings and blank lines.
+`attachment` is an exact record-type filter, not a guarantee about a harness's current internal
+schema. Other records have a different string `type`; malformed JSON, invalid UTF-8, nonobject
+values, missing or non-string types, and blank lines are unclassified. Neither category means
+"conversation," and the percentage is only a share of persisted bytes.
 
-- **トークン推定**: 散文には`単語数 × 1.3`を、コードが多いファイルには`文字数 / 4`を使用
-- **MCPが最大のレバー**: 各ツールスキーマはおよそ500トークンかかります。30ツールのサーバーはスキル全部よりも多くかかります
-- **エージェントdescriptionは常に読み込まれる**: エージェントが呼び出されなくても、そのdescriptionフィールドはすべてのTaskツールのコンテキストに存在します
-- **デバッグには詳細モード**: 特定のファイルがオーバーヘッドを駆動していることを正確に特定する必要がある場合に使用し、通常の監査には使用しない
-- **変更後に監査**: エージェント、スキル、またはMCPサーバーを追加した後に実行して、クリープを早期にキャッチ
+These counts do not establish active context, remaining room, token usage, billing, or what a
+reconnect loads. For current harness-reported context and usage, use the version-appropriate
+[`/context` and `/usage` commands (`/cost` is an alias)](https://code.claude.com/docs/en/commands).

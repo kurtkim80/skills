@@ -1,14 +1,15 @@
 ---
 name: ralphinho-rfc-pipeline
-description: RFC駆動の複数エージェントDAG実行パターン、品質ゲート、マージキュー、ワークユニットオーケストレーション。
-origin: ECC
+description: Split an RFC into a multi-agent execution DAG — decompose into work units with dependencies and acceptance tests, run research, plan, implement, test, and review per unit, then merge through a queue with re-based branches and final system verification. Use when a feature is too large for a single agent pass, orchestrating RFC-driven multi-agent execution, or managing merge queues across agent-built units.
+metadata:
+  origin: ECC
 ---
 
 # Ralphinho RFC Pipeline
 
-[humanplane](https://github.com/humanplane) スタイルのRFC分解パターンと複数ユニットオーケストレーションワークフローにインスパイア。
+Inspired by [humanplane](https://github.com/humanplane) style RFC decomposition patterns and multi-unit orchestration workflows.
 
-単一エージェントパスでは大きすぎる機能を独立して検証可能なワークユニットに分割する必要がある場合、このスキルを使用します。
+Use this skill when a feature is too large for a single agent pass and must be split into independently verifiable work units.
 
 ## Pipeline Stages
 
@@ -22,7 +23,7 @@ origin: ECC
 
 ## Unit Spec Template
 
-各ワークユニットに含める：
+Each work unit should include:
 - `id`
 - `depends_on`
 - `scope`
@@ -53,7 +54,7 @@ origin: ECC
 
 ## Recovery
 
-ユニットが stall した場合：
+If a unit stalls:
 - evict from active queue
 - snapshot findings
 - regenerate narrowed unit scope

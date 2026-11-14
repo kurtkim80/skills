@@ -1,29 +1,24 @@
 ---
-description: エージェント、スキル、MCP サーバー、ルールにわたるコンテキストウィンドウの使用状況を分析し、最適化の機会を探ります。トークンオーバーヘッドの削減とパフォーマンス警告の回避に役立ちます。
+description: Legacy slash-entry shim for the context-budget skill. Prefer the skill directly.
 ---
 
-# コンテキストバジェット最適化ツール
+# Context Budget Optimizer (Legacy Shim)
 
-Claude Code の設定におけるコンテキストウィンドウの消費量を分析し、トークンオーバーヘッドを削減するための実用的な推奨事項を提供します。
+Use this only if you still invoke `/context-budget`. The maintained workflow lives in `skills/context-budget/SKILL.md`.
 
-## 使用方法
+## Canonical Surface
 
-```
-/context-budget [--verbose]
-```
+- Prefer the `context-budget` skill directly.
+- Keep this file only as a compatibility entry point.
 
-* デフォルト：サマリーと主要な推奨事項を提供
-* `--verbose`：コンポーネントごとの完全な内訳を提供
+## Arguments
 
 $ARGUMENTS
 
-## 操作手順
+## Delegation
 
-**context-budget** スキル（`skills/context-budget/SKILL.md`）を実行し、以下を入力します：
-
-1. `$ARGUMENTS` に `--verbose` フラグが存在する場合、そのフラグを渡す
-2. ユーザーが別途指定しない限り、200K コンテキストウィンドウ（Claude Sonnet のデフォルト）を仮定する
-3. スキルの4フェーズに従う：インベントリ → 分類 → 問題検出 → レポート
-4. フォーマット済みのコンテキストバジェットレポートをユーザーに出力する
-
-すべてのスキャンロジック、トークン推定、問題検出、レポートフォーマットはスキルが担当します。
+Apply the `context-budget` skill.
+- Without an explicit audit request, return the harness's native live-context command and do not scan files or call tools.
+- Treat an explicit `--audit`, “audit installed components,” or equivalent unambiguous audit wording as opt-in. `--verbose` alone stays on the native live-context path.
+- Pass through `--audit` and `--verbose` only when the user supplied them.
+- Keep any explicit audit bounded to the scope and safety rules in the canonical skill.

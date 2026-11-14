@@ -1,86 +1,135 @@
 ---
 name: ui-to-vue
-description: UIスクリーンショットやデザインエクスポートをVue 3コンポーネントに一括変換する際に使用。Vant、Element Plus、Ant Design Vueに対応。
-origin: community
+description: Use when the user has UI screenshots or design exports that need batch conversion into Vue 3 components, especially with Vant, Element Plus, or Ant Design Vue.
+metadata:
+  origin: community
 ---
 
 # UI To Vue
 
-UIデザインのスクリーンショットをVue 3 Composition APIコンポーネントコードに一括変換します。
+Batch-convert UI design screenshots into Vue 3 Composition API component code.
 
-## 使用するタイミング
+## When to Use
 
-- ユーザーがデザインスクリーンショットまたはデザインエクスポート画像のディレクトリを提供するとき。
-- ターゲットアプリケーションがVue 3のとき。
-- ユーザーがページコンポーネント、共有コンポーネント、ルーター配線の最初の変換を希望するとき。
-- ユーザーがVant、Element Plus、またはAnt Design Vueをコンポーネントライブラリとして指定するとき。
+- The user provides a directory of design screenshots or design-export images.
+- The target application is Vue 3.
+- The user wants a first pass of page components, shared components, and router wiring.
+- The user specifies Vant, Element Plus, or Ant Design Vue as the component library.
 
-## 使用しないタイミング
+## When Not to Use
 
-- ユーザーがスクリーンショット1枚のみで、特定のコンポーネントを希望するとき。
-- ターゲットプロジェクトがVueでないとき。
-- デザインが詳細なインタラクションロジック、データフロー、またはアクセシビリティレビューを必要とするとき。
-- スクリーンショットに外部モデルAPIに送信できないプライベートな顧客データが含まれるとき。
+- The user has only one screenshot and wants a bespoke component.
+- The target project is not Vue.
+- The design requires detailed interaction logic, data flow, or accessibility review.
+- The screenshots contain private customer data that cannot be sent to an external model API.
 
-## 入力
+## Inputs
 
-モジュールとページ状態でスクリーンショットをグループ化したディレクトリを入力として使用します。
+Use an input directory that groups screenshots by module and page state:
 
-サポートされている切り出し画像ディレクトリ名：`assets`、`icons`、`sprites`、`cut`、`images`、`cut-images`。
+```text
+screenshots/
+|-- HomePage/
+|   |-- List/
+|   |   |-- HomePage-List-Default@3x.png
+|   |   `-- cut-images/
+|   |-- cut-images/
+|   `-- HomePage-Default@3x.png
+`-- cut-images/
+```
 
-## 変換モデル
+Supported cut-image directory names include `assets`, `icons`, `sprites`, `cut`, `images`, and `cut-images`.
 
-- ページグループ化：リスト、詳細、フォーム、ローディング、または空の状態を表す関連スクリーンショットを1つのページコンポーネントにまとめる。
-- UIライブラリマッピング：可能な限りネイティブのビジュアル要素をVant、Element Plus、またはAnt Design Vueコンポーネントにマッピングする。
-- 切り出し画像の優先順位：ページレベルのアセットを優先し、次にモジュールレベル、最後にグローバル共有アセット。
-- コンポーネント抽出：繰り返し使われるUIリージョンが2回以上現れる場合は共有コンポーネントに抽出する。
+## Conversion Model
 
-## CLI使用方法
+- Page grouping: combine related screenshots into one page component when they represent list, detail, form, loading, or empty states.
+- UI library mapping: map native visual elements to Vant, Element Plus, or Ant Design Vue components where practical.
+- Cut-image priority: prefer page-level assets, then module-level assets, then global shared assets.
+- Component extraction: extract repeated UI regions into shared components when they appear more than once.
 
-グローバルバイナリに依存せず、ドキュメントに記載されたコマンドが機能するように `npx` でコンバーターを実行します：
+## CLI Usage
+
+Run the converter with `npx` so the documented command works without relying on a global binary:
 
 ```bash
 export DASHSCOPE_API_KEY=your_key
 npx ui-to-vue-converter@1.0.2 --input ./screenshots --ui vant --output ./src
 ```
 
-## オプション
+For desktop UI libraries:
 
-| オプション | 説明 | デフォルト |
+```bash
+npx ui-to-vue-converter@1.0.2 --input ./designs --ui element-plus --output ./src
+npx ui-to-vue-converter@1.0.2 --input ./designs --ui antd-vue --output ./src
+```
+
+If the package is installed globally, the `ui-to-vue` binary can be used directly:
+
+```bash
+npm install -g ui-to-vue-converter@1.0.2
+ui-to-vue --input ./screenshots --ui vant --output ./src
+```
+
+## Options
+
+| Option | Description | Default |
 | --- | --- | --- |
-| `--input` | デザイン画像ディレクトリ | `./screenshots` |
-| `--ui` | UIライブラリ：`vant`、`element-plus`、または `antd-vue` | `vant` |
-| `--output` | 出力ディレクトリ | `./src` |
-| `--config` | 設定ファイルのパス | `./.ui-to-vue.config.json` |
+| `--input` | Design image directory | `./screenshots` |
+| `--ui` | UI library: `vant`, `element-plus`, or `antd-vue` | `vant` |
+| `--output` | Output directory | `./src` |
+| `--config` | Config file path | `./.ui-to-vue.config.json` |
 
-## セキュリティとプライバシー
+## API Key Handling
 
-- デザインスクリーンショットを外部モデルAPIに送信される可能性があるソース素材として扱う。
-- 許可なくプライベートな顧客デザインでこのフローを実行しないこと。
-- 再現可能なワークフローでは `@latest` の代わりにコンバーターのバージョンを固定すること。
-- コミット前に生成されたVueコードをレビューすること。
-- `.ui-to-vue.config.json`、APIキー、生成されたシークレット、または顧客スクリーンショットをコミットしないこと。
+The converter can read DashScope credentials from a config file or from the environment. Prefer an environment variable in repositories:
 
-## 出力レビューチェックリスト
+```bash
+export DASHSCOPE_API_KEY=your_key
+```
 
-- [ ] ページコンポーネントが `views/` または選択した出力ディレクトリの下に生成された。
-- [ ] 繰り返しのUIリージョンが再利用が明確な場合のみ `components/` に抽出された。
-- [ ] ルーター出力がターゲットプロジェクトのルータースタイルと互換性がある。
-- [ ] 生成されたコンポーネントが要求したUIライブラリを一貫して使用している。
-- [ ] 生成されたCSSのユニットがデザインのベースラインと一致している。
-- [ ] コードがプロジェクトのフォーマッター、リンター、型チェッカー、ビルドをパスする。
-- [ ] プレースホルダーのコピー、モックデータ、生成されたアセットをコミット前にレビューした。
+If a local config file is required, keep it out of version control:
 
-## トラブルシューティング
+```json
+{
+  "apiKey": "your_dashscope_key",
+  "input": "./designs",
+  "ui": "vant",
+  "output": "./src"
+}
+```
 
-| 問題 | 確認事項 |
+```gitignore
+.ui-to-vue.config.json
+```
+
+## Security and Privacy
+
+- Treat design screenshots as source material that may be sent to an external model API.
+- Do not run this flow on private customer designs without permission.
+- Pin the converter version in repeatable workflows instead of using `@latest`.
+- Review generated Vue code before committing it.
+- Do not commit `.ui-to-vue.config.json`, API keys, generated secrets, or customer screenshots.
+
+## Output Review Checklist
+
+- [ ] Page components were generated under `views/` or the chosen output directory.
+- [ ] Repeated UI regions were extracted into `components/` only when reuse is clear.
+- [ ] Router output is compatible with the target project's router style.
+- [ ] Generated components use the requested UI library consistently.
+- [ ] Generated CSS units match the design baseline.
+- [ ] The code passes the project's formatter, linter, type checker, and build.
+- [ ] Placeholder copy, mock data, and generated assets were reviewed before commit.
+
+## Troubleshooting
+
+| Issue | Check |
 | --- | --- |
-| `401` または認証エラー | コマンドを実行するシェルで `DASHSCOPE_API_KEY` が設定されていることを確認する。 |
-| `command not found: ui-to-vue` | `npx ui-to-vue-converter@1.0.2` の形式を使用するか、パッケージをグローバルインストールする。 |
-| 切り出し画像が無視される | アセットディレクトリ名がサポートされており、対応するページまたはモジュールの下にネストされていることを確認する。 |
-| コンポーネントが要求されたUIライブラリを無視する | 明示的な `--ui` 値で再実行して、生成されたインポートを確認する。 |
-| 生成されたレイアウトの寸法がおかしい | スクリーンショットのエクスポート幅がターゲットライブラリのベースラインと一致していることを確認する。 |
+| `401` or authentication error | Confirm `DASHSCOPE_API_KEY` is set in the shell running the command. |
+| `command not found: ui-to-vue` | Use the `npx ui-to-vue-converter@1.0.2` form or install the package globally. |
+| Cut images are ignored | Confirm the asset directory name is supported and nested under the matching page or module. |
+| Components ignore the requested UI library | Re-run with an explicit `--ui` value and inspect the generated imports. |
+| Generated layout dimensions look wrong | Confirm the screenshot export width matches the target library baseline. |
 
-## リファレンス
+## References
 
-- npmパッケージ：`ui-to-vue-converter`
+- npm package: `ui-to-vue-converter`

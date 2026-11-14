@@ -51,6 +51,26 @@ and answer "what does it look like?". Use crisp, current captures with realistic
 device frame or same shadow and radius). Retake them when the UI changes — stale
 screenshots are the most common accuracy bug on product sites.
 
+### Sample data is part of the claim
+
+A screenshot can imply a result even when its caption makes no performance
+promise. In financial or quantitative products, extreme returns and near-perfect
+win records look like evidence of likely outcomes, even when the data is invented.
+A "sample data" label does not make an exaggerated result representative.
+
+Define a screenshot-data brief before capturing: plausible values, a mix of
+outcomes, and any prohibited extremes. Use the same brief for new drafts and
+screenshots already on the public page or store listing. For example, show a
+portfolio with ordinary gains and losses rather than an unbroken series of wins;
+show the interface's ability to explain results rather than a spectacular result.
+Do not invent a universal "safe" return or win-rate cutoff: the sample must fit
+what the product can substantiate for its audience.
+
+Keep synthetic demonstration data distinct from measured proof. If a figure is
+presented as an actual result, attach its evidence and evaluation protocol as
+below; otherwise make its illustrative role clear and avoid copy that treats it
+as a benchmark or expected outcome.
+
 ## Proof and objections
 
 - Specific beats general: "Used by 1,200 teams" beats "Loved by teams".
@@ -58,6 +78,27 @@ screenshots are the most common accuracy bug on product sites.
 - An FAQ that answers the real objections: price, privacy, data export, platform
   support, what happens when you cancel.
 - Never fabricate testimonials, user counts, logos or ratings.
+
+### Keep measured proof attached to its protocol
+
+A benchmark number is a claim about a particular evaluation, not a timeless
+property of the product. Before rewriting copy around new results, re-verify the
+claim evidence, re-run the proof measurement when a refresh is intended, then
+update the copy that consumes it. Writing copy first preserves the very numbers
+the refresh was meant to replace.
+
+Put the identifying protocol beside each measured figure wherever it appears,
+not only in a linked report: package version, split versus walk-forward evaluation,
+warmup, and seed when applicable. For example:
+
+```text
+Median processing time: 18 ms per item
+Version 2.3; held-out split; 100 warmup items; seed 17.
+```
+
+Two pages quoting results from different protocols can look like a regression
+even when both numbers are correct. Link the full evidence from the local caption;
+a stable claim ID does not replace the context needed to interpret the number.
 
 ## Pricing pages
 
@@ -156,8 +197,9 @@ survive indefinitely behind a valid-looking citation.
 
 - [ ] A stranger can say what it is and who it's for after 5 seconds above the fold
 - [ ] One primary CTA, repeated at the end, labelled with the outcome
-- [ ] Real, current product screenshots
+- [ ] Real, current product screenshots; sample values are representative, including on existing public listings
 - [ ] Proof is real and specific; FAQ covers price, privacy, export, cancellation
+- [ ] Measured proof refreshed before dependent copy; evaluation protocol shown beside each figure
 - [ ] Pricing shows the real price and limits
 - [ ] Phone layout checked; Lighthouse performance and accessibility reviewed
 - [ ] Every claim and screenshot verified against the build available through the CTA, for its advertised audience

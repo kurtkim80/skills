@@ -1,29 +1,30 @@
 ---
 name: evm-token-decimals
-description: EVMチェーン全体でサイレントな小数点不一致バグを防ぐ。ランタイムでの小数点照会、チェーン対応キャッシング、ブリッジドトークンの精度ドリフト、ボット・ダッシュボード・DeFiツール向けの安全な正規化をカバーします。
-origin: ECC direct-port adaptation
-version: "1.0.0"
+description: Prevent silent decimal mismatch bugs across EVM chains. Covers runtime decimal lookup, chain-aware caching, bridged-token precision drift, and safe normalization for bots, dashboards, and DeFi tools. Use when handling token amounts across EVM chains, or when a balance, price, or transfer amount is off by orders of magnitude.
+metadata:
+  version: "1.0.0"
+  origin: ECC direct-port adaptation
 ---
 
-# EVMトークン小数点
+# EVM Token Decimals
 
-サイレントな小数点不一致は、エラーを発生させることなく残高やUSD値が桁違いになる最も簡単な方法のひとつです。
+Silent decimal mismatches are one of the easiest ways to ship balances or USD values that are off by orders of magnitude without throwing an error.
 
-## 使用するタイミング
+## When to Use
 
-- Python、TypeScript、またはSolidityでERC-20残高を読み取る場合
-- オンチェーン残高から法定通貨の値を計算する場合
-- 複数のEVMチェーン間でトークン量を比較する場合
-- ブリッジされた資産を扱う場合
-- ポートフォリオトラッカー、ボット、またはアグリゲーターを構築する場合
+- Reading ERC-20 balances in Python, TypeScript, or Solidity
+- Calculating fiat values from on-chain balances
+- Comparing token amounts across multiple EVM chains
+- Handling bridged assets
+- Building portfolio trackers, bots, or aggregators
 
-## 仕組み
+## How It Works
 
-ステーブルコインが同じ小数点を使用していると仮定しないでください。ランタイムで`decimals()`を照会し、`(chain_id, token_address)`でキャッシュし、値の計算には小数点安全な数学を使用します。
+Never assume stablecoins use the same decimals everywhere. Query `decimals()` at runtime, cache by `(chain_id, token_address)`, and use decimal-safe math for value calculations.
 
-## 使用例
+## Examples
 
-### ランタイムで小数点を照会する
+### Query decimals at runtime
 
 ```python
 from decimal import Decimal
@@ -47,9 +48,9 @@ def get_token_balance(w3: Web3, token_address: str, wallet: str) -> Decimal:
     return Decimal(raw) / Decimal(10 ** decimals)
 ```
 
-シンボルが他の場所で通常6小数点を持つからといって`1_000_000`をハードコードしないでください。
+Do not hardcode `1_000_000` because a symbol usually has 6 decimals somewhere else.
 
-### チェーンとトークンでキャッシュする
+### Cache by chain and token
 
 ```python
 from functools import lru_cache
@@ -64,7 +65,7 @@ def get_decimals(chain_id: int, token_address: str) -> int:
     return contract.functions.decimals().call()
 ```
 
-### 特殊なトークンを防御的に処理する
+### Handle odd tokens defensively
 
 ```python
 try:
@@ -78,9 +79,9 @@ except Exception:
     decimals = 18
 ```
 
-フォールバックをログに記録して可視化しておく。古いまたは非標準トークンはまだ存在します。
+Log the fallback and keep it visible. Old or non-standard tokens still exist.
 
-### SolidityでWAD（18小数点）に正規化する
+### Normalize to 18-decimal WAD in Solidity
 
 ```solidity
 interface IERC20Metadata {
@@ -95,7 +96,7 @@ function normalizeToWad(address token, uint256 amount) internal view returns (ui
 }
 ```
 
-### ethersを使ったTypeScript
+### TypeScript with ethers
 
 ```typescript
 import { Contract, formatUnits } from 'ethers';
@@ -115,16 +116,16 @@ async function getBalance(provider: any, tokenAddress: string, wallet: string): 
 }
 ```
 
-### クイックなオンチェーン確認
+### Quick on-chain check
 
 ```bash
 cast call <token_address> "decimals()(uint8)" --rpc-url <rpc>
 ```
 
-## ルール
+## Rules
 
-- 常にランタイムで`decimals()`を照会する
-- シンボルではなく、チェーンとトークンアドレスでキャッシュする
-- floatではなく`Decimal`、`BigInt`、または同等の正確な数学を使用する
-- ブリッジングやラッパーの変更後は小数点を再照会する
-- 比較や価格計算の前に内部会計を一貫して正規化する
+- Always query `decimals()` at runtime
+- Cache by chain plus token address, not symbol
+- Use `Decimal`, `BigInt`, or equivalent exact math, not float
+- Re-query decimals after bridging or wrapper changes
+- Normalize internal accounting consistently before comparison or pricing

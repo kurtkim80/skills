@@ -1,9 +1,6 @@
 ---
 name: agentic-engineering
-description: >
-  Operate as an agentic engineer using eval-first execution, decomposition,
-  and cost-aware model routing. Use when AI agents perform most implementation
-  work and humans enforce quality and risk controls.
+description: Operate as an agentic engineer using eval-first execution, decomposition, and cost-aware model routing. Use when planning or executing engineering work that agents will carry out end to end.
 metadata:
   origin: ECC
 ---
@@ -26,110 +23,119 @@ Use this skill for engineering workflows where AI agents perform most implementa
 3. Execute implementation.
 4. Re-run evals and compare deltas.
 
-**Example workflow:**
-```
-1. Write test that captures desired behavior (eval)
-2. Run test → capture baseline failures
-3. Implement feature
-4. Re-run test → verify improvements
-5. Check for regressions in other tests
-```
-
 ## Task Decomposition
 
 Apply the 15-minute unit rule:
-- Each unit should be independently verifiable
-- Each unit should have a single dominant risk
-- Each unit should expose a clear done condition
-
-**Good decomposition:**
-```
-Task: Add user authentication
-├─ Unit 1: Add password hashing (15 min, security risk)
-├─ Unit 2: Create login endpoint (15 min, API contract risk)
-├─ Unit 3: Add session management (15 min, state risk)
-└─ Unit 4: Protect routes with middleware (15 min, auth logic risk)
-```
-
-**Bad decomposition:**
-```
-Task: Add user authentication (2 hours, multiple risks)
-```
+- each unit should be independently verifiable
+- each unit should have a single dominant risk
+- each unit should expose a clear done condition
 
 ## Model Routing
 
-Choose model tier based on task complexity:
-
-- **Haiku**: Classification, boilerplate transforms, narrow edits
-  - Example: Rename variable, add type annotation, format code
-
-- **Sonnet**: Implementation and refactors
-  - Example: Implement feature, refactor module, write tests
-
-- **Opus**: Architecture, root-cause analysis, multi-file invariants
-  - Example: Design system, debug complex issue, review architecture
-
-**Cost discipline:** Escalate model tier only when lower tier fails with a clear reasoning gap.
+- Haiku: classification, boilerplate transforms, narrow edits
+- Sonnet: implementation and refactors
+- Opus: architecture, root-cause analysis, multi-file invariants
 
 ## Session Strategy
 
-- **Continue session** for closely-coupled units
-  - Example: Implementing related functions in same module
-
-- **Start fresh session** after major phase transitions
-  - Example: Moving from implementation to testing
-
-- **Compact after milestone completion**, not during active debugging
-  - Example: After feature complete, before starting next feature
+- Continue session for closely-coupled units.
+- Start fresh session after major phase transitions.
+- Compact after milestone completion, not during active debugging.
 
 ## Review Focus for AI-Generated Code
 
 Prioritize:
-- Invariants and edge cases
-- Error boundaries
-- Security and auth assumptions
-- Hidden coupling and rollout risk
+- invariants and edge cases
+- error boundaries
+- security and auth assumptions
+- hidden coupling and rollout risk
 
 Do not waste review cycles on style-only disagreements when automated format/lint already enforce style.
 
-**Review checklist:**
-- [ ] Edge cases handled (null, empty, boundary values)
-- [ ] Error handling comprehensive
-- [ ] Security assumptions validated
-- [ ] No hidden coupling between modules
-- [ ] Rollout risk assessed (breaking changes, migrations)
+## Interpret Tool Results Before Comparing Data
+
+For document reads and processing loops, check three boundaries in order:
+
+1. Check the tool/transport envelope for an error or an indeterminate outcome.
+2. Decode the response and check operation status using that tool's documented
+   contract. An outer success flag or a present payload does not establish that
+   the requested operation succeeded. Status may live in structured content,
+   decoded text, or another documented field; `result.ok` is not a universal MCP
+   field. Missing or unrecognized status stays unknown.
+3. Only after confirmed operation success, validate the document shape and compare
+   its fields. An operation failure is not a document identity mismatch.
+
+Keep the operation name, request/correlation ID when available, relevant status
+and error details, and the original response needed for diagnosis. Redact secrets
+and private document data before logging or sharing. Do not reconstruct missing
+responses from a later response's shape.
+
+### Portable Classification Example
+
+The adapter below uses an **illustrative read-tool contract**, not an MCP schema:
+`isError` is a required boolean; when false, `result.ok` is a required operation
+status. A successful read returns `result.document` with a string `id`; a failed
+read may carry `result.error`. Replace this adapter with the actual tool's
+contract, including its documented decoding and document validation rules.
+
+```javascript
+function decodeRead(response) {
+  if (!response || typeof response.isError !== 'boolean') {
+    return { kind: 'unknown_response' };
+  }
+  if (response.isError) return { kind: 'tool_error' };
+
+  const result = response.result;
+  if (result?.ok === false) {
+    return { kind: 'operation_error', error: result.error };
+  }
+  if (result?.ok !== true) return { kind: 'unknown_response' };
+
+  const document = result.document;
+  if (!document || typeof document.id !== 'string') {
+    return { kind: 'invalid_document' };
+  }
+  return { kind: 'document', document };
+}
+
+function inspectRead(response, expectedId, decode = decodeRead) {
+  const outcome = decode(response);
+  if (outcome.kind !== 'document') return outcome;
+
+  return outcome.document.id === expectedId
+    ? { kind: 'match', document: outcome.document }
+    : { kind: 'field_mismatch', actualId: outcome.document.id, expectedId };
+}
+```
+
+Synthetic evaluation cases (not a reproduction of any historical incident):
+
+| Input under this illustrative contract | Expected classification |
+| --- | --- |
+| `isError: true` | `tool_error`; no field comparison |
+| `isError: false`, `result.ok: false`, maintenance error, no document | `operation_error`; preserve maintenance details, no mismatch |
+| `isError: false`, missing operation status | `unknown_response`; no field comparison |
+| Confirmed success, missing document or non-string ID | `invalid_document`; no field comparison |
+| Confirmed success, valid document with expected ID | `match` |
+| Confirmed success, valid document with a different ID | `field_mismatch` |
+
+Classification does not authorize a write or retry. Temporary maintenance remains
+an operation failure with its own evidence; follow the tool's documented recovery
+policy. A documented service-wide maintenance failure should stop a batch rather
+than trigger the same request for every row; a lone authorization error does not
+establish service-wide maintenance. If a write times out or its outcome is unknown,
+preserve that uncertainty
+and reconcile using a documented status/read-back mechanism before considering a
+retry. Never infer that a write failed, repeat it, or overwrite a document solely
+because a read failed or a returned field differs.
 
 ## Cost Discipline
 
 Track per task:
-- Model tier used
-- Token estimate
-- Retries needed
-- Wall-clock time
-- Success/failure outcome
+- model
+- token estimate
+- retries
+- wall-clock time
+- success/failure
 
-**Example tracking:**
-```
-Task: Implement user login
-Model: Sonnet
-Tokens: ~5k input, ~2k output
-Retries: 1 (initial implementation had auth bug)
-Time: 8 minutes
-Outcome: Success
-```
-
-## When to Use This Skill
-
-- Managing AI-driven development workflows
-- Planning agent task decomposition
-- Optimizing model tier selection
-- Implementing eval-first development
-- Reviewing AI-generated code
-- Tracking development costs
-
-## Integration with Other Skills
-
-- **tdd-workflow**: Combine with eval-first loop for test-driven development
-- **verification-loop**: Use for continuous validation during implementation
-- **search-first**: Apply before implementation to find existing solutions
-- **coding-standards**: Reference during code review phase
+Escalate model tier only when lower tier fails with a clear reasoning gap.
