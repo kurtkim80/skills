@@ -1,45 +1,44 @@
 ---
 name: continuous-learning
-description: "[DEPRECATED - use continuous-learning-v2] Legacy v1 stop-hook skill extractor. v2 is a strict superset with instinct-based, project-scoped, hook-reliable learning. Do not invoke v1: when continuous learning, session learning, or pattern extraction is requested, route to continuous-learning-v2 instead."
-metadata:
-  origin: ECC
+description: "[OBSOLETO - usar continuous-learning-v2] Extractor de skill por hook Stop v1 heredado. v2 es un superconjunto estricto con aprendizaje basado en instintos, con alcance de proyecto y hooks confiables. No invocar v1; dirigir solicitudes de aprendizaje continuo, aprendizaje de sesión y extracción de patrones a continuous-learning-v2."
+origin: ECC
 ---
 
-# Continuous Learning Skill - DEPRECATED
+# Skill de Aprendizaje Continuo - OBSOLETO
 
-> **DEPRECATED 2026-04-28.** Use `continuous-learning-v2` instead. v2 is a strict superset: stop-hook observation becomes PreToolUse/PostToolUse observation, full skills become atomic instincts with confidence scoring, and global-only storage becomes project-scoped plus global promotion.
+> **OBSOLETO el 2026-04-28.** Usar `continuous-learning-v2` en su lugar. v2 es un superconjunto estricto: la observación por hook Stop se convierte en observación PreToolUse/PostToolUse, los skills completos se convierten en instintos atómicos con puntuación de confianza, y el almacenamiento solo global se convierte en almacenamiento con alcance de proyecto más promoción global.
 >
-> This file is kept for archival reference and backward compatibility with existing installs.
+> Este archivo se mantiene como referencia de archivo y compatibilidad retroactiva con instalaciones existentes.
 
 ---
 
-## Original v1 Documentation (archival)
+## Documentación Original v1 (archivo)
 
-Automatically evaluates Claude Code sessions on end to extract reusable patterns that can be saved as learned skills.
+Evalúa automáticamente las sesiones de Claude Code al terminar para extraer patrones reutilizables que pueden guardarse como skills aprendidos.
 
-## When to Activate
+## Cuándo Activar
 
-- Setting up automatic pattern extraction from Claude Code sessions
-- Configuring the Stop hook for session evaluation
-- Reviewing or curating learned skills in `~/.claude/skills/learned/`
-- Adjusting extraction thresholds or pattern categories
-- Comparing v1 (this) vs v2 (instinct-based) approaches
+- Configurar extracción automática de patrones desde sesiones de Claude Code
+- Configurar el hook Stop para evaluación de sesiones
+- Revisar o curar skills aprendidos en `~/.claude/skills/learned/`
+- Ajustar umbrales de extracción o categorías de patrones
+- Comparar enfoques v1 (este) vs v2 (basado en instintos)
 
-## Status
+## Estado
 
-This v1 skill is still supported, but `continuous-learning-v2` is the preferred path for new installs. Keep v1 when you explicitly want the simpler Stop-hook extraction flow or need compatibility with older learned-skill workflows.
+Este skill v1 sigue siendo compatible, pero `continuous-learning-v2` es la ruta preferida para nuevas instalaciones. Mantener v1 cuando explícitamente quieras el flujo de extracción por hook Stop más simple o necesites compatibilidad con flujos de trabajo de skills aprendidos más antiguos.
 
-## How It Works
+## Cómo Funciona
 
-This skill runs as a **Stop hook** at the end of each session:
+Este skill se ejecuta como un **hook Stop** al final de cada sesión:
 
-1. **Session Evaluation**: Checks if session has enough messages (default: 10+)
-2. **Pattern Detection**: Identifies extractable patterns from the session
-3. **Skill Extraction**: Saves useful patterns to `~/.claude/skills/learned/`
+1. **Evaluación de Sesión**: Verifica si la sesión tiene suficientes mensajes (por defecto: 10+)
+2. **Detección de Patrones**: Identifica patrones extraíbles de la sesión
+3. **Extracción de Skills**: Guarda patrones útiles en `~/.claude/skills/learned/`
 
-## Configuration
+## Configuración
 
-Edit `config.json` to customize:
+Editar `config.json` para personalizar:
 
 ```json
 {
@@ -62,19 +61,19 @@ Edit `config.json` to customize:
 }
 ```
 
-## Pattern Types
+## Tipos de Patrones
 
-| Pattern | Description |
-|---------|-------------|
-| `error_resolution` | How specific errors were resolved |
-| `user_corrections` | Patterns from user corrections |
-| `workarounds` | Solutions to framework/library quirks |
-| `debugging_techniques` | Effective debugging approaches |
-| `project_specific` | Project-specific conventions |
+| Patrón | Descripción |
+|--------|-------------|
+| `error_resolution` | Cómo se resolvieron errores específicos |
+| `user_corrections` | Patrones de correcciones del usuario |
+| `workarounds` | Soluciones a peculiaridades de frameworks/librerías |
+| `debugging_techniques` | Enfoques efectivos de depuración |
+| `project_specific` | Convenciones específicas del proyecto |
 
-## Hook Setup
+## Configuración del Hook
 
-Add to your `~/.claude/settings.json`:
+Agregar a tu `~/.claude/settings.json`:
 
 ```json
 {
@@ -90,43 +89,42 @@ Add to your `~/.claude/settings.json`:
 }
 ```
 
-## Why Stop Hook?
+## Por Qué Hook Stop?
 
-- **Lightweight**: Runs once at session end
-- **Non-blocking**: Doesn't add latency to every message
-- **Complete context**: Has access to full session transcript
+- **Ligero**: Se ejecuta una vez al final de la sesión
+- **No bloqueante**: No agrega latencia a cada mensaje
+- **Contexto completo**: Tiene acceso a la transcripción completa de la sesión
 
-## Related
+## Relacionado
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Section on continuous learning
-- `/learn` command - Manual pattern extraction mid-session
+- `/learn` — Extracción manual de patrones a mitad de sesión
 
 ---
 
-## Comparison Notes (Research: Jan 2025)
+## Notas de Comparación (Investigación: Ene 2025)
 
 ### vs Homunculus
 
-Homunculus v2 takes a more sophisticated approach:
+Homunculus v2 adopta un enfoque más sofisticado:
 
-| Feature | Our Approach | Homunculus v2 |
-|---------|--------------|---------------|
-| Observation | Stop hook (end of session) | PreToolUse/PostToolUse hooks (100% reliable) |
-| Analysis | Main context | Background agent (Haiku) |
-| Granularity | Full skills | Atomic "instincts" |
-| Confidence | None | 0.3-0.9 weighted |
-| Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
-| Sharing | None | Export/import instincts |
+| Característica | Nuestro Enfoque | Homunculus v2 |
+|----------------|-----------------|---------------|
+| Observación | Hook Stop (fin de sesión) | Hooks PreToolUse/PostToolUse (100% confiable) |
+| Análisis | Contexto principal | Agente en segundo plano (Haiku) |
+| Granularidad | Skills completos | "Instintos" atómicos |
+| Confianza | Ninguna | Ponderada 0.3-0.9 |
+| Evolución | Directamente a skill | Instintos → cluster → skill/comando/agente |
+| Compartir | Ninguno | Exportar/importar instintos |
 
-**Key insight from homunculus:**
-> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time. v2 uses hooks for observation (100% reliable) and instincts as the atomic unit of learned behavior."
+**Insight clave de homunculus:**
+> "v1 dependía de skills para observar. Los skills son probabilísticos — se activan ~50-80% del tiempo. v2 usa hooks para la observación (100% confiable) e instintos como unidad atómica de comportamiento aprendido."
 
-### Potential v2 Enhancements
+### Mejoras Potenciales v2
 
-1. **Instinct-based learning** - Smaller, atomic behaviors with confidence scoring
-2. **Background observer** - Haiku agent analyzing in parallel
-3. **Confidence decay** - Instincts lose confidence if contradicted
-4. **Domain tagging** - code-style, testing, git, debugging, etc.
-5. **Evolution path** - Cluster related instincts into skills/commands
+1. **Aprendizaje basado en instintos** — Comportamientos más pequeños y atómicos con puntuación de confianza
+2. **Observador en segundo plano** — Agente Haiku analizando en paralelo
+3. **Decaimiento de confianza** — Los instintos pierden confianza si son contradichos
+4. **Etiquetado de dominio** — code-style, testing, git, debugging, etc.
+5. **Ruta de evolución** — Agrupar instintos relacionados en skills/comandos
 
-See: `docs/continuous-learning-v2-spec.md` for full spec.
+Ver: `docs/continuous-learning-v2-spec.md` para la especificación completa.

@@ -1,70 +1,74 @@
-# /learn - Yeniden Kullanılabilir Desenleri Çıkar
+---
+description: Extraer patrones reutilizables de la sesión actual y guardarlos como skills candidatas o guía.
+---
 
-Mevcut oturumu analiz et ve skill olarak kaydetmeye değer desenleri çıkar.
+# /learn - Extraer Patrones Reutilizables
 
-## Tetikleyici
+Analizar la sesión actual y extraer cualquier patrón que valga la pena guardar como skills.
 
-Önemsiz olmayan bir sorunu çözdüğünüzde, oturum sırasında herhangi bir noktada `/learn` komutunu çalıştırın.
+## Activador
 
-## Ne Çıkarılmalı
+Ejecutar `/learn` en cualquier momento durante una sesión cuando se haya resuelto un problema no trivial.
 
-Şunları arayın:
+## Qué Extraer
 
-1. **Hata Çözüm Desenleri**
-   - Hangi hata oluştu?
-   - Kök neden neydi?
-   - Onu ne düzeltti?
-   - Bu benzer hatalar için yeniden kullanılabilir mi?
+Buscar:
 
-2. **Hata Ayıklama Teknikleri**
-   - Bariz olmayan hata ayıklama adımları
-   - İşe yarayan araç kombinasyonları
-   - Tanılama desenleri
+1. **Patrones de Resolución de Errores**
+   - ¿Qué error ocurrió?
+   - ¿Cuál fue la causa raíz?
+   - ¿Qué lo solucionó?
+   - ¿Es reutilizable para errores similares?
 
-3. **Geçici Çözümler**
-   - Kütüphane gariplikleri
-   - API sınırlamaları
-   - Versiyona özel düzeltmeler
+2. **Técnicas de Depuración**
+   - Pasos de depuración no obvios
+   - Combinaciones de herramientas que funcionaron
+   - Patrones de diagnóstico
 
-4. **Projeye Özgü Desenler**
-   - Keşfedilen kod tabanı kuralları
-   - Verilen mimari kararlar
-   - Entegrasyon desenleri
+3. **Soluciones Alternativas**
+   - Peculiaridades de librerías
+   - Limitaciones de API
+   - Correcciones específicas de versión
 
-## Çıktı Formatı
+4. **Patrones Específicos del Proyecto**
+   - Convenciones de la base de código descubiertas
+   - Decisiones arquitectónicas tomadas
+   - Patrones de integración
 
-`~/.claude/skills/learned/[desen-adi].md` konumunda bir skill dosyası oluştur:
+## Formato de Salida
+
+Crear un archivo de skill en `~/.claude/skills/learned/[nombre-del-patron].md`:
 
 ```markdown
-# [Açıklayıcı Desen Adı]
+# [Nombre Descriptivo del Patrón]
 
-**Çıkarıldı:** [Tarih]
-**Bağlam:** [Bunun ne zaman geçerli olduğunun kısa açıklaması]
+**Extraído:** [Fecha]
+**Contexto:** [Breve descripción de cuándo aplica]
 
-## Sorun
-[Bunun çözdüğü sorun - spesifik olun]
+## Problema
+[Qué problema resuelve - ser específico]
 
-## Çözüm
-[Desen/teknik/geçici çözüm]
+## Solución
+[El patrón/técnica/solución alternativa]
 
-## Örnek
-[Uygulanabilirse kod örneği]
+## Ejemplo
+[Ejemplo de código si aplica]
 
-## Ne Zaman Kullanılır
-[Tetikleyici koşullar - bu skill'i neyin etkinleştirmesi gerektiği]
+## Cuándo Usar
+[Condiciones de activación - qué debe activar esta skill]
 ```
 
-## Süreç
+## Proceso
 
-1. Çıkarılabilir desenler için oturumu incele
-2. En değerli/yeniden kullanılabilir içgörüyü tanımla
-3. Skill dosyasını taslak olarak hazırla
-4. Kaydetmeden önce kullanıcıdan onay iste
-5. `~/.claude/skills/learned/` konumuna kaydet
+1. Revisar la sesión en busca de patrones extraíbles
+2. Identificar el insight más valioso/reutilizable
+3. Redactar el archivo de skill
+4. Pedir al usuario que confirme antes de guardar
+5. Guardar en `~/.claude/skills/learned/`
 
-## Notlar
+## Notas
 
-- Önemsiz düzeltmeleri çıkarmayın (yazım hataları, basit sözdizimi hataları)
-- Tek seferlik sorunları çıkarmayın (belirli API kesintileri, vb.)
-- Gelecekteki oturumlarda zaman kazandıracak desenlere odaklanın
-- Skill'leri odaklı tutun - skill başına bir desen
+- No extraer correcciones triviales (typos, errores de sintaxis simples)
+- No extraer problemas puntuales (interrupciones específicas de API, etc.)
+- Enfocarse en patrones que ahorrarán tiempo en sesiones futuras
+- Mantener las skills enfocadas - un patrón por skill

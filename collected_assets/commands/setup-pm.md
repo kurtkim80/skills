@@ -1,42 +1,42 @@
 ---
-description: Tercih ettiğiniz paket yöneticisini yapılandırın (npm/pnpm/yarn/bun)
+description: Configurar tu gestor de paquetes preferido (npm/pnpm/yarn/bun)
 disable-model-invocation: true
 ---
 
-# Paket Yöneticisi Kurulumu
+# Configuración del Gestor de Paquetes
 
-Bu proje veya global olarak tercih ettiğiniz paket yöneticisini yapılandırın.
+Configurar tu gestor de paquetes preferido para este proyecto o globalmente.
 
-## Kullanım
+## Uso
 
 ```bash
-# Mevcut paket yöneticisini tespit et
+# Detectar el gestor de paquetes actual
 node scripts/setup-package-manager.js --detect
 
-# Global tercihi ayarla
+# Establecer preferencia global
 node scripts/setup-package-manager.js --global pnpm
 
-# Proje tercihini ayarla
+# Establecer preferencia del proyecto
 node scripts/setup-package-manager.js --project bun
 
-# Mevcut paket yöneticilerini listele
+# Listar gestores de paquetes disponibles
 node scripts/setup-package-manager.js --list
 ```
 
-## Tespit Önceliği
+## Prioridad de Detección
 
-Hangi paket yöneticisinin kullanılacağını belirlerken, şu sıra kontrol edilir:
+Al determinar qué gestor de paquetes usar, se verifica el siguiente orden:
 
-1. **Environment variable**: `CLAUDE_PACKAGE_MANAGER`
-2. **Proje config**: `.claude/package-manager.json`
-3. **package.json**: `packageManager` alanı
-4. **Lock dosyası**: package-lock.json, yarn.lock, pnpm-lock.yaml veya bun.lockb varlığı
-5. **Global config**: `~/.claude/package-manager.json`
-6. **Fallback**: İlk mevcut paket yöneticisi (pnpm > bun > yarn > npm)
+1. **Variable de entorno**: `CLAUDE_PACKAGE_MANAGER`
+2. **Config del proyecto**: `.claude/package-manager.json`
+3. **package.json**: campo `packageManager`
+4. **Lock file**: Presencia de package-lock.json, yarn.lock, pnpm-lock.yaml o bun.lockb
+5. **Config global**: `~/.claude/package-manager.json`
+6. **Fallback**: Primer gestor de paquetes disponible (pnpm > bun > yarn > npm)
 
-## Yapılandırma Dosyaları
+## Archivos de Configuración
 
-### Global Yapılandırma
+### Configuración Global
 ```json
 // ~/.claude/package-manager.json
 {
@@ -44,7 +44,7 @@ Hangi paket yöneticisinin kullanılacağını belirlerken, şu sıra kontrol ed
 }
 ```
 
-### Proje Yapılandırması
+### Configuración del Proyecto
 ```json
 // .claude/package-manager.json
 {
@@ -59,9 +59,9 @@ Hangi paket yöneticisinin kullanılacağını belirlerken, şu sıra kontrol ed
 }
 ```
 
-## Environment Variable
+## Variable de Entorno
 
-Tüm diğer tespit yöntemlerini geçersiz kılmak için `CLAUDE_PACKAGE_MANAGER` ayarlayın:
+Establecer `CLAUDE_PACKAGE_MANAGER` para anular todos los demás métodos de detección:
 
 ```bash
 # Windows (PowerShell)
@@ -71,9 +71,9 @@ $env:CLAUDE_PACKAGE_MANAGER = "pnpm"
 export CLAUDE_PACKAGE_MANAGER=pnpm
 ```
 
-## Tespiti Çalıştır
+## Ejecutar la Detección
 
-Mevcut paket yöneticisi tespit sonuçlarını görmek için şunu çalıştırın:
+Para ver los resultados actuales de detección del gestor de paquetes:
 
 ```bash
 node scripts/setup-package-manager.js --detect

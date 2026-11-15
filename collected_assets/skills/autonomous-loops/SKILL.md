@@ -1,8 +1,7 @@
 ---
 name: autonomous-loops
-description: "Patterns and architectures for autonomous Claude Code loops — from simple sequential pipelines to RFC-driven multi-agent DAG systems. Retained for compatibility only: when new autonomous loop guidance is needed, use continuous-agent-loop instead."
-metadata:
-  origin: ECC
+description: "Patterns and architectures for autonomous Claude Code loops — from simple sequential pipelines to RFC-driven multi-agent DAG systems."
+origin: ECC
 ---
 
 # Autonomous Loops Skill
@@ -112,17 +111,11 @@ claude -p --allowedTools "Read,Write,Edit,Bash" "Implement the fixes from securi
 **ECC's built-in persistent loop.** A session-aware REPL that calls `claude -p` synchronously with full conversation history.
 
 ```bash
-# Use the configured plugin root or standalone install (~/.claude or
-# $CLAUDE_CONFIG_DIR). For a reviewed and explicitly authorized ECC checkout:
-# export CLAUDE_PLUGIN_ROOT="/absolute/path/to/reviewed/ECC"
-ECC_ROOT="${CLAUDE_PLUGIN_ROOT:-${CLAUDE_CONFIG_DIR:-$HOME/.claude}}"
-[ -f "$ECC_ROOT/scripts/claw.js" ] || { echo "ECC scripts not found in the selected root (set CLAUDE_PLUGIN_ROOT to an authorized ECC checkout)" >&2; exit 1; }
-
 # Start the default session
-node "$ECC_ROOT/scripts/claw.js"
+node scripts/claw.js
 
 # Named session with skill context
-CLAW_SESSION=my-project CLAW_SKILLS=tdd-workflow,security-review node "$ECC_ROOT/scripts/claw.js"
+CLAW_SESSION=my-project CLAW_SKILLS=tdd-workflow,security-review node scripts/claw.js
 ```
 
 ### How It Works

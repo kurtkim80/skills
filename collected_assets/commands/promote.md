@@ -1,41 +1,41 @@
 ---
 name: promote
-description: 将项目范围内的本能推广到全局范围
+description: プロジェクトスコープのインスティンクトをグローバルスコープにプロモート
 command: true
 ---
 
-# 提升命令
+# プロモートコマンド
 
-在 continuous-learning-v2 中将本能从项目范围提升到全局范围。
+continuous-learning-v2のインスティンクトをプロジェクトスコープからグローバルスコープにプロモートします。
 
-## 实现
+## 実装
 
-使用插件根路径运行本能 CLI：
+プラグインルートパスを使用してインスティンクトCLIを実行:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" promote [instinct-id] [--force] [--dry-run]
 ```
 
-或者如果未设置 `CLAUDE_PLUGIN_ROOT`（手动安装）：
+または`CLAUDE_PLUGIN_ROOT`が設定されていない場合（手動インストール）:
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py promote [instinct-id] [--force] [--dry-run]
 ```
 
-## 用法
+## 使い方
 
 ```bash
-/promote                      # Auto-detect promotion candidates
-/promote --dry-run            # Preview auto-promotion candidates
-/promote --force              # Promote all qualified candidates without prompt
-/promote grep-before-edit     # Promote one specific instinct from current project
+/promote                      # プロモーション候補を自動検出
+/promote --dry-run            # 自動プロモーション候補をプレビュー
+/promote --force              # プロンプトなしで全適格候補をプロモート
+/promote grep-before-edit     # 現在のプロジェクトから1つの特定インスティンクトをプロモート
 ```
 
-## 操作步骤
+## 動作内容
 
-1. 检测当前项目
-2. 如果提供了 `instinct-id`，则仅提升该本能（如果存在于当前项目中）
-3. 否则，查找跨项目候选本能，这些本能：
-   * 出现在至少 2 个项目中
-   * 满足置信度阈值
-4. 将提升后的本能写入 `~/.claude/homunculus/instincts/personal/`，并设置 `scope: global`
+1. 現在のプロジェクトを検出
+2. `instinct-id`が提供された場合、そのインスティンクトのみをプロモート（現在のプロジェクトに存在する場合）
+3. それ以外の場合、以下の条件を満たすクロスプロジェクト候補を検出:
+   - 少なくとも2つのプロジェクトに存在
+   - 信頼度閾値を満たす
+4. プロモートされたインスティンクトを`~/.claude/homunculus/instincts/personal/`に`scope: global`で書き込み

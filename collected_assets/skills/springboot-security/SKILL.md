@@ -1,8 +1,7 @@
 ---
 name: springboot-security
-description: Spring Security best practices for authn/authz, validation, CSRF, secrets, headers, rate limiting, and dependency security in Java Spring Boot services. Use when reviewing Spring Security authn/authz, validation, CSRF, secrets, headers, or rate limiting.
-metadata:
-  origin: ECC
+description: Spring Security best practices for authn/authz, validation, CSRF, secrets, headers, rate limiting, and dependency security in Java Spring Boot services.
+origin: ECC
 ---
 
 # Spring Boot Security Review
@@ -107,8 +106,9 @@ public ResponseEntity<UserDto> createUser(@Valid @RequestBody CreateUserDto dto)
 - For native queries, use `:param` bindings; never concatenate strings
 
 ```java
-// BAD: String concatenation in native query
-@Query(value = "SELECT * FROM users WHERE name = '" + name + "'", nativeQuery = true)
+// BAD: String concatenation with EntityManager (SQL injection risk)
+String sql = "SELECT * FROM users WHERE name = '" + name + "'";
+List<User> users = entityManager.createNativeQuery(sql, User.class).getResultList();
 
 // GOOD: Parameterized native query
 @Query(value = "SELECT * FROM users WHERE name = :name", nativeQuery = true)
