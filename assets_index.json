@@ -5270,9 +5270,9 @@
     "terraform-patterns": {
       "name": "terraform-patterns",
       "type": "skill",
-      "description": "Use for any Terraform module, state backend, provider setup or IaC security review, before editing .tf files. Analyzes modules with tf_module_analyzer.py and scans for misconfigurations with tf_security_scanner.py.",
-      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
-      "source_name": "alirezarezvani/claude-skills",
+      "description": "Terraform and OpenTofu infrastructure-as-code patterns for project layout, remote state, modules, variables, secrets, safe plan/apply workflows, and CI. Use when writing or reviewing .tf files, structuring modules or environments, configuring backends and state locking, or debugging plan drift, state, and provider errors.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/terraform-patterns"
     },
     "design-system": {
@@ -5355,6 +5355,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/andreessen"
+    },
+    "monetize": {
+      "name": "monetize",
+      "type": "skill",
+      "description": "Use when someone asks how to earn more from their own experience: side income, side hustle, monetizing a skill, salary ceiling, career leverage, 副业, 变现, 外快, 技能变现, 薪资天花板, or pastes a résumé asking what they could do with it. Builds one person's side-income plan (hidden-skills audit, opportunity scan, productization, one leverage action, salary ceiling, AI starter pack) with every number sourced or labeled, and lints the report with report_lint.py.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/monetize"
     },
     "capture": {
       "name": "capture",
@@ -14749,6 +14757,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/link-source-categorizer"
     },
+    "google-code-review": {
+      "name": "google-code-review",
+      "type": "skill",
+      "description": "Review code or prepare a change for review using Google's engineering practices: reviewer and author modes, severity labels, CL descriptions, review speed and pushback.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/google-code-review"
+    },
     "discord-automation": {
       "name": "discord-automation",
       "type": "skill",
@@ -15085,6 +15101,14 @@
       "path": "collected_assets/skills/eas-simulator",
       "description_ko": "Eas Simulator에 대한 엄선된 업스트림 지침 워크플로가 사용자 목표와 일치할 때 사용합니다."
     },
+    "flash-compare": {
+      "name": "flash-compare",
+      "type": "skill",
+      "description": "Compare products before buying: check OEM specs against owner reports, load tests and verified reviews, then keep at most two and reject the rest with one-line causes.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/flash-compare"
+    },
     "claimable-postgres": {
       "name": "claimable-postgres",
       "type": "skill",
@@ -15119,6 +15143,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/client-secret-exposure-audit",
       "description_ko": "브라우저에 노출된 비밀(JS의 하드코딩된 API 키/토큰, HTML 메타/속성/설명의 비밀, 공개적으로 접근 가능한 소스/구성/배포 파일 및 헤더/CORS 잘못된 구성)에 대해 배포된 웹 앱을 감사합니다."
+    },
+    "no-obvious-questions": {
+      "name": "no-obvious-questions",
+      "type": "skill",
+      "description": "Filter every question before asking the user: skip ones answerable from context, tools, common sense or prior authorization; send the rest once, with a recommendation.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/no-obvious-questions"
     },
     "ios-screens": {
       "name": "ios-screens",
@@ -16412,6 +16444,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/course-upskilling-requests"
     },
+    "master-pitcher": {
+      "name": "master-pitcher",
+      "type": "skill",
+      "description": "Audit, draft or roast a pitch deck against a VC's 3-minute scan: 18 checks across 6 dimensions, a score out of 18, ranked fixes and placement violations.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/master-pitcher"
+    },
     "debugger": {
       "name": "debugger",
       "type": "skill",
@@ -17369,6 +17409,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/noaa-radar-satellite-fetching",
       "description_ko": "검증된 사이트, 제품, 채널, 부문 및 스캔 시간 선택을 사용하여 공용 클라우드 아카이브에서 NOAA NEXRAD 및 GOES 제품을 검색합니다."
+    },
+    "piloterr-mcp": {
+      "name": "piloterr-mcp",
+      "type": "skill",
+      "description": "Get structured JSON from 391 Piloterr scraping endpoints (Amazon, LinkedIn, Zillow, Crunchbase, Google...) through Piloterr's MCP server. Use when the user chooses Piloterr.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/piloterr-mcp"
     },
     "fal-platform": {
       "name": "fal-platform",
@@ -18416,6 +18464,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/doom-pay"
+    },
+    "autom-mcp": {
+      "name": "autom-mcp",
+      "type": "skill",
+      "description": "Get Google, Bing, Brave, DuckDuckGo and Yahoo results as JSON (web, news, maps, shopping, jobs, images, AI Mode) through Autom's MCP server. Use when the user chooses Autom.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/autom-mcp"
     },
     "quant-analyst": {
       "name": "quant-analyst",
@@ -20331,6 +20387,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/sales-accounting"
     },
+    "pennylane": {
+      "name": "pennylane",
+      "type": "skill",
+      "description": "Write, simulate and train PennyLane quantum circuits: QNodes, devices, templates, measurements, autodiff with NumPy/JAX/PyTorch, gradients, shots and noise.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pennylane"
+    },
     "scanpy": {
       "name": "scanpy",
       "type": "skill",
@@ -20418,6 +20482,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/thick-client",
       "description_ko": "데스크톱 씩(thick) 클라이언트에 대한 공인된 보안 테스트: 로컬 스토리지, 업데이트 채널, IPC, 트래픽 차단 및 클라이언트 측 신뢰 경계 검토."
+    },
+    "veille-mcp": {
+      "name": "veille-mcp",
+      "type": "skill",
+      "description": "Check emails, domains, phone numbers and IPs for fraud signals, and validate EU VAT numbers and IBANs, through Veille's MCP server. Use when the user chooses Veille.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/veille-mcp"
     },
     "seo-dataforseo": {
       "name": "seo-dataforseo",
@@ -21118,6 +21190,14 @@
       "path": "collected_assets/skills/azure-servicebus-dotnet",
       "description_ko": ".NET용 Azure Service Bus SDK. 대기열, 주제, 구독 및 세션이 포함된 엔터프라이즈 메시징."
     },
+    "chartquery-mcp": {
+      "name": "chartquery-mcp",
+      "type": "skill",
+      "description": "Render Chart.js charts, Mermaid and other diagrams, QR codes, barcodes and thermal printer labels (ZPL, TSC, EPL) as images through ChartQuery's MCP server. Use when the user chooses ChartQuery.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/chartquery-mcp"
+    },
     "n8n-multi-instance": {
       "name": "n8n-multi-instance",
       "type": "skill",
@@ -21774,6 +21854,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/meta-description-writer"
+    },
+    "finetune-llm": {
+      "name": "finetune-llm",
+      "type": "skill",
+      "description": "Fine-tune or post-train an LLM against measured VRAM budgets: probe the GPU, pick the engine, hash the data, smoke test, train instrumented, verify with a neutral evaluator.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/finetune-llm"
     },
     "kubernetes-ops": {
       "name": "kubernetes-ops",
@@ -22864,6 +22952,14 @@
       "path": "collected_assets/skills/devcontainer-setup",
       "description_ko": "Claude Code, 언어별 도구(Python/Node/Rust/Go) 및 영구 볼륨을 사용하여 devcontainer를 생성합니다. 프로젝트에 devcontainer 지원을 추가하거나, 격리된 개발 환경을 설정하거나, 샌드박스 Claude Code 작업 영역을 구성할 때 사용합니다."
     },
+    "perp-dex-costs": {
+      "name": "perp-dex-costs",
+      "type": "skill",
+      "description": "Before a perpetual futures trade, find which perp DEX is cheapest now for the size (fees plus slippage on the live book) and compare funding across 25+ venues.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/perp-dex-costs"
+    },
     "error-diagnostics-error-analysis": {
       "name": "error-diagnostics-error-analysis",
       "type": "skill",
@@ -23073,6 +23169,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/jobgpt",
       "description_ko": "JobGPT MCP 서버를 사용한 구직 자동화, 자동 지원, 이력서 생성, 지원 추적, 급여 정보 및 채용 담당자 지원."
+    },
+    "dox-init": {
+      "name": "dox-init",
+      "type": "skill",
+      "description": "Initialize a DOX AGENTS.md tree in a project: fetch the DOX contract, scan the real structure, then write nested AGENTS.md files with purpose, ownership and child indexes.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/dox-init"
     },
     "azure-eventhub-java": {
       "name": "azure-eventhub-java",
@@ -24327,6 +24431,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/makepad-font",
       "description_ko": "|"
+    },
+    "brand-vibes": {
+      "name": "brand-vibes",
+      "type": "skill",
+      "description": "Apply a company's design language to a site from 66 brand profiles, or extract a brand's DNA into semantic tokens for Tailwind, CSS variables or shadcn.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/brand-vibes"
     },
     "sdk-dx": {
       "name": "sdk-dx",
@@ -27558,6 +27670,14 @@
       "path": "collected_assets/skills/resolving-merge-conflicts",
       "description_ko": "진행 중인 Git 병합/리베이스 충돌을 해결해야 할 때 사용합니다."
     },
+    "capturekit-mcp": {
+      "name": "capturekit-mcp",
+      "type": "skill",
+      "description": "Take page screenshots or PDFs, extract page content, metadata and links, or get a page summary through CaptureKit's MCP server. Use when the user chooses CaptureKit.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/capturekit-mcp"
+    },
     "hig-components-dialogs": {
       "name": "hig-components-dialogs",
       "type": "skill",
@@ -29180,6 +29300,14 @@
       "path": "collected_assets/skills/neon-postgres-egress-optimizer",
       "description_ko": "코드베이스에서 과도한 Postgres 송신(네트워크 데이터 전송)을 진단하고 수정합니다."
     },
+    "specstream-browser-sessions": {
+      "name": "specstream-browser-sessions",
+      "type": "skill",
+      "description": "Open, drive and release a hosted SpecStream browser session over CDP (Playwright, Puppeteer) or one REST action at a time, with domain limits and per-second billing.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/specstream-browser-sessions"
+    },
     "brooks-lint": {
       "name": "brooks-lint",
       "type": "skill",
@@ -29346,6 +29474,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/android-dev",
       "description_ko": "네이티브(Kotlin/Java), 크로스 플랫폼(Flutter, RN, KMM) 및 하이브리드 아키텍처를 다루는 프로덕션급 Android 앱 개발 가이드입니다."
+    },
+    "huntapi-mcp": {
+      "name": "huntapi-mcp",
+      "type": "skill",
+      "description": "Read media metadata, or download video and audio the user has the rights to, from public media URLs through HuntAPI's MCP server and its async jobs. Use when the user chooses HuntAPI.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/huntapi-mcp"
     },
     "google-no-code": {
       "name": "google-no-code",
@@ -29533,6 +29669,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/changelog-entry"
+    },
+    "darpa-audit": {
+      "name": "darpa-audit",
+      "type": "skill",
+      "description": "Stress-test a startup or product idea against the Heilmeier Catechism before you build: 5 forcing prompts, assumption labels, and a SURVIVES or DOES NOT SURVIVE verdict.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/darpa-audit"
     },
     "axiom": {
       "name": "axiom",
@@ -30068,6 +30212,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/idor-testing",
       "description_ko": "웹 애플리케이션의 안전하지 않은 IDOR(직접 개체 참조) 취약점을 식별하고 악용하기 위한 체계적인 방법론을 제공합니다."
+    },
+    "vibe-abliteration": {
+      "name": "vibe-abliteration",
+      "type": "skill",
+      "description": "Run Heretic directional abliteration to reduce a model's refusals: set up, optimize, read the Pareto front, verify the export, then save or upload with a proper model card.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/vibe-abliteration"
     },
     "nosql-expert": {
       "name": "nosql-expert",
@@ -31121,6 +31273,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/deterministic-design"
     },
+    "market-validator": {
+      "name": "market-validator",
+      "type": "skill",
+      "description": "Validate a product idea against real user complaints from Reddit, X, G2, Quora, Hacker News, Product Hunt and YouTube, then score demand, competition gap and reachability.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/market-validator"
+    },
     "cicd-automation-workflow-automate": {
       "name": "cicd-automation-workflow-automate",
       "type": "skill",
@@ -31530,6 +31690,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/wiki-vitepress",
       "description_ko": "생성된 Wiki Markdown 파일을 어두운 테마와 대화형 인어 다이어그램을 갖춘 세련된 VitePress 정적 사이트로 변환합니다. 사용자가 \\\"사이트 구축\\\" 또는 \\\"VitePress로 패키지\\\"를 요청하거나, /deep-wiki를 실행하거나, 사용자가 생성된 위키 페이지에서 탐색 가능한 HTML 출력을 원할 때 사용합니다."
+    },
+    "asin-mcp": {
+      "name": "asin-mcp",
+      "type": "skill",
+      "description": "Find Amazon ASINs, read current offers and price history, and manage a price watchlist with target-price alerts through Asin's MCP server. Use when the user chooses Asin.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/asin-mcp"
     },
     "email-systems": {
       "name": "email-systems",
@@ -34547,6 +34715,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-web-pubsub-ts",
       "description_ko": "WebSocket 연결 및 게시/구독 패턴을 사용한 실시간 메시징."
+    },
+    "scroll-3d-world": {
+      "name": "scroll-3d-world",
+      "type": "skill",
+      "description": "Build a scroll-scrubbed Three.js fly-through landing page: one continuous camera path through diorama scenes, with no AI video, no seams and no render credits.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/scroll-3d-world"
     },
     "apify-integration-development": {
       "name": "apify-integration-development",
@@ -37676,15 +37852,6 @@
       "path": "collected_assets/skills/sysadmin-security",
       "description_ko": "사용자 액세스, SSH, 방화벽, 포트, 파일 권한, 업데이트 및 백업을 다루는 Debian/Ubuntu Linux 시스템에 대한 보안 감사 및 강화입니다. 적용하기 전에 각 변경 사항의 이점과 잠금 위험을 설명합니다. 서버나 워크스테이션을 감사하거나 강화할 때 사용합니다."
     },
-    "linux-server-ops": {
-      "name": "linux-server-ops",
-      "type": "skill",
-      "description": "Manage, deploy, and monitor Linux servers via SSH. Like a BaoTa/1Panel but AI-driven. Covers websites, Node.js/Java/Python/Go/PHP services, MySQL/PostgreSQL/Redis databases, Docker containers and Compose stacks, SSL certificates (auto-issue + auto-renew), domain binding, Nginx management, WAF (ModSecurity+OWASP), cron jobs, firewall, log management, file operations, user management, system monitoring, and backups. All services auto-start on boot. Maintains a server-side index and local workspace snapshots for instant session resumption. Use when the user asks to deploy a website or service, manage a Linux server, set up SSL, configure databases, manage Docker, check service status, restart a service, monitor resources, or resume work on a previously configured server.",
-      "source_repo": "https://github.com/kirbeeinsipid671/linux-server-skill.git",
-      "source_name": "kirbeeinsipid671/linux-server-skill",
-      "path": "collected_assets/skills/linux-server-ops",
-      "description_ko": "SSH를 통해 Linux 서버를 관리, 배포 및 모니터링합니다. BaoTa/1Panel과 비슷하지만 AI 기반입니다. 웹사이트, Node.js/Java/Python/Go/PHP 서비스, MySQL/PostgreSQL/Redis 데이터베이스, Docker 컨테이너 및 Compose 스택, SSL 인증서(자동 발급 + 자동 갱신), 도메인 바인딩, Nginx 관리, WAF(ModSecurity+OWASP), cron 작업, 방화벽, 로그 관리, 파일 작업, 사용자 관리, 시스템 모니터링 및 백업을 다룹니다. 부팅 시 모든 서비스가 자동으로 시작됩니다. 즉각적인 세션 재개를 위해 서버측 인덱스와 로컬 작업공간 스냅샷을 유지합니다. 사용자가 웹 사이트 또는 서비스 배포, Linux 서버 관리, SSL 설정, 데이터베이스 구성, Docker 관리, 서비스 상태 확인, 서비스 다시 시작, 리소스 모니터링 또는 이전에 구성된 서버에서 작업 재개를 요청할 때 사용합니다."
-    },
     "triage-suspected-secret-exposure": {
       "name": "Triage Suspected Secret Exposure",
       "type": "skill",
@@ -37957,11 +38124,10 @@
     "security-review": {
       "name": "security-review",
       "type": "skill",
-      "description": "Use this skill when adding authentication, handling user input, working with secrets, creating API endpoints, or implementing payment/sensitive features. Provides comprehensive security checklist and patterns.",
+      "description": "Security review checklist and patterns for adding authentication, handling user input, managing secrets, creating API endpoints, or implementing payment and sensitive features.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/security-review",
-      "description_ko": "인증 추가, 사용자 입력 처리, 비밀 작업, API 엔드포인트 생성 또는 결제/민감한 기능 구현 시 이 기술을 사용하세요. 포괄적인 보안 체크리스트와 패턴을 제공합니다."
+      "path": "collected_assets/skills/security-review"
     },
     "migrating-oracle-to-postgres-data-access-code": {
       "name": "migrating-oracle-to-postgres-data-access-code",
@@ -47557,6 +47723,14 @@
       "path": "collected_assets/skills/investor-materials",
       "description_ko": "프레젠테이션 자료, 단일 페이지 자료, 투자자 메모, 액셀러레이터 애플리케이션, 재무 모델 및 기금 모금 자료를 만들고 업데이트합니다. 사용자가 여러 모금 자산 전반에 걸쳐 내부적으로 일관성을 유지해야 하는 투자자 관련 문서, 예측, 자금 사용 표, 마일스톤 계획 또는 자료가 필요할 때 사용합니다."
     },
+    "ecc-contribution-review": {
+      "name": "ecc-contribution-review",
+      "type": "skill",
+      "description": "Prepare an ECC skill contribution for review by organizing repository, install-surface, cross-harness, validation, security, and commit observations into a local proposal. Use when preparing a skill contribution for review.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/ecc-contribution-review"
+    },
     "nextjs-turbopack": {
       "name": "nextjs-turbopack",
       "type": "skill",
@@ -47670,6 +47844,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/perl-patterns"
+    },
+    "yoruba-localization-testing": {
+      "name": "yoruba-localization-testing",
+      "type": "skill",
+      "description": "Test Yoruba (yo) and English bilingual interfaces for tone marks, underdots, Unicode normalization, translation fallback, and accessibility.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/yoruba-localization-testing"
     },
     "ui-to-vue": {
       "name": "ui-to-vue",
@@ -47810,6 +47992,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/rust-testing"
+    },
+    "platform-factory": {
+      "name": "platform-factory",
+      "type": "skill",
+      "description": "Build deterministic OCI images, SBOM/provenance evidence and hardened container or microVM runs from a compiled executable with the Platform Factory (pf) CLI, and keep its freeze lock in sync with a companion Claude Code hook. Use when a project contains .platform-factory/, when the user runs or asks about pf/platform-factory (detect, plan, freeze, build, verify, run, launch), or wants reproducible OCI builds without a Docker daemon.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/platform-factory"
     },
     "safety-guard": {
       "name": "safety-guard",
@@ -47974,15 +48164,6 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/regex-vs-llm-structured-text"
     },
-    "claude-devfleet": {
-      "name": "claude-devfleet",
-      "type": "skill",
-      "description": "Claude DevFleet経由でマルチエージェントコーディングタスクをオーケストレーション — プロジェクトを計画し、分離された作業ツリー内で平行エージェントを派遣し、進捗を監視し、構造化レポートを読む。",
-      "source_repo": "https://github.com/affaan-m/ECC.git",
-      "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/claude-devfleet",
-      "description_ko": "Claude DevFleet経由데마르치에이젠트코딩타스크오케스트레이션 — 프로제크트を計画し、分離捗を計画し、分離捗を監視し、分離捗を監視し、構造化画し、構造化画し、を読む。"
-    },
     "agent-sort": {
       "name": "agent-sort",
       "type": "skill",
@@ -48035,6 +48216,15 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/prisma-patterns",
       "description_ko": "TypeScript 백엔드를 위한 Prisma ORM 패턴 — 스키마 설계, 쿼리 최적화, 트랜잭션, 페이지 매김 및 updateMany가 레코드가 아닌 개수를 반환하는 것과 같은 중요한 트랩, $transaction 시간 초과, DB를 재설정하는 마이그레이션 개발, 대량 쓰기에서 건너뛴 @updatedAt 및 서버리스 연결 소진. Prisma 스키마 또는 쿼리를 작성하거나 트랜잭션, 마이그레이션 또는 서버리스 연결 제한을 디버깅할 때 사용합니다."
+    },
+    "devfleet": {
+      "name": "devfleet",
+      "type": "skill",
+      "description": "Claude DevFleet経由でマルチエージェントコーディングタスクをオーケストレーション — プロジェクトを計画し、分離された作業ツリー内で平行エージェントを派遣し、進捗を監視し、構造化レポートを読む。",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/devfleet",
+      "description_ko": "Claude DevFleet経由데마르치에이젠트코딩타스크오케스트레이션 — 프로제크트を計画し、分離捗を計画し、分離捗を監視し、分離捗を監視し、構造化画し、構造化画し、を読む。"
     },
     "llm-trading-agent-security": {
       "name": "llm-trading-agent-security",
@@ -48130,6 +48320,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/token-card"
     },
+    "short-video-distribution": {
+      "name": "short-video-distribution",
+      "type": "skill",
+      "description": "Ship a finished vertical video to TikTok, YouTube Shorts, and Instagram Reels. Checks the file against each platform's limits, writes native captions and titles, handles privacy and disclosure choices, gets explicit approval, then publishes through whichever path the user has (a connected publishing MCP server, the platform APIs, or a manual upload sheet) and returns the live links. Use after a video is rendered or edited and the user wants it posted as a Short, Reel, or TikTok.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/short-video-distribution"
+    },
     "cisco-ios-patterns": {
       "name": "cisco-ios-patterns",
       "type": "skill",
@@ -48181,6 +48379,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/api-connector-builder"
+    },
+    "rails-security": {
+      "name": "rails-security",
+      "type": "skill",
+      "description": "Ruby on Rails security practices for Rails 7.1+ and 8.x apps. Covers production configuration, authentication, authorization, strong parameters, SQL injection, XSS and output escaping, CSRF, file uploads, API security, credentials, untrusted boundaries, and dependency scanning. Use when reviewing or writing Rails authentication, authorization, input handling, uploads, or deployment configuration.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/rails-security"
     },
     "fsharp-testing": {
       "name": "fsharp-testing",
@@ -48454,11 +48660,10 @@
     "kubernetes-patterns": {
       "name": "kubernetes-patterns",
       "type": "skill",
-      "description": "Kubernetes workload patterns, resource management, RBAC, probes, autoscaling, ConfigMap/Secret handling, and kubectl debugging for production-grade deployments. Use when writing or reviewing Kubernetes manifests, or debugging probes, RBAC, autoscaling, or resource limits.",
+      "description": "Kubernetes workload patterns, resource management, RBAC, probes, autoscaling, ConfigMap/Secret handling, and kubectl debugging for production-grade deployments. Use when writing or reviewing Kubernetes manifests, or debugging probes, RBAC, autoscaling, resource limits, or pods that keep getting evicted.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/kubernetes-patterns",
-      "description_ko": "프로덕션 등급 배포를 위한 Kubernetes 워크로드 패턴, 리소스 관리, RBAC, 프로브, 자동 크기 조정, ConfigMap/Secret 처리 및 kubectl 디버깅. Kubernetes 매니페스트를 작성 또는 검토하거나 프로브, RBAC, 자동 크기 조정 또는 리소스 제한을 디버깅할 때 사용합니다."
+      "path": "collected_assets/skills/kubernetes-patterns"
     },
     "jpa-patterns": {
       "name": "jpa-patterns",
@@ -48740,11 +48945,10 @@
     "blender-motion-state-inspection": {
       "name": "blender-motion-state-inspection",
       "type": "skill",
-      "description": "Use this skill when inspecting Blender characters, rigs, poses, animation retargeting, ground contact, facing direction, or model-vs-motion alignment where screenshots alone are not enough.",
+      "description": "Inspects Blender characters, rigs, poses, animation retargeting, ground contact, facing direction, or model-vs-motion alignment where screenshots alone are not enough.",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/blender-motion-state-inspection",
-      "description_ko": "스크린샷만으로는 충분하지 않은 Blender 캐릭터, 리그, 포즈, 애니메이션 대상 변경, 지면 접촉, 직면 방향 또는 모델 대 모션 정렬을 검사할 때 이 스킬을 사용하세요."
+      "path": "collected_assets/skills/blender-motion-state-inspection"
     },
     "remotion-video-creation": {
       "name": "remotion-video-creation",
@@ -48827,10 +49031,11 @@
     "benchmark-optimization-loop": {
       "name": "benchmark-optimization-loop",
       "type": "skill",
-      "description": "Convert 'make it faster' requests into a bounded measured optimization loop — baseline first, generate one-hypothesis variants, benchmark each against a correctness gate, and promote the fastest safe variant with reproducible commands. Use when asked to speed something up, try many variants, run recursive optimization, benchmark latency/throughput/cost, or pick the best implementation by repeated measured tests.",
+      "description": ">-",
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
-      "path": "collected_assets/skills/benchmark-optimization-loop"
+      "path": "collected_assets/skills/benchmark-optimization-loop",
+      "description_ko": ">-"
     },
     "canary-watch": {
       "name": "canary-watch",
@@ -48913,6 +49118,14 @@
       "path": "collected_assets/skills/continuous-agent-loop",
       "description_ko": "품질 게이트, 설명, 리카바리 콘트로를 を備えた継続的인 자체 에이젠트루프 파탄입니다."
     },
+    "roundhouse-x402": {
+      "name": "roundhouse-x402",
+      "type": "skill",
+      "description": "Discover x402-paid services and ERC-8004 agent identity via Roundhouse (open catalog, paid SQL, MCP server, rh-x402 CLI), and optionally settle through Roundhouse's Base mainnet facilitator. Use when searching the x402 bazaar/index, vetting a payee or wallet, querying settlement or agent data, configuring Roundhouse MCP, or pointing a paywall at a hosted facilitator on Base.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/roundhouse-x402"
+    },
     "django-patterns": {
       "name": "django-patterns",
       "type": "skill",
@@ -48973,6 +49186,14 @@
       "path": "collected_assets/skills/homelab-network-setup",
       "description_ko": "홈라보넷트워크基盤設定, 데바이스정정, 接続性, あよびnettworkeregmentation。"
     },
+    "godot-testing": {
+      "name": "godot-testing",
+      "type": "skill",
+      "description": "Testing Godot 4 GDScript projects - a zero-dependency headless check scene, gdUnit4 and GUT suites, scene-runner tests, signal assertions, and CI commands. Use when adding tests to a Godot project, setting up CI, or proving a change did not break the game.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/godot-testing"
+    },
     "ml-adoption-playbook": {
       "name": "ml-adoption-playbook",
       "type": "skill",
@@ -48990,6 +49211,22 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/visa-doc-translate",
       "description_ko": "biz申請書類(画image)をEnglishに翻訳し、원문과翻訳を含む바이링갈PDFを작성하기"
+    },
+    "scientific-db-openalex-database": {
+      "name": "scientific-db-openalex-database",
+      "type": "skill",
+      "description": "OpenAlex REST API workflows for cross-disciplinary literature search, DOI/PMID lookup, open-access links, citation counts, and reproducible search logs. Use when a task needs scholarly works from every field (not only biomedicine), or needs to resolve a DOI, PMID or OpenAlex ID to full metadata.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/scientific-db-openalex-database"
+    },
+    "leanrea": {
+      "name": "leanrea",
+      "type": "skill",
+      "description": "Reverse engineers shipped software with bounded local CLI inspection. Covers PE headers, Electron archives, custom binary formats, SQLite databases, and JavaScript bundles while separating observed evidence from inference.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/leanrea"
     },
     "csharp-testing": {
       "name": "csharp-testing",
@@ -49206,6 +49443,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/data-throughput-accelerator"
+    },
+    "config-health": {
+      "name": "config-health",
+      "type": "skill",
+      "description": "Runtime configuration integrity monitoring for Claude Code. Detects config drift, rule staleness, and hook wiring gaps at startup, with an optional per-tool mode. Complements delivery-gate with startup soft monitoring.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/config-health"
     },
     "swiftui-patterns": {
       "name": "swiftui-patterns",
@@ -49753,6 +49998,14 @@
       "path": "collected_assets/skills/fal-ai-media",
       "description_ko": "fal.ai MCP를 통한 통합 미디어 생성 — 이미지, 비디오 및 오디오. 텍스트를 이미지로 변환(Nano Banana), 텍스트/이미지를 비디오로(Seedance, Kling, Veo 3), 텍스트를 음성으로(CSM-1B) 및 비디오를 오디오로(ThinkSound)를 다룹니다. 사용자가 AI로 이미지, 동영상, 오디오를 생성하고 싶을 때 사용하세요."
     },
+    "web-perimeter-owasp-2025-audit": {
+      "name": "web-perimeter-owasp-2025-audit",
+      "type": "skill",
+      "description": "Passive, non-destructive web perimeter security auditing mapped to OWASP Top 10:2025 surface leads, CDN Unkeyed Header Web Cache Poisoning (X-Forwarded-Host), supply chain manifest exposure, git object dumping prevention (/.git/HEAD), cryptographic headers, and AI crawler boundary governance (llms.txt, robots.txt). Use when auditing production domains, configuring Cloudflare/Vercel/Nginx edge security, or preparing pre-launch perimeter checks.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/web-perimeter-owasp-2025-audit"
+    },
     "redis-patterns": {
       "name": "redis-patterns",
       "type": "skill",
@@ -49890,6 +50143,14 @@
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/skills/counterparty-channel-discipline",
       "description_ko": "채널별 엄격한 프롬프트, 멘션 게이팅, 침묵 관찰 및 외부 상대방과 공유 채널에 있는 상담원에 대한 통신 자율성 정책. 에이전트가 외부인이 모든 메시지를 읽을 수 있고 처리된 경우에만 말하고 내부 컨텍스트를 유출하지 않고 위험한 콘텐츠를 초안 전용 승인으로 라우팅해야 하는 그룹 채팅, 공유 채널 또는 DM에 참여할 때 사용합니다."
+    },
+    "godot-patterns": {
+      "name": "godot-patterns",
+      "type": "skill",
+      "description": "Idiomatic Godot 4 GDScript patterns - static typing, scene and node design, signals, resources, autoloads, input, and lifecycle safety. Use when writing or reviewing GDScript, designing scenes, or deciding where game state should live.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/skills/godot-patterns"
     },
     "rules-distill": {
       "name": "rules-distill",
@@ -58463,15 +58724,6 @@
       "path": "collected_assets/agents/python-notebook-sample-builder.agent.md",
       "description_ko": "Azure 및 AI 기능을 보여주는 VS Code에서 Python Notebook을 빌드하기 위한 사용자 지정 에이전트"
     },
-    "gem-designer.agent": {
-      "name": "gem-designer.agent",
-      "type": "agent",
-      "description": "UI/UX design specialist: layouts, themes, color schemes, design systems, accessibility.",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
-      "path": "collected_assets/agents/gem-designer.agent.md",
-      "description_ko": "UI/UX 디자인 전문가: 레이아웃, 테마, 색 구성표, 디자인 시스템, 접근성."
-    },
     "software-engineer-agent-v1.agent": {
       "name": "software-engineer-agent-v1.agent",
       "type": "agent",
@@ -59841,11 +60093,10 @@
     "gem-mobile-tester.agent": {
       "name": "gem-mobile-tester.agent",
       "type": "agent",
-      "description": "Mobile E2E testing: Detox, Maestro, iOS/Android simulators.",
+      "description": "Mobile E2E testing: Detox, Maestro, Appium, or e2e on iOS/Android simulators.",
       "source_repo": "https://github.com/github/awesome-copilot.git",
       "source_name": "github/awesome-copilot",
-      "path": "collected_assets/agents/gem-mobile-tester.agent.md",
-      "description_ko": "모바일 E2E 테스트: Detox, Maestro, iOS/Android 시뮬레이터."
+      "path": "collected_assets/agents/gem-mobile-tester.agent.md"
     },
     "blueprint-mode.agent": {
       "name": "blueprint-mode.agent",
@@ -61087,6 +61338,14 @@
       "source_repo": "https://github.com/affaan-m/ECC.git",
       "source_name": "affaan-m/ECC",
       "path": "collected_assets/agents/gan-planner.md"
+    },
+    "gdscript-reviewer": {
+      "name": "gdscript-reviewer",
+      "type": "agent",
+      "description": "Expert GDScript and Godot 4 code reviewer specializing in static typing, scene and node design, signals, lifecycle safety, resources, and performance. Use for all GDScript changes. MUST BE USED for Godot projects.",
+      "source_repo": "https://github.com/affaan-m/ECC.git",
+      "source_name": "affaan-m/ECC",
+      "path": "collected_assets/agents/gdscript-reviewer.md"
     },
     "rag-pipeline-reviewer": {
       "name": "rag-pipeline-reviewer",
