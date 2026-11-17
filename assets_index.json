@@ -3116,6 +3116,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/sales-engineer"
     },
+    "support-ops": {
+      "name": "support-ops",
+      "type": "skill",
+      "description": "Use for any customer support operations question - SLA attainment and breaches (first response, resolution, business hours, weekends, tickets about to breach), how many agents to schedule per hour for a phone, chat or email queue and where the roster is short (Erlang C, service level, handle time, shrinkage, occupancy, backlog), or which ticket topics to deflect with help-center articles, automate with macros or fix as product bugs. Works from a helpdesk ticket export with stdlib scripts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/support-ops"
+    },
     "revenue-operations": {
       "name": "revenue-operations",
       "type": "skill",
@@ -3127,7 +3135,7 @@
     "business-growth-skills": {
       "name": "business-growth-skills",
       "type": "skill",
-      "description": "Use when a growth request needs routing between customer-success-manager, sales-engineer, revenue-operations and contract-and-proposal-writer.",
+      "description": "Use when a growth request needs routing between customer-success-manager, sales-engineer, revenue-operations, contract-and-proposal-writer and support-ops.",
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/business-growth-skills"
@@ -3293,6 +3301,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/isms-audit-expert"
     },
+    "dora-readiness": {
+      "name": "dora-readiness",
+      "type": "skill",
+      "description": "Use when a bank, payment or e-money institution, investment firm, insurer, crypto-asset service provider or fund manager in the EU faces DORA (Regulation 2022/2554, Digital Operational Resilience Act) - is an ICT outage or cyber incident major, when the initial (4h/24h), intermediate (72h) and final reports are due, weekends included; the register of information; ICT or cloud contracts missing audit rights, exit plans or other Article 30 terms; scope and the simplified framework for small firms. Not for DORA DevOps metrics. Three deterministic scripts with cited articles.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/dora-readiness"
+    },
     "fda-consultant-specialist": {
       "name": "fda-consultant-specialist",
       "type": "skill",
@@ -3324,6 +3340,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/ra-qm-skills"
+    },
+    "nis2-readiness": {
+      "name": "nis2-readiness",
+      "type": "skill",
+      "description": "Use when a cyberattack, ransomware or outage hits a hospital, utility, transport, digital-infrastructure or other EU company and it must report under NIS2 (Directive 2022/2555) or the German NIS2UmsuCG/BSIG - 24h early warning, 72h notification, one-month final report. Also for whether a company is an essential or important entity, BSI registration, management-board liability and training (Article 20), an Article 21 gap analysis, or one incident that also triggers DORA, CRA or GDPR reports. Four deterministic scripts with cited articles.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/nis2-readiness"
     },
     "cmmc-readiness": {
       "name": "cmmc-readiness",
@@ -4664,6 +4688,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/collab-proof"
     },
+    "cloud-finops": {
+      "name": "cloud-finops",
+      "type": "skill",
+      "description": "Use for any cloud cost question on AWS, Azure or Google Cloud - a bill that jumped or one service that spiked (NAT gateway, egress, storage), cost anomaly alert thresholds, untagged or unallocated spend and tag cleanup for showback or chargeback, Savings Plans, Reserved Instances or committed use discounts (utilization, coverage, unused commitment, effective savings rate, whether to buy more), or whether cost per order or per customer got worse. Reads a FOCUS billing export with stdlib scripts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/cloud-finops"
+    },
     "security-guidance": {
       "name": "security-guidance",
       "type": "skill",
@@ -4989,6 +5021,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/slo-architect"
     },
+    "mobile-release": {
+      "name": "mobile-release",
+      "type": "skill",
+      "description": "Use when shipping an iOS or Android app update to the App Store or Google Play - Apple or Google rejected or warned about a build (ITMS-91053 privacy manifest, required reason API, missing usage description, target API level, 16 KB page size, exported activity, SMS or call log permission, Data safety), a readiness check before submitting an iOS, Android, Flutter or React Native release, or whether to pause, halt or widen a phased or staged rollout from crash rate, ANR rate or Play's bad behavior thresholds. Checks the project with stdlib scripts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/mobile-release"
+    },
     "coding-agent-rollout": {
       "name": "coding-agent-rollout",
       "type": "skill",
@@ -5257,6 +5297,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/skills/demo-video"
+    },
+    "readme-polish": {
+      "name": "readme-polish",
+      "type": "skill",
+      "description": "Use when an existing README must be upgraded, audited, or made scannable: polish/美化/升级/优化/打磨 README, add badges, mermaid, callouts, or collapsible sections, compare against top repos in the same ecosystem, or fix a plain/ugly first screen. Calibrates to the repo's own category, rewrites the hero and information hierarchy, and enforces a deterministic lint gate. Not for brand-new READMEs from scratch or hero-image design.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/skills/readme-polish"
     },
     "handoff": {
       "name": "handoff",
@@ -14130,6 +14178,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/code-review-ai-ai-review"
     },
+    "boring-marketing-first-screen-check": {
+      "name": "boring-marketing-first-screen-check",
+      "type": "skill",
+      "description": "Audit what a mobile visitor sees on an ad destination or business homepage.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-first-screen-check"
+    },
     "radix-ui-design-system": {
       "name": "radix-ui-design-system",
       "type": "skill",
@@ -14226,6 +14282,14 @@
       "path": "collected_assets/skills/fedramp-compliance",
       "description_ko": "연방 클라우드 서비스에 대한 FedRAMP 요구 사항을 구현합니다. 구성"
     },
+    "boring-marketing-long-form-article": {
+      "name": "boring-marketing-long-form-article",
+      "type": "skill",
+      "description": "Research and draft a long-form guide with sourced facts and platform-specific edits.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-long-form-article"
+    },
     "bill-gates": {
       "name": "bill-gates",
       "type": "skill",
@@ -14233,6 +14297,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/bill-gates"
+    },
+    "boring-marketing-start-here": {
+      "name": "boring-marketing-start-here",
+      "type": "skill",
+      "description": "Build project marketing context from business evidence and route work to a matching skill.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-start-here"
     },
     "competitor-tracking": {
       "name": "competitor-tracking",
@@ -15495,6 +15567,14 @@
       "path": "collected_assets/skills/cloud-devops",
       "description_ko": "AWS, Azure, GCP, Kubernetes, Terraform, CI/CD, 모니터링 및 클라우드 네이티브 개발을 다루는 클라우드 인프라 및 DevOps 워크플로입니다."
     },
+    "boring-marketing-newsletter": {
+      "name": "boring-marketing-newsletter",
+      "type": "skill",
+      "description": "Plan and draft newsletter editions with a clear editorial angle and sourced material.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-newsletter"
+    },
     "apk-redteam-pipeline": {
       "name": "apk-redteam-pipeline",
       "type": "skill",
@@ -15971,6 +16051,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/tune-monitor",
       "description_ko": "Monte Carlo 모니터를 분석하고 경고 소음을 줄이기 위한 구성 변경을 권장합니다. 메트릭, 사용자 정의 SQL, 유효성 검사 및 테이블 모니터를 지원합니다. 보고서를 가져오고, 패턴을 식별하고, 튜닝을 제안합니다."
+    },
+    "boring-marketing-keyword-research": {
+      "name": "boring-marketing-keyword-research",
+      "type": "skill",
+      "description": "Organize search queries into topic families, intent and prioritized content briefs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-keyword-research"
     },
     "customs-trade-compliance": {
       "name": "customs-trade-compliance",
@@ -16531,6 +16619,14 @@
       "path": "collected_assets/skills/md2video-audio",
       "description_ko": "동기화된 시각적 및 음성 내레이션을 통해 마크다운 문서를 내레이션이 포함된 MP4 비디오로 변환하세요."
     },
+    "boring-marketing-ai-search": {
+      "name": "boring-marketing-ai-search",
+      "type": "skill",
+      "description": "Audit and improve a brand's citations in AI search results.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-ai-search"
+    },
     "ask-sonner": {
       "name": "ask-sonner",
       "type": "skill",
@@ -16622,6 +16718,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/web-review"
+    },
+    "boring-marketing-service-area-pages": {
+      "name": "boring-marketing-service-area-pages",
+      "type": "skill",
+      "description": "Create distinct local service pages backed by credible evidence for each location.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-service-area-pages"
     },
     "hunt-jwt-crypto": {
       "name": "hunt-jwt-crypto",
@@ -17409,6 +17513,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/noaa-radar-satellite-fetching",
       "description_ko": "검증된 사이트, 제품, 채널, 부문 및 스캔 시간 선택을 사용하여 공용 클라우드 아카이브에서 NOAA NEXRAD 및 GOES 제품을 검색합니다."
+    },
+    "boring-marketing-social-content": {
+      "name": "boring-marketing-social-content",
+      "type": "skill",
+      "description": "Draft original X and LinkedIn posts grounded in a brand's past posts and real numbers.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-social-content"
     },
     "piloterr-mcp": {
       "name": "piloterr-mcp",
@@ -19458,6 +19570,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ai-podcast-voiceover"
     },
+    "boring-marketing-competitive-intel": {
+      "name": "boring-marketing-competitive-intel",
+      "type": "skill",
+      "description": "Compare competitor positioning, offers, ads and public customer feedback.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-competitive-intel"
+    },
     "grpc-golang": {
       "name": "grpc-golang",
       "type": "skill",
@@ -19642,6 +19762,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ai-analyzer"
     },
+    "e2e": {
+      "name": "e2e",
+      "type": "skill",
+      "description": "Write, run and debug e2e tests for web and iOS/Android apps that mix plain-language agent steps with exact assertions, replaying cached agent steps without model calls.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/e2e"
+    },
     "vendor-contractor-management": {
       "name": "vendor-contractor-management",
       "type": "skill",
@@ -19701,6 +19829,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/attack-chain",
       "description_ko": "정찰, 초기 액세스, 권한 상승, 측면 이동 및 보고를 포괄하는 승인된 다단계 공격 경로 계획 및 조정입니다. 전체 참여 및 교차 단계 작업을 위한 진입점입니다."
+    },
+    "boring-marketing-lead-magnet": {
+      "name": "boring-marketing-lead-magnet",
+      "type": "skill",
+      "description": "Research and prototype a useful opt-in resource, quiz or calculator.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-lead-magnet"
     },
     "ai-prompt-regression-testing": {
       "name": "ai-prompt-regression-testing",
@@ -20978,6 +21114,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/parallel-search-mcp",
       "description_ko": "Parallel의 무료 Search MCP를 사용하여 공개 웹을 검색하고 소스를 확인하세요. 사용자가 현재 정보 및 URL 추출을 위해 병렬 또는 연결된 도구를 선택할 때 사용합니다."
+    },
+    "boring-marketing-find-local-clients": {
+      "name": "boring-marketing-find-local-clients",
+      "type": "skill",
+      "description": "Build a ranked list of local businesses from public search and directory evidence.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-find-local-clients"
     },
     "remotion": {
       "name": "remotion",
@@ -22765,6 +22909,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/moltnode-chain-reader"
     },
+    "boring-marketing-direct-response-copy": {
+      "name": "boring-marketing-direct-response-copy",
+      "type": "skill",
+      "description": "Draft conversion copy from customer language, evidence and offer constraints.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-direct-response-copy"
+    },
     "m365-agents-py": {
       "name": "m365-agents-py",
       "type": "skill",
@@ -22977,6 +23129,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/multi-advisor",
       "description_ko": "Conselho de especialistas - Consulta multiplos Agentes do ecossistema em paralelo para anise multi-perspectiva de qualquer topico. Ativa personas, especialistas e Agentes tecnicos simultaneamente, cada um pela sua otica unica, e consolida em sintese decisoria final."
+    },
+    "boring-marketing-google-ads-tracking": {
+      "name": "boring-marketing-google-ads-tracking",
+      "type": "skill",
+      "description": "Audit Google Ads lead signals and plan or verify tracking corrections.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-google-ads-tracking"
     },
     "wiki-changelog": {
       "name": "wiki-changelog",
@@ -24249,6 +24409,14 @@
       "path": "collected_assets/skills/expo-brownfield",
       "description_ko": "Expo 및 React Native를 기존 기본 iOS 또는 Android 앱에 통합합니다. 사용자가 브라운필드를 언급하거나 기본 앱, AAR/XCFramework에 React Native를 포함하거나 기존 Kotlin/Swift 프로젝트에 Expo를 추가하는 경우에 사용하세요. 격리된 접근 방식과 통합된 접근 방식을 모두 다룹니다."
     },
+    "vibe-shield": {
+      "name": "vibe-shield",
+      "type": "skill",
+      "description": "Audit Next.js, React, Express, Hono, Supabase SQL, Stripe webhooks, and SKILL.md or MCP configs across 92 static security and prompt-injection rules.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/vibe-shield"
+    },
     "customer-research": {
       "name": "customer-research",
       "type": "skill",
@@ -25066,6 +25234,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/defi-yield-strategy-allocator"
     },
+    "boring-marketing-site-audit": {
+      "name": "boring-marketing-site-audit",
+      "type": "skill",
+      "description": "Crawl a site and prioritize technical SEO fixes. Use to check robots.txt, sitemaps, noindex, duplicate pages, broken links, metadata, page speed, and AI crawler access.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-site-audit"
+    },
     "red-team-tactics": {
       "name": "red-team-tactics",
       "type": "skill",
@@ -25100,6 +25276,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/animation-vocabulary"
+    },
+    "modern-java-guidance": {
+      "name": "modern-java-guidance",
+      "type": "skill",
+      "description": "Guides agents to write Java 17/21+ and Spring Boot 3.x+ code with version detection and the mjg CLI scanner instead of Java 8 and Boot 2.x patterns.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/modern-java-guidance"
     },
     "robius-event-action": {
       "name": "robius-event-action",
@@ -25602,6 +25786,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/nerdzao-elite-gemini-high",
       "description_ko": "Modo Elite Coder + UX Pixel-Perfect는 Gemini 3.1 Pro High에 대한 세부 사항을 설명합니다. 토큰의 효율성을 최대화하는 데 초점을 맞춘 워크플로가 완료되었습니다."
+    },
+    "boring-marketing-brand-voice": {
+      "name": "boring-marketing-brand-voice",
+      "type": "skill",
+      "description": "Extract a brand voice profile with evidence and observable writing checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-brand-voice"
     },
     "aws-agentic-ai": {
       "name": "aws-agentic-ai",
@@ -26522,6 +26714,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-ai-voicelive-py",
       "description_ko": "양방향 WebSocket 통신을 통해 실시간 음성 AI 애플리케이션을 구축하세요."
+    },
+    "boring-marketing-email-sequences": {
+      "name": "boring-marketing-email-sequences",
+      "type": "skill",
+      "description": "Draft lifecycle and sales email sequences with send timing and delivery checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-email-sequences"
     },
     "local-seo-audit-checklist": {
       "name": "local-seo-audit-checklist",
@@ -28421,6 +28621,14 @@
       "path": "collected_assets/skills/ssh-penetration-testing",
       "description_ko": "열거, 자격 증명 공격, 취약점 악용, 터널링 기술 및 악용 후 활동을 포함한 포괄적인 SSH 보안 평가를 수행합니다. 이 기술은 SSH 서비스 보안을 테스트하기 위한 전체 방법론을 다룹니다."
     },
+    "worktable-mcp": {
+      "name": "worktable-mcp",
+      "type": "skill",
+      "description": "Find, cite and update Docs, Records, HTML Docs, annotations and threads in a Worktable workspace through Worktable's MCP server. Use when the user chooses Worktable.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/worktable-mcp"
+    },
     "waf-setup": {
       "name": "waf-setup",
       "type": "skill",
@@ -28534,6 +28742,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/cc-skill-strategic-compact",
       "description_ko": "단계 경계에서 에이전트 대화를 압축하기 전에 확인된 체크포인트를 준비하세요. 컨텍스트가 반복되는 긴 작업 중에 사용합니다. 제약 조건, 증거, 결정 및 다음 작업을 보존합니다."
+    },
+    "boring-marketing-local-seo-plan": {
+      "name": "boring-marketing-local-seo-plan",
+      "type": "skill",
+      "description": "Prioritize local SEO fixes, service coverage and location page decisions.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-local-seo-plan"
     },
     "eas-workflows": {
       "name": "eas-workflows",
@@ -28939,6 +29155,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/agent-orchestration-multi-agent-optimize",
       "description_ko": "조정된 프로파일링, 작업 부하 분산 및 비용 인식 오케스트레이션을 통해 다중 에이전트 시스템을 최적화합니다. 에이전트 성능, 처리량 또는 안정성을 향상시킬 때 사용합니다."
+    },
+    "boring-marketing-meta-ads": {
+      "name": "boring-marketing-meta-ads",
+      "type": "skill",
+      "description": "Run account preflight, create paused Meta campaigns, and verify pixel and Conversions API events. Use for Facebook Ads API launches, permission errors, and tracking audits.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-meta-ads"
     },
     "blue-green-deploy": {
       "name": "blue-green-deploy",
@@ -30107,6 +30331,14 @@
       "path": "collected_assets/skills/ux-feedback",
       "description_ko": "구성 요소 또는 페이지에 적절한 사용자 피드백 상태(로드, 성공, 오류, 비어 있음) 추가"
     },
+    "boring-marketing-landing-page": {
+      "name": "boring-marketing-landing-page",
+      "type": "skill",
+      "description": "Build or audit a mobile-first offer page with message match and conversion checks.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-landing-page"
+    },
     "lookdev-auto": {
       "name": "lookdev-auto",
       "type": "skill",
@@ -30203,6 +30435,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/unsplash-integration",
       "description_ko": "Unsplash에서 무료로 사용할 수 있는 고품질 전문 사진을 검색하고 가져오기 위한 통합 기술입니다."
+    },
+    "boring-marketing-seo-content": {
+      "name": "boring-marketing-seo-content",
+      "type": "skill",
+      "description": "Draft or refresh search content using intent, firsthand evidence and citation gaps.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-seo-content"
     },
     "idor-testing": {
       "name": "idor-testing",
@@ -32587,6 +32827,14 @@
       "path": "collected_assets/skills/jira-automation",
       "description_ko": "Rube MCP(Composio)를 통해 이슈, 프로젝트, 스프린트, 보드, 댓글, 사용자 등 Jira 작업을 자동화합니다. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
     },
+    "boring-marketing-google-business-profile": {
+      "name": "boring-marketing-google-business-profile",
+      "type": "skill",
+      "description": "Audit a Google Business Profile against nearby competitors and draft profile posts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-google-business-profile"
+    },
     "vibers-code-review": {
       "name": "vibers-code-review",
       "type": "skill",
@@ -32803,6 +33051,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/link-relevance-evaluator"
+    },
+    "boring-marketing-speed-to-lead": {
+      "name": "boring-marketing-speed-to-lead",
+      "type": "skill",
+      "description": "Analyze missed calls and response time, then design a follow-up workflow.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-speed-to-lead"
     },
     "scientific-writing": {
       "name": "scientific-writing",
@@ -33064,6 +33320,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/capacity-workload-planner"
     },
+    "boring-marketing-paid-ads": {
+      "name": "boring-marketing-paid-ads",
+      "type": "skill",
+      "description": "Turn an ad matrix into campaign drafts, creative briefs and a measurement plan.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-paid-ads"
+    },
     "fact-check-x-complete": {
       "name": "fact-check-x-complete",
       "type": "skill",
@@ -33124,6 +33388,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/dx-optimizer"
     },
+    "boring-marketing-pitch-the-fix": {
+      "name": "boring-marketing-pitch-the-fix",
+      "type": "skill",
+      "description": "Draft a targeted prospect email around one observable business problem and a proposed fix.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-pitch-the-fix"
+    },
     "push-skill-to-github": {
       "name": "push-skill-to-github",
       "type": "skill",
@@ -33157,6 +33429,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/onboarding-psychologist"
+    },
+    "boring-marketing-audience-research": {
+      "name": "boring-marketing-audience-research",
+      "type": "skill",
+      "description": "Mine public conversations for audience segments and verbatim customer language.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-audience-research"
     },
     "court": {
       "name": "court",
@@ -33331,6 +33611,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/azure-mgmt-arizeaiobservabilityeval-dotnet",
       "description_ko": "Arize AI 관찰 가능성 및 평가(.NET)용 Azure Resource Manager SDK."
+    },
+    "boring-marketing-creative": {
+      "name": "boring-marketing-creative",
+      "type": "skill",
+      "description": "Plan and produce campaign visuals, product media and short advertising videos.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-creative"
     },
     "mmx-cli": {
       "name": "mmx-cli",
@@ -33626,6 +33914,14 @@
       "path": "collected_assets/skills/api-onboarding",
       "description_ko": "개발자 온보딩 여정의 모든 단계를 최적화하여 TTFAC(첫 번째 API 호출 시간)을 단축합니다. 이 기술은 인증 단순화, 샌드박스 환경, 대화형 문서화, 일반적인 실패 지점 식별 및 제거를 다룹니다."
     },
+    "boring-marketing-content-atomizer": {
+      "name": "boring-marketing-content-atomizer",
+      "type": "skill",
+      "description": "Adapt an existing asset into native social drafts for the brand's priority channels.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-content-atomizer"
+    },
     "hunt-idor": {
       "name": "hunt-idor",
       "type": "skill",
@@ -33888,6 +34184,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/spec-driven-development",
       "description_ko": "코딩하기 전에 사양을 만듭니다. 새 프로젝트, 기능 또는 중요한 변경을 시작할 때 사용하며 아직 사양이 없습니다. 요구사항이 불분명하거나 모호하거나 모호한 아이디어로만 존재하는 경우에 사용합니다."
+    },
+    "boring-marketing-programmatic-seo": {
+      "name": "boring-marketing-programmatic-seo",
+      "type": "skill",
+      "description": "Validate a dataset and build templated SEO pages with genuinely distinct information.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-programmatic-seo"
     },
     "figma-designer": {
       "name": "figma-designer",
@@ -34321,6 +34625,14 @@
       "path": "collected_assets/skills/lambdatest-agent-skills",
       "description_ko": "15개 이상의 언어로 E2E, 유닛, 모바일, BDD, 시각적 및 클라우드 테스트 전반에 걸쳐 46개 프레임워크에 대한 프로덕션 등급 테스트 자동화 기술입니다."
     },
+    "boring-marketing-reviews": {
+      "name": "boring-marketing-reviews",
+      "type": "skill",
+      "description": "Assess review coverage, draft owner replies and plan compliant review requests.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-reviews"
+    },
     "unpaid-intern": {
       "name": "unpaid-intern",
       "type": "skill",
@@ -34354,6 +34666,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ai-schema-markup-generator"
+    },
+    "boring-marketing-positioning-angles": {
+      "name": "boring-marketing-positioning-angles",
+      "type": "skill",
+      "description": "Build positioning options and an ad matrix from customer and competitive research.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-positioning-angles"
     },
     "chat-widget": {
       "name": "chat-widget",
@@ -34810,6 +35130,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/crossframe-casebook",
       "description_ko": "CrossFrame Suite가 명시적인 중국어 사례집 작업을 라우팅할 때 사용합니다. 자료를 재사용 가능한 사례, 익명화된 항목, 메커니즘 및 검색 색인으로 전환합니다."
+    },
+    "boring-marketing-ads-incrementality-check": {
+      "name": "boring-marketing-ads-incrementality-check",
+      "type": "skill",
+      "description": "Design a matched ad pause test using call or sales logs.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-ads-incrementality-check"
     },
     "arrowspace": {
       "name": "arrowspace",
@@ -35640,6 +35968,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/user-thoughts",
       "description_ko": ">-"
+    },
+    "boring-marketing-performance-review": {
+      "name": "boring-marketing-performance-review",
+      "type": "skill",
+      "description": "Analyze campaign data to identify a measurable bottleneck and rank next tests.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/boring-marketing-performance-review"
     },
     "project-brief": {
       "name": "project-brief",
@@ -51815,6 +52151,30 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-clinical-research.md"
     },
+    "cs-support-staffing": {
+      "name": "cs-support-staffing",
+      "type": "command",
+      "description": "Size a support team per interval with Erlang C (phone, chat) or workload (email), with shrinkage, occupancy cap and roster gap.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-support-staffing.md"
+    },
+    "cs-support-deflection": {
+      "name": "cs-support-deflection",
+      "type": "command",
+      "description": "Rank ticket contact reasons and route each to a help-center article, a macro or workflow, or a product fix.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-support-deflection.md"
+    },
+    "cs-support-sla": {
+      "name": "cs-support-sla",
+      "type": "command",
+      "description": "Check support SLA attainment and breach risk from a ticket export on the contract's business or calendar clock.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-support-sla.md"
+    },
     "cs-linkedin-repurpose": {
       "name": "cs-linkedin-repurpose",
       "type": "command",
@@ -51919,6 +52279,22 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-cra-report.md"
     },
+    "cs-dora-readiness": {
+      "name": "cs-dora-readiness",
+      "type": "command",
+      "description": "Full DORA readiness pass - scope and simplified-framework check, major-incident classification and reporting deadlines, and the register of information with Article 30 contract terms.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-dora-readiness.md"
+    },
+    "cs-dora-incident": {
+      "name": "cs-dora-incident",
+      "type": "command",
+      "description": "Classify ICT incidents as major under DORA (RTS 2024/1772) and run the reporting clock (RTS 2025/301) - initial, intermediate and final deadlines, weekend rule, client notice.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-dora-incident.md"
+    },
     "cs-medical-device-software": {
       "name": "cs-medical-device-software",
       "type": "command",
@@ -51934,6 +52310,30 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-soup-review.md"
+    },
+    "cs-nis2-report": {
+      "name": "cs-nis2-report",
+      "type": "command",
+      "description": "Run the NIS2 Article 23 clock on an incident log - which incidents are significant, which report is due, overdue or late, and what each must contain.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-nis2-report.md"
+    },
+    "cs-nis2-readiness": {
+      "name": "cs-nis2-readiness",
+      "type": "command",
+      "description": "Full NIS2 readiness pass - classify entities as essential, important or out, check Article 23 reporting deadlines, and gap-check the Article 21 measures.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-nis2-readiness.md"
+    },
+    "cs-eu-cyber-scope": {
+      "name": "cs-eu-cyber-scope",
+      "type": "command",
+      "description": "Route one company and one event across NIS2, DORA, CRA and GDPR - which laws apply, which reporting clocks run in parallel, and who receives what.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-eu-cyber-scope.md"
     },
     "cs-sprs-score": {
       "name": "cs-sprs-score",
@@ -52351,6 +52751,22 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-run-forensics.md"
     },
+    "cs-finops-review": {
+      "name": "cs-finops-review",
+      "type": "command",
+      "description": "Monthly cloud cost review from a FOCUS export - allocation coverage, commitment utilization, coverage and effective savings rate, anomalies and unit cost.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-finops-review.md"
+    },
+    "cs-cost-spike": {
+      "name": "cs-cost-spike",
+      "type": "command",
+      "description": "Explain a cloud cost spike from a FOCUS export - which service or account, which day, how far above baseline, and whether unit cost moved.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-cost-spike.md"
+    },
     "cs-dl-reading-path": {
       "name": "cs-dl-reading-path",
       "type": "command",
@@ -52498,6 +52914,22 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/commands/cs-workflow-build.md"
+    },
+    "cs-rollout-gate": {
+      "name": "cs-rollout-gate",
+      "type": "command",
+      "description": "Decide whether to widen, hold or halt a staged (Android) or phased (iOS) rollout from crash and ANR counts against the previous release.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-rollout-gate.md"
+    },
+    "cs-mobile-release": {
+      "name": "cs-mobile-release",
+      "type": "command",
+      "description": "Check an iOS and/or Android project against App Store and Google Play submission rules before upload.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/commands/cs-mobile-release.md"
     },
     "cs-claude-rollout": {
       "name": "cs-claude-rollout",
@@ -56872,6 +57304,14 @@
       "path": "collected_assets/agents/cs-dpo-gdpr.md",
       "description_ko": "GDPR/DSGVO 데이터 보호 책임자 감사 인물. 합법적 기반 규율 + DPIA 품질 + Schrems-II 전송 인식. ISO 27001 32조 조직적 조치, EU AI Act 27조 FRIA(중복 가공물) 및 SOC 2 개인 정보 보호 기준을 조정합니다. 경영진의 개인 정보 보호 전략이 아님 - DPO는 38조에 따라 운영상 독립적입니다."
     },
+    "cs-support-ops-lead": {
+      "name": "cs-support-ops-lead",
+      "type": "agent",
+      "description": "Use when a support queue is missing SLAs, needs a staffing plan for phone, chat or email, or is drowning in repeat questions. Measures SLA attainment on the contract's clock, schedules agents per interval with Erlang C (headcount and hiring order stay with capacity-planner), and routes contact reasons to help-center articles, macros or product fixes, through three deterministic scripts over a ticket export.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-support-ops-lead.md"
+    },
     "cs-linkedin-editor": {
       "name": "cs-linkedin-editor",
       "type": "agent",
@@ -56915,6 +57355,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-cra-officer.md"
     },
+    "cs-dora-officer": {
+      "name": "cs-dora-officer",
+      "type": "agent",
+      "description": "Use when an EU financial entity (bank, payment or e-money institution, investment firm, insurer, crypto-asset provider, fund manager) needs to act on DORA, Regulation 2022/2554 - an ICT incident to classify as major and report (initial 4h/24h, intermediate 72h, final one month), a register of information to submit, ICT provider contracts to check against Article 30, or a scope and simplified-framework question. Not for DORA DevOps metrics. Runs three deterministic scripts and cites the article behind every call.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-dora-officer.md"
+    },
     "cs-device-software-lead": {
       "name": "cs-device-software-lead",
       "type": "agent",
@@ -56922,6 +57370,14 @@
       "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-device-software-lead.md"
+    },
+    "cs-nis2-officer": {
+      "name": "cs-nis2-officer",
+      "type": "agent",
+      "description": "Use when an EU company needs to act on NIS2 (Directive 2022/2555) or the German NIS2UmsuCG - a significant incident to report (24h early warning, 72h notification), an essential-or-important classification, BSI or national registration, an Article 21 gap analysis for the board, or one incident that may also trigger DORA, CRA or GDPR reports. Runs four deterministic scripts and cites the article behind every call.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-nis2-officer.md"
     },
     "cs-cmmc-assessor": {
       "name": "cs-cmmc-assessor",
@@ -57182,6 +57638,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-run-forensics.md"
     },
+    "cs-finops-analyst": {
+      "name": "cs-finops-analyst",
+      "type": "agent",
+      "description": "Use when a cloud bill needs explaining or cutting - who owns untagged spend, whether Savings Plans, Reserved Instances or committed use discounts pay off, what caused a cost spike, or how cost per customer moves. Works from a FOCUS export through three deterministic scripts; never touches the cloud account.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-finops-analyst.md"
+    },
     "cs-deep-learning-tutor": {
       "name": "cs-deep-learning-tutor",
       "type": "agent",
@@ -57321,6 +57785,14 @@
       "source_name": "alirezarezvani/claude-skills",
       "path": "collected_assets/agents/cs-workflow-architect.md",
       "description_ko": "워크플로 설계자 페르소나. 접수 질문 세트가 있는 모든 워크플로 생성 세션을 열고, 사용자가 모호할 때(루프에서 질문하지 않음) 추론 및 제안하고, 토폴로지가 확인되기 전에 워크플로 파일 작성을 거부합니다. 실행 전에 유효성 검사기를 통해 엄격한 규칙(순수 리터럴 메타, 비결정성 없음, 보호 루프, 병렬 썽크)을 적용합니다."
+    },
+    "cs-mobile-release": {
+      "name": "cs-mobile-release",
+      "type": "agent",
+      "description": "Use before an iOS or Android build is submitted, after App Store Connect or Play Console rejects one, or while a staged or phased rollout is running. Checks privacy manifests and purpose strings, Play target API level and manifest rules, and gates each rollout step on crash and ANR counts, through three deterministic scripts.",
+      "source_repo": "https://github.com/alirezarezvani/claude-skills.git",
+      "source_name": "alirezarezvani/claude-skills",
+      "path": "collected_assets/agents/cs-mobile-release.md"
     },
     "cs-claude-code-rollout": {
       "name": "cs-claude-code-rollout",
