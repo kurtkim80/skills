@@ -1,26 +1,27 @@
 ---
 name: team-builder
-description: 並列チームを構成して派遣するためのインタラクティブなエージェント選択ツール
-origin: community
+description: Interactive picker that discovers available agent personas via the claude agents command and agents/ markdown globs, groups them into domains, has the user select up to five, dispatches them in parallel on one task, and synthesizes agreements and conflicts into a unified report. Use when composing a team of agents, browsing available agent personas, or running several specialist agents in parallel.
+metadata:
+  origin: community
 ---
 
-# チームビルダー
+# Team Builder
 
-オンデマンドでエージェントチームを閲覧・構成するためのインタラクティブメニュー。フラット構成またはドメインサブディレクトリで整理されたエージェントコレクションに対応する。
+Interactive menu for browsing and composing agent teams on demand. Works with flat or domain-subdirectory agent collections.
 
-## 使用場面
+## When to Use
 
-* 複数のエージェントロール（markdownファイル）があり、あるタスクにどのエージェントを使うか選択したい場合
-* 異なるドメインから（例えば、セキュリティ + SEO + アーキテクチャ）臨時チームを結成したい場合
-* 決定する前に利用可能なエージェントを閲覧したい場合
+- You have multiple agent personas (markdown files) and want to pick which ones to use for a task
+- You want to compose an ad-hoc team from different domains (e.g., Security + SEO + Architecture)
+- You want to browse what agents are available before deciding
 
-## 前提条件
+## Prerequisites
 
-エージェントファイルはロール、プロンプト（アイデンティティ、ルール、ワークフロー、成果物）を含むmarkdownファイルである必要がある。最初の `# Heading` がエージェント名として使用され、最初の段落が説明として使用される。
+Agent files must be markdown files containing a persona prompt (identity, rules, workflow, deliverables). The first `# Heading` is used as the agent name and the first paragraph as the description.
 
-フラット構成とサブディレクトリの両方のレイアウトをサポートする：
+Both flat and subdirectory layouts are supported:
 
-**サブディレクトリレイアウト** —— ドメインはフォルダー名から推論される：
+**Subdirectory layout** — domain is inferred from the folder name:
 
 ```
 agents/
@@ -33,7 +34,7 @@ agents/
     └── discovery-coach.md
 ```
 
-**フラットレイアウト** —— ドメインは共有のファイル名プレフィックスから推論される。2つ以上のファイルが同じプレフィックスを共有する場合、そのプレフィックスはドメインとみなされる。ユニークなプレフィックスを持つファイルは「General」カテゴリーに分類される。注意：アルゴリズムは最初の `-` で分割するため、複数単語のドメイン（例：`product-management`）にはサブディレクトリレイアウトを使用する：
+**Flat layout** — domain inferred from shared filename prefixes. A prefix counts as a domain when 2+ files share it. Files with unique prefixes go to "General". Note: the algorithm splits at the first `-`, so multi-word domains (e.g., `product-management`) should use the subdirectory layout instead:
 
 ```
 agents/
@@ -45,121 +46,124 @@ agents/
 └── sales-outbound-strategist.md
 ```
 
-## 設定
+## Configuration
 
-エージェントディレクトリは順番に探索され、結果がマージされる：
+Agents are discovered via two methods, merged and deduplicated by agent name:
 
-1. `./agents/**/*.md` + `./agents/*.md` —— プロジェクトローカルのエージェント（両方の深さ）
-2. `~/.claude/agents/**/*.md` + `~/.claude/agents/*.md` —— グローバルエージェント（両方の深さ）
+1. **`claude agents` command** (primary) — run `claude agents` to get all agents known to the CLI, including user agents, plugin agents (e.g. `ecc:architect`), and built-in agents. This automatically covers ECC marketplace installs without any path configuration.
+2. **File glob** (fallback, for reading agent content) — agent markdown files are read from:
+   - `./agents/**/*.md` + `./agents/*.md` — project-local agents
+   - `~/.claude/agents/**/*.md` + `~/.claude/agents/*.md` — global user agents
 
-すべての場所の結果がマージされ、エージェント名で重複排除される。同名の場合、プロジェクトローカルのエージェントがグローバルエージェントより優先される。ユーザーがカスタムパスを指定した場合、そのパスを代わりに使用する。
+Earlier sources take precedence when names collide: user agents > plugin agents > built-in agents. A custom path can be used instead if the user specifies one.
 
-## 動作原理
+## How It Works
 
-### ステップ 1：利用可能なエージェントを発見する
+### Step 1: Discover Available Agents
 
-上記の探索順序を使用してエージェントディレクトリでグローバル検索を実行する。READMEファイルを除外する。見つかった各ファイルに対して：
+Run `claude agents` to get the full agent list. Parse each line:
+- **Plugin agents** are prefixed with `plugin-name:` (e.g., `ecc:security-reviewer`). Use the part after `:` as the agent name and the plugin name as the domain.
+- **User agents** have no prefix. Read the corresponding markdown file from `~/.claude/agents/` or `./agents/` to extract the name and description.
+- **Built-in agents** (e.g., `Explore`, `Plan`) are skipped unless the user explicitly asks to include them.
 
-* **サブディレクトリレイアウト：** 親フォルダー名からドメインを抽出する
-* **フラットレイアウト：** すべてのファイル名プレフィックス（最初の `-` より前のテキスト）を収集する。プレフィックスが2つ以上のファイル名に現れる場合のみドメインとして適格（例：`engineering-security-engineer.md` と `engineering-software-architect.md` はどちらも `engineering` で始まる → Engineeringドメイン）。ユニークなプレフィックスを持つファイル（例：`code-reviewer.md`、`tdd-guide.md`）は「General」カテゴリーに分類される
-* 最初の `# Heading` からエージェント名を抽出する。見出しが見つからない場合は、ファイル名から名前を導出する（`.md` を除去し、ハイフンをスペースに置換し、タイトルケースに変換）
-* 見出しの後の最初の段落から一行のサマリーを抽出する
+For user agents loaded from markdown files:
+- **Subdirectory layout:** extract the domain from the parent folder name
+- **Flat layout:** collect all filename prefixes (text before the first `-`). A prefix qualifies as a domain only if it appears in 2 or more filenames (e.g., `engineering-security-engineer.md` and `engineering-software-architect.md` both start with `engineering` → Engineering domain). Files with unique prefixes (e.g., `code-reviewer.md`, `tdd-guide.md`) are grouped under "General"
+- Extract the agent name from the first `# Heading`. If no heading is found, derive the name from the filename (strip `.md`, replace hyphens with spaces, title-case)
+- Extract a one-line summary from the first paragraph after the heading
 
-すべての場所を探索した後にエージェントファイルが見つからない場合、ユーザーに通知する：「エージェントファイルが見つかりませんでした。確認済み：\[探索済みパスのリスト]。期待されるもの：これらのディレクトリ内のmarkdownファイル。」そして停止する。
+If no agents are found after running `claude agents` and probing file locations, inform the user: "No agents found. Run `claude agents` to verify your setup." Then stop.
 
-### ステップ 2：ドメインメニューを表示する
-
-```
-利用可能なエージェントドメイン：
-1. エンジニアリング — ソフトウェアアーキテクト、セキュリティエンジニア
-2. マーケティング — SEOスペシャリスト
-3. セールス — ディスカバリーコーチ、アウトバウンドストラテジスト
-
-ドメインを選択するか、特定のエージェントを指定してください（例：「1,3」または「security + seo」）：
-```
-
-* エージェント数がゼロのドメインはスキップする（空ディレクトリ）
-* 各ドメインのエージェント数を表示する
-
-### ステップ 3：選択を処理する
-
-柔軟な入力を受け付ける：
-
-* 数字：「1,3」でEngineeringとSalesのすべてのエージェントを選択
-* 名前：「security + seo」で発見されたエージェントに対してファジーマッチング
-* 「all from engineering」でそのドメインのすべてのエージェントを選択
-
-5つ以上のエージェントが選択された場合、アルファベット順にリストアップして絞り込みを求める：「Nつのエージェントを選択しました（最大5つ）。どれを保持するか選択するか、アルファベット順の最初の5つを使用する場合は 'first 5' と言ってください。」
-
-選択を確認する：
+### Step 2: Present Domain Menu
 
 ```
-選択済み：セキュリティエンジニア + SEOスペシャリスト
-どのようなタスクに取り組む予定ですか？（タスクを説明してください）
+Available agent domains:
+1. Engineering — Software Architect, Security Engineer
+2. Marketing — SEO Specialist
+3. Sales — Discovery Coach, Outbound Strategist
+
+Pick domains or name specific agents (e.g., "1,3" or "security + seo"):
 ```
 
-### ステップ 4：エージェントを並列で起動する
+- Skip domains with zero agents (empty directories)
+- Show agent count per domain
 
-1. 選択された各エージェントのmarkdownファイルを読み取る
-2. まだ提供されていない場合は、タスクの説明を求める
-3. Agentツールを使用してすべてのエージェントを並列で起動する：
-   * `subagent_type: "general-purpose"`
-   * `prompt: "{agent file content}\n\nTask: {task description}"`
-   * 各エージェントは独立して実行する——エージェント間の通信は不要
-4. エージェントが失敗した場合（エラー、タイムアウト、または空の出力）、インラインで失敗を記録し（例：「Security Engineer: failed — \[理由]」）、成功したエージェントの結果の処理を続ける
+### Step 3: Handle Selection
 
-### ステップ 5：結果を統合する
+Accept flexible input:
+- Numbers: "1,3" selects all agents from Engineering and Sales
+- Names: "security + seo" fuzzy-matches against discovered agents
+- "all from engineering" selects every agent in that domain
 
-すべての出力を収集して統一されたレポートを提示する：
+If more than 5 agents are selected, list them alphabetically and ask the user to narrow down: "You selected N agents (max 5). Pick which to keep, or say 'first 5' to use the first five alphabetically."
 
-* エージェント別にグループ化された結果
-* 統合セクションで強調：
-  * エージェント間のコンセンサス
-  * 提案間の衝突または矛盾
-  * 推奨される次のステップ
+Confirm selection:
+```
+Selected: Security Engineer + SEO Specialist
+What should they work on? (describe the task):
+```
 
-1つのエージェントのみが選択された場合は、統合セクションをスキップして直接出力を提示する。
+### Step 4: Spawn Agents in Parallel
 
-## ルール
+1. Read each selected agent's markdown file
+2. Prompt for the task description if not already provided
+3. Spawn all agents in parallel using the Agent tool:
+   - `subagent_type: "general-purpose"`
+   - `prompt: "{agent file content}\n\nTask: {task description}"`
+   - Each agent runs independently — no inter-agent communication needed
+4. If an agent fails (error, timeout, or empty output), note the failure inline (e.g., "Security Engineer: failed — [reason]") and continue with results from agents that succeeded
 
-* **動的発見のみ。** エージェントリストをハードコードしない。ディレクトリの新しいファイルはメニューに自動的に表示される。
-* **チームあたり最大5つのエージェント。** 5つを超えると収益逓減とトークン使用量が多くなる。選択時に強制する。
-* **並列分散。** すべてのエージェントが同時に実行される——Agentツールの並列呼び出しパターンを使用する。
-* **並列Agent呼び出し（TeamCreateではない）。** このスキルは独立した作業の処理に並列Agentツール呼び出しを使用する。エージェントが議論したり互いに回答する必要がある場合のみ、TeamCreate（マルチエージェント会話のためのClaude Codeツール）が必要になる。
+### Step 5: Synthesize Results
 
-## 例
+Collect all outputs and present a unified report:
+- Results grouped by agent
+- Synthesis section highlighting:
+  - Agreements across agents
+  - Conflicts or tensions between recommendations
+  - Recommended next steps
+
+If only 1 agent was selected, skip synthesis and present the output directly.
+
+## Rules
+
+- **Dynamic discovery only.** Never hardcode agent lists. New files in the directory auto-appear in the menu.
+- **Max 5 agents per team.** More than 5 produces diminishing returns and excessive token usage. Enforce at selection time.
+- **Parallel dispatch.** All agents run simultaneously — use the Agent tool's parallel invocation pattern.
+- **Parallel Agent calls, not TeamCreate.** This skill uses parallel Agent tool calls for independent work. TeamCreate (a Claude Code tool for multi-agent dialogue) is only needed when agents must debate or respond to each other.
+
+## Examples
 
 ```
-ユーザー: team builder
+User: team builder
 
 Claude:
-利用可能なエージェントドメイン：
-1. エンジニアリング (2) — ソフトウェアアーキテクト、セキュリティエンジニア
-2. マーケティング (1) — SEOスペシャリスト
-3. セールス (4) — ディスカバリーコーチ、アウトバウンドストラテジスト、プロポーザルストラテジスト、セールスエンジニア
-4. サポート (1) — エグゼクティブサマリー
+Available agent domains:
+1. Engineering (2) — Software Architect, Security Engineer
+2. Marketing (1) — SEO Specialist
+3. Sales (4) — Discovery Coach, Outbound Strategist, Proposal Strategist, Sales Engineer
+4. Support (1) — Executive Summary
 
-ドメインを選択するか、特定のエージェントを指定してください：
+Pick domains or name specific agents:
 
-ユーザー: security + seo
-
-Claude:
-選択済み：セキュリティエンジニア + SEOスペシャリスト
-どのようなタスクに取り組む予定ですか？
-
-ユーザー: リリース前に私のNext.jsのeコマースサイトをレビューしてほしい
-
-[2つのエージェントが並列で起動され、それぞれがコードベースに専門知識を適用する]
+User: security + seo
 
 Claude:
-## セキュリティエンジニアの発見事項
-- [発見内容...]
+Selected: Security Engineer + SEO Specialist
+What should they work on?
 
-## SEOスペシャリストの発見事項
-- [発見内容...]
+User: Review my Next.js e-commerce site before launch
 
-## 統合分析
-両エージェントが同意：[...]
-衝突点：セキュリティが推奨するCSPがインラインスタイルをブロックし、SEOはインラインのschemaマークアップを必要とする。解決策：[...]
-次のステップ：[...]
+[Both agents spawn in parallel, each applying their specialty to the codebase]
+
+Claude:
+## Security Engineer Findings
+- [findings...]
+
+## SEO Specialist Findings
+- [findings...]
+
+## Synthesis
+Both agents agree on: [...]
+Tension: Security recommends CSP that blocks inline styles, SEO needs inline schema markup. Resolution: [...]
+Next steps: [...]
 ```

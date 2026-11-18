@@ -1,7 +1,8 @@
 ---
 name: hermes-imports
-description: Hermesデータインポート、マッピング、変換、およびデータインテグリティ検証。
-origin: ECC
+description: Convert local Hermes operator workflows into sanitized ECC skills and release-pack artifacts. Use when preparing a Hermes workflow for public ECC reuse without leaking private workspace state, credentials, or local-only paths.
+metadata:
+  origin: ECC
 ---
 
 # Hermes Imports

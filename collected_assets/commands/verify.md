@@ -1,59 +1,23 @@
-# Comando Verify
+---
+description: Legacy slash-entry shim for the verification-loop skill. Prefer the skill directly.
+---
 
-Ejecutar verificación exhaustiva sobre el estado actual del código base.
+# Verification Command (Legacy Shim)
 
-## Instrucciones
+Use this only if you still invoke `/verify`. The maintained workflow lives in `skills/verification-loop/SKILL.md`.
 
-Ejecutar la verificación exactamente en este orden:
+## Canonical Surface
 
-1. **Verificación de Build**
-   - Ejecutar el comando de build para este proyecto
-   - Si falla, reportar los errores y DETENER
+- Prefer the `verification-loop` skill directly.
+- Keep this file only as a compatibility entry point.
 
-2. **Verificación de Tipos**
-   - Ejecutar TypeScript/verificador de tipos
-   - Reportar todos los errores con archivo:línea
+## Arguments
 
-3. **Verificación de Lint**
-   - Ejecutar el linter
-   - Reportar advertencias y errores
+`$ARGUMENTS`
 
-4. **Suite de Pruebas**
-   - Ejecutar todas las pruebas
-   - Reportar cantidad de pasadas/fallidas
-   - Reportar porcentaje de cobertura
+## Delegation
 
-5. **Auditoría de console.log**
-   - Buscar console.log en los archivos fuente
-   - Reportar las ubicaciones
-
-6. **Estado de Git**
-   - Mostrar cambios no confirmados
-   - Mostrar archivos modificados desde el último commit
-
-## Salida
-
-Generar un reporte de verificación resumido:
-
-```
-VERIFICACIÓN: [PASÓ/FALLÓ]
-
-Build:    [OK/FALLÓ]
-Tipos:    [OK/X errores]
-Lint:     [OK/X problemas]
-Pruebas:  [X/Y pasaron, Z% cobertura]
-Secretos: [OK/X encontrados]
-Logs:     [OK/X console.log]
-
-Listo para PR: [SÍ/NO]
-```
-
-Si hay algún problema crítico, listarlos con sugerencias de corrección.
-
-## Argumentos
-
-$ARGUMENTS puede ser:
-- `quick` - Solo build + tipos
-- `full` - Todas las verificaciones (por defecto)
-- `pre-commit` - Verificaciones relevantes para commits
-- `pre-pr` - Escaneo de seguridad más verificaciones completas
+Apply the `verification-loop` skill.
+- Choose the right verification depth for the user's requested mode.
+- Run build, types, lint, tests, security/log checks, and diff review in the right order for the current repo.
+- Report only the verdicts and blockers instead of maintaining a second verification checklist here.

@@ -1,35 +1,35 @@
 ---
 name: skill-comply
-description: スキル、ルール、エージェント定義が実際に遵守されているかを可視化する——3種類のプロンプト厳格度レベルのシナリオを自動生成し、エージェントを実行し、動作シーケンスを分類し、完全なツール呼び出しタイムラインの遵守率をレポートする
-origin: ECC
+description: Visualize whether skills, rules, and agent definitions are actually followed — auto-generates scenarios at 3 prompt strictness levels, runs agents, classifies behavioral sequences, and reports compliance rates with full tool call timelines. Use when checking whether agents actually follow the skills, rules, and definitions they were given, rather than assuming they do.
+metadata:
+  origin: ECC
 tools: Read, Bash
 ---
 
-# skill-comply：自動化された遵守測定
+# skill-comply: Automated Compliance Measurement
 
-コーディングエージェントがスキル、ルール、またはエージェント定義を実際に遵守しているかを以下の方法で測定する：
+Measures whether coding agents actually follow skills, rules, or agent definitions by:
+1. Auto-generating expected behavioral sequences (specs) from any .md file
+2. Auto-generating scenarios with decreasing prompt strictness (supportive → neutral → competing)
+3. Running `claude -p` and capturing tool call traces via stream-json
+4. Classifying tool calls against spec steps using LLM (not regex)
+5. Checking temporal ordering deterministically
+6. Generating self-contained reports with spec, prompts, and timelines
 
-1. 任意の .md ファイルから期待される動作シーケンス（仕様）を自動生成する
-2. プロンプトの厳格度が段階的に低下するシナリオを自動生成する（支持的 → 中立的 → 競合的）
-3. `claude -p` を実行し、stream-json 経由でツール呼び出しトレースを取得する
-4. 正規表現ではなくLLMを使用してツール呼び出しを仕様ステップに分類する
-5. 決定論的に時系列順を確認する
-6. 仕様、プロンプト、タイムラインを含む自己完結型レポートを生成する
+## Supported Targets
 
-## サポートされるターゲット
+- **Skills** (`skills/*/SKILL.md`): Workflow skills like search-first, TDD guides
+- **Rules** (`rules/common/*.md`): Mandatory rules like testing.md, security.md, git-workflow.md
+- **Agent definitions** (`agents/*.md`): Whether an agent gets invoked when expected (internal workflow verification not yet supported)
 
-* **スキル**（`skills/*/SKILL.md`）：検索優先、TDDガイドなどのワークフロースキル
-* **ルール**（`rules/common/*.md`）：testing.md、security.md、git-workflow.md などの強制的なルール
-* **エージェント定義**（`agents/*.md`）：エージェントが期待される場面で呼び出されるか（内部ワークフロー検証は未サポート）
+## When to Activate
 
-## 起動条件
+- User runs `/skill-comply <path>`
+- User asks "is this rule actually being followed?"
+- After adding new rules/skills, to verify agent compliance
+- Periodically as part of quality maintenance
 
-* ユーザーが `/skill-comply <path>` を実行する
-* ユーザーが「このルールは本当に遵守されているか？」と尋ねる
-* 新しいルール/スキルを追加した後、エージェントの遵守を確認する
-* 品質メンテナンスの一環として定期的に実行する
-
-## 使い方
+## Usage
 
 ```bash
 # Full run
@@ -40,21 +40,36 @@ uv run python -m scripts.run --dry-run ~/.claude/skills/search-first/SKILL.md
 
 # Custom models
 uv run python -m scripts.run --gen-model haiku --model sonnet <path>
+
+# Long multi-step workflows: raise the per-scenario turn cap and timeout
+uv run python -m scripts.run --max-turns 120 --timeout 2400 <path>
+
+# Copy a directory (plans, config, sources) into every scenario sandbox
+uv run python -m scripts.run --fixtures ./fixtures <path>
 ```
 
-## 重要なコンセプト：プロンプト独立性
+| Flag | Default | Meaning |
+|---|---|---|
+| `--max-turns N` | 30 | Turn cap per scenario |
+| `--timeout S` | 900 | Seconds per scenario; on timeout the partial trace is still graded and a warning is logged |
+| `--fixtures DIR` | none | Copied into each sandbox (links/reparse points rejected, `.git` skipped case-insensitively at any depth) |
 
-プロンプトが明示的にサポートしていない場合でも、スキル/ルールが遵守されるかどうかを測定する。
+### Sandbox
 
-## レポートの内容
+Each scenario uses a private per-user directory under the OS temporary directory. This is fixture isolation, not an ECC sandbox tier or a network/credential isolation boundary. It holds the files the scenario lists under `files:` plus any `--fixtures`, committed as a baseline. It has a local bare `origin` with `origin/HEAD` set, so push and merge steps work offline. A stub `gh` is first on `PATH`: it explicitly simulates `pr create`, `pr view`, `pr list` and `repo view` and fails on other subcommands. Reports label this boundary and any timeout; they cannot establish that a real PR, merge or hosted check succeeded. Auxiliary `.bin` and `.origin.git` directories are replaced only when they carry matching tool-owned metadata.
 
-レポートは自己完結型で、以下を含む：
+## Key Concept: Prompt Independence
 
-1. 期待される動作シーケンス（自動生成された仕様）
-2. シナリオプロンプト（各厳格度レベルで尋ねる内容）
-3. 各シナリオの遵守スコア
-4. LLM分類ラベル付きのツール呼び出しタイムライン
+Measures whether a skill/rule is followed even when the prompt doesn't explicitly support it.
 
-### 高度な内容（オプション）
+## Report Contents
 
-フックに精通したユーザー向けに、レポートには遵守率が低いステップに対するフック強化の推奨事項も含まれる。これは参考情報——主要な価値は遵守性自体の可視化にある。
+Reports are self-contained and include:
+1. Expected behavioral sequence (auto-generated spec)
+2. Scenario prompts (what was asked at each strictness level)
+3. Compliance scores per scenario
+4. Tool call timelines with LLM classification labels
+
+### Advanced (optional)
+
+For users familiar with hooks, reports also include hook promotion recommendations for steps with low compliance. This is informational — the main value is the compliance visibility itself.

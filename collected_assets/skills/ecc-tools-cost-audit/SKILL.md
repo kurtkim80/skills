@@ -1,14 +1,15 @@
 ---
 name: ecc-tools-cost-audit
-description: ECC ツール、エージェント、スキル、および実装のコスト監査を実施します。プロンプト入力トークンを分析して、計算効率を定量化します。
-origin: ECC
+description: Evidence-first ECC Tools burn and billing audit workflow. Use when investigating runaway PR creation, quota bypass, premium-model leakage, duplicate jobs, or GitHub App cost spikes in the ECC Tools repo.
+metadata:
+  origin: ECC
 ---
 
 # ECC Tools Cost Audit
 
 Use this skill when the user suspects the ECC Tools GitHub App is burning cost, over-creating PRs, bypassing usage limits, or routing free users into premium analysis paths.
 
-This is a focused operator workflow for the sibling [ECC-Tools](https://github.com/ECC-Tools/ECC-Tools) repo. It is not a generic billing skill and it is not a repo-wide code review pass.
+This is a focused operator workflow for the sibling [ECC-Tools](../../ECC-Tools) repo. It is not a generic billing skill and it is not a repo-wide code review pass.
 
 ## Skill Stack
 

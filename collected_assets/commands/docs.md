@@ -1,32 +1,23 @@
 ---
-description: Context7 を使ってライブラリやトピックの最新ドキュメントを検索します。
+description: Legacy slash-entry shim for the documentation-lookup skill. Prefer the skill directly.
 ---
 
-# /docs
+# Docs Command (Legacy Shim)
 
-## 目的
+Use this only if you still reach for `/docs`. The maintained workflow lives in `skills/documentation-lookup/SKILL.md`.
 
-ライブラリ、フレームワーク、または API の最新ドキュメントを検索し、関連するコードスニペットを含む要約された回答を返します。Context7 MCP（resolve-library-id と query-docs）を使用するため、回答はトレーニングデータではなく最新のドキュメントを反映しています。
+## Canonical Surface
 
-## 使い方
+- Prefer the `documentation-lookup` skill directly.
+- Keep this file only as a compatibility entry point.
 
-```
-/docs [library name] [question]
-```
+## Arguments
 
-複数の単語からなる引数には、単一のトークンとして解析されるよう引用符を使用してください。例：`/docs "Next.js" "How do I configure middleware?"`
+`$ARGUMENTS`
 
-ライブラリまたは質問が省略された場合、ユーザーに入力を求めます：
+## Delegation
 
-1. ライブラリまたは製品名（例：Next.js、Prisma、Supabase）。
-2. 具体的な質問またはタスク（例：「ミドルウェアの設定方法は？」、「認証方法」）。
-
-## ワークフロー
-
-1. **ライブラリ ID を解決する** — Context7 ツール `resolve-library-id` をライブラリ名とユーザーの質問とともに呼び出し、Context7 互換のライブラリ ID（例：`/vercel/next.js`）を取得する。
-2. **ドキュメントをクエリする** — そのライブラリ ID とユーザーの質問を使って `query-docs` を呼び出す。
-3. **要約する** — 簡潔な回答を返し、取得したドキュメントから抽出した関連コード例を含める。ライブラリ（関連する場合はバージョンも含めて）に言及する。
-
-## 出力
-
-ユーザーは、最新のドキュメントに基づいた簡潔で正確な回答と、役立つコードスニペットを受け取ります。Context7 が利用できない場合は、その旨を説明し、トレーニングデータに基づいて回答しますが、ドキュメントが古い可能性があることを注記します。
+Apply the `documentation-lookup` skill.
+- If the library or the question is missing, ask for the missing part.
+- Use live documentation through Context7 instead of training data.
+- Return only the current answer and the minimum code/example surface needed.

@@ -1,7 +1,8 @@
 ---
 name: google-workspace-ops
-description: Google Workspace API操作、Sheets自動化、Gmail統合、およびドキュメント管理。
-origin: ECC
+description: Operate across Google Drive, Docs, Sheets, and Slides as one workflow surface for plans, trackers, decks, and shared documents. Use when the user needs to find, summarize, edit, migrate, or clean up Google Workspace assets without dropping to raw tool calls.
+metadata:
+  origin: ECC
 ---
 
 # Google Workspace Ops

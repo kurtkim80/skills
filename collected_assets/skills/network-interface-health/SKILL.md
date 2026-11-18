@@ -1,24 +1,28 @@
 ---
 name: network-interface-health
-description: ルーター、スイッチ、Linuxホスト上のインターフェースエラー、ドロップ、CRC、デュプレックス不一致、フラッピング、速度ネゴシエーション問題、カウンタートレンドを診断する。
-origin: community
+description: Diagnose interface errors, drops, CRCs, duplex mismatches, flapping, speed negotiation issues, and counter trends on routers, switches, and Linux hosts. Use when an interface shows errors, drops, CRCs, flapping, or a duplex or speed mismatch.
+metadata:
+  origin: community
 ---
 
-# ネットワークインターフェースヘルス
+# Network Interface Health
 
-ネットワークの症状が物理リンク、スイッチポート、ケーブル、トランシーバー、デュプレックス設定、または輻輳したインターフェースによって引き起こされている可能性がある場合にこのスキルを使用する。
+Use this skill when a network symptom might be caused by a physical link, switch
+port, cable, transceiver, duplex setting, or congested interface.
 
-## 使用するタイミング
+## When to Use
 
-- ホストまたはVLANにパケットロス、レイテンシスパイク、または断続的な到達不能がある。
-- スイッチまたはルーターのインターフェースにCRC、ランツ、ジャイアント、ドロップ、リセット、またはフラップが表示されている。
-- ハードウェアを交換する前にリンクの両端を比較する必要がある。
-- 変更ウィンドウでインターフェースカウンターの前後の証拠が必要。
-- 監視が`ifInErrors`、`ifOutErrors`、または`ifOutDiscards`の増加を報告している。
+- A host or VLAN has packet loss, latency spikes, or intermittent reachability.
+- A switch or router interface shows CRCs, runts, giants, drops, resets, or flaps.
+- You need to compare both ends of a link before replacing hardware.
+- A change window needs before/after interface counter evidence.
+- Monitoring reports rising `ifInErrors`, `ifOutErrors`, or `ifOutDiscards`.
 
-## 仕組み
+## How It Works
 
-インターフェースカウンターは証拠だが、絶対値よりもトレンドの方が重要である。ベースラインを取得し、測定間隔を待ち、再度取得してから増分を比較する。
+Interface counters are evidence, but the trend matters more than the absolute
+number. Capture a baseline, wait a measurement interval, capture again, then
+compare increments.
 
 ```text
 show interfaces <interface>
@@ -26,7 +30,7 @@ show interfaces <interface> status
 show logging | include <interface>|changed state|line protocol
 ```
 
-Linuxホストの場合:
+On Linux hosts:
 
 ```text
 ip -s link show <interface>
@@ -34,47 +38,53 @@ ethtool <interface>
 ethtool -S <interface>
 ```
 
-## カウンターリファレンス
+## Counter Reference
 
-| カウンター | 意味 | 一般的な原因 |
+| Counter | Meaning | Common cause |
 | --- | --- | --- |
-| CRC | 受信フレームのチェックサムが失敗 | 不良ケーブル、汚れたファイバー、不良オプティック、デュプレックス不一致 |
-| input errors | 受信側エラーの集計 | 結論を出す前にサブカウンターを確認 |
-| runts | 最小イーサネットサイズ未満のフレーム | デュプレックス不一致、コリジョンドメイン、不良NIC |
-| giants | 期待されるMTUより大きいフレーム | MTU不一致またはジャンボフレーム境界 |
-| input drops | デバイスがインバウンドパケットを受け入れられなかった | バースト、オーバーサブスクリプション、CPUパス、キュー圧迫 |
-| output drops | 送信キューがパケットを廃棄した | 輻輳、QoSポリシー、サイズ不足のアップリンク |
-| resets | インターフェースハードウェアリセット | フラッピング、キープアライブ、ドライバー、オプティック、電源 |
-| collisions | イーサネットコリジョンカウンター | ハーフデュプレックスまたはネゴシエーション不一致 |
+| CRC | Received frame checksum failed | Bad cable, dirty fiber, bad optic, duplex mismatch |
+| input errors | Aggregate receive-side errors | Check sub-counters before concluding |
+| runts | Frames below minimum Ethernet size | Duplex mismatch, collision domain, faulty NIC |
+| giants | Frames larger than expected MTU | MTU mismatch or jumbo-frame boundary |
+| input drops | Device could not accept inbound packets | Burst, oversubscription, CPU path, queue pressure |
+| output drops | Egress queue discarded packets | Congestion, QoS policy, undersized uplink |
+| resets | Interface hardware reset | Flapping, keepalive, driver, optic, power |
+| collisions | Ethernet collision counter | Half duplex or negotiation mismatch |
 
-## 診断フロー
+## Diagnosis Flow
 
-### CRCまたは入力エラー
+### CRCs Or Input Errors
 
-1. カウンターが増加していることを確認する（歴史的なものだけでなく）。
-2. リンクの両端を確認する。受信側エラーは通常、エラーを報告しているポートではなく、その側に到着する信号を指す。
-3. パッチケーブルを交換するか、ファイバーとオプティクスを清掃/交換する。
-4. 両側で速度/デュプレックス設定が一致していることを確認する。
-5. 同じタイムスタンプ前後のフラップイベントのログを確認する。
+1. Confirm counters are incrementing, not just historical.
+2. Check both ends of the link. Receive-side errors usually point to the signal
+   arriving on that side, not necessarily the port reporting the error.
+3. Replace patch cable or clean/replace fiber and optics.
+4. Confirm speed/duplex settings match on both sides.
+5. Check logs for flap events around the same timestamp.
 
-### ドロップ
+### Drops
 
-1. 入力ドロップと出力ドロップを分離する。
-2. インターフェースレートを容量と比較する。
-3. QoSポリシー、キューカウンター、リンクがオーバーサブスクリプションのアップリンクかどうかを確認する。
-4. キューチューニングは二次的な処置として扱う。まずリンクが輻輳しているかどうかを証明する。
+1. Separate input drops from output drops.
+2. Compare interface rate against capacity.
+3. Check QoS policy, queue counters, and whether the link is an oversubscribed
+   uplink.
+4. Treat queue tuning as secondary. First prove whether the link is congested.
 
-### デュプレックスと速度
+### Duplex And Speed
 
-両側がサポートしている場合、最新のイーサネットリンクではオートネゴシエーションを優先する。一方の側を固定する必要がある場合は、両側を明示的に設定し、理由を文書化する。一方をfixed speed/duplexに設定し、もう一方をautoにすることは絶対にしてはならない。
+Prefer auto-negotiation on modern Ethernet links when both sides support it. If
+one side must be fixed, configure both sides explicitly and document why. Never
+mix fixed speed/duplex on one side with auto on the other.
 
 ```text
 show interfaces <interface> | include duplex|speed
 ```
 
-## 安全なパーサーの例
+## Safe Parser Example
 
-各インターフェースブロックを1つのヘッダーから次のヘッダーまでスライスする。任意の文字ウィンドウを使用しないこと。大きなインターフェースブロックはカウンターが欠落したり、誤ったポートに割り当てられたりする可能性がある。
+Slice each interface block from one header to the next. Do not use an arbitrary
+character window; large interface blocks can cause counters to be missed or
+assigned to the wrong port.
 
 ```python
 import re
@@ -111,33 +121,33 @@ def parse_show_interfaces(raw: str) -> list[dict[str, Any]]:
     return interfaces
 ```
 
-## 例
+## Examples
 
-### 1つのスイッチポートのCRC
+### CRCs On One Switch Port
 
-1. ローカルポートのカウンターを取得する。
-2. 接続されたリモートポートのカウンターを取得する。
-3. ルーティングやファイアウォールルールを変更する前にケーブルまたはオプティクスを交換する。
-4. ベースラインを記録した後にのみカウンターをクリアする。
-5. 一定間隔後に再確認する。
+1. Capture counters on the local port.
+2. Capture counters on the connected remote port.
+3. Replace the cable or optic before changing routing or firewall rules.
+4. Clear counters only after recording the baseline.
+5. Recheck after a fixed interval.
 
-### インターネットは遅いがLANは正常
+### Internet Slow But LAN Is Fine
 
-1. WANインターフェースのドロップ/エラーを確認する。
-2. LANアップリンクの利用率と出力ドロップを確認する。
-3. WANリンクがクリーンでもスループットが低い場合はゲートウェイCPUを確認する。
-4. 上流サービスを責める前に有線と無線のテストを比較する。
+1. Check WAN interface drops/errors.
+2. Check LAN uplink utilization and output drops.
+3. Check gateway CPU if the WAN link is clean but throughput is still low.
+4. Compare wired and wireless tests before blaming upstream service.
 
-## アンチパターン
+## Anti-Patterns
 
-- ベースラインを保存する前にカウンターをクリアする。
-- リンクの一方の側だけを確認する。
-- 時間ウィンドウなしで過去のすべてのCRCをアクティブな問題と仮定する。
-- 一方の側でオートネゴシエーションを使用し、もう一方で固定速度/デュプレックスを使用する。
-- 輻輳を確認する前に出力ドロップをケーブル問題として扱う。
+- Clearing counters before saving a baseline.
+- Looking at only one side of a link.
+- Assuming all historical CRCs are active problems without a time window.
+- Mixing auto-negotiation on one side with fixed speed/duplex on the other.
+- Treating output drops as a cable problem before checking congestion.
 
-## 関連情報
+## See Also
 
-- エージェント: `network-troubleshooter`
-- スキル: `network-config-validation`
-- スキル: `homelab-network-setup`
+- Agent: `network-troubleshooter`
+- Skill: `network-config-validation`
+- Skill: `homelab-network-setup`
