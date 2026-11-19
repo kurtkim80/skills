@@ -1,122 +1,122 @@
 ---
 name: token-budget-advisor
-description: Offer a choice of response depth (25%/50%/75%/100%) with token estimates before answering, then answer at that level. Use when the user asks to control response length or token budget, such as 'token budget', 'short version', 'brief answer', 'respuesta corta vs larga', 'cuántos tokens', 'ahorrar tokens', 'responde al 50%', 'dame la versión corta', 'quiero controlar cuánto usas'. Skip if depth is already set this session or 'token' means an auth/payment token.
-metadata:
-  origin: community
+description: 回答する前に、どれだけの回答深度を消費するかについてユーザーに情報に基づいた選択を提供する。ユーザーが回答の長さ、深さ、またはトークンバジェットを明示的に制御したい場合にこのスキルを使用する。トリガー条件："token budget", "token count", "token usage", "token limit", "response length", "answer depth", "short version", "brief answer", "detailed answer", "exhaustive answer", "respuesta corta vs larga", "cuántos tokens", "ahorrar tokens", "responde al 50%", "dame la versión corta", "quiero controlar cuánto usas"、またはユーザーが回答のサイズや深さの制御を明示的に求めるその他の明確なバリエーション。トリガーしない条件：ユーザーが現在のセッションでレベルを指定済み（そのレベルを維持）、リクエストが明らかに一言の回答、または「token」が認証/セッション/支払いトークンを指している。
+origin: community
 ---
 
-# Token Budget Advisor (TBA)
+# トークンバジェットアドバイザー（TBA）
 
-Intercept the response flow to offer the user a choice about response depth **before** Claude answers.
+Claudeが回答する前にレスポンスフローをインターセプトし、ユーザーが回答の深さを選択できるようにする。
 
-## When to Use
+## 使用場面
 
-- User wants to control how long or detailed a response is
-- User mentions tokens, budget, depth, or response length
-- User says "short version", "tldr", "brief", "al 25%", "exhaustive", etc.
-- Any time the user wants to choose depth/detail level upfront
+* ユーザーが回答の長さや詳細度を制御したい場合
+* ユーザーがトークン、バジェット、深さ、または回答の長さに言及する場合
+* ユーザーが「短いバージョン」「TL;DR」「簡潔に」「25%」「詳細に」などと言う場合
+* ユーザーが事前に深さ/詳細度を選択したい場合
 
-**Do not trigger** when: user already set a level this session (maintain it silently), or the answer is trivially one line.
+**トリガーしない場合**：ユーザーが本セッションですでにレベルを設定している（静かに維持）、または回答が本質的に一行。
 
-## How It Works
+## 動作原理
 
-### Step 1 — Estimate input tokens
+### ステップ 1 — 入力トークンを推定する
 
-Use the repository's canonical context-budget heuristics to estimate the prompt's token count mentally.
+リポジトリの標準コンテキストバジェットのヒューリスティックスを使用して、プロンプトのトークン数を頭の中で推定する。
 
-Use the same calibration guidance as [context-budget](../context-budget/SKILL.md):
+[context-budget](../context-budget/SKILL.md) と同じキャリブレーションガイドラインを使用する：
 
-- prose: `words × 1.3`
-- code-heavy or mixed/code blocks: `chars / 4`
+* 散文：`words × 1.3`
+* コード集約またはコード混在/コードブロック：`chars / 4`
 
-For mixed content, use the dominant content type and keep the estimate heuristic.
+混在コンテンツの場合、支配的なコンテンツタイプを使用し、推定ヒューリスティックスを保持する。
 
-### Step 2 — Estimate response size by complexity
+### ステップ 2 — 複雑度に応じてレスポンスサイズを推定する
 
-Classify the prompt, then apply the multiplier range to get the full response window:
+プロンプトを分類し、乗数範囲を適用して完全なレスポンスウィンドウを得る：
 
-| Complexity   | Multiplier range | Example prompts                                      |
-|--------------|------------------|------------------------------------------------------|
-| Simple       | 3× – 8×          | "What is X?", yes/no, single fact                   |
-| Medium       | 8× – 20×         | "How does X work?"                                  |
-| Medium-High  | 10× – 25×        | Code request with context                           |
-| Complex      | 15× – 40×        | Multi-part analysis, comparisons, architecture      |
-| Creative     | 10× – 30×        | Stories, essays, narrative writing                  |
+| 複雑度 | 乗数範囲 | プロンプト例 |
+|--------------|------------|------------------------------------------------------|
+| シンプル | 3× – 8× | 「Xとは何ですか？」、はい/いいえの質問、単一の事実 |
+| 中程度 | 8× – 20× | 「Xはどのように機能しますか？」 |
+| 中〜高 | 10× – 25× | コンテキスト付きのコードリクエスト |
+| 複雑 | 15× – 40× | マルチパート分析、比較、アーキテクチャ |
+| クリエイティブ | 10× – 30× | ストーリー、散文、ナラティブライティング |
 
-Response window = `input_tokens × mult_min` to `input_tokens × mult_max` (but don’t exceed your model’s configured output-token limit).
+レスポンスウィンドウ = `input_tokens × mult_min` から `input_tokens × mult_max`（ただしモデルの設定済み出力トークン制限を超えない）。
 
-### Step 3 — Present depth options
+### ステップ 3 — 深さのオプションを提示する
 
-Present this block **before** answering, using the actual estimated numbers:
+**回答する前に**、実際に推定した数値を使用してこのブロックを提示する：
 
 ```
-Analyzing your prompt...
+プロンプトを分析中...
 
-Input: ~[N] tokens  |  Type: [type]  |  Complexity: [level]  |  Language: [lang]
+入力：~[N] トークン  |  タイプ：[タイプ]  |  複雑度：[レベル]  |  言語：[言語]
 
-Choose your depth level:
+深さレベルを選択してください：
 
-[1] Essential   (25%)  ->  ~[tokens]   Direct answer only, no preamble
-[2] Moderate    (50%)  ->  ~[tokens]   Answer + context + 1 example
-[3] Detailed    (75%)  ->  ~[tokens]   Full answer with alternatives
-[4] Exhaustive (100%)  ->  ~[tokens]   Everything, no limits
+[1] ベーシック    (25%)  ->  ~[トークン数]   直接回答、前置きなし
+[2] 適度         (50%)  ->  ~[トークン数]   回答 + 背景 + 1つの例
+[3] 詳細         (75%)  ->  ~[トークン数]   代替案を含む完全な回答
+[4] 徹底的      (100%)  ->  ~[トークン数]   すべて、制限なし
 
-Which level? (1-4 or say "25% depth", "50% depth", "75% depth", "100% depth")
+どのレベルを選択しますか？(1-4 または「25%の深さ」「50%の深さ」「75%の深さ」「100%の深さ」)
 
-Precision: heuristic estimate ~85-90% accuracy (±15%).
+精度：ヒューリスティック推定、約85〜90%の精度（±15%）。
 ```
 
-Level token estimates (within the response window):
-- 25%  → `min + (max - min) × 0.25`
-- 50%  → `min + (max - min) × 0.50`
-- 75%  → `min + (max - min) × 0.75`
-- 100% → `max`
+各レベルのトークン推定（レスポンスウィンドウ内）：
 
-### Step 4 — Respond at the chosen level
+* 25%  → `min + (max - min) × 0.25`
+* 50%  → `min + (max - min) × 0.50`
+* 75%  → `min + (max - min) × 0.75`
+* 100% → `max`
 
-| Level            | Target length       | Include                                             | Omit                                              |
+### ステップ 4 — 選択されたレベルで回答する
+
+| レベル | 目標の長さ | 含む内容 | 省略する内容 |
 |------------------|---------------------|-----------------------------------------------------|---------------------------------------------------|
-| 25% Essential    | 2-4 sentences max   | Direct answer, key conclusion                       | Context, examples, nuance, alternatives           |
-| 50% Moderate     | 1-3 paragraphs      | Answer + necessary context + 1 example              | Deep analysis, edge cases, references             |
-| 75% Detailed     | Structured response | Multiple examples, pros/cons, alternatives          | Extreme edge cases, exhaustive references         |
-| 100% Exhaustive  | No restriction      | Everything — full analysis, all code, all perspectives | Nothing                                        |
+| 25% コア | 最大2〜4文 | 直接回答、重要な結論 | コンテキスト、例、ニュアンス、代替案 |
+| 50% 適度 | 1〜3段落 | 回答 + 必要なコンテキスト + 1つの例 | 深い分析、エッジケース、参考文献 |
+| 75% 詳細 | 構造化された回答 | 複数の例、長所/短所、代替案 | 極端なエッジケース、網羅的な参考文献 |
+| 100% 徹底的 | 制限なし | すべて——完全な分析、すべてのコード、すべての視点 | なし |
 
-## Shortcuts — skip the question
+## ショートカット——質問をスキップ
 
-If the user already signals a level, respond at that level immediately without asking:
+ユーザーがすでにレベルを示している場合、質問せずにそのレベルで即座に回答する：
 
-| What they say                                      | Level |
+| ユーザーの発言 | レベル |
 |----------------------------------------------------|-------|
-| "1" / "25% depth" / "short version" / "brief answer" / "tldr"  | 25%   |
-| "2" / "50% depth" / "moderate depth" / "balanced answer"        | 50%   |
-| "3" / "75% depth" / "detailed answer" / "thorough answer"       | 75%   |
-| "4" / "100% depth" / "exhaustive answer" / "full deep dive"     | 100%  |
+| 「1」/「25%の深さ」/「短いバージョン」/「簡潔に」/「TL;DR」 | 25% |
+| 「2」/「50%の深さ」/「適度の深さ」/「バランスの取れた回答」 | 50% |
+| 「3」/「75%の深さ」/「詳細な回答」/「包括的な回答」 | 75% |
+| 「4」/「100%の深さ」/「徹底的な回答」/「完全で詳細な分析」 | 100% |
 
-If the user set a level earlier in the session, **maintain it silently** for subsequent responses unless they change it.
+ユーザーが本セッションですでにレベルを設定している場合、ユーザーが変更しない限り後続の回答も**静かに**そのレベルを維持する。
 
-## Precision note
+## 精度について
 
-This skill uses heuristic estimation — no real tokenizer. Accuracy ~85-90%, variance ±15%. Always show the disclaimer.
+このスキルはヒューリスティック推定を使用する——実際のトークナイザーではない。精度は約85〜90%で偏差は±15%。常に免責事項を表示する。
 
-## Examples
+## 例
 
-### Triggers
+### トリガーシナリオ
 
-- "Give me the short version first."
-- "How many tokens will your answer use?"
-- "Respond at 50% depth."
-- "I want the exhaustive answer, not the summary."
-- "Dame la version corta y luego la detallada."
+* 「まず短いバージョンをください。」
+* 「あなたの回答は何トークン使いますか？」
+* 「50%の深さで回答してください。」
+* 「徹底的な回答が欲しい、サマリーはいらない。」
+* 「まず短いバージョン、次に詳細なバージョンをください。」
 
-### Does Not Trigger
+### トリガーしないシナリオ
 
-- "What is a JWT token?"
-- "The checkout flow uses a payment token."
-- "Is this normal?"
-- "Complete the refactor."
-- Follow-up questions after the user already chose a depth for the session
+* 「JWTトークンとは何ですか？」
+* 「チェックアウトフローは支払いトークンを使用しています。」
+* 「これは正常ですか？」
+* 「リファクタリングを完了してください。」
+* ユーザーが本セッションの深さを選択した後の後続の質問
 
-## Source
+## 出典
 
-Standalone skill from [TBA — Token Budget Advisor for Claude Code](https://github.com/Xabilimon1/Token-Budget-Advisor-Claude-Code-).
-Original project also ships a Python estimator script, but this repository keeps the skill self-contained and heuristic-only.
+[TBA — Claude CodeのToken Budget Advisor](https://github.com/Xabilimon1/Token-Budget-Advisor-Claude-Code-)から引用した独立スキル。
+元のプロジェクトにはPython推定スクリプトも付属しているが、本リポジトリではスキルを自己完結型に保ち、ヒューリスティックスのみを使用する。

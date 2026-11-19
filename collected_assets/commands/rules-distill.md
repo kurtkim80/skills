@@ -1,20 +1,11 @@
 ---
-description: Legacy slash-entry shim for the rules-distill skill. Prefer the skill directly.
+description: "スキルをスキャンして横断的な原則を抽出し、ルールとして蒸留する"
 ---
 
-# Rules Distill (Legacy Shim)
+# /rules-distill — スキルから原則をルールとして蒸留する
 
-Use this only if you still invoke `/rules-distill`. The maintained workflow lives in `skills/rules-distill/SKILL.md`.
+インストール済みのスキルをスキャンし、横断的な原則を抽出して、ルールとして蒸留します。
 
-## Canonical Surface
+## フロー
 
-- Prefer the `rules-distill` skill directly.
-- Keep this file only as a compatibility entry point.
-
-## Arguments
-
-`$ARGUMENTS`
-
-## Delegation
-
-Apply the `rules-distill` skill and follow its inventory, cross-read, and verdict workflow instead of duplicating that logic here.
+`rules-distill` スキルで定義された完全なワークフローに従います。

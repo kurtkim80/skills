@@ -1,65 +1,75 @@
 ---
 name: safety-guard
-description: "Guard against destructive operations with three modes: Careful intercepts dangerous commands (rm -rf, git push --force, DROP TABLE) for confirmation, Freeze locks writes to one directory, and Guard combines both. Advisory: the agent applies these rules itself; no hook ships with it. Use when working on production systems, running agents autonomously, restricting edits to a directory, or during migrations, deploys, and data changes."
-metadata:
-  origin: ECC
+description: 本番システムでの作業時や、エージェントを自律的に実行する際に破壊的な操作を防ぐためにこのスキルを使用してください。
+origin: ECC
 ---
 
-# Safety Guard — Prevent Destructive Operations
+# Safety Guard — 破壊的な操作の防止
 
-## When to Use
+## 使用するタイミング
 
-- When working on production systems
-- When agents are running autonomously (full-auto mode)
-- When you want to restrict edits to a specific directory
-- During sensitive operations (migrations, deploys, data changes)
+- 本番システムでの作業時
+- エージェントが自律的に動作している場合（フルオートモード）
+- 特定のディレクトリへの編集を制限したい場合
+- センシティブな操作時（マイグレーション、デプロイ、データ変更）
 
-## How It Works
+## 動作の仕組み
 
-Three modes of protection. They are instructions the agent follows, not enforced blocks (see [Enforcement](#enforcement)).
+3つの保護モードがあります:
 
-### Mode 1: Careful Mode
+### モード1: Careful モード
 
-Before it runs a destructive command, the agent stops and warns:
+実行前に破壊的なコマンドを検知して警告します:
 
 ```
-Watched patterns:
-- rm -rf (especially /, ~, or project root)
+監視するパターン:
+- rm -rf（特に /、~、またはプロジェクトルート）
 - git push --force
 - git reset --hard
-- git checkout . (discard all changes)
+- git checkout .（全変更を破棄）
 - DROP TABLE / DROP DATABASE
 - docker system prune
 - kubectl delete
 - chmod 777
 - sudo rm
-- npm publish (accidental publishes)
-- Any command with --no-verify
+- npm publish（誤公開）
+- --no-verify を含む全コマンド
 ```
 
-When detected: shows what the command does, asks for confirmation, suggests safer alternative.
+検知した場合: コマンドの内容を示し、確認を求め、より安全な代替手段を提示します。
 
-### Mode 2: Freeze Mode
+### モード2: Freeze モード
 
-Locks file edits to a specific directory tree, for example: "freeze edits to `src/components/`".
+特定のディレクトリツリーへのファイル編集をロックします:
 
-The agent does not Write/Edit outside `src/components/`, and explains why when a change would need it. Useful when you want an agent to focus on one area without touching unrelated code.
+```
+/safety-guard freeze src/components/
+```
 
-### Mode 3: Guard Mode (Careful + Freeze combined)
+`src/components/` 外への Write/Edit は説明付きでブロックされます。エージェントを特定の領域に集中させ、無関係なコードに触れないようにしたい場合に便利です。
 
-Both protections active, for example: "guard mode, write only to `src/api/`, read anything".
+### モード3: Guard モード（Careful + Freeze の組み合わせ）
 
-The agent can read anything but only writes to `src/api/`, and asks before any destructive command.
+両方の保護が有効になります。自律エージェントのための最大安全モードです。
 
-### Unlock
+```
+/safety-guard guard --dir src/api/ --allow-read-all
+```
 
-Tell the agent to stop applying the rules.
+エージェントはすべてを読み取れますが、`src/api/` にのみ書き込めます。破壊的なコマンドはどこでもブロックされます。
 
-## Enforcement
+### ロック解除
 
-This skill is advisory. ECC ships no `/safety-guard` command and no hook for it, so nothing blocks a tool call that breaks these rules. For blocking that does not depend on the agent, use Claude Code [permission deny rules](https://code.claude.com/docs/en/permissions) (for example `Bash(rm -rf *)`) or a [PreToolUse hook](https://code.claude.com/docs/en/hooks).
+```
+/safety-guard off
+```
 
-## Integration
+## 実装
 
-- Enable by default for `codex -a never` sessions
-- Pair with observability risk scoring in ECC 2.0
+PreToolUse フックを使用して Bash、Write、Edit、MultiEdit ツールの呼び出しを検知します。実行前に、アクティブなルールに対してコマンド/パスを確認します。
+
+## 統合
+
+- `codex -a never` セッションでデフォルトで有効化する
+- ECC 2.0 の可観測性リスクスコアリングと組み合わせる
+- ブロックされた全アクションを `~/.claude/safety-guard.log` に記録する

@@ -1,8 +1,7 @@
 ---
 name: openclaw-persona-forge
-description: "为 OpenClaw AI Agent 锻造完整的龙虾灵魂方案。根据用户偏好或随机抽卡， 输出身份定位、灵魂描述(SOUL.md)、角色化底线规则、名字和头像生图提示词。 如当前环境提供已审核的生图 skill，可自动生成统一风格头像图片。 当用户需要创建、设计或定制 OpenClaw 龙虾灵魂时使用。 不适用于：微调已有 SOUL.md、非 OpenClaw 平台的角色设计、纯工具型无性格 Agent。 触发词：龙虾灵魂、虾魂、OpenClaw 灵魂、养虾灵魂、龙虾角色、龙虾定位、 龙虾剧本杀角色、龙虾游戏角色、龙虾 NPC、龙虾性格、龙虾背景故事、 lobster soul、lobster character、抽卡、随机龙虾、龙虾 SOUL、gacha。 Use when creating, designing, or customizing an OpenClaw lobster persona — identity, SOUL.md, name, or avatar prompt."
-metadata:
-  origin: community
+description: "为 OpenClaw AI Agent 锻造完整的龙虾灵魂方案。根据用户偏好或随机抽卡， 输出身份定位、灵魂描述(SOUL.md)、角色化底线规则、名字和头像生图提示词。 如当前环境提供已审核的生图 skill，可自动生成统一风格头像图片。 当用户需要创建、设计或定制 OpenClaw 龙虾灵魂时使用。 不适用于：微调已有 SOUL.md、非 OpenClaw 平台的角色设计、纯工具型无性格 Agent。 触发词：龙虾灵魂、虾魂、OpenClaw 灵魂、养虾灵魂、龙虾角色、龙虾定位、 龙虾剧本杀角色、龙虾游戏角色、龙虾 NPC、龙虾性格、龙虾背景故事、 lobster soul、lobster character、抽卡、随机龙虾、龙虾 SOUL、gacha。"
+origin: community
 ---
 
 # 龙虾灵魂锻造炉
@@ -18,17 +17,17 @@ metadata:
 ### Avoid when
 
 - 用户只需微调已有 SOUL.md
-- 目标平台不是 OpenClaw，需要的是其他 Agent 框架专用格式
-- 用户需要纯工具型 Agent，不需要角色化灵魂
+- 目标平台不是 OpenClaw，需要的是其他 エージェント 框架专用格式
+- 用户需要纯工具型 エージェント，不需要角色化灵魂
 
 ## 前置条件
 
 - **必需**：`python3`（运行抽卡引擎 gacha.py）
-- **可选**：已审核的生图 skill（自动生成头像图片，未安装则输出提示词文本）
+- **可选**：已审核的生图 スキル（自动生成头像图片，未安装则输出提示词文本）
 
-## Skill 目录约定
+## スキル 目录约定
 
-**Agent Execution**:
+**エージェント Execution**:
 1. Determine this SKILL.md file's directory path as `SKILL_DIR`
 2. Replace all `${SKILL_DIR}` in this document with the actual path
 
@@ -42,26 +41,26 @@ metadata:
 
 ## 可选依赖
 
-### 头像自动生图：可选生图 skill
+### 头像自动生图：可选生图 スキル
 
-本 Skill 的核心输出是**文本方案**（SOUL.md + IDENTITY.md + 头像提示词）。
-头像图片生成是**可选增强能力**，由当前环境中**已审核并已安装**的生图 skill 提供。
+本 スキル 的核心输出是**文本方案**（SOUL.md + IDENTITY.md + 头像提示词）。
+头像图片生成是**可选增强能力**，由当前环境中**已审核并已安装**的生图 スキル 提供。
 
 **判断逻辑**：
-- 如果当前环境已安装并允许使用的生图 skill → Step 5 中调用它自动生图
+- 如果当前环境已安装并允许使用的生图 スキル → Step 5 中调用它自动生图
 - 如果未安装 → Step 5 输出完整的提示词文本，用户可复制到 Gemini / ChatGPT / Midjourney 手动生成
 
 **调用方式**（仅在已安装且已审核时）：
 1. 先将龙虾名字规整为安全片段：仅保留字母、数字和连字符，其余字符统一替换为 `-`
 2. 将提示词写入临时文件 `/tmp/openclaw-<safe-name>-prompt.md`
-3. 使用当前环境允许的生图 skill，传入提示词文件和输出路径
+3. 使用当前环境允许的生图 スキル，传入提示词文件和输出路径
 
 **接口约定**：
 - 参数：`<prompt-file> <output-path>`
 - 提示词文件：UTF-8 Markdown 文本，包含完整英文生图提示词
 - 成功：退出码 `0`，并在输出路径生成图片文件
 - 失败：返回非 `0` 退出码，或未生成输出文件；此时必须回退到手动提示词流程
-- 如生图 skill 后续接口发生变化，调用前应重新核对其参数和输出契约
+- 如生图 スキル 后续接口发生变化，调用前应重新核对其参数和输出契约
 
 ---
 
@@ -118,7 +117,7 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## Step 2：锻造身份张力
 
-**详细模板和示例**：见 [references/identity-tension.md](references/identity-tension.md)
+**详细模板和示例**：见 [references/identity-tension.md](../../../../skills/openclaw-persona-forge/references/identity-tension.md)
 
 构建：前世身份 × 当下处境 × 内在矛盾 → 一句话灵魂。
 
@@ -126,7 +125,7 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## Step 3：推导底线规则
 
-**推导公式和各方向参考**：见 [references/boundary-rules.md](references/boundary-rules.md)
+**推导公式和各方向参考**：见 [references/boundary-rules.md](../../../../skills/openclaw-persona-forge/references/boundary-rules.md)
 
 核心：用角色的语言表达底线，不用通用条款。2-4 条为宜。
 
@@ -134,7 +133,7 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## Step 4：锻造名字
 
-**命名策略和红线**：见 [references/naming-system.md](references/naming-system.md)
+**命名策略和红线**：见 [references/naming-system.md](../../../../skills/openclaw-persona-forge/references/naming-system.md)
 
 提供 3 个候选，每个附带策略类型和搭配理由。
 
@@ -142,14 +141,14 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## Step 5：生成头像
 
-**风格基底、变量、提示词模板**：见 [references/avatar-style.md](references/avatar-style.md)
+**风格基底、变量、提示词模板**：见 [references/avatar-style.md](../../../../skills/openclaw-persona-forge/references/avatar-style.md)
 
 ### 流程
 
 1. 根据灵魂填充 7 个个性化变量
 2. 拼接 STYLE_BASE + 个性化描述为完整提示词
-3. **检查当前环境是否存在可用且已审核的生图 skill**：
-   - **可用** → 写入临时文件，调用该生图 skill 生成图片，展示结果
+3. **检查当前环境是否存在可用且已审核的生图 スキル**：
+   - **可用** → 写入临时文件，调用该生图 スキル 生成图片，展示结果
    - **不可用** → 输出完整提示词文本，附使用说明：
 
 ```markdown
@@ -160,14 +159,14 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 > [完整英文提示词]
 
-如当前环境后续提供经过审核的生图 skill，可再接回自动生图流程。
+如当前环境后续提供经过审核的生图 スキル，可再接回自动生图流程。
 ```
 
 展示结果后，引导用户进入下一步。
 
 ## Step 6：输出完整方案 & 生成文件
 
-**完整输出模板**：见 [references/output-template.md](references/output-template.md)
+**完整输出模板**：见 [references/output-template.md](../../../../skills/openclaw-persona-forge/references/output-template.md)
 
 整合所有步骤为一份完整的龙虾灵魂方案，然后**主动引导用户生成实际文件**：
 
@@ -180,7 +179,7 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## 对话语气指南
 
-本 Skill 以**龙虾创世神亚当**的视角与用户对话。每个步骤的确认/引导不是机械提问，而是带有创世神个性的反馈。
+本 スキル 以**龙虾创世神亚当**的视角与用户对话。每个步骤的确认/引导不是机械提问，而是带有创世神个性的反馈。
 
 ### 原则
 
@@ -228,15 +227,15 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## 错误处理
 
-**完整降级策略**：见 [references/error-handling.md](references/error-handling.md)
+**完整降级策略**：见 [references/error-handling.md](../../../../skills/openclaw-persona-forge/references/error-handling.md)
 
 核心原则：**降级，不中断**。
 
 | 故障 | 降级行为 |
 |------|---------|
 | Python 不可用 | 跳过 gacha.py，从 10 类预设中随机选 |
-| 生图 skill 未安装 | 输出提示词文本供手动使用 |
-| 生图 skill 调用失败 | 重试 1 次，仍失败则输出提示词文本 |
+| 生图 スキル 未安装 | 输出提示词文本供手动使用 |
+| 生图 スキル 调用失败 | 重试 1 次，仍失败则输出提示词文本 |
 | 任何未预期错误 | 记录错误，跳过该步骤，继续主流程 |
 
 错误信息统一格式：
@@ -278,12 +277,12 @@ python3 ${SKILL_DIR}/gacha.py [次数]
 
 ## 兼容性
 
-本 Skill 遵循 Markdown 指令注入标准：
+本 スキル 遵循 Markdown 指令注入标准：
 - **Claude Code / Claude.ai**：原生支持
-- **OpenClaw Agent**：通过 SOUL.md 注入
-- **其他 Agent**：支持 SKILL.md 格式的框架均可使用
+- **OpenClaw エージェント**：通过 SOUL.md 注入
+- **其他 エージェント**：支持 SKILL.md 格式的框架均可使用
 
-本 Skill 自身不包含任何网络请求或文件发送代码。
-头像生图能力通过当前环境中已审核的可选生图 skill 提供。
+本 スキル 自身不包含任何网络请求或文件发送代码。
+头像生图能力通过当前环境中已审核的可选生图 スキル 提供。
 
-> 注：README.md / README.zh.md 是给人类用户看的安装说明，不影响 Skill 运行。
+> 注：README.md / README.zh.md 是给人类用户看的安装说明，不影响 スキル 运行。

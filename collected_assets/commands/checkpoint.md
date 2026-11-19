@@ -1,74 +1,78 @@
-# Checkpoint Komutu
+---
+description: Crear, verificar o listar puntos de control del flujo de trabajo después de ejecutar verificaciones.
+---
 
-İş akışınızda bir checkpoint oluşturun veya doğrulayın.
+# Comando Checkpoint
 
-## Kullanım
+Crear o verificar un punto de control en tu flujo de trabajo.
 
-`/checkpoint [create|verify|list|clear] [isim]`
+## Uso
 
-## Checkpoint Oluştur
+`/checkpoint [create|verify|list] [nombre]`
 
-Checkpoint oluştururken:
+## Crear Checkpoint
 
-1. Mevcut durumun temiz olduğundan emin olmak için `/verify quick` çalıştır
-2. Checkpoint adıyla bir git stash veya commit oluştur
-3. Checkpoint'i `.claude/checkpoints.log`'a kaydet:
+Al crear un checkpoint:
+
+1. Ejecutar `/verify quick` para asegurarse de que el estado actual está limpio
+2. Crear un git stash o commit con el nombre del checkpoint
+3. Registrar el checkpoint en `.claude/checkpoints.log`:
 
 ```bash
 echo "$(date +%Y-%m-%d-%H:%M) | $CHECKPOINT_NAME | $(git rev-parse --short HEAD)" >> .claude/checkpoints.log
 ```
 
-4. Checkpoint oluşturulduğunu raporla
+4. Reportar que el checkpoint fue creado
 
-## Checkpoint'i Doğrula
+## Verificar Checkpoint
 
-Bir checkpoint'e karşı doğrularken:
+Al verificar contra un checkpoint:
 
-1. Log'dan checkpoint'i oku
-2. Mevcut durumu checkpoint ile karşılaştır:
-   - Checkpoint'ten sonra eklenen dosyalar
-   - Checkpoint'ten sonra değiştirilen dosyalar
-   - Şimdiki vs o zamanki test başarı oranı
-   - Şimdiki vs o zamanki kapsama oranı
+1. Leer el checkpoint desde el log
+2. Comparar el estado actual con el checkpoint:
+   - Archivos añadidos desde el checkpoint
+   - Archivos modificados desde el checkpoint
+   - Tasa de pruebas pasadas ahora vs entonces
+   - Cobertura ahora vs entonces
 
-3. Raporla:
+3. Reportar:
 ```
-CHECKPOINT KARŞILAŞTIRMASI: $NAME
+COMPARACIÓN DE CHECKPOINT: $NAME
 ============================
-Değişen dosyalar: X
-Testler: +Y geçti / -Z başarısız
-Kapsama: +X% / -Y%
-Build: [GEÇTİ/BAŞARISIZ]
+Archivos cambiados: X
+Pruebas: +Y pasaron / -Z fallaron
+Cobertura: +X% / -Y%
+Build: [PASS/FAIL]
 ```
 
-## Checkpoint'leri Listele
+## Listar Checkpoints
 
-Tüm checkpoint'leri şunlarla göster:
-- Ad
-- Zaman damgası
-- Git SHA
-- Durum (mevcut, geride, ileride)
+Mostrar todos los checkpoints con:
+- Nombre
+- Marca de tiempo
+- SHA de git
+- Estado (actual, detrás, adelante)
 
-## İş Akışı
+## Flujo de Trabajo
 
-Tipik checkpoint akışı:
+Flujo típico de checkpoints:
 
 ```
-[Başlangıç] --> /checkpoint create "feature-start"
+[Inicio] --> /checkpoint create "feature-start"
    |
-[Uygula] --> /checkpoint create "core-done"
+[Implementar] --> /checkpoint create "core-done"
    |
-[Test] --> /checkpoint verify "core-done"
+[Probar] --> /checkpoint verify "core-done"
    |
-[Refactor] --> /checkpoint create "refactor-done"
+[Refactorizar] --> /checkpoint create "refactor-done"
    |
 [PR] --> /checkpoint verify "feature-start"
 ```
 
-## Argümanlar
+## Argumentos
 
 $ARGUMENTS:
-- `create <isim>` - İsimlendirilmiş checkpoint oluştur
-- `verify <isim>` - İsimlendirilmiş checkpoint'e karşı doğrula
-- `list` - Tüm checkpoint'leri göster
-- `clear` - Eski checkpoint'leri kaldır (son 5'i tutar)
+- `create <nombre>` - Crear checkpoint con nombre
+- `verify <nombre>` - Verificar contra checkpoint con nombre
+- `list` - Mostrar todos los checkpoints
+- `clear` - Eliminar checkpoints antiguos (conserva los últimos 5)

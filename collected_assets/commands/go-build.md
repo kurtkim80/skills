@@ -1,183 +1,166 @@
 ---
-description: Go build hatalarını, go vet uyarılarını ve linter sorunlarını aşamalı olarak düzelt. Minimal, cerrahi düzeltmeler için go-build-resolver agent'ını çağırır.
+description: Corregir errores de build de Go, advertencias de go vet y problemas del linter de forma incremental. Invoca al agente go-build-resolver para correcciones mínimas y quirúrgicas.
 ---
 
-# Go Build and Fix
+# Go Build y Corrección
 
-Bu komut, minimal değişikliklerle Go build hatalarını aşamalı olarak düzeltmek için **go-build-resolver** agent'ını çağırır.
+Este comando invoca al agente **go-build-resolver** para corregir incrementalmente errores de build de Go con cambios mínimos.
 
-## Bu Komut Ne Yapar
+## Qué Hace Este Comando
 
-1. **Diagnostics Çalıştır**: `go build`, `go vet`, `staticcheck` yürüt
-2. **Hataları Parse Et**: Dosyaya göre grupla ve önem derecesine göre sırala
-3. **Aşamalı Düzelt**: Bir seferde bir hata
-4. **Her Düzeltmeyi Doğrula**: Her değişiklikten sonra build'i yeniden çalıştır
-5. **Özet Raporla**: Neyin düzeltildiğini ve neyin kaldığını göster
+1. **Ejecutar Diagnósticos**: Ejecutar `go build`, `go vet`, `staticcheck`
+2. **Parsear Errores**: Agrupar por archivo y ordenar por severidad
+3. **Corregir Incrementalmente**: Un error a la vez
+4. **Verificar Cada Corrección**: Re-ejecutar el build después de cada cambio
+5. **Reportar Resumen**: Mostrar qué se corrigió y qué queda pendiente
 
-## Ne Zaman Kullanılır
+## Cuándo Usar
 
-`/go-build` komutunu şu durumlarda kullanın:
-- `go build ./...` hatalarla başarısız olduğunda
-- `go vet ./...` sorunlar raporladığında
-- `golangci-lint run` uyarılar gösterdiğinde
-- Modül bağımlılıkları bozulduğunda
-- Build'i bozan değişiklikleri pull ettikten sonra
+Usar `/go-build` cuando:
+- `go build ./...` falla con errores
+- `go vet ./...` reporta problemas
+- `golangci-lint run` muestra advertencias
+- Las dependencias de módulos están rotas
+- Después de hacer pull de cambios que rompen el build
 
-## Çalıştırılan Diagnostic Komutları
+## Comandos de Diagnóstico Ejecutados
 
 ```bash
-# Birincil build kontrolü
+# Verificación de build principal
 go build ./...
 
-# Static analiz
+# Análisis estático
 go vet ./...
 
-# Genişletilmiş linting (mevcutsa)
+# Linting extendido (si está disponible)
 staticcheck ./...
 golangci-lint run
 
-# Modül sorunları
+# Problemas de módulos
 go mod verify
 go mod tidy -v
 ```
 
-## Örnek Oturum
+## Ejemplo de Sesión
 
 ```text
-Kullanıcı: /go-build
+Usuario: /go-build
 
-Agent:
-# Go Build Çözümü
+Agente:
+# Resolución de Build de Go
 
-## İlk Diagnostics
+## Diagnósticos Iniciales
 
-```bash
 $ go build ./...
 internal/service/user.go:25:15: undefined: UserRepository
 internal/handler/api.go:42:9: cannot use x (type string) as type int
 internal/handler/api.go:58:2: missing return at end of function
-```
 
-Bulunan hatalar: 3
+Errores encontrados: 3
 
-## Düzeltme 1: Tanımsız Tanımlayıcı
+## Corrección 1: Identificador Indefinido
 
-Dosya: internal/service/user.go:25
-Hata: undefined: UserRepository
-Neden: Eksik import
+Archivo: internal/service/user.go:25
+Error: undefined: UserRepository
+Causa: Import faltante
 
-```go
-// Import eklendi
+// Import añadido
 import "project/internal/repository"
 
-// Değiştirildi
+// Cambiado
 var repo UserRepository
-// Şuna
+// A
 var repo repository.UserRepository
-```
 
-```bash
 $ go build ./...
-# 2 hata kaldı
-```
+# 2 errores restantes
 
-## Düzeltme 2: Tip Uyuşmazlığı
+## Corrección 2: Incompatibilidad de Tipos
 
-Dosya: internal/handler/api.go:42
-Hata: cannot use x (type string) as type int
+Archivo: internal/handler/api.go:42
+Error: cannot use x (type string) as type int
 
-```go
-// Değiştirildi
+// Cambiado
 count := params.Get("count")
-// Şuna
+// A
 countStr := params.Get("count")
 count, _ := strconv.Atoi(countStr)
-```
 
-```bash
 $ go build ./...
-# 1 hata kaldı
-```
+# 1 error restante
 
-## Düzeltme 3: Eksik Return
+## Corrección 3: Return Faltante
 
-Dosya: internal/handler/api.go:58
-Hata: missing return at end of function
+Archivo: internal/handler/api.go:58
+Error: missing return at end of function
 
-```go
 func GetUser(id string) (*User, error) {
     if id == "" {
         return nil, ErrInvalidID
     }
     user := findUser(id)
-    // Eksik return eklendi
+    // Return añadido
     return user, nil
 }
-```
 
-```bash
 $ go build ./...
-# Build başarılı!
-```
+# ¡Build exitoso!
 
-## Son Doğrulama
+## Verificación Final
 
-```bash
 $ go vet ./...
-# Sorun yok
+# Sin problemas
 
 $ go test ./...
 ok      project/internal/service   0.015s
 ok      project/internal/handler   0.023s
+
+## Resumen
+
+| Métrica | Cantidad |
+|---------|---------|
+| Errores de build corregidos | 3 |
+| Advertencias de vet corregidas | 0 |
+| Archivos modificados | 2 |
+| Problemas restantes | 0 |
+
+Estado del Build: ÉXITO
 ```
 
-## Özet
+## Errores Comunes Corregidos
 
-| Metrik | Sayı |
-|--------|-------|
-| Düzeltilen build hataları | 3 |
-| Düzeltilen vet uyarıları | 0 |
-| Değiştirilen dosyalar | 2 |
-| Kalan sorunlar | 0 |
+| Error | Corrección Típica |
+|-------|-----------------|
+| `undefined: X` | Añadir import o corregir typo |
+| `cannot use X as Y` | Conversión de tipo o corregir asignación |
+| `missing return` | Añadir sentencia return |
+| `X does not implement Y` | Añadir método faltante |
+| `import cycle` | Reestructurar paquetes |
+| `declared but not used` | Eliminar o usar la variable |
+| `cannot find package` | `go get` o `go mod tidy` |
 
-Build Durumu: PASS: BAŞARILI
-```
+## Estrategia de Corrección
 
-## Düzeltilen Yaygın Hatalar
+1. **Errores de build primero** - El código debe compilar
+2. **Advertencias de vet segundo** - Corregir construcciones sospechosas
+3. **Advertencias del linter tercero** - Estilo y mejores prácticas
+4. **Una corrección a la vez** - Verificar cada cambio
+5. **Cambios mínimos** - No refactorizar, solo corregir
 
-| Hata | Tipik Düzeltme |
-|-------|-------------|
-| `undefined: X` | Import ekle veya yazım hatasını düzelt |
-| `cannot use X as Y` | Tip dönüşümü veya atamayı düzelt |
-| `missing return` | Return ifadesi ekle |
-| `X does not implement Y` | Eksik metod ekle |
-| `import cycle` | Paketleri yeniden yapılandır |
-| `declared but not used` | Değişkeni kaldır veya kullan |
-| `cannot find package` | `go get` veya `go mod tidy` |
+## Condiciones de Parada
 
-## Düzeltme Stratejisi
+El agente se detendrá e informará si:
+- El mismo error persiste después de 3 intentos
+- La corrección introduce más errores
+- Requiere cambios arquitectónicos
+- Faltan dependencias externas
 
-1. **Önce build hataları** - Kodun compile edilmesi gerekli
-2. **İkinci olarak vet uyarıları** - Şüpheli yapıları düzelt
-3. **Üçüncü olarak lint uyarıları** - Stil ve en iyi uygulamalar
-4. **Bir seferde bir düzeltme** - Her değişikliği doğrula
-5. **Minimal değişiklikler** - Refactor etme, sadece düzelt
+## Comandos Relacionados
 
-## Durdurma Koşulları
+- `/go-test` - Ejecutar pruebas después de que el build tenga éxito
+- `/go-review` - Revisar la calidad del código
 
-Agent şu durumlarda durur ve raporlar:
-- Aynı hata 3 denemeden sonra devam ederse
-- Düzeltme daha fazla hata oluşturursa
-- Mimari değişiklikler gerektirirse
-- Harici bağımlılıklar eksikse
+## Relacionado
 
-## İlgili Komutlar
-
-- `/go-test` - Build başarılı olduktan sonra testleri çalıştır
-- `/go-review` - Kod kalitesini incele
-- `/verify` - Tam doğrulama döngüsü
-
-## İlgili
-
-- Agent: `agents/go-build-resolver.md`
+- Agente: `agents/go-build-resolver.md`
 - Skill: `skills/golang-patterns/`

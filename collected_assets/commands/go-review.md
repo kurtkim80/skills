@@ -1,148 +1,124 @@
 ---
-description: İdiomatic desenler, eşzamanlılık güvenliği, hata yönetimi ve güvenlik için kapsamlı Go kod incelemesi. go-reviewer agent'ını çağırır.
+description: Revisión de código Go completa para patrones idiomáticos, seguridad de concurrencia, manejo de errores y seguridad. Invoca al agente go-reviewer.
 ---
 
-# Go Code Review
+# Revisión de Código Go
 
-Bu komut, Go'ya özel kapsamlı kod incelemesi için **go-reviewer** agent'ını çağırır.
+Este comando invoca al agente **go-reviewer** para una revisión de código Go completa y específica.
 
-## Bu Komut Ne Yapar
+## Qué Hace Este Comando
 
-1. **Go Değişikliklerini Tanımla**: `git diff` ile değiştirilmiş `.go` dosyalarını bul
-2. **Static Analiz Çalıştır**: `go vet`, `staticcheck` ve `golangci-lint` yürüt
-3. **Güvenlik Taraması**: SQL injection, command injection, race condition'ları kontrol et
-4. **Eşzamanlılık İncelemesi**: Goroutine güvenliğini, channel kullanımını, mutex desenlerini analiz et
-5. **İdiomatic Go Kontrolü**: Kodun Go kurallarına ve en iyi uygulamalara uyduğunu doğrula
-6. **Rapor Oluştur**: Sorunları önem derecesine göre kategorize et
+1. **Identificar Cambios de Go**: Encontrar archivos `.go` modificados mediante `git diff`
+2. **Ejecutar Análisis Estático**: Ejecutar `go vet`, `staticcheck` y `golangci-lint`
+3. **Escaneo de Seguridad**: Verificar inyección SQL, inyección de comandos, condiciones de carrera
+4. **Revisión de Concurrencia**: Analizar seguridad de goroutines, uso de canales, patrones de mutex
+5. **Verificación de Go Idiomático**: Verificar que el código sigue las convenciones y mejores prácticas de Go
+6. **Generar Reporte**: Categorizar problemas por severidad
 
-## Ne Zaman Kullanılır
+## Cuándo Usar
 
-`/go-review` komutunu şu durumlarda kullanın:
-- Go kodu yazdıktan veya değiştirdikten sonra
-- Go değişikliklerini commit etmeden önce
-- Go kodu içeren pull request'leri incelerken
-- Yeni bir Go kod tabanına adapte olurken
-- İdiomatic Go desenlerini öğrenirken
+Usar `/go-review` cuando:
+- Después de escribir o modificar código Go
+- Antes de hacer commit de cambios de Go
+- Al revisar pull requests con código Go
+- Al incorporarse a una nueva base de código de Go
+- Al aprender patrones idiomáticos de Go
 
-## İnceleme Kategorileri
+## Categorías de Revisión
 
-### KRİTİK (Düzeltilmeli)
-- SQL/Command injection açıklıkları
-- Senkronizasyon olmadan race condition'lar
-- Goroutine sızıntıları
-- Hardcode edilmiş kimlik bilgileri
-- Güvenli olmayan pointer kullanımı
-- Kritik yollarda göz ardı edilen hatalar
+### CRÍTICO (Debe Corregirse)
+- Vulnerabilidades de inyección SQL/comandos
+- Condiciones de carrera sin sincronización
+- Fugas de goroutines
+- Credenciales hardcodeadas
+- Uso de punteros inseguros
+- Errores ignorados en rutas críticas
 
-### YÜKSEK (Düzeltilmeli)
-- Bağlamlı hata sarmalama eksikliği
-- Hata dönüşleri yerine panic
-- Context yayılmıyor
-- Deadlock'a neden olan buffersız channel'lar
-- Interface yerine getirilmeme hataları
-- Eksik mutex koruması
+### ALTO (Debería Corregirse)
+- Manejo de errores sin context
+- Panic en lugar de retorno de errores
+- Context no propagado
+- Canales sin buffer causando deadlocks
+- Errores de interfaz no satisfecha
+- Protección de mutex faltante
 
-### ORTA (Düşünün)
-- İdiomatic olmayan kod desenleri
-- Export edilen elementlerde eksik godoc yorumları
-- Verimsiz string birleştirme
-- Preallocate edilmemiş slice
-- Table-driven testler kullanılmamış
+### MEDIO (Considerar)
+- Patrones de código no idiomáticos
+- Comentarios godoc faltantes en exports
+- Concatenación de strings ineficiente
+- Slice no preasignado
+- Pruebas table-driven no usadas
 
-## Çalıştırılan Otomatik Kontroller
+## Verificaciones Automáticas Ejecutadas
 
 ```bash
-# Static analiz
+# Análisis estático
 go vet ./...
 
-# Gelişmiş kontroller (kuruluysa)
+# Verificaciones avanzadas (si están instaladas)
 staticcheck ./...
 golangci-lint run
 
-# Race tespiti
+# Detección de condiciones de carrera
 go build -race ./...
 
-# Güvenlik açıklıkları
+# Vulnerabilidades de seguridad
 govulncheck ./...
 ```
 
-## Örnek Kullanım
+## Ejemplo de Uso
 
 ```text
-Kullanıcı: /go-review
+Usuario: /go-review
 
-Agent:
-# Go Kod İnceleme Raporu
+Agente:
+# Reporte de Revisión de Código Go
 
-## İncelenen Dosyalar
-- internal/handler/user.go (değiştirildi)
-- internal/service/auth.go (değiştirildi)
+## Archivos Revisados
+- internal/handler/user.go (modificado)
+- internal/service/auth.go (modificado)
 
-## Static Analiz Sonuçları
-✓ go vet: Sorun yok
-✓ staticcheck: Sorun yok
+## Resultados del Análisis Estático
+✓ go vet: Sin problemas
+✓ staticcheck: Sin problemas
 
-## Bulunan Sorunlar
+## Problemas Encontrados
 
-[KRİTİK] Race Condition
-Dosya: internal/service/auth.go:45
-Sorun: Paylaşılan map senkronizasyon olmadan erişiliyor
-```go
-var cache = map[string]*Session{}  // Eşzamanlı erişim!
+[CRÍTICO] Condición de Carrera
+Archivo: internal/service/auth.go:45
+Problema: Mapa compartido accedido sin sincronización
+Fix: Usar sync.RWMutex o sync.Map
 
-func GetSession(id string) *Session {
-    return cache[id]  // Race condition
-}
-```
-Düzeltme: sync.RWMutex veya sync.Map kullan
-```go
-var (
-    cache   = map[string]*Session{}
-    cacheMu sync.RWMutex
-)
-
-func GetSession(id string) *Session {
-    cacheMu.RLock()
-    defer cacheMu.RUnlock()
-    return cache[id]
-}
-```
-
-[YÜKSEK] Eksik Hata Bağlamı
-Dosya: internal/handler/user.go:28
-Sorun: Hata bağlam olmadan döndürülüyor
-```go
-return err  // Bağlam yok
-```
-Düzeltme: Bağlamla sarmala
-```go
+[ALTO] Context de Error Faltante
+Archivo: internal/handler/user.go:28
+Problema: Error retornado sin context
+Fix: Envolver con context
 return fmt.Errorf("get user %s: %w", userID, err)
+
+## Resumen
+- CRÍTICO: 1
+- ALTO: 1
+- MEDIO: 0
+
+Recomendación: FALLAR: Bloquear merge hasta que se corrija el problema CRÍTICO
 ```
 
-## Özet
-- KRİTİK: 1
-- YÜKSEK: 1
-- ORTA: 0
+## Criterios de Aprobación
 
-Öneri: FAIL: KRİTİK sorun düzeltilene kadar merge'i engelle
-```
-
-## Onay Kriterleri
-
-| Durum | Koşul |
+| Estado | Condición |
 |--------|-----------|
-| PASS: Onayla | KRİTİK veya YÜKSEK sorun yok |
-| WARNING: Uyarı | Sadece ORTA sorunlar (dikkatle merge et) |
-| FAIL: Engelle | KRİTİK veya YÜKSEK sorun bulundu |
+| PASAR: Aprobar | Sin problemas CRÍTICOS o ALTOS |
+| ADVERTENCIA | Solo problemas MEDIOS (fusionar con precaución) |
+| FALLAR: Bloquear | Problemas CRÍTICOS o ALTOS encontrados |
 
-## Diğer Komutlarla Entegrasyon
+## Integración con Otros Comandos
 
-- Testlerin geçtiğinden emin olmak için önce `/go-test` kullanın
-- Build hataları oluşursa `/go-build` kullanın
-- Commit etmeden önce `/go-review` kullanın
-- Go'ya özel olmayan endişeler için `/code-review` kullanın
+- Usar `/go-test` primero para asegurarse de que las pruebas pasen
+- Usar `/go-build` si ocurren errores de build
+- Usar `/go-review` antes de hacer commit
+- Usar `/code-review` para preocupaciones no específicas de Go
 
-## İlgili
+## Relacionado
 
-- Agent: `agents/go-reviewer.md`
+- Agente: `agents/go-reviewer.md`
 - Skills: `skills/golang-patterns/`, `skills/golang-testing/`

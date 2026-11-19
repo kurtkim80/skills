@@ -1,16 +1,16 @@
-# Search & Indexing Guide
+# 検索とインデックスガイド
 
-Search allows you to find specific moments inside videos using natural language queries, exact keywords, or visual scene descriptions.
+検索機能を使用すると、自然言語クエリ、正確なキーワード、またはビジュアルシーンの説明でビデオ内の特定のモーメントを見つけることができる。
 
-## Prerequisites
+## 前提条件
 
-Videos **must be indexed** before they can be searched. Indexing is a one-time operation per video per index type.
+ビデオは検索の前に**インデックス化されている必要がある**。各インデックスタイプは各ビデオに対して1回だけ実行が必要。
 
-## Indexing
+## インデックス作成
 
-### Spoken Word Index
+### 音声単語インデックス
 
-Index the transcribed speech content of a video for semantic and keyword search:
+セマンティック検索とキーワード検索をサポートするためにビデオの転写音声コンテンツをインデックス化する：
 
 ```python
 video = coll.get_video(video_id)
@@ -19,20 +19,20 @@ video = coll.get_video(video_id)
 video.index_spoken_words(force=True)
 ```
 
-This transcribes the audio track and builds a searchable index over the spoken content. Required for semantic search and keyword search.
+この操作はオーディオトラックを転写し、音声コンテンツ上に検索可能なインデックスを構築する。セマンティック検索とキーワード検索に必要。
 
-**Parameters:**
+**パラメータ：**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `language_code` | `str\|None` | `None` | Language code of the video |
-| `segmentation_type` | `SegmentationType` | `SegmentationType.sentence` | Segmentation type (`sentence` or `llm`) |
-| `force` | `bool` | `False` | Set to `True` to skip if already indexed (avoids "already exists" error) |
-| `callback_url` | `str\|None` | `None` | Webhook URL for async notification |
+| `language_code` | `str\|None` | `None` | ビデオの言語コード |
+| `segmentation_type` | `SegmentationType` | `SegmentationType.sentence` | セグメンテーションタイプ（`sentence` または `llm`） |
+| `force` | `bool` | `False` | `True` に設定すると既にインデックス化済みをスキップする（「既に存在」エラーを回避） |
+| `callback_url` | `str\|None` | `None` | 非同期通知のWebhook URL |
 
-### Scene Index
+### シーンインデックス
 
-Index visual content by generating AI descriptions of scenes. Like spoken word indexing, this raises an error if a scene index already exists. Extract the existing `scene_index_id` from the error message.
+シーンのAI説明を生成することでビジュアルコンテンツをインデックス化する。音声単語インデックスと同様に、シーンインデックスが既に存在する場合はこの操作がエラーを発生させる。エラーメッセージから既存の `scene_index_id` を抽出する。
 
 ```python
 import re
@@ -51,15 +51,15 @@ except Exception as e:
         raise
 ```
 
-**Extraction types:**
+**抽出タイプ：**
 
-| Type | Description | Best For |
+| タイプ | 説明 | 最適な用途 |
 |------|-------------|----------|
-| `SceneExtractionType.shot_based` | Splits on visual shot boundaries | General purpose, action content |
-| `SceneExtractionType.time_based` | Splits at fixed intervals | Uniform sampling, long static content |
-| `SceneExtractionType.transcript` | Splits based on transcript segments | Speech-driven scene boundaries |
+| `SceneExtractionType.shot_based` | ビジュアルショット境界に基づいてセグメント化 | 汎用、アクションコンテンツ |
+| `SceneExtractionType.time_based` | 固定間隔でセグメント化 | 均一なサンプリング、長い静的コンテンツ |
+| `SceneExtractionType.transcript` | トランスクリプトセグメントに基づいてセグメント化 | 音声駆動のシーン境界 |
 
-**Parameters for `time_based`:**
+**`time_based` のパラメータ：**
 
 ```python
 video.index_scenes(
@@ -69,11 +69,11 @@ video.index_scenes(
 )
 ```
 
-## Search Types
+## 検索タイプ
 
-### Semantic Search
+### セマンティック検索
 
-Natural language queries matched against spoken content:
+自然言語クエリを使用して音声コンテンツを照合する：
 
 ```python
 from videodb import SearchType
@@ -84,11 +84,11 @@ results = video.search(
 )
 ```
 
-Returns ranked segments where the spoken content semantically matches the query.
+クエリとセマンティックに一致する音声コンテンツのランク付けされたクリップを返す。
 
-### Keyword Search
+### キーワード検索
 
-Exact term matching in transcribed speech:
+転写された音声内で正確な用語照合を行う：
 
 ```python
 results = video.search(
@@ -97,13 +97,13 @@ results = video.search(
 )
 ```
 
-Returns segments containing the exact keyword or phrase.
+正確なキーワードまたはフレーズを含むクリップを返す。
 
-### Scene Search
+### シーン検索
 
-Visual content queries matched against indexed scene descriptions. Requires a prior `index_scenes()` call.
+ビジュアルコンテンツクエリをインデックス化されたシーンの説明と照合する。事前に `index_scenes()` の呼び出しが必要。
 
-`index_scenes()` returns a `scene_index_id`. Pass it to `video.search()` to target a specific scene index (especially important when a video has multiple scene indexes):
+`index_scenes()` は `scene_index_id` を返す。`video.search()` に渡して特定のシーンインデックスを対象にする（ビデオに複数のシーンインデックスがある場合に特に重要）：
 
 ```python
 from videodb import SearchType, IndexType
@@ -127,16 +127,16 @@ except InvalidRequestError as e:
         raise
 ```
 
-**Important notes:**
+**重要な注意事項：**
 
-- Use `SearchType.semantic` with `index_type=IndexType.scene` — this is the most reliable combination and works on all plans.
-- `SearchType.scene` exists but may not be available on all plans (e.g. Free tier). Prefer `SearchType.semantic` with `IndexType.scene`.
-- The `scene_index_id` parameter is optional. If omitted, the search runs against all scene indexes on the video. Pass it to target a specific index.
-- You can create multiple scene indexes per video (with different prompts or extraction types) and search them independently using `scene_index_id`.
+* `SearchType.semantic` と `index_type=IndexType.scene` を組み合わせて使用する——これはすべてのプランで機能する最も信頼性の高い組み合わせ。
+* `SearchType.scene` は存在するが、すべてのプラン（例：無料プラン）で利用可能ではない可能性がある。`IndexType.scene` と `SearchType.semantic` を使用することを推奨する。
+* `scene_index_id` パラメータはオプション。省略すると、検索はビデオ上のすべてのシーンインデックスに対して実行される。特定のインデックスを対象にするためにこのパラメータを渡す。
+* 各ビデオに対して複数のシーンインデックスを作成し（異なるプロンプトや抽出タイプを使用して）、`scene_index_id` を使用して独立して検索できる。
 
-### Scene Search with Metadata Filtering
+### メタデータフィルター付きシーン検索
 
-When indexing scenes with custom metadata, you can combine semantic search with metadata filters:
+カスタムメタデータでシーンをインデックス化する場合、セマンティック検索とメタデータフィルターを組み合わせて使用できる：
 
 ```python
 from videodb import SearchType, IndexType
@@ -150,13 +150,13 @@ results = video.search(
 )
 ```
 
-See the [scene_level_metadata_indexing cookbook](https://github.com/video-db/videodb-cookbook/blob/main/quickstart/scene_level_metadata_indexing.ipynb) for a full example of custom metadata indexing and filtered search.
+カスタムメタデータインデックスとフィルター検索の完全な例については、[scene\_level\_metadata\_indexing 例](https://github.com/video-db/videodb-cookbook/blob/main/quickstart/scene_level_metadata_indexing.ipynb) を参照。
 
-## Working with Results
+## 結果の処理
 
-### Get Shots
+### クリップを取得する
 
-Access individual result segments:
+個々の結果クリップにアクセスする：
 
 ```python
 results = video.search("your query")
@@ -169,9 +169,9 @@ for shot in results.get_shots():
     print("---")
 ```
 
-### Play Compiled Results
+### コンパイルされた結果を再生する
 
-Stream all matching segments as a single compiled video:
+すべての一致するクリップを単一のコンパイルされたビデオとしてストリーミング再生する：
 
 ```python
 results = video.search("your query")
@@ -179,9 +179,9 @@ stream_url = results.compile()
 results.play()  # opens compiled stream in browser
 ```
 
-### Extract Clips
+### クリップを抽出する
 
-Download or stream specific result segments:
+特定の結果クリップをダウンロードまたはストリーミングする：
 
 ```python
 for shot in results.get_shots():
@@ -189,9 +189,9 @@ for shot in results.get_shots():
     print(f"Clip: {stream_url}")
 ```
 
-## Cross-Collection Search
+## コレクション横断検索
 
-Search across all videos in a collection:
+コレクション内のすべてのビデオを横断して検索する：
 
 ```python
 coll = conn.get_collection()
@@ -206,11 +206,11 @@ for shot in results.get_shots():
     print(f"Video: {shot.video_id} [{shot.start:.1f}s - {shot.end:.1f}s]")
 ```
 
-> **Note:** Collection-level search only supports `SearchType.semantic`. Using `SearchType.keyword` or `SearchType.scene` with `coll.search()` will raise `NotImplementedError`. For keyword or scene search, use `video.search()` on individual videos instead.
+> **注意：** コレクションレベルの検索は `SearchType.semantic` のみをサポートする。`SearchType.keyword` または `SearchType.scene` を `coll.search()` と組み合わせると `NotImplementedError` が発生する。キーワードやシーン検索には代わりに個々のビデオで `video.search()` を使用する。
 
-## Search + Compile
+## 検索 + コンパイル
 
-Index, search, and compile matching segments into a single playable stream:
+一致するクリップをインデックス化、検索し、単一の再生可能なストリームにコンパイルする：
 
 ```python
 video.index_spoken_words(force=True)
@@ -219,12 +219,12 @@ stream_url = results.compile()
 print(stream_url)
 ```
 
-## Tips
+## ヒント
 
-- **Index once, search many times**: Indexing is the expensive operation. Once indexed, searches are fast.
-- **Combine index types**: Index both spoken words and scenes to enable all search types on the same video.
-- **Refine queries**: Semantic search works best with descriptive, natural language phrases rather than single keywords.
-- **Use keyword search for precision**: When you need exact term matches, keyword search avoids semantic drift.
-- **Handle "No results found"**: `video.search()` raises `InvalidRequestError` when no results match. Always wrap search calls in try/except and treat `"No results found"` as an empty result set.
-- **Filter scene search noise**: Semantic scene search can return low-relevance results for vague queries. Use `score_threshold=0.3` (or higher) to filter noise.
-- **Idempotent indexing**: Use `index_spoken_words(force=True)` to safely re-index. `index_scenes()` has no `force` parameter — wrap it in try/except and extract the existing `scene_index_id` from the error message with `re.search(r"id\s+([a-f0-9]+)", str(e))`.
+* **一度インデックス化、何度も検索**：インデックス作成は高コストな操作。一度インデックスが作成されれば、検索は速くなる。
+* **インデックスタイプを組み合わせる**：音声単語とシーンの両方をインデックス化して、同じビデオですべての検索タイプを有効にする。
+* **クエリの最適化**：セマンティック検索は単一のキーワードではなく説明的な自然言語フレーズで最もよく機能する。
+* **精度向上のためにキーワード検索を使用**：正確な用語照合が必要なときは、キーワード検索でセマンティックドリフトを避けられる。
+* **「結果なし」の処理**：一致するものがない場合、`video.search()` は `InvalidRequestError` を発生させる。常に検索呼び出しをtry/exceptで包み、`"No results found"` を空の結果セットとして扱うこと。
+* **シーン検索ノイズのフィルタリング**：あいまいなクエリの場合、セマンティックシーン検索は低関連性の結果を返す可能性がある。ノイズをフィルタリングするために `score_threshold=0.3`（またはより高い値）を使用する。
+* **べき等なインデックス作成**：`index_spoken_words(force=True)` を使用すると安全に再インデックス化できる。`index_scenes()` には `force` パラメータがない——try/exceptで包み、`re.search(r"id\s+([a-f0-9]+)", str(e))` を使用してエラーメッセージから既存の `scene_index_id` を抽出する。

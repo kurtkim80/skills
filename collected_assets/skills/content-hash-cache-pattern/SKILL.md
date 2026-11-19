@@ -1,8 +1,7 @@
 ---
 name: content-hash-cache-pattern
-description: Cache expensive file processing results using SHA-256 content hashes — path-independent, auto-invalidating, with service layer separation. Use when repeated file processing is slow and results should be cached and invalidated by content rather than path.
-metadata:
-  origin: ECC
+description: Cache expensive file processing results using SHA-256 content hashes — path-independent, auto-invalidating, with service layer separation.
+origin: ECC
 ---
 
 # Content-Hash File Cache Pattern
@@ -18,7 +17,7 @@ Cache expensive file processing results (PDF parsing, text extraction, image ana
 
 ## Core Pattern
 
-### 1. Content-Hash Based Cache Key
+### 1. Content-Hash-Based Cache Key
 
 Use file content (not path) as the cache key:
 

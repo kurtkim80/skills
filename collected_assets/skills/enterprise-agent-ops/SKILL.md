@@ -1,8 +1,7 @@
 ---
 name: enterprise-agent-ops
-description: Operational controls for long-lived or cloud-hosted agent systems — runtime lifecycle (start, pause, stop, restart), observability (logs, metrics, traces), least-privilege safety scopes and kill switches, and rollout/rollback change management with audit logs and success/cost metrics. Use when running production agent fleets on PM2, systemd, or containers that need monitoring, incident response, or deployment gates.
-metadata:
-  origin: ECC
+description: オブザーバビリティ、セキュリティ境界、およびライフサイクル管理を備えた長寿命エージェントワークロードを運用します。
+origin: ECC
 ---
 
 # Enterprise Agent Ops
