@@ -1,160 +1,160 @@
 ---
-description: Guía de orquestación secuencial y tmux/worktree para flujos de trabajo multi-agente.
+description: Multi-agent iş akışları için sıralı ve tmux/worktree orkestrasyon rehberi.
 ---
 
-# Comando Orchestrate
+# Orchestrate Komutu
 
-Flujo de trabajo secuencial de agentes para tareas complejas.
+Karmaşık görevler için sıralı agent iş akışı.
 
-## Uso
+## Kullanım
 
-`/orchestrate [tipo-workflow] [descripción-de-tarea]`
+`/orchestrate [workflow-type] [task-description]`
 
-## Tipos de Workflow
+## Workflow Tipleri
 
 ### feature
-Flujo de trabajo completo de implementación de feature:
+Tam özellik implementasyon iş akışı:
 ```
 planner -> tdd-guide -> code-reviewer -> security-reviewer
 ```
 
 ### bugfix
-Flujo de trabajo de investigación y corrección de bugs:
+Bug araştırma ve düzeltme iş akışı:
 ```
 planner -> tdd-guide -> code-reviewer
 ```
 
 ### refactor
-Flujo de trabajo de refactoring seguro:
+Güvenli refactoring iş akışı:
 ```
 architect -> code-reviewer -> tdd-guide
 ```
 
 ### security
-Revisión enfocada en seguridad:
+Güvenlik odaklı review:
 ```
 security-reviewer -> code-reviewer -> architect
 ```
 
-## Patrón de Ejecución
+## Execution Pattern
 
-Para cada agente en el flujo de trabajo:
+İş akışındaki her agent için:
 
-1. **Invocar el agente** con el contexto del agente anterior
-2. **Recopilar la salida** como documento de handoff estructurado
-3. **Pasarlo al siguiente agente** en la cadena
-4. **Consolidar los resultados** en el reporte final
+1. **Agent'ı çağır** önceki agent'tan gelen context ile
+2. **Çıktıyı topla** yapılandırılmış handoff dokümanı olarak
+3. **Sonraki agent'a geçir** zincirde
+4. **Sonuçları topla** nihai rapora
 
-## Formato del Documento de Handoff
+## Handoff Doküman Formatı
 
-Entre agentes, crear el documento de handoff:
+Agent'lar arasında, handoff dokümanı oluştur:
 
 ```markdown
-## HANDOFF: [agente-anterior] -> [agente-siguiente]
+## HANDOFF: [previous-agent] -> [next-agent]
 
 ### Context
-[Resumen de lo que se hizo]
+[Yapılanların özeti]
 
 ### Findings
-[Descubrimientos o decisiones clave]
+[Anahtar keşifler veya kararlar]
 
 ### Files Modified
-[Lista de archivos tocados]
+[Dokunulan dosyaların listesi]
 
 ### Open Questions
-[Elementos sin resolver para el siguiente agente]
+[Sonraki agent için çözülmemiş öğeler]
 
 ### Recommendations
-[Próximos pasos recomendados]
+[Önerilen sonraki adımlar]
 ```
 
-## Ejemplo: Flujo de Trabajo Feature
+## Örnek: Feature Workflow
 
 ```
-/orchestrate feature "Agregar autenticación de usuarios"
+/orchestrate feature "Add user authentication"
 ```
 
-Ejecuta:
+Çalıştırır:
 
-1. **Agente Planner**
-   - Analiza los requisitos
-   - Crea un plan de implementación
-   - Identifica dependencias
-   - Salida: `HANDOFF: planner -> tdd-guide`
+1. **Planner Agent**
+   - Requirement'ları analiz eder
+   - Implementation planı oluşturur
+   - Bağımlılıkları tanımlar
+   - Çıktı: `HANDOFF: planner -> tdd-guide`
 
-2. **Agente TDD Guide**
-   - Lee el handoff del planner
-   - Escribe las pruebas primero
-   - Implementa para que las pruebas pasen
-   - Salida: `HANDOFF: tdd-guide -> code-reviewer`
+2. **TDD Guide Agent**
+   - Planner handoff'unu okur
+   - Önce test'leri yazar
+   - Test'leri geçirmek için implement eder
+   - Çıktı: `HANDOFF: tdd-guide -> code-reviewer`
 
-3. **Agente Code Reviewer**
-   - Revisa la implementación
-   - Verifica problemas
-   - Sugiere mejoras
-   - Salida: `HANDOFF: code-reviewer -> security-reviewer`
+3. **Code Reviewer Agent**
+   - Implementation'ı gözden geçirir
+   - Sorunları kontrol eder
+   - İyileştirmeler önerir
+   - Çıktı: `HANDOFF: code-reviewer -> security-reviewer`
 
-4. **Agente Security Reviewer**
-   - Auditoría de seguridad
-   - Verificación de vulnerabilidades
-   - Aprobación final
-   - Salida: Reporte Final
+4. **Security Reviewer Agent**
+   - Güvenlik denetimi
+   - Güvenlik açığı kontrolü
+   - Nihai onay
+   - Çıktı: Final Report
 
-## Formato del Reporte Final
+## Nihai Rapor Formatı
 
 ```
 ORCHESTRATION REPORT
 ====================
 Workflow: feature
-Task: Agregar autenticación de usuarios
+Task: Add user authentication
 Agents: planner -> tdd-guide -> code-reviewer -> security-reviewer
 
 SUMMARY
 -------
-[Resumen en un párrafo]
+[Bir paragraf özet]
 
 AGENT OUTPUTS
 -------------
-Planner: [resumen]
-TDD Guide: [resumen]
-Code Reviewer: [resumen]
-Security Reviewer: [resumen]
+Planner: [özet]
+TDD Guide: [özet]
+Code Reviewer: [özet]
+Security Reviewer: [özet]
 
 FILES CHANGED
 -------------
-[Lista de todos los archivos modificados]
+[Değiştirilen tüm dosyaların listesi]
 
 TEST RESULTS
 ------------
-[Resumen de pruebas pasadas/fallidas]
+[Test geçti/başarısız özeti]
 
 SECURITY STATUS
 ---------------
-[Hallazgos de seguridad]
+[Güvenlik bulguları]
 
 RECOMMENDATION
 --------------
 [SHIP / NEEDS WORK / BLOCKED]
 ```
 
-## Ejecución Paralela
+## Parallel Execution
 
-Para verificaciones independientes, ejecutar agentes en paralelo:
+Bağımsız kontroller için, agent'ları parallel çalıştır:
 
 ```markdown
-### Fase Paralela
-Ejecutar simultáneamente:
-- code-reviewer (calidad)
-- security-reviewer (seguridad)
-- architect (diseño)
+### Parallel Phase
+Eş zamanlı çalıştır:
+- code-reviewer (kalite)
+- security-reviewer (güvenlik)
+- architect (tasarım)
 
-### Combinar Resultados
-Combinar las salidas en un único reporte
+### Merge Results
+Çıktıları tek rapora birleştir
 ```
 
-Para workers externos en tmux pane con git worktrees separados, usar `node scripts/orchestrate-worktrees.js plan.json --execute`. El patrón de orquestación integrado permanece en proceso; el helper sirve para sesiones de larga duración o cross-harness.
+Ayrı git worktree'leri olan harici tmux-pane worker'ları için, `node scripts/orchestrate-worktrees.js plan.json --execute` kullan. Built-in orkestrasyon pattern'i in-process kalır; helper uzun süren veya cross-harness session'lar için.
 
-Cuando los workers necesiten ver archivos locales no rastreados o sucios del checkout principal, agregar `seedPaths` al archivo de plan. ECC superpone solo esas rutas seleccionadas en cada worktree de worker después de `git worktree add`; esto muestra scripts, planes o documentos locales en progreso mientras mantiene el branch aislado.
+Worker'ların ana checkout'tan kirli veya izlenmeyen yerel dosyaları görmesi gerektiğinde, plan dosyasına `seedPaths` ekle. ECC sadece seçilen bu yolları `git worktree add`'den sonra her worker worktree'sine overlay eder; bu branch'ı izole tutarken devam eden yerel script'leri, planları veya dokümanları gösterir.
 
 ```json
 {
@@ -165,67 +165,67 @@ Cuando los workers necesiten ver archivos locales no rastreados o sucios del che
     ".claude/plan/workflow-e2e-test.json"
   ],
   "workers": [
-    { "name": "docs", "task": "Actualizar documentación de orquestación." }
+    { "name": "docs", "task": "Orkestrasyon dokümanlarını güncelle." }
   ]
 }
 ```
 
-Para exportar un snapshot del plano de control de una sesión tmux/worktree activa, ejecutar:
+Canlı bir tmux/worktree session için kontrol düzlemi snapshot'ı dışa aktarmak için şunu çalıştır:
 
 ```bash
 node scripts/orchestration-status.js .claude/plan/workflow-visual-proof.json
 ```
 
-El snapshot contiene actividad de sesión, metadatos de pane de tmux, estados de workers, objetivos, seed overlays y resúmenes de handoff recientes en formato JSON.
+Snapshot session aktivitesi, tmux pane metadata'sı, worker state'leri, hedefleri, seed overlay'leri ve son handoff özetlerini JSON formatında içerir.
 
-## Handoff al Centro de Control del Operador
+## Operatör Command-Center Handoff
 
-Cuando el flujo de trabajo se extiende a múltiples sesiones, worktrees o panes de tmux, agregar un bloque de plano de control al handoff final:
+İş akışı birden fazla session, worktree veya tmux pane'e yayıldığında, nihai handoff'a bir kontrol düzlemi bloğu ekle:
 
 ```markdown
 CONTROL PLANE
 -------------
 Sessions:
-- ID o alias de sesión activa
-- branch + ruta de worktree para cada worker activo
-- nombre del pane de tmux o sesión detached donde aplique
+- aktif session ID veya alias
+- her aktif worker için branch + worktree yolu
+- uygulanabilir durumlarda tmux pane veya detached session adı
 
 Diffs:
-- resumen de git status
-- git diff --stat de archivos tocados
-- notas de riesgo de merge/conflictos
+- git status özeti
+- dokunulan dosyalar için git diff --stat
+- merge/çakışma risk notları
 
 Approvals:
-- aprobaciones de usuario pendientes
-- pasos bloqueados esperando aprobación
+- bekleyen kullanıcı onayları
+- onay bekleyen bloke adımlar
 
 Telemetry:
-- timestamp de última actividad o señal de idle
-- deriva estimada de tokens o costos
-- eventos de política reportados por hooks o revisores
+- son aktivite timestamp'i veya idle sinyali
+- tahmini token veya cost drift
+- hook'lar veya reviewer'lar tarafından bildirilen policy olayları
 ```
 
-Esto mantiene al planner, implementador, revisor y workers del loop comprensibles desde la superficie del operador.
+Bu planner, implementer, reviewer ve loop worker'larını operatör yüzeyinden anlaşılır tutar.
 
-## Argumentos
+## Argümanlar
 
 $ARGUMENTS:
-- `feature <descripción>` - Flujo de trabajo completo de feature
-- `bugfix <descripción>` - Flujo de trabajo de corrección de bug
-- `refactor <descripción>` - Flujo de trabajo de refactoring
-- `security <descripción>` - Flujo de trabajo de revisión de seguridad
-- `custom <agentes> <descripción>` - Secuencia de agentes personalizada
+- `feature <description>` - Tam özellik iş akışı
+- `bugfix <description>` - Bug düzeltme iş akışı
+- `refactor <description>` - Refactoring iş akışı
+- `security <description>` - Güvenlik review iş akışı
+- `custom <agents> <description>` - Özel agent dizisi
 
-## Ejemplo de Workflow Personalizado
+## Özel Workflow Örneği
 
 ```
-/orchestrate custom "architect,tdd-guide,code-reviewer" "Rediseñar la capa de caché"
+/orchestrate custom "architect,tdd-guide,code-reviewer" "Caching katmanını yeniden tasarla"
 ```
 
-## Consejos
+## İpuçları
 
-1. **Comenzar con planner para features complejas**
-2. **Siempre incluir code-reviewer antes del merge**
-3. **Usar security-reviewer para auth/pagos/PII**
-4. **Mantener los handoffs concisos** - enfocarse en lo que el siguiente agente necesita
-5. **Ejecutar validación entre agentes si es necesario**
+1. **Karmaşık özellikler için planner ile başla**
+2. **Merge'den önce her zaman code-reviewer dahil et**
+3. **Auth/ödeme/PII için security-reviewer kullan**
+4. **Handoff'ları kısa tut** - sonraki agent'ın ihtiyaç duyduğu şeye odaklan
+5. **Gerekirse agent'lar arasında doğrulama çalıştır**

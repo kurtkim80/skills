@@ -1,61 +1,61 @@
 ---
 name: agent-payment-x402
-description: タスクごとのバジェット、支出コントロール、ノンカストディアルウォレットを備えた x402 決済実行を AI エージェントに追加します。agentwallet-sdk を通じて Base を、OKX Payments / OKX エージェント決済プロトコルを通じて X Layer を、アップストリームの x402 パッケージとファシリテーターベースの決済を通じて Solana とマルチネットワーク EVM をサポートします。
+description: 将 x402 支付执行添加到 AI 代理中，具备每任务预算、支出控制和非托管钱包。通过 agentwallet-sdk 支持 Base，通过 OKX Payments / OKX 代理支付协议支持 X Layer，并通过上游 x402 包与基于结算器的结算支持 Solana 及多网络 EVM。
 origin: community
 ---
 
-# エージェント決済実行（x402）
+# 代理支付执行 (x402)
 
-ポリシーゲートによる決済と組み込みの支出コントロールで AI エージェントを有効化します。x402 HTTP 決済プロトコルと MCP ツールを使用して、カストディアルリスクなしに外部サービス、API、または他のエージェントへの支払いを行えます。
+让 AI 代理能够进行策略门控的支付并内置支出控制。使用 x402 HTTP 支付协议和 MCP 工具，使代理能够为外部服务、API 或其他代理付费，无托管风险。
 
-## 使用タイミング
+## 使用场景
 
-使用する場合：エージェントが API 呼び出しへの支払い、サービスの購入、別のエージェントとの決済、タスクごとの支出制限の強制、またはノンカストディアルウォレットの管理を必要とする場合。`cost-aware-llm-pipeline` および `security-review` スキルと自然に組み合わせられます。
+适用于：代理需要支付 API 调用、购买服务、与其他代理结算、强制执行每任务支出限额，或管理非托管钱包。与 cost-aware-llm-pipeline 和 security-review 技能自然搭配。
 
-## 決定ツリー
+## 决策树
 
-エージェントが有料 API へのアクセスを購入するか、他者にアクセスを課金するかに基づいて統合パスを選択します：
+根据代理是购买对付费 API 的访问权，还是向他人收费，选择集成路径：
 
-| ニーズ | 推奨パス |
+| 需求 | 推荐路径 |
 |------|------------------|
-| エージェントが Base または他の agentwallet 対応チェーンの 402 ゲート API に支払う | 厳格な支出ポリシーで `agentwallet-sdk` を MCP 決済サーバーとして使用 |
-| エージェントが X Layer の 402 ゲート API に支払う | `okx/onchainos-skills` の OKX エージェント決済プロトコルを使用；`okx-x402-payment` は廃止されたレガシーエイリアス |
-| エージェントが Solana または他の x402 v2 ネットワークの 402 ゲート API に支払う | エージェントの HTTP クライアントをアップストリームの `@x402/fetch` または `@x402/axios` パッケージでラップし、EVM/SVM スキームを登録する；リソースサーバーのファシリテーターが検証・決済する |
-| API が Solana または複数ネットワークでエージェントに課金する（TypeScript、Python、または Go） | `x402-foundation/x402` のアップストリーム x402 ミドルウェアを使用 — TypeScript は `@x402/express`、`@x402/hono`、`@x402/next`、または `@x402/fastify`、Python は `x402`、Go は `github.com/x402-foundation/x402/go/v2` |
-| TypeScript API がエージェントに課金する | Express、Hono、Fastify、または Next.js 向け OKX Payments TypeScript セラー SDK ドキュメントを使用 |
-| Go API がエージェントに課金する | Gin、Echo、または `net/http` 向け OKX Payments Go セラー SDK ドキュメントを使用 |
-| Rust API がエージェントに課金する | Axum 向け OKX Payments Rust セラー SDK ドキュメントを使用 |
-| Java API がエージェントに課金する | Spring Boot 2/3、Java EE、または Jakarta 向け OKX Payments Java セラー SDK ドキュメントを使用 |
-| Python API がエージェントに課金する | 実装前に現在の OKX Payments リポジトリを確認；Python セラーガイドがない場合がある |
+| 代理为 Base 或其他 agentwallet 支持链上的 402 门控 API 付费 | 使用 `agentwallet-sdk` 作为 MCP 支付服务器，并配置严格的支出策略 |
+| 代理为 X Layer 上的 402 门控 API 付费 | 使用 `okx/onchainos-skills` 中的 OKX 代理支付协议；`okx-x402-payment` 是已弃用的旧别名 |
+| 代理为 Solana 或其他 x402 v2 网络上的 402 门控 API 付费 | 用上游的 `@x402/fetch` 或 `@x402/axios` 包包装代理的 HTTP 客户端并注册 EVM/SVM 方案；由资源服务器的结算器验证和结算 |
+| API 在 Solana 或多个网络上向代理收费（TypeScript、Python 或 Go） | 使用来自 `x402-foundation/x402` 的上游 x402 中间件 —— TypeScript 用 `@x402/express`、`@x402/hono`、`@x402/next` 或 `@x402/fastify`，Python 用 `x402`，Go 用 `github.com/x402-foundation/x402/go/v2` |
+| TypeScript API 向代理收费 | 使用面向 Express、Hono、Fastify 或 Next.js 的 OKX Payments TypeScript 卖家 SDK 文档 |
+| Go API 向代理收费 | 使用面向 Gin、Echo 或 `net/http` 的 OKX Payments Go 卖家 SDK 文档 |
+| Rust API 向代理收费 | 使用面向 Axum 的 OKX Payments Rust 卖家 SDK 文档 |
+| Java API 向代理收费 | 使用面向 Spring Boot 2/3、Java EE 或 Jakarta 的 OKX Payments Java 卖家 SDK 文档 |
+| Python API 向代理收费 | 实现前先检查当前 OKX Payments 仓库；可能尚无 Python 卖家指南 |
 
-## 対応ネットワーク
+## 支持的网络
 
-- `agentwallet-sdk`: 本番使用前に現在のネットワークカバレッジをパッケージドキュメントで確認。Base Sepolia が最も安全な開発デフォルト；Base メインネットがオリジナルスキルで説明されている本番パス。
-- OKX Payments / X Layer: 現在のセラードキュメントは X Layer（`eip155:196`）と USDT0 決済を対象。決済パッケージとファシリテーターの動作が迅速に変わる可能性があるため、本番コードを生成する前に現在の SDK ドキュメントを取得すること。
-- アップストリーム x402 パッケージ: 設計上マルチネットワーク — 1 つのルートで Base と Solana を同時に提示し、買い手に選ばせることができる。パッケージのデフォルトは `x402.org` ファシリテーターで、テストネット専用（Base Sepolia `eip155:84532`、Solana デブネット `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`、加えて Stellar、Aptos、Hedera、XRPL の各テストネット）であり、メインネットルート向けではない。メインネット（Solana は `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp`）では、自己ファシリテートするか、自前のファシリテーターを運用するか、アップストリームのファシリテーターリストからホスト型を選ぶ — オプション C のファシリテーター比較を参照。本番前にここにハードコードするのではなく、ファシリテーターの `/supported` エンドポイントでライブカバレッジを確認すること。
+- `agentwallet-sdk`：在生产使用前，通过包文档确认当前网络覆盖范围。Base Sepolia 是最安全的开发默认值；Base 主网是原始技能所述的生产路径。
+- OKX Payments / X Layer：当前卖家文档面向 X Layer（`eip155:196`）和 USDT0 结算。由于支付包和结算器行为可能快速变化，生成生产代码前请获取当前 SDK 文档。
+- 上游 x402 包：设计上即多网络 —— 一条路由可以同时提供 Base 和 Solana，由买方选择。包默认使用 `x402.org` 结算器，它仅限测试网（Base Sepolia `eip155:84532`、Solana 开发网 `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`，以及 Stellar、Aptos、Hedera、XRPL 测试网），不适用于主网路由。主网（Solana 为 `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp`）请选择自结算、自行运行结算器，或从上游结算器列表中挑选托管方案——参见选项 C 中的结算器对比。生产前请在结算器的 `/supported` 端点确认实时覆盖范围，而不要在此硬编码。
 
-## 仕組み
+## 工作原理
 
-### x402 プロトコル
-x402 は HTTP 402（Payment Required）を機械が交渉可能なフローに拡張します。サーバーが `402` を返すと、エージェントの決済ツールが価格を交渉し、バジェットを確認し、トランザクションに署名し、オーケストレーターが設定したポリシーと確認境界内でのみリトライします。
+### x402 协议
+x402 将 HTTP 402（需要付款）扩展为机器可协商的流程。当服务器返回 `402` 时，代理的支付工具会协商价格、检查预算、签署交易，并仅在编排器设定的策略与确认边界内重试。
 
-### 支出コントロール
-すべての決済ツール呼び出しは `SpendingPolicy` を強制します：
-- **タスクごとのバジェット** — 単一エージェントアクションの最大支出
-- **セッションごとのバジェット** — セッション全体の累積制限
-- **許可リストに登録された受取人** — エージェントが支払える アドレス/サービスを制限
-- **レート制限** — 分/時間あたりの最大トランザクション数
+### 支出控制
+每次支付工具调用都会强制执行 `SpendingPolicy`：
+- **每任务预算** — 单次代理操作的最大支出
+- **每会话预算** — 整个会话的累计限额
+- **白名单接收方** — 限制代理可支付的地址/服务
+- **速率限制** — 每分钟/小时的最大交易数
 
-### ノンカストディアルウォレット
-エージェントは ERC-4337 スマートアカウントを通じて独自のキーを保持します。オーケストレーターが委任前にポリシーを設定し、エージェントは境界内でのみ支出できます。プールされた資金なし、カストディアルリスクなし。
+### 非托管钱包
+代理通过 ERC-4337 智能账户持有自己的密钥。编排器在委托前设置策略；代理只能在限定范围内支出。无资金池，无托管风险。
 
-## MCP 統合
+## MCP 集成
 
-決済層は Claude Code またはエージェントハーネスのセットアップに組み込まれる標準 MCP ツールを公開します。
+支付层暴露标准 MCP 工具，可无缝接入任何 Claude Code 或代理框架设置。
 
-> **セキュリティ注意**: 常にパッケージバージョンを固定してください。このツールは秘密鍵を管理します — 固定されていない `npx` インストールはサプライチェーンリスクをもたらします。
+> **安全提示**：务必锁定包版本。此工具管理私钥——未锁定的 `npx` 安装会引入供应链风险。
 
-### オプション A: agentwallet-sdk（Base / マルチチェーン）
+### 选项 A：agentwallet-sdk（Base / 多链）
 
 ```json
 {
@@ -68,51 +68,51 @@ x402 は HTTP 402（Payment Required）を機械が交渉可能なフローに�
 }
 ```
 
-### 利用可能なツール（エージェント呼び出し可能）
+### 可用工具（代理可调用）
 
-| ツール | 目的 |
+| 工具 | 用途 |
 |------|---------|
-| `get_balance` | エージェントウォレットの残高を確認 |
-| `send_payment` | アドレスまたは ENS に支払いを送信 |
-| `check_spending` | 残りバジェットを照会 |
-| `list_transactions` | すべての支払いの監査証跡 |
+| `get_balance` | 检查代理钱包余额 |
+| `send_payment` | 向地址或 ENS 发送付款 |
+| `check_spending` | 查询剩余预算 |
+| `list_transactions` | 所有付款的审计追踪 |
 
-> **注意**: 支出ポリシーはエージェントへの委任前に**オーケストレーター**が設定します — エージェント自体では設定しません。これによりエージェントが独自の支出制限をエスカレーションするのを防ぎます。オーケストレーション層またはタスク前のフックで `set_policy` 経由でポリシーを設定し、エージェント呼び出し可能ツールとしては設定しないこと。
+> **注意**：支出策略由**编排器**在委托给代理之前设置——而非代理本身。这可防止代理自行提高支出限额。通过编排层或任务前钩子中的 `set_policy` 配置策略，切勿将其作为代理可调用工具。
 
-### オプション B: OKX エージェント決済プロトコル（X Layer）
+### 选项 B：OKX 代理支付协议（X Layer）
 
-X Layer x402、マルチパーティ決済（MPP）、セッション決済、チャージ、A2A チャージフロー向けにこのパスを使用します。
+将此路径用于 X Layer x402、多方支付（MPP）、会话支付、收费和 A2A 收费流程。
 
-バイヤー側エージェントフローの場合：
+对于买方代理流程：
 
-1. 現在の `okx/onchainos-skills` リポジトリをインストールまたは参照する。
-2. `skills/okx-agent-payments-protocol/SKILL.md` をディスパッチャーとして使用する。
-3. `skills/okx-x402-payment/SKILL.md` は廃止された互換エイリアスとして扱い、正規スキルとしては扱わない。
-4. ウォレット状態の確認または決済アクションの前に明示的なユーザー確認を求める。汎用ツール呼び出しの背後に決済実行を隠さない。
+1. 安装或引用当前的 `okx/onchainos-skills` 仓库。
+2. 使用 `skills/okx-agent-payments-protocol/SKILL.md` 作为调度器。
+3. 将 `skills/okx-x402-payment/SKILL.md` 视为已弃用的兼容别名，而非规范技能。
+4. 在钱包状态检查或支付操作前要求明确的用户确认。不要将支付执行隐藏在通用工具调用之后。
 
-セラー側 API フローの場合、コードを生成する前に最新の言語固有ガイドを取得する：
+对于卖方 API 流程，生成代码前先获取最新的语言专用指南：
 
-| ランタイム | 現在のガイド |
+| 运行时 | 当前指南 |
 |---------|---------------|
 | TypeScript | `https://raw.githubusercontent.com/okx/payments/main/typescript/SELLER.md` |
 | Go | `https://raw.githubusercontent.com/okx/payments/main/go/x402/SELLER.md` |
 | Rust | `https://raw.githubusercontent.com/okx/payments/main/rust/x402/SELLER.md` |
 | Java | `https://raw.githubusercontent.com/okx/payments/main/java/SELLER.md` |
 
-現在の OKX リポジトリを確認せずに古いドキュメントの例をコピーしないこと。現在の OKX ガイダンスはディスパッチャーとして `okx-agent-payments-protocol` を使用しており、Java セラードキュメントが利用可能になっています。
+不要在未检查当前 OKX 仓库的情况下复制旧文档中的示例。当前 OKX 指南使用 `okx-agent-payments-protocol` 作为调度器，且 Java 卖家文档现已可用。
 
-### オプション C: アップストリーム x402 パッケージ（Solana + Base/EVM）
+### 选项 C：上游 x402 包（Solana + Base/EVM）
 
-エージェントが Solana、Base、またはアップストリームのプロトコル実装がサポートする他のネットワークで支払う（または API が課金する）場合にこのパスを使用します。[`x402-foundation/x402`](https://github.com/x402-foundation/x402) の正規 x402 モノレポは活発にメンテナンスされており、クライアントとミドルウェアのパッケージを直接公開しています。オプション A・B と異なり、これは別個の MCP サーバーではありません — エージェント自身の HTTP クライアントをラップし、リソースサーバーが選んだファシリテーターが検証・決済します。
+当代理在 Solana、Base 或上游协议实现支持的其他网络上付费（或你的 API 收费）时，使用此路径。位于 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 的规范 x402 monorepo 正在积极维护，并直接发布客户端和中间件包。与选项 A 和 B 不同，这不是独立的 MCP 服务器——你包装代理自己的 HTTP 客户端，由资源服务器选择的结算器验证并结算。
 
-バイヤー側エージェントフローの場合：
+对于买方代理流程：
 
-1. 古いドキュメントのスニペットをコピーするのではなく、メンテナンスされている [`examples/typescript/clients`](https://github.com/x402-foundation/x402/tree/main/examples/typescript/clients)（fetch、axios、MCP）の例から始める。
-2. オプション B が OKX フローに要求するのとまったく同様に、最初の有料リクエストの署名または送信の前に明示的なユーザー確認を求める。汎用ツール呼び出しの背後に決済実行を隠さない。
-3. パッケージバージョンを固定する（例：`@x402/fetch@2.22.0`）；アップストリームの全パッケージはロックステップでバージョニングされる。
-4. バジェットはクライアントに登録した `PaymentPolicy` で強制し、毎回サーバーの実際のチャレンジに対して検査が走るようにする。自分で渡した数値と突き合わせるバジェットは何も証明しない — 金額・アセット・ネットワークはすべてサーバー由来なので、署名が生成される前に 3 つとも検証すること。
+1. 从维护中的 [`examples/typescript/clients`](https://github.com/x402-foundation/x402/tree/main/examples/typescript/clients) 示例（fetch、axios、MCP）开始，而不是复制旧文档中的片段。
+2. 在签署或提交第一笔付费请求之前要求明确的用户确认，与选项 B 对 OKX 流程的要求完全一致。不要将支付执行隐藏在通用工具调用之后。
+3. 锁定包版本（例如 `@x402/fetch@2.22.0`）；上游所有包以相同步调发布版本。
+4. 用注册到客户端的 `PaymentPolicy` 强制预算，使检查在每次调用时都针对服务器的真实挑战运行。与你自己传入的数字比较的预算不能证明任何事——金额、资产和网络都来自服务器，因此必须在签名产生之前全部验证。
 
-5. 受取先と予算のポリシーとは別に、許可するリソースのオリジンを正確に設定する。以下の支払い対応 fetch はすべてリダイレクトを拒否する。セッションの確認には許可オリジン、ネットワーク、資産、受取先、人が読める単位の支出上限を明示し、並行呼び出しは同じ確認結果を共有する。クライアントとポリシーはオーケストレーター内に留める。
+5. 在收款方和预算策略之外，单独配置精确的资源来源白名单。下方所有支付 fetch 均拒绝重定向。会话确认应明确列出允许的来源、网络、资产、收款方和以可读单位表示的支出上限；并发调用共享一次确认结果。客户端和策略只能由编排器持有。
 
 ```typescript
 import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
@@ -253,30 +253,30 @@ async function payOnce(url: string, init?: RequestInit): Promise<Response> {
 const res = await payOnce("https://api.example.com/data", { method: "GET" });
 ```
 
-ポリシーを登録すると、予算超過の金額、想定外のトークン、未登録のチェーンはすべてフェイルクローズドになる — 候補がすべて除外されるため、`createPaymentPayload` は署名せずに例外を投げる。デブネット USDC は `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU`；開発時のみ `ALLOWED_ASSETS` に追加すること。ポリシーは敵対的にテストする — `5000000` アトミック単位を要求するチャレンジ、別のミントを提示するチャレンジ、登録していないチェーンのチャレンジを与え、いずれも署名が生成されないことを確認する。exact-SVM スキームではファシリテーターがトランザクション手数料支払者となるため、買い手のウォレットは USDC のみを保有すればよい — ガス用の SOL は不要。
+注册该策略后，超预算金额、非预期代币或未注册的链都会故障关闭——所有候选项都被过滤掉，`createPaymentPayload` 会抛出异常而不是签名。开发网 USDC 是 `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU`；仅在开发时把它加入 `ALLOWED_ASSETS`。对策略做对抗性测试——分别喂入要求 `5000000` 原子单位的挑战、报价另一种铸币地址的挑战，以及你从未注册的链上的挑战，并断言它们都不会产生签名。在 exact-SVM 方案中，结算器是交易费用支付方，因此买方钱包只需持有 USDC——无需 SOL 支付 gas。
 
-**ファシリテーターの選択。** ファシリテーターはリソースサーバーに代わって検証と決済を行うため、これは買い手ではなくリソースサーバーの判断である。委ねる信頼が小さい順に：
+**结算器选择。** 结算器代表资源服务器执行验证和结算，因此这是资源服务器的决定，而非买方的决定。按委托信任由少到多排列：
 
-| 選択肢 | 適する場面 |
+| 选项 | 适用场景 |
 |--------|--------------|
-| [インプロセスで自己ファシリテート](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers/self-facilitation) | 決済経路に第三者を入れたくなく、鍵と RPC アクセスを自前で保持できる |
-| 自前のファシリテーターを運用 | 同じ制御を複数サービスで共有したい |
-| [`x402.org` ファシリテーター](https://x402.org/facilitator) | 開発・テストネット向け — パッケージのデフォルトでセットアップ不要。アップストリームはメインネットルート向けではないと明記している |
-| ホスト型の本番ファシリテーター | インフラを運用せずにメインネット対応が欲しい |
+| [进程内自结算](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers/self-facilitation) | 你不希望结算路径中有第三方，且能自行持有密钥和 RPC 访问 |
+| 自行运行结算器 | 你想要同样的控制力，但在多个服务间共享 |
+| [`x402.org` 结算器](https://x402.org/facilitator) | 开发与测试网——它是包的默认值，无需配置，上游明确说明它不适用于主网路由 |
+| 托管的生产结算器 | 你希望获得主网覆盖而不必自己运维基础设施 |
 
-ホスト型を選ぶ場合は、ここに書かれた名前ではなくアップストリームドキュメントの[ファシリテーターリスト](https://docs.x402.org/dev-tools/facilitators)から選ぶこと — メンテナンスされており、網羅的ではなく、カバレッジも変わる。執筆時点では Coinbase の CDP（全トランザクションに KYT/OFAC スクリーニング）、PayAI、Corbits、Dexter、Solvador などが掲載され、複数が EVM に加えて Solana メインネットをカバーしている。このリストに掲載されていない他のファシリテーターとしては Roundhouse（`https://x402.roundhouseai.io`、API キー不要、Base メインネットの `exact` の例 — x402 v1 のネットワーク `base` と v2 の `eip155:8453`、Base Sepolia は対象外 — `/supported` で確認）などがある。Roundhouse を上流の表へ載せるドキュメント PR は未マージのまま開いている: [x402-foundation/x402#4005](https://github.com/x402-foundation/x402/pull/4005)。どれを選ぶ場合も、本番前に `/supported` エンドポイントでライブカバレッジを確認し、ネットワークを追加したときは再確認すること。
+选择托管方案时，请从上游文档的[结算器列表](https://docs.x402.org/dev-tools/facilitators)中挑选，而不是照搬这里的名字——该列表有人维护、并不详尽，且覆盖范围会变化。撰写时它包含 Coinbase 的 CDP（对每笔交易执行 KYT/OFAC 筛查）、PayAI、Corbits、Dexter、Solvador 等，其中若干同时覆盖 EVM 与 Solana 主网。不在该列表中的其他结算器还包括 Roundhouse（`https://x402.roundhouseai.io`，无需 API 密钥，Base 主网 `exact` 示例——x402 v1 网络 `base` 与 v2 的 `eip155:8453`，不含 Base Sepolia——以 `/supported` 为准）。把 Roundhouse 加进上游表格的文档 PR 仍未合并：[x402-foundation/x402#4005](https://github.com/x402-foundation/x402/pull/4005)。无论选择哪一个，上线前都要在其 `/supported` 端点确认实时覆盖范围，并在新增网络时重新确认。
 
-> **開示**: このセクションの一部は、ここで言及しているファシリテーター / インデックスである PayAI（アップストリームのリストに掲載）と Roundhouse（上記で別途言及）に関わる者が寄稿した。いずれも複数ある選択肢の 1 つとして記載しており、上記の自己ホストおよびアップストリームデフォルトのパスを意図的に先に挙げている。
+> **披露**：本节部分内容由与 PayAI（位于上游列表中）和 Roundhouse（已在上文单独提及）有关联的人贡献，二者均为此处提到的结算器 / 索引。每一项都只是若干选项之一，上面的自托管与上游默认路径是有意排在前面的。
 
-**セラー側（API がエージェントに課金する）。** アップストリームのミドルウェアを使用する；1 つのルートで Base と Solana を同時に提示できる（実行可能なバージョンは [`examples/typescript/servers`](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers) を参照）：
+**卖方侧（API 向代理收费）。** 使用上游中间件；一条路由可以同时提供 Base 和 Solana（可运行版本参见 [`examples/typescript/servers`](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers)）：
 
-| ランタイム | パッケージ |
+| 运行时 | 包 |
 |---------|---------|
 | Express / Hono / Next.js / Fastify | `@x402/express@2.22.0`、`@x402/hono@2.22.0`、`@x402/next@2.22.0`、`@x402/fastify@2.22.0` |
-| Python（FastAPI、Flask） | PyPI の `x402` |
+| Python（FastAPI、Flask） | PyPI 上的 `x402` |
 | Go（Gin、Echo、`net/http`） | `github.com/x402-foundation/x402/go/v2` |
 
-**Solana のセラー：`payTo` アドレスには先に正規のトークンアカウントが必要。** exact-SVM クライアントは `findAssociatedTokenPda` で `payTo` の*関連トークンアカウント*（ATA）を導出してそこに送金するが、それを作成はしない。その正確なアカウントが存在しないと決済はシミュレーション段階で失敗し、402 が `transaction_simulation_failed` を返す — クライアントのバグのように見えるが、実際は受取側アカウントの欠落である。導出したアドレス自体を確認すること — オーナーのトークンアカウントを走査するのは等価ではない。同じミントの非正規な補助アカウントがあると検査は通るのに、クライアントが対象とする ATA は依然として存在しないからだ：
+**Solana 卖方：`payTo` 地址需要先有其规范代币账户。** exact-SVM 客户端用 `findAssociatedTokenPda` 为 `payTo` 推导*关联代币账户*（ATA）并转账到那里，但不会创建它。如果那个确切账户不存在，结算会在模拟阶段失败，402 返回 `transaction_simulation_failed`，看起来像客户端 bug，实际是收款方账户缺失。要检查推导出的地址本身——扫描该所有者的代币账户并不等价，因为同一铸币地址下的非规范辅助账户会让检查通过，而客户端真正要用的 ATA 仍然不存在：
 
 ```typescript
 import { findAssociatedTokenPda, TOKEN_PROGRAM_ADDRESS } from "@solana-program/token";
@@ -288,7 +288,7 @@ const [ata] = await findAssociatedTokenPda({
 });
 ```
 
-次にそのアドレスが実在することを確認する — `value: null` なら存在せず、そこへの決済は失敗する：
+然后确认该确切地址存在——`value: null` 表示不存在，向它结算将会失败：
 
 ```bash
 curl -s https://api.mainnet-beta.solana.com -X POST -H 'Content-Type: application/json' \
@@ -297,17 +297,17 @@ curl -s https://api.mainnet-beta.solana.com -X POST -H 'Content-Type: applicatio
   | jq '.result.value != null'
 ```
 
-作成方法（作成者が少額のレントを負担し、支払者ではない）：
+创建方式（由创建者支付少量租金，而非付款方）：
 
-- コード上では `@solana-program/token` の `getCreateAssociatedTokenIdempotentInstruction` をオンボーディングフローに追加する — 冪等版なので再実行しても安全で、決定的に動作する唯一の方法。
-- spl-token CLI で `spl-token create-account <MINT> --owner <PAYTO_ADDRESS>`。
-- そのトークンを `payTo` に送金する方法も使えるが、送金側が作成インストラクションを含む場合に限る — ウォレットや `spl-token transfer --fund-recipient` は含める。ATA が無い状態への素の `transferChecked` は、決済と同じように失敗する。
+- 在代码中，将 `@solana-program/token` 的 `getCreateAssociatedTokenIdempotentInstruction` 加入你的开通流程——幂等版本可安全重复执行，也是唯一确定性的方式。
+- 用 spl-token CLI：`spl-token create-account <MINT> --owner <PAYTO_ADDRESS>`。
+- 向 `payTo` 转账该代币也可以，但仅当发送方包含创建指令时——钱包和 `spl-token transfer --fund-recipient` 会包含；对缺失 ATA 的裸 `transferChecked` 会像结算一样失败。
 
-これは新規プロビジョニングされたウォレットやカストディアルウォレットへの支払いで最も問題になりやすい。そうしたウォレットは対象アセットの ATA をまだ持っていないことが多い。
+这个问题在向新开通的钱包或托管钱包付款时最容易出现，这类钱包往往还没有该资产的 ATA。
 
-**セラー：1 つの支払い承認につきルートは 1 回だけ実行する。** ミドルウェアは支払いを検証し、ハンドラーを実行し、その後で決済する。検証は承認を消費しない（消費するのは決済）ため、同じ署名済み支払いを同時に複数回送ると、毎回検証を通り、毎回ハンドラーが実行される。ファシリテーターが決済するのは 1 つのコピーだけで、残りはレスポンスなしの 402 を受け取るので、誰も無料で出力を得ることはない。しかしハンドラー内の副作用（LLM 呼び出し、ジョブのキュー投入、オンチェーントランザクション）はコピーごとに発生する。本番のセラー（Python `x402` 2.9.0、FastAPI）では、1 つの承認を同時に 3 回送ると、ハンドラーが 3 回実行され、決済は 1 回だった。ハンドラー内の有料呼び出しカウンターも同じように売上を過大に数えるので、決済後に数えること。検証から決済までのより広い競合については [x402#1169](https://github.com/x402-foundation/x402/issues/1169) で議論されている。
+**卖方：每个支付授权只运行一次路由。** 中间件先验证支付，再运行处理程序，然后结算。验证不会消耗授权（结算才会），因此同一笔已签名的支付同时发送多次，每次都能通过验证，每次都会运行处理程序。结算器只结算其中一份副本，其余副本收到不带响应的 402，所以没有人能免费获得输出。但处理程序中的每个副作用（LLM 调用、排队任务、链上交易）都会按副本数重复发生。在一个生产卖方（Python `x402` 2.9.0、FastAPI）上，同一授权并发发送三次，处理程序运行了三次，结算一次。放在处理程序内的付费调用计数器也会以同样方式高估收入；应在结算后计数。更广泛的验证到结算竞态在 [x402#1169](https://github.com/x402-foundation/x402/issues/1169) 中讨论。
 
-各承認を、ファシリテーターが検証した後、ハンドラーが実行される前に、1 回だけ取得する。リソースサーバーの `onAfterVerify` フックはちょうどその時点で実行され、そこから返した `abort` はハンドラーを実行せずに 402 になる：
+在结算器验证授权之后、处理程序运行之前，将每个授权只认领一次。资源服务器的 `onAfterVerify` 钩子恰好在这一时刻运行，从中返回的 `abort` 会变成 402，处理程序不会运行：
 
 ```typescript
 import { createHash } from "node:crypto";
@@ -455,33 +455,33 @@ app.post("/report", async (req, res, next) => {
 });
 ```
 
-アトミックな条件付き挿入ができるストアなら何でもよい：DynamoDB の `attribute_not_exists` 付き `PutItem`、または Postgres のユニークインデックス。ガードが代わりに決めてくれないことが 2 つある。ストアが停止している場合、`FAIL_CLOSED` は可用性と引き換えに承認ごとに 1 回という保証を守る。フェイルオープンにするとルートは動き続けるが、ストアが回復するまで各コピーがハンドラーを実行するので、冪等なハンドラーに限って使うこと。また `payment_replayed` は、その承認が以前に提示されたことを意味し、最初の試行が失敗したことを意味しない。クライアントが最初のレスポンスを失った場合、処理が実行され支払いが決済されている可能性があるので、新しい承認に署名する前に元のリクエストの結果を照合すること。これが防ぐのは 1 つの承認の重複コピーだけである。検証と決済の間に支払いを無効にする支払者（たとえば資金を移動する）は、依然としてハンドラーを 1 回実行させられる。高コストなルートでは、作業の前に資金を確保すること。
+任何支持原子条件插入的存储都可以：DynamoDB 带 `attribute_not_exists` 的 `PutItem`，或 Postgres 的唯一索引。有两件事守卫不会替你决定。存储不可用时，`FAIL_CLOSED` 以可用性为代价保住“每个授权只运行一次”的保证；失败开放（fail open）能让路由继续服务，但在存储恢复之前每个副本都会运行处理程序，因此只应用于幂等的处理程序。另外，`payment_replayed` 表示该授权之前已被提交过，并不表示第一次尝试失败：如果客户端丢失了第一次的响应，工作可能已经执行、支付可能已经结算，因此在签署新授权之前应先核对原始请求的结果。这只能阻止同一授权的重复副本。在验证和结算之间使支付失效的付款方（例如转走资金）仍能触发一次处理程序运行；对于高成本路由，应在执行工作前先锁定资金。
 
-**発見。** x402 バザール拡張を実装するファシリテーターは `/discovery/resources` エンドポイントを公開する — CDP カタログは `https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources`、PayAI カタログは `https://facilitator.payai.network/discovery/resources` で照会できる。Roundhouse はバザールの `/discovery/resources` ではなく、インデックス済みサービスディレクトリを `https://api.roundhouseai.io/v0/endpoints` と `https://roundhouseai.io/services.json` で公開し、ERC-8004 エージェントは `/v0/agents` で参照できる。Solana で支払い可能なサービスには、Solana Foundation のキュレーションカタログである [pay.sh](https://pay.sh) もある。
+**发现。** 实现 x402 集市扩展的结算器会公开 `/discovery/resources` 端点——可在 `https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources` 查询 CDP 目录，在 `https://facilitator.payai.network/discovery/resources` 查询 PayAI 目录。Roundhouse 不使用集市的 `/discovery/resources`，而是通过 `https://api.roundhouseai.io/v0/endpoints` 与 `https://roundhouseai.io/services.json` 发布已索引的服务目录，并通过 `/v0/agents` 提供 ERC-8004 代理读取。对于 Solana 可付费服务，还有 Solana 基金会的精选目录 [pay.sh](https://pay.sh)。
 
-## 例
+## 示例
 
-### MCP クライアントでのバジェット強制
+### MCP 客户端中的预算执行
 
-有料ツール呼び出しをディスパッチする前にバジェットを強制するオーケストレーターを構築する場合。
+在构建调用 agentpay MCP 服务器的编排器时，在分派付费工具调用前强制执行预算。
 
-> **前提条件**: MCP 設定を追加する前にパッケージをインストール — 非インタラクティブ環境では `-y` なしの `npx` は確認を求め、サーバーがハングします：`npm install -g agentwallet-sdk@6.0.0`
+> **前提条件**：在添加 MCP 配置前安装包——`npx` 不带 `-y` 会在非交互环境中提示确认，导致服务器挂起：`npm install -g agentwallet-sdk@6.0.0`
 
 ```typescript
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 async function main() {
-  // 1. トランスポートを構築する前に認証情報を検証する。
-  //    キーが欠落している場合は即座に失敗する — 認証なしでサブプロセスを開始させない。
+  // 1. Validate credentials before constructing the transport.
+  //    A missing key must fail immediately — never let the subprocess start without auth.
   const walletKey = process.env.WALLET_PRIVATE_KEY;
   if (!walletKey) {
     throw new Error("WALLET_PRIVATE_KEY is not set — refusing to start payment server");
   }
 
-  // stdio トランスポートを介して agentpay MCP サーバーに接続する。
-  // サーバーが必要とする env 変数のみをホワイトリストに登録する —
-  // 秘密鍵を管理するサードパーティのサブプロセスに process.env のすべてを渡さない。
+  // Connect to the agentpay MCP server via stdio transport.
+  // Whitelist only the env vars the server needs — never forward all of process.env
+  // to a third-party subprocess that manages private keys.
   const transport = new StdioClientTransport({
     command: "npx",
     args: ["agentwallet-sdk@6.0.0"],
@@ -494,8 +494,8 @@ async function main() {
   const agentpay = new Client({ name: "orchestrator", version: "1.0.0" });
   await agentpay.connect(transport);
 
-  // 2. エージェントへの委任前に支出ポリシーを設定する。
-  //    常に成功を確認する — サイレントな失敗はコントロールがアクティブでないことを意味する。
+  // 2. Set spending policy before delegating to the agent.
+  //    Always verify success — a silent failure means no controls are active.
   const policyResult = await agentpay.callTool({
     name: "set_policy",
     arguments: {
@@ -510,18 +510,18 @@ async function main() {
     );
   }
 
-  // 3. 有料アクションの前に preToolCheck を使用する
+  // 3. Use preToolCheck before any paid action
   await preToolCheck(agentpay, 0.01);
 }
 
-// プレツールフック: 4 つの異なるエラーパスを持つフェイルクローズドバジェット強制。
+// Pre-tool hook: fail-closed budget enforcement with four distinct error paths.
 async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
-  // パス 1: 無効な入力を拒否する（NaN/Infinity は < 比較をバイパスする）
+  // Path 1: Reject invalid input (NaN/Infinity bypass the < comparison)
   if (!Number.isFinite(apiCost) || apiCost < 0) {
     throw new Error(`Invalid apiCost: ${apiCost} — action blocked`);
   }
 
-  // パス 2: トランスポート/接続の失敗
+  // Path 2: Transport/connectivity failure
   let result;
   try {
     result = await agentpay.callTool({ name: "check_spending" });
@@ -529,14 +529,14 @@ async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
     throw new Error(`Payment service unreachable — action blocked: ${err}`);
   }
 
-  // パス 3: ツールがエラーを返した（例：認証失敗、ウォレット未初期化）
+  // Path 3: Tool returned an error (e.g., auth failure, wallet not initialised)
   if (result.isError) {
     throw new Error(
       `check_spending failed — action blocked: ${JSON.stringify(result.content)}`
     );
   }
 
-  // パス 4: レスポンスの形状を解析して検証する
+  // Path 4: Parse and validate the response shape
   let remaining: number;
   try {
     const parsed = JSON.parse(
@@ -552,7 +552,7 @@ async function preToolCheck(agentpay: Client, apiCost: number): Promise<void> {
     );
   }
 
-  // パス 5: バジェット超過
+  // Path 5: Budget exceeded
   if (remaining < apiCost) {
     throw new Error(
       `Budget exceeded: need $${apiCost} but only $${remaining} remaining`
@@ -566,26 +566,26 @@ main().catch((err) => {
 });
 ```
 
-## ベストプラクティス
+## 最佳实践
 
-- **委任前にバジェットを設定する**: サブエージェントを生成する際、オーケストレーション層を通じて SpendingPolicy を添付する。エージェントに無制限の支出を与えない。
-- **依存関係を固定する**: MCP 設定に常に正確なバージョンを指定する（例：`agentwallet-sdk@6.0.0`）。本番デプロイ前にパッケージの整合性を確認する。
-- **監査証跡**: タスク後のフックで `list_transactions` を使用して何が使われたかをログに記録する。
-- **フェイルクローズド**: 決済ツールに到達できない場合、有料アクションをブロックする — 課金されないアクセスにフォールバックしない。
-- **security-review と組み合わせる**: 決済ツールは高い権限を持つ。シェルアクセスと同じ精査を適用する。
-- **まずテストネットでテストする**: 開発には Base Sepolia を使用；本番には Base メインネットに切り替える。Solana では、メインネットの本番ファシリテーターに移る前に、Solana デブネット（`solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`）と無料の x402.org ファシリテーターで開発する。
-- **Solana では SOL ではなく USDC を資金として入れる**: exact-SVM スキームではファシリテーターがトランザクション手数料支払者となるため、SOL を持たないウォレットでも支払える。署名前に各チャレンジの `asset` を期待する USDC ミント（メインネット `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`、デブネット `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU`）と照合する — 任意のアセットに支払うラップクライアントはバジェットの穴になる。
+- **委托前设置预算**：生成子代理时，通过编排层附加 SpendingPolicy。切勿让代理拥有无限支出权限。
+- **锁定依赖项**：始终在 MCP 配置中指定确切版本（例如 `agentwallet-sdk@6.0.0`）。部署到生产环境前验证包完整性。
+- **审计追踪**：在任务后钩子中使用 `list_transactions` 记录支出内容和原因。
+- **故障关闭**：如果支付工具不可达，阻止付费操作——不要回退到无计量访问。
+- **配合 security-review**：支付工具是高权限操作。应用与 shell 访问相同的审查标准。
+- **先在测试网测试**：开发时使用 Base Sepolia；生产环境切换到 Base 主网。在 Solana 上，先针对 Solana 开发网（`solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`）和免费的 x402.org 结算器开发，再转到主网的生产结算器。
+- **在 Solana 上注入 USDC 而非 SOL**：exact-SVM 方案让结算器成为交易费用支付方，因此没有 SOL 的钱包也能付费。签署前将每个挑战的 `asset` 与预期的 USDC 铸币地址核对（主网 `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`，开发网 `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU`）——一个会支付任意资产的包装客户端是预算上的漏洞。
 
-## 本番リファレンス
+## 生产参考
 
-- **npm**: [`agentwallet-sdk`](https://www.npmjs.com/package/agentwallet-sdk)
-- **NVIDIA NeMo エージェントツールキットにマージ**: [PR #17](https://github.com/NVIDIA/NeMo-Agent-Toolkit-Examples/pull/17) — NVIDIA のエージェント例向け x402 決済ツール
-- **プロトコル仕様**: [x402.org](https://x402.org)
-- **OKX Payments SDK**: [`okx/payments`](https://github.com/okx/payments) — X Layer x402 向け TypeScript、Go、Rust、Java セラー統合
-- **OKX エージェント決済プロトコルスキル**: [`okx/onchainos-skills`](https://github.com/okx/onchainos-skills/tree/main/skills/okx-agent-payments-protocol)
-- **OKX Payments 概要**: [web3.okx.com/onchainos/dev-docs/payments/overview](https://web3.okx.com/onchainos/dev-docs/payments/overview)
-- **アップストリーム x402 モノレポ**: [`x402-foundation/x402`](https://github.com/x402-foundation/x402) — TypeScript、Python、Go の実装と、メンテナンスされているクライアント・サーバー例
-- **x402 ドキュメント**: [docs.x402.org](https://docs.x402.org)；本番ファシリテーターリストは [docs.x402.org/dev-tools/facilitators](https://docs.x402.org/dev-tools/facilitators)
-- **`@x402` パッケージ**: [npmjs.com/org/x402](https://www.npmjs.com/org/x402) — `@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/hono`、`@x402/next`、`@x402/fastify`、`@x402/evm`、`@x402/svm`
-- **ファシリテーター**: [自己ファシリテーションの例](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers/self-facilitation)（第三者なし）、[x402.org ファシリテーター](https://x402.org/facilitator)（テストネットデフォルト）、メンテナンスされている[本番リスト](https://docs.x402.org/dev-tools/facilitators)
-- **発見**: CDP と PayAI のバザールは `/discovery/resources`；Roundhouse ディレクトリは `/v0/endpoints` と `services.json`；Solana で支払い可能なサービスは [pay.sh](https://pay.sh)
+- **npm**：[`agentwallet-sdk`](https://www.npmjs.com/package/agentwallet-sdk)
+- **合并到 NVIDIA NeMo Agent Toolkit**：[PR #17](https://github.com/NVIDIA/NeMo-Agent-Toolkit-Examples/pull/17) — 面向 NVIDIA 代理示例的 x402 支付工具
+- **协议规范**：[x402.org](https://x402.org)
+- **OKX Payments SDK**：[`okx/payments`](https://github.com/okx/payments) — 面向 X Layer x402 的 TypeScript、Go、Rust 和 Java 卖家集成
+- **OKX 代理支付协议技能**：[`okx/onchainos-skills`](https://github.com/okx/onchainos-skills/tree/main/skills/okx-agent-payments-protocol)
+- **OKX Payments 概览**：[web3.okx.com/onchainos/dev-docs/payments/overview](https://web3.okx.com/onchainos/dev-docs/payments/overview)
+- **上游 x402 monorepo**：[`x402-foundation/x402`](https://github.com/x402-foundation/x402) — TypeScript、Python 和 Go 实现，以及维护中的客户端和服务器示例
+- **x402 文档**：[docs.x402.org](https://docs.x402.org)；生产结算器列表位于 [docs.x402.org/dev-tools/facilitators](https://docs.x402.org/dev-tools/facilitators)
+- **`@x402` 包**：[npmjs.com/org/x402](https://www.npmjs.com/org/x402) — `@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/hono`、`@x402/next`、`@x402/fastify`、`@x402/evm`、`@x402/svm`
+- **结算器**：[自结算示例](https://github.com/x402-foundation/x402/tree/main/examples/typescript/servers/self-facilitation)（无第三方）、[x402.org 结算器](https://x402.org/facilitator)（测试网默认）、以及有人维护的[生产列表](https://docs.x402.org/dev-tools/facilitators)
+- **发现**：CDP 与 PayAI 集市位于 `/discovery/resources`；Roundhouse 目录见 `/v0/endpoints` 与 `services.json`；Solana 可付费服务见 [pay.sh](https://pay.sh)

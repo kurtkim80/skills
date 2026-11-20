@@ -1,96 +1,104 @@
 ---
 name: canary-watch
-description: このスキルを使用して、デプロイメント、マージ、または依存関係アップグレード後にデプロイされたURLの回帰を監視します。
+description: 使用此技能在部署、合并或依赖升级后监控已部署的URL是否存在回归问题。
 origin: ECC
 ---
 
-# カナリアウォッチ — デプロイ後の監視
+# Canary Watch — 部署后监控
 
-## 使用時期
+## 使用场景
 
-- 本番またはステージングへのデプロイ後
-- 危険なPRをマージした後
-- 修正が実際に修正されたことを確認したい場合
-- ローンチウィンドウ中の継続的監視
-- 依存関係アップグレード後
+* 部署到生产或预发布环境后
+* 合并高风险 PR 后
+* 需要验证修复是否生效时
+* 发布窗口期间的持续监控
+* 依赖升级后
 
-## 動作方法
+## 工作原理
 
-デプロイされたURLの回帰を監視します。停止されるか監視ウィンドウが期限切れになるまで、ループで実行されます。
+监控已部署 URL 是否存在回归问题。循环运行，直至手动停止或监控窗口过期。
 
-### 監視内容
+### 监控内容
 
 ```
-1. HTTPステータス — ページは200を返していますか？
-2. コンソールエラー — 以前なかった新しいエラーはありますか？
-3. ネットワークの障害 — 失敗したAPIコール、5xx応答？
-4. パフォーマンス — LCP/CLS/INPの回帰対ベースライン？
-5. コンテンツ — 主要な要素は消えましたか？（h1、nav、footer、CTA）
-6. API健康 — 重要なエンドポイントはSLA内で応答していますか？
+1. HTTP 状态 — 页面是否返回 200？
+2. 控制台错误 — 是否出现之前没有的新错误？
+3. 网络故障 — 是否存在失败的 API 调用、5xx 响应？
+4. 性能 — LCP/CLS/INP 与基线相比是否有退化？
+5. 内容 — 关键元素是否消失？（h1、导航、页脚、CTA）
+6. API 健康 — 关键端点是否在 SLA 内响应？
 ```
 
-### 監視モード
+### 监控模式
 
-**クイックチェック**（デフォルト）：シングルパス、レポート結果
+**快速检查**（默认）：单次执行，报告结果
+
 ```
 /canary-watch https://myapp.com
 ```
 
-**継続監視**：N分ごとにM時間チェック
+**持续监控**：每 N 分钟检查一次，持续 M 小时
+
 ```
 /canary-watch https://myapp.com --interval 5m --duration 2h
 ```
 
-**差分モード**：ステージング対本番を比較
+**差异模式**：对比预发布环境与生产环境
+
 ```
 /canary-watch --compare https://staging.myapp.com https://myapp.com
 ```
 
-### 警告しきい値
+### 告警阈值
 
 ```yaml
-critical:  # 即座の警告
-  - HTTPステータス != 200
-  - コンソールエラー数 > 5（新しいエラーのみ）
+critical:  # immediate alert
+  - HTTP status != 200
+  - Console error count > 5 (new errors only)
   - LCP > 4s
-  - APIエンドポイントは5xxを返す
+  - API endpoint returns 5xx
 
-warning:   # レポートで報告
-  - LCP ベースラインから > 500ms増加
+warning:   # flag in report
+  - LCP increased > 500ms from baseline
   - CLS > 0.1
-  - 新しいコンソール警告
-  - レスポンス時間 > 2xベースライン
+  - New console warnings
+  - Response time > 2x baseline
 
-info:      # ログのみ
-  - マイナーパフォーマンス分散
-  - 新しいネットワークリクエスト（サードパーティスクリプトが追加された？）
+info:      # log only
+  - Minor performance variance
+  - New network requests (third-party scripts added?)
 ```
 
-### 通知
+### 通知机制
 
-重大なしきい値を超えたとき：
-- デスクトップ通知（macOS/Linux）
-- オプション：Slack/Discord Webhook
-- `~/.claude/canary-watch.log`にログ
+当超过关键阈值时：
 
-## 出力
+* 桌面通知（macOS/Linux）
+* 可选：Slack/Discord Webhook
+* 记录至 `~/.claude/canary-watch.log`
+
+## 输出
 
 ```markdown
-## Canary Report — myapp.com — 2026-03-23 03:15 PST
+## Canary 报告 — myapp.com — 2026-03-23 03:15 PST
 
-### Status
-- ✓ HTTP 200
-- ✓ No critical errors
-- ✓ LCP within SLA (1.8s)
+### 状态：健康 ✓
 
-### Diffs from Baseline
-- CLS: 0.08 (↓ 0.02)
-- Response: 245ms (↑ 12ms, OK)
-- Network: 42 requests (↑ 3, investigate third-party?)
+| 检查项 | 结果 | 基线 | 偏差 |
+|-------|--------|----------|-------|
+| HTTP | 200 ✓ | 200 | — |
+| 控制台错误 | 0 ✓ | 0 | — |
+| LCP | 1.8s ✓ | 1.6s | +200ms |
+| CLS | 0.01 ✓ | 0.01 | — |
+| API /health | 145ms ✓ | 120ms | +25ms |
+
+### 未检测到回归问题。部署状态良好。
 ```
 
-## 統合
+## 集成
 
-- `/benchmark`とペアリングしてパフォーマンス比較
-- `/browser-qa`とペアリングして完全なUIテスト
-- CI/CDパイプラインに組み込んでオートメーション監視
+配合使用：
+
+* `/browser-qa` 进行部署前验证
+* 钩子：在 `git push` 上添加 PostToolUse 钩子，部署后自动检查
+* CI：在 GitHub Actions 的部署步骤后运行

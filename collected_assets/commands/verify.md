@@ -1,59 +1,59 @@
-# Comando Verify
+# Verification Komutu
 
-Ejecutar verificación exhaustiva sobre el estado actual del código base.
+Mevcut kod tabanı durumu üzerinde kapsamlı doğrulama çalıştır.
 
-## Instrucciones
+## Talimatlar
 
-Ejecutar la verificación exactamente en este orden:
+Doğrulamayı tam olarak bu sırayla yürüt:
 
-1. **Verificación de Build**
-   - Ejecutar el comando de build para este proyecto
-   - Si falla, reportar los errores y DETENER
+1. **Build Kontrolü**
+   - Bu proje için build komutunu çalıştır
+   - Başarısız olursa, hataları raporla ve DUR
 
-2. **Verificación de Tipos**
-   - Ejecutar TypeScript/verificador de tipos
-   - Reportar todos los errores con archivo:línea
+2. **Tip Kontrolü**
+   - TypeScript/tip denetleyicisini çalıştır
+   - Tüm hataları dosya:satır ile raporla
 
-3. **Verificación de Lint**
-   - Ejecutar el linter
-   - Reportar advertencias y errores
+3. **Lint Kontrolü**
+   - Linter'ı çalıştır
+   - Uyarıları ve hataları raporla
 
-4. **Suite de Pruebas**
-   - Ejecutar todas las pruebas
-   - Reportar cantidad de pasadas/fallidas
-   - Reportar porcentaje de cobertura
+4. **Test Paketi**
+   - Tüm testleri çalıştır
+   - Geçti/başarısız sayısını raporla
+   - Kapsama yüzdesini raporla
 
-5. **Auditoría de console.log**
-   - Buscar console.log en los archivos fuente
-   - Reportar las ubicaciones
+5. **Console.log Denetimi**
+   - Kaynak dosyalarda console.log ara
+   - Konumları raporla
 
-6. **Estado de Git**
-   - Mostrar cambios no confirmados
-   - Mostrar archivos modificados desde el último commit
+6. **Git Durumu**
+   - Commit edilmemiş değişiklikleri göster
+   - Son commit'ten beri değiştirilen dosyaları göster
 
-## Salida
+## Çıktı
 
-Generar un reporte de verificación resumido:
+Özet bir doğrulama raporu üret:
 
 ```
-VERIFICACIÓN: [PASÓ/FALLÓ]
+DOĞRULAMA: [GEÇTİ/BAŞARISIZ]
 
-Build:    [OK/FALLÓ]
-Tipos:    [OK/X errores]
-Lint:     [OK/X problemas]
-Pruebas:  [X/Y pasaron, Z% cobertura]
-Secretos: [OK/X encontrados]
-Logs:     [OK/X console.log]
+Build:    [TAMAM/BAŞARISIZ]
+Tipler:   [TAMAM/X hata]
+Lint:     [TAMAM/X sorun]
+Testler:  [X/Y geçti, Z% kapsama]
+Gizli:    [TAMAM/X bulundu]
+Loglar:   [TAMAM/X console.log]
 
-Listo para PR: [SÍ/NO]
+PR için Hazır: [EVET/HAYIR]
 ```
 
-Si hay algún problema crítico, listarlos con sugerencias de corrección.
+Herhangi bir kritik sorun varsa, düzeltme önerileriyle listele.
 
-## Argumentos
+## Argümanlar
 
-$ARGUMENTS puede ser:
-- `quick` - Solo build + tipos
-- `full` - Todas las verificaciones (por defecto)
-- `pre-commit` - Verificaciones relevantes para commits
-- `pre-pr` - Escaneo de seguridad más verificaciones completas
+$ARGUMENTS şunlar olabilir:
+- `quick` - Sadece build + tipler
+- `full` - Tüm kontroller (varsayılan)
+- `pre-commit` - Commit'ler için ilgili kontroller
+- `pre-pr` - Güvenlik taraması artı tam kontroller

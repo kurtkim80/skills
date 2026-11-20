@@ -1,43 +1,46 @@
 ---
 name: strategic-compact
-description: Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. Use when a session is approaching a context limit and a task phase is a natural place to compact.
-license: MIT
+description: 임의의 자동 컴팩션 대신 논리적 간격에서 수동 컨텍스트 압축을 제안하여 작업 단계를 통해 컨텍스트를 보존합니다.
+origin: ECC
 ---
 
-# Strategic Compact Skill
+# 전략적 컴팩트 스킬
 
-Suggests manual `/compact` at strategic points in your workflow rather than relying on arbitrary auto-compaction.
+임의의 자동 컴팩션에 의존하지 않고 워크플로우의 전략적 지점에서 수동 `/compact`를 제안합니다.
 
-## When to Activate
+## 활성화 시점
 
-- Running long sessions that approach context limits (200K+ tokens)
-- Working on multi-phase tasks (research → plan → implement → test)
-- Switching between unrelated tasks within the same session
-- After completing a major milestone and starting new work
-- When responses slow down or become less coherent (context pressure)
+- 컨텍스트 제한에 근접하는 긴 세션을 실행할 때 (200K+ 토큰)
+- 다단계 작업을 수행할 때 (조사 -> 계획 -> 구현 -> 테스트)
+- 같은 세션 내에서 관련 없는 작업 간 전환할 때
+- 주요 마일스톤을 완료하고 새 작업을 시작할 때
+- 응답이 느려지거나 일관성이 떨어질 때 (컨텍스트 압박)
 
-## Why Strategic Compaction?
+## 전략적 컴팩션이 필요한 이유
 
-Auto-compaction triggers at arbitrary points:
-- Often mid-task, losing important context
-- No awareness of logical task boundaries
-- Can interrupt complex multi-step operations
+자동 컴팩션은 임의의 지점에서 실행됩니다:
+- 종종 작업 중간에 실행되어 중요한 컨텍스트를 잃음
+- 논리적 작업 경계를 인식하지 못함
+- 복잡한 다단계 작업을 중단할 수 있음
 
-Strategic compaction at logical boundaries:
-- **After exploration, before execution** — Compact research context, keep implementation plan
-- **After completing a milestone** — Fresh start for next phase
-- **Before major context shifts** — Clear exploration context before different task
+논리적 경계에서의 전략적 컴팩션:
+- **탐색 후, 실행 전** -- 조사 컨텍스트를 압축하고 구현 계획은 유지
+- **마일스톤 완료 후** -- 다음 단계를 위한 새로운 시작
+- **주요 컨텍스트 전환 전** -- 다른 작업 시작 전에 탐색 컨텍스트 정리
 
-## How It Works
+## 작동 방식
 
-The `suggest-compact.js` script runs on PreToolUse (Edit/Write) and combines two signals:
+`suggest-compact.js` 스크립트는 PreToolUse (Edit/Write)에서 실행되며 다음을 수행합니다:
 
-1. **Context size (primary)** — Reads the latest `usage` record from the session transcript (`transcript_path` in the hook payload) and sums `input_tokens + cache_read_input_tokens + cache_creation_input_tokens` (the true context size of the turn). Suggests `/compact` at a window-scaled threshold — 160k tokens on a 200k window, 250k on a 1M window (detected from a `[1m]` model marker, or inferred when observed tokens already exceed 200k) — and re-reminds after every additional 60k tokens of context growth
-2. **Tool-call count (secondary)** — Counts tool invocations in session; suggests at a configurable threshold (default: 50 calls), then every 25 calls after
+1. **도구 호출 추적** -- 세션 내 도구 호출 횟수를 카운트
+2. **임계값 감지** -- 설정 가능한 임계값에서 제안 (기본값: 50회)
+3. **주기적 알림** -- 임계값 이후 25회마다 알림
 
-## Hook Setup
+## Hook 설정
 
-Add to your `~/.claude/settings.json`:
+**플러그인으로 설치한 경우**: 별도 설정이 필요 없습니다. 플러그인의 `hooks/hooks.json`이 이미 `suggest-compact.js`를 등록합니다(훅 ID `pre:edit-write:suggest-compact`, `standard` 및 `strict` 훅 프로파일에서 활성). 아래 블록을 `~/.claude/settings.json`에 복사하지 마세요 — 플러그인 설치에는 `~/.claude/scripts/`가 존재하지 않으며, 플러그인 훅을 중복하면 이중 실행이 발생합니다(`${CLAUDE_PLUGIN_ROOT}`는 사용자 `settings.json`에서 해석되지 않습니다).
+
+**수동 설치**(`./install.sh`)인 경우 `~/.claude/settings.json`에 추가합니다:
 
 ```json
 {
@@ -45,78 +48,58 @@ Add to your `~/.claude/settings.json`:
     "PreToolUse": [
       {
         "matcher": "Edit",
-        "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+        "hooks": [{ "type": "command", "command": "node ~/.claude/scripts/hooks/suggest-compact.js" }]
       },
       {
         "matcher": "Write",
-        "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+        "hooks": [{ "type": "command", "command": "node ~/.claude/scripts/hooks/suggest-compact.js" }]
       }
     ]
   }
 }
 ```
 
-## Configuration
+## 구성
 
-Environment variables:
-- `COMPACT_THRESHOLD` — Tool calls before first suggestion (default: 50)
-- `COMPACT_CONTEXT_THRESHOLD` — Context tokens before the context-size suggestion (default: 160000 on a 200k window, 250000 on a 1M window; `0` disables the context signal)
-- `COMPACT_CONTEXT_INTERVAL` — Additional context tokens before the suggestion repeats (default: 60000)
-- `ECC_CONTEXT_WINDOW_TOKENS` — Explicit context-window size, in tokens, overriding auto-detection. Set this for large-window models whose reported id lacks a `[1m]` marker (e.g. 400k Opus 4.x, or a new 1M-window model family) so the threshold scales to the real window instead of defaulting to 200k and overstating context usage.
-- `CLAUDE_CODE_AUTO_COMPACT_WINDOW` — Claude Code's native window-size override, in tokens; honored as a fallback when `ECC_CONTEXT_WINDOW_TOKENS` is unset.
+환경 변수:
+- `COMPACT_THRESHOLD` -- 첫 번째 제안까지의 도구 호출 횟수 (기본값: 50)
 
-> The context window is otherwise auto-detected from a `[1m]` model marker or inferred when observed tokens already exceed 200k. On a large-window model that carries neither signal, set one of the overrides above so the `/compact` suggestion fires at the right point.
+## 컴팩션 결정 가이드
 
-## Compaction Decision Guide
+컴팩션 시기를 결정하기 위해 이 표를 사용하세요:
 
-Use this table to decide when to compact:
-
-| Phase Transition | Compact? | Why |
+| 단계 전환 | 컴팩션? | 이유 |
 |-----------------|----------|-----|
-| Research → Planning | Yes | Research context is bulky; plan is the distilled output |
-| Planning → Implementation | Yes | Plan is written down (a file, or the task list if you have one); free up context for code |
-| Implementation → Testing | Maybe | Keep if tests reference recent code; compact if switching focus |
-| Debugging → Next feature | Yes | Debug traces pollute context for unrelated work |
-| Mid-implementation | No | Losing variable names, file paths, and partial state is costly |
-| After a failed approach | Yes | Clear the dead-end reasoning before trying a new approach |
+| 조사 -> 계획 | 예 | 조사 컨텍스트는 부피가 크고, 계획이 증류된 결과물 |
+| 계획 -> 구현 | 예 | 계획은 TodoWrite 또는 파일에 있으므로 코드를 위한 컨텍스트 확보 |
+| 구현 -> 테스트 | 경우에 따라 | 테스트가 최근 코드를 참조하면 유지; 포커스 전환 시 컴팩션 |
+| 디버깅 -> 다음 기능 | 예 | 디버그 추적이 관련 없는 작업의 컨텍스트를 오염시킴 |
+| 구현 중간 | 아니오 | 변수명, 파일 경로, 부분 상태를 잃는 비용이 큼 |
+| 실패한 접근 후 | 예 | 새 접근을 시도하기 전에 막다른 길의 추론을 정리 |
 
-## What Survives Compaction
+## 컴팩션에서 유지되는 것
 
-Understanding what persists helps you compact with confidence:
+무엇이 유지되는지 이해하면 자신 있게 컴팩션할 수 있습니다:
 
-| Persists | Lost |
+| 유지됨 | 손실됨 |
 |----------|------|
-| CLAUDE.md instructions | Intermediate reasoning and analysis |
-| Files on disk | File contents you previously read |
-| Memory files (`~/.claude/memory/`) | Multi-step conversation context |
-| Git state (commits, branches) | Tool call history and counts |
-| The task list — **only if you have the todo tools** (see below) | Nuanced user preferences stated verbally |
+| CLAUDE.md 지침 | 중간 추론 및 분석 |
+| TodoWrite 작업 목록 | 이전에 읽은 파일 내용 |
+| 메모리 파일 (`~/.claude/memory/`) | 다단계 대화 컨텍스트 |
+| Git 상태 (커밋, 브랜치) | 도구 호출 기록 및 횟수 |
+| 디스크의 파일 | 구두로 언급된 세밀한 사용자 선호도 |
 
-> ### Don't rely on the task list surviving — it may not exist
->
-> Claude Code **2.1.233 removed the todo/task tools by default** on Opus 4.8, Sonnet 5,
-> Fable 5, Mythos 5 and newer models (`TodoWrite`, `TaskCreate/Get/Update/List`).
-> `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` brings them back, but that is a per-machine
-> environment setting — **it does not travel with this skill**, so you cannot assume the
-> reader has it.
->
-> This matters because "my todo list survives compaction" is a reason people compact
-> *instead of* writing state down. If the tools are absent there is no list to survive,
-> and the plan is simply gone. **Write the plan to a file before compacting** — a file
-> persists on every version and every model. Treat the task list as a convenience that
-> may be missing, never as your durable record.
+## 모범 사례
 
-## Best Practices
+1. **계획 후 컴팩션** -- TodoWrite에서 계획이 확정되면 새로 시작하기 위해 컴팩션
+2. **디버깅 후 컴팩션** -- 계속하기 전에 에러 해결 컨텍스트 정리
+3. **구현 중간에는 컴팩션하지 않기** -- 관련 변경 사항의 컨텍스트 보존
+4. **제안을 읽기** -- Hook이 *언제*를 알려주고, *할지* 여부는 당신이 결정
+5. **컴팩션 전에 기록** -- 컴팩션 전에 중요한 컨텍스트를 파일이나 메모리에 저장
+6. **요약과 함께 `/compact` 사용** -- 커스텀 메시지 추가: `/compact Focus on implementing auth middleware next`
 
-1. **Compact after planning** — Once the plan is finalized **and written to a file**, compact to start fresh
-2. **Compact after debugging** — Clear error-resolution context before continuing
-3. **Don't compact mid-implementation** — Preserve context for related changes
-4. **Read the suggestion** — The hook tells you *when*, you decide *if*
-5. **Write before compacting** — Save important context to files or memory before compacting
-6. **Use `/compact` with a summary** — Add a custom message: `/compact Focus on implementing auth middleware next`
+## 관련 항목
 
-## Related
-
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) — Token optimization section
-- Memory persistence hooks — For state that survives compaction
-- `continuous-learning` skill — Extracts patterns before session ends
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) -- 토큰 최적화 섹션
+- 메모리 영속성 Hook -- 컴팩션에서 살아남는 상태를 위해
+- `continuous-learning` 스킬 -- 세션 종료 전 패턴 추출

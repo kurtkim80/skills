@@ -1,79 +1,79 @@
-# Comando Eval
+# Eval Komutu
 
-Gestionar el flujo de trabajo de desarrollo orientado a evals.
+Eval-odaklı geliştirme iş akışını yönet.
 
-## Uso
+## Kullanım
 
-`/eval [define|check|report|list] [nombre-feature]`
+`/eval [define|check|report|list] [feature-name]`
 
-## Definir Eval
+## Eval Tanımla
 
-`/eval define nombre-feature`
+`/eval define feature-name`
 
-Crear una nueva definición de eval:
+Yeni bir eval tanımı oluştur:
 
-1. Crear `.claude/evals/nombre-feature.md` con la plantilla:
+1. Şablonla `.claude/evals/feature-name.md` oluştur:
 
 ```markdown
-## EVAL: nombre-feature
+## EVAL: feature-name
 Created: $(date)
 
 ### Capability Evals
-- [ ] [Descripción de Capability 1]
-- [ ] [Descripción de Capability 2]
+- [ ] [Capability 1 açıklaması]
+- [ ] [Capability 2 açıklaması]
 
 ### Regression Evals
-- [ ] [El comportamiento existente 1 sigue funcionando]
-- [ ] [El comportamiento existente 2 sigue funcionando]
+- [ ] [Mevcut davranış 1 hala çalışıyor]
+- [ ] [Mevcut davranış 2 hala çalışıyor]
 
 ### Success Criteria
-- pass@3 > 90% para capability evals
-- pass^3 = 100% para regression evals
+- pass@3 > 90% for capability evals
+- pass^3 = 100% for regression evals
 ```
 
-2. Pedir al usuario que complete los criterios específicos
+2. Kullanıcıdan belirli kriterleri doldurmasını iste
 
-## Verificar Eval
+## Eval Kontrol Et
 
-`/eval check nombre-feature`
+`/eval check feature-name`
 
-Ejecutar los evals para una feature:
+Bir özellik için eval'ları çalıştır:
 
-1. Leer la definición de eval desde `.claude/evals/nombre-feature.md`
-2. Para cada capability eval:
-   - Intentar verificar el criterio
-   - Registrar PASS/FAIL
-   - Guardar el intento en `.claude/evals/nombre-feature.log`
-3. Para cada regression eval:
-   - Ejecutar las pruebas relevantes
-   - Comparar con la línea base
-   - Registrar PASS/FAIL
-4. Reportar el estado actual:
+1. `.claude/evals/feature-name.md` dosyasından eval tanımını oku
+2. Her capability eval için:
+   - Kriteri doğrulamayı dene
+   - PASS/FAIL kaydet
+   - Denemeyi `.claude/evals/feature-name.log` dosyasına kaydet
+3. Her regression eval için:
+   - İlgili test'leri çalıştır
+   - Baseline ile karşılaştır
+   - PASS/FAIL kaydet
+4. Mevcut durumu raporla:
 
 ```
-EVAL CHECK: nombre-feature
+EVAL CHECK: feature-name
 ========================
-Capability: X/Y pasando
-Regression: X/Y pasando
-Estado: EN PROGRESO / LISTO
+Capability: X/Y passing
+Regression: X/Y passing
+Status: IN PROGRESS / READY
 ```
 
-## Reporte de Eval
+## Eval Raporu
 
-`/eval report nombre-feature`
+`/eval report feature-name`
 
-Generar reporte exhaustivo de eval:
+Kapsamlı eval raporu oluştur:
 
 ```
-EVAL REPORT: nombre-feature
+EVAL REPORT: feature-name
 =========================
 Generated: $(date)
 
 CAPABILITY EVALS
 ----------------
 [eval-1]: PASS (pass@1)
-[eval-2]: PASS (pass@2) - requirió reintento
-[eval-3]: FAIL - ver notas
+[eval-2]: PASS (pass@2) - required retry
+[eval-3]: FAIL - see notes
 
 REGRESSION EVALS
 ----------------
@@ -89,32 +89,32 @@ Regression pass^3: 100%
 
 NOTES
 -----
-[Cualquier problema, caso límite u observación]
+[Herhangi bir sorun, edge case veya gözlem]
 
 RECOMMENDATION
 --------------
 [SHIP / NEEDS WORK / BLOCKED]
 ```
 
-## Listar Evals
+## Eval'ları Listele
 
 `/eval list`
 
-Mostrar todas las definiciones de eval:
+Tüm eval tanımlarını göster:
 
 ```
 EVAL DEFINITIONS
 ================
-feature-auth      [3/5 pasando] EN PROGRESO
-feature-search    [5/5 pasando] LISTO
-feature-export    [0/4 pasando] NO INICIADO
+feature-auth      [3/5 passing] IN PROGRESS
+feature-search    [5/5 passing] READY
+feature-export    [0/4 passing] NOT STARTED
 ```
 
-## Argumentos
+## Argümanlar
 
 $ARGUMENTS:
-- `define <nombre>` - Crear nueva definición de eval
-- `check <nombre>` - Ejecutar y verificar evals
-- `report <nombre>` - Generar reporte completo
-- `list` - Mostrar todos los evals
-- `clean` - Eliminar logs de evals antiguos (mantiene las últimas 10 ejecuciones)
+- `define <name>` - Yeni eval tanımı oluştur
+- `check <name>` - Eval'ları çalıştır ve kontrol et
+- `report <name>` - Tam rapor oluştur
+- `list` - Tüm eval'ları göster
+- `clean` - Eski eval loglarını kaldır (son 10 çalıştırmayı tutar)

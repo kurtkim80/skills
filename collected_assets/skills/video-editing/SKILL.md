@@ -1,76 +1,78 @@
 ---
 name: video-editing
-description: AI-assisted video editing workflows for cutting, structuring, and augmenting real footage. Covers the full pipeline from raw capture through FFmpeg, Remotion, ElevenLabs, fal.ai, and final polish in Descript or CapCut. Use when the user wants to edit video, cut footage, create vlogs, or build video content.
-license: MIT
+description: AI辅助的视频编辑工作流程，用于剪辑、构建和增强实拍素材。涵盖从原始拍摄到FFmpeg、Remotion、ElevenLabs、fal.ai，再到Descript或CapCut最终润色的完整流程。适用于用户想要编辑视频、剪辑素材、制作vlog或构建视频内容的情况。
+origin: ECC
 ---
 
-# Video Editing
+# 视频编辑
 
-AI-assisted editing for real footage. Not generation from prompts. Editing existing video fast.
+针对真实素材的AI辅助编辑。非根据提示生成。快速编辑现有视频。
 
-## When to Activate
+## 何时激活
 
-- User wants to edit, cut, or structure video footage
-- Turning long recordings into short-form content
-- Building vlogs, tutorials, or demo videos from raw capture
-- Adding overlays, subtitles, music, or voiceover to existing video
-- Reframing video for different platforms (YouTube, TikTok, Instagram)
-- User says "edit video", "cut this footage", "make a vlog", or "video workflow"
+* 用户想要编辑、剪辑或构建视频素材
+* 将长录制内容转化为短视频内容
+* 从原始素材构建vlog、教程或演示视频
+* 为现有视频添加叠加层、字幕、音乐或画外音
+* 为不同平台（YouTube、TikTok、Instagram）重新构图视频
+* 用户提到“编辑视频”、“剪辑这个素材”、“制作vlog”或“视频工作流”
 
-## Core Thesis
+## 核心理念
 
-AI video editing is useful when you stop asking it to create the whole video and start using it to compress, structure, and augment real footage. The value is not generation. The value is compression.
+当你不再要求AI创建整个视频，而是开始使用它来压缩、构建和增强真实素材时，AI视频编辑就变得有用了。价值不在于生成。价值在于压缩。
 
-## The Pipeline
+## 处理流程
 
 ```
-Screen Studio / raw footage
+Screen Studio / 原始素材
   → Claude / Codex
   → FFmpeg
   → Remotion
   → ElevenLabs / fal.ai
-  → Descript or CapCut
+  → Descript 或 CapCut
 ```
 
-Each layer has a specific job. Do not skip layers. Do not try to make one tool do everything.
+每个层级都有特定的工作。不要跳过层级。不要试图让一个工具完成所有事情。
 
-## Layer 1: Capture (Screen Studio / Raw Footage)
+## 层级 1：采集（Screen Studio / 原始素材）
 
-Collect the source material:
-- **Screen Studio**: polished screen recordings for app demos, coding sessions, browser workflows
-- **Raw camera footage**: vlog footage, interviews, event recordings
-- **Desktop capture via VideoDB**: session recording with real-time context (see `videodb` skill)
+收集源材料：
 
-Output: raw files ready for organization.
+* **Screen Studio**：用于应用演示、编码会话、浏览器工作流程的精致屏幕录制
+* **原始摄像机素材**：vlog素材、采访、活动录制
+* **通过VideoDB的桌面采集**：具有实时上下文的会话录制（参见 `videodb` 技能）
 
-## Layer 2: Organization (Claude / Codex)
+输出：准备进行组织的原始文件。
 
-Use Claude Code or Codex to:
-- **Transcribe and label**: generate transcript, identify topics and themes
-- **Plan structure**: decide what stays, what gets cut, what order works
-- **Identify dead sections**: find pauses, tangents, repeated takes
-- **Generate edit decision list**: timestamps for cuts, segments to keep
-- **Scaffold FFmpeg and Remotion code**: generate the commands and compositions
+## 层级 2：组织（Claude / Codex）
+
+使用Claude Code或Codex进行：
+
+* **转录和标记**：生成转录稿，识别主题和要点
+* **规划结构**：决定保留内容、剪切内容、确定顺序
+* **识别无效片段**：查找停顿、离题、重复拍摄
+* **生成编辑决策列表**：用于剪辑的时间戳、保留的片段
+* **搭建FFmpeg和Remotion代码**：生成命令和合成
 
 ```
-Example prompt:
-"Here's the transcript of a 4-hour recording. Identify the 8 strongest segments
-for a 24-minute vlog. Give me FFmpeg cut commands for each segment."
+示例提示词：
+"这是一份4小时录音的文字记录。找出最适合制作24分钟vlog的8个精彩片段。
+为每个片段提供FFmpeg剪辑命令。"
 ```
 
-This layer is about structure, not final creative taste.
+此层级关乎结构，而非最终的创意品味。
 
-## Layer 3: Deterministic Cuts (FFmpeg)
+## 层级 3：确定性剪辑（FFmpeg）
 
-FFmpeg handles the boring but critical work: splitting, trimming, concatenating, and preprocessing.
+FFmpeg处理枯燥但关键的工作：分割、修剪、连接和预处理。
 
-### Extract segment by timestamp
+### 按时间戳提取片段
 
 ```bash
 ffmpeg -i raw.mp4 -ss 00:12:30 -to 00:15:45 -c copy segment_01.mp4
 ```
 
-### Batch cut from edit decision list
+### 根据编辑决策列表批量剪辑
 
 ```bash
 #!/bin/bash
@@ -80,7 +82,7 @@ while IFS=, read -r start end label; do
 done < cuts.txt
 ```
 
-### Concatenate segments
+### 连接片段
 
 ```bash
 # Create file list
@@ -88,37 +90,37 @@ for f in segments/*.mp4; do echo "file '$f'"; done > concat.txt
 ffmpeg -f concat -safe 0 -i concat.txt -c copy assembled.mp4
 ```
 
-### Create proxy for faster editing
+### 创建代理文件以加速编辑
 
 ```bash
 ffmpeg -i raw.mp4 -vf "scale=960:-2" -c:v libx264 -preset ultrafast -crf 28 proxy.mp4
 ```
 
-### Extract audio for transcription
+### 提取音频用于转录
 
 ```bash
 ffmpeg -i raw.mp4 -vn -acodec pcm_s16le -ar 16000 audio.wav
 ```
 
-### Normalize audio levels
+### 标准化音频电平
 
 ```bash
 ffmpeg -i segment.mp4 -af loudnorm=I=-16:TP=-1.5:LRA=11 -c:v copy normalized.mp4
 ```
 
-## Layer 4: Programmable Composition (Remotion)
+## 层级 4：可编程合成（Remotion）
 
-Remotion turns editing problems into composable code. Use it for things that traditional editors make painful:
+Remotion将编辑问题转化为可组合的代码。用它来处理传统编辑器让工作变得痛苦的事情：
 
-### When to use Remotion
+### 何时使用Remotion
 
-- Overlays: text, images, branding, lower thirds
-- Data visualizations: charts, stats, animated numbers
-- Motion graphics: transitions, explainer animations
-- Composable scenes: reusable templates across videos
-- Product demos: annotated screenshots, UI highlights
+* 叠加层：文本、图像、品牌标识、下三分之一字幕
+* 数据可视化：图表、统计数据、动画数字
+* 动态图形：转场、解说动画
+* 可组合场景：跨视频可重复使用的模板
+* 产品演示：带注释的截图、UI高亮
 
-### Basic Remotion composition
+### 基本的Remotion合成
 
 ```tsx
 import { AbsoluteFill, Sequence, Video, useCurrentFrame } from "remotion";
@@ -158,19 +160,19 @@ export const VlogComposition: React.FC = () => {
 };
 ```
 
-### Render output
+### 渲染输出
 
 ```bash
 npx remotion render src/index.ts VlogComposition output.mp4
 ```
 
-See the [Remotion docs](https://www.remotion.dev/docs) for detailed patterns and API reference.
+有关详细模式和API参考，请参阅[Remotion文档](https://www.remotion.dev/docs)。
 
-## Layer 5: Generated Assets (ElevenLabs / fal.ai)
+## 层级 5：生成资产（ElevenLabs / fal.ai）
 
-Generate only what you need. Do not generate the whole video.
+仅生成所需内容。不要生成整个视频。
 
-### Voiceover with ElevenLabs
+### 使用ElevenLabs进行画外音
 
 ```python
 import os
@@ -192,55 +194,59 @@ with open("voiceover.mp3", "wb") as f:
     f.write(resp.content)
 ```
 
-### Music and SFX with fal.ai
+### 使用fal.ai生成音乐和音效
 
-Use the `fal-ai-media` skill for:
-- Background music generation
-- Sound effects (ThinkSound model for video-to-audio)
-- Transition sounds
+使用 `fal-ai-media` 技能进行：
 
-### Generated visuals with fal.ai
+* 背景音乐生成
+* 音效（用于视频转音频的ThinkSound模型）
+* 转场音效
 
-Use for insert shots, thumbnails, or b-roll that doesn't exist:
+### 使用fal.ai生成视觉效果
+
+用于不存在的插入镜头、缩略图或B-roll素材：
+
 ```
-generate(model_name: "fal-ai/nano-banana-pro", input: {
-  "prompt": "professional thumbnail for tech vlog, dark background, code on screen",
+generate(app_id: "fal-ai/nano-banana-pro", input_data: {
+  "prompt": "专业科技视频缩略图，深色背景，屏幕上显示代码",
   "image_size": "landscape_16_9"
 })
 ```
 
-### VideoDB generative audio
+### VideoDB生成式音频
 
-If VideoDB is configured:
+如果配置了VideoDB：
+
 ```python
 voiceover = coll.generate_voice(text="Narration here", voice="alloy")
 music = coll.generate_music(prompt="lo-fi background for coding vlog", duration=120)
 sfx = coll.generate_sound_effect(prompt="subtle whoosh transition")
 ```
 
-## Layer 6: Final Polish (Descript / CapCut)
+## 层级 6：最终润色（Descript / CapCut）
 
-The last layer is human. Use a traditional editor for:
-- **Pacing**: adjust cuts that feel too fast or slow
-- **Captions**: auto-generated, then manually cleaned
-- **Color grading**: basic correction and mood
-- **Final audio mix**: balance voice, music, and SFX levels
-- **Export**: platform-specific formats and quality settings
+最后一层由人工完成。使用传统编辑器进行：
 
-This is where taste lives. AI clears the repetitive work. You make the final calls.
+* **节奏调整**：调整感觉太快或太慢的剪辑
+* **字幕**：自动生成，然后手动清理
+* **色彩分级**：基本校正和氛围调整
+* **最终音频混音**：平衡人声、音乐和音效的电平
+* **导出**：平台特定的格式和质量设置
 
-## Social Media Reframing
+品味体现在此。AI清理重复性工作。你做出最终决定。
 
-Different platforms need different aspect ratios:
+## 社交媒体重新构图
 
-| Platform | Aspect Ratio | Resolution |
+不同平台需要不同的宽高比：
+
+| 平台 | 宽高比 | 分辨率 |
 |----------|-------------|------------|
 | YouTube | 16:9 | 1920x1080 |
 | TikTok / Reels | 9:16 | 1080x1920 |
 | Instagram Feed | 1:1 | 1080x1080 |
-| X / Twitter | 16:9 or 1:1 | 1280x720 or 720x720 |
+| X / Twitter | 16:9 或 1:1 | 1280x720 或 720x720 |
 
-### Reframe with FFmpeg
+### 使用FFmpeg重新构图
 
 ```bash
 # 16:9 to 9:16 (center crop)
@@ -250,59 +256,61 @@ ffmpeg -i input.mp4 -vf "crop=ih*9/16:ih,scale=1080:1920" vertical.mp4
 ffmpeg -i input.mp4 -vf "crop=ih:ih,scale=1080:1080" square.mp4
 ```
 
-### Reframe with VideoDB
+### 使用VideoDB重新构图
 
 ```python
+from videodb import ReframeMode
+
 # Smart reframe (AI-guided subject tracking)
 reframed = video.reframe(start=0, end=60, target="vertical", mode=ReframeMode.smart)
 ```
 
-## Scene Detection and Auto-Cut
+## 场景检测与自动剪辑
 
-### FFmpeg scene detection
+### FFmpeg场景检测
 
 ```bash
 # Detect scene changes (threshold 0.3 = moderate sensitivity)
 ffmpeg -i input.mp4 -vf "select='gt(scene,0.3)',showinfo" -vsync vfr -f null - 2>&1 | grep showinfo
 ```
 
-### Silence detection for auto-cut
+### 用于自动剪辑的静音检测
 
 ```bash
 # Find silent segments (useful for cutting dead air)
 ffmpeg -i input.mp4 -af silencedetect=noise=-30dB:d=2 -f null - 2>&1 | grep silence
 ```
 
-### Highlight extraction
+### 精彩片段提取
 
-Use Claude to analyze transcript + scene timestamps:
+使用Claude分析转录稿 + 场景时间戳：
+
 ```
-"Given this transcript with timestamps and these scene change points,
-identify the 5 most engaging 30-second clips for social media."
+"根据这份带时间戳的转录稿和这些场景转换点，找出最适合社交媒体发布的5段30秒最吸引人的剪辑片段。"
 ```
 
-## What Each Tool Does Best
+## 每个工具最擅长什么
 
-| Tool | Strength | Weakness |
+| 工具 | 优势 | 劣势 |
 |------|----------|----------|
-| Claude / Codex | Organization, planning, code generation | Not the creative taste layer |
-| FFmpeg | Deterministic cuts, batch processing, format conversion | No visual editing UI |
-| Remotion | Programmable overlays, composable scenes, reusable templates | Learning curve for non-devs |
-| Screen Studio | Polished screen recordings immediately | Only screen capture |
-| ElevenLabs | Voice, narration, music, SFX | Not the center of the workflow |
-| Descript / CapCut | Final pacing, captions, polish | Manual, not automatable |
+| Claude / Codex | 组织、规划、代码生成 | 不是创意品味层 |
+| FFmpeg | 确定性剪辑、批量处理、格式转换 | 无可视化编辑UI |
+| Remotion | 可编程叠加层、可组合场景、可重复使用模板 | 对非开发者有学习曲线 |
+| Screen Studio | 即时获得精致的屏幕录制 | 仅限屏幕采集 |
+| ElevenLabs | 人声、旁白、音乐、音效 | 不是工作流程的核心 |
+| Descript / CapCut | 最终节奏调整、字幕、润色 | 手动操作，不可自动化 |
 
-## Key Principles
+## 关键原则
 
-1. **Edit, don't generate.** This workflow is for cutting real footage, not creating from prompts.
-2. **Structure before style.** Get the story right in Layer 2 before touching anything visual.
-3. **FFmpeg is the backbone.** Boring but critical. Where long footage becomes manageable.
-4. **Remotion for repeatability.** If you'll do it more than once, make it a Remotion component.
-5. **Generate selectively.** Only use AI generation for assets that don't exist, not for everything.
-6. **Taste is the last layer.** AI clears repetitive work. You make the final creative calls.
+1. **编辑，而非生成。** 此工作流程用于剪辑真实素材，而非根据提示创建。
+2. **先结构，后风格。** 在接触任何视觉元素之前，先在层级2确定好故事结构。
+3. **FFmpeg是支柱。** 枯燥但关键。长素材在此变得易于管理。
+4. **Remotion用于可重复性。** 如果你会多次执行某项操作，就将其制作成Remotion组件。
+5. **选择性生成。** 仅对不存在的资产使用AI生成，而非所有内容。
+6. **品味是最后一层。** AI清理重复性工作。你做出最终的创意决定。
 
-## Related Skills
+## 相关技能
 
-- `fal-ai-media` — AI image, video, and audio generation
-- `videodb` — Server-side video processing, indexing, and streaming
-- `content-engine` — Platform-native content distribution
+* `fal-ai-media` — AI图像、视频和音频生成
+* `videodb` — 服务器端视频处理、索引和流媒体
+* `content-engine` — 平台原生内容分发

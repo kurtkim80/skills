@@ -1,97 +1,97 @@
 ---
 name: brand-voice
-description: Build a source-derived writing style profile from real posts, essays, launch notes, docs, or site copy, then reuse that profile across content, outreach, and social workflows. Use when the user wants voice consistency without generic AI writing tropes.
-license: MIT
+description: 从真实的帖子、文章、发布说明、文档或网站文案中构建基于源材料的写作风格档案，然后在内容、外展和社交工作流中重复使用该档案。当用户希望保持声音一致性而不使用通用的AI写作套路时使用。
+origin: ECC
 ---
 
-# Brand Voice
+# 品牌声音
 
-Build a durable voice profile from real source material, then use that profile everywhere instead of re-deriving style from scratch or defaulting to generic AI copy.
+从真实素材中构建持久的声音档案，然后将其应用于所有场景，避免每次都重新推导风格或默认使用通用AI文案。
 
-## When to Activate
+## 何时激活
 
-- the user wants content or outreach in a specific voice
-- writing for X, LinkedIn, email, launch posts, threads, or product updates
-- adapting a known author's tone across channels
-- the existing content lane needs a reusable style system instead of one-off mimicry
+* 用户希望内容或外联具有特定声音
+* 为X、LinkedIn、邮件、发布帖、推文串或产品更新撰写内容
+* 将已知作者的语调适配到不同渠道
+* 现有内容赛道需要可复用的风格体系，而非一次性模仿
 
-## Source Priority
+## 素材优先级
 
-Use the strongest real source set available, in this order:
+按以下顺序使用最强真实素材集：
 
-1. recent original X posts and threads
-2. articles, essays, memos, launch notes, or newsletters
-3. real outbound emails or DMs that worked
-4. product docs, changelogs, README framing, and site copy
+1. 近期原创X帖子和推文串
+2. 文章、随笔、备忘录、发布说明或新闻通讯
+3. 实际有效的外发邮件或私信
+4. 产品文档、更新日志、README框架和网站文案
 
-Do not use generic platform exemplars as source material.
+不得使用通用平台范例作为素材。
 
-## Collection Workflow
+## 收集流程
 
-1. Gather 5 to 20 representative samples when available.
-2. Prefer recent material over old material unless the user says the older writing is more canonical.
-3. Separate "public launch voice" from "private working voice" if the source set clearly splits.
-4. If live X access is available, use `x-api` to pull recent original posts before drafting.
-5. If site copy matters, include the current ECC landing page and repo/plugin framing.
+1. 尽可能收集5至20个代表性样本。
+2. 优先选择近期素材，除非用户明确表示旧素材更具代表性。
+3. 若素材集明显区分，将"公开发布声音"与"私下工作声音"分开处理。
+4. 若可访问实时X数据，在起草前使用`x-api`拉取近期原创帖子。
+5. 若网站文案重要，包含当前ECC落地页及仓库/插件框架。
 
-## What to Extract
+## 提取内容
 
-- rhythm and sentence length
-- compression vs explanation
-- capitalization norms
-- parenthetical use
-- question frequency and purpose
-- how sharply claims are made
-- how often numbers, mechanisms, or receipts show up
-- how transitions work
-- what the author never does
+* 节奏与句子长度
+* 压缩与解释的平衡
+* 大小写规范
+* 括号使用方式
+* 问题频率与目的
+* 主张的尖锐程度
+* 数字、机制或实证的出现频率
+* 过渡方式
+* 作者从不使用的表达
 
-## Output Contract
+## 输出约定
 
-Produce a reusable `VOICE PROFILE` block that downstream skills can consume directly. Use the schema in [references/voice-profile-schema.md](references/voice-profile-schema.md).
+生成一个可复用的`VOICE PROFILE`代码块，供下游技能直接调用。使用[references/voice-profile-schema.md](https://github.com/affaan-m/ECC/blob/main/skills/brand-voice/references/voice-profile-schema.md)中的架构。
 
-Keep the profile structured and short enough to reuse in session context. The point is not literary criticism. The point is operational reuse.
+保持档案结构化且足够简短，以便在会话上下文中复用。重点不是文学批评，而是操作复用。
 
-## Affaan / ECC Defaults
+## Affaan / ECC 默认设置
 
-If the user wants Affaan / ECC voice and live sources are thin, start here unless newer source material overrides it:
+若用户需要Affaan/ECC声音且实时素材不足，除非有更新素材覆盖，否则从以下默认值开始：
 
-- direct, compressed, concrete
-- specifics, mechanisms, receipts, and numbers beat adjectives
-- parentheticals are for qualification, narrowing, or over-clarification
-- capitalization is conventional unless there is a real reason to break it
-- questions are rare and should not be used as bait
-- tone can be sharp, blunt, skeptical, or dry
-- transitions should feel earned, not smoothed over
+* 直接、压缩、具体
+* 细节、机制、实证和数字优于形容词
+* 括号用于限定、缩小范围或过度澄清
+* 大小写遵循常规，除非有真实理由打破规则
+* 问题罕见，不得用作诱饵
+* 语调可尖锐、直率、怀疑或干涩
+* 过渡应自然，而非平滑掩盖
 
-## Hard Bans
+## 硬性禁止
 
-Delete and rewrite any of these:
+删除并重写以下内容：
 
-- fake curiosity hooks
-- "not X, just Y"
-- "no fluff"
-- forced lowercase
-- LinkedIn thought-leader cadence
-- bait questions
-- "Excited to share"
-- generic founder-journey filler
-- corny parentheticals
+* 虚假好奇心钩子
+* "不是X，只是Y"
+* "无废话"
+* 强制小写
+* LinkedIn思想领袖节奏
+* 诱饵问题
+* "激动地分享"
+* 通用创始人历程填充
+* 俗气括号
 
-## Persistence Rules
+## 持久化规则
 
-- Reuse the latest confirmed `VOICE PROFILE` across related tasks in the same session.
-- If the user asks for a durable artifact, save the profile in the requested workspace location or memory surface.
-- Do not create repo-tracked files that store personal voice fingerprints unless the user explicitly asks for that.
+* 在同一会话的相关任务中复用最新确认的`VOICE PROFILE`。
+* 若用户要求持久化工件，将档案保存至指定工作区位置或记忆存储区。
+* 除非用户明确要求，不得创建存储个人声音指纹的仓库跟踪文件。
 
-## Downstream Use
+## 下游使用
 
-Use this skill before or inside:
+在以下场景之前或之中使用此技能：
 
-- `content-engine`
-- `crosspost`
-- `lead-intelligence`
-- article or launch writing
-- cold or warm outbound across X, LinkedIn, and email
+* `content-engine`
+* `crosspost`
+* `lead-intelligence`
+* 文章或发布文案撰写
+* 在X、LinkedIn和邮件上的冷启动或预热外联
 
-If another skill already has a partial voice capture section, this skill is the canonical source of truth.
+若其他技能已包含部分声音捕获章节，此技能为权威来源。

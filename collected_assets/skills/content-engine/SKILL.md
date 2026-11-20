@@ -1,131 +1,97 @@
 ---
 name: content-engine
-description: Create platform-native content systems for X, LinkedIn, TikTok, YouTube, newsletters, and repurposed multi-platform campaigns. Use when the user wants social posts, threads, scripts, content calendars, or one source asset adapted cleanly across platforms.
-license: MIT
+description: 为X、LinkedIn、TikTok、YouTube、新闻通讯和跨平台重新利用的多平台活动创建平台原生内容系统。适用于当用户需要社交媒体帖子、帖子串、脚本、内容日历，或一个源资产在多个平台上清晰适配时。
+origin: ECC
 ---
 
-# Content Engine
+# 内容引擎
 
-Build platform-native content without flattening the author's real voice into platform slop.
+将一个想法转化为强大的、平台原生的内容，而不是到处发布相同的东西。
 
-## When to Activate
+## 何时激活
 
-- writing X posts or threads
-- drafting LinkedIn posts or launch updates
-- scripting short-form video or YouTube explainers
-- repurposing articles, podcasts, demos, docs, or internal notes into public content
-- building a launch sequence or ongoing content system around a product, insight, or narrative
+* 撰写 X 帖子或主题串时
+* 起草 LinkedIn 帖子或发布更新时
+* 编写短视频或 YouTube 解说稿时
+* 将文章、播客、演示或文档改写成社交内容时
+* 围绕发布、里程碑或主题制定轻量级内容计划时
 
-## Non-Negotiables
+## 首要问题
 
-1. Start from source material, not generic post formulas.
-2. Adapt the format for the platform, not the persona.
-3. One post should carry one actual claim.
-4. Specificity beats adjectives.
-5. No engagement bait unless the user explicitly asks for it.
+明确：
 
-## Source-First Workflow
+* 来源素材：我们从什么内容改编
+* 受众：构建者、投资者、客户、运营者，还是普通受众
+* 平台：X、LinkedIn、TikTok、YouTube、新闻简报，还是多平台
+* 目标：品牌认知、转化、招聘、建立权威、支持发布，还是互动参与
 
-Before drafting, identify the source set:
-- published articles
-- notes or internal memos
-- product demos
-- docs or changelogs
-- transcripts
-- screenshots
-- prior posts from the same author
+## 核心规则
 
-If the user wants a specific voice, build a voice profile from real examples before writing.
-Use `brand-voice` as the canonical workflow when voice consistency matters across more than one output.
+1. 为平台进行适配。不要交叉发布相同的文案。
+2. 开篇钩子比总结更重要。
+3. 每篇帖子应承载一个清晰的想法。
+4. 使用具体细节而非口号。
+5. 保持呼吁行动小而清晰。
 
-## Voice Handling
-
-`brand-voice` is the canonical voice layer.
-
-Run it first when:
-
-- there are multiple downstream outputs
-- the user explicitly cares about writing style
-- the content is launch, outreach, or reputation-sensitive
-
-Reuse the resulting `VOICE PROFILE` here instead of rebuilding a second voice model.
-If the user wants Affaan / ECC voice specifically, still treat `brand-voice` as the source of truth and feed it the best live or source-derived material available.
-
-## Hard Bans
-
-Delete and rewrite any of these:
-- "In today's rapidly evolving landscape"
-- "game-changer", "revolutionary", "cutting-edge"
-- "here's why this matters" unless it is followed immediately by something concrete
-- ending with a LinkedIn-style question just to farm replies
-- forced casualness on LinkedIn
-- fake engagement padding that was not present in the source material
-
-## Platform Adaptation Rules
+## 平台指南
 
 ### X
 
-- open with the strongest claim, artifact, or tension
-- keep the compression if the source voice is compressed
-- if writing a thread, each post must advance the argument
-- do not pad with context the audience does not need
+* 开场要快
+* 每个帖子或主题串中的每条推文只讲一个想法
+* 除非必要，避免在主文中放置链接
+* 避免滥用话题标签
 
 ### LinkedIn
 
-- expand only enough for people outside the immediate niche to follow
-- do not turn it into a fake lesson post unless the source material actually is reflective
-- no corporate inspiration cadence
-- no praise-stacking, no "journey" filler
+* 第一行要强有力
+* 使用短段落
+* 围绕经验教训、结果和要点进行更明确的框架构建
 
-### Short Video
+### TikTok / 短视频
 
-- script around the visual sequence and proof points
-- first seconds should show the result, problem, or punch
-- do not write narration that sounds better on paper than on screen
+* 前 3 秒必须抓住注意力
+* 围绕视觉内容编写脚本，而不仅仅是旁白
+* 一个演示、一个主张、一个行动号召
 
 ### YouTube
 
-- show the result or tension early
-- organize by argument or progression, not filler sections
-- use chaptering only when it helps clarity
+* 尽早展示结果
+* 按章节构建内容
+* 每 20-30 秒刷新一次视觉内容
 
-### Newsletter
+### 新闻简报
 
-- open with the point, conflict, or artifact
-- do not spend the first paragraph warming up
-- every section needs to add something new
+* 提供一个清晰的视角，而不是一堆不相关的内容
+* 使章节标题易于浏览
+* 让开篇段落真正发挥作用
 
-## Repurposing Flow
+## 内容再利用流程
 
-1. Pick the anchor asset.
-2. Extract 3 to 7 atomic claims or scenes.
-3. Rank them by sharpness, novelty, and proof.
-4. Assign one strong idea per output.
-5. Adapt structure for each platform.
-6. Strip platform-shaped filler.
-7. Run the quality gate.
+默认级联：
 
-## Deliverables
+1. 锚定素材：文章、视频、演示、备忘录或发布文档
+2. 提取 3-7 个原子化想法
+3. 撰写平台原生的变体内容
+4. 修剪不同输出内容中的重复部分
+5. 使行动号召与平台意图保持一致
 
-When asked for a campaign, return:
-- a short voice profile if voice matching matters
-- the core angle
-- platform-native drafts
-- posting order only if it helps execution
-- gaps that must be filled before publishing
+## 交付物
 
-## Quality Gate
+当被要求进行一项宣传活动时，请返回：
 
-Before delivering:
-- every draft sounds like the intended author, not the platform stereotype
-- every draft contains a real claim, proof point, or concrete observation
-- no generic hype language remains
-- no fake engagement bait remains
-- no duplicated copy across platforms unless requested
-- any CTA is earned and user-approved
+* 核心角度
+* 针对特定平台的草稿
+* 可选的发布顺序
+* 可选的行动号召变体
+* 发布前所需的任何缺失信息
 
-## Related Skills
+## 质量门槛
 
-- `brand-voice` for source-derived voice profiles
-- `crosspost` for platform-specific distribution
-- `x-api` for sourcing recent posts and publishing approved X output
+在交付前检查：
+
+* 每份草稿读起来都符合其平台原生风格
+* 开篇钩子强大且具体
+* 没有通用的炒作语言
+* 除非特别要求，否则各平台间没有重复文案
+* 行动号召与内容和受众相匹配

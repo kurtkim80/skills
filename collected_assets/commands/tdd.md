@@ -1,60 +1,60 @@
 ---
-description: Aplicar el flujo de trabajo de desarrollo guiado por pruebas (TDD). Diseña interfaces, crea las pruebas PRIMERO, luego implementa el código mínimo. Garantiza 80%+ de cobertura de código.
+description: Test odaklı geliştirme (TDD) iş akışını zorlar. Interface'leri tasarla, ÖNCE testleri oluştur, sonra minimal kodu uygula. %80+ kod kapsama oranı sağla.
 ---
 
-# Comando TDD
+# TDD Komutu
 
-Este comando invoca al agente **tdd-guide** para aplicar la metodología de desarrollo guiado por pruebas.
+Bu komut, test odaklı geliştirme metodolojisini zorlamak için **tdd-guide** agent'ını çağırır.
 
-## Qué Hace Este Comando
+## Bu Komut Ne Yapar
 
-1. **Diseñar Interfaces** - Definir primero los tipos/interfaces
-2. **Crear Pruebas Primero** - Escribir pruebas que fallan (RED)
-3. **Implementar Código Mínimo** - Escribir el código justo para que pasen (GREEN)
-4. **Refactorizar** - Mejorar el código mientras las pruebas siguen en verde (REFACTOR)
-5. **Verificar Cobertura** - Garantizar 80%+ de cobertura de pruebas
+1. **Interface'leri Tasarla** - Önce tip/interface'leri tanımla
+2. **Önce Testleri Oluştur** - Başarısız testler yaz (RED)
+3. **Minimal Kod Uygula** - Geçmek için yeterli kodu yaz (GREEN)
+4. **Refactor Et** - Testleri yeşil tutarken kodu iyileştir (REFACTOR)
+5. **Kapsama Oranını Doğrula** - %80+ test kapsama oranı sağla
 
-## Cuándo Usarlo
+## Ne Zaman Kullanılır
 
-Usa el comando `/tdd` cuando:
-- Implementes nuevas features
-- Agregues nuevas funciones/componentes
-- Corrijas bugs (primero escribe la prueba que reproduce el bug)
-- Refactorices código existente
-- Construyas lógica de negocio crítica
+`/tdd` komutunu şu durumlarda kullanın:
+- Yeni özellikler uygularken
+- Yeni fonksiyonlar/componentler eklerken
+- Hataları düzeltirken (önce hatayı tekrar eden test yaz)
+- Mevcut kodu refactor ederken
+- Kritik iş mantığı oluştururken
 
-## Cómo Funciona
+## Nasıl Çalışır
 
-El agente tdd-guide:
+tdd-guide agent'ı şunları yapacaktır:
 
-1. **Definirá las interfaces** para entradas/salidas
-2. **Escribirá pruebas que FALLARÁN** (porque el código aún no existe)
-3. **Ejecutará las pruebas** y verificará que fallen por la razón correcta
-4. **Escribirá la implementación mínima** para que las pruebas pasen
-5. **Ejecutará las pruebas** y verificará que pasen
-6. **Refactorizará el código** mientras las pruebas siguen en verde
-7. **Verificará la cobertura** y agregará más pruebas si está por debajo del 80%
+1. Giriş/çıkışlar için **interface'leri tanımla**
+2. **BAŞARISIZ olacak testleri yaz** (çünkü kod henüz yok)
+3. **Testleri çalıştır** ve doğru sebepten başarısız olduklarını doğrula
+4. Testleri geçirmek için **minimal uygulama yaz**
+5. **Testleri çalıştır** ve geçtiklerini doğrula
+6. Testleri yeşil tutarken kodu **refactor et**
+7. **Kapsama oranını kontrol et** ve %80'in altındaysa daha fazla test ekle
 
-## El Ciclo TDD
-
-```
-ROJO → VERDE → REFACTORIZAR → REPETIR
-
-ROJO:        Escribir una prueba que falla
-VERDE:       Escribir el código mínimo para que pase
-REFACTORIZAR: Mejorar el código, las pruebas siguen pasando
-REPETIR:     Siguiente feature/escenario
-```
-
-## Ejemplo de Uso
+## TDD Döngüsü
 
 ```
-Usuario: /tdd Necesito una función para calcular el puntaje de liquidez de un mercado
+RED → GREEN → REFACTOR → TEKRARLA
 
-Agente (tdd-guide):
-# Sesión TDD: Calculadora de Puntaje de Liquidez de Mercado
+RED:      Başarısız bir test yaz
+GREEN:    Geçmek için minimal kod yaz
+REFACTOR: Kodu iyileştir, testleri geçmeye devam et
+TEKRARLA: Bir sonraki özellik/senaryo
+```
 
-## Paso 1: Definir Interface (SCAFFOLD)
+## Örnek Kullanım
+
+```
+Kullanıcı: /tdd Piyasa likidite skorunu hesaplamak için bir fonksiyona ihtiyacım var
+
+Agent (tdd-guide):
+# TDD Oturumu: Piyasa Likidite Skoru Hesaplayıcı
+
+## Adım 1: Interface Tanımla (SCAFFOLD)
 
 ```typescript
 // lib/liquidity.ts
@@ -66,19 +66,19 @@ export interface MarketData {
 }
 
 export function calculateLiquidityScore(market: MarketData): number {
-  // TODO: Implementación
+  // TODO: Uygulama
   throw new Error('Not implemented')
 }
 ```
 
-## Paso 2: Escribir Prueba que Falla (ROJO)
+## Adım 2: Başarısız Test Yaz (RED)
 
 ```typescript
 // lib/liquidity.test.ts
 import { calculateLiquidityScore } from './liquidity'
 
 describe('calculateLiquidityScore', () => {
-  it('debe retornar puntaje alto para mercado líquido', () => {
+  it('likit piyasa için yüksek skor döndürmeli', () => {
     const market = {
       totalVolume: 100000,
       bidAskSpread: 0.01,
@@ -92,12 +92,12 @@ describe('calculateLiquidityScore', () => {
     expect(score).toBeLessThanOrEqual(100)
   })
 
-  it('debe retornar puntaje bajo para mercado poco líquido', () => {
+  it('az likit piyasa için düşük skor döndürmeli', () => {
     const market = {
       totalVolume: 100,
       bidAskSpread: 0.5,
       activeTraders: 2,
-      lastTradeTime: new Date(Date.now() - 86400000) // hace 1 día
+      lastTradeTime: new Date(Date.now() - 86400000) // 1 gün önce
     }
 
     const score = calculateLiquidityScore(market)
@@ -106,7 +106,7 @@ describe('calculateLiquidityScore', () => {
     expect(score).toBeGreaterThanOrEqual(0)
   })
 
-  it('debe manejar caso límite: volumen cero', () => {
+  it('edge case\'i idare etmeli: sıfır hacim', () => {
     const market = {
       totalVolume: 0,
       bidAskSpread: 0,
@@ -121,40 +121,40 @@ describe('calculateLiquidityScore', () => {
 })
 ```
 
-## Paso 3: Ejecutar Pruebas - Verificar el Fallo
+## Adım 3: Testleri Çalıştır - Başarısızlığı Doğrula
 
 ```bash
 npm test lib/liquidity.test.ts
 
 FAIL lib/liquidity.test.ts
-  ✕ debe retornar puntaje alto para mercado líquido (2 ms)
+  ✕ should return high score for liquid market (2 ms)
     Error: Not implemented
 
 1 test failed, 0 passed
 ```
 
-PASS: Las pruebas fallan como se esperaba. Listo para implementar.
+PASS: Testler beklendiği gibi başarısız. Uygulamaya hazır.
 
-## Paso 4: Implementar Código Mínimo (VERDE)
+## Adım 4: Minimal Kod Uygula (GREEN)
 
 ```typescript
 // lib/liquidity.ts
 export function calculateLiquidityScore(market: MarketData): number {
-  // Manejar caso límite de volumen cero
+  // Sıfır hacim edge case'ini idare et
   if (market.totalVolume === 0) {
     return 0
   }
 
-  // Calcular puntajes de componentes (escala 0-100)
+  // Bileşen skorlarını hesapla (0-100 ölçeği)
   const volumeScore = Math.min(market.totalVolume / 1000, 100)
   const spreadScore = Math.max(100 - (market.bidAskSpread * 1000), 0)
   const traderScore = Math.min(market.activeTraders / 10, 100)
 
-  // Bonus por actividad reciente
+  // Son aktivite bonusu
   const hoursSinceLastTrade = (Date.now() - market.lastTradeTime.getTime()) / (1000 * 60 * 60)
   const recencyScore = Math.max(100 - (hoursSinceLastTrade * 10), 0)
 
-  // Promedio ponderado
+  // Ağırlıklı ortalama
   const score = (
     volumeScore * 0.4 +
     spreadScore * 0.3 +
@@ -162,29 +162,29 @@ export function calculateLiquidityScore(market: MarketData): number {
     recencyScore * 0.1
   )
 
-  return Math.min(Math.max(score, 0), 100) // Limitar entre 0-100
+  return Math.min(Math.max(score, 0), 100) // 0-100 arası sınırla
 }
 ```
 
-## Paso 5: Ejecutar Pruebas - Verificar el Éxito
+## Adım 5: Testleri Çalıştır - Başarıyı Doğrula
 
 ```bash
 npm test lib/liquidity.test.ts
 
 PASS lib/liquidity.test.ts
-  ✓ debe retornar puntaje alto para mercado líquido (3 ms)
-  ✓ debe retornar puntaje bajo para mercado poco líquido (2 ms)
-  ✓ debe manejar caso límite: volumen cero (1 ms)
+  ✓ should return high score for liquid market (3 ms)
+  ✓ should return low score for illiquid market (2 ms)
+  ✓ should handle edge case: zero volume (1 ms)
 
 3 tests passed
 ```
 
-PASS: ¡Todas las pruebas pasan!
+PASS: Tüm testler geçiyor!
 
-## Paso 6: Refactorizar (MEJORAR)
+## Adım 6: Refactor Et (IYILEŞTIR)
 
 ```typescript
-// lib/liquidity.ts - Refactorizado con constantes y mejor legibilidad
+// lib/liquidity.ts - Sabitler ve daha iyi okunabilirlik ile refactor edildi
 const WEIGHTS = {
   VOLUME: 0.4,
   SPREAD: 0.3,
@@ -223,22 +223,22 @@ export function calculateLiquidityScore(market: MarketData): number {
 }
 ```
 
-## Paso 7: Verificar que las Pruebas Siguen Pasando
+## Adım 7: Testlerin Hala Geçtiğini Doğrula
 
 ```bash
 npm test lib/liquidity.test.ts
 
 PASS lib/liquidity.test.ts
-  ✓ debe retornar puntaje alto para mercado líquido (3 ms)
-  ✓ debe retornar puntaje bajo para mercado poco líquido (2 ms)
-  ✓ debe manejar caso límite: volumen cero (1 ms)
+  ✓ should return high score for liquid market (3 ms)
+  ✓ should return low score for illiquid market (2 ms)
+  ✓ should handle edge case: zero volume (1 ms)
 
 3 tests passed
 ```
 
-PASS: ¡Refactoring completo, las pruebas siguen pasando!
+PASS: Refactoring tamamlandı, testler hala geçiyor!
 
-## Paso 8: Verificar Cobertura
+## Adım 8: Kapsama Oranını Kontrol Et
 
 ```bash
 npm test -- --coverage lib/liquidity.test.ts
@@ -247,82 +247,82 @@ File           | % Stmts | % Branch | % Funcs | % Lines
 ---------------|---------|----------|---------|--------
 liquidity.ts   |   100   |   100    |   100   |   100
 
-Coverage: 100% PASS (Objetivo: 80%)
+Coverage: 100% PASS: (Hedef: 80%)
 ```
 
-PASS: ¡Sesión TDD completada!
+PASS: TDD oturumu tamamlandı!
 ```
 
-## Buenas Prácticas de TDD
+## TDD En İyi Uygulamaları
 
-**HAZ:**
-- PASS: Escribe la prueba ANTES de cualquier implementación
-- PASS: Ejecuta las pruebas y verifica que fallen antes de implementar
-- PASS: Escribe el código mínimo para que las pruebas pasen
-- PASS: Refactoriza después de que las pruebas estén en verde
-- PASS: Agrega casos límite y escenarios de error
-- PASS: Apunta a 80%+ de cobertura (100% para código crítico)
+**YAPIN:**
+- PASS: Herhangi bir uygulamadan ÖNCE testi yazın
+- PASS: Testleri çalıştırın ve uygulamadan önce başarısız olduklarını doğrulayın
+- PASS: Testleri geçirmek için minimal kod yazın
+- PASS: Testler yeşil olduktan sonra refactor edin
+- PASS: Edge case'leri ve hata senaryolarını ekleyin
+- PASS: %80+ kapsama hedefleyin (kritik kod için %100)
 
-**NO HAGAS:**
-- FAIL: No escribas implementación antes de las pruebas
-- FAIL: No omitas ejecutar las pruebas después de cada cambio
-- FAIL: No escribas demasiado código de una vez
-- FAIL: No ignores pruebas que fallan
-- FAIL: No pruebes detalles de implementación (prueba el comportamiento)
-- FAIL: No hagas mock de todo (prefiere pruebas de integración)
+**YAPMAYIN:**
+- FAIL: Testlerden önce uygulama yazmayın
+- FAIL: Her değişiklikten sonra testleri çalıştırmayı atlamayın
+- FAIL: Aynı anda çok fazla kod yazmayın
+- FAIL: Başarısız testleri görmezden gelmeyin
+- FAIL: Uygulama detaylarını test etmeyin (davranışı test edin)
+- FAIL: Her şeyi mock'lamayın (integration testleri tercih edin)
 
-## Tipos de Pruebas a Incluir
+## Dahil Edilecek Test Türleri
 
-**Pruebas Unitarias** (nivel de función):
-- Escenarios de camino feliz
-- Casos límite (vacío, null, valores máximos)
-- Condiciones de error
-- Valores límite
+**Unit Tests** (Fonksiyon seviyesi):
+- Happy path senaryoları
+- Edge case'ler (boş, null, maksimum değerler)
+- Hata koşulları
+- Sınır değerleri
 
-**Pruebas de Integración** (nivel de componente):
-- Endpoints de API
-- Operaciones de base de datos
-- Llamadas a servicios externos
-- Componentes React con hooks
+**Integration Tests** (Component seviyesi):
+- API endpoint'leri
+- Database operasyonları
+- Dış servis çağrıları
+- Hook'lu React componentleri
 
-**Pruebas E2E** (usar el comando `/e2e`):
-- Flujos de usuario críticos
-- Procesos de múltiples pasos
-- Integración full stack
+**E2E Tests** (`/e2e` komutunu kullanın):
+- Kritik kullanıcı akışları
+- Çok adımlı süreçler
+- Full stack entegrasyon
 
-## Requisitos de Cobertura
+## Kapsama Gereksinimleri
 
-- **Mínimo 80%** para todo el código
-- **100% requerido**:
-  - Cálculos financieros
-  - Lógica de autenticación
-  - Código crítico de seguridad
-  - Lógica de negocio principal
+- **Minimum %80** tüm kod için
+- **%100 gerekli**:
+  - Finansal hesaplamalar
+  - Kimlik doğrulama mantığı
+  - Güvenlik açısından kritik kod
+  - Temel iş mantığı
 
-## Notas Importantes
+## Önemli Notlar
 
-**OBLIGATORIO**: Las pruebas deben escribirse ANTES de la implementación. El ciclo TDD:
+**ZORUNLU**: Testler uygulamadan ÖNCE yazılmalıdır. TDD döngüsü:
 
-1. **ROJO** - Escribir prueba que falla
-2. **VERDE** - Implementar para que pase
-3. **REFACTORIZAR** - Mejorar el código
+1. **RED** - Başarısız test yaz
+2. **GREEN** - Geçmek için uygula
+3. **REFACTOR** - Kodu iyileştir
 
-Nunca omitas la fase ROJO. Nunca escribas código antes de las pruebas.
+RED aşamasını asla atlamayın. Testlerden önce asla kod yazmayın.
 
-## Integración con Otros Comandos
+## Diğer Komutlarla Entegrasyon
 
-- Usa `/plan` primero para entender qué construir
-- Usa `/tdd` para implementar con pruebas
-- Usa `/build-fix` si surgen errores de build
-- Usa `/code-review` para revisar la implementación
-- Usa `/test-coverage` para verificar la cobertura
+- Ne inşa edileceğini anlamak için önce `/plan` kullanın
+- Testlerle uygulamak için `/tdd` kullanın
+- Build hataları oluşursa `/build-fix` kullanın
+- Uygulamayı gözden geçirmek için `/code-review` kullanın
+- Kapsama oranını doğrulamak için `/test-coverage` kullanın
 
-## Agentes Relacionados
+## İlgili Agent'lar
 
-Este comando invoca al agente `tdd-guide` proporcionado por ECC.
+Bu komut, ECC tarafından sağlanan `tdd-guide` agent'ını çağırır.
 
-La skill relacionada `tdd-workflow` también viene incluida con ECC.
+İlgili `tdd-workflow` skill'i de ECC ile birlikte gelir.
 
-Para instalaciones manuales, los archivos fuente se encuentran en:
+Manuel kurulumlar için, kaynak dosyalar şurada bulunur:
 - `agents/tdd-guide.md`
 - `skills/tdd-workflow/SKILL.md`

@@ -1,91 +1,81 @@
 ---
 name: investor-outreach
-description: Draft cold emails, warm intro blurbs, follow-ups, update emails, and investor communications for fundraising. Use when the user wants outreach to angels, VCs, strategic investors, or accelerators and needs concise, personalized, investor-facing messaging.
-license: MIT
+description: 草拟冷邮件、热情介绍简介、跟进邮件、更新邮件和投资者沟通以筹集资金。当用户需要向天使投资人、风险投资公司、战略投资者或加速器进行推广，并需要简洁、个性化的面向投资者的消息时使用。
+origin: ECC
 ---
 
-# Investor Outreach
+# 投资者接洽
 
-Write investor communication that is short, concrete, and easy to act on.
+撰写简短、个性化且易于采取行动的投资者沟通内容。
 
-## When to Activate
+## 何时激活
 
-- writing a cold email to an investor
-- drafting a warm intro request
-- sending follow-ups after a meeting or no response
-- writing investor updates during a process
-- tailoring outreach based on fund thesis or partner fit
+* 向投资者发送冷邮件时
+* 起草熟人介绍请求时
+* 在会议后或无回复时发送跟进邮件时
+* 在融资过程中撰写投资者更新时
+* 根据基金投资主题或合伙人契合度定制接洽内容时
 
-## Core Rules
+## 核心规则
 
-1. Personalize every outbound message.
-2. Keep the ask low-friction.
-3. Use proof instead of adjectives.
-4. Stay concise.
-5. Never send copy that could go to any investor.
+1. 个性化每一条外发信息。
+2. 保持请求低门槛。
+3. 使用证据，而非形容词。
+4. 保持简洁。
+5. 绝不发送可发给任何投资者的通用文案。
 
-## Voice Handling
+## 冷邮件结构
 
-If the user's voice matters, run `brand-voice` first and reuse its `VOICE PROFILE`.
-This skill should keep the investor-specific structure and ask discipline, not recreate its own parallel voice system.
+1. 主题行：简短且具体
+2. 开头：说明为何选择这位特定投资者
+3. 推介：公司做什么，为何是现在，什么证据重要
+4. 请求：一个具体的下一步行动
+5. 签名：姓名、职位，如需可加上一个可信度锚点
 
-## Hard Bans
+## 个性化来源
 
-Delete and rewrite any of these:
-- "I'd love to connect"
-- "excited to share"
-- generic thesis praise without a real tie-in
-- vague founder adjectives
-- begging language
-- soft closing questions when a direct ask is clearer
+参考以下一项或多项：
 
-## Cold Email Structure
+* 相关的投资组合公司
+* 公开的投资主题、演讲、帖子或文章
+* 共同的联系人
+* 与投资者关注点明确匹配的市场或产品契合度
 
-1. subject line: short and specific
-2. opener: why this investor specifically
-3. pitch: what the company does, why now, and what proof matters
-4. ask: one concrete next step
-5. sign-off: name, role, and one credibility anchor if needed
+如果缺少相关背景信息，请询问或说明草稿是等待个性化的模板。
 
-## Personalization Sources
+## 跟进节奏
 
-Reference one or more of:
-- relevant portfolio companies
-- a public thesis, talk, post, or article
-- a mutual connection
-- a clear market or product fit with the investor's focus
+默认节奏：
 
-If that context is missing, state that the draft still needs personalization instead of pretending it is finished.
+* 第 0 天：初次外发
+* 第 4-5 天：简短跟进，附带一个新数据点
+* 第 10-12 天：最终跟进，干净利落地收尾
 
-## Follow-Up Cadence
+之后除非用户要求更长的跟进序列，否则不再继续提醒。
 
-Default:
-- day 0: initial outbound
-- day 4 or 5: short follow-up with one new data point
-- day 10 to 12: final follow-up with a clean close
+## 熟人介绍请求
 
-Do not keep nudging after that unless the user wants a longer sequence.
+为介绍人提供便利：
 
-## Warm Intro Requests
+* 解释为何这次介绍是合适的
+* 包含可转发的简介
+* 将可转发的简介控制在 100 字以内
 
-Make life easy for the connector:
-- explain why the intro is a fit
-- include a forwardable blurb
-- keep the forwardable blurb under 100 words
+## 会后更新
 
-## Post-Meeting Updates
+包含：
 
-Include:
-- the specific thing discussed
-- the answer or update promised
-- one new proof point if available
-- the next step
+* 讨论的具体事项
+* 承诺的答复或更新
+* 如有可能，提供一个新证据点
+* 下一步行动
 
-## Quality Gate
+## 质量关卡
 
-Before delivering:
-- the message is genuinely personalized
-- the ask is explicit
-- the proof point is concrete
-- filler praise and softener language are gone
-- word count stays tight
+在交付前检查：
+
+* 信息已个性化
+* 请求明确
+* 没有废话或乞求性语言
+* 证据点具体
+* 字数保持紧凑

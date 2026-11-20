@@ -1,27 +1,27 @@
 ---
 name: x-api
-description: X/Twitter API integration for posting tweets, threads, reading timelines, search, and analytics. Covers OAuth auth patterns, rate limits, and platform-native content posting. Use when the user wants to interact with X programmatically.
-license: MIT
+description: X/Twitter API集成，用于发布推文、线程、读取时间线、搜索和分析。涵盖OAuth认证模式、速率限制和平台原生内容发布。当用户希望以编程方式与X交互时使用。
+origin: ECC
 ---
 
 # X API
 
-Programmatic interaction with X (Twitter) for posting, reading, searching, and analytics.
+以编程方式与 X（Twitter）交互，用于发布、读取、搜索和分析。
 
-## When to Activate
+## 何时激活
 
-- User wants to post tweets or threads programmatically
-- Reading timeline, mentions, or user data from X
-- Searching X for content, trends, or conversations
-- Building X integrations or bots
-- Analytics and engagement tracking
-- User says "post to X", "tweet", "X API", or "Twitter API"
+* 用户希望以编程方式发布推文或帖子串
+* 从 X 读取时间线、提及或用户数据
+* 在 X 上搜索内容、趋势或对话
+* 构建 X 集成或机器人
+* 分析和参与度跟踪
+* 用户提及"发布到 X"、"发推"、"X API"或"Twitter API"
 
-## Authentication
+## 认证
 
-### OAuth 2.0 Bearer Token (App-Only)
+### OAuth 2.0 Bearer 令牌（仅应用）
 
-Best for: read-heavy operations, search, public data.
+最佳适用场景：读取密集型操作、搜索、公开数据。
 
 ```bash
 # Environment setup
@@ -44,35 +44,33 @@ resp = requests.get(
 tweets = resp.json()
 ```
 
-### OAuth 1.0a (User Context)
+### OAuth 1.0a（用户上下文）
 
-Required for: posting tweets, managing account, DMs, and any write flow.
+必需用于：发布推文、管理账户、私信。
 
 ```bash
 # Environment setup — source before use
-export X_CONSUMER_KEY="your-consumer-key"
-export X_CONSUMER_SECRET="your-consumer-secret"
+export X_API_KEY="your-api-key"
+export X_API_SECRET="your-api-secret"
 export X_ACCESS_TOKEN="your-access-token"
-export X_ACCESS_TOKEN_SECRET="your-access-token-secret"
+export X_ACCESS_SECRET="your-access-secret"
 ```
-
-Legacy aliases such as `X_API_KEY`, `X_API_SECRET`, and `X_ACCESS_SECRET` may exist in older setups. Prefer the `X_CONSUMER_*` and `X_ACCESS_TOKEN_SECRET` names when documenting or wiring new flows.
 
 ```python
 import os
 from requests_oauthlib import OAuth1Session
 
 oauth = OAuth1Session(
-    os.environ["X_CONSUMER_KEY"],
-    client_secret=os.environ["X_CONSUMER_SECRET"],
+    os.environ["X_API_KEY"],
+    client_secret=os.environ["X_API_SECRET"],
     resource_owner_key=os.environ["X_ACCESS_TOKEN"],
-    resource_owner_secret=os.environ["X_ACCESS_TOKEN_SECRET"],
+    resource_owner_secret=os.environ["X_ACCESS_SECRET"],
 )
 ```
 
-## Core Operations
+## 核心操作
 
-### Post a Tweet
+### 发布一条推文
 
 ```python
 resp = oauth.post(
@@ -83,7 +81,7 @@ resp.raise_for_status()
 tweet_id = resp.json()["data"]["id"]
 ```
 
-### Post a Thread
+### 发布一个帖子串
 
 ```python
 def post_thread(oauth, tweets: list[str]) -> list[str]:
@@ -100,7 +98,7 @@ def post_thread(oauth, tweets: list[str]) -> list[str]:
     return ids
 ```
 
-### Read User Timeline
+### 读取用户时间线
 
 ```python
 resp = requests.get(
@@ -113,7 +111,7 @@ resp = requests.get(
 )
 ```
 
-### Search Tweets
+### 搜索推文
 
 ```python
 resp = requests.get(
@@ -127,22 +125,7 @@ resp = requests.get(
 )
 ```
 
-### Pull Recent Original Posts for Voice Modeling
-
-```python
-resp = requests.get(
-    "https://api.x.com/2/tweets/search/recent",
-    headers=headers,
-    params={
-        "query": "from:affaanmustafa -is:retweet -is:reply",
-        "max_results": 25,
-        "tweet.fields": "created_at,public_metrics",
-    }
-)
-voice_samples = resp.json()
-```
-
-### Get User by Username
+### 通过用户名获取用户
 
 ```python
 resp = requests.get(
@@ -152,7 +135,7 @@ resp = requests.get(
 )
 ```
 
-### Upload Media and Post
+### 上传媒体并发布
 
 ```python
 # Media upload uses v1.1 endpoint
@@ -171,12 +154,13 @@ resp = oauth.post(
 )
 ```
 
-## Rate Limits
+## 速率限制
 
-X API rate limits vary by endpoint, auth method, and account tier, and they change over time. Always:
-- Check the current X developer docs before hardcoding assumptions
-- Read `x-rate-limit-remaining` and `x-rate-limit-reset` headers at runtime
-- Back off automatically instead of relying on static tables in code
+X API 的速率限制因端点、认证方法和账户等级而异，并且会随时间变化。请始终：
+
+* 在硬编码假设之前，查看当前的 X 开发者文档
+* 在运行时读取 `x-rate-limit-remaining` 和 `x-rate-limit-reset` 头部信息
+* 自动退避，而不是依赖代码中的静态表格
 
 ```python
 import time
@@ -188,7 +172,7 @@ if remaining < 5:
     print(f"Rate limit approaching. Resets in {wait}s")
 ```
 
-## Error Handling
+## 错误处理
 
 ```python
 resp = oauth.post("https://api.x.com/2/tweets", json={"text": content})
@@ -203,28 +187,24 @@ else:
     raise Exception(f"X API error {resp.status_code}: {resp.text}")
 ```
 
-## Security
+## 安全性
 
-- **Never hardcode tokens.** Use environment variables or `.env` files.
-- **Never commit `.env` files.** Add to `.gitignore`.
-- **Rotate tokens** if exposed. Regenerate at developer.x.com.
-- **Use read-only tokens** when write access is not needed.
-- **Store OAuth secrets securely** — not in source code or logs.
+* **切勿硬编码令牌。** 使用环境变量或 `.env` 文件。
+* **切勿提交 `.env` 文件。** 将其添加到 `.gitignore`。
+* **如果令牌暴露，请轮换令牌。** 在 developer.x.com 重新生成。
+* **当不需要写权限时，使用只读令牌。**
+* **安全存储 OAuth 密钥** — 不要存储在源代码或日志中。
 
-## Integration with Content Engine
+## 与内容引擎集成
 
-Use `brand-voice` plus `content-engine` to generate platform-native content, then post via X API:
-1. Pull recent original posts when voice matching matters
-2. Build or reuse a `VOICE PROFILE`
-3. Generate content with `content-engine` in X-native format
-4. Validate length and thread structure
-5. Return the draft for approval unless the user explicitly asked to post now
-6. Post via X API only after approval
-7. Track engagement via public_metrics
+使用 `content-engine` 技能生成平台原生内容，然后通过 X API 发布：
 
-## Related Skills
+1. 使用内容引擎生成内容（X 平台格式）
+2. 验证长度（单条推文 280 字符）
+3. 使用上述模式通过 X API 发布
+4. 通过 public\_metrics 跟踪参与度
 
-- `brand-voice` — Build a reusable voice profile from real X and site/source material
-- `content-engine` — Generate platform-native content for X
-- `crosspost` — Distribute content across X, LinkedIn, and other platforms
-- `connections-optimizer` — Reorganize the X graph before drafting network-driven outreach
+## 相关技能
+
+* `content-engine` — 为 X 生成平台原生内容
+* `crosspost` — 在 X、LinkedIn 和其他平台分发内容

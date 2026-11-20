@@ -1,182 +1,141 @@
 ---
 name: gateguard
-description: API、エージェント、およびLLMエンドポイントのアクセス制御と認可パターン。
+description: 强制事实的门控，阻止编辑/写入/Bash（包括MultiEdit），并要求在允许操作之前进行具体调查（导入器、数据模式、用户指令）。与无门控代理相比，可测量地将输出质量提高2.25分。
 origin: community
 ---
 
-# GateGuard — Fact-Forcing Pre-Action Gate
+# GateGuard — 事实驱动的前置操作门控
 
-A PreToolUse hook that forces Claude to investigate before editing. Instead of self-evaluation ("are you sure?"), it demands concrete facts. The act of investigation creates awareness that self-evaluation never did.
+一个 PreToolUse 钩子，强制 Claude 在编辑前进行调查。不同于自我评估（"你确定吗？"），它要求具体的事实。调查行为本身创造了自我评估永远无法带来的认知。
 
-## When to Activate
+## 何时激活
 
-- Working on any codebase where file edits affect multiple modules
-- Projects with data files that have specific schemas or date formats
-- Teams where AI-generated code must match existing patterns
-- Any workflow where Claude tends to guess instead of investigating
+* 处理任何文件编辑会影响多个模块的代码库时
+* 项目包含具有特定模式或日期格式的数据文件时
+* 团队要求 AI 生成的代码必须匹配现有模式时
+* 任何 Claude 倾向于猜测而非调查的工作流程中
 
-## Core Concept
+## 核心概念
 
-LLM self-evaluation doesn't work. Ask "did you violate any policies?" and the answer is always "no." This is verified experimentally.
+LLM 的自我评估不起作用。问"你是否违反了任何策略？"答案永远是"没有"。这已通过实验验证。
 
-But asking "list every file that imports this module" forces the LLM to run Grep and Read. The investigation itself creates context that changes the output.
+但问"列出所有导入此模块的文件"会迫使 LLM 运行 Grep 和 Read。调查本身创造了改变输出的上下文。
 
-**Three-stage gate:**
+**三阶段门控：**
 
 ```
-1. DENY  — block the first Edit/Write/Bash attempt
-2. FORCE — tell the model exactly which facts to gather
-3. ALLOW — permit retry after facts are presented
+1. DENY  — 阻止首次编辑/写入/Bash 尝试
+2. FORCE — 明确告知模型需要收集哪些事实
+3. ALLOW — 在事实呈现后允许重试
 ```
 
-No competitor does all three. Most stop at deny.
+没有竞争对手能同时做到这三步。大多数止步于拒绝。
 
-## Evidence
+## 证据
 
-Two independent A/B tests, identical agents, same task:
+两个独立的 A/B 测试，相同的代理，相同的任务：
 
-| Task | Gated | Ungated | Gap |
+| 任务 | 有门控 | 无门控 | 差距 |
 | --- | --- | --- | --- |
-| Analytics module | 8.0/10 | 6.5/10 | +1.5 |
-| Webhook validator | 10.0/10 | 7.0/10 | +3.0 |
-| **Average** | **9.0** | **6.75** | **+2.25** |
+| 分析模块 | 8.0/10 | 6.5/10 | +1.5 |
+| Webhook 验证器 | 10.0/10 | 7.0/10 | +3.0 |
+| **平均** | **9.0** | **6.75** | **+2.25** |
 
-Both agents produce code that runs and passes tests. The difference is design depth.
+两个代理生成的代码都能运行并通过测试。区别在于设计深度。
 
-## Gate Types
+## 门控类型
 
-### Edit / MultiEdit Gate (first edit per file)
+### 编辑/多编辑门控（每个文件的首次编辑）
 
-MultiEdit is handled identically — each file in the batch is gated individually.
-
-NotebookEdit は `notebook_path` への Edit として扱われます（同じクラス・チェック済みキー・クレジット・上限の規則。セル内容は読まないため常に完全な質問になり、コメントのみの通過はありません）。
-
-質問内容は対象ファイルのクラスによって変わります（[対象クラス別の質問](#対象クラス別の質問)を参照）。以下は **code** クラスの Edit ゲートの質問です。
+多编辑的处理方式相同——批次中的每个文件都单独进行门控。
 
 ```
-Before editing {file_path}, present these facts:
+在编辑 {file_path} 之前，请先呈现以下事实：
 
-1. List ALL files that import/require this file (search the tree — Glob/Grep, or find/grep via Bash)
-2. List the public functions/classes affected by this change
-3. If this file reads/writes data files, show field names, structure,
-   and date format (use redacted or synthetic values, not raw production data)
-4. Quote the user's current instruction verbatim
+1. 列出所有导入/引用此文件的文件（在代码树中搜索——Glob/Grep，或通过 Bash 用 find/grep）
+2. 列出受此更改影响的公共函数/类
+3. 如果此文件读取/写入数据文件，请显示字段名称、结构以及日期格式（使用脱敏或合成值，而非原始生产数据）
+4. 逐字引用用户当前的指令
 ```
 
-### Write Gate (first new file creation)
-
-以下は **code** クラスの Write ゲートの質問です。
+### 写入门控（首次创建新文件）
 
 ```
-Before creating {file_path}, present these facts:
+在创建 {file_path} 之前，请先说明以下事实：
 
-1. Name the file(s) and line(s) that will call this new file
-2. Confirm no existing file serves the same purpose (search the tree — Glob/Grep, or find/grep via Bash)
-3. If this file reads/writes data files, show field names, structure,
-   and date format (use redacted or synthetic values, not raw production data)
-4. Quote the user's current instruction verbatim
+1. 命名将调用此新文件的文件及行号
+2. 确认没有现有文件具有相同功能（在代码树中搜索——Glob/Grep，或通过 Bash 用 find/grep）
+3. 如果此文件读取/写入数据文件，请展示字段名称、结构及日期格式（使用脱敏或合成值，而非原始生产数据）
+4. 逐字引用用户当前的指令
 ```
 
-### 対象クラス別の質問
+### 破坏性 Bash 门控（每个破坏性命令）
 
-初回の Edit/Write ゲートは対象ファイルを分類し、最初に一致したクラスの質問を使います。分類にはプロジェクトルート（`CLAUDE_PROJECT_DIR`、次にペイロードの `cwd`、次にプロセスのディレクトリ）からの相対パスを使うため、`~/work/tests/` のような場所にあるプロジェクトでも全ファイルが test になることはありません。先頭の `.claude/worktrees/<name>/` は `<root>/.claude/worktrees/<name>/.git` が存在する場合にだけ取り除きます。Windows 形式のパスでは末尾のドット・空白と `:stream` 接尾辞を除いてから分類します（`CLAUDE.md.` や `CLAUDE.md::$DATA` は `CLAUDE.md` として扱います）。ルート外の対象は絶対パスで分類します。パスは小文字化・`/` 区切りで、次の順に判定します。
-
-1. **instruction** — `CLAUDE.md`、`AGENTS.md`、`AGENT.md`、`GEMINI.md`、`SKILL.md`、`copilot-instructions.md`、`.cursorrules`、`.windsurfrules`、任意の `.mdc`、`.claude`、`agents`、`commands`、`skills`、`rules`、`hooks`、`.cursor`、`.codex`、`.opencode` ディレクトリ配下の `.md`/`.mdx`/`.txt`、または `.github/` 配下の `*instructions*.md`
-2. **test** — `*.test.*`、`*.spec.*`、`test_*.py`、`*_test.py`、`*_test.go`、または `tests`、`test`、`__tests__` 配下
-3. **prose** — `.md`、`.mdx`、`.txt`、`.rst`、`.adoc`
-4. **config** — `.json`、`.jsonc`、`.yaml`、`.yml`、`.toml`、`.ini`、またはコード拡張子で終わらない `.env` / `.env.*`（`.env.local` は config、`.env.example.ts` と `.envrc` は code）
-5. **code** — 上記以外（上に示した質問）
-
-どのクラスも最後に「ユーザーの現在の指示を原文のまま引用する」項目が付きます。質問文（英語、hook の出力そのまま）は次のとおりです。*(search)* は "(search the tree — Glob/Grep, or find/grep via Bash)" の略です。
-
-| クラス | 質問 |
-|---|---|
-| instruction | Name the harness/loader that reads this file (Claude Code, Codex, Cursor, OpenCode, …) and when it loads it · Describe what agent behaviour changes as a result · Confirm no existing instruction, skill, or agent file already covers this *(search)* |
-| test | Name what behaviour is under test and which module/function it exercises · Name the existing test file(s) covering this module, or confirm none exist *(search)* |
-| prose (Write) | Name any existing doc this supersedes or duplicates *(search)* · State where it will be linked or referenced from · Explain why a new file rather than editing an existing one |
-| prose (Edit) | List other docs or code that reference the section being changed *(search)* · State what the change corrects or adds |
-| config | Name which process/tool reads this file and when · Describe the effect of the change · Confirm no secrets or credentials are being written in plain text |
-
-code クラスでは変更内容も読み、公開宣言に触れない Edit には importer/公開 API の代わりに「このファイルまたはモジュール内で変更された振る舞いに依存する呼び出し箇所」を尋ね、データを扱わない変更ではデータ形式の質問を省きます（未対応の拡張子、64 KiB 超などの判定不能な変更と機密対象では従来の 4 問のままです）。
-
-メッセージの文面以外でクラスが影響するのは兄弟ファイル集約だけです（集約できるクラスと、同じクラス同士でのみ集約されること）。
-
-### Destructive Bash Gate (every destructive command)
-
-Triggers on: `rm -rf`, `git reset --hard`, `git push --force`, `drop table`, `drop database`, `drop schema`, `alter table ... drop column`, etc.
+触发条件：`rm -rf`、`git reset --hard`、`git push --force`、`drop table`、`drop database`、`drop schema`、`alter table ... drop column` 等。
 
 ```
-1. List all files/data this command will modify or delete
-2. Write a one-line rollback procedure
-3. Quote the user's current instruction verbatim
+1. 列出此命令将修改或删除的所有文件/数据
+2. 编写一行回滚步骤
+3. 逐字引用用户当前的指令
 ```
 
-### Routine Bash Gate (once per session)
+### 常规 Bash 门控（每个会话一次）
 
 ```
-1. The current user request in one sentence
-2. What this specific command verifies or produces
+1. 当前用户请求的一句话概括
+2. 此特定命令验证或生成的内容
 ```
 
-このゲートが発火するまでは、読み取り専用のコマンド（`ls`、`cat`、`rg`、`git status`/`log`/`diff`、`Get-ChildItem` など。リダイレクト、置換、`tee`、`xargs`、未知のコマンドを含まないもの）はゲートを消費せずに通過し `routine_readonly_passes` に数えます。セッション ID またはトランスクリプトパスで識別される状態は 8 時間、プロジェクトディレクトリによるフォールバックは 30 分の無操作で失効し、サブエージェントでも機密対象はパスごとに 1 回拒否されます（親のゲートは解除されません）。
+## 按目标类别提问与已完成调查的认定
 
-## すでに済んでいるとみなされるもの
+以上编辑/写入门控的问题适用于 **code** 类目标。完整规则见英文版 `skills/gateguard/SKILL.md`，要点如下：
 
-調査がすでに行われたことがトランスクリプトから確認できる場合、または前回の拒否と同じ回答になる場合、ゲートは拒否の代わりに注記（`additionalContext`）付きで通過させます。判断が曖昧な場合は常に従来どおり拒否します。
+* **目标类别：** 首次编辑/写入按项目相对路径（去掉开头的 `.claude/worktrees/<name>/`）依次判定为 instruction（`CLAUDE.md`、`AGENTS.md`、`SKILL.md`、`.mdc`、`.cursorrules`、`.github/copilot-instructions.md` 等）、test、prose（`.md` 等）、config（`.json`、`.yaml`、`.env` / `.env.*` 等，`.env.example.ts` 仍属 code）或 code，并提出相应的问题。
+* **按变更内容提问：** 对 code 类目标还会读取变更内容：未触及公开声明的编辑改问"本文件或其模块中依赖所改行为的调用点"，不涉及数据的变更省略数据格式问题；无法可靠判断（不支持的扩展名、超过 64 KiB 等）以及敏感目标时仍问原来的四个问题。
+* **事先搜索抵免：** 若当前人类回合内已有成功完成（非错误结果）的 `Glob`、`Grep`、`LS` 或 `rg`/`grep`/`find` 等搜索命中该文件，则以附注代替拒绝。`Read` 从不计入；与被门控调用同批次的搜索、重复的 tool_use id、压缩（compaction）之前的搜索均不计入。文件名词干须按单词边界匹配（测试目标先去掉一个测试词缀：`.test`、`.spec`，以及 Python/Go 的 `test_`/`_test`，因此 `rg tokenizer src tests` 可抵免 `tests/tokenizer.test.js`，而 `index.test.js` 仍是通用词干 `index`），且目标须位于所搜索目录之内（shell 片段按其路径参数或 `cwd` 判定范围；参数前的输入重定向 `<` 视为读取 stdin）。仅"创建尚不存在的文件"的写入可按目录匹配，且 shell 参数须是真实存在的目录；回合内出现 `cd` 等切换目录命令时不再按 shell 目录匹配。相对路径按工具的 `cwd` 解析。排除规则从不计入：`Grep` 的 `glob` 中以 `!` 开头的项，以及 shell 中 `rg -g '!x'`、`grep --exclude`/`--exclude-dir`、`fd -E`、`ls -I`、`tree -I`、`git ls-files -x`、git `:!x` 路径规格、带 `-not`/`!` 或后接 `-prune` 的 `find -name`/`-path`、PowerShell `-Exclude` 都不作为词干来源；若排除项覆盖目标（文件名、路径上的目录或词干），该搜索完全不能为其抵免（`rg -g '!widget.py' TODO .` 不抵免 `widget.py`，`rg -g '!*.md' widget .` 仍抵免）。含 `--exclude-from`/`--ignore-file` 的片段不抵免；用 `*.py`、`--include`、`find -name` 等文件名 glob 限定的搜索，只有在其匹配目标文件名时词干才计入。
+* **仅注释/空白的编辑：** 对受支持语言中非敏感的 code/test/prose 文件，只改动注释和空白的编辑（MultiEdit 须该文件的所有条目都如此）以附注放行并计入 `trivial_allows`，但不标记为已检查，下一次改动代码的编辑仍按首次触碰门控（写入、Python 缩进变化、多行字符串等从不算作此类编辑）。
+* **拒绝中指出最接近的未计入搜索：** 非敏感目标被拒绝且本回合有提及该文件却未能抵免的调用时，拒绝消息追加一行"Closest search this turn did not count (...)"，说明最接近的一个及原因（同批次、被排除、范围外、读取 stdin、`Read` 等非搜索、文件名过于通用）；细节经净化并截断至 60 个字符。
+* **同回合同级文件合并：** 同一目录、同一类别（仅 code、test、prose）的新文件在同一回合内（完全没有 transcript 路径时为 120 秒内）只拒绝第一个，其余以附注放行。config、instruction，以及任何以 `.` 开头的路径段（点文件和所有点目录）或 8.3 短文件名下的文件从不合并；目录按解析符号链接后的真实位置判定和记录；有 transcript 路径但文件缺失、无法读取或得不到回合 ID 时不合并；编辑从不合并。
+* **拒绝上限（可选）：** 设置 `GATEGUARD_FACT_FORCE_MAX_DENIALS` 后，会话内首次触碰的拒绝次数达到该值后，新路径直接放行（计入 `cap_allows`）。`GATEGUARD_FACT_FORCE_FULL_DENIALS` 只决定消息详略（消息预算），而此变量决定是否拦截（拒绝预算）。事先搜索抵免和同级合并先于上限判定，不消耗上限；格式错误的值视为无上限，并在 stderr 警告一次。
+* **敏感目标：** `.env`/`.env.*`、`*.pem`/`*.key`/`*.p12`/`*.pfx`、`id_rsa*`/`id_ed25519*`/`id_ecdsa*`/`id_dsa*`/`.netrc`/`.pgpass`/`credentials*`/`secrets.*`、任一路径段恰为 `auth`、`authn`、`authz`、`security`、`secrets`、`payment`、`payments`、`billing`、`migrations`，以及 `.github/workflows/` 下的文件，不适用抵免、合并和上限，首次触碰总是拒绝。按字面路径和解析符号链接后的真实位置同时判定（`src/tools -> ../auth` 时 `src/tools/login.py` 也是敏感目标），真实位置无法解析时视为敏感。判定顺序：exempt → subagent → checked → 敏感或硬链接? → 抵免 → 同级合并 → 上限 → 拒绝。`GATEGUARD_EXEMPT_GLOBS` 的豁免优先于一切规则，对敏感目标和硬链接目标同样生效。
+* **硬链接目标：** 链接数大于 1 的文件（或指向此类文件的符号链接）可经其他名称访问，因此与敏感目标一样不适用抵免、变更画像、仅注释放行、同级合并、上限和子代理放行；拒绝消息附带 "Hard-linked target: ..." 一行而非敏感目标一行。除文件不存在外的任何 stat 错误都视为硬链接。
+* **NotebookEdit：** 按对 `notebook_path` 的编辑门控（相同的类别、已检查键、抵免与上限规则；不读取单元格内容，因此总是完整问题，也从不按仅注释放行）。
+* **例行 shell 门控与会话：** 门控触发前，只读命令（`ls`、`cat`、`rg`、`git status`/`log`/`diff`、`Get-ChildItem` 等，不含重定向、替换、`tee`、`xargs` 或未知命令）直接放行且不消耗门控，计入 `routine_readonly_passes`；以会话 ID 或 transcript 路径为键的状态空闲 8 小时失效，项目目录回退键仍为 30 分钟；子代理对敏感目标每个路径拒绝一次（不会为父会话解锁）。
+* **判定指标（可选）：** 设置 `GATEGUARD_METRICS=1` 后，每次判定向 `<GATEGUARD_STATE_DIR>/metrics.jsonl` 追加一行（不记录路径、命令或内容，超过 1 MiB 轮转为 `.1`）；用 `node scripts/gateguard-report.js [--dir <path>] [--json]` 汇总。
+* **兼容性：** 新增的环境变量只有可选的 `GATEGUARD_FACT_FORCE_MAX_DENIALS` 和 `GATEGUARD_METRICS`；除子代理首次触碰敏感或硬链接目标、以及每个笔记本的首次 NotebookEdit（此前不受门控）外，以前允许的操作不会变为拒绝，且从不返回 `permissionDecision: "allow"`。
 
-- **事前検索のクレジット:** 現在の人間のターン内で、`Glob`、`Grep`、`LS`、または `rg`/`grep`/`git grep`/`git ls-files`/`find`/`fd`/`ls`/`tree`/`Get-ChildItem`/`Select-String` などで始まる Bash/PowerShell コマンドが完了していれば、初回タッチを満たしたとみなします。**`Read` は対象外です。**
-  - **ターン:** 最新の実際のユーザーメッセージ、またはコンパクション（compact summary レコードや `compact_boundary`）から始まります。コンパクション前の検索は数えません。読むのはトランスクリプト末尾（256 KiB / 2000 行）だけで、ターン開始がその範囲より前にある場合は範囲全体を現在のターンとみなします。ターン開始がまったくないトランスクリプトではクレジットしません。
-  - **結果:** エラーでない `tool_result` が必要です（`is_error` が `true`/`"true"`、または内容が `<tool_use_error>` で始まるものはエラー）。同じ tool_use id が複数回現れる検索は数えません。
-  - **同一バッチの除外:** ゲート対象の呼び出しと同じアシスタントメッセージ内の検索は数えません。`tool_use_id` がない、またはトランスクリプトに見つからない場合は、ターン内の最新のアシスタントメッセージを除外します。message id のない検索は数えません。
-  - **語幹一致:** ファイル名の語幹（4 文字以上、`index`・`utils`・`config` などの汎用名は除外）が、英数字以外の文字または端で区切られた単語として検索文字列に現れる必要があります（`payment.py` は `payment` や `payment_service` の検索で一致し、`payments` では一致しません）。テスト対象では先にテストの接辞を 1 つ外します（`.test`、`.spec`、Python と Go の `test_`/`_test`）。`rg tokenizer src tests` は `tests/tokenizer.test.js` をクレジットしますが、`index.test.js` は汎用名 `index` になるため一致しません。
-  - **除外は数えない:** Grep の `glob` はトップレベルのカンマで分割し、`!` で始まるものは除外です。シェルでは `rg -g`/`--glob`/`--iglob` の `!` 値、`grep --exclude`/`--exclude-dir`、`fd -E`、`ls -I`、`tree -I`、`git ls-files -x`、git の `:!x` パススペック、`-not`/`!` 付きまたは `-prune` が続く `find -name`/`-path`、PowerShell の `-Exclude` が除外です。除外は語幹の出どころになりません。除外が対象（ファイル名またはパス上のディレクトリ、または語幹）に当たる検索はその対象を一切クレジットしません（`rg -g '!widget.py' TODO .` は `widget.py` をクレジットせず、`rg -g '!*.md' widget .` はクレジットします）。`--exclude-from`/`--ignore-file` を含むセグメントはクレジットしません。`*.py`・`--include`・`find -name` などのファイル名グロブで絞った検索は、対象のファイル名に一致する場合だけ語幹一致を数えます。
-  - **範囲:** `Glob`/`Grep`/`LS` は検索したディレクトリ（`path`、なければツールの `cwd`、Glob はパターンのリテラル部分を加える）の内側にある対象だけをクレジットします。対象自体を読むだけのシェルセグメント（例: `ls src/a.py`）や、パス引数がなく再帰でもない・パイプで stdin を読むセグメントは検索とみなしません。`$( )`、バッククォート、`<( )`、`>( )`、ヒアドキュメントを含むコマンドは対象外です。シェルセグメントは、パス引数（なければ `cwd`）の内側にある対象だけをクレジットします（`rg payment docs` は `src/payment.py` をクレジットしません）。引数より前の入力リダイレクト（`rg payment < file`）は stdin とみなし、別の呼び出しで `cd` した後の相対パス引数は数えません。
-  - **ディレクトリ一致:** まだ存在しないファイルを作成する Write だけが、対象のディレクトリそのものを指す検索でも一致します（Glob の `path` とリテラル接頭辞、Grep/LS の `path`、シェルのパス引数）。シェル引数では grep 系のパターン引数や値を取るフラグの値を除き、今実在するディレクトリだけを数えます。ターン内のいずれかの Bash/PowerShell 呼び出しに `cd`/`pushd`/`Set-Location` などがあれば、そのターンのシェルのディレクトリ一致は無効です。Edit、MultiEdit、既存ファイルを上書きする Write は語幹一致のみです。
-  - 相対パスはツールの `cwd`、次に `CLAUDE_PROJECT_DIR`、次にプロセスのディレクトリを基準に解決します。トランスクリプトが読めない等の問題があれば拒否に戻ります。
-  - 機密でない対象が拒否され、ターン内にそのファイルに触れたがクレジットにならなかった呼び出しがある場合、拒否に「Closest search this turn did not count (...)」の 1 行を加え、最も近いものとその理由（同一バッチ、除外、範囲外、stdin、検索ではない `Read` 等、汎用すぎる名前）を示します（詳細はサニタイズして 60 文字まで）。
-- **同一ターンの兄弟ファイル作成の集約:** まだ存在しないファイルへの Write（code、test、prose クラスのみ）が拒否された後、**同じクラス・同じディレクトリ**への新規ファイル Write は、同じターン内であれば注記付きで許可されます。ターン ID はターン開始レコード自身の `promptId`、なければその `uuid`、なければそのハッシュです（末尾範囲にターン開始がない場合は、範囲内のユーザーレコードの `promptId` がすべて一致するときだけ使います）。120 秒ルールはトランスクリプトのパスがまったくない場合に限られ、トランスクリプトが存在しない・読めない・ターン ID が得られない場合は集約されません。config・instruction ファイル、`.` で始まるセグメント（ドットファイルとすべてのドットディレクトリ）や 8.3 短縮名を含むパスは集約されません。ディレクトリはシンボリックリンクを解決した実体でも同じ判定を行い、実体のディレクトリをキーにします。Edit/MultiEdit も集約されません。
-- **コメント・空白のみの Edit:** 対応言語の機密でない code/test/prose ファイルに対し、コメントと空白だけが変わる Edit（MultiEdit はそのファイルの全エントリ）は注記付きで通過し、`trivial_allows` に数えます。チェック済みにはしないため、コードを変える次の変更は通常どおりゲートされます（Write、Python のインデント変更、複数行文字列などを含む変更は対象外）。
-- **正規化パスキー:** 相対パスはツールの `cwd` を基準に解決され、`a.py`、`./a.py`、絶対パスは同じファイルとして扱われ、初回タッチは 1 回だけです。
-- **セッション内カウンター:** 状態ファイルに `fact_force_credited`、`denials_by_class`、`credited_by_class`、`sibling_allows`、`dir_gates`、`cap_allows` を記録します（クラス名のみ記録し、パスは記録しません。`dir_gates` はサニタイズ済みの最初のファイル名のみ保持、最大 50 件）。
-- **拒否の上限（オプトイン）:** `GATEGUARD_FACT_FORCE_MAX_DENIALS` を設定すると、セッション内の初回タッチ拒否がその回数に達した後の新しいパスは拒否されずに通過します（`cap_allows` に記録）。`GATEGUARD_FACT_FORCE_FULL_DENIALS` はメッセージの詳しさ（メッセージ予算）だけを変えますが、こちらはブロックするかどうか（拒否予算）を変えます。事前検索のクレジットと兄弟ファイル集約が先に判定され、上限を消費しません。不正な値は上限なしとして扱い、stderr に 1 回警告します。
-- **機密対象:** `.env`/`.env.*`、`*.pem`・`*.key`・`*.p12`・`*.pfx`、`id_rsa*`・`id_ed25519*`・`id_ecdsa*`・`id_dsa*`・`.netrc`・`.pgpass`・`credentials*`・`secrets.*`、パスセグメントが `auth`・`authn`・`authz`・`security`・`secrets`・`payment`・`payments`・`billing`・`migrations` のいずれかと完全一致するもの、`.github/workflows/` 配下は、クレジット・集約・上限のいずれも適用されず、初回タッチで必ず拒否されます。判定は字句上のパスとシンボリックリンクを解決した実体の両方で行い（`src/tools -> ../auth` なら `src/tools/login.py` も機密）、実体を解決できない場合は機密とみなします。判定順は exempt → subagent → checked → 機密またはハードリンク? → クレジット → 兄弟集約 → 上限 → 拒否です。`GATEGUARD_EXEMPT_GLOBS` による除外は最優先で、機密対象やハードリンク対象にも適用されます。
-- **ハードリンク対象:** リンク数が 2 以上のファイル（またはそれを指すシンボリックリンク）は別名から到達できるため、機密対象と同じくクレジット・変更プロファイル・コメントのみの通過・兄弟集約・上限・サブエージェントの通過が適用されません。拒否には機密の行の代わりに「Hard-linked target: ...」の行が付きます。存在しない新規ファイル以外の stat エラーはハードリンクとみなします。
-- **判定メトリクス（オプトイン）:** `GATEGUARD_METRICS=1` で各判定を `<GATEGUARD_STATE_DIR>/metrics.jsonl` に 1 行ずつ記録します（パス・コマンド・内容は記録せず、1 MiB で `.1` にローテーション）。集計は `node scripts/gateguard-report.js [--dir <path>] [--json]` です。
-- **互換性:** 新しい環境変数はオプトインの `GATEGUARD_FACT_FORCE_MAX_DENIALS` と `GATEGUARD_METRICS` のみです。サブエージェントによる機密・ハードリンク対象への初回タッチと、各ノートブックへの最初の NotebookEdit（以前はゲート対象外）を除き、以前許可されていた操作が拒否されることはありません。
-- **信頼の限界:** クレジットはローカルのトランスクリプトを読むため、エージェントが理論上それを書き換えられます。検証するのは行動（検索が実行され結果が返ったこと）であり、意図ではありません。
+## 快速开始
 
-## Quick Start
+### 选项 A：使用 ECC 钩子（零安装）
 
-### Option A: Use the ECC hook (zero install)
+`scripts/hooks/gateguard-fact-force.js` 处的钩子已包含在此插件中。通过 hooks.json 启用它。
 
-The hook at `scripts/hooks/gateguard-fact-force.js` is included in this plugin. Enable it via hooks.json.
+如果 GateGuard 阻止了设置或修复工作，请使用
+`ECC_GATEGUARD=off` 启动会话。如需钩子级别的控制，请继续使用
+`ECC_DISABLED_HOOKS` 配合 GateGuard 钩子 ID。
 
-If GateGuard blocks setup or repair work, start the session with
-`ECC_GATEGUARD=off`. For hook-level control, keep using
-`ECC_DISABLED_HOOKS` with the GateGuard hook ID.
-
-### Option B: Full package with config
+### 选项 B：带配置的完整包
 
 ```bash
 pip install gateguard-ai
 gateguard init
 ```
 
-This adds `.gateguard.yml` for per-project configuration (custom messages, ignore paths, gate toggles).
+这会添加 `.gateguard.yml` 用于按项目配置（自定义消息、忽略路径、门控开关）。
 
-## Anti-Patterns
+## 反模式
 
-- **Don't use self-evaluation instead.** "Are you sure?" always gets "yes." This is experimentally verified.
-- **Don't skip the data schema check.** Both A/B test agents assumed ISO-8601 dates when real data used `%Y/%m/%d %H:%M`. Checking data structure (with redacted values) prevents this entire class of bugs.
-- **Don't gate every single Bash command.** Routine bash gates once per session. Destructive bash gates every time. This balance avoids slowdown while catching real risks.
+* **不要使用自我评估替代。** "你确定吗？"总是得到"确定。"这已通过实验验证。
+* **不要跳过数据模式检查。** 两个 A/B 测试代理都假设了 ISO-8601 日期，而实际数据使用的是 `%Y/%m/%d %H:%M`。检查数据结构（使用脱敏值）可以防止这类错误。
+* **不要对每个 Bash 命令都进行门控。** 常规 bash 门控每个会话一次。破坏性 bash 门控每次执行。这种平衡避免了速度下降，同时捕获了真正的风险。
 
-## Best Practices
+## 最佳实践
 
-- Let the gate fire naturally. Don't try to pre-answer the gate questions — the investigation itself is what improves quality.
-- Customize gate messages for your domain. If your project has specific conventions, add them to the gate prompts.
-- Use `.gateguard.yml` to ignore paths like `.venv/`, `node_modules/`, `.git/`.
+* 让门控自然触发。不要试图预先回答门控问题——调查本身才是提高质量的关键。
+* 为你的领域自定义门控消息。如果你的项目有特定约定，请将其添加到门控提示中。
+* 使用 `.gateguard.yml` 忽略 `.venv/`、`node_modules/`、`.git/` 等路径。
 
-## Related Skills
+## 相关技能
 
-- `safety-guard` — Runtime safety checks (complementary, not overlapping)
-- `code-reviewer` — Post-edit review (GateGuard is pre-edit investigation)
+* `safety-guard` — 运行时安全检查（互补，不重叠）
+* `code-reviewer` — 编辑后审查（GateGuard 是编辑前调查）

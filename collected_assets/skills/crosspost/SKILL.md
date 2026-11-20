@@ -1,111 +1,207 @@
 ---
 name: crosspost
-description: Multi-platform content distribution across X, LinkedIn, Threads, and Bluesky. Adapts content per platform using content-engine patterns. Never posts identical content cross-platform. Use when the user wants to distribute content across social platforms.
-license: MIT
+description: 跨X、LinkedIn、Threads和Bluesky的多平台内容分发。使用内容引擎模式根据平台适配内容。从不跨平台发布相同内容。当用户希望跨社交平台分发内容时使用。
+origin: ECC
 ---
 
-# Crosspost
+# 跨平台发布
 
-Distribute content across platforms without turning it into the same fake post in four costumes.
+将内容分发到多个社交平台，并适配各平台原生风格。
 
-## When to Activate
+## 何时激活
 
-- the user wants to publish the same underlying idea across multiple platforms
-- a launch, update, release, or essay needs platform-specific versions
-- the user says "crosspost", "post this everywhere", or "adapt this for X and LinkedIn"
+* 用户希望将内容发布到多个平台
+* 在社交媒体上发布公告、产品发布或更新
+* 将某个平台的内容改编后发布到其他平台
+* 用户提及“跨平台发布”、“到处发帖”、“分享到所有平台”或“分发这个”
 
-## Core Rules
+## 核心规则
 
-1. Do not publish identical copy across platforms.
-2. Preserve the author's voice across platforms.
-3. Adapt for constraints, not stereotypes.
-4. One post should still be about one thing.
-5. Do not invent a CTA, question, or moral if the source did not earn one.
+1. **切勿在不同平台发布相同内容。** 每个平台都应获得原生适配版本。
+2. **主平台优先。** 先发布到主平台，再为其他平台适配。
+3. **遵循平台惯例。** 各平台的字符限制、格式、链接处理方式均不同。
+4. **每条帖子一个核心思想。** 如果源内容包含多个想法，请拆分成多条帖子。
+5. **注明出处很重要。** 如果转发他人的内容，请注明来源。
 
-## Workflow
+## 平台规范
 
-### Step 1: Start with the Primary Version
+| 平台 | 最大长度 | 链接处理 | 话题标签 | 媒体 |
+|----------|-----------|---------------|----------|-------|
+| X | 280 字符 (Premium 用户为 4000) | 计入长度 | 少量 (最多 1-2 个) | 图片、视频、GIF |
+| LinkedIn | 3000 字符 | 不计入长度 | 3-5 个相关标签 | 图片、视频、文档、轮播 |
+| Threads | 500 字符 | 独立的链接附件 | 通常不使用 | 图片、视频 |
+| Bluesky | 300 字符 | 通过 Facets (富文本) | 无 (使用 Feeds) | 图片 |
 
-Pick the strongest source version first:
-- the original X post
-- the original article
-- the launch note
-- the thread
-- the memo or changelog
+## 工作流程
 
-Use `content-engine` first if the source still needs voice shaping.
+### 步骤 1：创建源内容
 
-### Step 2: Capture the Voice Fingerprint
+从核心想法开始。使用 `content-engine` 技能来生成高质量草稿：
 
-Run `brand-voice` first if the source voice is not already captured in the current session.
+* 识别单一核心信息
+* 确定主平台 (受众最大的平台)
+* 首先为主平台撰写草稿
 
-Reuse the resulting `VOICE PROFILE` directly.
-Do not build a second ad hoc voice checklist here unless the user explicitly wants a fresh override for this campaign.
+### 步骤 2：确定目标平台
 
-### Step 3: Adapt by Platform Constraint
+询问用户或根据上下文确定：
 
-### X
+* 要发布到哪些平台
+* 优先级顺序 (主平台获得最佳版本)
+* 任何平台特定要求 (例如，LinkedIn 需要专业语气)
 
-- keep it compressed
-- lead with the sharpest claim or artifact
-- use a thread only when a single post would collapse the argument
-- avoid hashtags and generic filler
+### 步骤 3：按平台适配
 
-### LinkedIn
+针对每个目标平台，转换内容：
 
-- add only the context needed for people outside the niche
-- do not turn it into a fake founder-reflection post
-- do not add a closing question just because it is LinkedIn
-- do not force a polished "professional tone" if the author is naturally sharper
+**X 平台适配：**
 
-### Threads
+* 用吸引人的开头，而非总结
+* 快速切入核心见解
+* 尽可能将链接放在正文之外
+* 对于较长内容，使用 Thread 格式
 
-- keep it readable and direct
-- do not write fake hyper-casual creator copy
-- do not paste the LinkedIn version and shorten it
+**LinkedIn 平台适配：**
 
-### Bluesky
+* 强有力的首行 (在“查看更多”前可见)
+* 使用换行符的短段落
+* 围绕经验教训、结果或专业收获来构建内容
+* 比 X 提供更明确的背景信息 (LinkedIn 受众需要背景框架)
 
-- keep it concise
-- preserve the author's cadence
-- do not rely on hashtags or feed-gaming language
+**Threads 平台适配：**
 
-## Posting Order
+* 对话式、随意的语气
+* 比 LinkedIn 短，但比 X 压缩感弱
+* 如果可能，优先考虑视觉效果
 
-Default:
-1. post the strongest native version first
-2. adapt for the secondary platforms
-3. stagger timing only if the user wants sequencing help
+**Bluesky 平台适配：**
 
-Do not add cross-platform references unless useful. Most of the time, the post should stand on its own.
+* 直接简洁 (300 字符限制)
+* 社区导向的语气
+* 使用 Feeds/列表进行主题定位，而非话题标签
 
-## Banned Patterns
+### 步骤 4：发布到主平台
 
-Delete and rewrite any of these:
-- "Excited to share"
-- "Here's what I learned"
-- "What do you think?"
-- "link in bio" unless that is literally true
-- generic "professional takeaway" paragraphs that were not in the source
+首先发布到主平台：
 
-## Output Format
+* 使用 `x-api` 技能处理 X
+* 使用平台特定的 API 或工具处理其他平台
+* 捕获帖子 URL 以便交叉引用
 
-Return:
-- the primary platform version
-- adapted variants for each requested platform
-- a short note on what changed and why
-- any publishing constraint the user still needs to resolve
+### 步骤 5：发布到次级平台
 
-## Quality Gate
+将适配后的版本发布到其余平台：
 
-Before delivering:
-- each version reads like the same author under different constraints
-- no platform version feels padded or sanitized
-- no copy is duplicated verbatim across platforms
-- any extra context added for LinkedIn or newsletter use is actually necessary
+* 错开发布时间 (不要同时发布 — 间隔 30-60 分钟)
+* 在适当的地方包含跨平台引用 (例如，“在 X 上有更长的 Thread”等)
 
-## Related Skills
+## 内容适配示例
 
-- `brand-voice` for reusable source-derived voice capture
-- `content-engine` for voice capture and source shaping
-- `x-api` for X publishing workflows
+### 源内容：产品发布
+
+**X 版本：**
+
+```
+我们刚刚发布了 [feature]。
+
+[它所实现的某个具体且令人印象深刻的功能]
+
+[链接]
+```
+
+**LinkedIn 版本：**
+
+```
+激动地宣布：我们刚刚在[Company]推出了[feature]。
+
+以下是其重要意义：
+
+[2-3段简短背景说明]
+
+[对受众的核心启示]
+
+[链接]
+```
+
+**Threads 版本：**
+
+```
+刚发布了一个很酷的东西 —— [feature]
+
+[对这个功能是什么的随意解释]
+
+链接在简介里
+```
+
+### 源内容：技术见解
+
+**X 版本：**
+
+```
+今天学到：[具体技术见解]
+
+[一句话说明其重要性]
+```
+
+**LinkedIn 版本：**
+
+```
+我一直在使用的一种模式，它带来了真正的改变：
+
+[技术见解与专业框架]
+
+[它如何适用于团队/组织]
+
+#相关标签
+```
+
+## API 集成
+
+### 批量跨平台发布服务 (示例模式)
+
+如果使用跨平台发布服务 (例如 Postbridge、Buffer 或自定义 API)，模式如下：
+
+```python
+import os
+import requests
+
+resp = requests.post(
+    "https://your-crosspost-service.example/api/posts",
+    headers={"Authorization": f"Bearer {os.environ['POSTBRIDGE_API_KEY']}"},
+    json={
+        "platforms": ["twitter", "linkedin", "threads"],
+        "content": {
+            "twitter": {"text": x_version},
+            "linkedin": {"text": linkedin_version},
+            "threads": {"text": threads_version}
+        }
+    },
+    timeout=30,
+)
+resp.raise_for_status()
+```
+
+### 手动发布
+
+没有 Postbridge 时，使用各平台原生 API 发布：
+
+* X: 使用 `x-api` 技能模式
+* LinkedIn: 使用 OAuth 2.0 的 LinkedIn API v2
+* Threads: Threads API (Meta)
+* Bluesky: AT Protocol API
+
+## 质量检查
+
+发布前：
+
+* \[ ] 每个平台的版本读起来都符合该平台的自然风格
+* \[ ] 各平台内容不完全相同
+* \[ ] 遵守字符限制
+* \[ ] 链接有效且放置位置恰当
+* \[ ] 语气符合平台惯例
+* \[ ] 媒体文件尺寸适合各平台
+
+## 相关技能
+
+* `content-engine` — 生成平台原生内容
+* `x-api` — X/Twitter API 集成

@@ -1,25 +1,25 @@
 ---
 name: exa-search
-description: Neural search via Exa MCP for web, code, and company research. Use when the user needs web search, code examples, company intel, people lookup, or AI-powered deep research with Exa's neural search engine.
-license: MIT
+description: 通过Exa MCP进行神经搜索，适用于网络、代码和公司研究。当用户需要网络搜索、代码示例、公司情报、人员查找，或使用Exa神经搜索引擎进行AI驱动的深度研究时使用。
+origin: ECC
 ---
 
-# Exa Search
+# Exa 搜索
 
-Neural search for web content, code, companies, and people via the Exa MCP server.
+通过 Exa MCP 服务器实现网页内容、代码、公司和人物的神经搜索。
 
-## When to Activate
+## 何时激活
 
-- User needs current web information or news
-- Searching for code examples, API docs, or technical references
-- Researching companies, competitors, or market players
-- Finding professional profiles or people in a domain
-- Running background research for any development task
-- User says "search for", "look up", "find", or "what's the latest on"
+* 用户需要当前网页信息或新闻
+* 搜索代码示例、API 文档或技术参考资料
+* 研究公司、竞争对手或市场参与者
+* 查找特定领域的专业资料或人物
+* 为任何开发任务进行背景调研
+* 用户提到“搜索”、“查找”、“寻找”或“关于……的最新消息是什么”
 
-## MCP Requirement
+## MCP 要求
 
-Exa MCP server must be configured. Add to `~/.claude.json`:
+必须配置 Exa MCP 服务器。添加到 `~/.claude.json`：
 
 ```json
 "exa-web-search": {
@@ -29,142 +29,81 @@ Exa MCP server must be configured. Add to `~/.claude.json`:
 }
 ```
 
-Get an API key at [exa.ai](https://exa.ai).
+在 [exa.ai](https://exa.ai) 获取 API 密钥。
+此仓库当前的 Exa 设置记录了此处公开的工具接口：`web_search_exa` 和 `get_code_context_exa`。
+如果你的 Exa 服务器公开了其他工具，请在文档或提示中依赖它们之前，先核实其确切名称。
 
-## Core Tools
+## 核心工具
 
-### web_search_exa
-General web search for current information, news, or facts.
+### web\_search\_exa
+
+用于当前信息、新闻或事实的通用网页搜索。
 
 ```
-web_search_exa(query: "latest AI developments 2026", numResults: 5)
+web_search_exa(query: "2026年最新人工智能发展", numResults: 5)
 ```
 
-**Parameters:**
+**参数：**
 
-| Param | Type | Default | Notes |
+| 参数 | 类型 | 默认值 | 说明 |
 |-------|------|---------|-------|
-| `query` | string | required | Search query |
-| `numResults` | number | 8 | Number of results |
+| `query` | 字符串 | 必填 | 搜索查询 |
+| `numResults` | 数字 | 8 | 结果数量 |
+| `type` | 字符串 | `auto` | 搜索模式 |
+| `livecrawl` | 字符串 | `fallback` | 需要时优先使用实时爬取 |
+| `category` | 字符串 | 无 | 可选焦点，例如 `company` 或 `research paper` |
 
-### web_search_advanced_exa
-Filtered search with domain and date constraints.
+### get\_code\_context\_exa
 
-```
-web_search_advanced_exa(
-  query: "React Server Components best practices",
-  numResults: 5,
-  includeDomains: ["github.com", "react.dev"],
-  startPublishedDate: "2025-01-01"
-)
-```
-
-**Parameters:**
-
-| Param | Type | Default | Notes |
-|-------|------|---------|-------|
-| `query` | string | required | Search query |
-| `numResults` | number | 8 | Number of results |
-| `includeDomains` | string[] | none | Limit to specific domains |
-| `excludeDomains` | string[] | none | Exclude specific domains |
-| `startPublishedDate` | string | none | ISO date filter (start) |
-| `endPublishedDate` | string | none | ISO date filter (end) |
-
-### get_code_context_exa
-Find code examples and documentation from GitHub, Stack Overflow, and docs sites.
+从 GitHub、Stack Overflow 和文档站点查找代码示例和文档。
 
 ```
 get_code_context_exa(query: "Python asyncio patterns", tokensNum: 3000)
 ```
 
-**Parameters:**
+**参数：**
 
-| Param | Type | Default | Notes |
+| 参数 | 类型 | 默认值 | 说明 |
 |-------|------|---------|-------|
-| `query` | string | required | Code or API search query |
-| `tokensNum` | number | 5000 | Content tokens (1000-50000) |
+| `query` | string | 必需 | 代码或 API 搜索查询 |
+| `tokensNum` | number | 5000 | 内容令牌数（1000-50000） |
 
-### company_research_exa
-Research companies for business intelligence and news.
+## 使用模式
 
-```
-company_research_exa(companyName: "Anthropic", numResults: 5)
-```
-
-**Parameters:**
-
-| Param | Type | Default | Notes |
-|-------|------|---------|-------|
-| `companyName` | string | required | Company name |
-| `numResults` | number | 5 | Number of results |
-
-### people_search_exa
-Find professional profiles and bios.
+### 快速查找
 
 ```
-people_search_exa(query: "AI safety researchers at Anthropic", numResults: 5)
+web_search_exa(query: "Node.js 22 新功能", numResults: 3)
 ```
 
-### crawling_exa
-Extract full page content from a URL.
+### 代码研究
 
 ```
-crawling_exa(url: "https://example.com/article", tokensNum: 5000)
+get_code_context_exa(query: "Rust错误处理模式Result类型", tokensNum: 3000)
 ```
 
-**Parameters:**
-
-| Param | Type | Default | Notes |
-|-------|------|---------|-------|
-| `url` | string | required | URL to extract |
-| `tokensNum` | number | 5000 | Content tokens |
-
-### deep_researcher_start / deep_researcher_check
-Start an AI research agent that runs asynchronously.
+### 公司或人物研究
 
 ```
-# Start research
-deep_researcher_start(query: "comprehensive analysis of AI code editors in 2026")
-
-# Check status (returns results when complete)
-deep_researcher_check(researchId: "<id from start>")
+web_search_exa(query: "Vercel 2026年融资估值", numResults: 3, category: "company")
+web_search_exa(query: "site:linkedin.com/in Anthropic AI安全研究员", numResults: 5)
 ```
 
-## Usage Patterns
+### 技术深度研究
 
-### Quick Lookup
 ```
-web_search_exa(query: "Node.js 22 new features", numResults: 3)
-```
-
-### Code Research
-```
-get_code_context_exa(query: "Rust error handling patterns Result type", tokensNum: 3000)
+web_search_exa(query: "WebAssembly 组件模型状态与采用情况", numResults: 5)
+get_code_context_exa(query: "WebAssembly 组件模型示例", tokensNum: 4000)
 ```
 
-### Company Due Diligence
-```
-company_research_exa(companyName: "Vercel", numResults: 5)
-web_search_advanced_exa(query: "Vercel funding valuation 2026", numResults: 3)
-```
+## 提示
 
-### Technical Deep Dive
-```
-# Start async research
-deep_researcher_start(query: "WebAssembly component model status and adoption")
-# ... do other work ...
-deep_researcher_check(researchId: "<id>")
-```
+* 使用 `web_search_exa` 获取最新信息、公司查询和广泛发现
+* 使用 `site:`、引号内的短语和 `intitle:` 等搜索运算符来缩小结果范围
+* 对于聚焦的代码片段，使用较低的 `tokensNum` (1000-2000)；对于全面的上下文，使用较高的值 (5000+)
+* 当你需要 API 用法或代码示例而非通用网页时，使用 `get_code_context_exa`
 
-## Tips
+## 相关技能
 
-- Use `web_search_exa` for broad queries, `web_search_advanced_exa` for filtered results
-- Lower `tokensNum` (1000-2000) for focused code snippets, higher (5000+) for comprehensive context
-- Combine `company_research_exa` with `web_search_advanced_exa` for thorough company analysis
-- Use `crawling_exa` to get full content from specific URLs found in search results
-- `deep_researcher_start` is best for comprehensive topics that benefit from AI synthesis
-
-## Related Skills
-
-- `deep-research` — Full research workflow using firecrawl + exa together
-- `market-research` — Business-oriented research with decision frameworks
+* `deep-research` — 使用 firecrawl + exa 的完整研究工作流
+* `market-research` — 带有决策框架的业务导向研究

@@ -1,44 +1,32 @@
 ---
 name: continuous-learning
-description: "[OBSOLETO - usar continuous-learning-v2] Extractor de skill por hook Stop v1 heredado. v2 es un superconjunto estricto con aprendizaje basado en instintos, con alcance de proyecto y hooks confiables. No invocar v1; dirigir solicitudes de aprendizaje continuo, aprendizaje de sesión y extracción de patrones a continuous-learning-v2."
+description: Claude Code oturumlarından yeniden kullanılabilir kalıpları otomatik olarak çıkarın ve gelecekte kullanmak üzere öğrenilmiş skill'ler olarak kaydedin.
 origin: ECC
 ---
 
-# Skill de Aprendizaje Continuo - OBSOLETO
+# Sürekli Öğrenme Skill'i
 
-> **OBSOLETO el 2026-04-28.** Usar `continuous-learning-v2` en su lugar. v2 es un superconjunto estricto: la observación por hook Stop se convierte en observación PreToolUse/PostToolUse, los skills completos se convierten en instintos atómicos con puntuación de confianza, y el almacenamiento solo global se convierte en almacenamiento con alcance de proyecto más promoción global.
->
-> Este archivo se mantiene como referencia de archivo y compatibilidad retroactiva con instalaciones existentes.
+Claude Code oturumlarını sonunda otomatik olarak değerlendirir ve öğrenilmiş skill'ler olarak kaydedilebilecek yeniden kullanılabilir kalıpları çıkarır.
 
----
+## Ne Zaman Aktifleştirmelisiniz
 
-## Documentación Original v1 (archivo)
+- Claude Code oturumlarından otomatik kalıp çıkarma ayarlarken
+- Oturum değerlendirmesi için Stop hook'u yapılandırırken
+- `~/.claude/skills/learned/` içindeki öğrenilmiş skill'leri incelerken veya düzenlerken
+- Çıkarma eşiklerini veya kalıp kategorilerini ayarlarken
+- v1 (bu) ile v2 (instinct tabanlı) yaklaşımlarını karşılaştırırken
 
-Evalúa automáticamente las sesiones de Claude Code al terminar para extraer patrones reutilizables que pueden guardarse como skills aprendidos.
+## Nasıl Çalışır
 
-## Cuándo Activar
+Bu skill her oturumun sonunda **Stop hook** olarak çalışır:
 
-- Configurar extracción automática de patrones desde sesiones de Claude Code
-- Configurar el hook Stop para evaluación de sesiones
-- Revisar o curar skills aprendidos en `~/.claude/skills/learned/`
-- Ajustar umbrales de extracción o categorías de patrones
-- Comparar enfoques v1 (este) vs v2 (basado en instintos)
+1. **Oturum Değerlendirmesi**: Oturumun yeterli mesaja sahip olup olmadığını kontrol eder (varsayılan: 10+)
+2. **Kalıp Tespiti**: Oturumdan çıkarılabilir kalıpları tanımlar
+3. **Skill Çıkarma**: Yararlı kalıpları `~/.claude/skills/learned/` dizinine kaydeder
 
-## Estado
+## Konfigürasyon
 
-Este skill v1 sigue siendo compatible, pero `continuous-learning-v2` es la ruta preferida para nuevas instalaciones. Mantener v1 cuando explícitamente quieras el flujo de extracción por hook Stop más simple o necesites compatibilidad con flujos de trabajo de skills aprendidos más antiguos.
-
-## Cómo Funciona
-
-Este skill se ejecuta como un **hook Stop** al final de cada sesión:
-
-1. **Evaluación de Sesión**: Verifica si la sesión tiene suficientes mensajes (por defecto: 10+)
-2. **Detección de Patrones**: Identifica patrones extraíbles de la sesión
-3. **Extracción de Skills**: Guarda patrones útiles en `~/.claude/skills/learned/`
-
-## Configuración
-
-Editar `config.json` para personalizar:
+Özelleştirmek için `config.json` dosyasını düzenleyin:
 
 ```json
 {
@@ -61,19 +49,19 @@ Editar `config.json` para personalizar:
 }
 ```
 
-## Tipos de Patrones
+## Kalıp Tipleri
 
-| Patrón | Descripción |
-|--------|-------------|
-| `error_resolution` | Cómo se resolvieron errores específicos |
-| `user_corrections` | Patrones de correcciones del usuario |
-| `workarounds` | Soluciones a peculiaridades de frameworks/librerías |
-| `debugging_techniques` | Enfoques efectivos de depuración |
-| `project_specific` | Convenciones específicas del proyecto |
+| Kalıp | Açıklama |
+|---------|-------------|
+| `error_resolution` | Belirli hataların nasıl çözüldüğü |
+| `user_corrections` | Kullanıcı düzeltmelerinden kalıplar |
+| `workarounds` | Framework/kütüphane tuhaflıklarına çözümler |
+| `debugging_techniques` | Etkili hata ayıklama yaklaşımları |
+| `project_specific` | Projeye özgü kurallar |
 
-## Configuración del Hook
+## Hook Kurulumu
 
-Agregar a tu `~/.claude/settings.json`:
+`~/.claude/settings.json` dosyanıza ekleyin:
 
 ```json
 {
@@ -89,42 +77,43 @@ Agregar a tu `~/.claude/settings.json`:
 }
 ```
 
-## Por Qué Hook Stop?
+## Neden Stop Hook?
 
-- **Ligero**: Se ejecuta una vez al final de la sesión
-- **No bloqueante**: No agrega latencia a cada mensaje
-- **Contexto completo**: Tiene acceso a la transcripción completa de la sesión
+- **Hafif**: Oturum sonunda bir kez çalışır
+- **Bloke Etmeyen**: Her mesaja gecikme eklemez
+- **Tam Bağlam**: Tam oturum kaydına erişimi vardır
 
-## Relacionado
+## İlgili
 
-- `/learn` — Extracción manual de patrones a mitad de sesión
+- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Sürekli öğrenme bölümü
+- `/learn` komutu - Oturum ortasında manuel kalıp çıkarma
 
 ---
 
-## Notas de Comparación (Investigación: Ene 2025)
+## Karşılaştırma Notları (Araştırma: Ocak 2025)
 
 ### vs Homunculus
 
-Homunculus v2 adopta un enfoque más sofisticado:
+Homunculus v2 daha sofistike bir yaklaşım benimsiyor:
 
-| Característica | Nuestro Enfoque | Homunculus v2 |
-|----------------|-----------------|---------------|
-| Observación | Hook Stop (fin de sesión) | Hooks PreToolUse/PostToolUse (100% confiable) |
-| Análisis | Contexto principal | Agente en segundo plano (Haiku) |
-| Granularidad | Skills completos | "Instintos" atómicos |
-| Confianza | Ninguna | Ponderada 0.3-0.9 |
-| Evolución | Directamente a skill | Instintos → cluster → skill/comando/agente |
-| Compartir | Ninguno | Exportar/importar instintos |
+| Özellik | Bizim Yaklaşım | Homunculus v2 |
+|---------|--------------|---------------|
+| Gözlem | Stop hook (oturum sonu) | PreToolUse/PostToolUse hooks (%100 güvenilir) |
+| Analiz | Ana bağlam | Arka plan agent'ı (Haiku) |
+| Granülerlik | Tam skill'ler | Atomik "instinct'ler" |
+| Güven | Yok | 0.3-0.9 ağırlıklı |
+| Evrim | Doğrudan skill'e | Instinct'ler → kümeleme → skill/command/agent |
+| Paylaşım | Yok | Instinct'leri dışa/içe aktar |
 
-**Insight clave de homunculus:**
-> "v1 dependía de skills para observar. Los skills son probabilísticos — se activan ~50-80% del tiempo. v2 usa hooks para la observación (100% confiable) e instintos como unidad atómica de comportamiento aprendido."
+**Homunculus'tan temel içgörü:**
+> "v1 gözlem için skill'lere güveniyordu. Skill'ler olasılıksaldır—zamanın ~%50-80'inde tetiklenirler. v2 gözlem için hook'ları kullanır (%100 güvenilir) ve öğrenilmiş davranışın atomik birimi olarak instinct'leri kullanır."
 
-### Mejoras Potenciales v2
+### Potansiyel v2 İyileştirmeleri
 
-1. **Aprendizaje basado en instintos** — Comportamientos más pequeños y atómicos con puntuación de confianza
-2. **Observador en segundo plano** — Agente Haiku analizando en paralelo
-3. **Decaimiento de confianza** — Los instintos pierden confianza si son contradichos
-4. **Etiquetado de dominio** — code-style, testing, git, debugging, etc.
-5. **Ruta de evolución** — Agrupar instintos relacionados en skills/comandos
+1. **Instinct tabanlı öğrenme** - Güven skorlaması ile daha küçük, atomik davranışlar
+2. **Arka plan gözlemcisi** - Paralel analiz yapan Haiku agent'ı
+3. **Güven azalması** - Çelişkiye uğrarsa instinct'ler güven kaybeder
+4. **Alan etiketleme** - code-style, testing, git, debugging, vb.
+5. **Evrim yolu** - İlgili instinct'leri skill/command'lara kümeleme
 
-Ver: `docs/continuous-learning-v2-spec.md` para la especificación completa.
+Bkz: Tam spec için `docs/continuous-learning-v2-spec.md`.

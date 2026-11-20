@@ -1,65 +1,65 @@
 ---
 name: agent-sort
-description: Build an evidence-backed ECC install plan for a specific repo by sorting skills, commands, rules, hooks, and extras into DAILY vs LIBRARY buckets using parallel repo-aware review passes. Use when ECC should be trimmed to what a project actually needs instead of loading the full bundle.
-license: MIT
+description: 通过将技能、命令、规则、钩子和额外内容并行进行仓库感知审查，为特定仓库构建基于证据的 ECC 安装计划，将其分为 DAILY 和 LIBRARY 两类。当 ECC 应精简为项目实际所需而非加载完整包时使用。
+origin: ECC
 ---
 
-# Agent Sort
+# 技能分类
 
-Use this skill when a repo needs a project-specific ECC surface instead of the default full install.
+当仓库需要项目特定的 ECC 表面而非默认完整安装时，使用此技能。
 
-The goal is not to guess what "feels useful." The goal is to classify ECC components with evidence from the actual codebase.
+目标不是猜测"什么感觉有用"。目标是根据实际代码库中的证据对 ECC 组件进行分类。
 
-## When to Use
+## 何时使用
 
-- A project only needs a subset of ECC and full installs are too noisy
-- The repo stack is clear, but nobody wants to hand-curate skills one by one
-- A team wants a repeatable install decision backed by grep evidence instead of opinion
-- You need to separate always-loaded daily workflow surfaces from searchable library/reference surfaces
-- A repo has drifted into the wrong language, rule, or hook set and needs cleanup
+* 项目只需要 ECC 的子集，完整安装过于嘈杂
+* 仓库技术栈明确，但无人希望逐个手动筛选技能
+* 团队希望获得基于 grep 证据而非主观意见的可重复安装决策
+* 需要将始终加载的日常工作流表面与可搜索的库/参考表面分离
+* 仓库已偏离至错误的语言、规则或钩子集，需要清理
 
-## Non-Negotiable Rules
+## 不可协商的规则
 
-- Use the current repository as the source of truth, not generic preferences
-- Every DAILY decision must cite concrete repo evidence
-- LIBRARY does not mean "delete"; it means "keep accessible without loading by default"
-- Do not install hooks, rules, or scripts that the current repo cannot use
-- Prefer ECC-native surfaces; do not introduce a second install system
+* 以当前仓库为事实来源，而非通用偏好
+* 每个 DAILY 决策必须引用具体的仓库证据
+* LIBRARY 并不意味着"删除"；它意味着"保持可访问但不默认加载"
+* 不要安装当前仓库无法使用的钩子、规则或脚本
+* 优先使用 ECC 原生表面；不要引入第二个安装系统
 
-## Outputs
+## 输出
 
-Produce these artifacts in order:
+按顺序生成以下工件：
 
-1. DAILY inventory
-2. LIBRARY inventory
-3. install plan
-4. verification report
-5. optional `skill-library` router if the project wants one
+1. DAILY 清单
+2. LIBRARY 清单
+3. 安装计划
+4. 验证报告
+5. 可选的路由器（如果项目需要）
 
-## Classification Model
+## 分类模型
 
-Use two buckets only:
+仅使用两个分类：
 
-- `DAILY`
-  - should load every session for this repo
-  - strongly matched to the repo's language, framework, workflow, or operator surface
-- `LIBRARY`
-  - useful to retain, but not worth loading by default
-  - should remain reachable through search, router skill, or selective manual use
+* `DAILY`
+  * 应为该仓库的每个会话加载
+  * 与仓库的语言、框架、工作流或操作者表面强匹配
+* `LIBRARY`
+  * 保留有用，但不值得默认加载
+  * 应通过搜索、路由器技能或选择性手动使用保持可访问
 
-## Evidence Sources
+## 证据来源
 
-Use repo-local evidence before making any classification:
+在进行任何分类之前，使用仓库本地证据：
 
-- file extensions
-- package managers and lockfiles
-- framework configs
-- CI and hook configs
-- build/test scripts
-- imports and dependency manifests
-- repo docs that explicitly describe the stack
+* 文件扩展名
+* 包管理器和锁文件
+* 框架配置
+* CI 和钩子配置
+* 构建/测试脚本
+* 导入和依赖清单
+* 明确描述技术栈的仓库文档
 
-Useful commands include:
+有用的命令包括：
 
 ```bash
 rg --files
@@ -71,145 +71,145 @@ cat pubspec.yaml
 cat go.mod
 ```
 
-## Parallel Review Passes
+## 并行审查轮次
 
-If parallel subagents are available, split the review into these passes:
+如果并行子代理可用，将审查分为以下轮次：
 
-1. Agents
-   - classify `agents/*`
-2. Skills
-   - classify `skills/*`
-3. Commands
-   - classify `commands/*`
-4. Rules
-   - classify `rules/*`
-5. Hooks and scripts
-   - classify hook surfaces, MCP health checks, helper scripts, and OS compatibility
-6. Extras
-   - classify contexts, examples, MCP configs, templates, and guidance docs
+1. 代理
+   * 分类 `agents/*`
+2. 技能
+   * 分类 `skills/*`
+3. 命令
+   * 分类 `commands/*`
+4. 规则
+   * 分类 `rules/*`
+5. 钩子和脚本
+   * 分类钩子表面、MCP 健康检查、辅助脚本和操作系统兼容性
+6. 额外项
+   * 分类上下文、示例、MCP 配置、模板和指导文档
 
-If subagents are not available, run the same passes sequentially.
+如果子代理不可用，则按顺序运行相同的轮次。
 
-## Core Workflow
+## 核心工作流
 
-### 1. Read the repo
+### 1. 读取仓库
 
-Establish the real stack before classifying anything:
+在分类任何内容之前，确定实际技术栈：
 
-- languages in use
-- frameworks in use
-- primary package manager
-- test stack
-- lint/format stack
-- deployment/runtime surface
-- operator integrations already present
+* 使用的语言
+* 使用的框架
+* 主要包管理器
+* 测试技术栈
+* 代码检查/格式化技术栈
+* 部署/运行时表面
+* 已存在的操作者集成
 
-### 2. Build the evidence table
+### 2. 构建证据表
 
-For every candidate surface, record:
+对于每个候选表面，记录：
 
-- component path
-- component type
-- proposed bucket
-- repo evidence
-- short justification
+* 组件路径
+* 组件类型
+* 建议的分类
+* 仓库证据
+* 简短理由
 
-Use this format:
+使用此格式：
 
 ```text
-skills/frontend-patterns | skill | DAILY | 84 .tsx files, next.config.ts present | core frontend stack
-skills/django-patterns   | skill | LIBRARY | no .py files, no pyproject.toml       | not active in this repo
-rules/typescript/*       | rules | DAILY | package.json + tsconfig.json            | active TS repo
-rules/python/*           | rules | LIBRARY | zero Python source files             | keep accessible only
+skills/frontend-patterns | skill | DAILY | 84 个 .tsx 文件，存在 next.config.ts | 核心前端技术栈
+skills/django-patterns   | skill | LIBRARY | 无 .py 文件，无 pyproject.toml       | 此仓库中未激活
+rules/typescript/*       | rules | DAILY | 存在 package.json + tsconfig.json            | 活跃的 TS 仓库
+rules/python/*           | rules | LIBRARY | 零个 Python 源文件             | 仅保持可访问
 ```
 
-### 3. Decide DAILY vs LIBRARY
+### 3. 决定 DAILY 还是 LIBRARY
 
-Promote to `DAILY` when:
+提升至 `DAILY` 当：
 
-- the repo clearly uses the matching stack
-- the component is general enough to help every session
-- the repo already depends on the corresponding runtime or workflow
+* 仓库明确使用匹配的技术栈
+* 组件足够通用，有助于每个会话
+* 仓库已依赖相应的运行时或工作流
 
-Demote to `LIBRARY` when:
+降级至 `LIBRARY` 当：
 
-- the component is off-stack
-- the repo might need it later, but not every day
-- it adds context overhead without immediate relevance
+* 组件与技术栈不匹配
+* 仓库可能以后需要，但不是每天
+* 它增加了上下文开销而无直接相关性
 
-### 4. Build the install plan
+### 4. 构建安装计划
 
-Translate the classification into action:
+将分类转化为行动：
 
-- DAILY skills -> install or keep in `.claude/skills/`
-- DAILY commands -> keep as explicit shims only if still useful
-- DAILY rules -> install only matching language sets
-- DAILY hooks/scripts -> keep only compatible ones
-- LIBRARY surfaces -> keep accessible through search or `skill-library`
+* DAILY 技能 -> 安装或保留在 `.claude/skills/`
+* DAILY 命令 -> 仅当仍然有用时保留为显式 shim
+* DAILY 规则 -> 仅安装匹配的语言集
+* DAILY 钩子/脚本 -> 仅保留兼容的
+* LIBRARY 表面 -> 通过搜索或 `skill-library` 保持可访问
 
-If the repo already uses selective installs, update that plan instead of creating another system.
+如果仓库已使用选择性安装，则更新该计划而非创建另一个系统。
 
-### 5. Create the optional library router
+### 5. 创建可选的路由器
 
-If the project wants a searchable library surface, create:
+如果项目需要可搜索的库表面，创建：
 
-- `.claude/skills/skill-library/SKILL.md`
+* `.claude/skills/skill-library/SKILL.md`
 
-That router should contain:
+该路由器应包含：
 
-- a short explanation of DAILY vs LIBRARY
-- grouped trigger keywords
-- where the library references live
+* DAILY 与 LIBRARY 的简短说明
+* 分组的触发关键词
+* 库参考的存放位置
 
-Do not duplicate every skill body inside the router.
+不要在路由器内重复每个技能的主体。
 
-### 6. Verify the result
+### 6. 验证结果
 
-After the plan is applied, verify:
+应用计划后，验证：
 
-- every DAILY file exists where expected
-- stale language rules were not left active
-- incompatible hooks were not installed
-- the resulting install actually matches the repo stack
+* 每个 DAILY 文件存在于预期位置
+* 未保留过时的语言规则
+* 未安装不兼容的钩子
+* 最终安装确实匹配仓库技术栈
 
-Return a compact report with:
+返回一个简洁的报告，包含：
 
-- DAILY count
-- LIBRARY count
-- removed stale surfaces
-- open questions
+* DAILY 数量
+* LIBRARY 数量
+* 移除的过时表面
+* 未解决的问题
 
-## Handoffs
+## 交接
 
-If the next step is interactive installation or repair, hand off to:
+如果下一步是交互式安装或修复，交接至：
 
-- `configure-ecc`
+* `configure-ecc`
 
-If the next step is overlap cleanup or catalog review, hand off to:
+如果下一步是重叠清理或目录审查，交接至：
 
-- `skill-stocktake`
+* `skill-stocktake`
 
-If the next step is broader context trimming, hand off to:
+如果下一步是更广泛的上下文修剪，交接至：
 
-- `strategic-compact`
+* `strategic-compact`
 
-## Output Format
+## 输出格式
 
-Return the result in this order:
+按此顺序返回结果：
 
 ```text
-STACK
-- language/framework/runtime summary
+栈
+- 语言/框架/运行时摘要
 
-DAILY
-- always-loaded items with evidence
+日常
+- 始终加载的条目及证据
 
-LIBRARY
-- searchable/reference items with evidence
+库
+- 可搜索/参考的条目及证据
 
-INSTALL PLAN
-- what should be installed, removed, or routed
+安装计划
+- 应安装、移除或路由的内容
 
-VERIFICATION
-- checks run and remaining gaps
+验证
+- 已运行的检查及剩余差距
 ```

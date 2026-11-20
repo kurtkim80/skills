@@ -1,40 +1,41 @@
-# Style Presets Reference
+# 样式预设参考
 
-Curated visual styles for `frontend-slides`.
+为 `frontend-slides` 整理的视觉样式。
 
-Use this file for:
-- the mandatory viewport-fitting CSS base
-- preset selection and mood mapping
-- CSS gotchas and validation rules
+使用此文件用于：
 
-Abstract shapes only. Avoid illustrations unless the user explicitly asks for them.
+* 强制性的视口适配 CSS 基础
+* 预设选择和情绪映射
+* CSS 陷阱和验证规则
 
-## Viewport Fit Is Non-Negotiable
+仅使用抽象形状。除非用户明确要求，否则避免使用插图。
 
-Every slide must fully fit in one viewport.
+## 视口适配不容妥协
 
-### Golden Rule
+每张幻灯片必须完全适配一个视口。
+
+### 黄金法则
 
 ```text
-Each slide = exactly one viewport height.
-Too much content = split into more slides.
-Never scroll inside a slide.
+每个幻灯片 = 恰好一个视口高度。
+内容过多 = 分割成更多幻灯片。
+切勿在幻灯片内部滚动。
 ```
 
-### Density Limits
+### 内容密度限制
 
-| Slide Type | Maximum Content |
-|------------|-----------------|
-| Title slide | 1 heading + 1 subtitle + optional tagline |
-| Content slide | 1 heading + 4-6 bullets or 2 paragraphs |
-| Feature grid | 6 cards maximum |
-| Code slide | 8-10 lines maximum |
-| Quote slide | 1 quote + attribution |
-| Image slide | 1 image, ideally under 60vh |
+| 幻灯片类型 | 最大内容量 |
+|---|---|
+| 标题幻灯片 | 1 个标题 + 1 个副标题 + 可选标语 |
+| 内容幻灯片 | 1 个标题 + 4-6 个要点或 2 个段落 |
+| 功能网格 | 最多 6 张卡片 |
+| 代码幻灯片 | 最多 8-10 行 |
+| 引用幻灯片 | 1 条引用 + 出处 |
+| 图片幻灯片 | 1 张图片，理想情况下低于 60vh |
 
-## Mandatory Base CSS
+## 强制基础 CSS
 
-Copy this block into every generated presentation and then theme on top of it.
+将此代码块复制到每个生成的演示文稿中，然后在其基础上应用主题。
 
 ```css
 /* ===========================================
@@ -163,168 +164,170 @@ img, .image-container {
 }
 ```
 
-## Viewport Checklist
+## 视口检查清单
 
-- every `.slide` has `height: 100vh`, `height: 100dvh`, and `overflow: hidden`
-- all typography uses `clamp()`
-- all spacing uses `clamp()` or viewport units
-- images have `max-height` constraints
-- grids adapt with `auto-fit` + `minmax()`
-- short-height breakpoints exist at `700px`, `600px`, and `500px`
-- if anything feels cramped, split the slide
+* 每个 `.slide` 都有 `height: 100vh`、`height: 100dvh` 和 `overflow: hidden`
+* 所有排版都使用 `clamp()`
+* 所有间距都使用 `clamp()` 或视口单位
+* 图片有 `max-height` 约束
+* 网格使用 `auto-fit` + `minmax()` 进行适配
+* 短高度断点存在于 `700px`、`600px` 和 `500px`
+* 如果感觉任何内容拥挤，请拆分幻灯片
 
-## Mood to Preset Mapping
+## 情绪到预设的映射
 
-| Mood | Good Presets |
-|------|--------------|
-| Impressed / Confident | Bold Signal, Electric Studio, Dark Botanical |
-| Excited / Energized | Creative Voltage, Neon Cyber, Split Pastel |
-| Calm / Focused | Notebook Tabs, Paper & Ink, Swiss Modern |
-| Inspired / Moved | Dark Botanical, Vintage Editorial, Pastel Geometry |
+| 情绪 | 推荐的预设 |
+|---|---|
+| 印象深刻 / 自信 | Bold Signal, Electric Studio, Dark Botanical |
+| 兴奋 / 充满活力 | Creative Voltage, Neon Cyber, Split Pastel |
+| 平静 / 专注 | Notebook Tabs, Paper & Ink, Swiss Modern |
+| 受启发 / 感动 | Dark Botanical, Vintage Editorial, Pastel Geometry |
 
-## Preset Catalog
+## 预设目录
 
 ### 1. Bold Signal
 
-- Vibe: confident, high-impact, keynote-ready
-- Best for: pitch decks, launches, statements
-- Fonts: Archivo Black + Space Grotesk
-- Palette: charcoal base, hot orange focal card, crisp white text
-- Signature: oversized section numbers, high-contrast card on dark field
+* 氛围：自信，高冲击力，适合主题演讲
+* 最适合：推介演示，产品发布，声明
+* 字体：Archivo Black + Space Grotesk
+* 调色板：炭灰色基底，亮橙色焦点卡片，纯白色文本
+* 特色：超大章节编号，深色背景上的高对比度卡片
 
 ### 2. Electric Studio
 
-- Vibe: clean, bold, agency-polished
-- Best for: client presentations, strategic reviews
-- Fonts: Manrope only
-- Palette: black, white, saturated cobalt accent
-- Signature: two-panel split and sharp editorial alignment
+* 氛围：简洁，大胆，机构级精致
+* 最适合：客户演示，战略评审
+* 字体：仅 Manrope
+* 调色板：黑色，白色，饱和钴蓝色点缀
+* 特色：双面板分割和锐利的编辑式对齐
 
 ### 3. Creative Voltage
 
-- Vibe: energetic, retro-modern, playful confidence
-- Best for: creative studios, brand work, product storytelling
-- Fonts: Syne + Space Mono
-- Palette: electric blue, neon yellow, deep navy
-- Signature: halftone textures, badges, punchy contrast
+* 氛围：充满活力，复古现代，俏皮自信
+* 最适合：创意工作室，品牌工作，产品故事叙述
+* 字体：Syne + Space Mono
+* 调色板：电光蓝，霓虹黄，深海军蓝
+* 特色：半色调纹理，徽章，强烈的对比
 
 ### 4. Dark Botanical
 
-- Vibe: elegant, premium, atmospheric
-- Best for: luxury brands, thoughtful narratives, premium product decks
-- Fonts: Cormorant + IBM Plex Sans
-- Palette: near-black, warm ivory, blush, gold, terracotta
-- Signature: blurred abstract circles, fine rules, restrained motion
+* 氛围：优雅，高端，有氛围感
+* 最适合：奢侈品牌，深思熟虑的叙述，高端产品演示
+* 字体：Cormorant + IBM Plex Sans
+* 调色板：接近黑色，温暖的象牙色，腮红，金色，赤陶色
+* 特色：模糊的抽象圆形，精细的线条，克制的动效
 
 ### 5. Notebook Tabs
 
-- Vibe: editorial, organized, tactile
-- Best for: reports, reviews, structured storytelling
-- Fonts: Bodoni Moda + DM Sans
-- Palette: cream paper on charcoal with pastel tabs
-- Signature: paper sheet, colored side tabs, binder details
+* 氛围：编辑感，有条理，有触感
+* 最适合：报告，评审，结构化的故事叙述
+* 字体：Bodoni Moda + DM Sans
+* 调色板：炭灰色上的奶油色纸张搭配柔和色彩标签
+* 特色：纸张效果，彩色侧边标签，活页夹细节
 
 ### 6. Pastel Geometry
 
-- Vibe: approachable, modern, friendly
-- Best for: product overviews, onboarding, lighter brand decks
-- Fonts: Plus Jakarta Sans only
-- Palette: pale blue field, cream card, soft pink/mint/lavender accents
-- Signature: vertical pills, rounded cards, soft shadows
+* 氛围：平易近人，现代，友好
+* 最适合：产品概览，入门介绍，较轻松的品牌演示
+* 字体：仅 Plus Jakarta Sans
+* 调色板：淡蓝色背景，奶油色卡片，柔和的粉色/薄荷色/薰衣草色点缀
+* 特色：垂直药丸形状，圆角卡片，柔和阴影
 
 ### 7. Split Pastel
 
-- Vibe: playful, modern, creative
-- Best for: agency intros, workshops, portfolios
-- Fonts: Outfit only
-- Palette: peach + lavender split with mint badges
-- Signature: split backdrop, rounded tags, light grid overlays
+* 氛围：有趣，现代，有创意
+* 最适合：机构介绍，研讨会，作品集
+* 字体：仅 Outfit
+* 调色板：桃色 + 薰衣草色分割背景搭配薄荷色徽章
+* 特色：分割背景，圆角标签，轻网格叠加层
 
 ### 8. Vintage Editorial
 
-- Vibe: witty, personality-driven, magazine-inspired
-- Best for: personal brands, opinionated talks, storytelling
-- Fonts: Fraunces + Work Sans
-- Palette: cream, charcoal, dusty warm accents
-- Signature: geometric accents, bordered callouts, punchy serif headlines
+* 氛围：诙谐，个性鲜明，受杂志启发
+* 最适合：个人品牌，观点性演讲，故事叙述
+* 字体：Fraunces + Work Sans
+* 调色板：奶油色，炭灰色，灰暗的暖色点缀
+* 特色：几何点缀，带边框的标注，醒目的衬线标题
 
 ### 9. Neon Cyber
 
-- Vibe: futuristic, techy, kinetic
-- Best for: AI, infra, dev tools, future-of-X talks
-- Fonts: Clash Display + Satoshi
-- Palette: midnight navy, cyan, magenta
-- Signature: glow, particles, grids, data-radar energy
+* 氛围：未来感，科技感，动感
+* 最适合：AI，基础设施，开发工具，关于未来趋势的演讲
+* 字体：Clash Display + Satoshi
+* 调色板：午夜海军蓝，青色，洋红色
+* 特色：发光效果，粒子，网格，数据雷达能量感
 
 ### 10. Terminal Green
 
-- Vibe: developer-focused, hacker-clean
-- Best for: APIs, CLI tools, engineering demos
-- Fonts: JetBrains Mono only
-- Palette: GitHub dark + terminal green
-- Signature: scan lines, command-line framing, precise monospace rhythm
+* 氛围：面向开发者，黑客风格简洁
+* 最适合：API，CLI 工具，工程演示
+* 字体：仅 JetBrains Mono
+* 调色板：GitHub 深色 + 终端绿色
+* 特色：扫描线，命令行框架，精确的等宽字体节奏
 
 ### 11. Swiss Modern
 
-- Vibe: minimal, precise, data-forward
-- Best for: corporate, product strategy, analytics
-- Fonts: Archivo + Nunito
-- Palette: white, black, signal red
-- Signature: visible grids, asymmetry, geometric discipline
+* 氛围：极简，精确，数据导向
+* 最适合：企业，产品战略，分析
+* 字体：Archivo + Nunito
+* 调色板：白色，黑色，信号红色
+* 特色：可见的网格，不对称，几何秩序感
 
 ### 12. Paper & Ink
 
-- Vibe: literary, thoughtful, story-driven
-- Best for: essays, keynote narratives, manifesto decks
-- Fonts: Cormorant Garamond + Source Serif 4
-- Palette: warm cream, charcoal, crimson accent
-- Signature: pull quotes, drop caps, elegant rules
+* 氛围：文学性，深思熟虑，故事驱动
+* 最适合：散文，主题演讲叙述，宣言式演示
+* 字体：Cormorant Garamond + Source Serif 4
+* 调色板：温暖的奶油色，炭灰色，深红色点缀
+* 特色：引文突出，首字下沉，优雅的线条
 
-## Direct Selection Prompts
+## 直接选择提示
 
-If the user already knows the style they want, let them pick directly from the preset names above instead of forcing preview generation.
+如果用户已经知道他们想要的样式，让他们直接从上面的预设名称中选择，而不是强制生成预览。
 
-## Animation Feel Mapping
+## 动画感觉映射
 
-| Feeling | Motion Direction |
-|---------|------------------|
-| Dramatic / Cinematic | slow fades, parallax, large scale-ins |
-| Techy / Futuristic | glow, particles, grid motion, scramble text |
-| Playful / Friendly | springy easing, rounded shapes, floating motion |
-| Professional / Corporate | subtle 200-300ms transitions, clean slides |
-| Calm / Minimal | very restrained movement, whitespace-first |
-| Editorial / Magazine | strong hierarchy, staggered text and image interplay |
+| 感觉 | 动效方向 |
+|---|---|
+| 戏剧性 / 电影感 | 缓慢淡入淡出，视差滚动，大比例缩放进入 |
+| 科技感 / 未来感 | 发光，粒子，网格运动，文字乱序出现 |
+| 有趣 / 友好 | 弹性缓动，圆角形状，漂浮运动 |
+| 专业 / 企业 | 微妙的 200-300 毫秒过渡，干净的幻灯片切换 |
+| 平静 / 极简 | 非常克制的运动，留白优先 |
+| 编辑感 / 杂志感 | 强烈的层次感，错落的文字和图片互动 |
 
-## CSS Gotcha: Negating Functions
+## CSS 陷阱：否定函数
 
-Never write these:
+切勿编写这些：
 
 ```css
 right: -clamp(28px, 3.5vw, 44px);
 margin-left: -min(10vw, 100px);
 ```
 
-Browsers ignore them silently.
+浏览器会静默忽略它们。
 
-Always write this instead:
+始终改为编写这个：
 
 ```css
 right: calc(-1 * clamp(28px, 3.5vw, 44px));
 margin-left: calc(-1 * min(10vw, 100px));
 ```
 
-## Validation Sizes
+## 验证尺寸
 
-Test at minimum:
-- Desktop: `1920x1080`, `1440x900`, `1280x720`
-- Tablet: `1024x768`, `768x1024`
-- Mobile: `375x667`, `414x896`
-- Landscape phone: `667x375`, `896x414`
+至少测试以下尺寸：
 
-## Anti-Patterns
+* 桌面：`1920x1080`，`1440x900`，`1280x720`
+* 平板：`1024x768`，`768x1024`
+* 手机：`375x667`，`414x896`
+* 横屏手机：`667x375`，`896x414`
 
-Do not use:
-- purple-on-white startup templates
-- Inter / Roboto / Arial as the visual voice unless the user explicitly wants utilitarian neutrality
-- bullet walls, tiny type, or code blocks that require scrolling
-- decorative illustrations when abstract geometry would do the job better
+## 反模式
+
+请勿使用：
+
+* 紫底白字的初创公司模板
+* Inter / Roboto / Arial 作为视觉声音，除非用户明确想要实用主义的中性风格
+* 要点堆砌、过小字体或需要滚动的代码块
+* 装饰性插图，当抽象几何形状能更好地完成工作时

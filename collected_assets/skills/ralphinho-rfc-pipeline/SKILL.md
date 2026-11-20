@@ -1,67 +1,69 @@
 ---
 name: ralphinho-rfc-pipeline
-description: RFC駆動の複数エージェントDAG実行パターン、品質ゲート、マージキュー、ワークユニットオーケストレーション。
+description: 基于RFC驱动的多智能体DAG执行模式，包含质量门、合并队列和工作单元编排。
 origin: ECC
 ---
 
-# Ralphinho RFC Pipeline
+# Ralphinho RFC 管道
 
-[humanplane](https://github.com/humanplane) スタイルのRFC分解パターンと複数ユニットオーケストレーションワークフローにインスパイア。
+灵感来源于 [humanplane](https://github.com/humanplane) 风格的 RFC 分解模式和多单元编排工作流。
 
-単一エージェントパスでは大きすぎる機能を独立して検証可能なワークユニットに分割する必要がある場合、このスキルを使用します。
+当一个功能对于单次代理处理来说过于庞大，必须拆分为独立可验证的工作单元时，请使用此技能。
 
-## Pipeline Stages
+## 管道阶段
 
-1. RFC intake
-2. DAG decomposition
-3. Unit assignment
-4. Unit implementation
-5. Unit validation
-6. Merge queue and integration
-7. Final system verification
+1. RFC 接收
+2. DAG 分解
+3. 单元分配
+4. 单元实现
+5. 单元验证
+6. 合并队列与集成
+7. 最终系统验证
 
-## Unit Spec Template
+## 单元规范模板
 
-各ワークユニットに含める：
-- `id`
-- `depends_on`
-- `scope`
-- `acceptance_tests`
-- `risk_level`
-- `rollback_plan`
+每个工作单元应包含：
 
-## Complexity Tiers
+* `id`
+* `depends_on`
+* `scope`
+* `acceptance_tests`
+* `risk_level`
+* `rollback_plan`
 
-- Tier 1: isolated file edits, deterministic tests
-- Tier 2: multi-file behavior changes, moderate integration risk
-- Tier 3: schema/auth/perf/security changes
+## 复杂度层级
 
-## Quality Pipeline per Unit
+* 层级 1：独立文件编辑，确定性测试
+* 层级 2：多文件行为变更，中等集成风险
+* 层级 3：架构/认证/性能/安全性变更
 
-1. research
-2. implementation plan
-3. implementation
-4. tests
-5. review
-6. merge-ready report
+## 每个单元的质量管道
 
-## Merge Queue Rules
+1. 研究
+2. 实现计划
+3. 实现
+4. 测试
+5. 审查
+6. 合并就绪报告
 
-- Never merge a unit with unresolved dependency failures.
-- Always rebase unit branches on latest integration branch.
-- Re-run integration tests after each queued merge.
+## 合并队列规则
 
-## Recovery
+* 永不合并存在未解决依赖项失败的单元。
+* 始终将单元分支变基到最新的集成分支上。
+* 每次队列合并后重新运行集成测试。
 
-ユニットが stall した場合：
-- evict from active queue
-- snapshot findings
-- regenerate narrowed unit scope
-- retry with updated constraints
+## 恢复
 
-## Outputs
+如果一个单元停滞：
 
-- RFC execution log
-- unit scorecards
-- dependency graph snapshot
-- integration risk summary
+* 从活动队列中移除
+* 快照发现结果
+* 重新生成范围缩小的单元
+* 使用更新的约束条件重试
+
+## 输出
+
+* RFC 执行日志
+* 单元记分卡
+* 依赖关系图快照
+* 集成风险摘要

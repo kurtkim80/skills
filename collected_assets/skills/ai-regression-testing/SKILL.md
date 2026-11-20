@@ -1,54 +1,54 @@
 ---
 name: ai-regression-testing
-description: AI 支援開発のためのリグレッションテスト戦略。データベース依存なしのサンドボックスモード API テスト、自動化されたバグチェックワークフロー、同じモデルがコードを書いてレビューする AI のブラインドスポットを捕捉するパターン。
+description: AI辅助开发的回归测试策略。沙盒模式API测试，无需依赖数据库，自动化的缺陷检查工作流程，以及捕捉AI盲点的模式，其中同一模型编写和审查代码。
 origin: ECC
 ---
 
-# AI リグレッションテスト
+# AI 回归测试
 
-AI 支援開発のために特別に設計されたテストパターン。同じモデルがコードを書いてレビューする場合、自動化されたテストのみが捕捉できる体系的なブラインドスポットが生まれます。
+专为 AI 辅助开发设计的测试模式，其中同一模型编写代码并审查代码——这会形成系统性的盲点，只有自动化测试才能发现。
 
-## 起動タイミング
+## 何时激活
 
-- AI エージェント（Claude Code、Cursor、Codex）が API ルートまたはバックエンドロジックを修正した場合
-- バグが見つかり修正された — 再発を防ぐ必要がある
-- プロジェクトに DB フリーテストに活用できるサンドボックス/モックモードがある場合
-- コード変更後に `/bug-check` または同様のレビューコマンドを実行する場合
-- 複数のコードパスが存在する場合（サンドボックス対本番、機能フラグなど）
+* AI 代理（Claude Code、Cursor、Codex）已修改 API 路由或后端逻辑
+* 发现并修复了一个 bug——需要防止重新引入
+* 项目具有沙盒/模拟模式，可用于无需数据库的测试
+* 在代码更改后运行 `/bug-check` 或类似的审查命令
+* 存在多个代码路径（沙盒与生产环境、功能开关等）
 
-## コアの問題
+## 核心问题
 
-AI がコードを書いてその後自分の作業をレビューする場合、両方のステップに同じ前提を持ち込みます。これにより予測可能な障害パターンが生まれます：
-
-```
-AI が修正を書く → AI が修正をレビューする → AI が「正しく見える」と言う → バグはまだ存在する
-```
-
-**実際の例**（本番で観察された）：
+当 AI 编写代码然后审查其自身工作时，它会将相同的假设带入这两个步骤。这会形成一个可预测的失败模式：
 
 ```
-修正 1: API レスポンスに notification_settings を追加
-  → SELECT クエリに追加するのを忘れた
-  → AI がレビューして見逃した（同じブラインドスポット）
-
-修正 2: SELECT クエリに追加
-  → TypeScript ビルドエラー（生成された型に列がない）
-  → AI が修正 1 をレビューしたが SELECT の問題を捕捉できなかった
-
-修正 3: SELECT * に変更
-  → 本番パスを修正、サンドボックスパスを忘れた
-  → AI がレビューして再び見逃した（4 回目の発生）
-
-修正 4: テストが最初の実行で即座に捕捉 PASS:
+AI 编写修复 → AI 审查修复 → AI 表示“看起来正确” → 漏洞依然存在
 ```
 
-パターン：**サンドボックス/本番パスの不一致**が AI が導入するリグレッションの第 1 位。
+**实际示例**（在生产环境中观察到）：
 
-## サンドボックスモード API テスト
+```
+修复 1：向 API 响应添加了 notification_settings
+  → 忘记将其添加到 SELECT 查询中
+  → AI 审核时遗漏了（相同的盲点）
 
-AI フレンドリーなアーキテクチャを持つほとんどのプロジェクトにはサンドボックス/モックモードがあります。これが高速な DB フリー API テストの鍵です。
+修复 2：将其添加到 SELECT 查询中
+  → TypeScript 构建错误（列不在生成的类型中）
+  → AI 审核了修复 1，但未发现 SELECT 问题
 
-### セットアップ（Vitest + Next.js App Router）
+修复 3：改为 SELECT *
+  → 修复了生产路径，忘记了沙箱路径
+  → AI 审核时再次遗漏（第 4 次出现）
+
+修复 4：测试在首次运行时立即捕获了问题 PASS:
+```
+
+模式：**沙盒/生产环境路径不一致**是 AI 引入的 #1 回归问题。
+
+## 沙盒模式 API 测试
+
+大多数具有 AI 友好架构的项目都有一个沙盒/模拟模式。这是实现快速、无需数据库的 API 测试的关键。
+
+### 设置（Vitest + Next.js App Router）
 
 ```typescript
 // vitest.config.ts
@@ -72,13 +72,13 @@ export default defineConfig({
 
 ```typescript
 // __tests__/setup.ts
-// サンドボックスモードを強制 — データベース不要
+// Force sandbox mode — no database needed
 process.env.SANDBOX_MODE = "true";
 process.env.NEXT_PUBLIC_SUPABASE_URL = "";
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "";
 ```
 
-### Next.js API ルート用テストヘルパー
+### Next.js API 路由的测试辅助工具
 
 ```typescript
 // __tests__/helpers.ts
@@ -120,9 +120,9 @@ export async function parseResponse(response: Response) {
 }
 ```
 
-### リグレッションテストの作成
+### 编写回归测试
 
-重要な原則：**機能するコードのためではなく、見つかったバグのためにテストを書く**。
+关键原则：**为已发现的 bug 编写测试，而不是为正常工作的代码编写测试**。
 
 ```typescript
 // __tests__/api/user/profile.test.ts
@@ -130,7 +130,7 @@ import { describe, it, expect } from "vitest";
 import { createTestRequest, parseResponse } from "../../helpers";
 import { GET, PATCH } from "@/app/api/user/profile/route";
 
-// コントラクトを定義 — レスポンスに必ず存在すべきフィールド
+// Define the contract — what fields MUST be in the response
 const REQUIRED_FIELDS = [
   "id",
   "email",
@@ -139,11 +139,11 @@ const REQUIRED_FIELDS = [
   "role",
   "created_at",
   "avatar_url",
-  "notification_settings",  // ← バグで欠落が判明した後に追加
+  "notification_settings",  // ← Added after bug found it missing
 ];
 
 describe("GET /api/user/profile", () => {
-  it("すべての必須フィールドを返す", async () => {
+  it("returns all required fields", async () => {
     const req = createTestRequest("/api/user/profile");
     const res = await GET(req);
     const { status, json } = await parseResponse(res);
@@ -154,8 +154,8 @@ describe("GET /api/user/profile", () => {
     }
   });
 
-  // リグレッションテスト — この正確なバグが AI によって 4 回導入された
-  it("notification_settings が undefined でない（BUG-R1 リグレッション）", async () => {
+  // Regression test — this exact bug was introduced by AI 4 times
+  it("notification_settings is not undefined (BUG-R1 regression)", async () => {
     const req = createTestRequest("/api/user/profile");
     const res = await GET(req);
     const { json } = await parseResponse(res);
@@ -167,22 +167,22 @@ describe("GET /api/user/profile", () => {
 });
 ```
 
-### サンドボックス/本番のパリティテスト
+### 测试沙盒/生产环境一致性
 
-最も一般的な AI リグレッション：本番パスを修正してサンドボックスパスを忘れる（またはその逆）。
+最常见的 AI 回归问题：修复了生产环境路径但忘记了沙盒路径（或反之）。
 
 ```typescript
-// サンドボックスレスポンスが期待されるコントラクトと一致することをテスト
-describe("GET /api/user/messages（会話リスト）", () => {
-  it("サンドボックスモードで partner_name を含む", async () => {
+// Test that sandbox responses match the expected contract
+describe("GET /api/user/messages (conversation list)", () => {
+  it("includes partner_name in sandbox mode", async () => {
     const req = createTestRequest("/api/user/messages", {
       sandboxUserId: "user-001",
     });
     const res = await GET(req);
     const { json } = await parseResponse(res);
 
-    // これは partner_name が本番パスに追加されたが
-    // サンドボックスパスに追加されなかったバグを捕捉した
+    // This caught a bug where partner_name was added
+    // to production path but not sandbox path
     if (json.data.length > 0) {
       for (const conv of json.data) {
         expect("partner_name" in conv).toBe(true);
@@ -192,82 +192,82 @@ describe("GET /api/user/messages（会話リスト）", () => {
 });
 ```
 
-## バグチェックワークフローへのテスト統合
+## 将测试集成到 Bug 检查工作流中
 
-### カスタムコマンド定義
+### 自定义命令定义
 
 ```markdown
 <!-- .claude/commands/bug-check.md -->
-# バグチェック
+# Bug 检查
 
-## ステップ 1: 自動テスト（必須、スキップ不可）
+## 步骤 1：自动化测试（强制，不可跳过）
 
-コードレビューの前に必ずこれらのコマンドを先に実行する：
+在代码审查前**首先**运行以下命令：
 
-    npm run test       # Vitest テストスイート
-    npm run build      # TypeScript 型チェック + ビルド
+    npm run test       # Vitest 测试套件
+    npm run build      # TypeScript 类型检查 + 构建
 
-- テストが失敗した場合 → 最高優先度のバグとして報告する
-- ビルドが失敗した場合 → 型エラーを最高優先度として報告する
-- 両方がパスした場合のみステップ 2 に進む
+- 如果测试失败 → 报告为最高优先级 Bug
+- 如果构建失败 → 将类型错误报告为最高优先级
+- 只有在两者都通过后，才能继续到步骤 2
 
-## ステップ 2: コードレビュー（AI レビュー）
+## 步骤 2：代码审查（AI 审查）
 
-1. サンドボックス / 本番パスの一貫性
-2. API レスポンスの形状がフロントエンドの期待と一致するか
-3. SELECT 句の完全性
-4. ロールバック付きのエラー処理
-5. オプティミスティックアップデートのレース条件
+1. 沙盒/生产环境路径一致性
+2. API 响应结构是否符合前端预期
+3. SELECT 子句的完整性
+4. 包含回滚的错误处理
+5. 乐观更新的竞态条件
 
-## ステップ 3: 修正されたバグごとにリグレッションテストを提案する
+## 步骤 3：对于每个修复的 Bug，提出回归测试方案
 ```
 
-### ワークフロー
+### 工作流程
 
 ```
-ユーザー: "バグチェックして" (or "/bug-check")
+User: "バグチェックして" (or "/bug-check")
   │
-  ├─ ステップ 1: npm run test
-  │   ├─ FAIL → バグが機械的に発見された（AI の判断不要）
-  │   └─ PASS → 続行
+  ├─ Step 1: npm run test
+  │   ├─ FAIL → 发现机械性错误（无需AI判断）
+  │   └─ PASS → 继续
   │
-  ├─ ステップ 2: npm run build
-  │   ├─ FAIL → 型エラーが機械的に発見された
-  │   └─ PASS → 続行
+  ├─ Step 2: npm run build
+  │   ├─ FAIL → 发现类型错误
+  │   └─ PASS → 继续
   │
-  ├─ ステップ 3: AI コードレビュー（既知のブラインドスポットを念頭に）
-  │   └─ 発見事項が報告される
+  ├─ Step 3: AI代码审查（考虑已知盲点）
+  │   └─ 报告发现的问题
   │
-  └─ ステップ 4: 各修正に対してリグレッションテストを書く
-      └─ 次のバグチェックで修正が壊れるか捕捉する
+  └─ Step 4: 对每个修复编写回归测试
+      └─ 下次bug-check时捕获修复是否破坏功能
 ```
 
-## 一般的な AI リグレッションパターン
+## 常见的 AI 回归模式
 
-### パターン 1: サンドボックス/本番パスの不一致
+### 模式 1：沙盒/生产环境路径不匹配
 
-**頻度**: 最も一般的（4 つのリグレッションのうち 3 つで観察）
+**频率**：最常见（在 4 个回归问题中观察到 3 个）
 
 ```typescript
-// 失敗: AI が本番パスのみにフィールドを追加する
+// FAIL: AI adds field to production path only
 if (isSandboxMode()) {
-  return { data: { id, email, name } };  // 新しいフィールドが欠落
+  return { data: { id, email, name } };  // Missing new field
 }
-// 本番パス
+// Production path
 return { data: { id, email, name, notification_settings } };
 
-// 成功: 両方のパスが同じ形状を返す必要がある
+// PASS: Both paths must return the same shape
 if (isSandboxMode()) {
   return { data: { id, email, name, notification_settings: null } };
 }
 return { data: { id, email, name, notification_settings } };
 ```
 
-**捕捉するためのテスト**：
+**用于捕获它的测试**：
 
 ```typescript
-it("サンドボックスと本番が同じフィールドを返す", async () => {
-  // テスト環境では、サンドボックスモードが強制的に ON になる
+it("sandbox and production return same fields", async () => {
+  // In test env, sandbox mode is forced ON
   const res = await GET(createTestRequest("/api/user/profile"));
   const { json } = await parseResponse(res);
 
@@ -277,56 +277,56 @@ it("サンドボックスと本番が同じフィールドを返す", async () =
 });
 ```
 
-### パターン 2: SELECT 句の省略
+### 模式 2：SELECT 子句遗漏
 
-**頻度**: 新しい列を追加する際の Supabase/Prisma で一般的
+**频率**：在使用 Supabase/Prisma 添加新列时常见
 
 ```typescript
-// 失敗: 新しい列がレスポンスに追加されたが SELECT に含まれていない
+// FAIL: New column added to response but not to SELECT
 const { data } = await supabase
   .from("users")
-  .select("id, email, name")  // notification_settings がここにない
+  .select("id, email, name")  // notification_settings not here
   .single();
 
 return { data: { ...data, notification_settings: data.notification_settings } };
-// → notification_settings は常に undefined
+// → notification_settings is always undefined
 
-// 成功: SELECT * を使用するか明示的に新しい列を含める
+// PASS: Use SELECT * or explicitly include new columns
 const { data } = await supabase
   .from("users")
   .select("*")
   .single();
 ```
 
-### パターン 3: エラー状態の漏洩
+### 模式 3：错误状态泄漏
 
-**頻度**: 既存のコンポーネントにエラー処理を追加する場合に中程度
+**频率**：中等——当向现有组件添加错误处理时
 
 ```typescript
-// 失敗: エラー状態が設定されたが古いデータがクリアされていない
+// FAIL: Error state set but old data not cleared
 catch (err) {
   setError("Failed to load");
-  // reservations は前のタブのデータをまだ表示している！
+  // reservations still shows data from previous tab!
 }
 
-// 成功: エラー時に関連する状態をクリアする
+// PASS: Clear related state on error
 catch (err) {
-  setReservations([]);  // 古いデータをクリア
+  setReservations([]);  // Clear stale data
   setError("Failed to load");
 }
 ```
 
-### パターン 4: 適切なロールバックなしのオプティミスティックアップデート
+### 模式 4：乐观更新未正确回滚
 
 ```typescript
-// 失敗: 失敗時のロールバックなし
+// FAIL: No rollback on failure
 const handleRemove = async (id: string) => {
   setItems(prev => prev.filter(i => i.id !== id));
   await fetch(`/api/items/${id}`, { method: "DELETE" });
-  // API が失敗した場合、アイテムは UI から消えるが DB にはまだある
+  // If API fails, item is gone from UI but still in DB
 };
 
-// 成功: 前の状態をキャプチャして失敗時にロールバックする
+// PASS: Capture previous state and rollback on failure
 const handleRemove = async (id: string) => {
   const prevItems = [...items];
   setItems(prev => prev.filter(i => i.id !== id));
@@ -334,52 +334,54 @@ const handleRemove = async (id: string) => {
     const res = await fetch(`/api/items/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("API error");
   } catch {
-    setItems(prevItems);  // ロールバック
+    setItems(prevItems);  // Rollback
     alert("削除に失敗しました");
   }
 };
 ```
 
-## 戦略: バグが見つかった場所でテストする
+## 策略：在发现 Bug 的地方进行测试
 
-100% カバレッジを目指さない。代わりに：
+不要追求 100% 的覆盖率。相反：
 
 ```
-/api/user/profile でバグ発見     → プロファイル API のテストを書く
-/api/user/messages でバグ発見    → メッセージ API のテストを書く
-/api/user/favorites でバグ発見   → お気に入り API のテストを書く
-/api/user/notifications でバグなし → テストを書かない（まだ）
+在 /api/user/profile 发现 bug → 为 profile API 编写测试
+在 /api/user/messages 发现 bug → 为 messages API 编写测试
+在 /api/user/favorites 发现 bug → 为 favorites API 编写测试
+在 /api/user/notifications 没有发现 bug → 暂时不编写测试
 ```
 
-**AI 開発でこれが機能する理由：**
+**为什么这在 AI 开发中有效：**
 
-1. AI は**同じカテゴリのミス**を繰り返す傾向がある
-2. バグは複雑な領域（認証、マルチパスロジック、状態管理）にクラスタリングする
-3. 一度テストされると、その正確なリグレッションは**再び発生できない**
-4. テスト数はバグ修正とともに有機的に増加する — 無駄な努力なし
+1. AI 倾向于重复犯**同一类错误**
+2. Bug 集中在复杂区域（身份验证、多路径逻辑、状态管理）
+3. 一旦经过测试，该特定回归问题**就不会再次发生**
+4. 测试数量随着 Bug 修复而有机增长——没有浪费精力
 
-## クイックリファレンス
+## 快速参考
 
-| AI リグレッションパターン | テスト戦略 | 優先度 |
+| AI 回归模式 | 测试策略 | 优先级 |
 |---|---|---|
-| サンドボックス/本番の不一致 | サンドボックスモードで同じレスポンス形状をアサート | 高 |
-| SELECT 句の省略 | レスポンス内のすべての必須フィールドをアサート | 高 |
-| エラー状態の漏洩 | エラー時の状態クリーンアップをアサート | 中 |
-| ロールバック欠如 | API 失敗時に状態が復元されることをアサート | 中 |
-| 型キャストが null をマスク | フィールドが undefined でないことをアサート | 中 |
+| 沙盒/生产环境不匹配 | 断言沙盒模式下响应结构相同 |  高 |
+| SELECT 子句遗漏 | 断言响应中包含所有必需字段 |  高 |
+| 错误状态泄漏 | 断言出错时状态已清理 |  中 |
+| 缺少回滚 | 断言 API 失败时状态已恢复 |  中 |
+| 类型转换掩盖 null | 断言字段不为 undefined |  中 |
 
-## DO / DON'T
+## 要 / 不要
 
-**DO:**
-- バグを見つけた後すぐにテストを書く（可能であれば修正前に）
-- 実装ではなく API レスポンスの形状をテストする
-- すべてのバグチェックの最初のステップとしてテストを実行する
-- テストを高速に保つ（サンドボックスモードで合計 1 秒未満）
-- 防ぐバグにちなんでテストに名前を付ける（例：「BUG-R1 リグレッション」）
+**要：**
 
-**DON'T:**
-- バグが一度もなかったコードのテストを書く
-- 自動化されたテストの代替として AI の自己レビューを信頼する
-- 「モックデータだから」という理由でサンドボックスパステストをスキップする
-- ユニットテストで十分な時に統合テストを書く
-- カバレッジのパーセンテージを目指す — リグレッション防止を目指す
+* 发现 bug 后立即编写测试（如果可能，在修复之前）
+* 测试 API 响应结构，而不是实现细节
+* 将运行测试作为每次 bug 检查的第一步
+* 保持测试快速（在沙盒模式下总计 < 1 秒）
+* 以测试所预防的 bug 来命名测试（例如，"BUG-R1 regression"）
+
+**不要：**
+
+* 为从未出现过 bug 的代码编写测试
+* 相信 AI 自我审查可以作为自动化测试的替代品
+* 因为“只是模拟数据”而跳过沙盒路径测试
+* 在单元测试足够时编写集成测试
+* 追求覆盖率百分比——追求回归预防
