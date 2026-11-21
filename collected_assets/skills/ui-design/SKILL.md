@@ -1,238 +1,113 @@
 ---
-name: designing-interfaces
-description: Makes a product's UI look deliberate and current instead of dated or improvised — auditing a screen against hierarchy, type scale, spacing scale, color tokens, layout and component consistency; introducing design tokens before restyling anything; and verifying every change visually with before/after screenshots. Use when building or restyling any web or app screen, reviewing a UI that looks old, cluttered or inconsistent, starting a design system for an existing app, or planning a design-improvement issue.
+name: ui-design
+description: 'Mandatory for any product''s screens, a builder''s too, and any mock, prototype or artifact that shows them: its design system, colour, type, components; judging the look.'
+risk: safe
+source: https://github.com/phuryn/product-engineering
+source_repo: phuryn/product-engineering
+source_type: official
+license: MIT
+license_source: https://github.com/phuryn/product-engineering/blob/8ebb50bb1b28dc9e8bc669199493e6020b808cc6/LICENSE.md
+author: Pawel Huryn
+upstream_commit: 8ebb50bb1b28dc9e8bc669199493e6020b808cc6
+date_added: '2026-11-21'
+category: development
 ---
 
-# Designing Interfaces
+# UI design
 
-Most "ugly" apps are not missing talent, they are missing **constraints**: twelve
-font sizes, spacing picked per element, a dozen near-identical greys, and buttons
-that each grew their own style. Good design here is mostly removing choices. Fix
-the system first (tokens, scales), then the screens fall into line.
+## Operational boundaries
 
-## Contents
-- Step 1 — Look before you touch anything
-- Step 2 — Audit against the six fundamentals
-- Match the visual language to the product
-- Step 3 — Tokens first, restyle second
-- Step 4 — Components and states
-- Step 5 — Verify visually
-- Native apps
-- Scoping design work into issues
-- Anti-patterns
+Keep the scope, sandbox, credentials and approval settings supplied by the user or host. Obtain authorization before delegating, exposing project files to another provider, enabling connectors or hooks, using paid services or deploying. Use synthetic or redacted inputs for examples. Keep security reviews static and defensive, with findings and fixes grounded in source inspection.
 
-## Step 1 — Look before you touch anything
+## When to Use
 
-Run the app with local data and screenshot the screens that matter at desktop and
-phone widths. Design judged from source code is guesswork.
+Mandatory for any product's screens, a builder's too, and any mock, prototype or artifact that shows them: its design system, colour, type, components; judging the look.
 
-```bash
-uvx --from playwright playwright screenshot --viewport-size "1280,800" "http://127.0.0.1:$PORT/" before-home-desktop.png
-uvx --from playwright playwright screenshot --viewport-size "390,844"  "http://127.0.0.1:$PORT/" before-home-phone.png
-```
 
-Keep these "before" images; every design change is reviewed as a before/after pair.
+**Load this skill for the whole of a product's look.** It holds the rules, which outside skill leads when, and how to judge the result. Reading only part of the method leaves already documented mistakes open to repetition.
 
-## Step 2 — Audit against the six fundamentals
+## What binds, in order
 
-Score each screen; the lowest scores are where the work is.
+1. **Keep taste and changes to written rules with the owner.** Apply the `agent-instructions` skill to record choices and their precedence. Put each visual question to them as specimens built in the product's real tokens, side by side, never described in words. `references/review.md` says how to sort a fix from an owner's call.
+2. **Apply the method to every kit and every screen.** Read `references/method.md`. A mock, prototype or artifact of a screen is high fidelity too: read the method; where the product has a kit, load its CSS and compose it rather than imitate it (a new product's artifact keeps its values in tokens, and the design stage builds the kit); and check a screenshot against the method before the owner sees it. A product departs from a rule only by the owner's decision, recorded in its kit README with the reason.
+3. **Keep the product's kit in three files and compose every screen from it.** Put them wherever the product keeps design, often a `design/` folder: `tokens.css`, every raw value (colour, type, space, radius, duration); `kit.css`, the primitives, built from tokens only; and the kit README, the product's own design document: its direction, palette, type, layout and button roles, each with its reason, and every departure from the method. With no provided design system, start the kit at the design stage, before the first app screen (an artifact before it keeps its values in tokens); maintain it and extend its primitives for each later need so buttons, fields and dialogs remain one set. Screens compose the kit; a screen never invents a style.
+4. **Take collection suggestions only through the kit's tokens or primitives.** Record them in the kit README; read `references/collections.md`. Where a collection disagrees with the method, the method wins.
 
-1. **Hierarchy** — squint at the screenshot. Is there exactly one obvious primary
-   thing (heading, primary action), then a clear second level, then the rest? If
-   everything is bold, large, or colored, nothing is. Demote before you promote:
-   most fixes make secondary text smaller and lighter, not the primary bigger.
-2. **Typography** — one or two families, a modular scale of 5–7 sizes (e.g. 12, 14,
-   16, 20, 24, 32, 40), body at 16px with ~1.5 line height, line length 50–75
-   characters, weights limited to regular/medium/semibold. Count the distinct font
-   sizes in the CSS; more than eight is a finding.
-3. **Spacing** — every margin, padding and gap comes from one scale on a 4px base
-   (4, 8, 12, 16, 24, 32, 48, 64). Related things sit closer together than
-   unrelated things (proximity *is* grouping). Generous whitespace reads as quality;
-   cramped reads as old.
-4. **Color** — for a utility interface, start with a neutral ramp (8–10 greys,
-   one slightly tinted family), one brand accent, and semantic colors (success,
-   warning, danger, info). Games and playful consumer/social apps can use several
-   saturated accents with stable roles; see "Match the visual language to the
-   product" below. Text meets contrast (4.5:1 body, 3:1 large text and UI borders)
-   — see the `building-accessible-interfaces` skill.
-5. **Layout** — a max content width (≈ 1100–1280px for apps, ≈ 680–720px for
-   reading), a consistent grid or column structure, alignment to shared edges, and
-   a layout that reflows at phone width rather than shrinking.
-6. **Consistency** — the same thing looks the same everywhere: one button style per
-   role, one card style, one input style, one icon set at one stroke weight, one
-   corner radius scale (e.g. 4/8/12/999). Inconsistency is the main thing that
-   makes an app look assembled rather than designed.
+**Every screen builder loads this skill from the installed `app-stack` pack.** Keep no product copy. A copy freezes the method at its copied version, and Claude Code loads it twice beside the pack. Builders need to be able to load the rule to read it.
 
-## Match the visual language to the product
+**A builder that isn't Claude Code has the pack installed in it too.** Codex reads the same marketplace (`codex plugin add app-stack@product-engineering`), and a brief names the skill there as `ui-design`: headless `codex exec` loads it with the pack installed (observed `2026-11-03`, codex-cli 0.166.0). An agent with no plugin installer takes the folder through `npx skills add`, into its own skills folder only. Whatever a collection taught that the next screen needs goes into the kit README, not just the session that used it.
 
-Choose the intended feel before choosing tokens. A restrained utility palette is
-one starting point, not a universal definition of quality. Games should feel
-playable; consumer/social apps built around fun should carry that energy in their
-visual language.
+## Before any screen: the jobs map
 
-- Use saturated accents for distinct roles (primary action, play surface, reward),
-  rather than adding unrelated colors per component. Keep warning/danger meanings
-  distinct from decorative or reward colors.
-- Pair a playful display face for short headings with a readable body face; keep
-  dense controls and data in the body face.
-- Make game controls feel pressable with chunky shapes, consistent outlines and
-  solid offset shadows. Show a pressed state by reducing the shadow and moving the
-  control toward it; preserve the visible keyboard focus ring.
-- Use drawn vector icons from one coherent set instead of emoji for game controls;
-  emoji rendering varies by platform and weakens the shared visual language.
+**Map the user's jobs before drawing any screen, a builder's included.** Work out what people come to do, with one row per job: the job in the user's words → its screen → the screen's one question → its primary action. Put the map in the proposal artifact and every stage brief adding screens. A screen with no job is cut; a job with no screen is a gap.
 
-For example, a game can give its board a saturated background, its main action a
-contrasting fill and offset shadow, and its score a reward accent while keeping
-instructions on a quiet, readable surface. Hierarchy still needs one obvious
-primary action. Expressiveness changes styling, not features or product scope.
+- **The product's data rules stay out of the copy.** The brief lists them (how records are split, sampled, versioned or locked), and a screen shows each only as an outcome in plain words: "12 traces wait for your review", never the table or the method's own vocabulary.
+- **Default to the familiar tool's structure when replacing one the owner knows.** Generalize that structure and justify every departure in the kit README.
+- **The example data fills every screen.** Fill every tab too. Show empty states on purpose beside it, so a click-through never meets an empty screen.
 
-Other audiences need their own register, not a default framework theme:
+## Complete phase visual checks before its review series and owner preview
 
-- **Professional B2B tools** should stay calm but carry a real identity: a
-  distinctive palette with one signature accent, a display face for headings and
-  key numerals, and a custom mark. A stock component-library theme with a
-  swapped primary color reads as unfinished.
-- **Developer-facing products** should look developer-made: a dark theme with
-  monospaced type for code, identifiers and most chrome, instead of a light
-  clean-SaaS look. Check contrast on the dark surfaces, not just the light ones.
-- **Financial and quantitative workbenches** should be information-dense but
-  calm: light, warm surfaces and natural colors (sage, cream, meadow green,
-  gold) rather than a black terminal look, which tires the eye and reads as
-  intimidating. Density comes from compact rows, small type and many figures per
-  screen, not from darkness. Use tabular (fixed-width) numerals and right-align
-  numeric columns so digits line up, keep decimals consistent per column, and
-  reserve color for sign and state (gain/loss, alert) rather than decoration.
-  Never rely on red versus green alone: add a sign, arrow or label. Dense must
-  still be beautiful and not overwhelming: group with spacing and quiet rules,
-  and keep one clear focal figure per panel.
-- **Consumer products with a theme** should lean into it: illustrated scenes,
-  dividers and textures drawn from the subject, with bold display type, rather
-  than a generic dashboard that happens to have the subject's name on it.
-- **Ornament** (blobs, squiggles, shapes) is fine when it is designed: one
-  consistent shape language and outline weight, cropped by its container,
-  asymmetric but balanced, and never placed over text or controls.
-- **Cleanup removes noise, not color.** When tidying a playful screen, fix
-  alignment, spacing and clutter but keep the large saturated surfaces and
-  display type; flattening it to white and cream turns a character into a
-  template.
-- **Keep an existing logo as shipped** in mockups and redesign targets. A
-  restyle changes the surrounding system; replacing the mark is a separate,
-  explicit brand decision.
+**The coordinator checks running screens briefly at the end of each stage.** Look at phone and desktop widths and both themes when two exist. The builder never substitutes for this exploratory look.
 
-## Step 3 — Tokens first, restyle second
+**Finish phase visual checks before its independent review series and owner preview.** The coordinator explores changed journeys and their affected shared surfaces. For routine edits, check the rendered screens at phone and desktop widths and in both themes when they exist. Check affected roles and states, accessibility, and any claims about data or payment against `references/screens.md`.
 
-Before changing how any screen looks, introduce **design tokens** — named values
-for color, type, spacing, radius, shadow — in one place, and point existing styles
-at them. Then restyling becomes editing tokens, not hunting hex codes.
+**Run the walkthrough, screenshot critique and scored audit for new or materially changed journeys and kit changes.** Run the rendered pass as part of that review. Repeat the full checks before releasing those changes and whenever the owner asks. Fix P0 and P1 findings. Open `references/review.md` when the full checks are due. The owner judges the look at the phase preview, which does not hold the next phase.
 
-- Web: CSS custom properties on `:root` (works with any framework, including none).
-  If the app already uses Tailwind, put the scales in the Tailwind theme instead of
-  adding a parallel system.
-- Name by role, not by value: `--color-text-muted`, not `--grey-500`; `--space-4`,
-  not `--sixteen`.
-- Define dark mode by overriding the role tokens under
-  `@media (prefers-color-scheme: dark)`, never by restyling components.
+## Which collection leads, stage by stage
 
-A starter token set (CSS custom properties with scales, semantic colors, and a dark
-override) is in [TOKENS.md](TOKENS.md). The order of operations for retrofitting an
-old app — and how to split it into reviewable PRs — is in
-[MODERNIZING.md](MODERNIZING.md).
+**Use the collection that fits the work, within the product's kit.** Open `references/collections.md` for direction, candidate choices, app screens, charts, pre-ship checks or published artifacts. Its matrix routes each task to a collection and includes checklists usable without installing third-party collections.
 
-## Step 4 — Components and states
+## The owner's standing preferences
 
-Build or fix the handful of primitives everything else uses: button (primary,
-secondary, ghost, danger), input/select/textarea with label and help text, card,
-table, badge, alert, modal, nav. Each needs every state, not just the resting one:
-default, hover, focus-visible, active, disabled, loading — plus the screen-level
-states (empty, loading, error, success) covered in the
-`designing-interaction-states` skill.
+**Record your preferences in the kit README or user-level agent instructions.** For one product, use the kit README with a pointer from the product's entry file. For every product, use your user-level agent instructions. Use your own words and the date of each choice; edits to the installed pack vanish at its next update. The entries below are the author's worked examples: a taste call with its receipt and scope. Until you write your own, treat them as one owner's taste, not rules.
 
-A component library (shadcn/ui, Radix, Headless UI, a design-system package) is a
-good choice for a new app. For an old server-rendered app, a small set of
-hand-written classes on top of tokens is usually lighter than migrating frameworks.
+- **Weight doesn't mark state.** "Colors already say this. Two things saying the same it unnecessary in my opinion." (author preference, `2026-10-22`, rejecting "bold only on problems".)
+  - Don't propose bold, size or weight as a second signal for what colour, shape and word already carry.
+  - This is separate from the method's *state is form as well as text*. That rule exists so colour is never the only signal: it's accessibility, not emphasis, and it stays.
+  - It covers bold that's already there, not only new proposals. "Same weight for every state" (author preference, `2026-10-22`, asked whether a down badge's word and a failed value should lose their bold): a problem's badge, value, row and name wear the weight of their healthy counterparts. A title stays bold because every title is, whatever state it describes.
+- **Use 8 px corners on an app's buttons.** "8 px corners in the app" (author preference, `2026-10-22`, a monitoring product, shown its pill buttons beside 8 px ones).
+  - Inside the app, buttons and segmented controls take a corner between an input's and a panel's, so a control reads as part of the form around it.
+  - Tags stay pills everywhere, so inside the app a pill means a label, not something to press. The marketing site and public pages may keep pill buttons.
+  - Start the next product's app this way. If its brand points elsewhere, show the owner both before choosing.
+- **Calm and reassuring is the target for monitoring and status products.** Supabase is the reference the owner named. A healthy screen says so in its own colour, and nothing on it says *press* or *beware* louder than that.
 
-## Step 5 — Verify visually
+Each rule's origin, the case that taught it, is in `receipts.md` beside this file; read it when a rule's edge is unclear.
 
-Re-take the same screenshots after the change, at both widths, and compare side by
-side. Check: the hierarchy squint test, nothing overflowing at 390px, focus rings
-visible when tabbing, dark mode if supported. Attach the before/after pair to the
-PR — reviewers approve design changes by looking, not by reading CSS diffs.
+## How you can tell it worked
 
-### Consolidating CSS without changing the design
+Every screen answers a mapped job. Changed screens passed the rendered check. New or materially changed journeys and kit changes passed the walkthrough and critique, and their scored audit has no open P0 or P1. The owner approved the look at phone and desktop width, and every raw style value comes from the tokens.
 
-Stacked restyles often leave the same selector defined several times. Editing
-the first block can have no visible effect because a later block wins. Before
-retinting or consolidating a component, inspect every definition and the winning
-declarations in browser DevTools.
+## When something is learned
 
-- Scan with a CSS parser (such as PostCSS), grouping repeated selectors by their
-  enclosing at-rule context. A selector in a dark-mode or narrow-screen media
-  query is not a duplicate of its base rule. Repeated rules can also be deliberate;
-  preserve cascade order when consolidating declarations.
-- For a cleanup intended to preserve appearance, compare base and branch at the
-  same viewport, theme, data and UI state. Dump `getComputedStyle(element)` for
-  matching elements, plus `::before` and `::after` when their `content` is present.
-  This catches a changed winning declaration even when a screenshot looks close.
-- Cover light/dark themes and the relevant empty, active, paused and settings
-  screens, including hover, focus, disabled and invalid controls. Disable
-  animations for the comparison; settling one default screenshot is insufficient.
-- Keep screenshots as a layout check, but mask or freeze live clocks and
-  countdowns before pixel comparison. A base-versus-base capture reveals which
-  differences are nondeterministic rather than caused by the cleanup.
+- **Record lessons true for any product in the product's feedback file.** Draft an upstream issue only when the owner requests one. For the session workflow, type `product-engineering-retro` (Codex: `product-engineering-retro`). Name the file the lesson belongs in:
+  - a rule for the kit or for building screens goes in `method.md`;
+  - a rule about what screens claim, or how they're checked, goes in `screens.md`;
+  - a change to the review procedure goes in `review.md`.
 
-An empty duplicate-selector report proves only structural cleanup. Matching
-computed styles across the exercised states and matching layouts provide the
-evidence that the cleanup preserved the design.
+  Give each its receipt: the date, and what happened, in a product named by kind, not by name. Hold it with a test where one can be written: a rule only in a report is gone by the next product.
+- **Keep lessons true only for this product in its kit README.**
+- **Record owner preferences in their own words.** Use the kit README or their user-level agent instructions (§ The owner's standing preferences).
 
-## App chrome and dense views
+## Where the method lives
 
-The frame around the content is judged as hard as the content itself.
+- **Replace `design` with `ui-design` in product agent instructions.** Change any "apply `design`" instruction there.
 
-- **Sidebar:** in an app shell, make it a full-bleed rail attached to the left, top and bottom viewport edges, with one background step against the page. A rounded box floating inside a margin wastes width and reads as a widget, not a frame.
-- **Footer:** one slim row (about 48px) of minimal text and a few links. Tall multi-column footers belong on marketing pages, not in a product, and even there they should be earned.
-- **Dense lists and boards:** single-line titles that truncate with a tooltip, compact rows, small buttons, and horizontal scroll inside a board rather than wrapping cards into tall stacks. Density is a hierarchy choice: keep the one primary action per row visible and demote the rest to a menu.
-- **Chrome follows the product's character:** a playful product's header and footer should carry the same outlines, accents and shadows as its content (an outlined floating pill header, a colored or ink footer), not a flat neutral bar that makes the page look like two designs stitched together.
-- **Brand marks are inputs, not design targets:** a restyle uses the shipped logo as-is. Rework the layout, color and type around it; never redraw or "refresh" it as a side effect.
+- **Install `app-stack` in every agent that builds screens.** Use Claude Code for the user, or with `--scope project` so every checkout of the product asks for it; Codex from the same marketplace; any other agent through `npx skills`. Each keeps it current with its own update command (the collection's README, § Install).
+- **Delete a product's skill copy once the pack is installed.** This includes `.claude/skills/design/` or `ui-design/`, and `.agents/skills/` equivalents. Before that, `diff -r` against the pack's installed folder shows what the copy says that the pack doesn't: this product's lessons go to the kit README, the owner's preferences as above, and a lesson for any product to this collection (§ When something is learned).
+- **Nobody edits the installed pack and hopes it travels.** A product's lesson goes into its own docs the day it is learned, and the general one goes to this collection as above.
 
-## Native apps
+## Files
 
-On iOS and macOS, follow the platform (Apple's Human Interface Guidelines) rather
-than porting web conventions: system fonts and Dynamic Type text styles, semantic
-system colors (`.primary`, `.secondary`, `Color(.systemBackground)`), SF Symbols,
-standard navigation and list patterns, 44pt minimum touch targets. "Looks like a
-good Apple app" beats "looks like our website". The fundamentals above still apply
-— hierarchy, spacing rhythm, consistency — expressed through platform styles.
+| File | Holds | Read when |
+|---|---|---|
+| `references/method.md` | the rules every kit and screen satisfies | writing or changing a kit; building any screen |
+| `references/collections.md` | each design skill collection: what to take, what to keep out, how to install it, its checklist distilled | choosing or running a collection, or working without one |
+| `references/screens.md` | what a screen may claim; what to verify visually | changing what a screen says; before a release |
+| `references/review.md` | reviewing a built product's look with its owner | the owner judges the look; a release's visual pass |
+| `scripts/color.py` | OKLCH lightness, chroma and hue, and WCAG contrast (standard library only) | any question about a colour: measure it, don't describe it |
 
-**Cover every platform the product ships on.** When a product runs on desktop and
-phone (or Mac and iPhone), a design target, mockup or restyle issue must include
-each one. A single-platform mock leaves the other to be improvised in code and
-drift from the intended language. Share the tokens and visual identity across
-platforms, but design each layout natively: a desktop sidebar and dense table do
-not shrink into a phone screen, they become a tab bar or stack and a card list.
+## Limitations
 
-## Scoping design work into issues
+Treat upstream examples as patterns. Validate scope and results against current project constraints, available tools and decisions recorded by the owner.
 
-Design improvements are legitimate, valuable issues — an app that looks abandoned
-loses users before they try a feature. Keep each one a single reviewable PR:
-
-- "Introduce design tokens and route existing colors through them" (no visual change)
-- "Adopt a type scale; remove the N ad-hoc font sizes"
-- "Rebuild the primary/secondary button styles on tokens across all pages"
-- "Redesign the dashboard empty state and first-run screen"
-- "Make the settings page responsive at phone width"
-
-Each issue names the screens it touches and includes before screenshots; each PR
-includes after screenshots. Avoid "redesign the whole app" issues — they never
-finish and can't be reviewed.
-
-## Anti-patterns
-
-- Restyling screen by screen without tokens, which recreates the inconsistency.
-- Swapping CSS frameworks as a "design fix" — it changes the plumbing, not the design.
-- Gradients, shadows and animation added to compensate for weak hierarchy.
-- A thick colored stripe down one edge of every card, alert or panel to signal category or state. It is the most recognizable generic-template tell. Keep one uniform border (or none) on every card and carry state with a dot, chip, icon or text label — which also survives for color-blind users.
-- The template look: an indigo/purple primary, a grid of identical rounded cards each with a tinted icon tile, pastel tinted chips, window-dot browser mockups, floating badges, and colored or italicized words inside headlines. Each is harmless alone; together they read as generated. Replace them with one identity: a paper-and-ink palette, an editorial serif for headings paired with a neutral sans (keep serifs out of dense tables), monospaced type for data, ruled sections instead of boxed ones, and a single signature highlight accent.
-- A design target that covers one platform. If the product ships on desktop and phone (or macOS and iOS), the target and the before/after screenshots cover each.
-- Light grey text on white to look "clean" (it fails contrast and reads as disabled).
-- Centering everything; long centered paragraphs are hard to read.
-- Designing only the happy path at desktop width.
+Adapted from [Pawel Huryn’s upstream skill](https://github.com/phuryn/product-engineering/tree/8ebb50bb1b28dc9e8bc669199493e6020b808cc6/app-stack/skills/ui-design).
