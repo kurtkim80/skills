@@ -15197,6 +15197,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/palmier-reels"
     },
+    "promo-reels": {
+      "name": "promo-reels",
+      "type": "skill",
+      "description": "This skill should be used when turning raw footage (rehearsals, backstage, events, product or workshop clips, phone videos) into short vertical promo Reels (1080×1920, 15–60 s) with a call to action — hook slide, fast or calm cut across varied framings, captions, text slides in a style picked from presets, from a reference image/site or tuned in dialogue (design tokens), optional generated or licensed music on a beat grid, and a final \"buy a ticket / sign up / order\" CTA. Trigger on \"сделай рилсы из этих видео\", \"рилс с призывом купить билет\", \"смонтируй reels под музыку\", \"make reels from this footage\", \"promo reel with CTA\", \"cut this to the beat\", \"reels for the show/event on <date>\", \"в стиле этого постера\", \"match our brand\". Also trigger its reflection command on \"рефлексия\", \"улучши скилл\", \"что узнали за этот запуск\", \"reflect on the reels run\", \"self-improve promo-reels\". Inputs are just the video files, the title, date/venue and the CTA; everything else has defaults.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/promo-reels"
+    },
     "presentation-generator": {
       "name": "presentation-generator",
       "type": "skill",
@@ -15772,6 +15780,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/meeting-prep",
       "description_ko": "예정된 회의 준비 — Cal.com 예약을 가져오고, 참가자를 조사하고, Obsidian Vault에서 이전 세션을 감사하고, 준비 메모를 작성합니다. 또한 준비 노트를 회의 후 세션 노트에 연결합니다."
+    },
+    "sops-mesh": {
+      "name": "sops-mesh",
+      "type": "skill",
+      "description": "This skill should be used to share SOPS + age secrets across someone's machines (macOS, Linux, Windows, CI), with one private key per machine in the strongest local store (Secure Enclave, Keychain, Credential Manager, libsecret, 0600 file), public keys exchanged over Syncthing or git, and secrets injected into AI agents that never see the keys. Triggers include \"encrypt my secrets\", \"set up sops\", \"share API keys between my machines\", \"stop agents seeing my keys\", \"sync secrets with Syncthing\", \"scan for plaintext secrets\", adding or revoking a machine, \"зашифровать секреты\", \"синхронизировать ключи\", \"спрятать ключи от агента\".",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/sops-mesh"
     },
     "cull-release": {
       "name": "cull-release",
