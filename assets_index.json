@@ -21375,6 +21375,14 @@
       "path": "collected_assets/skills/agents-generator",
       "description_ko": "코드베이스를 분석하여 프로젝트별 AGENTS.md 및 동반 규칙을 생성합니다. 패키지 관리자 감지, 단일 저장소, 백업, 관리형 블록, 신뢰도 점수 및 명령 검증을 통해 전체, 최소, 업데이트 및 테스트 실행 모드를 지원합니다."
     },
+    "nitrosend-klaviyo-migration": {
+      "name": "nitrosend-klaviyo-migration",
+      "type": "skill",
+      "description": "Move email marketing from Klaviyo to Nitrosend: bring suppressed profiles across first, import subscribed profiles by list, then rebuild flows as inactive drafts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nitrosend-klaviyo-migration"
+    },
     "internal-communication": {
       "name": "internal-communication",
       "type": "skill",
@@ -29358,6 +29366,14 @@
       "path": "collected_assets/skills/fixing-accessibility",
       "description_ko": "ARIA 레이블, 키보드 탐색, 포커스 관리, 색상 대비 및 양식 오류를 포함한 HTML 접근성 문제를 감사하고 수정합니다. 대화형 컨트롤, 양식, 대화 상자를 추가하거나 WCAG 준수를 검토할 때 사용합니다."
     },
+    "mobilebox-cloud-phones": {
+      "name": "mobilebox-cloud-phones",
+      "type": "skill",
+      "description": "Drive a Mobilebox cloud Android phone or iOS simulator over MCP or REST: create it, read the screen, tap and type, install an app, then delete it. Needs a Mobilebox account.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/mobilebox-cloud-phones"
+    },
     "hunt-cors": {
       "name": "hunt-cors",
       "type": "skill",
@@ -31618,6 +31634,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/slideshow"
+    },
+    "nitrosend-mailchimp-migration": {
+      "name": "nitrosend-mailchimp-migration",
+      "type": "skill",
+      "description": "Move a Mailchimp audience to Nitrosend without losing consent: import opt-outs first, connect Mailchimp to sync subscribed members, then rebuild journeys as drafts.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nitrosend-mailchimp-migration"
     },
     "c4-component": {
       "name": "c4-component",
@@ -34065,6 +34089,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/odoo-qweb-templates",
       "description_ko": "PDF 보고서, 이메일 템플릿 및 웹 사이트 페이지에 대한 Odoo QWeb 템플릿 전문가입니다. t-if, t-foreach, t-field 및 보고서 작업을 다룹니다."
+    },
+    "nitrosend-email-platform-migration": {
+      "name": "nitrosend-email-platform-migration",
+      "type": "skill",
+      "description": "Move contacts from MailerLite, Brevo, Kit, ActiveCampaign, HubSpot or any CSV export to Nitrosend, importing opt-outs first and only subscribed contacts after.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nitrosend-email-platform-migration"
     },
     "ios-debugger-agent": {
       "name": "ios-debugger-agent",
@@ -38547,6 +38579,14 @@
       "path": "collected_assets/skills/ebpf-observability",
       "description_ko": "깊은 커널 수준 관찰을 위해 eBPF 사용 - 시스템 호출, 네트워크 추적"
     },
+    "ultrafast": {
+      "name": "ultrafast",
+      "type": "skill",
+      "description": "Make or edit videos as ultrafast JSON documents with the uf CLI or its MCP tools: write, check, look at frames, review, then export MP4, ProRes, WebM, GIF or frame sequences.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ultrafast"
+    },
     "hunt-dispatch": {
       "name": "hunt-dispatch",
       "type": "skill",
@@ -39598,6 +39638,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/ios-flows"
+    },
+    "nitrosend-shopify-email-marketing": {
+      "name": "nitrosend-shopify-email-marketing",
+      "type": "skill",
+      "description": "Run Shopify email marketing in Nitrosend: connect the store with customer consent kept, segment on orders and store activity, and draft the core store flows.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nitrosend-shopify-email-marketing"
     },
     "building-native-ui": {
       "name": "building-native-ui",
@@ -43298,6 +43346,14 @@
       "path": "collected_assets/skills/odw",
       "description_ko": "동적 다중 에이전트 워크플로우 — 먼저 계획한 다음 로컬 odw 데몬을 통한 적대적 검증을 통해 병렬 에이전트를 조정합니다. 사용자가 \"워크플로\"를 요청하거나 \"울트라코드\"라고 말하거나 병렬 에이전트의 이점을 누릴 수 있는 많은 파일/항목에 걸친 작업을 전달할 때 사용합니다."
     },
+    "ghost-record": {
+      "name": "ghost-record",
+      "type": "skill",
+      "description": "Record a React component interaction as a replayable Ghost Cursor demo. Use only when the user explicitly invokes ghost-record.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ghost-record"
+    },
     "mercury-mcp": {
       "name": "mercury-mcp",
       "type": "skill",
@@ -43584,6 +43640,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/analyze-project"
+    },
+    "ui-diff": {
+      "name": "ui-diff",
+      "type": "skill",
+      "description": "Compare UI screenshots between revisions, capture interactions, and draft a visual PR review. Use for visual regressions, component diffs or preview comparisons.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-diff"
     },
     "skill-issue": {
       "name": "skill-issue",
@@ -51382,6 +51446,15 @@
       "path": "collected_assets/skills/filescom-ftp-action-logs",
       "description_ko": "|"
     },
+    "filescom-database-destinations": {
+      "name": "filescom-database-destinations",
+      "type": "skill",
+      "description": "|",
+      "source_repo": "https://github.com/Files-com/files-cli.git",
+      "source_name": "Files-com/files-cli",
+      "path": "collected_assets/skills/filescom-database-destinations",
+      "description_ko": "|"
+    },
     "filescom-event-targets": {
       "name": "filescom-event-targets",
       "type": "skill",
@@ -51677,6 +51750,15 @@
       "source_repo": "https://github.com/Files-com/files-cli.git",
       "source_name": "Files-com/files-cli",
       "path": "collected_assets/skills/filescom-ai-tasks",
+      "description_ko": "|"
+    },
+    "filescom-automation-versions": {
+      "name": "filescom-automation-versions",
+      "type": "skill",
+      "description": "|",
+      "source_repo": "https://github.com/Files-com/files-cli.git",
+      "source_name": "Files-com/files-cli",
+      "path": "collected_assets/skills/filescom-automation-versions",
       "description_ko": "|"
     },
     "filescom-usage-daily-snapshots": {
@@ -52055,6 +52137,15 @@
       "source_repo": "https://github.com/Files-com/files-cli.git",
       "source_name": "Files-com/files-cli",
       "path": "collected_assets/skills/filescom-histories",
+      "description_ko": "|"
+    },
+    "filescom-shared-workflows": {
+      "name": "filescom-shared-workflows",
+      "type": "skill",
+      "description": "|",
+      "source_repo": "https://github.com/Files-com/files-cli.git",
+      "source_name": "Files-com/files-cli",
+      "path": "collected_assets/skills/filescom-shared-workflows",
       "description_ko": "|"
     },
     "filescom-api-keys": {
