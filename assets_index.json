@@ -13951,7 +13951,7 @@
     "assertion-quality": {
       "name": "assertion-quality",
       "type": "skill",
-      "description": "Analyze assertion quality, depth, variety, and false confidence in existing tests. ALWAYS USE when asked about weak, shallow, trivial, always-true, self-referential, assertion-free, presence/truthiness-only, or insufficiently diverse assertions, including MSTest, Jest, pytest, and Go. DO NOT USE for direct fixes: writing-mstest-tests owns supplied MSTest assertions; code-testing owns new cases. Use test-gap-analysis when asked whether tests would catch a production change, and test-anti-patterns for general severity-ranked audits.",
+      "description": "Analyze weak, shallow, trivial, self-referential, assertion-free, or presence-only assertions; Contains fragments or totals replacing predictable generated code, JSON, CLI, report, or protocol output. Supports MSTest, Jest, pytest, and Go. DO NOT USE for direct assertion fixes (writing-mstest-tests for MSTest, code-testing for other frameworks), new cases (code-testing), missing scenarios or identified production changes (test-gap-analysis), or general severity-ranked audits (test-anti-patterns).",
       "source_repo": "https://github.com/dotnet/skills.git",
       "source_name": "dotnet/skills",
       "path": "collected_assets/skills/assertion-quality"
@@ -46038,15 +46038,6 @@
       "path": "collected_assets/skills/editorconfig",
       "description_ko": "프로젝트 분석 및 사용자 기본 설정을 기반으로 포괄적이고 모범 사례 중심의 .editorconfig 파일을 생성합니다."
     },
-    "ai-team-orchestration": {
-      "name": "ai-team-orchestration",
-      "type": "skill",
-      "description": "Bootstrap and run a lightweight multi-agent development team. Use when starting or adopting a project, planning work, coordinating implementation and optional QA, brainstorming with distinct perspectives, or preserving context across sessions.",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
-      "path": "collected_assets/skills/ai-team-orchestration",
-      "description_ko": "경량 다중 에이전트 개발 팀을 부트스트랩하고 운영합니다. 프로젝트 시작 또는 채택, 작업 계획, 구현 조정 및 선택적인 QA, 뚜렷한 관점으로 브레인스토밍, 세션 전반에 걸쳐 컨텍스트 유지 등을 수행할 때 사용하세요."
-    },
     "add-educational-comments": {
       "name": "add-educational-comments",
       "type": "skill",
@@ -50809,6 +50800,14 @@
       "path": "collected_assets/skills/qovery-onboard",
       "description_ko": "신규 Qovery 사용자를 위한 온보딩 안내. 개인 클라우드 설계자 역할을 하며 사용자의 역할, 경험 수준, 산업, 규정 준수 요구 사항 및 제약 조건을 수집한 다음 최적의 Qovery 구성을 권장하고 설정합니다. 클라우드 공급자 선택, 클러스터 생성(관리형 또는 BYOK), 프로젝트/환경 구조, 보안 기본값, 비용 기본값, 팀 초대 및 다른 플랫폼(Heroku, Vercel, Render)으로부터의 마이그레이션을 처리합니다. 사용자가 Qovery를 처음 사용하거나 처음부터 플랫폼을 설정하려는 경우에 사용하세요."
     },
+    "qovery-support": {
+      "name": "qovery-support",
+      "type": "skill",
+      "description": "Answers the questions Qovery users ask support most often and walks through the fixes that resolved them, covering deployments and builds, app crashes and health probes, custom domains and TLS, ingress timeouts, static IPs and VPC peering, databases, environment variables and secrets, AWS EKS clusters (Karpenter, node pools, upgrades, IAM, quotas), autoscaling, logs, the CLI, API and Terraform provider, billing and team access. Built from anonymized Qovery support history and checked against the Qovery docs. Hands off to qovery-troubleshoot when a specific service needs live diagnosis. Use when a user asks a how-to, why or \"is this expected\" question about Qovery, Kubernetes or AWS on Qovery, or wants to know the known fix for a common error before opening a support ticket.",
+      "source_repo": "https://github.com/Qovery/qovery-skills.git",
+      "source_name": "Qovery/qovery-skills",
+      "path": "collected_assets/skills/qovery-support"
+    },
     "qovery-optimize": {
       "name": "qovery-optimize",
       "type": "skill",
@@ -54536,6 +54535,15 @@
       "source_repo": "https://github.com/harness/harness-skills.git",
       "source_name": "harness/harness-skills",
       "path": "collected_assets/skills/configure-secret-scan",
+      "description_ko": ">-"
+    },
+    "dependency-firewall": {
+      "name": "dependency-firewall",
+      "type": "skill",
+      "description": ">-",
+      "source_repo": "https://github.com/harness/harness-skills.git",
+      "source_name": "harness/harness-skills",
+      "path": "collected_assets/skills/dependency-firewall",
       "description_ko": ">-"
     },
     "configure-dast-scan": {
@@ -61269,6 +61277,14 @@
       "path": "collected_assets/commands/qovery-onboard.md",
       "description_ko": "Qovery 시작하기 - 온보딩 안내"
     },
+    "qovery-support": {
+      "name": "qovery-support",
+      "type": "command",
+      "description": "Answer a Qovery, Kubernetes or AWS support question with the known fix",
+      "source_repo": "https://github.com/Qovery/qovery-skills.git",
+      "source_name": "Qovery/qovery-skills",
+      "path": "collected_assets/commands/qovery-support.md"
+    },
     "qovery-optimize": {
       "name": "qovery-optimize",
       "type": "command",
@@ -66006,15 +66022,6 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/sap-integration-suite-copilot.agent.md"
     },
-    "ai-team-producer.agent": {
-      "name": "ai-team-producer.agent",
-      "type": "agent",
-      "description": "AI team producer (Remy). Use when planning work, clarifying scope, coordinating Dev and optional QA, triaging issues, maintaining project context, or preparing and merging pull requests. Never writes application code.",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
-      "path": "collected_assets/agents/ai-team-producer.agent.md",
-      "description_ko": "AI팀 프로듀서(레미). 작업을 계획하고, 범위를 명확히 하고, 개발 및 선택적 QA를 조정하고, 문제를 분류하고, 프로젝트 컨텍스트를 유지하거나 끌어오기 요청을 준비 및 병합할 때 사용하세요. 애플리케이션 코드를 작성하지 않습니다."
-    },
     "react19-test-guardian.agent": {
       "name": "react19-test-guardian.agent",
       "type": "agent",
@@ -66479,15 +66486,6 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/tdd-green.agent.md",
       "description_ko": "GitHub 문제 요구 사항을 충족하고 과도한 엔지니어링 없이 실패한 테스트를 통과할 수 있도록 최소한의 코드를 구현합니다."
-    },
-    "ai-team-dev.agent": {
-      "name": "ai-team-dev.agent",
-      "type": "agent",
-      "description": "AI development team (Nova, Sage, Milo). Use when implementing features, fixing bugs, writing tests, improving user experience, or preparing a pull request across the project''s actual stack.",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
-      "path": "collected_assets/agents/ai-team-dev.agent.md",
-      "description_ko": "AI 개발팀(Nova, Sage, Milo). 기능 구현, 버그 수정, 테스트 작성, 사용자 경험 개선 또는 프로젝트의 실제 스택 전체에 대한 끌어오기 요청 준비 시 사용합니다."
     },
     "ember.agent": {
       "name": "ember.agent",
@@ -67509,15 +67507,6 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/markdown-accessibility-assistant.agent.md",
       "description_ko": "5가지 GitHub 모범 사례를 사용하여 마크다운 파일의 접근성을 향상합니다."
-    },
-    "ai-team-qa.agent": {
-      "name": "ai-team-qa.agent",
-      "type": "agent",
-      "description": "Optional AI QA engineer (Ivy). Use when testing behavior, running automated or exploratory checks, filing reproducible bugs, verifying fixes, or providing release confidence for changes that warrant dedicated QA.",
-      "source_repo": "https://github.com/github/awesome-copilot.git",
-      "source_name": "github/awesome-copilot",
-      "path": "collected_assets/agents/ai-team-qa.agent.md",
-      "description_ko": "선택적 AI QA 엔지니어(Ivy). 동작을 테스트하고, 자동 또는 탐색적 검사를 실행하고, 재현 가능한 버그를 제출하고, 수정 사항을 확인하거나, 전용 QA가 필요한 변경 사항에 대한 릴리스 신뢰를 제공할 때 사용하세요."
     },
     "linkedin-post-writer.agent": {
       "name": "linkedin-post-writer.agent",
