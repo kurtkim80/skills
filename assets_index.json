@@ -15336,6 +15336,14 @@
       "path": "collected_assets/skills/pdf-generation",
       "description_ko": "Eisvogel 템플릿 및 EB Garamond 글꼴과 함께 Pandoc을 사용하여 마크다운에서 전문적인 PDF 생성. 마크다운을 PDF로 변환하거나, 백서, 연구 문서, 마케팅 자료 또는 기술 문서를 만들 때 사용하세요. 전문적인 타이포그래피와 색상으로 구분된 테마를 사용하여 영어와 러시아어 문서를 모두 지원합니다. Telegram 봇 컨텍스트의 경우 기본적으로 모바일에 최적화된 레이아웃(6x9), 기타 컨텍스트의 경우 데스크탑/인쇄 레이아웃(A4)입니다."
     },
+    "ref-transfer": {
+      "name": "ref-transfer",
+      "type": "skill",
+      "description": "Break a reference video (an ad, a launch film, a YouTube link or a local file) into a measured shot list, a scenario and a board of stills, then transfer its moves onto the user's own product as a 25–30 s shot plan with a user story and the real interface moment for each shot. Use when the user says \"analyse this ad\", \"break down this reference\", \"shot list from this video\", \"make our video like this one\", \"steal the structure of this film\", \"transfer this reference to my app\", or gives a video link as a model for a product video. Step zero of the interface-to-video chain (ref-transfer → ui-tokens → user-journeys → ui-motion → raea-animate). Uses raea media/song and ffmpeg.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/ref-transfer"
+    },
     "youtube-transcript": {
       "name": "youtube-transcript",
       "type": "skill",
@@ -15763,6 +15771,14 @@
       "path": "collected_assets/skills/cull",
       "description_ko": "이 기술은 사용자가 Cull 앱을 사용하여 이미지/AI 아트 세대를 보고, 검토하고, 평가하고, 구성하고, 검색하거나 내보내려고 할 때 사용해야 합니다. \"이 이미지 표시\", \"이 배치 검토\", \"Cull에서 열기\", \"평가/후보 목록/수집\", \"유사한 이미지 찾기\", \"스마트 컬렉션 만들기\", \"품질 패스 실행\", \"키퍼 내보내기\", \"이 컬렉션 게시\"를 트리거합니다. 기본적으로 `cull` CLI를 통해 작동합니다(MCP가 필요하지 않음). `mcp__cull__*` 도구는 보다 풍부한 대화형 제어를 위한 선택 사항입니다."
     },
+    "kinetic-ad": {
+      "name": "kinetic-ad",
+      "type": "skill",
+      "description": "This skill should be used when making a short vertical (9:16, 1080×1920) kinetic-type promo or ad video in raea in the ink/paper/red style — Manrope 800 uppercase with IBM Plex Mono, physics letters, elastic chains, warped vector type, a 2.5D board camera (many slides seen at once, zooming, panning and leaping between them, slides dropping or sliding onto the board), wide-angle lens cuts, all on a 100 bpm beat grid with a synthesised kick and ElevenLabs SFX. Triggers on \"make a kinetic ad\", \"kinetic type promo\", \"another ad like the workshop one\", \"vertical ad in raea in the kinetic style\", \"reel for my event/workshop/launch in that style\", or when starting a new raea project from the kinetic components.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/kinetic-ad"
+    },
     "brand-agency": {
       "name": "brand-agency",
       "type": "skill",
@@ -15859,6 +15875,15 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/telegram-post",
       "description_ko": "초안 마크다운 파일에서 서식이 지정된 텔레그램 게시물을 생성하고, 미리 보고, 보낼 수 있습니다. 사용자가 텔레그램 채널 게시물 초안을 요청하거나, 보내기 전에 초안을 미리 보거나, Channels/*/drafts/에서 저장된 메시지나 채널에 초안을 게시하도록 요청할 때 사용합니다. \"텔레그램 게시\", \"저장된 메시지로 보내기\", \"초안 게시\", \"텔레그램 게시물\"에 대해 트리거됩니다."
+    },
+    "ui-motion": {
+      "name": "ui-motion",
+      "type": "skill",
+      "description": "Apply a named StyleSeed motion to a component — either one of the 5 personality seeds (Spring/Silk/Snap/Float/Pulse × entrance/exit/hover/press/layout) or a distinctive keyword move from the motion library (toggle-flip, toggle-curtain, reveal-blur, pop-in, shimmer, …).",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-motion",
+      "description_ko": "5가지 성격 시드(Spring/Silk/Snap/Float/Pulse × 입구/나가기/호버/프레스/레이아웃) 중 하나 또는 모션 라이브러리의 고유한 키워드 이동(토글-플립, 토글-커튼, 공개-블러, 팝인, 쉬머 등) 중 하나인 명명된 StyleSeed 모션을 구성 요소에 적용합니다."
     },
     "timebuzzer-led": {
       "name": "timebuzzer-led",
@@ -16072,6 +16097,14 @@
       "path": "collected_assets/skills/jtbd",
       "description_ko": "이동됨 — jtbd는 이제 여기가 아닌 humane 플러그인(glebis/humane-agentic-design)으로 제공됩니다. 이 디렉터리는 리디렉션입니다. 유지된 스킬을 얻으려면 휴먼을 설치하세요."
     },
+    "visual-board": {
+      "name": "visual-board",
+      "type": "skill",
+      "description": "Assemble a visual reference board as one PNG (plus per-section PNGs and optional HTML) that puts a reference video's stills, the product's real screens, its design tokens and the storyboard frames (reference move next to product moment) side by side. Use when the user asks for a \"mood board\", \"reference board\", \"visual board\", \"storyboard sheet\", \"put the reference and our screens side by side\", or a single picture for a deck that shows where a product video's look comes from. Follows ref-transfer and ui-tokens in the interface-to-video chain (ref-transfer → ui-tokens → user-journeys → ui-motion → raea-animate).",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/visual-board"
+    },
     "balanced": {
       "name": "balanced",
       "type": "skill",
@@ -16138,6 +16171,15 @@
       "source_repo": "https://github.com/glebis/claude-skills.git",
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/wispr-analytics"
+    },
+    "ui-tokens": {
+      "name": "ui-tokens",
+      "type": "skill",
+      "description": "View, add, or modify design tokens in the StyleSeed design system",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ui-tokens",
+      "description_ko": "StyleSeed 디자인 시스템에서 디자인 토큰 보기, 추가 또는 수정"
     },
     "weekly-digest": {
       "name": "weekly-digest",
@@ -16219,6 +16261,14 @@
       "path": "collected_assets/skills/trail-checkin",
       "description_ko": "~/Brains/brain에 있는 Obsidian Vault에 대한 대화형 트레일 검토 및 업데이트 프로세스입니다. 사용 가능한 트레일을 나열하고 체크인할 항목을 선택한 다음 각 항목에 대한 구조화된 질문(진행 상황, 표시, 작업, 지표, 미결 질문, 상태, 다음 검토 날짜)을 살펴보고 트레일 파일을 업데이트합니다. 주간 검토, 중요한 순간, 컨텍스트 전환 또는 월별 반영에 사용하세요. /trail-checkin에서 트리거됩니다."
     },
+    "user-journeys": {
+      "name": "user-journeys",
+      "type": "skill",
+      "description": "Read a product (code, docs, UI screenshots) and produce a customer journey map (CJM) and user stories ranked as candidate scenes for a product video — every story has an action in the interface and a visible result. Outputs journeys.json, cjm.png, stories.png and stories.md. Use when planning a product video or demo of existing software (\"what should the video show\", \"user journeys\", \"CJM\", \"user stories for the demo\", \"which scenes\"), as step two of the interface-to-video chain (ui-tokens → user-journeys → ui-motion → raea-animate).",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/user-journeys"
+    },
     "publish-skill": {
       "name": "publish-skill",
       "type": "skill",
@@ -16245,6 +16295,14 @@
       "source_name": "glebis/claude-skills",
       "path": "collected_assets/skills/granola",
       "description_ko": "이 기술은 Granola 회의 녹음 및 대화 내용을 가져오거나 나열하거나 내보낼 때 사용해야 합니다. Granola의 개인 API를 쿼리하여 회의 목록을 나열하고, 녹취록을 추출하고, Fathom 호환 형식의 Obsidian 노트로 내보냅니다."
+    },
+    "raea-animate": {
+      "name": "raea-animate",
+      "type": "skill",
+      "description": "Assemble a short product video in raea from the outputs of the interface-to-video chain — tokens (ui-tokens), the story arc (user-journeys), the UI components (ui-motion) and, if there is one, a reference transfer (ref-transfer) — into one frame-pure composition with a single clock, a camera, GSAP eases (gsap.parseEase), isolation fields, captions, an end card and a synthesised Tone score on a BPM grid; then render, raea check, post with raea show, and export lecture/deck stills. Use for \"assemble the video\", \"animate it in raea\", \"put the product video together\", \"render the product demo from these components\". Named raea-animate because `animate` is already a different (web UI motion) skill. Reuses the raea, demo-cut and kinetic-ad skills instead of repeating them.",
+      "source_repo": "https://github.com/glebis/claude-skills.git",
+      "source_name": "glebis/claude-skills",
+      "path": "collected_assets/skills/raea-animate"
     },
     "clean-code": {
       "name": "clean-code",
@@ -21434,6 +21492,14 @@
       "path": "collected_assets/skills/azure-keyvault-keys-rust",
       "description_ko": "Rust용 Azure Key Vault 키 SDK. 암호화 키를 생성, 관리 및 사용하는 데 사용됩니다. 트리거: \"keyvault 키 녹\", \"KeyClient 녹\", \"키 녹 생성\", \"녹 암호화\", \"서명 녹\"."
     },
+    "dopamine-talk": {
+      "name": "dopamine-talk",
+      "type": "skill",
+      "description": "Cut file-path recaps, trailing hedging disclaimers, boilerplate padding, and unasked critic-gates from coding agent replies. Use for direct explanations or architecture ideas.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/dopamine-talk"
+    },
     "database-migrations-migration-observability": {
       "name": "database-migrations-migration-observability",
       "type": "skill",
@@ -22880,6 +22946,14 @@
       "path": "collected_assets/skills/awt-e2e-testing",
       "description_ko": "AI 기반 E2E 웹 테스트 — AI 코딩 도구를 위한 눈과 손. 선언적 YAML 시나리오, Playwright 실행, 시각적 매칭(OpenCV + OCR), 플랫폼 자동 감지(Flutter/React/Vue), 학습 DB. 설치: npx 기술 추가 ksgisang/awt-skill --skill awt -g"
     },
+    "pronounce-word": {
+      "name": "pronounce-word",
+      "type": "skill",
+      "description": "Speak an English word or developer term aloud via the say-it CLI, using a community pronunciation dictionary so names like kubectl, GIF or Pydantic come out the way engineers actually say them.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/pronounce-word"
+    },
     "frontend-mobile-development-component-scaffold": {
       "name": "frontend-mobile-development-component-scaffold",
       "type": "skill",
@@ -23780,6 +23854,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/hunt-cache-poison",
       "description_ko": "캐시포이즌 취약점 사냥 스킬."
+    },
+    "atelier-ui": {
+      "name": "atelier-ui",
+      "type": "skill",
+      "description": "Route frontend builds across brand sites, app dashboards, and 3D scenes using 1-turn intake, WCAG AA palettes, anti-slop rules, and visual QA.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/atelier-ui"
     },
     "code-showcase-testing-patterns": {
       "name": "code-showcase-testing-patterns",
@@ -26541,6 +26623,14 @@
       "path": "collected_assets/skills/ai-seo",
       "description_ko": "AI 개요, ChatGPT, Perplexity, Claude, Gemini 및 유사한 시스템 전반에서 AI 검색 및 LLM 인용에 대한 콘텐츠를 최적화합니다. AI 가시성, 답변 엔진 최적화 또는 인용 준비를 개선할 때 사용합니다."
     },
+    "alphasift": {
+      "name": "alphasift",
+      "type": "skill",
+      "description": "Screen equities across 7 markets (CN/US/HK/JP/KR/TW/IN), run walk-forward pattern audits, and generate T+N research digests via AlphaSift CLI or STDIO MCP. Research only.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/alphasift"
+    },
     "helpdesk-automation": {
       "name": "helpdesk-automation",
       "type": "skill",
@@ -26611,6 +26701,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/zustand-store-ts",
       "description_ko": "적절한 TypeScript 유형 및 미들웨어를 사용하여 설정된 패턴에 따라 Zustand 저장소를 만듭니다."
+    },
+    "ghost-record": {
+      "name": "ghost-record",
+      "type": "skill",
+      "description": "Record a React component interaction as a replayable Ghost Cursor demo. Use only when the user explicitly invokes ghost-record.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/ghost-record"
     },
     "serply-search-mcp": {
       "name": "serply-search-mcp",
@@ -26919,6 +27017,14 @@
       "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/loss-aversion-designer"
+    },
+    "searchapi-search-mcp": {
+      "name": "searchapi-search-mcp",
+      "type": "skill",
+      "description": "Search Google (web, News, Scholar, Images), Bing, YouTube, Amazon and 100+ engines as structured results through the SearchApi MCP server. Use when the user chooses SearchApi or its connected tools.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/searchapi-search-mcp"
     },
     "wechat-official-account-strategist": {
       "name": "wechat-official-account-strategist",
@@ -31940,6 +32046,14 @@
       "path": "collected_assets/skills/deprecation-and-migration",
       "description_ko": "지원 중단 및 마이그레이션을 관리합니다. 오래된 시스템, API 또는 기능을 제거할 때 사용합니다. 한 구현에서 다른 구현으로 사용자를 마이그레이션할 때 사용합니다. 기존 코드를 유지할지, 종료할지 결정할 때 사용합니다."
     },
+    "cross-source-metric-reconciliation": {
+      "name": "cross-source-metric-reconciliation",
+      "type": "skill",
+      "description": "Use when two systems report different values for the same business metric and you must decide which number to trust, explain the gap, and present one figure with its source and as-of time.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/cross-source-metric-reconciliation"
+    },
     "laravel-development-workflow": {
       "name": "laravel-development-workflow",
       "type": "skill",
@@ -33303,15 +33417,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/android_ui_verification",
       "description_ko": "ADB를 사용하여 Android Emulator에서 자동화된 엔드투엔드 UI 테스트 및 검증."
-    },
-    "ui-motion": {
-      "name": "ui-motion",
-      "type": "skill",
-      "description": "Apply a named StyleSeed motion to a component — either one of the 5 personality seeds (Spring/Silk/Snap/Float/Pulse × entrance/exit/hover/press/layout) or a distinctive keyword move from the motion library (toggle-flip, toggle-curtain, reveal-blur, pop-in, shimmer, …).",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ui-motion",
-      "description_ko": "5가지 성격 시드(Spring/Silk/Snap/Float/Pulse × 입구/나가기/호버/프레스/레이아웃) 중 하나 또는 모션 라이브러리의 고유한 키워드 이동(토글-플립, 토글-커튼, 공개-블러, 팝인, 쉬머 등) 중 하나인 명명된 StyleSeed 모션을 구성 요소에 적용합니다."
     },
     "azure-communication-callautomation-java": {
       "name": "azure-communication-callautomation-java",
@@ -36034,6 +36139,14 @@
       "path": "collected_assets/skills/reverse-engineer",
       "description_ko": "바이너리 분석, 디스어셈블리, 디컴파일 및 소프트웨어 분석을 전문으로 하는 전문 리버스 엔지니어입니다. IDA Pro, Ghidra, Radare2, x64dbg 및 최신 RE 툴체인을 마스터합니다."
     },
+    "setsuzei-japan-tax-savings": {
+      "name": "setsuzei-japan-tax-savings",
+      "type": "skill",
+      "description": "Estimate how much Japanese income and resident tax a freelancer can still save before year-end (furusato nozei limit, iDeCo, mutual aid, blue-return deduction) by running the setsuzei CLI.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/setsuzei-japan-tax-savings"
+    },
     "favicon": {
       "name": "favicon",
       "type": "skill",
@@ -36695,6 +36808,14 @@
       "path": "collected_assets/skills/dropbox-automation",
       "description_ko": "Rube MCP(Composio)를 통해 Dropbox 파일 관리, 공유, 검색, 업로드, 다운로드, 폴더 작업을 자동화하세요. 현재 스키마에 대해서는 항상 도구를 먼저 검색하십시오."
     },
+    "nia-teams-agent-bridge": {
+      "name": "nia-teams-agent-bridge",
+      "type": "skill",
+      "description": "Connect local coding agents (Claude Code, Codex, WorkBuddy, Doubao, Antigravity, Droid, Pi, DSH) to a Nia Teams GroupChat for two-way collaboration.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/nia-teams-agent-bridge"
+    },
     "agent-squad": {
       "name": "agent-squad",
       "type": "skill",
@@ -37066,6 +37187,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/find-matching-tenders",
       "description_ko": "회사의 업무와 일치하는 공개 AU/NZ 정부 입찰을 찾아 이유와 격차 분석에 따라 순위를 매깁니다. 사용자가 자신의 비즈니스(또는 고객)에 대한 입찰, 입찰 기회, 정부 계약 또는 RFP를 찾아달라고 요청할 때 사용합니다."
+    },
+    "gridpin-offline-geocoding": {
+      "name": "gridpin-offline-geocoding",
+      "type": "skill",
+      "description": "Geocode or reverse-geocode addresses locally with the gridpin CLI: no API key, addresses stay on the machine. Use for one address or a CSV in a covered country.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/gridpin-offline-geocoding"
     },
     "zhongcao-cover-maker": {
       "name": "zhongcao-cover-maker",
@@ -39217,15 +39346,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/mirrord"
     },
-    "ui-tokens": {
-      "name": "ui-tokens",
-      "type": "skill",
-      "description": "View, add, or modify design tokens in the StyleSeed design system",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ui-tokens",
-      "description_ko": "StyleSeed 디자인 시스템에서 디자인 토큰 보기, 추가 또는 수정"
-    },
     "trip-coupon": {
       "name": "trip-coupon",
       "type": "skill",
@@ -39863,6 +39983,14 @@
       "path": "collected_assets/skills/claude-ally-health",
       "description_ko": "의료 정보 분석, 증상 추적, 건강 지도를 위한 건강 보조 기술입니다."
     },
+    "overleaf-collaboration": {
+      "name": "overleaf-collaboration",
+      "type": "skill",
+      "description": "Review changes, resolve co-author conflicts, and handle comments in shared Overleaf LaTeX papers. Use when an Overleaf push is refused or the user asks for tracked suggestions or review replies.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/overleaf-collaboration"
+    },
     "link-relevance-evaluator": {
       "name": "link-relevance-evaluator",
       "type": "skill",
@@ -40218,6 +40346,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/odoo-upgrade-advisor",
       "description_ko": "단계별 Odoo 버전 업그레이드 관리자: 업그레이드 전 체크리스트, 커뮤니티 및 엔터프라이즈 업그레이드 경로, OCA 모듈 호환성 및 업그레이드 후 검증."
+    },
+    "email-testing": {
+      "name": "email-testing",
+      "type": "skill",
+      "description": "Check HTML email and emulate Outlook, Gmail, Apple Mail, Yahoo Mail, and AOL Mail locally with the Hyper Elements CLI before sending. Emulations, not renders by the real clients.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/email-testing"
     },
     "remote-work-tracker": {
       "name": "remote-work-tracker",
@@ -42645,6 +42781,14 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/project-brief"
     },
+    "publora-social-posting": {
+      "name": "publora-social-posting",
+      "type": "skill",
+      "description": "Draft, schedule or publish one post to LinkedIn, X, Instagram, Threads, TikTok, YouTube, Facebook, Bluesky, Mastodon or Telegram through the Publora MCP server.",
+      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
+      "source_name": "sickn33/agentic-awesome-skills",
+      "path": "collected_assets/skills/publora-social-posting"
+    },
     "shipvela-publish": {
       "name": "shipvela-publish",
       "type": "skill",
@@ -43345,14 +43489,6 @@
       "source_name": "sickn33/agentic-awesome-skills",
       "path": "collected_assets/skills/odw",
       "description_ko": "동적 다중 에이전트 워크플로우 — 먼저 계획한 다음 로컬 odw 데몬을 통한 적대적 검증을 통해 병렬 에이전트를 조정합니다. 사용자가 \"워크플로\"를 요청하거나 \"울트라코드\"라고 말하거나 병렬 에이전트의 이점을 누릴 수 있는 많은 파일/항목에 걸친 작업을 전달할 때 사용합니다."
-    },
-    "ghost-record": {
-      "name": "ghost-record",
-      "type": "skill",
-      "description": "Record a React component interaction as a replayable Ghost Cursor demo. Use only when the user explicitly invokes ghost-record.",
-      "source_repo": "https://github.com/sickn33/agentic-awesome-skills.git",
-      "source_name": "sickn33/agentic-awesome-skills",
-      "path": "collected_assets/skills/ghost-record"
     },
     "mercury-mcp": {
       "name": "mercury-mcp",
@@ -50874,7 +51010,7 @@
     "qovery-switch-source": {
       "name": "qovery-switch-source",
       "type": "skill",
-      "description": "Switches an existing Qovery container service in place between a registry image and a Git repository that Qovery builds, in either direction, keeping the same service id, name, Kubernetes resources, volumes, variables and domains. Builds the update from the live container so nothing else changes, confirms the plan, applies it through the Qovery API, deploys a chosen commit, offers a CI job that deploys on push, and verifies what was kept. Use when a user wants Qovery to build a container that was deployed from a registry image, wants to move a container from an image built in any CI (GitHub Actions, GitLab CI, CircleCI, Bitbucket Pipelines, Jenkins) to a Qovery build, wants to switch a container back to a registry image, or asks to change a container's source without recreating the service.",
+      "description": "Switches an existing Qovery container service in place between a registry image and a Git repository that Qovery builds, in either direction, keeping the same service id, name, Kubernetes resources, volumes, variables and domains. Builds the update from the live container so nothing else changes, confirms the plan, applies it through the Qovery API, deploys a chosen commit, sets up deploy on push (Qovery auto-deploy, or a CI job when tests must pass first), and verifies what was kept. Use when a user wants Qovery to build a container that was deployed from a registry image, wants to move a container from an image built in any CI (GitHub Actions, GitLab CI, CircleCI, Bitbucket Pipelines, Jenkins) to a Qovery build, wants to switch a container back to a registry image, or asks to change a container's source without recreating the service.",
       "source_repo": "https://github.com/Qovery/qovery-skills.git",
       "source_name": "Qovery/qovery-skills",
       "path": "collected_assets/skills/qovery-switch-source"
@@ -65835,15 +65971,6 @@
       "source_name": "github/awesome-copilot",
       "path": "collected_assets/agents/planner.agent.md",
       "description_ko": "새로운 기능을 위한 구현 계획을 생성하거나 기존 코드를 리팩터링합니다."
-    },
-    "dotnet-version-estimator.agent": {
-      "name": "dotnet-version-estimator.agent",
-      "type": "agent",
-      "description": "Estimates the token budget for the dotnet-version-upgrade scenario and returns a ready-to-present budget block. Dispatched only when the user explicitly asks for an estimate.",
-      "source_repo": "https://github.com/microsoft/upgrade-agent-plugins.git",
-      "source_name": "microsoft/upgrade-agent-plugins",
-      "path": "collected_assets/agents/dotnet-version-estimator.agent.md",
-      "description_ko": "dotnet-version-upgrade 시나리오에 대한 토큰 예산을 추정하고 즉시 제시할 수 있는 예산 블록을 반환합니다. 사용자가 명시적으로 견적을 요청하는 경우에만 전달됩니다."
     },
     "terminal-executor.agent": {
       "name": "terminal-executor.agent",
