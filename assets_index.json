@@ -12756,6 +12756,14 @@
       "path": "collected_assets/skills/hosted-agents",
       "description_ko": "샌드박스 환경에서 백그라운드 에이전트를 구축하세요. 호스팅된 코딩 에이전트, 샌드박스 VM, 모달 샌드박스 및 원격 코딩 환경에 사용합니다."
     },
+    "compaction-control-profiling": {
+      "name": "compaction-control-profiling",
+      "type": "skill",
+      "description": "This skill should be used when deciding, for a specific model and workload, whether the harness or the model should control compaction, and when qualifying or calibrating that choice with measurements: context-budget sweeps that compare harness-driven and model-driven compaction on one harness, the context-pressure regime where delegation pays, a per-model compaction behavior profile (interface uptake, compression factor per call, reopen rate of archived content, context fill at first compaction, response to pressure warnings), context anxiety and timing-instruction calibration, reversible collapse-and-archive interfaces, and re-qualification after a model or prompt change. Route the editable-file protocol, harness invariants, and edit-position cache cost of self-editing agents to self-managed-context, summary content to context-compression, harness thresholds and cache layout to context-optimization, and general evaluation design to evaluation.",
+      "source_repo": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git",
+      "source_name": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "path": "collected_assets/skills/compaction-control-profiling"
+    },
     "tool-design": {
       "name": "tool-design",
       "type": "skill",
